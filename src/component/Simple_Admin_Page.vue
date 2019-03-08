@@ -84,9 +84,11 @@ export default {
             var self = this;
             $ASA.empty(self.form)
 
-            Object.keys(self.base).forEach(function(key){
-                self.form[key] =  self.base[key]
-            });
+            if(self.base) {
+                Object.keys(self.base).forEach(function(key){
+                    self.form[key] =  self.base[key]
+                });
+            }
 
             this.formTitle = this.labels.formTitleCreate;
             this.dialogVisible = true;
@@ -112,10 +114,13 @@ export default {
             self.tableData = []
 
             var params = {}
-            Object.keys(self.base).forEach(function(key){
-                params[key] =  self.base[key]
-            });
-            console.log(self.base)
+            
+            if(self.base) {
+                Object.keys(self.base).forEach(function(key){
+                    params[key] =  self.base[key]
+                });
+                //console.log(self.base)
+            }
 
             $.post("/"+self.controller+"/page",params,function(res){
                 //console.log(res)
