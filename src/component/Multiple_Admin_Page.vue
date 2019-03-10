@@ -36,7 +36,7 @@
     <el-dialog class="user-form" :title="formTitle" :visible.sync="dialogVisible" :center="true" :width="componenToptions.dialogWidth||'40%'" :modal="false">
       <el-form ref="form" :model="form" label-width="80px">
         <el-form-item :label="item.label" v-if="!item.is_hidden" v-for="item in columns" :key="item.name">
-          <el-input :ref="item.name" v-if="!item.type||item.type=='input'" v-model="form[item.name]" :disabled="isFormDisabled(item)"></el-input>
+          <el-input :ref="item.name" @keyup.enter.native="onSubmit" v-if="!item.type||item.type=='input'" v-model="form[item.name]" :disabled="isFormDisabled(item)"></el-input>
           <el-switch :ref="item.name" v-if="item.type=='switch'" v-model="form[item.name]" :disabled="isFormDisabled(item)" active-value="1" inactive-value="0"></el-switch>
         </el-form-item>
 
@@ -101,6 +101,8 @@ export default {
                         self.form.relateid = self.form.id
                         self.tableData.push($ASA.clone(self.form))
                     }
+                    
+                    self.dialogVisible = false
                 })
             }
             else {
@@ -109,6 +111,8 @@ export default {
                     if(self.form.lang_code==self.default_language) {
                         $ASA.copyTo(self.form, self.tableData[self.rowIndex])
                     }
+                    
+                    self.dialogVisible = false
                 })
             }
         },
