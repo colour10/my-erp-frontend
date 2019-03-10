@@ -11,7 +11,8 @@
         <el-table :data="tableData" stripe border style="width: 100%;" v-loading.fullscreen.lock="loading">
           <el-table-column :prop="name" :label="item.label" align="center" :width="item.width||180" v-if="item.is_show" v-for="item in columns" :key="item.name">
             <template v-slot="scope">
-              {{item.convert?item.convert(scope.row,scope.rowIndex,item):convert(scope.row,item, rowIndex)}}
+              <img v-if="item.is_image" :src="image_url_prex+scope.row[item.name]" :style="getImageStyle(item)">
+              <span v-if="!item.is_image">{{item.convert?item.convert(scope.row,scope.rowIndex,item):convert(scope.row,item, rowIndex)}}</span>
             </template>
             
           </el-table-column>
@@ -35,14 +36,18 @@
 
 
     <el-dialog class="user-form" :title="formTitle" :visible.sync="dialogVisible" :center="true" :width="componenToptions.dialogWidth||'40%'" :modal="false">
-      <el-form ref="form" :model="form" label-width="80px">
+      <el-form ref="form" :model="form" label-width="100px">
         <el-form-item :label="item.label" v-if="!item.is_hidden" v-for="item in columns" :key="item.name">
-          <el-input :ref="item.name" @keyup.enter.native="onSubmit" v-if="!item.type||item.type=='input'" v-model="form[item.name]" :disabled="isFormDisabled(item)"></el-input>
+          <el-input :ref="item.name" @keyup.enter.native="onSubmit" :type="item.type?item.type:'text'" v-if="!item.type||item.type=='input'||item.type=='textarea'" v-model="form[item.name]" :disabled="isFormDisabled(item)"></el-input>
           <el-switch :ref="item.name" v-if="item.type=='switch'" v-model="form[item.name]" :disabled="isFormDisabled(item)" active-value="1" inactive-value="0"></el-switch>
           
           <el-select :ref="item.name" v-model="form[item.name]" placeholder="choice" v-if="item.type=='select'">
             <el-option v-for="(label,value) in item.data_source" :key="value" :label="label" :value="value"></el-option>
           </el-select>
+          
+          <el-upload :ref="item.name" :action="'/common/upload?category='+controller" v-if="item.type=='upload'" :multiple="item.multiple || false"  :limit="item.limit || 1" :on-success="getUploadSuccessCallback(item)" :on-remove="getRemoveUploadFileCallback(item)" :disabled="isFormDisabled(item)">
+            <el-button size="small" type="primary">{{labels.upload}}</el-button>
+          </el-upload>
         </el-form-item>
 
         <el-form-item :label="labels.language">
@@ -64,7 +69,7 @@
 
 export default {
     name: 'multiple-admin-page',
-    props: ['columns','buttons',"labels","options","controller", "base", "default_language"],
+    props: ['columns','buttons',"labels","options","controller", "base", "default_language", "image_url_prex"],
     components: {
 
     },
@@ -108,6 +113,7 @@ export default {
                     }
                     
                     self.dialogVisible = false
+                    self.clearFiles()
                 })
             }
             else {
@@ -118,6 +124,7 @@ export default {
                     }
                     
                     self.dialogVisible = false
+                    self.clearFiles()
                 })
             }
         },
@@ -149,7 +156,7 @@ export default {
                 if(is_update) {
                     //console.log(lang_code)
                     //加载这条数据
-                    $.post("/"+self.controller+"/load", {lang_code:lang_code, relateid:row.relateid}, function(res){
+                    $ASA.post("/"+self.controller+"/load", {lang_code:lang_code, relateid:row.relateid}, function(res){
                         $ASA.copyTo(res, self.form)
 
                         self.showDialog();
@@ -183,21 +190,73 @@ export default {
                 self.$delete(self.tableData,rowIndex)
             })
         },
-        showDialog() {
-            var self = this;
-             self.dialogVisible = true;
-             setTimeout(function(){
+        getImageStyle(column){
+            var styles = "";
+            if(column.image_width) {
+                styles += "width:"+column.image_width+'px;'  
+            }    
+            
+            if(column.image_height) {
+                styles += "height:"+column.image_height+'px;'  
+            } 
+            return styles;
+        },
+        getUploadSuccessCallback(column){      
+            var self = this;      
+            if(!column.success_callback) {
+                console.log(column ,"44")
+                column.success_callback = function(response, file, fileList) {
+                    //console.log(response["files"], file, fileList)                
+                    file.name = response["files"][file.name]
+                    
+                    self.form[column.name] += ","+file.name
+                    self.form[column.name] = self.form[column.name].replace(/^,/,"")
+                } 
+            }
+            return column.success_callback                       
+        },
+        getRemoveUploadFileCallback(column){
+            var self = this;      
+            if(!column.remove_callback) {
+                column.remove_callback = function(file, fileList) {   
+                    console.log(self.form[column.name], file.name)                 
+                    self.form[column.name] = self.form[column.name].replace(file.name,"").replace(/^,/,"").replace(/,+/,",").replace(/,+$/,"")
+                } 
+            }
+            return column.remove_callback
+        
+        },
+        clearFiles() {
+            var self = this;                
+            setTimeout(function(){
                 //console.log(self.$refs) 
                 var columns = self.columns;
                 for(var i=0;i<columns.length;i++){
                     var column = columns[i]
                     var ele = self.$refs[column.name][0];
+                                        
+                    if(column.type=='upload') {
+                        ele.clearFiles();      
+                    }     
+                }
+             },50)  
+        },
+        showDialog() {
+            var self = this;
+                
+             self.dialogVisible = true;
+             setTimeout(function(){
+                //console.log(self.$refs) 
+                var is_focus_call = false;
+                var columns = self.columns;
+                for(var i=0;i<columns.length;i++){
+                    var column = columns[i]
+                    var ele = self.$refs[column.name][0];
                     
-                    if(column.is_focus && !ele.disabled) {
-                        console.log(ele)
+                    if(!is_focus_call && column.is_focus && !ele.disabled) {
+                        //console.log(ele)
                         ele.focus();
-                        break;
-                    }       
+                    }  
                 }
              },50)  
         },
@@ -215,7 +274,7 @@ export default {
         },
         isFormDisabled(column) {
             var form = this.form;
-            console.log(column, form)
+            //console.log(column, form)
             return (form.id==''&&!column.is_create) || (form.id!=''&&!column.is_update) || (column.disable_change && form.lang_code!=this.default_language)
         },
         loadList(cb) {
@@ -231,7 +290,7 @@ export default {
                 //console.log(self.base)
             }
 
-            $.post("/"+self.controller+"/page",params,function(res){
+            $ASA.post("/"+self.controller+"/page",params,function(res){
                 //console.log(res)
                 for(var i=0;i<res.length;i++) {
                     self.tableData.push(res[i])
@@ -255,7 +314,7 @@ export default {
         var self = this;
 
         var load_languages = new Promise(function(resolve, reject){
-            $.post("/common/language", {}, function(res){
+            $ASA.post("/common/language", {}, function(res){
                 //console.log(res)
                 resolve(res)
             },"json")
