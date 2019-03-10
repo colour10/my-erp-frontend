@@ -11,8 +11,9 @@
         <el-table :data="tableData" stripe border style="width: 100%;" v-loading.fullscreen.lock="loading">
           <el-table-column :prop="name" :label="item.label" align="center" :width="item.width||180" v-if="item.is_show" v-for="item in columns" :key="item.name">
             <template v-slot="scope">
-             {{convert(scope.row,item, rowIndex)}}
+              {{item.convert?item.convert(scope.row,scope.rowIndex,item):convert(scope.row,item, rowIndex)}}
             </template>
+            
           </el-table-column>
 
           <el-table-column prop="lang_code" :label="labels.language" width="180" align="center">
@@ -38,6 +39,10 @@
         <el-form-item :label="item.label" v-if="!item.is_hidden" v-for="item in columns" :key="item.name">
           <el-input :ref="item.name" @keyup.enter.native="onSubmit" v-if="!item.type||item.type=='input'" v-model="form[item.name]" :disabled="isFormDisabled(item)"></el-input>
           <el-switch :ref="item.name" v-if="item.type=='switch'" v-model="form[item.name]" :disabled="isFormDisabled(item)" active-value="1" inactive-value="0"></el-switch>
+          
+          <el-select :ref="item.name" v-model="form[item.name]" placeholder="choice" v-if="item.type=='select'">
+            <el-option v-for="(label,value) in item.data_source" :key="value" :label="label" :value="value"></el-option>
+          </el-select>
         </el-form-item>
 
         <el-form-item :label="labels.language">
