@@ -7,10 +7,10 @@
         </template>
       </el-table-column>
 
-      <el-table-column :label="labels.action" width="150" align="center">
+      <el-table-column :label="caozuo" width="150" align="center">
         <template v-slot="scope">
-          <el-button size="mini" @click="handleClickUpdate(scope.$index, scope.row)">{{labels.update}}</el-button>
-          <el-button size="mini" type="danger" @click="onClickDelete(scope.$index, scope.row)">{{labels.remove}}</el-button>
+          <el-button size="mini" @click="handleClickUpdate(scope.$index, scope.row)">{{bianji}}</el-button>
+          <el-button size="mini" type="danger" @click="onClickDelete(scope.$index, scope.row)">{{shanchu}}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -20,7 +20,7 @@
 <script>
 export default {
     name: 'simple-admin-tablelist',
-    props: ['columns',"labels","controller", "base", "onclickupdate"],
+    props: ['columns',"controller", "base", "onclickupdate"],
     components: {
 
     },
@@ -29,12 +29,18 @@ export default {
 
         return {
             rowIndex:"",
-            tableData:[]
+            tableData:[],
+            'caozuo':$ASAL.caozuo,
+            'bianji':$ASAL.bianji,
+            'shanchu':$ASAL.shanchu
         }
     },
     methods: {
         appendRow:function(row) {
             this.tableData.push(row)
+        },
+        getRow:function(rowIndex) {
+            return this.tableData[rowIndex]
         },
         onClickDelete(rowIndex, row) {
             var self = this
@@ -47,11 +53,12 @@ export default {
         handleClickUpdate(rowIndex, row) {
             if(this.onclickupdate) {
                 this.onclickupdate(rowIndex, row)
+                console.log("click edit")
             }
         },
         convert(row,column, rowIndex){
             if(column.type=='switch') {
-                return row[column.name]=='1'? this.labels.yes : this.labels.no;
+                return row[column.name]=='1'? $ASAL.yes : $ASAL.no;
             }
             else {
                 return row[column.name];

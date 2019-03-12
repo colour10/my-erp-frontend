@@ -2,7 +2,7 @@
   <div>
     <el-row>
       <el-col :span="24">
-        <el-button type="primary" @click="showFormToCreate()">{{buttons.create.label}}</el-button>
+        <el-button type="primary" @click="showFormToCreate()">{{labels.xinjian}}</el-button>
       </el-col>
     </el-row>
 
@@ -13,11 +13,16 @@
             <template v-slot="scope">
               <img v-if="item.is_image" :src="image_url_prex+scope.row[item.name]" :style="getImageStyle(item)">
               <span v-if="!item.is_image">{{item.convert?item.convert(scope.row,scope.rowIndex,item):convert(scope.row,item, rowIndex)}}</span>
-            </template>
-            
+            </template>            
+          </el-table-column>
+          
+          <el-table-column :label="item.label" align="center" :width="item.width||180" v-for="item in buttons" >
+            <template v-slot="scope">
+              <el-button type="info" circle @click="item.handler(scope.$index, scope.row, item)">{{item.label}}</el-button>
+            </template>            
           </el-table-column>
 
-          <el-table-column prop="lang_code" :label="labels.language" width="180" align="center">
+          <el-table-column prop="lang_code" :label="labels.yuyan" width="180" align="center">
             <template v-slot="scope">
              <span v-for="(item, key) in languages" :key="item.code" :value="item.code">
                <el-button :type="isSettingLanguage(scope.row, item.code)?'primary':'info'" circle @click="showFormToUpdate(scope.$index, scope.row, item.code, scope.row.languages.indexOf(item.code)>0)">{{item.shortName}}</el-button>
@@ -25,9 +30,9 @@
             </template>
           </el-table-column>
 
-          <el-table-column :label="labels.action" width="150" align="center">
+          <el-table-column :label="labels.caozuo" width="150" align="center">
             <template v-slot="scope">
-              <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">{{buttons.remove.label}}</el-button>
+              <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">{{labels.shanchu}}</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -40,17 +45,16 @@
         <el-form-item :label="item.label" v-if="!item.is_hidden" v-for="item in columns" :key="item.name">
           <el-input :ref="item.name" @keyup.enter.native="onSubmit" :type="item.type?item.type:'text'" v-if="!item.type||item.type=='input'||item.type=='textarea'" v-model="form[item.name]" :disabled="isFormDisabled(item)"></el-input>
           <el-switch :ref="item.name" v-if="item.type=='switch'" v-model="form[item.name]" :disabled="isFormDisabled(item)" active-value="1" inactive-value="0"></el-switch>
-          
-          <el-select :ref="item.name" v-model="form[item.name]" placeholder="choice" v-if="item.type=='select'">
-            <el-option v-for="(label,value) in item.data_source" :key="value" :label="label" :value="value"></el-option>
-          </el-select>
+                              
+          <simple-select :ref="item.name" v-if="item.type=='select'" v-model="form[item.name]" v-bind="item.data_source" :disabled="isFormDisabled(item)">
+          </simple-select>
           
           <el-upload :ref="item.name" :action="'/common/upload?category='+controller" v-if="item.type=='upload'" :multiple="item.multiple || false"  :limit="item.limit || 1" :on-success="getUploadSuccessCallback(item)" :on-remove="getRemoveUploadFileCallback(item)" :disabled="isFormDisabled(item)">
-            <el-button size="small" type="primary">{{labels.upload}}</el-button>
+            <el-button size="small" type="primary">{{labels.shangchuan}}</el-button>
           </el-upload>
         </el-form-item>
 
-        <el-form-item :label="labels.language">
+        <el-form-item :label="labels.yuyan">
             <el-select v-model="!form.relateid?default_language:form.lang_code" :placeholder="labels.choice" disabled>
               <el-option v-for="(item, key) in languages" :key="item.code" :label="item.name" :value="item.code">
               </el-option>
@@ -58,7 +62,7 @@
           </el-form-item>
 
         <el-form-item>
-          <el-button type="primary" @click="onSubmit">{{buttons.save.label}}</el-button>
+          <el-button type="primary" @click="onSubmit">{{labels.baocun}}</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -69,7 +73,7 @@
 
 export default {
     name: 'multiple-admin-page',
-    props: ['columns','buttons',"labels","options","controller", "base", "default_language", "image_url_prex"],
+    props: ['columns', "buttons" ,"options","controller", "base", "default_language", "image_url_prex"],
     components: {
 
     },
@@ -82,9 +86,12 @@ export default {
 
         var options = this.options || {}
         var base = this.base || {}
-
-        for(var i=0;i<this.columns.length;i++) {
-            form[this.columns[i].name] = ""
+        
+        var columns = this.columns
+        for(var i=0;i<columns.length;i++) {
+            if(columns[i].is_create && columns[i].is_update) {
+                form[columns[i].name] = ""
+            }
         }
 
         return {
@@ -95,7 +102,16 @@ export default {
             tableData:[] ,
             componenToptions:options,
             languages:[],
-            loading:true
+            loading:true,
+            labels:{
+                baocun: $ASAL.baocun,
+                xinjian: $ASAL.xinjian,
+                shanchu: $ASAL.shanchu,
+                yuyan: $ASAL.yuyan,
+                caozuo:$ASAL.caozuo,
+                shangchuan:$ASAL.shangchuan,
+                qingxuanze:$ASAL.qingxuanze
+            }
         }
     },
     methods: {
@@ -138,9 +154,8 @@ export default {
                 });
             }
 
-            self.formTitle = self.labels.formTitleCreate;
             self.form.lang_code = self.default_language;
-            self.showDialog();
+            self.showDialog($ASAL.tianjiaxinxi);
         },
         showFormToUpdate(rowIndex, row, lang_code, is_update){
             var self = this
@@ -150,7 +165,7 @@ export default {
             if(row.lang_code==lang_code) {
                 //更新本条记录
                 $ASA.copyTo(row, self.form)
-                self.showDialog()
+                self.showDialog($ASAL.xiugaixinxi)
             }
             else {
                 if(is_update) {
@@ -159,12 +174,18 @@ export default {
                     $ASA.post("/"+self.controller+"/load", {lang_code:lang_code, relateid:row.relateid}, function(res){
                         $ASA.copyTo(res, self.form)
 
-                        self.showDialog();
+                        self.showDialog($ASAL.xiugaixinxi);
                     }, "json")
                 }
                 else {
                     $ASA.empty(self.form)
-                    console.log(self.form)
+                    
+                    if(self.base) {
+                        Object.keys(self.base).forEach(function(key){
+                            self.form[key] =  self.base[key]
+                        });
+                    }
+                    //console.log(self.form)
                     self.columns.forEach(function(column){
                         if(!column.disable_change) {
                             self.form[column.name] = ""
@@ -173,12 +194,12 @@ export default {
                             self.form[column.name] = row[column.name]    
                         }
                     })
-                    console.log(self.form)
+                    //console.log(self.form)
         
                     self.form.relateid = row.relateid;
                     self.form.lang_code = lang_code
-                    self.formTitle = self.labels.formTitleCreate;
-                    self.showDialog();
+                    
+                    self.showDialog($ASAL.tianjiaxinxi);
                 }
             }
         },
@@ -241,9 +262,10 @@ export default {
                 }
              },50)  
         },
-        showDialog() {
+        showDialog(title) {
             var self = this;
-                
+             //console.log(title,"focus44")
+             self.formTitle = title
              self.dialogVisible = true;
              setTimeout(function(){
                 //console.log(self.$refs) 
@@ -254,8 +276,9 @@ export default {
                     var ele = self.$refs[column.name][0];
                     
                     if(!is_focus_call && column.is_focus && !ele.disabled) {
-                        //console.log(ele)
+                        //console.log(ele,"focus")
                         ele.focus();
+                        is_focus_call = true;
                     }  
                 }
              },50)  
@@ -265,17 +288,27 @@ export default {
             return (row.languages && row.languages.indexOf(lang_code)>=0)
         },
         convert(row,column, rowIndex){
+            var value = row[column.name]; 
             if(column.type=='switch') {
-                return row[column.name]=='1'? this.labels.yes : this.labels.no;   
-            }    
+                return value=='1'? $ASAL.yes : $ASAL.no;   
+            }   
+            else if(column.type=='select') {
+                if(column.data_source.hashtable) {
+                    return column.data_source.hashtable[value]   
+                }
+                else {
+                    return value; 
+                }
+            } 
             else {
-                return row[column.name];      
+                
+                return value;      
             }
         },
         isFormDisabled(column) {
             var form = this.form;
             //console.log(column, form)
-            return (form.id==''&&!column.is_create) || (form.id!=''&&!column.is_update) || (column.disable_change && form.lang_code!=this.default_language)
+            return (form.id==''&&!column.is_create) || (form.id!=''&&!column.is_update) || ((form.id!='' || form.lang_code!=this.default_language)&&column.disable_change)
         },
         loadList(cb) {
             var self = this;
@@ -295,6 +328,7 @@ export default {
                 for(var i=0;i<res.length;i++) {
                     self.tableData.push(res[i])
                 }
+                console.log("callback",cb)
                 cb()
             },'json');
         }
@@ -303,7 +337,7 @@ export default {
         base:{
             handler:function(newValue,oldValue){
                 //console.log("change",newValue,oldValue)
-                this.loadList()
+                this.loadList(function(){})
             },
             deep: true
         }
@@ -321,7 +355,9 @@ export default {
         });
 
         var load_page = new Promise(function(resolve, reject){
-            self.loadList(resolve)
+            self.loadList(function(){
+                resolve()    
+            })
         });
 
         Promise.all([load_languages, load_page]).then(function (results) {
