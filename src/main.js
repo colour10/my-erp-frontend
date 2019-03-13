@@ -6,7 +6,7 @@ Vue.use(ElementUI);
 import simple2 from './component/Simple_Admin_Page.vue'
 import multiple from './component/Multiple_Admin_Page.vue'
 
-
+import app from './App.vue'
 var data = [{
             id:4,
             date: '2016-05-02',
@@ -28,7 +28,7 @@ var data = [{
 
 new Vue({
     el: '#app',
-    render: h => h(multiple,{
+    render: h => h(app,{
         props:{
             data: data,
             columns:[

@@ -1,11 +1,17 @@
 <template>
   <div>
     <el-table :data="tableData" stripe border style="width: 100%;">
-      <el-table-column :prop="item.name" :label="item.label" align="center" :width="item.width||180" v-if="item.is_show" v-for="item in columns" :key="item.name">
+      <el-table-column :prop="item.name" :label="item.label" align="center" :width="item.width||180" v-if="!item.is_hide" v-for="item in columns" :key="item.name">
         <template v-slot="scope">
           {{item.convert?item.convert(scope.row,scope.rowIndex,item):convert(scope.row,item, rowIndex)}}
         </template>
       </el-table-column>
+      
+      <el-table-column :label="item.label" align="center" :width="item.width||180" v-for="item in buttons" >
+      <template v-slot="scope">
+        <el-button type="info" circle @click="item.handler(scope.$index, scope.row, item)">{{item.label}}</el-button>
+      </template>            
+    </el-table-column>
 
       <el-table-column :label="caozuo" width="150" align="center">
         <template v-slot="scope">
@@ -20,7 +26,7 @@
 <script>
 export default {
     name: 'simple-admin-tablelist',
-    props: ['columns',"controller", "base", "onclickupdate"],
+    props: ['columns',"buttons","controller", "base", "onclickupdate"],
     components: {
 
     },

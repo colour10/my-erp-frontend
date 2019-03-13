@@ -1,35 +1,32 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank">Twitter</a></li>
-    </ul>
-    <h2>Ecosystem</h2>
-    <ul>
-      <li><a href="http://router.vuejs.org/" target="_blank">vue-router</a></li>
-      <li><a href="http://vuex.vuejs.org/" target="_blank">vuex</a></li>
-      <li><a href="http://vue-loader.vuejs.org/" target="_blank">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue</a></li>
-    </ul>
-    <simple></simple>
+    <avatar v-model="msg"></avatar>
   </div>
 </template>
 
 <script>
+    import Vue from 'vue';
     import simple from './component/Simple_Admin_Page.vue'
+    import selectdialog from './component/Select_Dialog.vue'
+    import avatar from './component/Simple_Avatar.vue'
+    
+    Vue.use(selectdialog);
+    Vue.use(avatar);
 export default {
   name: 'asa-app',
   components: {
-      simple
+      avatar
     },
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      msg: '',
+      data_source:{
+        //hashtable:{"SS":"春夏","FW":"秋冬","XX":"经典"}
+        //hashlist:{"SS":{tname:"春夏",tvalue:"SS"}, "FW":{tname:"秋冬",tvalue:"FW"}, "XX":{tname:"经典",tvalue:"XX"}},
+        datalist:[{tname:"春夏",tvalue:"SS"}, {tname:"秋冬",tvalue:"FW"}, {tname:"经典",tvalue:"XX"}],
+        oplabel:"tname",
+        opvalue:"tvalue"
+      }
     }
   }
 }

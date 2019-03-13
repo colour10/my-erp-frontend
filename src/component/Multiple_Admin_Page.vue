@@ -8,34 +8,7 @@
 
     <el-row :gutter="20">
       <el-col :span="24">
-        <el-table :data="tableData" stripe border style="width: 100%;" v-loading.fullscreen.lock="loading">
-          <el-table-column :prop="name" :label="item.label" align="center" :width="item.width||180" v-if="item.is_show" v-for="item in columns" :key="item.name">
-            <template v-slot="scope">
-              <img v-if="item.is_image" :src="image_url_prex+scope.row[item.name]" :style="getImageStyle(item)">
-              <span v-if="!item.is_image">{{item.convert?item.convert(scope.row,scope.rowIndex,item):convert(scope.row,item, rowIndex)}}</span>
-            </template>            
-          </el-table-column>
-          
-          <el-table-column :label="item.label" align="center" :width="item.width||180" v-for="item in buttons" >
-            <template v-slot="scope">
-              <el-button type="info" circle @click="item.handler(scope.$index, scope.row, item)">{{item.label}}</el-button>
-            </template>            
-          </el-table-column>
-
-          <el-table-column prop="lang_code" :label="labels.yuyan" width="180" align="center">
-            <template v-slot="scope">
-             <span v-for="(item, key) in languages" :key="item.code" :value="item.code">
-               <el-button :type="isSettingLanguage(scope.row, item.code)?'primary':'info'" circle @click="showFormToUpdate(scope.$index, scope.row, item.code, scope.row.languages.indexOf(item.code)>0)">{{item.shortName}}</el-button>
-             </span>
-            </template>
-          </el-table-column>
-
-          <el-table-column :label="labels.caozuo" width="150" align="center">
-            <template v-slot="scope">
-              <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">{{labels.shanchu}}</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
+        <multiple-admin-tablelist ref="tablelist" :controller="controller" :key_column="key_column" :columns="columns" :buttons="buttons" :options="options" :base="base" :onclickupdate="showFormToUpdate"></multiple-admin-tablelist>
       </el-col>
     </el-row>
 
@@ -43,19 +16,19 @@
     <el-dialog class="user-form" :title="formTitle" :visible.sync="dialogVisible" :center="true" :width="componenToptions.dialogWidth||'40%'" :modal="false">
       <el-form ref="form" :model="form" label-width="100px">
         <el-form-item :label="item.label" v-if="!item.is_hidden" v-for="item in columns" :key="item.name">
-          <el-input :ref="item.name" @keyup.enter.native="onSubmit" :type="item.type?item.type:'text'" v-if="!item.type||item.type=='input'||item.type=='textarea'" v-model="form[item.name]" :disabled="isFormDisabled(item)"></el-input>
-          <el-switch :ref="item.name" v-if="item.type=='switch'" v-model="form[item.name]" :disabled="isFormDisabled(item)" active-value="1" inactive-value="0"></el-switch>
+          <el-input :ref="item.name" @keyup.enter.native="onSubmit" :type="item.type?item.type:'text'" v-if="!item.type||item.type=='input'||item.type=='textarea'" v-model="form[getColumnName(item)]"></el-input>
+          <el-switch :ref="item.name" v-if="item.type=='switch'" v-model="form[item.name]" active-value="1" inactive-value="0"></el-switch>
                               
-          <simple-select :ref="item.name" v-if="item.type=='select'" v-model="form[item.name]" v-bind="item.data_source" :disabled="isFormDisabled(item)">
+          <simple-select :ref="item.name" v-if="item.type=='select'" v-model="form[item.name]" :data_source="item.data_source" :lang="lang">
           </simple-select>
           
-          <el-upload :ref="item.name" :action="'/common/upload?category='+controller" v-if="item.type=='upload'" :multiple="item.multiple || false"  :limit="item.limit || 1" :on-success="getUploadSuccessCallback(item)" :on-remove="getRemoveUploadFileCallback(item)" :disabled="isFormDisabled(item)">
+          <el-upload :ref="item.name" :action="'/common/upload?category='+controller" v-if="item.type=='upload'" :multiple="item.multiple || false"  :limit="item.limit || 1" :on-success="getUploadSuccessCallback(item)" :on-remove="getRemoveUploadFileCallback(item)">
             <el-button size="small" type="primary">{{labels.shangchuan}}</el-button>
           </el-upload>
         </el-form-item>
 
         <el-form-item :label="labels.yuyan">
-            <el-select v-model="!form.relateid?default_language:form.lang_code" :placeholder="labels.choice" disabled>
+            <el-select v-model="lang" :placeholder="labels.choice" disabled>
               <el-option v-for="(item, key) in languages" :key="item.code" :label="item.name" :value="item.code">
               </el-option>
             </el-select>
@@ -73,36 +46,44 @@
 
 export default {
     name: 'multiple-admin-page',
-    props: ['columns', "buttons" ,"options","controller", "base", "default_language", "image_url_prex"],
+    props: ['columns', "buttons" ,"options","controller", "base", "key_column", "auto_hide"],
     components: {
 
     },
     data() {
         var form = {
-            id:"",
-            relateid:'',
-            lang_code:''
+            id:""
         }
 
         var options = this.options || {}
         var base = this.base || {}
         
         var columns = this.columns
+        var column;
+        
+        var languages = $ASAL._languages;
+        var keys = Object.keys(languages)
         for(var i=0;i<columns.length;i++) {
-            if(columns[i].is_create && columns[i].is_update) {
-                form[columns[i].name] = ""
+            column = columns[i]
+            if(column.is_multiple) {
+                keys.forEach(function(code){
+                    form[column.name+"_"+code] = "" 
+                });
+            }
+            else {
+                form[column.name] = ""
             }
         }
+        //console.log(columns,form)
 
         return {
             dialogVisible:false,
             form: form,
-            rowIndex:"",
+            rowIndex:"",            
             formTitle:"",
-            tableData:[] ,
+            lang:$ASAL.lang,
             componenToptions:options,
-            languages:[],
-            loading:true,
+            languages:$ASAL._languages,
             labels:{
                 baocun: $ASAL.baocun,
                 xinjian: $ASAL.xinjian,
@@ -117,30 +98,23 @@ export default {
     methods: {
         onSubmit() {
             var self = this;
+            self.form.lang = self.lang;
             if(self.form.id=="") {
                 $ASA.submit.call(self, "/"+self.controller+"/add", self.form, function(){
-                    if(self.form.relateid) {
-                        self.tableData[self.rowIndex].languages += ','+self.form.lang_code;
-                    }
-                    else {
-                        self.form.languages = self.form.lang_code;
-                        self.form.relateid = self.form.id
-                        self.tableData.push($ASA.clone(self.form))
-                    }
+                    self.$refs.tablelist.appendRow($ASA.clone(self.form))
                     
-                    self.dialogVisible = false
-                    self.clearFiles()
+                    if(self.auto_hide!==false) {
+                        self.dialogVisible = false
+                    }
                 })
             }
             else {
                 $ASA.submit.call(self, "/"+self.controller+"/edit", self.form, function(){
-                    //self.tableData[self.rowIndex].lang_code = self.form.lang_code
-                    if(self.form.lang_code==self.default_language) {
-                        $ASA.copyTo(self.form, self.tableData[self.rowIndex])
+                    var row = self.$refs.tablelist.getRow(self.rowIndex)
+                    $ASA.copyTo(self.form, row)
+                    if(self.auto_hide!==false) {
+                        self.dialogVisible = false
                     }
-                    
-                    self.dialogVisible = false
-                    self.clearFiles()
                 })
             }
         },
@@ -153,74 +127,19 @@ export default {
                     self.form[key] =  self.base[key]
                 });
             }
-
-            self.form.lang_code = self.default_language;
+            self.lang = $ASAL.lang;
             self.showDialog($ASAL.tianjiaxinxi);
         },
-        showFormToUpdate(rowIndex, row, lang_code, is_update){
+        showFormToUpdate(rowIndex, row, lang){
             var self = this
             self.rowIndex = rowIndex;
+            self.lang = lang;
+            $ASA.copyTo(row, self.form);
 
-            //console.log(rowIndex, row, lang_code, action, this.default_language)
-            if(row.lang_code==lang_code) {
-                //更新本条记录
-                $ASA.copyTo(row, self.form)
-                self.showDialog($ASAL.xiugaixinxi)
-            }
-            else {
-                if(is_update) {
-                    //console.log(lang_code)
-                    //加载这条数据
-                    $ASA.post("/"+self.controller+"/load", {lang_code:lang_code, relateid:row.relateid}, function(res){
-                        $ASA.copyTo(res, self.form)
-
-                        self.showDialog($ASAL.xiugaixinxi);
-                    }, "json")
-                }
-                else {
-                    $ASA.empty(self.form)
-                    
-                    if(self.base) {
-                        Object.keys(self.base).forEach(function(key){
-                            self.form[key] =  self.base[key]
-                        });
-                    }
-                    //console.log(self.form)
-                    self.columns.forEach(function(column){
-                        if(!column.disable_change) {
-                            self.form[column.name] = ""
-                        }
-                        else {
-                            self.form[column.name] = row[column.name]    
-                        }
-                    })
-                    //console.log(self.form)
-        
-                    self.form.relateid = row.relateid;
-                    self.form.lang_code = lang_code
-                    
-                    self.showDialog($ASAL.tianjiaxinxi);
-                }
-            }
+            self.showDialog($ASAL.xiugaixinxi);
         },
-        handleDelete(rowIndex, row) {
-            var self = this
-            self.rowIndex = rowIndex;
-
-            $ASA.remove.call(this, "/"+self.controller+"/deleteGroup?id="+row.id, function() {
-                self.$delete(self.tableData,rowIndex)
-            })
-        },
-        getImageStyle(column){
-            var styles = "";
-            if(column.image_width) {
-                styles += "width:"+column.image_width+'px;'  
-            }    
-            
-            if(column.image_height) {
-                styles += "height:"+column.image_height+'px;'  
-            } 
-            return styles;
+        getColumnName(column){
+            return column.is_multiple? column.name + "_" + this.lang: column.name;
         },
         getUploadSuccessCallback(column){      
             var self = this;      
@@ -282,62 +201,13 @@ export default {
                     }  
                 }
              },50)  
-        },
-        isSettingLanguage(row, lang_code) {
-            //console.log(row.languages, lang_code)
-            return (row.languages && row.languages.indexOf(lang_code)>=0)
-        },
-        convert(row,column, rowIndex){
-            var value = row[column.name]; 
-            if(column.type=='switch') {
-                return value=='1'? $ASAL.yes : $ASAL.no;   
-            }   
-            else if(column.type=='select') {
-                if(column.data_source.hashtable) {
-                    return column.data_source.hashtable[value]   
-                }
-                else {
-                    return value; 
-                }
-            } 
-            else {
-                
-                return value;      
-            }
-        },
-        isFormDisabled(column) {
-            var form = this.form;
-            //console.log(column, form)
-            return (form.id==''&&!column.is_create) || (form.id!=''&&!column.is_update) || ((form.id!='' || form.lang_code!=this.default_language)&&column.disable_change)
-        },
-        loadList(cb) {
-            var self = this;
-            self.tableData = []
-
-            var params = {}
-            params.lang_code = self.default_language;
-            if(self.base) {
-                Object.keys(self.base).forEach(function(key){
-                    params[key] =  self.base[key]
-                });
-                //console.log(self.base)
-            }
-
-            $ASA.post("/"+self.controller+"/page",params,function(res){
-                //console.log(res)
-                for(var i=0;i<res.length;i++) {
-                    self.tableData.push(res[i])
-                }
-                console.log("callback",cb)
-                cb()
-            },'json');
         }
     },
     watch:{
         base:{
             handler:function(newValue,oldValue){
-                //console.log("change",newValue,oldValue)
-                this.loadList(function(){})
+                console.log("change",newValue,oldValue)
+                //this.loadList(function(){})
             },
             deep: true
         }
@@ -345,25 +215,6 @@ export default {
     computed:{
     },
     mounted:function(){
-        var self = this;
-
-        var load_languages = new Promise(function(resolve, reject){
-            $ASA.post("/common/language", {}, function(res){
-                //console.log(res)
-                resolve(res)
-            },"json")
-        });
-
-        var load_page = new Promise(function(resolve, reject){
-            self.loadList(function(){
-                resolve()    
-            })
-        });
-
-        Promise.all([load_languages, load_page]).then(function (results) {
-            self.languages = results[0]
-            self.loading = false;
-        });
     }
 }
 
