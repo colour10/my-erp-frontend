@@ -1,6 +1,7 @@
 <template>
   <div id="app">
-    <avatar v-model="msg"></avatar>
+    <selectdialogsingle v-model="msg_single" :source="source"></selectdialogsingle>
+    <selectdialog v-model="msg" :source="source"></selectdialog>
   </div>
 </template>
 
@@ -8,6 +9,7 @@
     import Vue from 'vue';
     import simple from './component/Simple_Admin_Page.vue'
     import selectdialog from './component/Select_Dialog.vue'
+    import selectdialogsingle from './component/Select_Dialog_Single.vue'
     import avatar from './component/Simple_Avatar.vue'
     
     Vue.use(selectdialog);
@@ -15,18 +17,14 @@
 export default {
   name: 'asa-app',
   components: {
-      avatar
+      selectdialogsingle,
+      selectdialog
     },
   data () {
     return {
-      msg: '',
-      data_source:{
-        //hashtable:{"SS":"春夏","FW":"秋冬","XX":"经典"}
-        //hashlist:{"SS":{tname:"春夏",tvalue:"SS"}, "FW":{tname:"秋冬",tvalue:"FW"}, "XX":{tname:"经典",tvalue:"XX"}},
-        datalist:[{tname:"春夏",tvalue:"SS"}, {tname:"秋冬",tvalue:"FW"}, {tname:"经典",tvalue:"XX"}],
-        oplabel:"tname",
-        opvalue:"tvalue"
-      }
+      msg_single: 'FW',
+      msg: 'FW',
+      source:'test.hashlist'
     }
   }
 }

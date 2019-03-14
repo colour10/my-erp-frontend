@@ -4,10 +4,10 @@
     <el-button slot="append" icon="el-icon-more" @click="showPanel"></el-button>
   </el-input>
   
-  <el-dialog class="user-form" :title="labels.formTitle" :visible.sync="dialogVisible" :center="true" :width="componenToptions.dialogWidth||'40%'" :modal="false">
-    <el-checkbox-group v-model="checkList" @change="handleChange">
-      <el-checkbox :label="key" v-for="(item,key) in data" :key="key">{{dataSource.getRowLabel(key)}}</el-checkbox>
-    </el-checkbox-group>
+  <el-dialog class="user-form" :title="labels.formTitle" :visible.sync="dialogVisible" :center="true" :width="componenToptions.dialogWidth||'40%'" :modal="false">  
+    <el-radio-group v-model="currentValue" @change="handleChange">
+      <el-radio :label="key" v-for="(item,key) in data" :key="key">{{dataSource.getRowLabel(key)}}</el-radio>
+    </el-radio-group>
     
     <div slot="footer" class="dialog-footer" v-if="!auto_model">    
       <el-button type="primary" @click="handleSelect">{{labels.ok}}</el-button>
@@ -23,12 +23,15 @@ import DataSource from './DataSource.js'
 import globals from './globals.js'
 
 export default {
-    name: 'select-dialog',
+    name: 'select-dialog-single',
     props: {
         select_value:{
             type: [String,Number],
             required: true,
             default:''
+        },
+        data_source:{
+            type: Object    
         },
         disabled:{
             type: Boolean,
@@ -48,7 +51,8 @@ export default {
         source:{
             type:String,
             required:true    
-        }        
+        }
+        
     },
     model: {
         prop: 'select_value',
@@ -56,12 +60,17 @@ export default {
     },
     data() {
         var self = this
-        var dataSource = DataSource.getDataSource(self.source, self.lang);
         
+        //var dataSource = new DataSource(self.data_source, self.lang);
+        var dataSource = DataSource.getDataSource(self.source, self.lang);
+        var data = dataSource.getData()
+        
+        
+        console.log(dataSource,"dataSource")
         return {
             currentText:"",
-            checkList:[],
-            data:dataSource.getData(),
+            currentValue:"",
+            data:data,
             componenToptions:{},            
             dialogVisible:false,
             labels:{
@@ -75,14 +84,14 @@ export default {
     methods: {
         handleSelect() {
             var self = this;
-            self.currentText = self.convertValue(self.checkList)
-            self.$emit('change',self.checkList.join(","))    
+            self.currentText = self.convertValue(self.currentValue)
+            self.$emit('change',self.currentValue)    
             self.dialogVisible = false;  
         },
         handleCancel() {
             var self = this;
             self.currentText = self.convertValue(this.select_value)
-            self.checkList = self.select_value.split(",")
+            self.currentValue = self.select_value
             self.dialogVisible = false;  
         },
         showPanel(){
@@ -94,26 +103,18 @@ export default {
             
             if(self.auto_model) {
                 self.currentText = self.convertValue(newValue)
-                self.$emit('change',newValue.join(","))
+                self.$emit('change',newValue)
             }
         },
         convertValue(value) {
             var self = this;
-            if(typeof(value)=='string') {
-                value = value.split(',')    
-            }
-            
-            return value.map(function(key){
-                return self.dataSource.getRowLabel(key)
-            }).join(",")
+            return self.dataSource.getRowLabel(value);
         }
     },
     watch:{
         select_value(newValue) {
             this.currentText = this.convertValue(newValue)
-            if(newValue.trim()!="") {
-                this.checkList = newValue.split(",");
-            }
+            this.currentValue = newValue
         },
         lang(newValue) {
             this.dataSource.setLang(newValue)   
@@ -123,15 +124,8 @@ export default {
     },
     mounted:function(){
         var self = this;
-        
         self.currentText = self.convertValue(self.select_value)
-        if(self.select_value.trim()!="") {
-            self.checkList = self.select_value.split(",");
-        }
-        
+        self.currentValue = self.select_value
     }
 }
 </script>
-
-<style>
-</style>

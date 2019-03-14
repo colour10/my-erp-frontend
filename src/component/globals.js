@@ -5,10 +5,15 @@ ASA.caches = {}
 ASA.get = function(url, callback) {
     if(ASA.caches[url]) {
         if(ASA.caches[url].loaded==false) {
-            var tryNext;
-            
-            tryNext = getCallback(url, callback)
-            setTimeout(tryNext,50)
+            setTimeout(function() {
+                console.log("===================", url)
+                if(ASA.caches[url] && ASA.caches[url].loaded==true) {
+                    callback(ASA.caches[url].data)
+                }
+                else {
+                    setTimeout(this.callee, 50)    
+                }      
+            },50)
         }
         else {
             callback(ASA.caches[url].data) 
@@ -27,16 +32,15 @@ ASA.get = function(url, callback) {
     }
 };
 
-function getCallback(url,callback) {
-    return function() {
-        console.log("===================", url)
-        if(ASA.caches[url] && ASA.caches[url].loaded==true) {
-            callback(ASA.caches[url].data)
-        }
-        else {
-            setTimeout(this.callee, 50)    
-        }      
-    }   
+ASA.getLabel = function(name) {
+    console.log(typeof($ASA))
+    if(typeof($ASA)!='undefined' && $ASA[name]) {
+        return $ASA[name]   
+    }  
+    else {
+        return "";   
+    } 
 }
+
 
 export default ASA
