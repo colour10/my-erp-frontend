@@ -1,13 +1,17 @@
 <template>
   <el-select v-model="currentValue" placeholder="" style="width:150" @change="handleChange" filterable :filter-method="filterCurrency" :disabled="disabled">
-    <el-option v-for="item in data" :key="item.code" :value="item.code" :label="item.label">
-      <span style="float: left">{{ item.code }}</span>
-      <span style="float: right; color: #8492a6; font-size: 13px">{{ item.label }}</span>
+    <el-option v-for="(item,key) in current_list" :key="item.getKeyValue()" :value="item.getKeyValue()" :label="item.getKeyValue()">
+      <span style="float: left">{{ item.getRow().value }}</span>
+      <span style="float: right; color: #8492a6; font-size: 13px">{{ item.getRow().name }}</span>
     </el-option>
+    
   </el-select>
 </template>
 
 <script>
+import DataSource from './DataSource.js'
+import globals from './globals.js'
+
 export default {
     name: 'select-currency',
     props: {
@@ -26,47 +30,23 @@ export default {
     },
     data() {
         var self = this
+        var dataSource = DataSource.getDataSource("currency", self.lang);
         return {
             currentValue:self.select_value,
             data:[],
             dataCopy:[],
-            is_load:false,
-            qingxuanze:$ASAL.qingxuanze
+            currentInput:"",
+            dataSource:dataSource,
+            qingxuanze:globals.getLabel("qingxuanze")
         }
     },
     methods: {
         filterCurrency(val) {
-            var self = this;
-            if (val) { //val存在
-                self.data = self.dataCopy.filter((item) => {
-                    if (!!~item.code.indexOf(val) || !!~item.code.toUpperCase().indexOf(val.toUpperCase())) {
-                        return true
-                    }
-                })
-            } 
-            else { //val为空时，还原数组
-                self.data = data.dataCopy;
-            }
+            this.currentInput = val
         },
         handleChange(newValue) {
             console.log("change", newValue)
             this.$emit('change',newValue)
-        },
-        loadList() {
-            var self = this;
-            if(self.is_load) {
-                return ;   
-            }
-            
-            $ASA.post("/common/currency", {}, function(res){
-               
-                Object.keys(res.currency).forEach(function(key){
-                    self.dataCopy.push({code:key, label:res.currency[key]})
-                    self.data.push({code:key, label:res.currency[key]})
-                });
-            
-                self.is_load = true;
-            },'json');
         }
     },
     watch:{
@@ -75,9 +55,28 @@ export default {
         }
     },
     computed:{
+        current_list() {
+            var self = this
+            var val = self.currentInput;
+            if (val) { //val存在
+                return self.dataCopy.filter((item) => {
+                    var row = item.getRow().value
+                    if (!!~row.indexOf(val) || !!~row.toUpperCase().indexOf(val.toUpperCase())) {
+                        return true
+                    }
+                })
+            } 
+            else { //val为空时，还原数组
+                console.log("self.dataCopy", self.dataCopy)
+                return self.dataCopy;
+            }
+        }
     },
     mounted:function(){
-        this.loadList()
+        var self = this
+        self.dataSource.getData(function(data){
+            self.dataCopy = data      
+        }) 
     }
 }
 </script>

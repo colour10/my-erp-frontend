@@ -8,6 +8,7 @@ import select_dialog from './component/Select_Dialog.vue'
 import select_dialog_single from './component/Select_Dialog_Single.vue'
 import select_currency from './component/Select_Currency.vue'
 import avatar from './component/Simple_Avatar.vue'
+import album from './component/Simple_Album.vue'
 import globals from './component/globals.js'
 
 const paykeyboard = {
@@ -21,6 +22,7 @@ const paykeyboard = {
         Vue.component(select_currency.name, select_currency) // vuePayKeyboard.name 组件的name属性
         Vue.component(avatar.name, avatar) // vuePayKeyboard.name 组件的name属性
         Vue.component(select_dialog_single.name, select_dialog_single) // vuePayKeyboard.name 组件的name属性
+        Vue.component(album.name, album) // vuePayKeyboard.name 组件的name属性
         
         Vue.prototype.$asa = globals
         

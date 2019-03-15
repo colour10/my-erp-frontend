@@ -22,7 +22,7 @@
           <el-input :ref="item.name" @keyup.enter.native="onSubmit" :type="item.type?item.type:'text'" v-if="!item.type||item.type=='input'||item.type=='textarea'" v-model="form[item.name]"></el-input>
           <el-switch :ref="item.name" v-if="item.type=='switch'" v-model="form[item.name]" active-value="1" inactive-value="0"></el-switch>
           
-          <simple-select :ref="item.name" v-if="item.type=='select'" v-model="form[item.name]" :data_source="item.data_source" :lang="lang">
+          <simple-select :ref="item.name" v-if="item.type=='select'" v-model="form[item.name]" :source="item.source" :lang="lang">
           </simple-select>
         </el-form-item>
       </el-form>
@@ -150,4 +150,19 @@ export default {
 </script>
 
 <style>
+    .user-form .width2 .el-input__inner {
+        width:200px;
+    }
+    
+    .user-form .width1 .el-input__inner {
+        width:510px;
+    }
+    
+    .user-form .width1 .el-textarea__inner {
+        width:510px;
+    }
+    
+    .user-form .width2 .el-date-editor.el-input, .el-date-editor.el-input__inner {
+        width:200px
+    }
 </style>

@@ -29,6 +29,8 @@
   </el-table>
 </template>
 <script>
+import DataSource from './DataSource.js'
+import globals from './globals.js'
 
 export default {
     name: 'multiple-admin-tablelist',
@@ -43,7 +45,7 @@ export default {
         return {
             tableData:[] ,
             componenToptions:options,
-            languages:$ASAL._languages,
+            languages:$ASAL.list_languages,
             loading:true,
             labels:{
                 shanchu: $ASAL.shanchu,
@@ -100,18 +102,21 @@ export default {
                 return value=='1'? $ASAL.yes : $ASAL.no;   
             }   
             else if(column.type=='select') {
-                if(column.data_source.hashtable) {
-                    return column.data_source.hashtable[value]   
+                //异步加载数据，然后重新渲染列表
+                if(!column.dataSource) {
+                    column.dataSource = DataSource.getDataSource(column.source, self.current_lang);
                 }
-                /*else if(column.data_source.getValueByKey) {
-                    return column.data_source.getValueByKey(value, self.lang)
-                }*/
-                else {
-                    return value; 
-                }
-            } 
-            else {
                 
+                if(row[column.name + "__columncopy"]!=value) {
+                    column.dataSource.getRowLabel(value,function(label){
+                        row[column.name + "__label"] = label; 
+                        row[column.name + "__columncopy"] = value;  
+                    });
+                    console.log('==================')
+                }
+                return row[column.name + "__label"]
+            } 
+            else {                
                 return value;      
             }
         },
@@ -126,11 +131,22 @@ export default {
                 });
                 //console.log(self.base)
             }
+            
+            var obj = {}
+            var columns = self.columns;
+            for(var i=0;i<columns.length;i++) {
+                if(columns[i].type=='select') {
+                    obj[columns[i].name+"__label"] = "";
+                    obj[columns[i].name+"__columncopy"] = "";  
+                }   
+            }
+            
+            var asa = self.$asa;
 
             $ASA.post("/"+self.controller+"/page",params,function(res){
                 //console.log(res)
                 for(var i=0;i<res.length;i++) {
-                    self.tableData.push(res[i])
+                    self.tableData.push(asa.extend(res[i], obj))
                 }
                 cb()
             },'json');

@@ -1,7 +1,11 @@
 <template>
   <div id="app">
-    <selectdialogsingle v-model="msg_single" :source="source"></selectdialogsingle>
+    <!--<selectdialogsingle v-model="msg_single" :source="source"></selectdialogsingle>
     <selectdialog v-model="msg" :source="source"></selectdialog>
+    <simpleselect v-model="msg_select" :source="source"></simpleselect>
+    <selectcurrency v-model="msg" ></selectcurrency>-->
+    
+    <spalbum v-model="msg" ></spalbum>
   </div>
 </template>
 
@@ -11,6 +15,9 @@
     import selectdialog from './component/Select_Dialog.vue'
     import selectdialogsingle from './component/Select_Dialog_Single.vue'
     import avatar from './component/Simple_Avatar.vue'
+    import simpleselect from './component/Simple_Select.vue'
+    import selectcurrency from './component/Select_Currency.vue'
+    import spalbum from './component/Simple_Album.vue'
     
     Vue.use(selectdialog);
     Vue.use(avatar);
@@ -18,43 +25,18 @@ export default {
   name: 'asa-app',
   components: {
       selectdialogsingle,
-      selectdialog
+      selectdialog,
+      simpleselect,
+      selectcurrency,
+      spalbum
     },
   data () {
     return {
       msg_single: 'FW',
-      msg: 'FW',
+      msg: '',
+      msg_select:"XX",
       source:'test.hashlist'
     }
   }
 }
 </script>
-
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-
-h1, h2 {
-  font-weight: normal;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-
-a {
-  color: #42b983;
-}
-</style>

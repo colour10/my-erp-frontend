@@ -6,7 +6,7 @@
   
   <el-dialog class="user-form" :title="labels.formTitle" :visible.sync="dialogVisible" :center="true" :width="componenToptions.dialogWidth||'40%'" :modal="false">
     <el-checkbox-group v-model="checkList" @change="handleChange">
-      <el-checkbox :label="key" v-for="(item,key) in data" :key="key">{{dataSource.getRowLabel(key)}}</el-checkbox>
+      <el-checkbox :label="item.getKeyValue()" v-for="(item,key) in data" :key="item.getKeyValue()">{{item.getLabelValue()}}</el-checkbox>
     </el-checkbox-group>
     
     <div slot="footer" class="dialog-footer" v-if="!auto_model">    
@@ -21,12 +21,12 @@
 <script>
 import DataSource from './DataSource.js'
 import globals from './globals.js'
+import _ from 'underscore'
 
 export default {
     name: 'select-dialog',
     props: {
         select_value:{
-            type: [String,Number],
             required: true,
             default:''
         },
@@ -61,7 +61,7 @@ export default {
         return {
             currentText:"",
             checkList:[],
-            data:dataSource.getData(),
+            data:[],
             componenToptions:{},            
             dialogVisible:false,
             labels:{
@@ -75,13 +75,13 @@ export default {
     methods: {
         handleSelect() {
             var self = this;
-            self.currentText = self.convertValue(self.checkList)
+            //self.convertValue(self.checkList)
             self.$emit('change',self.checkList.join(","))    
             self.dialogVisible = false;  
         },
         handleCancel() {
             var self = this;
-            self.currentText = self.convertValue(this.select_value)
+            self.convertValue(this.select_value)
             self.checkList = self.select_value.split(",")
             self.dialogVisible = false;  
         },
@@ -90,45 +90,76 @@ export default {
         },
         handleChange(newValue) {
             var self = this;
-            //console.log("change", newValue)            
             
             if(self.auto_model) {
-                self.currentText = self.convertValue(newValue)
+                self.convertValue(newValue)
                 self.$emit('change',newValue.join(","))
             }
         },
         convertValue(value) {
             var self = this;
+            console.log("convertValue", self.source)
+            
             if(typeof(value)=='string') {
                 value = value.split(',')    
             }
             
-            return value.map(function(key){
-                return self.dataSource.getRowLabel(key)
-            }).join(",")
+            var arr = value.map(function(key){
+                return new Promise(function(resolve, reject){
+                    self.dataSource.getRowLabel(key,function(label){
+                        resolve([key,label])
+                    });
+                })
+            });
+            
+            Promise.all(arr).then(data => {
+                console.log(data.join(","), "===")
+                
+                //过滤掉找不到label的数据
+                var arr = _.filter(data, function(item){
+                    return item[1]!=""    
+                })
+                
+                
+                self.checkList = _.map(arr, _.first);
+                self.currentText = _.map(arr, function(item){
+                    return item[1]    
+                }).join(",")
+            }) 
         }
     },
     watch:{
         select_value(newValue) {
-            this.currentText = this.convertValue(newValue)
+            console.log("change", newValue)
+            this.convertValue(newValue)
             if(newValue.trim()!="") {
                 this.checkList = newValue.split(",");
+            }
+            else {
+                this.checkList = []
             }
         },
         lang(newValue) {
             this.dataSource.setLang(newValue)   
         }
     },
-    computed:{
-    },
     mounted:function(){
         var self = this;
-        
-        self.currentText = self.convertValue(self.select_value)
-        if(self.select_value.trim()!="") {
+        var txt = self.select_value ||""
+        self.convertValue(txt)
+        if(txt.trim()!="") {
             self.checkList = self.select_value.split(",");
+            
+//            self.checkList = self.checkList.filter(function(key){
+//                console.log(self.dataSource.getRowLabel(key))
+//                return self.dataSource.getRowLabel(key)!="";
+//            })
+//            console.log(self.checkList)
         }
         
+        self.dataSource.getData(function(data){
+            self.data = data      
+        })        
     }
 }
 </script>

@@ -3,7 +3,9 @@
     <el-table :data="tableData" stripe border style="width: 100%;">
       <el-table-column :prop="item.name" :label="item.label" align="center" :width="item.width||180" v-if="!item.is_hide" v-for="item in columns" :key="item.name">
         <template v-slot="scope">
-          {{item.convert?item.convert(scope.row,scope.rowIndex,item):convert(scope.row,item, rowIndex)}}
+          <img v-if="item.is_image" :src="image_url_prex+scope.row[item.name]" :style="getImageStyle(item)">
+          <span v-if="!item.is_image">{{item.convert?item.convert(scope.row,scope.rowIndex,item):convert(scope.row,item, rowIndex)}}</span>
+          
         </template>
       </el-table-column>
       
@@ -24,6 +26,9 @@
 </template>
 
 <script>
+import DataSource from './DataSource.js'
+import globals from './globals.js'
+
 export default {
     name: 'simple-admin-tablelist',
     props: ['columns',"buttons","controller", "base", "onclickupdate"],
@@ -38,7 +43,8 @@ export default {
             tableData:[],
             'caozuo':$ASAL.caozuo,
             'bianji':$ASAL.bianji,
-            'shanchu':$ASAL.shanchu
+            'shanchu':$ASAL.shanchu,
+            image_url_prex:$ASAL._image_url_prex
         }
     },
     methods: {
@@ -62,12 +68,54 @@ export default {
                 console.log("click edit")
             }
         },
+        getImageStyle(column){
+            var styles = "";
+            if(column.image_width) {
+                styles += "width:"+column.image_width+'px;'  
+            }    
+            
+            if(column.image_height) {
+                styles += "height:"+column.image_height+'px;'  
+            } 
+            return styles;
+        },
         convert(row,column, rowIndex){
+            var value = row[column.name]
             if(column.type=='switch') {
-                return row[column.name]=='1'? $ASAL.yes : $ASAL.no;
+                return value=='1'? $ASAL.yes : $ASAL.no;
+            }
+            else if(column.type=='select') {
+                //异步加载数据，然后重新渲染列表
+                if(!column.dataSource) {
+                    column.dataSource = DataSource.getDataSource(column.source, globals.getLabel("lang"));
+                }
+                
+                if(row[column.name + "__columncopy"]!=value) {
+                    column.dataSource.getRowLabel(value,function(label){
+                        row[column.name + "__label"] = label; 
+                        row[column.name + "__columncopy"] = value;  
+                    });
+                    console.log('==================', value)
+                }
+                return row[column.name + "__label"]
+            }
+            else if(column.type=='select-dialog') {
+                //异步加载数据，然后重新渲染列表
+                if(!column.dataSource) {
+                    column.dataSource = DataSource.getDataSource(column.source, globals.getLabel("lang"));
+                }
+                
+                if(row[column.name + "__columncopy"]!=value) {
+                    column.dataSource.getRowLabels(value,function(label){
+                        row[column.name + "__label"] = label; 
+                        row[column.name + "__columncopy"] = value;  
+                    });
+                    console.log('==================', value)
+                }
+                return row[column.name + "__label"]         
             }
             else {
-                return row[column.name];
+                return value;
             }
         },
         loadList() {
@@ -82,11 +130,22 @@ export default {
                 });
                 //console.log(self.base)
             }
+            
+            var obj = {}
+            var columns = self.columns;
+            for(var i=0;i<columns.length;i++) {
+                if(columns[i].type=='select' || columns[i].type=='select-dialog') {
+                    obj[columns[i].name+"__label"] = "";  
+                    obj[columns[i].name+"__columncopy"] = "";  
+                }   
+            }
+            
+            var asa = self.$asa;
 
             $ASA.post("/"+self.controller+"/page",params,function(res){
                 //console.log(res)
                 for(var i=0;i<res.length;i++) {
-                    self.tableData.push(res[i])
+                    self.tableData.push(asa.extend(res[i], obj))
                 }
             },'json');
         }

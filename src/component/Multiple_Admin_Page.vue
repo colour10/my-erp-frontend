@@ -14,12 +14,14 @@
 
 
     <el-dialog class="user-form" :title="formTitle" :visible.sync="dialogVisible" :center="true" :width="componenToptions.dialogWidth||'40%'" :modal="false">
-      <el-form ref="form" :model="form" label-width="100px">
-        <el-form-item :label="item.label" v-if="!item.is_hidden" v-for="item in columns" :key="item.name">
+        <el-row>
+      <el-col :span="24">
+      <el-form ref="form" :model="form" label-width="100px" :inline="componenToptions.inline||false" :size="componenToptions.formSize||'medium'">
+        <el-form-item :label="item.label" v-if="!item.is_hidden" v-for="item in columns" :key="item.name" :class="item.class?item.class:''">
           <el-input :ref="item.name" @keyup.enter.native="onSubmit" :type="item.type?item.type:'text'" v-if="!item.type||item.type=='input'||item.type=='textarea'" v-model="form[getColumnName(item)]"></el-input>
           <el-switch :ref="item.name" v-if="item.type=='switch'" v-model="form[item.name]" active-value="1" inactive-value="0"></el-switch>
                               
-          <simple-select :ref="item.name" v-if="item.type=='select'" v-model="form[item.name]" :data_source="item.data_source" :lang="lang">
+          <simple-select :ref="item.name" v-if="item.type=='select'" v-model="form[item.name]" :source="item.source" :lang="lang">
           </simple-select>
           
           <el-upload :ref="item.name" :action="'/common/upload?category='+controller" v-if="item.type=='upload'" :multiple="item.multiple || false"  :limit="item.limit || 1" :on-success="getUploadSuccessCallback(item)" :on-remove="getRemoveUploadFileCallback(item)">
@@ -29,7 +31,7 @@
 
         <el-form-item :label="labels.yuyan">
             <el-select v-model="lang" :placeholder="labels.choice" disabled>
-              <el-option v-for="(item, key) in languages" :key="item.code" :label="item.name" :value="item.code">
+              <el-option v-for="item in languages" :key="item.code" :label="item.name" :value="item.code">
               </el-option>
             </el-select>
           </el-form-item>
@@ -38,6 +40,8 @@
           <el-button type="primary" @click="onSubmit">{{labels.baocun}}</el-button>
         </el-form-item>
       </el-form>
+    </el-row>
+    </el-col>
     </el-dialog>
   </div>
 </template>
@@ -61,7 +65,7 @@ export default {
         var columns = this.columns
         var column;
         
-        var languages = $ASAL._languages;
+        var languages = $ASAL.list_languages;
         var keys = Object.keys(languages)
         for(var i=0;i<columns.length;i++) {
             column = columns[i]
@@ -83,7 +87,7 @@ export default {
             formTitle:"",
             lang:$ASAL.lang,
             componenToptions:options,
-            languages:$ASAL._languages,
+            languages:languages,
             labels:{
                 baocun: $ASAL.baocun,
                 xinjian: $ASAL.xinjian,
@@ -221,4 +225,19 @@ export default {
 </script>
 
 <style>
+    .user-form .width2 .el-input__inner {
+        width:200px;
+    }
+    
+    .user-form .width1 .el-input__inner {
+        width:510px;
+    }
+    
+    .user-form .width1 .el-textarea__inner {
+        width:510px;
+    }
+    
+    .user-form .width2 .el-date-editor.el-input, .el-date-editor.el-input__inner {
+        width:200px
+    }
 </style>

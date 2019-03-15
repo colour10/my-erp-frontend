@@ -6,7 +6,7 @@
   
   <el-dialog class="user-form" :title="labels.formTitle" :visible.sync="dialogVisible" :center="true" :width="componenToptions.dialogWidth||'40%'" :modal="false">  
     <el-radio-group v-model="currentValue" @change="handleChange">
-      <el-radio :label="key" v-for="(item,key) in data" :key="key">{{dataSource.getRowLabel(key)}}</el-radio>
+      <el-radio :label="item.getKeyValue()" v-for="(item,key) in data" :key="item.getKeyValue()">{{item.getLabelValue()}}</el-radio>
     </el-radio-group>
     
     <div slot="footer" class="dialog-footer" v-if="!auto_model">    
@@ -61,16 +61,13 @@ export default {
     data() {
         var self = this
         
-        //var dataSource = new DataSource(self.data_source, self.lang);
         var dataSource = DataSource.getDataSource(self.source, self.lang);
-        var data = dataSource.getData()
-        
         
         console.log(dataSource,"dataSource")
         return {
             currentText:"",
             currentValue:"",
-            data:data,
+            data:[],
             componenToptions:{},            
             dialogVisible:false,
             labels:{
@@ -84,13 +81,13 @@ export default {
     methods: {
         handleSelect() {
             var self = this;
-            self.currentText = self.convertValue(self.currentValue)
+            //self.convertValue(self.currentValue)
             self.$emit('change',self.currentValue)    
             self.dialogVisible = false;  
         },
         handleCancel() {
             var self = this;
-            self.currentText = self.convertValue(this.select_value)
+            self.convertValue(this.select_value)
             self.currentValue = self.select_value
             self.dialogVisible = false;  
         },
@@ -102,30 +99,34 @@ export default {
             //console.log("change", newValue)            
             
             if(self.auto_model) {
-                self.currentText = self.convertValue(newValue)
+                self.convertValue(newValue)
                 self.$emit('change',newValue)
             }
         },
         convertValue(value) {
             var self = this;
-            return self.dataSource.getRowLabel(value);
+            self.dataSource.getRowLabel(value,function(label){
+                self.currentText = label;  
+            });
         }
     },
     watch:{
         select_value(newValue) {
-            this.currentText = this.convertValue(newValue)
+            this.convertValue(newValue)
             this.currentValue = newValue
         },
         lang(newValue) {
             this.dataSource.setLang(newValue)   
         }
     },
-    computed:{
-    },
     mounted:function(){
         var self = this;
-        self.currentText = self.convertValue(self.select_value)
-        self.currentValue = self.select_value
+        self.convertValue(self.select_value)
+        self.currentValue = self.select_value;
+        
+        self.dataSource.getData(function(data){
+            self.data = data      
+        })
     }
 }
 </script>

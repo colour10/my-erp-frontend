@@ -6,6 +6,7 @@
 </template>
 
 <script>
+
 export default {
     name: 'simple-avatar',
     props: {
@@ -23,29 +24,25 @@ export default {
         event: 'change'
     },
     data() {
-        var self = this
         return {
-            imageurl:self.select_value,
+            imageurl:this.select_value,
             image_url_prex:$ASAL._image_url_prex
         }
     },
     methods: {
         handleAvatarSuccess(response, file, fileList) {
-            file.name = response["files"][file.name]
+            var filename = file.name
+            filename = response["files"][filename]
             
-            self.imageurl = file.name
-            console.log(file.name)
-            this.$emit('change', file.name)
+            //self.imageurl = file.name
+            //console.log(file.name)
+            this.$emit('change', filename)
         } 
     },
     watch:{
         select_value(newValue) {
             this.imageurl = newValue
         }
-    },
-    computed:{
-    },
-    mounted:function(){
     }
 }
 </script>
