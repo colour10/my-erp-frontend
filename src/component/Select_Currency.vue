@@ -1,7 +1,7 @@
 <template>
   <el-select v-model="currentValue" placeholder="" style="width:150" @change="handleChange" filterable :filter-method="filterCurrency" :disabled="disabled">
-    <el-option v-for="(item,key) in current_list" :key="item.getKeyValue()" :value="item.getKeyValue()" :label="item.getKeyValue()">
-      <span style="float: left">{{ item.getRow().value }}</span>
+    <el-option v-for="item in current_list" :key="item.getKeyValue()" :value="item.getKeyValue()" :label="item.getLabelValue()">
+      <span style="float: left">{{ item.getRow().code }}</span>
       <span style="float: right; color: #8492a6; font-size: 13px">{{ item.getRow().name }}</span>
     </el-option>
     
@@ -60,7 +60,7 @@ export default {
             var val = self.currentInput;
             if (val) { //val存在
                 return self.dataCopy.filter((item) => {
-                    var row = item.getRow().value
+                    var row = item.getRow().code
                     if (!!~row.indexOf(val) || !!~row.toUpperCase().indexOf(val.toUpperCase())) {
                         return true
                     }

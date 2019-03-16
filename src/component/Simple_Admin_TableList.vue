@@ -105,12 +105,13 @@ export default {
                     column.dataSource = DataSource.getDataSource(column.source, globals.getLabel("lang"));
                 }
                 
-                if(row[column.name + "__columncopy"]!=value) {
+                if(row[column.name + "__columncopy"]!=value && row[column.name + "__loading"]!="1") {
+                    row[column.name + "__loading"] = 1;
                     column.dataSource.getRowLabels(value,function(label){
                         row[column.name + "__label"] = label; 
                         row[column.name + "__columncopy"] = value;  
                     });
-                    console.log('==================', value)
+                    console.log('==================',column.name, value)
                 }
                 return row[column.name + "__label"]         
             }
@@ -135,6 +136,7 @@ export default {
             var columns = self.columns;
             for(var i=0;i<columns.length;i++) {
                 if(columns[i].type=='select' || columns[i].type=='select-dialog') {
+                    obj[columns[i].name+"__loading"] = "";
                     obj[columns[i].name+"__label"] = "";  
                     obj[columns[i].name+"__columncopy"] = "";  
                 }   

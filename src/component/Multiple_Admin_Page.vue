@@ -17,7 +17,7 @@
         <el-row>
       <el-col :span="24">
       <el-form ref="form" :model="form" label-width="100px" :inline="componenToptions.inline||false" :size="componenToptions.formSize||'medium'">
-        <el-form-item :label="item.label" v-if="!item.is_hidden" v-for="item in columns" :key="item.name" :class="item.class?item.class:''">
+        <el-form-item :label="item.label" v-if="!item.is_edit_hide" v-for="item in columns" :key="item.name" :class="item.class?item.class:''">
           <el-input :ref="item.name" @keyup.enter.native="onSubmit" :type="item.type?item.type:'text'" v-if="!item.type||item.type=='input'||item.type=='textarea'" v-model="form[getColumnName(item)]"></el-input>
           <el-switch :ref="item.name" v-if="item.type=='switch'" v-model="form[item.name]" active-value="1" inactive-value="0"></el-switch>
                               
@@ -196,13 +196,16 @@ export default {
                 var columns = self.columns;
                 for(var i=0;i<columns.length;i++){
                     var column = columns[i]
-                    var ele = self.$refs[column.name][0];
-                    
-                    if(!is_focus_call && column.is_focus && !ele.disabled) {
-                        //console.log(ele,"focus")
-                        ele.focus();
-                        is_focus_call = true;
-                    }  
+                    var refs = self.$refs[column.name];
+                    if(refs && refs.length>0) {
+                        var ele = refs[0];
+                        
+                        if(!is_focus_call && column.is_focus && !ele.disabled) {
+                            //console.log(ele,"focus")
+                            ele.focus();
+                            is_focus_call = true;
+                        }  
+                    }
                 }
              },50)  
         }

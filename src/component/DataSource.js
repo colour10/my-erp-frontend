@@ -22,8 +22,11 @@ DataRow.prototype.getLabelValue = function() {
     //console.log(self.row, keyName,"keyName")
     return self.row[keyName] || self.row[keyName+"_"+lang]
 }
-DataRow.prototype.getRow = function() {
-    return this.row;
+
+DataRow.prototype.getLabel = DataRow.prototype.getLabelValue
+DataRow.prototype.getValue = DataRow.prototype.getKeyValue
+DataRow.prototype.getRow = function(key) {
+    return key ? this.row[key] : this.row;
 }
 
 
@@ -97,6 +100,19 @@ DataSource.prototype.getData = function(callback) {
     }
 
     func();
+}
+
+DataSource.prototype.filter = function(condition, callback) {
+    var self = this;
+    self.getData(data=>{       
+        var keys = Object.keys(condition)
+        
+        var result = data.filter(row=>{
+            //console.log("DataSource.filter", row, keys.every(key=>condition[key]==row.getRow(key)))
+            return keys.every(key=>condition[key]==row.getRow(key))    
+        })
+        callback(result)
+    })
 }
 
 DataSource.prototype.getLabelName = function(name) {

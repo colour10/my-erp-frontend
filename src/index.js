@@ -10,6 +10,11 @@ import select_currency from './component/Select_Currency.vue'
 import avatar from './component/Simple_Avatar.vue'
 import album from './component/Simple_Album.vue'
 import globals from './component/globals.js'
+import Asa_Aliases from './component/asa/Asa_Aliases.vue'
+import Asa_BrandTab from './component/asa/Asa_BrandTab.vue'
+import Series from './component/asa/Asa_Series.vue'
+import Asa_Order_Dialog from './component/asa/Asa_Order_Dialog.vue'
+import Asa_Select_Product_Dialog from './component/asa/Asa_Select_Product_Dialog.vue'
 
 const paykeyboard = {
     install(Vue, options) {
@@ -23,6 +28,13 @@ const paykeyboard = {
         Vue.component(avatar.name, avatar) // vuePayKeyboard.name 组件的name属性
         Vue.component(select_dialog_single.name, select_dialog_single) // vuePayKeyboard.name 组件的name属性
         Vue.component(album.name, album) // vuePayKeyboard.name 组件的name属性
+        Vue.component(Asa_Aliases.name, Asa_Aliases) // vuePayKeyboard.name 组件的name属性
+        Vue.component(Asa_BrandTab.name, Asa_BrandTab) // vuePayKeyboard.name 组件的name属性
+        Vue.component(Series.name, Series) // vuePayKeyboard.name 组件的name属性
+        Vue.component(Asa_Order_Dialog.name, Asa_Order_Dialog) // vuePayKeyboard.name 组件的name属性
+        Vue.component(Asa_Select_Product_Dialog.name, Asa_Select_Product_Dialog) // vuePayKeyboard.name 组件的name属性
+        
+        
         
         Vue.prototype.$asa = globals
         

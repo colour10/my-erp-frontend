@@ -1,16 +1,15 @@
 <template>
-  <el-row :gutter="20">
+  <el-row :gutter="10">
       <el-col :span="4"  v-for="item in data" :key="item.id" >
         <img :src="image_url_prex+item.filename" class="avatar" />
       </el-col>
       <el-col :span="4">
-      <el-upload class="avatar-uploader" action="/common/upload?category=product" multiple :show-file-list="false" :on-success="handleAvatarSuccess">
+        <el-upload class="avatar-uploader" action="/common/upload?category=product" multiple :show-file-list="false" :on-success="handleAvatarSuccess">
           <img v-if="imageurl" :src="image_url_prex+imageurl" class="avatar">
           <i v-else class="el-icon-plus avatar-uploader-icon"></i>
         </el-upload>
       </el-col>
-    </el-row>
-  
+    </el-row>  
 </template>
 
 <script>
@@ -94,14 +93,14 @@ export default {
   .avatar-uploader-icon {
     font-size: 28px;
     color: #8c939d;
-    width: 178px;
-    height: 178px;
-    line-height: 178px;
+    width: 148px;
+    height: 148px;
+    line-height: 148px;
     text-align: center;
   }
   .avatar {
-    width: 178px;
-    height: 178px;
+    width: 148px;
+    height: 148px;
     display: block;
   }
   

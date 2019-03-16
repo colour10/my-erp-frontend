@@ -3,10 +3,10 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';    
 Vue.use(ElementUI);
  
-import simple2 from './component/Simple_Admin_Page.vue'
-import multiple from './component/Multiple_Admin_Page.vue'
-import globals from './component/globals.js'
-Vue.prototype.$asa = globals
+//import simple2 from './component/Simple_Admin_Page.vue'
+//import multiple from './component/Multiple_Admin_Page.vue'
+//import globals from './component/globals.js'
+//Vue.prototype.$asa = globals
 import app from './App.vue'
 var data = [{
             id:4,

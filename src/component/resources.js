@@ -37,6 +37,9 @@ options["brandgroup"] = {url:'/brandgroup/list',oplabel:'name', opvalue:'id'}
 //用户组
 options["group"] = {url:'/group/list',oplabel:'group_name', opvalue:'id'}
 
+//用户
+options["user"] = {url:'/user/list',oplabel:'login_name', opvalue:'id'}
+
 //部门列表
 options["department.single"] = {url:'/department/single',oplabel:'label', opvalue:'id'}
 
@@ -64,10 +67,26 @@ options["winterproofing"] = {url:'/winterproofing/list',oplabel:'name', opvalue:
 //尺码组
 options["sizetop"] = {url:'/sizetop/list',oplabel:'name', opvalue:'id'}
 
+//尺码组明细
+options["sizecontent"] = {url:'/sizecontent/list',oplabel:'content', opvalue:'id'}
+
+
+//仓库
+options["warehouse"] = {url:'/warehouse/list',oplabel:'name', opvalue:'id'}
+
+//供货商 发货单位
+options["supplier"] = {url:'/supplier/list',oplabel:'suppliername', opvalue:'id'}
+
 options["gender"] = {hashtable:$ASAL.list_gender}
-options["currency"] = {hashtable:$ASAL.list_currency}
+options["currency"] = {hashlist:$ASAL.list_currency,oplabel:'name', opvalue:'id'}
 options["season"] = {hashtable:$ASAL.list_season}
+options["orderproperty"] = {hashtable:$ASAL.list_orderproperty}
+options["businesstype"] = {hashtable:$ASAL.list_businesstype}
 options["sessionmark"] = {hashtable:{"SS":"SS","FW":"FW","XX":"XX"}}
+options["seasontype"] = {hashtable:{"0":"Pre","1":"Main","2":"Fashion"}}
+
+
+options["formtype"] = {hashtable:$ASAL.list_formtype}
 options["languages"] = {hashlist:$ASAL.list_languages,oplabel:'name', opvalue:'code'}
 //options["materialstatus"] = 
 //options["materialstatus"] = 

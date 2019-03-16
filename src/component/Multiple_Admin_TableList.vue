@@ -3,7 +3,8 @@
     <el-table-column :prop="name" :label="item.label" align="center" :width="item.width||180" v-if="!item.is_hide" v-for="item in columns" :key="item.name">
       <template v-slot="scope">
         <img v-if="item.is_image" :src="image_url_prex+scope.row[item.name]" :style="getImageStyle(item)">
-        <span v-if="!item.is_image">{{item.convert?item.convert(scope.row,scope.rowIndex,item):convert(scope.row,item, rowIndex)}}</span>
+        <span v-if="!item.is_image && !item.html">{{item.convert?item.convert(scope.row,scope.rowIndex,item):convert(scope.row,item, rowIndex)}}</span>
+        <span v-if="item.html" v-html="item.html">{{item.html}}</span>
       </template>            
     </el-table-column>
     
@@ -107,12 +108,13 @@ export default {
                     column.dataSource = DataSource.getDataSource(column.source, self.current_lang);
                 }
                 
-                if(row[column.name + "__columncopy"]!=value) {
+                if(row[column.name + "__columncopy"]!=value && row[column.name + "__loading"]!="1") {
+                    row[column.name + "__loading"] = 1;
                     column.dataSource.getRowLabel(value,function(label){
                         row[column.name + "__label"] = label; 
                         row[column.name + "__columncopy"] = value;  
                     });
-                    console.log('==================')
+                    //console.log('==================')
                 }
                 return row[column.name + "__label"]
             } 
@@ -136,6 +138,7 @@ export default {
             var columns = self.columns;
             for(var i=0;i<columns.length;i++) {
                 if(columns[i].type=='select') {
+                    obj[columns[i].name+"__loading"] = "";
                     obj[columns[i].name+"__label"] = "";
                     obj[columns[i].name+"__columncopy"] = "";  
                 }   
