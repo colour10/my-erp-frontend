@@ -126,9 +126,9 @@
               </template>
             </el-table-column>
 
-            <el-table-column prop="num" :label="globals.getLabel('dinggoushuliang')" width="200" align="center">
+            <el-table-column prop="number" :label="globals.getLabel('dinggoushuliang')" width="200" align="center">
               <template v-slot="scope">
-                <el-input-number v-model="scope.row.num" :min="1" :max="10"></el-input-number>
+                <el-input-number v-model="scope.row.number" :min="1" :max="10"></el-input-number>
               </template>
             </el-table-column>
                         
@@ -215,7 +215,7 @@ export default {
             })*/
             self.dataSource.filter({topid:row.sizetopid}, data=> {
                 data.map( item => { 
-                    self.tabledata.unshift({productid:row.id, sizecontentid:item.getValue(), orderid:0, num:0, sizecontent:item, product:row})
+                    self.tabledata.unshift({productid:row.id, sizecontentid:item.getValue(), orderid:0, number:0, sizecontent:item, product:row})
                 })                
             })
         },
@@ -225,7 +225,7 @@ export default {
             var params = {form:self.form}
             var array = []
             params.list = self.tabledata.map(item=> {
-                return {productid:item.productid, id:item.id, sizecontentid:item.sizecontentid, num:item.num}
+                return {productid:item.productid, id:item.id, sizecontentid:item.sizecontentid, number:item.number}
             })
             console.log(JSON.stringify(params))
             $ASA.submit.call(self, "/order/save", {params}, function(res){
@@ -234,7 +234,7 @@ export default {
         },
         getRowCount(rowIndex, row) {
             console.log(row, "getRowCount")
-            return row.sizetoplist.reduce((total,item)=>total+=item.num,0)
+            return row.sizetoplist.reduce((total,item)=>total+=item.number,0)
         },
         deleteRow(rowIndex, row) {
             var self = this;

@@ -23,7 +23,7 @@ export default {
             type: String
         },
         source:{
-            type:String,
+            type:[String,Object],
             required:true    
         }   
     },

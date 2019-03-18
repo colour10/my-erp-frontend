@@ -40,7 +40,14 @@ function DataSource(options, lang) {
     self.opvalue = options.opvalue || 'value'
     self.is_loaded = false;
             
-    //console.log(data_source.hashtable, data_source.datalist, data_source.url)
+    //console.log(data_source.hashtable, data_source.datalist, data_source.url)    
+}
+
+DataSource.prototype.init = function() {
+    var self = this;
+    var options = self.options;
+
+
     if(options.url) {
         self.loadList()
     }
@@ -64,8 +71,9 @@ function DataSource(options, lang) {
         self.is_loaded = true;
     }
     else if(options.datalist) {
-        self.datalist.forEach(function(item){
-            var row = new DataRow(item[self.opvalue], self)
+        //console.log(options.datalist.forEach,"options")
+        options.datalist.forEach(function(item){
+            var row = new DataRow(item, self)
             
             self.hashtable[item[self.opvalue]] = row;    
             self.data.push(row)
@@ -115,6 +123,24 @@ DataSource.prototype.filter = function(condition, callback) {
     })
 }
 
+DataSource.prototype.sub = function(condition, callback) {
+    var self = this;
+    self.getData(data=>{
+        var keys = Object.keys(condition)
+        
+        var result = data.filter(row=>{
+            //console.log("DataSource.filter", row, keys.every(key=>condition[key]==row.getRow(key)))
+            return keys.every(key=>condition[key]==row.getRow(key))    
+        })
+
+        var result = R.map(item => item.getRow())(result)
+        console.log(result,"999")
+        var sub = new DataSource({datalist:result, oplabel:self.oplabel, opvalue:self.opvalue},self.lang)
+        sub.init()
+        callback(sub)
+    })
+}
+
 DataSource.prototype.getLabelName = function(name) {
     return this.oplabel
 }
@@ -133,6 +159,22 @@ DataSource.prototype.getLang = function() {
 
 DataSource.prototype.setLabelName = function(name) {
     this.oplabel = name
+}
+
+DataSource.prototype.getLabelList = function(valueList, callback) {
+    this.getData( data => {
+        //console.log(valueList, data, '+++++++')    
+        
+        var fmap = R.map(function(value){
+            var equals = item=>value==item.getValue()
+            return R.find(equals)(data)        
+        })(valueList)
+
+        //过滤掉空值
+        fmap = R.filter(R.identity)(fmap)
+        
+        callback(R.map(R.invoker(0,"getLabel"))(fmap))
+    })
 }
 
 /*
@@ -168,8 +210,13 @@ DataSource.prototype.getRowLabel = function(keyValue, callback) {
 
 DataSource.prototype.getRowLabels = function(keyValues, callback) {
     var self = this;
+    keyValues = R.ifElse(R.is(String), R.split(','), R.identity)(keyValues)
+
+    this.getLabelList(keyValues, function(list){
+        callback(R.join(",")(list))
+    })
     
-    var all_promise = keyValues.split(",").map(function(item){
+/*    var all_promise = keyValues.map(function(item){
         return new Promise(function(resolve, reject){
             self.getRow(item,function(row){
                 if(row) {
@@ -185,17 +232,32 @@ DataSource.prototype.getRowLabels = function(keyValues, callback) {
     Promise.all(all_promise).then(function(results) {
         self.loading = false;
         callback(results.join(","))
-    });    
+    });*/    
 }
 
 DataSource.getDataSource = function(resourceName, lang) {
+    if(resourceName.constructor==DataSource) {
+        return resourceName;
+    }
+
     if(resources[resourceName]) {
         resources[resourceName].setLang(lang)
         return resources[resourceName]   
     }
     else {
-        resources[resourceName] = new DataSource(resources_options[resourceName], lang)
-        return resources[resourceName]     
+        var create = function() {
+            resources[resourceName] = new DataSource(resources_options[resourceName], lang)
+            resources[resourceName].init()
+            return resources[resourceName]
+        }
+
+        var tmp_create = function() {
+            return new DataSource(resources_options[resourceName], lang)
+        }
+        
+        return R.ifElse(R.is(String), create, tmp_create)(resourceName)
+        /*resources[resourceName] = new DataSource(resources_options[resourceName], lang)
+        return resources[resourceName]   */  
     }
 }
 

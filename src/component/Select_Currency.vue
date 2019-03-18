@@ -33,7 +33,6 @@ export default {
         var dataSource = DataSource.getDataSource("currency", self.lang);
         return {
             currentValue:self.select_value,
-            data:[],
             dataCopy:[],
             currentInput:"",
             dataSource:dataSource,

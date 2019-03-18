@@ -21,7 +21,6 @@
 <script>
 import DataSource from './DataSource.js'
 import globals from './globals.js'
-import _ from 'underscore'
 
 export default {
     name: 'select-dialog',
@@ -81,7 +80,7 @@ export default {
         },
         handleCancel() {
             var self = this;
-            self.convertValue(this.select_value)
+            self.convertValue(self.select_value)
             self.checkList = self.select_value.split(",")
             self.dialogVisible = false;  
         },
@@ -116,27 +115,27 @@ export default {
                 console.log(data.join(","), "===")
                 
                 //过滤掉找不到label的数据
-                var arr = _.filter(data, function(item){
+                var arr = R.filter(function(item){
                     return item[1]!=""    
-                })
+                })(data)
+                console.log(arr)
                 
                 
-                self.checkList = _.map(arr, _.first);
-                self.currentText = _.map(arr, function(item){
-                    return item[1]    
-                }).join(",")
+                self.checkList = R.map(R.head)(arr);
+                self.currentText = R.map(R.nth(1))(arr).join(",")
             }) 
         }
     },
     watch:{
         select_value(newValue) {
+            var self = this
             console.log("change", newValue)
-            this.convertValue(newValue)
+            self.convertValue(newValue)
             if(newValue.trim()!="") {
-                this.checkList = newValue.split(",");
+                self.checkList = newValue.split(",");
             }
             else {
-                this.checkList = []
+                self.checkList = []
             }
         },
         lang(newValue) {

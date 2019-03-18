@@ -88,8 +88,12 @@ options["seasontype"] = {hashtable:{"0":"Pre","1":"Main","2":"Fashion"}}
 
 options["formtype"] = {hashtable:$ASAL.list_formtype}
 options["languages"] = {hashlist:$ASAL.list_languages,oplabel:'name', opvalue:'code'}
-//options["materialstatus"] = 
-//options["materialstatus"] = 
+
+//提货方式
+options["pickingtype"] = {hashtable:$ASAL.list_pickingtype}
+
+//快递付款类型
+options["expresspaidtype"] =  {hashtable:$ASAL.list_expresspaidtype}
 
 
 export default options
