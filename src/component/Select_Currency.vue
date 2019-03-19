@@ -16,7 +16,6 @@ export default {
     name: 'select-currency',
     props: {
         select_value:{
-            type: [String,Number],
             required: true,
             default:''
         },

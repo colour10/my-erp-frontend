@@ -8,6 +8,7 @@
 import DataSource from './DataSource.js'
 import globals from './globals.js'
 
+const _log = globals.logger("simple-select");
 export default {
     name: 'simple-select',
     props: {
@@ -38,7 +39,7 @@ export default {
         if(value=='0') {
             value = ''   
         }
-            
+        _log(self.source, dataSource)
         return {
             currentValue:value,
             data:[],
@@ -48,7 +49,7 @@ export default {
     },
     methods: {
         handleChange(newValue) {
-            console.log("change", newValue)
+            _log("change", newValue)
             this.$emit('change',newValue)
         }
     },

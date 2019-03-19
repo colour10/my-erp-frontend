@@ -52,4 +52,12 @@ ASA.extend = function(obj1, obj2) {
     return obj1;
 }
 
+ASA.logger = function(name) {
+    return function() {
+        var arr = Array.prototype.slice.call(arguments)
+        arr.unshift("<"+name+">")
+        console.log.apply(console, arr);
+    }
+}
+
 export default ASA

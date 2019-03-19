@@ -36,6 +36,7 @@
                   <sp-display-input :value="form.sys_create_stuff" source="user"></sp-display-input>
               </el-form-item>
             </el-col>
+
             <el-col :span="6">
               <el-form-item :label="globals.getLabel('kuaidifukuanfang')">
                 <simple-select v-model="form.expresspaidtype" source="expresspaidtype" :lang="lang"></simple-select>
@@ -43,21 +44,24 @@
 
               <el-form-item :label="globals.getLabel('kuaididanhao')">
                 <el-input v-model="form.expressno"></el-input>
-              </el-form-item>              
+              </el-form-item>   
+
               <el-form-item :label="globals.getLabel('kuaidifeiyong')">
                 <el-input v-model="form.expressfee"></el-input>
-              </el-form-item>              
+              </el-form-item>   
+
               <el-form-item :label="globals.getLabel('shouhuodizhi')">
                 <el-input v-model="form.address"></el-input>
-              </el-form-item>
-              
+              </el-form-item>              
           </el-col>
 
           <el-col :span="6">
-            <el-button type="primary" @click="saveOrder()">{{globals.getLabel("tijiao")}}</el-button>
-            <el-button type="primary" @click="showProduct()">{{globals.getLabel("yushou")}}</el-button>
-            <el-button type="primary" @click="showProduct()">{{globals.getLabel("fujian")}}</el-button>
-            <el-button type="primary" @click="saveOrder()">{{globals.getLabel("shanchu")}}</el-button>
+            <el-button type="primary" @click="saveOrder(1)">{{globals.getLabel("tijiao")}}</el-button>
+            <el-button type="primary" @click="saveOrder(2)">{{globals.getLabel("yushou")}}</el-button>
+            <el-button :type="form.id?'primary':'info'" @click="showAttachment()">{{globals.getLabel("fujian")}}</el-button>
+            <el-tooltip class="item" effect="dark" content="Right Bottom 提示文字" placement="bottom">
+              <el-button :type="form.id?'primary':'info'" @click="deleteOrder()">{{globals.getLabel("shanchu")}}</el-button>
+            </el-tooltip>
           </el-col>
         </el-row>
       </el-form>
@@ -66,7 +70,7 @@
 
       <el-row type="flex" justify="end">
         <el-col :offset="22" :span="2" >
-          <el-button type="info" @click="showProduct()">{{globals.getLabel("xuanzeshangpin")}}</el-button>
+          <el-button type="primary" @click="showProduct()">{{globals.getLabel("xuanzeshangpin")}}</el-button>
         </el-col>
       </el-row>    
       <el-row>
@@ -84,7 +88,7 @@
               </template>
             </el-table-column>
 
-            <el-table-column prop="num" :label="globals.getLabel('chima')" width="200" align="center">
+            <el-table-column prop="num" :label="globals.getLabel('shuliang')" width="200" align="center">
               <template v-slot="scope">
                 <el-input-number v-model="scope.row.number" :min="1" :max="10"></el-input-number>
               </template>
@@ -128,7 +132,6 @@ export default {
         var dataSource = DataSource.getDataSource('sizecontent', globals.getLabel('lang'));
         return {
             form:{
-
                 memberid:"",
                 salesstaff:"",
                 externalno:"",
@@ -163,7 +166,7 @@ export default {
                 self.tabledata.unshift({productid:row.id, salesid:0, number:0, sizecontentid:0, source:subDataSource, product:row})              
             })
         },
-        saveOrder() {
+        saveOrder(flag) {
             //保存订单
             var self = this
             var params = {form:self.form}
@@ -176,13 +179,21 @@ export default {
                     
             });
         },
-        getRowCount(rowIndex, row) {
-            console.log(row, "getRowCount")
-            return row.sizetoplist.reduce((total,item)=>total+=item.num,0)
-        },
         deleteRow(rowIndex, row) {
             var self = this;
             self.$delete(self.tabledata, rowIndex)
+        },
+        showAttachment() {
+
+        },
+        deleteOrder() {
+            const self = this
+            if(!self.form.id) {
+                return 
+            }
+            $ASA.remove.call(self, "/order/delete?id="+self.form.id, function(res){
+                    
+            });
         }
     },
     computed:{

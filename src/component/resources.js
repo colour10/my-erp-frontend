@@ -81,7 +81,7 @@ options["gender"] = {hashtable:$ASAL.list_gender}
 options["currency"] = {hashlist:$ASAL.list_currency,oplabel:'name', opvalue:'id'}
 options["season"] = {hashtable:$ASAL.list_season}
 options["orderproperty"] = {hashtable:$ASAL.list_orderproperty}
-options["businesstype"] = {hashtable:$ASAL.list_businesstype}
+options["bussinesstype"] = {hashtable:$ASAL.list_bussinesstype}
 options["sessionmark"] = {hashtable:{"SS":"SS","FW":"FW","XX":"XX"}}
 options["seasontype"] = {hashtable:{"0":"Pre","1":"Main","2":"Fashion"}}
 

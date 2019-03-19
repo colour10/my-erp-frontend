@@ -30,10 +30,10 @@
         <el-col :span="24">
 
           <el-table :data="tabledata" stripe border style="width:100%;" v-loading.fullscreen.lock="loading">
-            <el-table-column prop="productname" label="item.label" align="center"></el-table-column>
+            <el-table-column prop="productname" :label="globals.getLabel('shangpinmingcheng')" align="center"></el-table-column>
 
 
-            <el-table-column label="labels.caozuo" width="150" align="center">
+            <el-table-column :label="globals.getLabel('caozuo')" width="150" align="center">
               <template v-slot="scope">
                 <el-button size="mini" type="primary" @click="onSelect(scope.$index, scope.row)">选择</el-button>
               </template>

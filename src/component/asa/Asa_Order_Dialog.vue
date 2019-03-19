@@ -5,7 +5,7 @@
         <el-row :gutter="0">
             <el-col :span="6">
                 <el-form-item :label="globals.getLabel('yewuleixing')">
-                  <simple-select v-model="form.businesstype" source="businesstype" :lang="lang">
+                  <simple-select v-model="form.bussinesstype" source="bussinesstype" :lang="lang">
                   </simple-select>
                 </el-form-item>
 
@@ -53,18 +53,18 @@
             </el-col>
             <el-col :span="6">
                 <el-form-item :label="globals.getLabel('zongjine')">
-                  <el-input placeholder="" v-model="form.exchangerate" class="input-with-select">
-                    <select-currency v-model="form.currencyid" slot="prepend">
+                  <sp-float-input placeholder="" v-model="form.total" class="input-with-select">
+                    <select-currency v-model="form.currency">
                     </select-currency>
-                  </el-input>
+                  </sp-float-input>
                 </el-form-item>
 
                 <el-form-item :label="globals.getLabel('huilv')">
-                  <el-input v-model="form.exchangerate"></el-input>
+                  <sp-float-input v-model="form.exchangerate"></sp-float-input>
                 </el-form-item>
 
                 <el-form-item :label="globals.getLabel('zhekou')">
-                  <el-input v-model="form.discount"></el-input>
+                  <sp-float-input v-model="form.discount"></sp-float-input>
                 </el-form-item>
 
                 <el-form-item :label="globals.getLabel('shuxing')">
@@ -93,11 +93,11 @@
                 </el-form-item>
                 
                 <el-form-item :label="globals.getLabel('shenheren')">
-                  <el-input v-model="form.auditstaff" disabled></el-input>
+                  <sp-display-input :value="form.auditstaff" source="user"></sp-display-input>
                 </el-form-item>
                 
                 <el-form-item :label="globals.getLabel('zhidanren')">
-                  <el-input v-model="form.makestaff" disabled></el-input>
+                  <sp-display-input :value="form.makestaff" source="user"></sp-display-input>
                 </el-form-item>
           </el-col>
         </el-row>
@@ -152,6 +152,7 @@ import simple_select from '../Simple_Select.vue'
 import Asa_Select_Product_Dialog from './Asa_Select_Product_Dialog.vue'
 import DataSource from '../DataSource.js'
 
+const _log = globals.logger("asa-order-dialog");
 
 export default {
     name: 'asa-order-dialog',
@@ -163,6 +164,9 @@ export default {
         visible:{
             type: Boolean
         },
+        data:{
+            type:Object
+        }
     },
     data() {
         var self = this;
@@ -170,7 +174,7 @@ export default {
         var dataSource = DataSource.getDataSource('sizecontent', globals.getLabel('lang'));
         return {
             form:{
-                businesstype:"",
+                bussinesstype:"",
                 supplierid:"",
                 finalsupplierid:"",
                 ageseason:"",
@@ -181,8 +185,7 @@ export default {
                 worldordercode:"",
                 invoiceno:"",
                 exchangerate:"",
-                currencyid:"",
-                exchangerate:"",
+                currency:"",
                 discount:"",
                 property:"",
                 makestaff:"",
@@ -191,6 +194,7 @@ export default {
                 bookingid:"",
                 contactor:"",
                 memo:"",
+                total:"",
                 id:""
             },
             tabledata:[],
@@ -199,7 +203,8 @@ export default {
             lang:"",
             pro:false,
             globals,
-            dataSource
+            dataSource,
+            formid:''
         }
     },
     methods:{
@@ -208,11 +213,6 @@ export default {
         },
         onSelect(row) {
             var self = this;
-            /*self.dataSource.getData(data=> {
-                data.filter(item => item.getRow().topid==row.sizetopid).map( item => { 
-                    self.tabledata.unshift({productid:row.id, sizecontentid:item.getValue(), orderid:0, num:0, sizecontent:item, product:row})
-                })                
-            })*/
             self.dataSource.filter({topid:row.sizetopid}, data=> {
                 data.map( item => { 
                     self.tabledata.unshift({productid:row.id, sizecontentid:item.getValue(), orderid:0, number:0, sizecontent:item, product:row})
@@ -227,18 +227,30 @@ export default {
             params.list = self.tabledata.map(item=> {
                 return {productid:item.productid, id:item.id, sizecontentid:item.sizecontentid, number:item.number}
             })
-            console.log(JSON.stringify(params))
-            $ASA.submit.call(self, "/order/save", {params}, function(res){
-                    
+            _log(JSON.stringify(params))
+            $ASA.submit.call(self, "/order/saveorder", {params:JSON.stringify(params)}, function(res){
+                _log(res)
+                if(res.id) {
+                    self.form.id = res.id
+                    self.formid = res.id
+                }
+                self.$emit("change", res.data.form)
             });
         },
         getRowCount(rowIndex, row) {
-            console.log(row, "getRowCount")
+            _log(row, "getRowCount")
             return row.sizetoplist.reduce((total,item)=>total+=item.number,0)
         },
         deleteRow(rowIndex, row) {
             var self = this;
             self.$delete(self.tabledata, rowIndex)
+        },
+        appendRow(row) {
+            const self = this;
+            self.dataSource.getRow(row.sizecontentid, data=> {
+                row.sizecontent = data
+                self.tabledata.unshift(row)               
+            })
         }
     },
     computed:{
@@ -250,7 +262,32 @@ export default {
         visible(newValue) {
             //console.log("visible", newValue)
             this.dialogVisible = newValue
+        },
+        data(newValue) {
+            var self = this
+            _log("copy data1", newValue,self.form)
+            $ASA.empty(self.form)
+            $ASA.copyTo(newValue, self.form)
+            _log("copy data2", newValue)
+
+            if(self.form.id!="" && self.form.id!=self.fomrid) {
+                self.tabledata = []
+                //加载数据
+                $ASA.get("/order/loadorder?id="+self.form.id, function(res){
+                    _log("加载订单信息", res)
+                    if(res.data.list) {
+                        res.data.list.forEach(item=>{
+                            _log(item)
+                            self.appendRow(item)
+                        })
+                    }
+                },"json") 
+            }
         }
+    },
+    mounted:function(){
+        var self = this;
+        $ASA.copyTo(self.data, this.form)
     }
 }
 </script>

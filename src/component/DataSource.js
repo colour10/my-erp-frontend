@@ -133,7 +133,7 @@ DataSource.prototype.sub = function(condition, callback) {
             return keys.every(key=>condition[key]==row.getRow(key))    
         })
 
-        var result = R.map(item => item.getRow())(result)
+        var result = result.map(item=>item.getRow())
         console.log(result,"999")
         var sub = new DataSource({datalist:result, oplabel:self.oplabel, opvalue:self.opvalue},self.lang)
         sub.init()
@@ -169,6 +169,7 @@ DataSource.prototype.getLabelList = function(valueList, callback) {
             var equals = item=>value==item.getValue()
             return R.find(equals)(data)        
         })(valueList)
+
 
         //过滤掉空值
         fmap = R.filter(R.identity)(fmap)
@@ -210,10 +211,10 @@ DataSource.prototype.getRowLabel = function(keyValue, callback) {
 
 DataSource.prototype.getRowLabels = function(keyValues, callback) {
     var self = this;
-    keyValues = R.ifElse(R.is(String), R.split(','), R.identity)(keyValues)
+    keyValues = typeof(keyValues)=='string' ? keyValues.split(",") : keyValues;
 
     this.getLabelList(keyValues, function(list){
-        callback(R.join(",")(list))
+        callback(list.join(","))
     })
     
 /*    var all_promise = keyValues.map(function(item){
@@ -246,6 +247,11 @@ DataSource.getDataSource = function(resourceName, lang) {
     }
     else {
         var create = function() {
+            
+            if(!resources_options[resourceName]) {
+                //console.log(resourceName,"未定义")
+                throw "资源未定义:"+resourceName
+            }
             resources[resourceName] = new DataSource(resources_options[resourceName], lang)
             resources[resourceName].init()
             return resources[resourceName]
@@ -255,7 +261,7 @@ DataSource.getDataSource = function(resourceName, lang) {
             return new DataSource(resources_options[resourceName], lang)
         }
         
-        return R.ifElse(R.is(String), create, tmp_create)(resourceName)
+        return typeof(resourceName)=="string" ? create(): tmp_create();
         /*resources[resourceName] = new DataSource(resources_options[resourceName], lang)
         return resources[resourceName]   */  
     }

@@ -17,6 +17,7 @@ import Asa_Order_Dialog from './component/asa/Asa_Order_Dialog.vue'
 import Asa_Select_Product_Dialog from './component/asa/Asa_Select_Product_Dialog.vue'
 import Asa_Sales_Dialog from './component/asa/Asa_Sales_Dialog.vue'
 import Simple_Display_Input from './component/Simple_Display_Input.vue'
+import Simple_Float_Input from './component/Simple_Float_Input.vue'
 
 const paykeyboard = {
     install(Vue, options) {
@@ -37,6 +38,7 @@ const paykeyboard = {
         Vue.component(Asa_Select_Product_Dialog.name, Asa_Select_Product_Dialog) // vuePayKeyboard.name 组件的name属性
         Vue.component(Asa_Sales_Dialog.name, Asa_Sales_Dialog) // vuePayKeyboard.name 组件的name属性
         Vue.component(Simple_Display_Input.name, Simple_Display_Input) // vuePayKeyboard.name 组件的name属性
+        Vue.component(Simple_Float_Input.name, Simple_Float_Input) // vuePayKeyboard.name 组件的name属性
         
         Vue.prototype.$asa = globals
         
