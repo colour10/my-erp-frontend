@@ -40,7 +40,7 @@
                 </el-form-item>
 
                 <el-form-item :label="globals.getLabel('dingdanhao')">
-                  <el-input v-model="form.ordercode" :placeholder="globals.getLabel('zidonghuoqu')" disabled></el-input>
+                  <el-input v-model="form.orderno" :placeholder="globals.getLabel('zidonghuoqu')" disabled></el-input>
                 </el-form-item>
 
                 <el-form-item :label="globals.getLabel('haiwaidingdanhao')">
@@ -104,13 +104,17 @@
       </el-form>
 
       <el-row type="flex" justify="end">
-        <el-col :offset="20" :span="2" >
-          <el-button type="info" @click="showProduct()">{{globals.getLabel("xuanzeshangpin")}}</el-button>
+        <el-col :offset="18" :span="2" >
+          <el-button v-if="isEditable" :type="buttontype" @click="showProduct()">{{globals.getLabel("xuanzeshangpin")}}</el-button>
         </el-col>
         <el-col :span="2" >
-          <el-button type="primary" @click="saveOrder()">{{globals.getLabel("baocundingdan")}}</el-button>
+          <el-button v-if="isEditable" :type="buttontype" @click="saveOrder(1)">{{globals.getLabel("baocundingdan")}}</el-button>
         </el-col>
-      </el-row>    
+        <el-col :span="2" >
+          <el-button v-if="isEditable" type="danger" @click="saveOrder(2)">{{globals.getLabel("tijiaoshenhe")}}</el-button>
+        </el-col>
+      </el-row>
+
       <el-row>
         <el-col :span="24">            
           <el-table :data="tabledata" stripe border style="width:100%;" v-loading.fullscreen.lock="loading">
@@ -128,11 +132,11 @@
 
             <el-table-column prop="number" :label="globals.getLabel('dinggoushuliang')" width="200" align="center">
               <template v-slot="scope">
-                <el-input-number v-model="scope.row.number" :min="1" :max="10"></el-input-number>
+                <el-input-number v-model="scope.row.number" :min="1" :max="10" :disabled="!isEditable"></el-input-number>
               </template>
             </el-table-column>
                         
-            <el-table-column :label="globals.getLabel('caozuo')" width="150" align="center">
+            <el-table-column :label="globals.getLabel('caozuo')" width="150" align="center" v-if="isEditable">
               <template v-slot="scope">
                 <el-button size="mini" type="danger" @click="deleteRow(scope.$index, scope.row)">{{globals.getLabel('shanchu')}}</el-button>
               </template>
@@ -195,6 +199,8 @@ export default {
                 contactor:"",
                 memo:"",
                 total:"",
+                orderno:"",
+                status:"",  //状态，1=保存；2=送审；3=审核完成
                 id:""
             },
             tabledata:[],
@@ -219,9 +225,17 @@ export default {
                 })                
             })
         },
-        saveOrder() {
+        saveOrder(status) {
             //保存订单
             var self = this
+
+            if(status==2) {
+                if(!confirm(globals.getLabel('order_submit_confirm'))) {
+                    return
+                }
+            }
+            self.form.status = status;
+
             var params = {form:self.form}
             var array = []
             params.list = self.tabledata.map(item=> {
@@ -254,6 +268,14 @@ export default {
         }
     },
     computed:{
+        buttontype() {
+            var status = this.form.status;
+            return status=='1'||status=='' || !status ?'primary':'info'
+        },
+        isEditable() {
+            var status = this.form.status;
+            return status=='1'||status=='' || !status
+        }
     },
     watch:{
         dialogVisible(newValue) {
@@ -265,15 +287,19 @@ export default {
         },
         data(newValue) {
             var self = this
-            _log("copy data1", newValue,self.form)
-            $ASA.empty(self.form)
-            $ASA.copyTo(newValue, self.form)
+            var form = self.form;
+            _log("copy data1", newValue,form)
+
+            //清空当前表单数据，并复制新记录的数据
+            $ASA.empty(form)
+            $ASA.copyTo(newValue, form)
             _log("copy data2", newValue)
 
-            if(self.form.id!="" && self.form.id!=self.fomrid) {
+            //如果订单的id变化了，则清空明细，重新加载新订单的明细
+            if(form.id!="" && form.id!=self.fomrid) {
                 self.tabledata = []
                 //加载数据
-                $ASA.get("/order/loadorder?id="+self.form.id, function(res){
+                $ASA.get("/order/loadorder?id="+form.id, function(res){
                     _log("加载订单信息", res)
                     if(res.data.list) {
                         res.data.list.forEach(item=>{

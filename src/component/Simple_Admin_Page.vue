@@ -22,8 +22,8 @@
           <el-input :ref="item.name" @keyup.enter.native="onSubmit" :type="item.type?item.type:'text'" v-if="!item.type||item.type=='input'||item.type=='textarea'" v-model="form[item.name]"></el-input>
           <el-switch :ref="item.name" v-if="item.type=='switch'" v-model="form[item.name]" active-value="1" inactive-value="0"></el-switch>
           
-          <simple-select :ref="item.name" v-if="item.type=='select'" v-model="form[item.name]" :source="item.source" :lang="lang">
-          </simple-select>
+          <simple-select :ref="item.name" v-if="item.type=='select'" v-model="form[item.name]" :source="item.source" :lang="lang"></simple-select>
+          <el-date-picker :ref="item.name" v-if="item.type=='date'" v-model="form[item.name]" type="date" value-format="yyyy-MM-dd" placeholder=""></el-date-picker>
         </el-form-item>
       </el-form>
       </el-col>
@@ -153,6 +153,10 @@ export default {
     .user-form .width2 .el-input__inner {
         width:200px;
     }
+
+    .user-form  .width2 .el-input-group {
+        width:200px;
+    }
     
     .user-form .width1 .el-input__inner {
         width:510px;
@@ -163,6 +167,30 @@ export default {
     }
     
     .user-form .width2 .el-date-editor.el-input, .el-date-editor.el-input__inner {
-        width:200px
+        width:150px
     }
+
+    .user-form .width2 .el-input-group .el-input__inner {
+        width:155px;
+    }
+    .user-form .width2 .el-input-group--prepend .el-input__inner {
+        width:99px;
+    }
+
+    .user-form /width2 .el-form-item__content {
+        width:200px;
+    }
+
+    .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item {
+        margin-bottom: 5px;
+    }
+
+    .user-form .el-checkbox {
+        margin-right:12px;
+    }
+
+    .user-form .el-checkbox__label {
+        padding-left:4px;
+    }
+
 </style>

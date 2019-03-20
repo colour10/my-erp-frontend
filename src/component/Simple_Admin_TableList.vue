@@ -17,8 +17,8 @@
 
       <el-table-column :label="caozuo" width="150" align="center">
         <template v-slot="scope">
-          <el-button size="mini" @click="handleClickUpdate(scope.$index, scope.row)">{{bianji}}</el-button>
-          <el-button size="mini" type="danger" @click="onClickDelete(scope.$index, scope.row)">{{shanchu}}</el-button>
+          <el-button size="mini" @click="handleClickUpdate(scope.$index, scope.row)" v-if="isEditable(scope.row)">{{bianji}}</el-button>
+          <el-button size="mini" type="danger" @click="onClickDelete(scope.$index, scope.row)" v-if="isDeletable(scope.row)">{{shanchu}}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -31,7 +31,7 @@ import globals from './globals.js'
 
 export default {
     name: 'simple-admin-tablelist',
-    props: ['columns',"buttons","controller", "base", "onclickupdate"],
+    props: ['columns',"buttons","controller", "base", "onclickupdate", 'isedit', 'isdelete'],
     components: {
 
     },
@@ -150,6 +150,22 @@ export default {
                     self.tableData.push(asa.extend(res[i], obj))
                 }
             },'json');
+        },
+        isDeletable(row) {
+            let self = this
+            if(typeof(self.isdelete)=='function') {
+                return self.isdelete(row)
+            }
+
+            return true
+        },
+        isEditable(row) {
+            let self = this
+            if(typeof(self.isedit)=='function') {
+                return self.isedit(row)
+            }
+
+            return true
         }
     },
     watch:{

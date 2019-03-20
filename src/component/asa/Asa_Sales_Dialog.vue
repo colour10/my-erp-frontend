@@ -5,7 +5,7 @@
         <el-row :gutter="0">
             <el-col :span="6">
               <el-form-item :label="globals.getLabel('huiyuan')">
-                <simple-select v-model="form.memberid" source="businesstype" :lang="lang"></simple-select>
+                <simple-select v-model="form.memberid" source="member" :lang="lang"></simple-select>
               </el-form-item>              
               <el-form-item :label="globals.getLabel('xiaoshouren')">
                 <simple-select v-model="form.salesstaff" source="user" :lang="lang"></simple-select>
@@ -16,21 +16,24 @@
               <el-form-item :label="globals.getLabel('xiaoshoudangku')">
                 <simple-select v-model="form.warehouseid" source="warehouse" :lang="lang"></simple-select>
               </el-form-item>
+
+              <el-form-item :label="globals.getLabel('duizhangdanhao')">
+                <el-input v-model="form.ordercode" ></el-input>
+              </el-form-item>  
             </el-col>
 
             <el-col :span="6">
               <el-form-item :label="globals.getLabel('xiaoshouriqi')">
                 <el-date-picker v-model="form.salesdate" type="date" value-format="yyyy-MM-dd"></el-date-picker>
-              </el-form-item>              
-              <el-form-item :label="globals.getLabel('duizhangdanhao')">
-                <el-input v-model="form.ordercode" ></el-input>
-              </el-form-item>              
-              <el-form-item :label="globals.getLabel('zhidanriqi')">
-                <el-input :value="form.sys_create_date" :placeholder="globals.getLabel('zidonghuoqu')" disabled></el-input>
-              </el-form-item>              
+              </el-form-item>     
+                           
               <el-form-item :label="globals.getLabel('tihuofangshi')">
                 <simple-select v-model="form.pickingtype" source="pickingtype" :lang="lang"></simple-select>
               </el-form-item>
+
+              <el-form-item :label="globals.getLabel('zhidanriqi')">
+                <el-input :value="form.sys_create_date" :placeholder="globals.getLabel('zidonghuoqu')" disabled></el-input>
+              </el-form-item> 
 
               <el-form-item :label="globals.getLabel('zhidanren')">
                   <sp-display-input :value="form.sys_create_stuff" source="user"></sp-display-input>

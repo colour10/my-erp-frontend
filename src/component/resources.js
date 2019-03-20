@@ -70,6 +70,9 @@ options["sizetop"] = {url:'/sizetop/list',oplabel:'name', opvalue:'id'}
 //尺码组明细
 options["sizecontent"] = {url:'/sizecontent/list',oplabel:'content', opvalue:'id'}
 
+//尺码组明细
+options["member"] = {url:'/member/list',oplabel:'name', opvalue:'id'}
+
 
 //仓库
 options["warehouse"] = {url:'/warehouse/list',oplabel:'name', opvalue:'id'}
@@ -78,6 +81,7 @@ options["warehouse"] = {url:'/warehouse/list',oplabel:'name', opvalue:'id'}
 options["supplier"] = {url:'/supplier/list',oplabel:'suppliername', opvalue:'id'}
 
 options["gender"] = {hashtable:$ASAL.list_gender}
+options["gender2"] = {hashtable:$ASAL.list_gender2}
 options["currency"] = {hashlist:$ASAL.list_currency,oplabel:'name', opvalue:'id'}
 options["season"] = {hashtable:$ASAL.list_season}
 options["orderproperty"] = {hashtable:$ASAL.list_orderproperty}
@@ -94,6 +98,13 @@ options["pickingtype"] = {hashtable:$ASAL.list_pickingtype}
 
 //快递付款类型
 options["expresspaidtype"] =  {hashtable:$ASAL.list_expresspaidtype}
+
+//运输方式
+options["transporttype"] =  {hashtable:$ASAL.list_transporttype}
+
+//支付方式
+options["paytype"] =  {hashtable:$ASAL.list_paytype}
+
 
 
 export default options

@@ -1,44 +1,78 @@
 //import App from './App.vue'
-import simple from './component/Simple_Admin_Page.vue'
-import multiple from './component/Multiple_Admin_Page.vue'
-import multiple_table from './component/Multiple_Admin_TableList.vue'
-import simple_table from './component/Simple_Admin_TableList.vue'
-import simple_select from './component/Simple_Select.vue'
-import select_dialog from './component/Select_Dialog.vue'
-import select_dialog_single from './component/Select_Dialog_Single.vue'
-import select_currency from './component/Select_Currency.vue'
-import avatar from './component/Simple_Avatar.vue'
-import album from './component/Simple_Album.vue'
+import Simple_Admin_Page from './component/Simple_Admin_Page.vue'
+import Multiple_Admin_Page from './component/Multiple_Admin_Page.vue'
+import Multiple_Admin_TableList from './component/Multiple_Admin_TableList.vue'
+import Simple_Admin_TableList from './component/Simple_Admin_TableList.vue'
+import Simple_Select from './component/Simple_Select.vue'
+import Select_Dialog from './component/Select_Dialog.vue'
+import Select_Dialog_Single from './component/Select_Dialog_Single.vue'
+import Select_Currency from './component/Select_Currency.vue'
+import Simple_Avatar from './component/Simple_Avatar.vue'
+import Simple_Album from './component/Simple_Album.vue'
 import globals from './component/globals.js'
 import Asa_Aliases from './component/asa/Asa_Aliases.vue'
 import Asa_BrandTab from './component/asa/Asa_BrandTab.vue'
-import Series from './component/asa/Asa_Series.vue'
+import Asa_Series from './component/asa/Asa_Series.vue'
 import Asa_Order_Dialog from './component/asa/Asa_Order_Dialog.vue'
 import Asa_Select_Product_Dialog from './component/asa/Asa_Select_Product_Dialog.vue'
 import Asa_Sales_Dialog from './component/asa/Asa_Sales_Dialog.vue'
 import Simple_Display_Input from './component/Simple_Display_Input.vue'
 import Simple_Float_Input from './component/Simple_Float_Input.vue'
+import Asa_Order_Confirm_Dialog from './component/asa/Asa_Order_Confirm_Dialog.vue'
+import Page_Home from './component/page/Home.vue'
+import Page_Order from './component/page/Order.vue'
+import Page_Producttemplate from './component/page/Producttemplate.vue'
+import Page_User from './component/page/User.vue'
+import Page_Group from './component/page/Group.vue'
+import Page_Department from './component/page/Department.vue'
+import Page_Brand from './component/page/Brand.vue'
+import Page_Brandgroup from './component/page/Brandgroup.vue'
+import Page_Sizetop from './component/page/Sizetop.vue'
+import Page_Product from './component/page/Product.vue'
+import Page_Sales from './component/page/Sales.vue'
+import Page_Login from './component/page/Login.vue'
+
+
+const components = [
+    Simple_Admin_Page,
+    Multiple_Admin_Page,
+    Multiple_Admin_TableList,
+    Simple_Admin_TableList,
+    Simple_Select,
+    Select_Dialog,
+    Select_Dialog_Single,
+    Select_Currency,
+    Simple_Avatar,
+    Simple_Album,
+    Asa_Aliases,
+    Asa_BrandTab,
+    Asa_Series,
+    Asa_Order_Dialog,
+    Asa_Select_Product_Dialog,
+    Asa_Sales_Dialog,
+    Simple_Display_Input,
+    Simple_Float_Input,
+    Asa_Order_Confirm_Dialog,
+    Page_Home,
+    Page_Order,
+    Page_Producttemplate,
+    Page_User,
+    Page_Group,
+    Page_Department,
+    Page_Brand,
+    Page_Brandgroup,
+    Page_Sizetop,
+    Page_Product,
+    Page_Sales,
+    Page_Login
+]
 
 const paykeyboard = {
     install(Vue, options) {
-        Vue.component(simple.name, simple) // vuePayKeyboard.name 组件的name属性
-        Vue.component(multiple.name, multiple) // vuePayKeyboard.name 组件的name属性
-        Vue.component(simple_table.name, simple_table) // vuePayKeyboard.name 组件的name属性
-        Vue.component(simple_select.name, simple_select) // vuePayKeyboard.name 组件的name属性
-        Vue.component(multiple_table.name, multiple_table) // vuePayKeyboard.name 组件的name属性
-        Vue.component(select_dialog.name, select_dialog) // vuePayKeyboard.name 组件的name属性
-        Vue.component(select_currency.name, select_currency) // vuePayKeyboard.name 组件的name属性
-        Vue.component(avatar.name, avatar) // vuePayKeyboard.name 组件的name属性
-        Vue.component(select_dialog_single.name, select_dialog_single) // vuePayKeyboard.name 组件的name属性
-        Vue.component(album.name, album) // vuePayKeyboard.name 组件的name属性
-        Vue.component(Asa_Aliases.name, Asa_Aliases) // vuePayKeyboard.name 组件的name属性
-        Vue.component(Asa_BrandTab.name, Asa_BrandTab) // vuePayKeyboard.name 组件的name属性
-        Vue.component(Series.name, Series) // vuePayKeyboard.name 组件的name属性
-        Vue.component(Asa_Order_Dialog.name, Asa_Order_Dialog) // vuePayKeyboard.name 组件的name属性
-        Vue.component(Asa_Select_Product_Dialog.name, Asa_Select_Product_Dialog) // vuePayKeyboard.name 组件的name属性
-        Vue.component(Asa_Sales_Dialog.name, Asa_Sales_Dialog) // vuePayKeyboard.name 组件的name属性
-        Vue.component(Simple_Display_Input.name, Simple_Display_Input) // vuePayKeyboard.name 组件的name属性
-        Vue.component(Simple_Float_Input.name, Simple_Float_Input) // vuePayKeyboard.name 组件的name属性
+        components.forEach(component => {
+            Vue.component(component.name, component);
+        });
+
         
         Vue.prototype.$asa = globals
         
