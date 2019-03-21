@@ -142,7 +142,7 @@ export default {
             
             var asa = self.$asa;
 
-            self._submit("/"+self.controller+"/page",params,function(res){
+            self._fetch("/"+self.controller+"/page",params,function(res){
                 //self._log(res)
                 res.data.forEach(item=>self.tableData.push(asa.extend(item, obj)))
             });

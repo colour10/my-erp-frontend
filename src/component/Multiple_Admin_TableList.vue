@@ -138,7 +138,7 @@ export default {
                 }   
             }
             
-            self._submit("/"+self.controller+"/page",params,function(res){
+            self._fetch("/"+self.controller+"/page",params,function(res){
                 //console.log(res)
                 res.data.forEach(item=>self.tableData.push(globals.extend(item, obj)))
                 cb()

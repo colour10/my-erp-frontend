@@ -106,5 +106,8 @@ options["transporttype"] =  {hashtable:$ASAL.list_transporttype}
 options["paytype"] =  {hashtable:$ASAL.list_paytype}
 
 
+//订单状态
+options["salestatus"] =  {hashtable:$ASAL.list_salestatus}
+
 
 export default options

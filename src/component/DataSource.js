@@ -83,6 +83,10 @@ DataSource.prototype.init = function() {
     }
 }
 
+/**
+ * [loadList description]
+ * @return {[type]} [description]
+ */
 DataSource.prototype.loadList = function() {
     var self = this;
     var options = self.options;

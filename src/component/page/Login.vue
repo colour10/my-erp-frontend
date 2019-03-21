@@ -75,7 +75,7 @@ export default {
       doAction(action) {
           var self = this
           if(action=='logout') {
-              $ASA.post("/login/logout", {}, function(res){
+              self.post("/login/logout", {}, function(res){
                   self.$store.commit("logout")
                   self.$router.push("/login/login")
                   self._log("logout")
@@ -86,7 +86,7 @@ export default {
                   self.$router.push("/") 
               }  
               else {
-                  $ASA.post("/login/checklogin", {}, function(res){
+                  self._fetch("/login/checklogin", {}, function(res){
                       if(res.code==200 && res.auth && res.auth.id && res.auth.id>0) {
                           self.$store.commit({
                               type:"login",
