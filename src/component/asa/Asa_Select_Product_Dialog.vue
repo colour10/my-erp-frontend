@@ -35,7 +35,7 @@
 
             <el-table-column :label="globals.getLabel('caozuo')" width="150" align="center">
               <template v-slot="scope">
-                <el-button size="mini" type="primary" @click="onSelect(scope.$index, scope.row)">选择</el-button>
+                <el-button size="mini" type="primary" @click="onSelect(scope.$index, scope.row)">{{globals.getLabel("xuanze")}}</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -103,40 +103,3 @@ export default {
     }
 }
 </script>
-<style>
-    .user-form .el-input__inner {
-        width:200px;
-    }
-
-    .user-form .el-input-group {
-        width:200px;
-    }
-
-    .user-form .el-input-group .el-input__inner {
-        width:155px;
-    }
-    .user-form .el-input-group--prepend .el-input__inner {
-        width:99px;
-    }
-
-    .user-form .el-form-item__content {
-        width:200px;
-    }
-
-    .user-form .el-date-editor.el-input, .el-date-editor.el-input__inner {
-        width:150px
-    }
-
-    .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item {
-        margin-bottom: 5px;
-    }
-
-    .user-form .el-checkbox {
-        margin-right:12px;
-    }
-
-    .user-form .el-checkbox__label {
-        padding-left:4px;
-    }
-
-</style>

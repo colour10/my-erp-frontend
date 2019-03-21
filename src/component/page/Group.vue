@@ -126,42 +126,34 @@ export default {
     methods:{
         handleDeleteUser(rowIndex, row) {
             var self = this;
-            self.$confirm($ASAL.delete_warning, $ASAL.tip, {
-                confirmButtonText: $ASAL.ok,
-                cancelButtonText: $ASAL.cancel,
-                type: 'warning'
-            }).then(() => {
-                $ASA.submit.call(this, "/user/deletegroup",{groupid:'',id:row.id}, function() {
-                    self.$delete(self.user_list,rowIndex)
-                })
-            }).catch(() => {
-            });
+            self._remove("/user/deletegroup",{groupid:'',id:row.id}, function() {
+                self.$delete(self.user_list,rowIndex)
+            })
         },
         onTabClick(tab){
             var self = this;
             $ASA.post("/user/list", {groupid:self.form.id}, function(res){
                 console.log(res)
-                self.user_list = res;
-            },"json")
+                self.user_list = res.data;
+            })
         },
         onSavePermission(){
             var self = this;
             var keys = self.$refs.tree.getCheckedKeys()
-            $ASA.post("/permissiongroup/setting", {groupid:self.form.id, keys:keys.join(",")}, function(res){
-                console.log(res)
-                $ASA.handelSubmitMessage.call(self, res)
-            },"json") 
+            self._submit("/permissiongroup/setting", {groupid:self.form.id, keys:keys.join(",")}, function(res){
+                self._log(res)
+            }) 
         },
         onSubmit() {
             var self = this;
             if(self.form.id=="") {
-                $ASA.submit.call(self, "/"+props.controller+"/add", self.form, function(){
+                self._submit("/"+props.controller+"/add", self.form, function(){
                     self.$refs.tablelist.appendRow($ASA.clone(self.form))
                     //self.dialogVisible = false
                 })
             }
             else {
-                $ASA.submit.call(self, "/"+props.controller+"/edit", self.form, function(){
+                self._submit("/"+props.controller+"/edit", self.form, function(){
                     $ASA.copyTo(self.form, self.row)
                     //self.dialogVisible = false
                 })

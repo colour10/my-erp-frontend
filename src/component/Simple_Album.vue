@@ -1,11 +1,11 @@
 <template>
   <el-row :gutter="10">
-      <el-col :span="4"  v-for="item in data" :key="item.id" >
-        <img :src="image_url_prex+item.filename" class="avatar" />
+      <el-col :span="4"  v-for="item in data" :key="item.id" style="margin-bottom: 20px;">
+        <img :src="_label('_image_url_prex')+item.filename" class="avatar" />
       </el-col>
       <el-col :span="4">
         <el-upload class="avatar-uploader" action="/common/upload?category=product" multiple :show-file-list="false" :on-success="handleAvatarSuccess">
-          <img v-if="imageurl" :src="image_url_prex+imageurl" class="avatar">
+          <img v-if="imageurl" :src="_label('_image_url_prex')+imageurl" class="avatar">
           <i v-else class="el-icon-plus avatar-uploader-icon"></i>
         </el-upload>
       </el-col>
@@ -29,23 +29,15 @@ export default {
             type:[String,Number]
         }
     },
-    data() {
-        var self = this        
-        
+    data() {        
         return {
-            data:[],
-            labels:{
-                //formTitle:globals.getLabel('qingxuanze'),
-                //ok:globals.getLabel('ok'),
-                //cancel:globals.getLabel('cancel')
-            },
-            image_url_prex:globals.getLabel("_image_url_prex")
+            data:[]
         }
     },
     methods: {
         handleAvatarSuccess(response, file, fileList) {
             var self = this
-            console.log(response,file)
+            self._log(response,file)
             //file.name = response["files"][file.name]
             var params = {
                 productid:self.productid,
@@ -53,7 +45,7 @@ export default {
                 filename:response["files"][file.name]    
             }
             
-            $ASA.submit.call(self, "/picture/add", params, function(res){
+            self._submit("/picture/add", params, function(res){
                 params.id = res.id;
                 self.data.push(params)      
             })
@@ -61,7 +53,7 @@ export default {
         loadList() {
             var self = this
             $ASA.post("/picture/list", {productid:self.productid}, function(res){
-                console.log("==========",res)   
+                self._log("==========",res)   
                 self.data = res; 
             },'json')
         }
@@ -79,35 +71,3 @@ export default {
     }
 }
 </script>
-<style>
-    .avatar-uploader .el-upload {
-    border: 1px dashed #d9d9d9;
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-  }
-  .avatar-uploader .el-upload:hover {
-    border-color: #409EFF;
-  }
-  .avatar-uploader-icon {
-    font-size: 28px;
-    color: #8c939d;
-    width: 148px;
-    height: 148px;
-    line-height: 148px;
-    text-align: center;
-  }
-  .avatar {
-    width: 148px;
-    height: 148px;
-    display: block;
-  }
-  
-  .el-col {
-    margin-bottom: 20px;
-    &:last-child {
-      margin-bottom: 0;
-    }
-  }
-</style>

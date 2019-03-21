@@ -6,8 +6,6 @@
 import DataSource from './DataSource.js'
 import globals from './globals.js'
 
-const _log = globals.logger("sp-display-input");
-
 export default {
     name: 'sp-display-input',
     components: {
@@ -40,16 +38,16 @@ export default {
         }
     },
     methods: {
-        convertValue: item =>{
+        convertValue(item) {
             var self = this;
-            _log("item value", item)
+            self._log("item value", item)
             return typeof(item)=='string' ? item.split(',') : item
         },
         loadList() {
             var self = this;
-            _log(self.current_value,"..........")
+            self._log(self.current_value,"..........")
             self.dataSource.getRowLabels(self.current_value, label_list=>{
-                _log(label_list)
+                self._log(label_list)
                 self.current_label = label_list
             })     
         }

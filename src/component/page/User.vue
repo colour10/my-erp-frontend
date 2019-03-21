@@ -14,55 +14,55 @@
 
 <el-dialog class="user-form" :title="labels[action_type][0]" :visible.sync="dialogVisible" :center="true" width="80%">
   <el-tabs type="border-card" @tab-click="onTabClick">
-    <el-tab-pane :label="globals.getLabel('user-setting')">
+    <el-tab-pane :label="_label('user-setting')">
       <el-form :model="form" label-width="100px"  :inline="true" style="width:700px;" size="small">
-        <el-form-item :label="globals.getLabel('user-loginname')">
+        <el-form-item :label="_label('user-loginname')">
           <el-input v-model="form.login_name"></el-input>
         </el-form-item>
 
-        <el-form-item :label="globals.getLabel('password')">
+        <el-form-item :label="_label('password')">
           <el-input v-model="form.password"></el-input>
         </el-form-item>
         
-        <el-form-item :label="globals.getLabel('user-realname')">
+        <el-form-item :label="_label('user-realname')">
           <el-input v-model="form.real_name"></el-input>
         </el-form-item>
         
-        <el-form-item :label="globals.getLabel('gender')">
+        <el-form-item :label="_label('gender')">
           <el-radio-group v-model="form.sex" style="width:200px">
             <el-radio :label="'1'">{{globals.getLabel("man")}}</el-radio>
             <el-radio :label="'0'">{{globals.getLabel("woman")}}</el-radio>
           </el-radio-group>
         </el-form-item>
 
-        <el-form-item :label="globals.getLabel('depart')">
+        <el-form-item :label="_label('depart')">
 
           <simple-select v-model="form.departmentid" source="department.single"></simple-select>
         </el-form-item>
         
-        <el-form-item :label="globals.getLabel('zu')">
+        <el-form-item :label="_label('zu')">
           <simple-select v-model="form.groupid" source="group" style="width:150"></simple-select>
         </el-form-item>
 
-        <el-form-item :label="globals.getLabel('country')">
+        <el-form-item :label="_label('country')">
           <simple-select v-model="form.countryid" source="country" :lang="lang"></simple-select>
         </el-form-item>
         
-        <el-form-item :label="globals.getLabel('email')">
+        <el-form-item :label="_label('email')">
           <el-input v-model="form.e_mail"></el-input>
         </el-form-item>
         
-        <el-form-item :label="globals.getLabel('user-join')">
-          <el-date-picker v-model="form.date" type="date" value-format="yyyy-MM-dd" placeholder="globals.getLabel('xuanzeriqi')"></el-date-picker>
+        <el-form-item :label="_label('user-join')">
+          <el-date-picker v-model="form.date" type="date" value-format="yyyy-MM-dd" placeholder="_label('xuanzeriqi')"></el-date-picker>
         </el-form-item>
-        <el-form-item :label="globals.getLabel('user-left')">
-          <el-date-picker v-model="form.leave_date" type="date" value-format="yyyy-MM-dd" placeholder="globals.getLabel('xuanzeriqi')"></el-date-picker>
+        <el-form-item :label="_label('user-left')">
+          <el-date-picker v-model="form.leave_date" type="date" value-format="yyyy-MM-dd" placeholder="_label('xuanzeriqi')"></el-date-picker>
         </el-form-item>
       
-        <el-form-item :label="globals.getLabel('telephone')">
+        <el-form-item :label="_label('telephone')">
           <el-input v-model="form.phone"></el-input>
         </el-form-item>
-        <el-form-item :label="globals.getLabel('mobile')">
+        <el-form-item :label="_label('mobile')">
           <el-input v-model="form.mobilephone"></el-input>
         </el-form-item>
 
@@ -70,24 +70,24 @@
       </el-form>
     </el-tab-pane>
   
-    <el-tab-pane :label="globals.getLabel('sale-port')">
+    <el-tab-pane :label="_label('sale-port')">
       <el-checkbox-group v-model="form.sale_port">
         <el-checkbox v-for="item in sale_port_list" :label="item.value">{{item.label}}</el-checkbox>
       </el-checkbox-group>    
     </el-tab-pane>
-  <el-tab-pane :label="globals.getLabel('jiesuandanwei')">定时任务补偿</el-tab-pane>
-    <el-tab-pane :label="globals.getLabel('cangku')">
+  <el-tab-pane :label="_label('jiesuandanwei')">定时任务补偿</el-tab-pane>
+    <el-tab-pane :label="_label('cangku')">
       <el-checkbox-group v-model="form.cangku">
         <el-checkbox v-for="item in cangku_list" :label="item.value">{{item.label}}</el-checkbox>
       </el-checkbox-group> 
     </el-tab-pane>
     
-    <el-tab-pane :label="globals.getLabel('jiagedan')">
+    <el-tab-pane :label="_label('jiagedan')">
       <el-checkbox-group v-model="form.jiagedan">
         <el-checkbox v-for="item in jiagedan_list" :label="item.value">{{item.label}}</el-checkbox>
       </el-checkbox-group> 
     </el-tab-pane>
-  <el-tab-pane :label="globals.getLabel('gerenshezhi')">定时任务补偿</el-tab-pane>
+  <el-tab-pane :label="_label('gerenshezhi')">定时任务补偿</el-tab-pane>
   </el-tabs>
   
   <span slot="footer" class="dialog-footer">
@@ -180,13 +180,13 @@ export default {
         onSubmit() {
             var self = this;
             if(self.form.id=="") {
-                $ASA.submit.call(self, "/"+props.controller+"/add", self.form, function(){
+                self._submit("/"+props.controller+"/add", self.form, function(){
                     self.$refs.tablelist.appendRow($ASA.clone(self.form))
                     //self.dialogVisible = false
                 })
             }
             else {
-                $ASA.submit.call(self, "/"+props.controller+"/edit", self.form, function(){
+                self._submit("/"+props.controller+"/edit", self.form, function(){
                     $ASA.copyTo(self.form, self.row)
                     //self.dialogVisible = false
                 })
@@ -222,31 +222,9 @@ export default {
         handleDelete(rowIndex, row) {
             var self = this;
 
-            self.$confirm('此操作将永久删除该记录, 是否继续?', '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-            }).then(() => {
-                $ASA.get("/user/delete?id="+row.id, function(res){
-                    if(res.messages.length>0) {
-                        const h = self.$createElement;
-                        var message = h("ul", null, res.messages.map(function(v){
-                            return h("li",null,v)
-                        }))
-
-                        self.$alert(message, '错误提示', {
-                            confirmButtonText: '确定'
-                        });
-                    }
-                    else {
-                        self.$delete(self.tableData,rowIndex)
-                        self.$message({
-                            message: '删除成功',
-                            type: 'success'
-                        });
-                    }
-                },"json")
-            });
+            self._remove("/user/delete?id="+row.id, function(res){
+                self.$delete(self.tableData,rowIndex)
+            })
         }
     }
 }

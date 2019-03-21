@@ -55,7 +55,7 @@ ASA.extend = function(obj1, obj2) {
 ASA.logger = function(name) {
     return function() {
         var arr = Array.prototype.slice.call(arguments)
-        arr.unshift("<"+name+">")
+        arr.unshift("old <"+name+">")
         console.log.apply(console, arr);
     }
 }

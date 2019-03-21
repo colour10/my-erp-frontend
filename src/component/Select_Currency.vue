@@ -10,7 +10,6 @@
 
 <script>
 import DataSource from './DataSource.js'
-import globals from './globals.js'
 
 export default {
     name: 'select-currency',
@@ -35,7 +34,7 @@ export default {
             dataCopy:[],
             currentInput:"",
             dataSource:dataSource,
-            qingxuanze:globals.getLabel("qingxuanze")
+            qingxuanze:self._label("qingxuanze")
         }
     },
     methods: {
@@ -43,7 +42,6 @@ export default {
             this.currentInput = val
         },
         handleChange(newValue) {
-            console.log("change", newValue)
             this.$emit('change',newValue)
         }
     },
@@ -65,7 +63,7 @@ export default {
                 })
             } 
             else { //val为空时，还原数组
-                console.log("self.dataCopy", self.dataCopy)
+                self._log("self.dataCopy", self.dataCopy)
                 return self.dataCopy;
             }
         }
@@ -78,6 +76,3 @@ export default {
     }
 }
 </script>
-
-<style>
-</style>

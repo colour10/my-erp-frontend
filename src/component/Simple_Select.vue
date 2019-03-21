@@ -6,9 +6,7 @@
 
 <script>
 import DataSource from './DataSource.js'
-import globals from './globals.js'
 
-const _log = globals.logger("simple-select");
 export default {
     name: 'simple-select',
     props: {
@@ -39,18 +37,18 @@ export default {
         if(value=='0') {
             value = ''   
         }
-        _log(self.source, dataSource)
+        self._log(self.source, dataSource)
         return {
             currentValue:value,
             data:[],
             dataSource:dataSource,
-            qingxuanze:globals.getLabel('qingxuanze')
+            qingxuanze:self._label('qingxuanze')
         }
     },
     methods: {
         handleChange(newValue) {
-            _log("change", newValue)
-            this.$emit('change',newValue)
+            var self = this
+            self.$emit('change',newValue)
         }
     },
     watch:{

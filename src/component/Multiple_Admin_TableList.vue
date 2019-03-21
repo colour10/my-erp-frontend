@@ -2,7 +2,7 @@
   <el-table :data="tableData" stripe border style="width:100%;" v-loading.fullscreen.lock="loading">
     <el-table-column :prop="name" :label="item.label" align="center" :width="item.width||180" v-if="!item.is_hide" v-for="item in columns" :key="item.name">
       <template v-slot="scope">
-        <img v-if="item.is_image" :src="image_url_prex+scope.row[item.name]" :style="getImageStyle(item)">
+        <img v-if="item.is_image" :src="_label('_image_url_prex')+scope.row[item.name]" :style="getImageStyle(item)">
         <span v-if="!item.is_image && !item.html">{{item.convert?item.convert(scope.row,scope.rowIndex,item):convert(scope.row,item, rowIndex)}}</span>
         <span v-if="item.html" v-html="item.html">{{item.html}}</span>
       </template>            
@@ -14,7 +14,7 @@
       </template>            
     </el-table-column>
 
-    <el-table-column prop="lang_code" :label="labels.yuyan" width="180" align="center">
+    <el-table-column prop="lang_code" :label="_label('yuyan')" width="180" align="center">
       <template v-slot="scope">
        <span v-for="(item, key) in languages" :key="item.code" :value="item.code">
          <el-button :type="isSettingLanguage(scope.row, item.code)?'primary':'info'" circle @click="showFormToUpdate(scope.$index, scope.row, item.code)">{{item.shortName}}</el-button>
@@ -22,9 +22,9 @@
       </template>
     </el-table-column>
 
-    <el-table-column :label="labels.caozuo" width="150" align="center">
+    <el-table-column :label="_label('caozuo')" width="150" align="center">
       <template v-slot="scope">
-        <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">{{labels.shanchu}}</el-button>
+        <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">{{_label("shanchu")}}</el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -48,13 +48,7 @@ export default {
             componenToptions:options,
             languages:$ASAL.list_languages,
             loading:true,
-            labels:{
-                shanchu: $ASAL.shanchu,
-                yuyan: $ASAL.yuyan,
-                caozuo:$ASAL.caozuo
-            },
-            current_lang:$ASAL.lang,
-            image_url_prex:$ASAL._image_url_prex
+            current_lang:$ASAL.lang
         }
     },
     methods: {
@@ -75,7 +69,7 @@ export default {
         handleDelete(rowIndex, row) {
             var self = this
 
-            $ASA.remove.call(this, "/"+self.controller+"/delete?id="+row.id, function() {
+            self._remove("/"+self.controller+"/delete?id="+row.id, function() {
                 self.$delete(self.tableData, rowIndex)
             })
         },
@@ -144,15 +138,11 @@ export default {
                 }   
             }
             
-            var asa = self.$asa;
-
-            $ASA.post("/"+self.controller+"/page",params,function(res){
+            self._submit("/"+self.controller+"/page",params,function(res){
                 //console.log(res)
-                for(var i=0;i<res.length;i++) {
-                    self.tableData.push(asa.extend(res[i], obj))
-                }
+                res.data.forEach(item=>self.tableData.push(globals.extend(item, obj)))
                 cb()
-            },'json');
+            });
         }
     },
     watch:{
@@ -180,6 +170,3 @@ export default {
 }
 
 </script>
-
-<style>
-</style>

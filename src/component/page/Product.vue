@@ -26,7 +26,7 @@
           </el-col>
 
           <el-col :span="14">
-            <el-form ref="form" :model="form" label-width="80px" size="small">
+            <el-form ref="form" :model="form" label-width="80px" size="mini">
               <el-form-item :label="globals.getLabel('shangpinmingcheng')">
                 <el-input v-model="form.productname"></el-input>
               </el-form-item>
@@ -43,7 +43,7 @@
             </el-form>
           </el-col>
         </el-row>
-        <el-form  class="user-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini">
+        <el-form  class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini">
         <el-row :gutter="0">
           <el-col :span="8">
             <el-form-item :label="globals.getLabel('pinpai')">
@@ -336,13 +336,13 @@ export default {
         onSubmit() {
             var self = this;
             if(self.form.id=="") {
-                $ASA.submit.call(self, "/"+props.controller+"/add", self.form, function(){
+                self._submit("/"+props.controller+"/add", self.form, function(){
                     self.$refs.tablelist.appendRow($ASA.clone(self.form))
                     //self.dialogVisible = false
                 })
             }
             else {
-                $ASA.submit.call(self, "/"+props.controller+"/edit", self.form, function(){
+                self._submit("/"+props.controller+"/edit", self.form, function(){
                     $ASA.copyTo(self.form, self.row)
                     //self.dialogVisible = false
                 })
@@ -376,75 +376,13 @@ export default {
             self.activeName = "info"
             self.showDialog();
         },
-        handleEdit(rowIndex, row){
-           window.location = "/user/edit?id="+row.id;
-        },
         handleDelete(rowIndex, row) {
             var self = this;
 
-            self.$confirm('此操作将永久删除该记录, 是否继续?', '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-            }).then(() => {
-                $ASA.get("/user/delete?id="+row.id, function(res){
-                    if(res.messages.length>0) {
-                        const h = self.$createElement;
-                        var message = h("ul", null, res.messages.map(function(v){
-                            return h("li",null,v)
-                        }))
-
-                        self.$alert(message, '错误提示', {
-                            confirmButtonText: '确定'
-                        });
-                    }
-                    else {
-                        self.$delete(self.tableData,rowIndex)
-                        self.$message({
-                            message: '删除成功',
-                            type: 'success'
-                        });
-                    }
-                },"json")
-            });
+            self._remove("/user/delete?id="+row.id, function(res){
+                self.$delete(self.tableData,rowIndex)
+            })
         }
     }
 }
 </script>
-<style>
-    .user-form .el-input__inner {
-        width:200px;
-    }
-
-    .user-form .el-input-group {
-        width:200px;
-    }
-
-    .user-form .el-input-group .el-input__inner {
-        width:155px;
-    }
-    .user-form .el-input-group--prepend .el-input__inner {
-        width:99px;
-    }
-
-    .user-form .el-form-item__content {
-        width:200px;
-    }
-
-    .user-form .el-date-editor.el-input, .el-date-editor.el-input__inner {
-        width:150px
-    }
-
-    .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item {
-        margin-bottom: 5px;
-    }
-
-    .user-form .el-checkbox {
-        margin-right:12px;
-    }
-
-    .user-form .el-checkbox__label {
-        padding-left:4px;
-    }
-
-</style>

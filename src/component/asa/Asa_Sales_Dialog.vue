@@ -1,7 +1,7 @@
 <template>
 <div>   
   <el-dialog :title="title" :visible.sync="dialogVisible" :center="true" :fullscreen="true" :modal="false" >
-    <el-form  class="user-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini">
+    <el-form  class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini">
         <el-row :gutter="0">
             <el-col :span="6">
               <el-form-item :label="globals.getLabel('huiyuan')">
@@ -178,7 +178,7 @@ export default {
                 return {productid:item.productid, id:item.id, sizecontentid:item.sizecontentid, number:item.number}
             })
             console.log(JSON.stringify(params))
-            $ASA.submit.call(self, "/order/save", {params}, function(res){
+            self._submit("/order/save", {params}, function(res){
                     
             });
         },
@@ -212,40 +212,3 @@ export default {
     }
 }
 </script>
-<style>
-    .user-form .el-input__inner {
-        width:200px;
-    }
-
-    .user-form .el-input-group {
-        width:200px;
-    }
-
-    .user-form .el-input-group .el-input__inner {
-        width:155px;
-    }
-    .user-form .el-input-group--prepend .el-input__inner {
-        width:99px;
-    }
-
-    .user-form .el-form-item__content {
-        width:200px;
-    }
-
-    .user-form .el-date-editor.el-input, .el-date-editor.el-input__inner {
-        width:150px
-    }
-
-    .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item {
-        margin-bottom: 5px;
-    }
-
-    .user-form .el-checkbox {
-        margin-right:12px;
-    }
-
-    .user-form .el-checkbox__label {
-        padding-left:4px;
-    }
-
-</style>

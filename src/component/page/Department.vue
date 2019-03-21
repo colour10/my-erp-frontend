@@ -89,19 +89,20 @@ export default {
             this.selectNode(node)
         },
         selectNode(node) {
+            var self = this;
             var data = node.data;
-            this.node = node;
-            this.form.name = data.label
-            this.form.remark = data.remark
-            this.form.id = data.id
-            this.form_create.parent_name = data.label
-            this.form_create.up_dp_id = data.id
+            self.node = node;
+            self.form.name = data.label
+            self.form.remark = data.remark
+            self.form.id = data.id
+            self.form_create.parent_name = data.label
+            self.form_create.up_dp_id = data.id
 
-            this.is_save_disabled = node.parent.id<=0
+            self.is_save_disabled = node.parent.id<=0
         },
         onEdit() {
             var self = this
-            $ASA.submit.call(this, "/department/edit", this.form, function(res) {
+            self._submit("/department/edit", this.form, function(res) {
                 //$ASA.copyTo(self.form, self.node.data)
                 //console.log(self.node.data, self.form)
                 self.node.data.label = self.form.name;
@@ -131,7 +132,7 @@ export default {
         },
         onCreate() {
             var self = this
-            $ASA.submit.call(this, "/department/add", this.form_create, function(){
+            self._submit("/department/add", this.form_create, function(){
                 var newNode = {}
                 newNode.label = self.form_create.name;
                 newNode.remark = self.form_create.remark;

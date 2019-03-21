@@ -1,102 +1,102 @@
 <template>
 <div>
   <el-dialog :title="title" :visible.sync="dialogVisible" :center="true" :fullscreen="true" :modal="false" >
-    <el-form  class="user-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini">
+    <el-form  class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini">
         <el-row :gutter="0">
             <el-col :span="6">
-                <el-form-item :label="globals.getLabel('yewuleixing')">
+                <el-form-item :label="_label('yewuleixing')">
                   <simple-select v-model="form.bussinesstype" source="bussinesstype" :lang="lang">
                   </simple-select>
                 </el-form-item>
 
-                <el-form-item :label="globals.getLabel('gonghuoshang')">
+                <el-form-item :label="_label('gonghuoshang')">
                   <simple-select v-model="form.supplierid" source="supplier" :lang="lang">
                   </simple-select>
                 </el-form-item>
 
-                <el-form-item :label="globals.getLabel('fahuodanwei')">
+                <el-form-item :label="_label('fahuodanwei')">
                   <simple-select v-model="form.finalsupplierid" source="supplier" :lang="lang">
                   </simple-select>
                 </el-form-item>
 
-                <el-form-item :label="globals.getLabel('niandai')">
+                <el-form-item :label="_label('niandai')">
                   <simple-select v-model="form.ageseason" source="ageseason" :lang="lang"></simple-select>
                 </el-form-item>
 
-                <el-form-item :label="globals.getLabel('niandaileixing')">
+                <el-form-item :label="_label('niandaileixing')">
                   <simple-select v-model="form.seasontype" source="seasontype" :lang="lang">
                   </simple-select>
                 </el-form-item>
             </el-col>
 
             <el-col :span="6">
-                <el-form-item :label="globals.getLabel('nannvkuan')">
+                <el-form-item :label="_label('nannvkuan')">
                   <simple-select v-model="form.formtype" source="formtype" :lang="lang">
                   </simple-select>
                 </el-form-item>
 
-                <el-form-item :label="globals.getLabel('dingdanriqi')">
+                <el-form-item :label="_label('dingdanriqi')">
                   <el-date-picker v-model="form.makedate" type="date" value-format="yyyy-MM-dd"></el-date-picker>
                 </el-form-item>
 
-                <el-form-item :label="globals.getLabel('dingdanhao')">
-                  <el-input v-model="form.orderno" :placeholder="globals.getLabel('zidonghuoqu')" disabled></el-input>
+                <el-form-item :label="_label('dingdanhao')">
+                  <el-input v-model="form.orderno" :placeholder="_label('zidonghuoqu')" disabled></el-input>
                 </el-form-item>
 
-                <el-form-item :label="globals.getLabel('haiwaidingdanhao')">
+                <el-form-item :label="_label('haiwaidingdanhao')">
                   <el-input v-model="form.worldordercode"></el-input>
                 </el-form-item>
 
-                <el-form-item :label="globals.getLabel('fapiaohao')">
+                <el-form-item :label="_label('fapiaohao')">
                   <el-input v-model="form.invoiceno"></el-input>
                 </el-form-item>
             </el-col>
             <el-col :span="6">
-                <el-form-item :label="globals.getLabel('zongjine')">
+                <el-form-item :label="_label('zongjine')">
                   <sp-float-input placeholder="" v-model="form.total" class="input-with-select">
                     <select-currency v-model="form.currency">
                     </select-currency>
                   </sp-float-input>
                 </el-form-item>
 
-                <el-form-item :label="globals.getLabel('huilv')">
+                <el-form-item :label="_label('huilv')">
                   <sp-float-input v-model="form.exchangerate"></sp-float-input>
                 </el-form-item>
 
-                <el-form-item :label="globals.getLabel('zhekou')">
+                <el-form-item :label="_label('zhekou')">
                   <sp-float-input v-model="form.discount"></sp-float-input>
                 </el-form-item>
 
-                <el-form-item :label="globals.getLabel('shuxing')">
+                <el-form-item :label="_label('shuxing')">
                   <simple-select v-model="form.property" source="orderproperty" :lang="lang">
                   </simple-select>
                 </el-form-item>
                 
-                <el-form-item :label="globals.getLabel('wofanglianxiren')">
+                <el-form-item :label="_label('wofanglianxiren')">
                   <simple-select v-model="form.ourcontactor" source="user" :lang="lang">
                   </simple-select>
                 </el-form-item>
           </el-col>
 
           <el-col :span="6">
-                <el-form-item :label="globals.getLabel('dinghuokehu')">
+                <el-form-item :label="_label('dinghuokehu')">
                   <simple-select v-model="form.bookingid" source="supplier" :lang="lang">
                   </simple-select>
                 </el-form-item>
 
-                <el-form-item :label="globals.getLabel('dinghuokehulianxiren')">
+                <el-form-item :label="_label('dinghuokehulianxiren')">
                   <el-input v-model="form.contactor"></el-input>
                 </el-form-item>
 
-                <el-form-item :label="globals.getLabel('beizhu')">
+                <el-form-item :label="_label('beizhu')">
                   <el-input v-model="form.memo"></el-input>
                 </el-form-item>
                 
-                <el-form-item :label="globals.getLabel('shenheren')">
+                <el-form-item :label="_label('shenheren')">
                   <sp-display-input :value="form.auditstaff" source="user"></sp-display-input>
                 </el-form-item>
                 
-                <el-form-item :label="globals.getLabel('zhidanren')">
+                <el-form-item :label="_label('zhidanren')">
                   <sp-display-input :value="form.makestaff" source="user"></sp-display-input>
                 </el-form-item>
           </el-col>
@@ -105,40 +105,40 @@
 
       <el-row type="flex" justify="end">
         <el-col :offset="18" :span="2" >
-          <el-button v-if="isEditable" :type="buttontype" @click="showProduct()">{{globals.getLabel("xuanzeshangpin")}}</el-button>
+          <el-button v-if="isEditable" :type="buttontype" @click="showProduct()">{{_label("xuanzeshangpin")}}</el-button>
         </el-col>
         <el-col :span="2" >
-          <el-button v-if="isEditable" :type="buttontype" @click="saveOrder(1)">{{globals.getLabel("baocundingdan")}}</el-button>
+          <el-button v-if="isEditable" :type="buttontype" @click="saveOrder(1)">{{_label("baocundingdan")}}</el-button>
         </el-col>
         <el-col :span="2" >
-          <el-button v-if="isEditable" type="danger" @click="saveOrder(2)">{{globals.getLabel("tijiaoshenhe")}}</el-button>
+          <el-button v-if="isEditable" type="danger" @click="saveOrder(2)">{{_label("tijiaoshenhe")}}</el-button>
         </el-col>
       </el-row>
 
       <el-row>
         <el-col :span="24">            
           <el-table :data="tabledata" stripe border style="width:100%;" v-loading.fullscreen.lock="loading">
-            <el-table-column prop="productname" :label="globals.getLabel('chanpinmingcheng')" align="center">
+            <el-table-column prop="productname" :label="_label('chanpinmingcheng')" align="center">
               <template v-slot="scope">
                 {{scope.row.product.productname}}
               </template>
             </el-table-column>
 
-            <el-table-column prop="label" :label="globals.getLabel('chima')" width="100" align="center">
+            <el-table-column prop="label" :label="_label('chima')" width="100" align="center">
                 <template v-slot="scope">
                 {{scope.row.sizecontent.getLabel()}}
               </template>
             </el-table-column>
 
-            <el-table-column prop="number" :label="globals.getLabel('dinggoushuliang')" width="200" align="center">
+            <el-table-column prop="number" :label="_label('dinggoushuliang')" width="200" align="center">
               <template v-slot="scope">
                 <el-input-number v-model="scope.row.number" :min="1" :max="10" :disabled="!isEditable"></el-input-number>
               </template>
             </el-table-column>
                         
-            <el-table-column :label="globals.getLabel('caozuo')" width="150" align="center" v-if="isEditable">
+            <el-table-column :label="_label('caozuo')" width="150" align="center" v-if="isEditable">
               <template v-slot="scope">
-                <el-button size="mini" type="danger" @click="deleteRow(scope.$index, scope.row)">{{globals.getLabel('shanchu')}}</el-button>
+                <el-button size="mini" type="danger" @click="deleteRow(scope.$index, scope.row)">{{_label('shanchu')}}</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -151,12 +151,9 @@
 </template>
 
 <script>
-import globals from '../globals.js'
 import simple_select from '../Simple_Select.vue'
 import Asa_Select_Product_Dialog from './Asa_Select_Product_Dialog.vue'
 import DataSource from '../DataSource.js'
-
-const _log = globals.logger("asa-order-dialog");
 
 export default {
     name: 'asa-order-dialog',
@@ -175,7 +172,7 @@ export default {
     data() {
         var self = this;
         
-        var dataSource = DataSource.getDataSource('sizecontent', globals.getLabel('lang'));
+        var dataSource = DataSource.getDataSource('sizecontent', self._label('lang'));
         return {
             form:{
                 bussinesstype:"",
@@ -208,7 +205,6 @@ export default {
             title:"",
             lang:"",
             pro:false,
-            globals,
             dataSource,
             formid:''
         }
@@ -230,7 +226,7 @@ export default {
             var self = this
 
             if(status==2) {
-                if(!confirm(globals.getLabel('order_submit_confirm'))) {
+                if(!confirm(_label('order_submit_confirm'))) {
                     return
                 }
             }
@@ -241,9 +237,9 @@ export default {
             params.list = self.tabledata.map(item=> {
                 return {productid:item.productid, id:item.id, sizecontentid:item.sizecontentid, number:item.number}
             })
-            _log(JSON.stringify(params))
-            $ASA.submit.call(self, "/order/saveorder", {params:JSON.stringify(params)}, function(res){
-                _log(res)
+            self._log(JSON.stringify(params))
+            self._submit("/order/saveorder", {params:JSON.stringify(params)}, function(res){
+                self._log(res)
                 if(res.id) {
                     self.form.id = res.id
                     self.formid = res.id
@@ -252,7 +248,7 @@ export default {
             });
         },
         getRowCount(rowIndex, row) {
-            _log(row, "getRowCount")
+            this._log(row, "getRowCount")
             return row.sizetoplist.reduce((total,item)=>total+=item.number,0)
         },
         deleteRow(rowIndex, row) {
@@ -288,22 +284,22 @@ export default {
         data(newValue) {
             var self = this
             var form = self.form;
-            _log("copy data1", newValue,form)
+            self._log("copy data1", newValue,form)
 
             //清空当前表单数据，并复制新记录的数据
             $ASA.empty(form)
             $ASA.copyTo(newValue, form)
-            _log("copy data2", newValue)
+            self._log("copy data2", newValue)
 
             //如果订单的id变化了，则清空明细，重新加载新订单的明细
             if(form.id!="" && form.id!=self.fomrid) {
                 self.tabledata = []
                 //加载数据
                 $ASA.get("/order/loadorder?id="+form.id, function(res){
-                    _log("加载订单信息", res)
+                    self._log("加载订单信息", res)
                     if(res.data.list) {
                         res.data.list.forEach(item=>{
-                            _log(item)
+                            self._log(item)
                             self.appendRow(item)
                         })
                     }
@@ -317,40 +313,3 @@ export default {
     }
 }
 </script>
-<style>
-    .user-form .el-input__inner {
-        width:200px;
-    }
-
-    .user-form .el-input-group {
-        width:200px;
-    }
-
-    .user-form .el-input-group .el-input__inner {
-        width:155px;
-    }
-    .user-form .el-input-group--prepend .el-input__inner {
-        width:99px;
-    }
-
-    .user-form .el-form-item__content {
-        width:200px;
-    }
-
-    .user-form .el-date-editor.el-input, .el-date-editor.el-input__inner {
-        width:150px
-    }
-
-    .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item {
-        margin-bottom: 5px;
-    }
-
-    .user-form .el-checkbox {
-        margin-right:12px;
-    }
-
-    .user-form .el-checkbox__label {
-        padding-left:4px;
-    }
-
-</style>

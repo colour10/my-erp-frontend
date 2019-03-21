@@ -13,7 +13,7 @@
     </el-row>
   
 
-  <asa-order-dialog :visible.sync="visibleDialog" :data="info" @change="onChange"></asa-order-dialog>
+    <asa-order-confirm-dialog :visible.sync="visibleDialog"></asa-order-confirm-dialog>
 </div>
 
 </template>
@@ -22,7 +22,7 @@ import globals from '../globals.js'
 import Asa_Order_Dialog from '../asa/Asa_Order_Dialog.vue'
 import Simple_Admin_TableList from '../Simple_Admin_TableList.vue'
 
-const _log = globals.logger("asapage-order");
+const _log = globals.logger("asapage-confirmorder");
 
 var props = {
         columns:[
@@ -39,11 +39,11 @@ var props = {
             //{name:"othercontact", label:"<?=$system_language['qitalianxifangshi']?>"},
             //{name:"is_real", label:"<?=$system_language['shifoukeyong']?>", type:"switch"}
         ],
-        controller:"order"
+        controller:"confirmorder"
     }
 
 export default {
-    name: 'asapage-order',
+    name: 'asapage-confirmorder',
     components:{
         'asa-order-dialog':Asa_Order_Dialog,
         'simple-admin-tablelist':Simple_Admin_TableList

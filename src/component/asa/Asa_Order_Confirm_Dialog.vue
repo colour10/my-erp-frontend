@@ -1,7 +1,7 @@
 <template>
 <div>   
   <el-dialog :title="title" :visible.sync="dialogVisible" :center="true" :fullscreen="true" :modal="false" >
-    <el-form  class="user-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini">
+    <el-form  class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini">
         <el-row :gutter="0">
             <el-col :span="6">
               <el-form-item :label="globals.getLabel('gonghuoshang')">
@@ -67,7 +67,7 @@
                 <simple-select v-model="form.dd_company" source="supplier" :lang="lang"></simple-select>
               </el-form-item>
 
-              <el-form-item :label="globals.getLabel('anpaitihuoshijian')" class="mini">
+              <el-form-item :label="globals.getLabel('anpaitihuoshijian')" class="mini" class="font12">
                 <el-date-picker v-model="form.apickingdate" type="date" value-format="yyyy-MM-dd"></el-date-picker>
               </el-form-item>  
 
@@ -197,14 +197,14 @@
       </el-row>
   </el-dialog>
   
-  <asa-select-product-dialog :visible.sync="pro" @select="onSelect"></asa-select-product-dialog>
+  <asa-select-order-detail-dialog :visible.sync="pro" @select="onSelect"></asa-select-order-detail-dialog>
 </div>
 </template>
 
 <script>
 import globals from '../globals.js'
 import simple_select from '../Simple_Select.vue'
-import Asa_Select_Product_Dialog from './Asa_Select_Product_Dialog.vue'
+import Asa_Select_Order_Detail_Dialog from './Asa_Select_Order_Detail_Dialog.vue'
 import DataSource from '../DataSource.js'
 
 const _log = globals.logger("asa-order-confirm-dialog");
@@ -213,7 +213,7 @@ export default {
     name: 'asa-order-confirm-dialog',
     components:{
         'simple-select':simple_select,
-        'asa-select-product-dialog':Asa_Select_Product_Dialog
+        'asa-select-order-detail-dialog':Asa_Select_Order_Detail_Dialog
     },
     props: {
         visible:{
@@ -289,7 +289,7 @@ export default {
                 return {productid:item.productid, id:item.id, sizecontentid:item.sizecontentid, number:item.number}
             })
             console.log(JSON.stringify(params))
-            $ASA.submit.call(self, "/order/save", {params}, function(res){
+            self._submit("/order/save", {params}, function(res){
                     
             });
         },
@@ -323,44 +323,3 @@ export default {
     }
 }
 </script>
-<style>
-    .user-form .el-input__inner {
-        width:200px;
-    }
-
-    .user-form .el-input-group {
-        width:200px;
-    }
-
-    .user-form .el-input-group .el-input__inner {
-        width:155px;
-    }
-    .user-form .el-input-group--prepend .el-input__inner {
-        width:99px;
-    }
-
-    .user-form .el-form-item__content {
-        width:200px;
-    }
-
-    .user-form .el-date-editor.el-input, .el-date-editor.el-input__inner {
-        width:150px
-    }
-
-    .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item {
-        margin-bottom: 5px;
-    }
-
-    .user-form .el-checkbox {
-        margin-right:12px;
-    }
-
-    .user-form .el-checkbox__label {
-        padding-left:4px;
-    }
-
-    .user-form  div.mini label {
-        font-size:12px;
-    }
-
-</style>

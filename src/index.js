@@ -10,6 +10,7 @@ import Select_Currency from './component/Select_Currency.vue'
 import Simple_Avatar from './component/Simple_Avatar.vue'
 import Simple_Album from './component/Simple_Album.vue'
 import globals from './component/globals.js'
+import mixin from './component/mixin.js'
 import Asa_Aliases from './component/asa/Asa_Aliases.vue'
 import Asa_BrandTab from './component/asa/Asa_BrandTab.vue'
 import Asa_Series from './component/asa/Asa_Series.vue'
@@ -19,6 +20,8 @@ import Asa_Sales_Dialog from './component/asa/Asa_Sales_Dialog.vue'
 import Simple_Display_Input from './component/Simple_Display_Input.vue'
 import Simple_Float_Input from './component/Simple_Float_Input.vue'
 import Asa_Order_Confirm_Dialog from './component/asa/Asa_Order_Confirm_Dialog.vue'
+import Asa_Select_Order_Detail_Dialog from './component/asa/Asa_Select_Order_Detail_Dialog.vue'
+
 import Page_Home from './component/page/Home.vue'
 import Page_Order from './component/page/Order.vue'
 import Page_Producttemplate from './component/page/Producttemplate.vue'
@@ -31,7 +34,8 @@ import Page_Sizetop from './component/page/Sizetop.vue'
 import Page_Product from './component/page/Product.vue'
 import Page_Sales from './component/page/Sales.vue'
 import Page_Login from './component/page/Login.vue'
-
+import Page_Confirmorder from './component/page/Confirmorder.vue'
+import Page_UserModifyPassword from './component/page/UserModifyPassword.vue'
 
 const components = [
     Simple_Admin_Page,
@@ -53,6 +57,7 @@ const components = [
     Simple_Display_Input,
     Simple_Float_Input,
     Asa_Order_Confirm_Dialog,
+    Asa_Select_Order_Detail_Dialog,
     Page_Home,
     Page_Order,
     Page_Producttemplate,
@@ -64,7 +69,9 @@ const components = [
     Page_Sizetop,
     Page_Product,
     Page_Sales,
-    Page_Login
+    Page_Login,
+    Page_Confirmorder,
+    Page_UserModifyPassword
 ]
 
 const paykeyboard = {
@@ -72,6 +79,8 @@ const paykeyboard = {
         components.forEach(component => {
             Vue.component(component.name, component);
         });
+
+        Vue.mixin(mixin)
 
         
         Vue.prototype.$asa = globals

@@ -1,6 +1,7 @@
 import globals from './globals.js'
 import resources_options from './resources.js'
 
+const _log = globals.logger("DataSource");
 const resources = {};
 
 function DataRow(row, dataSource) {
@@ -11,7 +12,7 @@ function DataRow(row, dataSource) {
 
 DataRow.prototype.getKeyValue = function() {
     var keyName = this.dataSource.getValueName();
-    //console.log(this.row, keyName,"getKeyValue")
+    //_log(this.row, keyName,"getKeyValue")
     return this.row[keyName]
 }
 
@@ -19,7 +20,7 @@ DataRow.prototype.getLabelValue = function() {
     var self = this;
     var keyName = self.dataSource.getLabelName();
     var lang = self.dataSource.getLang();
-    //console.log(self.row, keyName,"keyName")
+    //_log(self.row, keyName,"keyName")
     return self.row[keyName] || self.row[keyName+"_"+lang]
 }
 
@@ -40,7 +41,7 @@ function DataSource(options, lang) {
     self.opvalue = options.opvalue || 'value'
     self.is_loaded = false;
             
-    //console.log(data_source.hashtable, data_source.datalist, data_source.url)    
+    //_log(data_source.hashtable, data_source.datalist, data_source.url)    
 }
 
 DataSource.prototype.init = function() {
@@ -52,7 +53,7 @@ DataSource.prototype.init = function() {
         self.loadList()
     }
     else if(options.hashlist) {
-        //console.log(options.hashlist)
+        //_log(options.hashlist)
         Object.keys(options.hashlist).forEach(function(key){
             var row = new DataRow(options.hashlist[key], self)
             self.data.push(row)
@@ -71,7 +72,7 @@ DataSource.prototype.init = function() {
         self.is_loaded = true;
     }
     else if(options.datalist) {
-        //console.log(options.datalist.forEach,"options")
+        //_log(options.datalist.forEach,"options")
         options.datalist.forEach(function(item){
             var row = new DataRow(item, self)
             
@@ -87,7 +88,7 @@ DataSource.prototype.loadList = function() {
     var options = self.options;
     var params = options.params || {}
     globals.get(options.url, function(res){
-        res.forEach(function(item){
+        res.data.forEach(function(item){
             var row = new DataRow(item, self)
             self.hashtable[item[self.opvalue]] = row; 
             self.data.push(row)   
@@ -116,7 +117,7 @@ DataSource.prototype.filter = function(condition, callback) {
         var keys = Object.keys(condition)
         
         var result = data.filter(row=>{
-            //console.log("DataSource.filter", row, keys.every(key=>condition[key]==row.getRow(key)))
+            //_log("DataSource.filter", row, keys.every(key=>condition[key]==row.getRow(key)))
             return keys.every(key=>condition[key]==row.getRow(key))    
         })
         callback(result)
@@ -129,12 +130,12 @@ DataSource.prototype.sub = function(condition, callback) {
         var keys = Object.keys(condition)
         
         var result = data.filter(row=>{
-            //console.log("DataSource.filter", row, keys.every(key=>condition[key]==row.getRow(key)))
+            //_log("DataSource.filter", row, keys.every(key=>condition[key]==row.getRow(key)))
             return keys.every(key=>condition[key]==row.getRow(key))    
         })
 
         var result = result.map(item=>item.getRow())
-        console.log(result,"999")
+        _log(result,"999")
         var sub = new DataSource({datalist:result, oplabel:self.oplabel, opvalue:self.opvalue},self.lang)
         sub.init()
         callback(sub)
@@ -163,7 +164,7 @@ DataSource.prototype.setLabelName = function(name) {
 
 DataSource.prototype.getLabelList = function(valueList, callback) {
     this.getData( data => {
-        //console.log(valueList, data, '+++++++')    
+        //_log(valueList, data, '+++++++')    
         
         var fmap = R.map(function(value){
             var equals = item=>value==item.getValue()
@@ -249,7 +250,7 @@ DataSource.getDataSource = function(resourceName, lang) {
         var create = function() {
             
             if(!resources_options[resourceName]) {
-                //console.log(resourceName,"未定义")
+                //_log(resourceName,"未定义")
                 throw "资源未定义:"+resourceName
             }
             resources[resourceName] = new DataSource(resources_options[resourceName], lang)

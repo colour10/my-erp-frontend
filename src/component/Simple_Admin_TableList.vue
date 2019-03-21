@@ -3,7 +3,7 @@
     <el-table :data="tableData" stripe border style="width: 100%;">
       <el-table-column :prop="item.name" :label="item.label" align="center" :width="item.width||180" v-if="!item.is_hide" v-for="item in columns" :key="item.name">
         <template v-slot="scope">
-          <img v-if="item.is_image" :src="image_url_prex+scope.row[item.name]" :style="getImageStyle(item)">
+          <img v-if="item.is_image" :src="_label('_image_url_prex')+scope.row[item.name]" :style="getImageStyle(item)">
           <span v-if="!item.is_image">{{item.convert?item.convert(scope.row,scope.rowIndex,item):convert(scope.row,item, rowIndex)}}</span>
           
         </template>
@@ -15,10 +15,10 @@
       </template>            
     </el-table-column>
 
-      <el-table-column :label="caozuo" width="150" align="center">
+      <el-table-column :label="_label('caozuo')" width="150" align="center">
         <template v-slot="scope">
-          <el-button size="mini" @click="handleClickUpdate(scope.$index, scope.row)" v-if="isEditable(scope.row)">{{bianji}}</el-button>
-          <el-button size="mini" type="danger" @click="onClickDelete(scope.$index, scope.row)" v-if="isDeletable(scope.row)">{{shanchu}}</el-button>
+          <el-button size="mini" @click="handleClickUpdate(scope.$index, scope.row)" v-if="isEditable(scope.row)">{{_label('bianji')}}</el-button>
+          <el-button size="mini" type="danger" @click="onClickDelete(scope.$index, scope.row)" v-if="isDeletable(scope.row)">{{_label('shanchu')}}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -40,11 +40,7 @@ export default {
 
         return {
             rowIndex:"",
-            tableData:[],
-            'caozuo':$ASAL.caozuo,
-            'bianji':$ASAL.bianji,
-            'shanchu':$ASAL.shanchu,
-            image_url_prex:$ASAL._image_url_prex
+            tableData:[]
         }
     },
     methods: {
@@ -58,14 +54,15 @@ export default {
             var self = this
             self.rowIndex = rowIndex;
 
-            $ASA.remove.call(this, "/"+self.controller+"/delete?id="+row.id, function() {
+            self._remove("/"+self.controller+"/delete?id="+row.id, function() {
                 self.$delete(self.tableData,rowIndex)
             })
         },
         handleClickUpdate(rowIndex, row) {
-            if(this.onclickupdate) {
-                this.onclickupdate(rowIndex, row)
-                console.log("click edit")
+            var self = this
+            if(self.onclickupdate) {
+                self.onclickupdate(rowIndex, row)
+                self._log("click edit")
             }
         },
         getImageStyle(column){
@@ -80,6 +77,7 @@ export default {
             return styles;
         },
         convert(row,column, rowIndex){
+            let self = this
             var value = row[column.name]
             if(column.type=='switch') {
                 return value=='1'? $ASAL.yes : $ASAL.no;
@@ -95,7 +93,7 @@ export default {
                         row[column.name + "__label"] = label; 
                         row[column.name + "__columncopy"] = value;  
                     });
-                    console.log('==================', value)
+                    self._log('==================', value)
                 }
                 return row[column.name + "__label"]
             }
@@ -111,7 +109,7 @@ export default {
                         row[column.name + "__label"] = label; 
                         row[column.name + "__columncopy"] = value;  
                     });
-                    console.log('==================',column.name, value)
+                    self._log('==================',column.name, value)
                 }
                 return row[column.name + "__label"]         
             }
@@ -129,7 +127,7 @@ export default {
                 Object.keys(self.base).forEach(function(key){
                     params[key] =  self.base[key]
                 });
-                //console.log(self.base)
+                //self._log(self.base)
             }
             
             var obj = {}
@@ -144,12 +142,10 @@ export default {
             
             var asa = self.$asa;
 
-            $ASA.post("/"+self.controller+"/page",params,function(res){
-                //console.log(res)
-                for(var i=0;i<res.length;i++) {
-                    self.tableData.push(asa.extend(res[i], obj))
-                }
-            },'json');
+            self._submit("/"+self.controller+"/page",params,function(res){
+                //self._log(res)
+                res.data.forEach(item=>self.tableData.push(asa.extend(item, obj)))
+            });
         },
         isDeletable(row) {
             let self = this
@@ -171,7 +167,7 @@ export default {
     watch:{
         base:{
             handler:function(newValue,oldValue){
-                //console.log("change",newValue,oldValue)
+                //this._log("change",newValue,oldValue)
                 this.loadList()
             },
             deep: true
@@ -180,11 +176,8 @@ export default {
     computed:{
     },
     mounted:function(){
-        //console.log(onClickUpdate)
+        //this._log(onClickUpdate)
         this.loadList()
     }
 }
 </script>
-
-<style>
-</style>

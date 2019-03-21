@@ -104,7 +104,7 @@ export default {
             var self = this;
             self.form.lang = self.lang;
             if(self.form.id=="") {
-                $ASA.submit.call(self, "/"+self.controller+"/add", self.form, function(){
+                self._submit("/"+self.controller+"/add", self.form, function(){
                     self.$refs.tablelist.appendRow($ASA.clone(self.form))
                     
                     if(self.auto_hide!==false) {
@@ -113,7 +113,7 @@ export default {
                 })
             }
             else {
-                $ASA.submit.call(self, "/"+self.controller+"/edit", self.form, function(){
+                self._submit("/"+self.controller+"/edit", self.form, function(){
                     var row = self.$refs.tablelist.getRow(self.rowIndex)
                     $ASA.copyTo(self.form, row)
                     if(self.auto_hide!==false) {
@@ -226,21 +226,3 @@ export default {
 }
 
 </script>
-
-<style>
-    .user-form .width2 .el-input__inner {
-        width:200px;
-    }
-    
-    .user-form .width1 .el-input__inner {
-        width:510px;
-    }
-    
-    .user-form .width1 .el-textarea__inner {
-        width:510px;
-    }
-    
-    .user-form .width2 .el-date-editor.el-input, .el-date-editor.el-input__inner {
-        width:200px
-    }
-</style>

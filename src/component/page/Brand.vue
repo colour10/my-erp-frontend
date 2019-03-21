@@ -60,11 +60,3 @@ export default {
     }
 }
 </script>
-<style>
-    .user-form .el-input__inner {
-        width:200px;
-    }
-    .user-form .el-date-editor.el-input, .el-date-editor.el-input__inner {
-        width:200px
-    }
-</style>
