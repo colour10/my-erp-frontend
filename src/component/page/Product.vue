@@ -140,15 +140,15 @@
                                     </simple-select>
                                 </el-form-item>
                                 <el-form-item :label="_label('chimaguige')">
-                                    <simple-select v-model="form.ulnarinch" source="sizetop" :lang="lang">
+                                    <simple-select v-model="form.ulnarinch" source="ulnarinch" :lang="lang">
                                     </simple-select>
                                 </el-form-item>
                                 <el-form-item :label="_label('zhixingbiaozhun')">
-                                    <simple-select v-model="form.ulnarinch" source="sizetop" :lang="lang">
+                                    <simple-select v-model="form.executioncategory" source="executioncategory" :lang="lang">
                                     </simple-select>
                                 </el-form-item>
                                 <el-form-item :label="_label('anquanleibie')">
-                                    <simple-select v-model="form.ulnarinch" source="sizetop" :lang="lang">
+                                    <simple-select v-model="form.securitycategory" source="securitycategory" :lang="lang">
                                     </simple-select>
                                 </el-form-item>
                                 <el-form-item :label="_label('guigexinghao')">
@@ -217,8 +217,8 @@ export default {
                 productsize: "",
                 countries: "",
                 brandcolor: "",
-                security: "",
-                execution: "",
+                securitycategory: "",
+                executioncategory: "",
                 material: "",
                 productparst: "",
                 occasion: "",
@@ -308,7 +308,7 @@ export default {
             }
         },
         onTabClick(tab) {
-            _log(tab)
+            this._log(tab)
         },
         showFormToEdit(rowIndex, row) {
             var self = this

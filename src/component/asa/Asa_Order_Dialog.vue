@@ -16,15 +16,13 @@
                             <simple-select v-model="form.finalsupplierid" source="supplier" :lang="lang">
                             </simple-select>
                         </el-form-item>
-                        <el-form-item :label="_label('niandai')">
+                        <el-form-item :label="_label('niandaijijie')">
                             <simple-select v-model="form.ageseason" source="ageseason" :lang="lang"></simple-select>
                         </el-form-item>
                         <el-form-item :label="_label('niandaileixing')">
                             <simple-select v-model="form.seasontype" source="seasontype" :lang="lang">
                             </simple-select>
                         </el-form-item>
-                    </el-col>
-                    <el-col :span="6">
                         <el-form-item :label="_label('nannvkuan')">
                             <simple-select v-model="form.formtype" source="formtype" :lang="lang">
                             </simple-select>
@@ -32,6 +30,8 @@
                         <el-form-item :label="_label('dingdanriqi')">
                             <el-date-picker v-model="form.makedate" type="date" value-format="yyyy-MM-dd"></el-date-picker>
                         </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
                         <el-form-item :label="_label('dingdanhao')">
                             <el-input v-model="form.orderno" :placeholder="_label('zidonghuoqu')" disabled></el-input>
                         </el-form-item>
@@ -41,8 +41,6 @@
                         <el-form-item :label="_label('fapiaohao')">
                             <el-input v-model="form.invoiceno"></el-input>
                         </el-form-item>
-                    </el-col>
-                    <el-col :span="6">
                         <el-form-item :label="_label('zongjine')">
                             <sp-float-input placeholder="" v-model="form.total" class="input-with-select">
                                 <select-currency v-model="form.currency">
@@ -59,12 +57,12 @@
                             <simple-select v-model="form.property" source="orderproperty" :lang="lang">
                             </simple-select>
                         </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
                         <el-form-item :label="_label('wofanglianxiren')">
                             <simple-select v-model="form.ourcontactor" source="user" :lang="lang">
                             </simple-select>
                         </el-form-item>
-                    </el-col>
-                    <el-col :span="6">
                         <el-form-item :label="_label('dinghuokehu')">
                             <simple-select v-model="form.bookingid" source="supplier" :lang="lang">
                             </simple-select>
@@ -82,17 +80,23 @@
                             <sp-display-input :value="form.makestaff" source="user"></sp-display-input>
                         </el-form-item>
                     </el-col>
+                    <el-col :span="6">
+                        <el-row type="flex" justify="start">
+                            <el-button :type="canSubmit?'primary':'info'" @click="saveOrder(1)">{{_label("baocun")}}</el-button>
+                            <el-button :type="canSubmit?'primary':'info'" @click="saveOrder(2)">{{_label("tijiaoshenhe")}}</el-button>
+                            <el-button :type="canDelete?'primary':'info'" @click="saveOrder(2)">{{_label("shanchu")}}</el-button>
+                        </el-row>
+                        <el-row type="flex" justify="start">
+                            <el-button :type="canConfirm?'primary':'info'" @click="saveOrder(0)">{{_label("tuihui")}}</el-button>
+                            <el-button :type="canConfirm?'primary':'info'" @click="saveOrder(1)">{{_label("shenhetongguo")}}</el-button>
+                            <el-button :type="canCancel?'primary':'info'" @click="createWarehousing()">{{_label("quxiaoshenhe")}}</el-button>
+                        </el-row>
+                    </el-col>
                 </el-row>
             </el-form>
             <el-row type="flex" justify="end">
-                <el-col :offset="18" :span="2">
+                <el-col :offset="22" :span="2">
                     <el-button v-if="isEditable" :type="buttontype" @click="showProduct()">{{_label("xuanzeshangpin")}}</el-button>
-                </el-col>
-                <el-col :span="2">
-                    <el-button v-if="isEditable" :type="buttontype" @click="saveOrder(1)">{{_label("baocundingdan")}}</el-button>
-                </el-col>
-                <el-col :span="2">
-                    <el-button v-if="isEditable" type="danger" @click="saveOrder(2)">{{_label("tijiaoshenhe")}}</el-button>
                 </el-col>
             </el-row>
             <el-row>
@@ -194,16 +198,36 @@ export default {
             self.dataSource.filter({
                 topid: row.sizetopid
             }, data => {
+                let is_ignore = false;
                 data.map(item => {
-                    self.tabledata.unshift({
-                        productid: row.id,
-                        sizecontentid: item.getValue(),
-                        orderid: 0,
-                        number: 0,
-                        sizecontent: item,
-                        product: row
-                    })
+                    //查询是不是已经添加过
+                    let is_exist = R.any(rowData => {
+                        self._log("any", rowData, row, item)
+                        return rowData.productid == row.id && rowData.sizecontentid == item.getValue()
+                    })(self.tabledata)
+                    self._log("is_exist", is_exist)
+
+                    if (!is_exist) {
+                        self.tabledata.unshift({
+                            productid: row.id,
+                            sizecontentid: item.getValue(),
+                            orderid: 0,
+                            number: 0,
+                            sizecontent: item,
+                            product: row
+                        })
+                    }
+                    else {
+                        //提示信息
+                        //is_ignore
+                        is_ignore = true
+                        
+                    }
                 })
+
+                if(is_ignore) {
+                    self._info(self._label("order-add-warning"))
+                }
             })
         },
         saveOrder(status) {
@@ -265,6 +289,22 @@ export default {
         isEditable() {
             var status = this.form.status;
             return status == '1' || status == '' || !status
+        },
+        canDelete() {
+            var status = this.form.status;
+            return this.form.id > 0 && status == 1
+        },
+        canConfirm() {
+            var status = this.form.status;
+            return this.form.id > 0 && status == 2
+        },
+        canCancel() {
+            var status = this.form.status;
+            return this.form.id > 0 && status == 3
+        },
+        canSubmit() {
+            var status = this.form.status;
+            return status != 2 && status != 3
         }
     },
     watch: {

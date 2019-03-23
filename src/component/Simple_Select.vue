@@ -1,5 +1,5 @@
 <template>
-  <el-select v-model="currentValue" :placeholder="qingxuanze" style="width:150" @change="handleChange" filterable :disabled="disabled">
+  <el-select v-model="currentValue" :placeholder="qingxuanze" style="width:150" @change="handleChange" filterable :disabled="disabled" :clearable="clearable">
     <el-option v-for="(item,key) in data" :key="item.getKeyValue()" :label="item.getLabelValue()" :value="item.getKeyValue()"></el-option> 
   </el-select>
 </template>
@@ -24,7 +24,13 @@ export default {
         source:{
             type:[String,Object],
             required:true    
-        }   
+        }  
+         ,
+        clearable:{
+            type:[Boolean],
+            required:false,
+            default:false    
+        }  
     },
     model: {
         prop: 'select_value',

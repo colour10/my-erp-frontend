@@ -7,7 +7,7 @@
         </el-row>
         <el-row :gutter="20">
             <el-col :span="24">
-                <simple-admin-tablelist ref="tablelist" v-bind="props" :onclickupdate="showFormToEdit" :isdelete="isEditable"></simple-admin-tablelist>
+                <simple-admin-tablelist ref="tablelist" v-bind="props" :onclickupdate="showFormToEdit" :isdelete="false"></simple-admin-tablelist>
             </el-col>
         </el-row>
         <asa-order-dialog :visible.sync="visibleDialog" :data="info" @change="onChange"></asa-order-dialog>
@@ -25,7 +25,7 @@ var props = {
     columns: [
         { name: "orderno", label: globals.getLabel('dingdanbianhao'), width: 300 },
         { name: "bussinesstype", label: globals.getLabel('yewuleixing'), type: 'select', source: "bussinesstype" },
-        //{name:"city", label:"<?=$system_language['chengshi']?>"},
+        { name: "status", label: globals.getLabel('zhuangtai'), type: 'select', source: "orderstatus" },
         //{name:"address", label:"<?=$system_language['dizhi']?>"},
         //{name:"zipcode", label:"<?=$system_language['youbian']?>"}, 
 

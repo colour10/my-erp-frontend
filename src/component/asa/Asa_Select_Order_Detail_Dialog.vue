@@ -24,7 +24,7 @@
                 <el-table :data="tabledata" border style="width:100%;" v-loading.fullscreen.lock="loading" :row-class-name="tableRowClassName">
                     <el-table-column prop="productname" :label="_label('shangpinmingcheng')" align="center">
                         <template v-slot="scope">
-                            {{scope.row.id}}
+                            {{scope.row.product.productname}}
                         </template>
                     </el-table-column>
                     <el-table-column prop="label" :label="_label('chima')" width="100" align="center">
@@ -52,8 +52,6 @@
 import globals from '../globals.js'
 import simple_select from '../Simple_Select.vue'
 import DataSource from '../DataSource.js'
-
-const _log = globals.logger("asa-select-order-detail-dialog");
 
 export default {
     name: 'asa-select-order-detail-dialog',
@@ -93,17 +91,21 @@ export default {
         loadPage() {
             var self = this;
             var form = self.form
-            self._fetch("/orderdetails/list", {}, function(res) {
-                //_log("loadPage", res)
+            self._fetch("/confirmorder/search", form, function(res) {
+                self._log("loadPage", res)
 
-                res.data.forEach(row => {
-                        self.dataSource.getRow(row.sizecontentid, data => {
-                            row.sizecontent = data
-                            row.select_number = 0 //默认0个
-                            self.tabledata.push(row)
-                        })
+                //处理商品信息列表
+                res.data.list.forEach(function(row) {
+                    self.dataSource.getRow(row.sizecontentid, data => {
+                        row.sizecontent = data
+                        row.select_number = 0 //默认0个
+
+                        row.product = R.find(R.propEq('id', row.productid))(res.data.productlist)
+                        self.tabledata.push(row)
                     })
-                    //self.tabledata = res;
+                })
+
+                //self.tabledata = res;
             });
         },
         onSearch() {
@@ -112,7 +114,7 @@ export default {
         onSelect() {
             var self = this
             self.dialogVisible = false;
-            self.$emit("select", self.tabledata.filter(item=>item.select_number>0))
+            self.$emit("select", self.tabledata.filter(item => item.select_number > 0))
         }
     },
     mounted: function() {},

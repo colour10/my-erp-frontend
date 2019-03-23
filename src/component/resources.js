@@ -70,8 +70,14 @@ options["sizetop"] = {url:'/sizetop/list',oplabel:'name', opvalue:'id'}
 //尺码组明细
 options["sizecontent"] = {url:'/sizecontent/list',oplabel:'content', opvalue:'id'}
 
-//尺码组明细
+//成员
 options["member"] = {url:'/member/list',oplabel:'name', opvalue:'id'}
+
+//执行标准
+options["executioncategory"] = {url:'/executioncategory/list',oplabel:'name', opvalue:'id'}
+
+//安全类别
+options["securitycategory"] = {url:'/securitycategory/list',oplabel:'name', opvalue:'id'}
 
 
 //仓库
@@ -85,7 +91,7 @@ options["gender2"] = {hashtable:$ASAL.list_gender2}
 options["currency"] = {hashlist:$ASAL.list_currency,oplabel:'name', opvalue:'id'}
 options["season"] = {hashtable:$ASAL.list_season}
 options["orderproperty"] = {hashtable:$ASAL.list_orderproperty}
-options["bussinesstype"] = {hashtable:$ASAL.list_bussinesstype}
+options["bussinesstype"] = {hashlist:$ASAL.list_bussinesstype,oplabel:'name', opvalue:'id'}
 options["sessionmark"] = {hashtable:{"SS":"SS","FW":"FW","XX":"XX"}}
 options["seasontype"] = {hashtable:{"0":"Pre","1":"Main","2":"Fashion"}}
 
@@ -106,8 +112,13 @@ options["transporttype"] =  {hashtable:$ASAL.list_transporttype}
 options["paytype"] =  {hashtable:$ASAL.list_paytype}
 
 
-//订单状态
+//销售单状态
 options["salestatus"] =  {hashtable:$ASAL.list_salestatus}
 
+//订单状态
+options["orderstatus"] =  {hashtable:$ASAL.list_ordertatus}
+
+//发货单状态
+options["confirmstatusstatus"] =  {hashtable:$ASAL.list_confirmstatusstatus}
 
 export default options

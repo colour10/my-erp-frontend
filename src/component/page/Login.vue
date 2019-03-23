@@ -2,7 +2,7 @@
     <el-form v-if="isShowForm" :model="ruleForm2" :rules="rules2" ref="ruleForm2" label-position="left" label-width="0px" class="demo-ruleForm login-container" native-type="submit">
         <h3 class="title">{{_label("xitongdenglu")}}</h3>
         <el-form-item prop="account">
-            <el-input type="text" v-model="ruleForm2.account" auto-complete="off" :placeholder="_label('yonghuming')"  @keyup.enter.native="handleSubmit2"></el-input>
+            <el-input type="text" v-model="ruleForm2.account" auto-complete="off" :placeholder="_label('yonghuming')"  @keyup.enter.native="handleSubmit2" :autofocus="true"></el-input>
         </el-form-item>
     
         <el-form-item prop="checkPass">
@@ -75,7 +75,7 @@ export default {
       doAction(action) {
           var self = this
           if(action=='logout') {
-              self.post("/login/logout", {}, function(res){
+              self._fetch("/login/logout", {}, function(res){
                   self.$store.commit("logout")
                   self.$router.push("/login/login")
                   self._log("logout")
@@ -98,7 +98,7 @@ export default {
                           self.$router.push("/login/login") 
                           self.isShowForm = true;
                       }
-                  }, 'json')
+                  })
               }
           }
       }

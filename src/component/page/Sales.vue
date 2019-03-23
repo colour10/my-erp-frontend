@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-row>
-            <el-col :span="24">
+            <el-col :span="2" :offset="22">
                 <el-button type="primary" @click="showFormToCreate()">{{globals.getLabel('xinjian')}}</el-button>
             </el-col>
         </el-row>

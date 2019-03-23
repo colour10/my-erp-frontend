@@ -99,6 +99,14 @@ export default {
                     }
                 }, "json")
             }).catch(() => {});
+        },
+        _info(message) {
+            let self = this
+            self.$notify({
+                type: 'warning',
+                title: self._label("tishi"),
+                message: message
+            });
         }
     }
 }

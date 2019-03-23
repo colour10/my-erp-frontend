@@ -21,6 +21,7 @@ import Simple_Display_Input from './component/Simple_Display_Input.vue'
 import Simple_Float_Input from './component/Simple_Float_Input.vue'
 import Asa_Order_Confirm_Dialog from './component/asa/Asa_Order_Confirm_Dialog.vue'
 import Asa_Select_Order_Detail_Dialog from './component/asa/Asa_Select_Order_Detail_Dialog.vue'
+import Asa_Warehousing_Dialog from './component/asa/Asa_Warehousing_Dialog.vue'
 
 import Page_Home from './component/page/Home.vue'
 import Page_Order from './component/page/Order.vue'
@@ -58,6 +59,7 @@ const components = [
     Simple_Float_Input,
     Asa_Order_Confirm_Dialog,
     Asa_Select_Order_Detail_Dialog,
+    Asa_Warehousing_Dialog,
     Page_Home,
     Page_Order,
     Page_Producttemplate,

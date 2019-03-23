@@ -13,7 +13,7 @@
                         <el-form-item :label="_label('waitudingdanhao')">
                             <el-input v-model="form.externalno"></el-input>
                         </el-form-item>
-                        <el-form-item :label="_label('xiaoshoudangku')">
+                        <el-form-item :label="_label('xiaoshoucangku')">
                             <simple-select v-model="form.warehouseid" source="warehouse" :lang="lang"></simple-select>
                         </el-form-item>
                         <el-form-item :label="_label('duizhangdanhao')">
@@ -212,7 +212,7 @@ export default {
         zuofei() {
             const self = this
             if (!self.canZuofei) {
-                return
+                return;
             }
 
             self.$confirm(self._label('zuofei_warning'), self._label('tip'), {

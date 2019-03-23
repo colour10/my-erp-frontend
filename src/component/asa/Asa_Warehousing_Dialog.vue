@@ -4,131 +4,49 @@
             <el-form class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini">
                 <el-row :gutter="0">
                     <el-col :span="6">
+                        <el-form-item :label="_label('fahuodanhao')">
+                            <el-input v-model="form.orderno" disabled></el-input>
+                        </el-form-item>
+                        <el-form-item :label="_label('rukuriqi')">
+                            <el-date-picker v-model="form.entrydate" type="date" value-format="yyyy-MM-dd"></el-date-picker>
+                        </el-form-item>
                         <el-form-item :label="_label('gonghuoshang')">
                             <simple-select v-model="form.supplierid" source="supplier" :lang="lang"></simple-select>
                         </el-form-item>
-                        <el-form-item :label="_label('gonghuodanwei')">
-                            <simple-select v-model="form.finalsupplierid" source="supplier" :lang="lang"></simple-select>
+                        <el-form-item :label="_label('cangku')">
+                            <simple-select v-model="form.warehouseid" source="warehouse" :lang="lang"></simple-select>
                         </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
                         <el-form-item :label="_label('niandaijijie')">
                             <simple-select v-model="form.ageseasonid" source="ageseason" :lang="lang"></simple-select>
                         </el-form-item>
                         <el-form-item :label="_label('niandaileixing')">
-                            <simple-select v-model="form.seasontype" source="seasontype" :lang="lang">
-                            </simple-select>
-                        </el-form-item>
-                        <el-form-item :label="_label('daohuocangku')">
-                            <simple-select v-model="form.warehouseid" source="warehouse" :lang="lang"></simple-select>
+                            <simple-select v-model="form.seasontype" source="seasontype" :lang="lang" :clearable="true"> </simple-select>
                         </el-form-item>
                         <el-form-item :label="_label('shuxing')">
                             <simple-select v-model="form.property" source="orderproperty" :lang="lang">
                             </simple-select>
                         </el-form-item>
-                        <el-form-item :label="_label('zongjine')">
-                            <sp-float-input placeholder="" v-model="form.total" class="input-with-select">
-                                <select-currency v-model="form.currency">
-                                </select-currency>
-                            </sp-float-input>
-                        </el-form-item>
                         <el-form-item :label="_label('huilv')">
                             <sp-float-input v-model="form.exchangerate"></sp-float-input>
                         </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
                         <el-form-item :label="_label('zhidanriqi')">
                             <el-input :value="form.makedate" :placeholder="_label('zidonghuoqu')" disabled></el-input>
                         </el-form-item>
                         <el-form-item :label="_label('zhidanren')">
                             <sp-display-input :value="form.makestaff" source="user"></sp-display-input>
                         </el-form-item>
-                        <el-form-item :label="_label('shenheren')">
-                            <sp-display-input :value="form.auditstaff" source="user"></sp-display-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="6">
-                        <el-form-item :label="_label('fahuodanhao')">
-                            <el-input v-model="form.orderno"></el-input>
-                        </el-form-item>
-                        <el-form-item :label="_label('fukuanshijian')">
-                            <el-date-picker v-model="form.paydate" type="date" value-format="yyyy-MM-dd"></el-date-picker>
-                        </el-form-item>
-                        <el-form-item :label="_label('daidiandanwei')">
-                            <simple-select v-model="form.dd_company" source="supplier" :lang="lang"></simple-select>
-                        </el-form-item>
-                        <el-form-item :label="_label('anpaitihuoshijian')" class="mini" class="font12">
-                            <el-date-picker v-model="form.apickingdate" type="date" value-format="yyyy-MM-dd"></el-date-picker>
-                        </el-form-item>
-                        <el-form-item :label="_label('hangbanhao')">
-                            <el-input v-model="form.flightno"></el-input>
-                        </el-form-item>
-                        <el-form-item :label="_label('hangbanriqi')">
-                            <el-date-picker v-model="form.flightdate" type="date" value-format="yyyy-MM-dd"></el-date-picker>
-                        </el-form-item>
-                        <el-form-item :label="_label('zhudanhao')">
-                            <el-input v-model="form.mblno"></el-input>
-                        </el-form-item>
-                        <el-form-item :label="_label('zidanhao')">
-                            <el-input v-model="form.hblno"></el-input>
-                        </el-form-item>
-                        <el-form-item :label="_label('fahuogang')">
-                            <el-input v-model="form.dispatchport"></el-input>
-                        </el-form-item>
-                        <el-form-item :label="_label('daohuogang')">
-                            <el-input v-model="form.deliveryport"></el-input>
-                        </el-form-item>
-                        <el-form-item :label="_label('xiangshu')">
-                            <el-input v-model="form.box_number"></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="6">
-                        <el-form-item :label="_label('zhongliang')">
-                            <el-input v-model="form.weight"></el-input>
-                        </el-form-item>
-                        <el-form-item :label="_label('tiji')">
-                            <el-input v-model="form.volume"></el-input>
-                        </el-form-item>
-                        <el-form-item :label="_label('jifeizhongliang')">
-                            <el-input v-model="form.chargedweight"></el-input>
-                        </el-form-item>
-                        <el-form-item :label="_label('kongyunshang')">
-                            <simple-select v-model="form.transcompany" source="supplier" :lang="lang"></simple-select>
-                        </el-form-item>
-                        <el-form-item :label="_label('haiwaifapiaohao')">
-                            <el-input v-model="form.invoiceno"></el-input>
-                        </el-form-item>
-                        <el-form-item :label="_label('daokushijian')">
-                            <el-date-picker v-model="form.aarrivaldate" type="date" value-format="yyyy-MM-dd"></el-date-picker>
-                        </el-form-item>
-                        <!--<el-form-item :label="_label('hangbanriqi')">
-                            <el-date-picker v-model="form.flightdate" type="date" value-format="yyyy-MM-dd"></el-date-picker>
-                        </el-form-item>-->
-                        <el-form-item :label="_label('hetongmaifang')">
-                            <simple-select v-model="form.buyerid" source="supplier" :lang="lang"></simple-select>
-                        </el-form-item>
-                        <el-form-item :label="_label('hetongmaifang2')">
-                            <simple-select v-model="form.sellerid" source="supplier" :lang="lang"></simple-select>
-                        </el-form-item>
-                        <el-form-item :label="_label('yunshufangshi')">
-                            <simple-select v-model="form.transporttype" source="transporttype" :lang="lang"></simple-select>
-                        </el-form-item>
-                        <el-form-item :label="_label('zhifufangshi')">
-                            <simple-select v-model="form.paytype" source="paytype" :lang="lang"></simple-select>
-                        </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-row type="flex" justify="start">
                             <el-button type="primary" @click="saveOrder(0)">{{_label("baocun")}}</el-button>
-                            <el-button type="primary" @click="saveOrder(1)">{{_label("tijiaoshenhe")}}</el-button>
                             <el-button :type="form.id?'primary':'info'" @click="showAttachment()">{{_label("fujian")}}</el-button>
                             <el-tooltip class="item" effect="dark" content="Right Bottom 提示文字" placement="bottom">
                                 <el-button :type="form.id?'primary':'info'" @click="deleteOrder()">{{_label("shanchu")}}</el-button>
                             </el-tooltip>
-                        </el-row>
-                        <el-row type="flex" justify="start">
-                            <el-button type="primary" @click="saveOrder(0)">{{_label("tuihui")}}</el-button>
-                            <el-button type="primary" @click="saveOrder(1)">{{_label("shenhetongguo")}}</el-button>
-                            <el-button type="primary" @click="createWarehousing()">{{_label("quxiaoshenhe")}}</el-button>
-                        </el-row>
-                        <el-row type="flex" justify="start">
-                            <el-button :type="form.id?'primary':'info'" @click="createWarehousing()">{{_label("shengchengrukudan")}}</el-button>
                         </el-row>
                     </el-col>
                 </el-row>
@@ -151,14 +69,19 @@
                                 {{scope.row.sizecontent.getLabel()}}
                             </template>
                         </el-table-column>
-                        <el-table-column prop="number" :label="_label('shengyushuliang')" width="200" align="center">
+                        <el-table-column prop="number" :label="_label('dinggoushuliang')" width="200" align="center">
                             <template v-slot="scope">
                                 {{scope.row.orderdetails.number-scope.row.orderdetails.actualnumber}}
                             </template>
                         </el-table-column>
-                        <el-table-column prop="number" :label="_label('dinggoushuliang')" width="200" align="center">
+                        <el-table-column prop="number" :label="_label('daohuoshuliang')" width="200" align="center">
                             <template v-slot="scope">
-                                <el-input-number v-model="scope.row.number" :min="0" :max="scope.row.orderdetails.number-scope.row.orderdetails.actualnumber"></el-input-number>
+                                <el-input-number v-model="scope.row.number" :min="0" :disabled="scope.row.is_match==1"></el-input-number>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="number" :label="_label('shuliangxiangfu')" width="200" align="center">
+                            <template v-slot="scope">
+                                <el-switch v-model="scope.row.is_match" active-value="1" inactive-value="0" @change="onSwitchChange(scope.$index,scope.row)"></el-switch>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -177,7 +100,7 @@ import DataSource from '../DataSource.js'
 
 
 export default {
-    name: 'asa-order-confirm-dialog',
+    name: 'asa-warehousing-dialog',
     components: {
         'simple-select': simple_select,
         'asa-select-order-detail-dialog': Asa_Select_Order_Detail_Dialog
@@ -243,6 +166,10 @@ export default {
         createWarehousing() {
             this._log("跳转")
             this.$router.push("/user")
+        },
+        onSwitchChange(rowIndex, row) {
+            let self = this
+            self._log(rowIndex, row)
         },
         showProduct() {
             this.pro = true;
@@ -336,6 +263,7 @@ export default {
                     res.data.list.forEach(function(row) {
                         self.dataSource.getRow(row.sizecontentid, data => {
                             row.sizecontent = data
+                            row.is_match = 0
 
                             row.product = R.find(R.propEq('id', row.productid))(res.data.productlist)
                             self.tabledata.push(row)
