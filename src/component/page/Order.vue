@@ -73,13 +73,23 @@ export default {
             console.log(row)
             this.showForm()
         },
-        onChange(form) {
+        onChange(form, isdelete) {
             let self = this
-            if (self.rowIndex < 0) {
-                self.$refs.tablelist.appendRow($ASA.clone(form))
-            } else {
-                var row = self.$refs.tablelist.getRow(self.rowIndex)
-                $ASA.copyTo(form, row)
+
+            self._log(form,isdelete)
+            if(isdelete) {
+                 if (self.rowIndex >= 0) {
+                    self._log("删除订单")
+                    self.$refs.tablelist.deleteRow(self.rowIndex)
+                }
+            }
+            else {
+                if (self.rowIndex < 0) {
+                    self.rowIndex = self.$refs.tablelist.appendRow($ASA.clone(form))
+                } else {
+                    var row = self.$refs.tablelist.getRow(self.rowIndex)
+                    $ASA.copyTo(form, row)
+                }
             }
             self.rowIndex = -1
         },

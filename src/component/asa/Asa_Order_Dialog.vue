@@ -84,12 +84,12 @@
                         <el-row type="flex" justify="start">
                             <el-button :type="canSubmit?'primary':'info'" @click="saveOrder(1)">{{_label("baocun")}}</el-button>
                             <el-button :type="canSubmit?'primary':'info'" @click="saveOrder(2)">{{_label("tijiaoshenhe")}}</el-button>
-                            <el-button :type="canDelete?'primary':'info'" @click="saveOrder(2)">{{_label("shanchu")}}</el-button>
+                            <el-button :type="canDelete?'primary':'info'" @click="deleteOrder()">{{_label("shanchu")}}</el-button>
                         </el-row>
                         <el-row type="flex" justify="start">
-                            <el-button :type="canConfirm?'primary':'info'" @click="saveOrder(0)">{{_label("tuihui")}}</el-button>
-                            <el-button :type="canConfirm?'primary':'info'" @click="saveOrder(1)">{{_label("shenhetongguo")}}</el-button>
-                            <el-button :type="canCancel?'primary':'info'" @click="createWarehousing()">{{_label("quxiaoshenhe")}}</el-button>
+                            <el-button :type="canConfirm?'primary':'info'" @click="confirmOrder(1)">{{_label("tuihui")}}</el-button>
+                            <el-button :type="canConfirm?'primary':'info'" @click="confirmOrder(3)">{{_label("shenhetongguo")}}</el-button>
+                            <el-button :type="canCancel?'primary':'info'" @click="cancelConfirm()">{{_label("quxiaoshenhe")}}</el-button>
                         </el-row>
                     </el-col>
                 </el-row>
@@ -216,18 +216,30 @@ export default {
                             sizecontent: item,
                             product: row
                         })
-                    }
-                    else {
+                    } else {
                         //提示信息
                         //is_ignore
                         is_ignore = true
-                        
+
                     }
                 })
 
-                if(is_ignore) {
+                if (is_ignore) {
                     self._info(self._label("order-add-warning"))
                 }
+            })
+        },
+        deleteOrder() {
+            let self = this
+            if (!self.canDelete) {
+                return
+            }
+
+            self._remove("/order/delete?id=" + self.form.id, function() {
+                self.dialogVisible = false
+                self.form.id = ""
+
+                self.$emit("change", {}, true)
             })
         },
         saveOrder(status) {
@@ -235,7 +247,7 @@ export default {
             var self = this
 
             if (status == 2) {
-                if (!confirm(_label('order_submit_confirm'))) {
+                if (!confirm(self._label('order_submit_confirm'))) {
                     return
                 }
             }
@@ -258,12 +270,50 @@ export default {
                 params: JSON.stringify(params)
             }, function(res) {
                 self._log(res)
-                if (res.id) {
-                    self.form.id = res.id
-                    self.formid = res.id
+                let data = res.data
+                if (data.form.id) {
+                    $ASA.copyTo(data.form, self.form)
+                    self.formid = self.form.id
+
+                    self.tabledata=[]
+                    data.list.forEach(item => {
+                        self._log(item)
+                        self.appendRow(item)
+                    })
                 }
-                self.$emit("change", res.data.form)
+                self.$emit("change", data.form)
             });
+        },
+        confirmOrder(status) {
+            let self = this
+            if (!self.canConfirm) {
+                return
+            }
+            self._confirm(self._label("confirm-order"), function() {
+                self._submit("/order/confirm", {
+                    id: self.form.id,
+                    status: status
+                }, function(res) {
+                    self._log(res)
+                    self.form.status = status
+                    self.$emit("change", self.form)
+                });
+            })
+        },
+        cancelConfirm(){
+            let self = this
+            if (!self.canCancel) {
+                return
+            }
+            self._confirm(self._label("confirm-order-cancel"), function() {
+                self._submit("/order/cancel", {
+                    id: self.form.id
+                }, function(res) {
+                    self._log(res)
+                    self.form.status = 2
+                    self.$emit("change", self.form)
+                });
+            })
         },
         getRowCount(rowIndex, row) {
             this._log(row, "getRowCount")
@@ -277,7 +327,7 @@ export default {
             const self = this;
             self.dataSource.getRow(row.sizecontentid, data => {
                 row.sizecontent = data
-                self.tabledata.unshift(row)
+                self.tabledata.push(row)
             })
         }
     },
@@ -324,6 +374,10 @@ export default {
             $ASA.empty(form)
             $ASA.copyTo(newValue, form)
             self._log("copy data2", newValue)
+
+            if (!self.form.id) {
+                self.tabledata = []
+            }
 
             //如果订单的id变化了，则清空明细，重新加载新订单的明细
             if (form.id != "" && form.id != self.fomrid) {

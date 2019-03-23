@@ -64,6 +64,16 @@ export default {
 
             self._fetch(path, form, options)
         },
+        _confirm(message, callback) {
+            var self = this;
+            self.$confirm(message, _label('tip'), {
+                confirmButtonText: _label('ok'),
+                cancelButtonText: _label('cancel'),
+                type: 'warning'
+            }).then(() => {
+                callback()
+            }).catch(() => {});
+        },
         _remove(path, options) {
             var self = this;
             self.$confirm(_label('delete_warning'), _label('tip'), {

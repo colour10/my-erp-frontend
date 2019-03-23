@@ -44,9 +44,14 @@ export default {
     methods: {
         appendRow: function(row) {
             this.tableData.push(row)
+            return this.tableData.length-1;
         },
         getRow: function(rowIndex) {
             return this.tableData[rowIndex]
+        },
+        deleteRow: function(rowIndex) {
+            var self = this
+            return self.$delete(self.tableData, rowIndex)
         },
         onClickDelete(rowIndex, row) {
             var self = this

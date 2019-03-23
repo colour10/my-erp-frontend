@@ -268,6 +268,7 @@ const menus = {
     "4-1": "/supplier",
     "4-1": "/supplier",
     "5-1-1": "/order",
+    "5-1": "/order",
     "5-2": "/confirmorder",
     "5-3-1": "/warehousing",
     "5-3-2": "/warehousing",
