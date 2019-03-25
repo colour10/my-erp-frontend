@@ -115,20 +115,20 @@
                     </el-col>
                     <el-col :span="6">
                         <el-row type="flex" justify="start">
-                            <el-button type="primary" @click="saveOrder(0)">{{_label("baocun")}}</el-button>
-                            <el-button type="primary" @click="saveOrder(1)">{{_label("tijiaoshenhe")}}</el-button>
+                            <el-button :type="canSubmit?'primary':'info'" @click="saveOrder(1)">{{_label("baocun")}}</el-button>
+                            <el-button :type="canSubmit?'primary':'info'" @click="saveOrder(2)">{{_label("tijiaoshenhe")}}</el-button>
                             <el-button :type="form.id?'primary':'info'" @click="showAttachment()">{{_label("fujian")}}</el-button>
                             <el-tooltip class="item" effect="dark" content="Right Bottom 提示文字" placement="bottom">
-                                <el-button :type="form.id?'primary':'info'" @click="deleteOrder()">{{_label("shanchu")}}</el-button>
+                                <el-button :type="canDelete?'primary':'info'" @click="deleteOrder()">{{_label("shanchu")}}</el-button>
                             </el-tooltip>
                         </el-row>
                         <el-row type="flex" justify="start">
-                            <el-button type="primary" @click="saveOrder(0)">{{_label("tuihui")}}</el-button>
-                            <el-button type="primary" @click="saveOrder(1)">{{_label("shenhetongguo")}}</el-button>
-                            <el-button type="primary" @click="createWarehousing()">{{_label("quxiaoshenhe")}}</el-button>
+                            <el-button :type="canConfirm?'primary':'info'" @click="confirmOrder(1)">{{_label("tuihui")}}</el-button>
+                            <el-button :type="canConfirm?'primary':'info'" @click="confirmOrder(3)">{{_label("shenhetongguo")}}</el-button>
+                            <el-button :type="canCancel?'primary':'info'" @click="cancelConfirm()">{{_label("quxiaoshenhe")}}</el-button>
                         </el-row>
                         <el-row type="flex" justify="start">
-                            <el-button :type="form.id?'primary':'info'" @click="createWarehousing()">{{_label("shengchengrukudan")}}</el-button>
+                            <el-button :type="canCancel?'primary':'info'" @click="createWarehousing()">{{_label("shengchengrukudan")}}</el-button>
                         </el-row>
                     </el-col>
                 </el-row>
@@ -226,7 +226,7 @@ export default {
                 sellerid: "",
                 transporttype: "",
                 paytype: "",
-                auditstatus: "", //审核状态: 0-未提交审核；1-待审核；2-审核完成
+                status: "", //状态:1-未提交审核；2-待审核；3-审核完成,4-作废
                 id: ""
             },
             tabledata: [],
@@ -242,7 +242,7 @@ export default {
     methods: {
         createWarehousing() {
             this._log("跳转")
-            this.$router.push("/user")
+            this.$emit("warehousing")
         },
         showProduct() {
             this.pro = true;
@@ -266,10 +266,16 @@ export default {
                 })
             })
         },
-        saveOrder(auditstatus) {
+        saveOrder(status) {
             //保存订单
-            var self = this
-            self.form.auditstatus = auditstatus
+            var self = this            
+
+            if (status == 2) {
+                if (!confirm(self._label('order_submit_confirm'))) {
+                    return
+                }
+            }
+            self.form.status = status
 
             var params = { form: self.form }
             var array = []
@@ -285,6 +291,37 @@ export default {
                 }
                 self.$emit("change", res.data.form)
             });
+        },
+        confirmOrder(status) {
+            let self = this
+            if (!self.canConfirm) {
+                return
+            }
+            self._confirm(self._label("confirm-order"), function() {
+                self._submit("/confirmorder/confirm", {
+                    id: self.form.id,
+                    status: status
+                }, function(res) {
+                    self._log(res)
+                    self.form.status = status
+                    self.$emit("change", self.form)
+                });
+            })
+        },
+        cancelConfirm(){
+            let self = this
+            if (!self.canCancel) {
+                return
+            }
+            self._confirm(self._label("confirm-order-cancel"), function() {
+                self._submit("/confirmorder/cancel", {
+                    id: self.form.id
+                }, function(res) {
+                    self._log(res)
+                    self.form.status = 2
+                    self.$emit("change", self.form)
+                });
+            })
         },
         deleteRow(rowIndex, row) {
             var self = this;
@@ -303,7 +340,24 @@ export default {
             });
         }
     },
-    computed: {},
+    computed: {
+        canDelete() {
+            var form = this.form;
+            return form.id > 0 && form.status == 1
+        },
+        canConfirm() {
+            var form = this.form;
+            return form.id > 0 && form.status == 2
+        },
+        canCancel() {
+            var form = this.form;
+            return form.id > 0 && form.status == 3
+        },
+        canSubmit() {
+            var status = this.form.status;
+            return status != 2 && status != 3
+        }
+    },
     watch: {
         dialogVisible(newValue) {
             this.$emit("update:visible", newValue)

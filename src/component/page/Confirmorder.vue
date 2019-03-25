@@ -7,10 +7,10 @@
         </el-row>
         <el-row :gutter="20">
             <el-col :span="24">
-                <simple-admin-tablelist ref="tablelist" v-bind="props" :onclickupdate="showFormToEdit" :isdelete="isEditable"></simple-admin-tablelist>
+                <simple-admin-tablelist ref="tablelist" v-bind="props" :onclickupdate="showFormToEdit" :isdelete="false"></simple-admin-tablelist>
             </el-col>
         </el-row>
-        <asa-order-confirm-dialog :visible.sync="visibleDialog" :data="info" @change="onChange"></asa-order-confirm-dialog>
+        <asa-order-confirm-dialog :visible.sync="visibleDialog" :data="info" @change="onChange" @warehousing="goToWarehousing"></asa-order-confirm-dialog>
         <asa-warehousing-dialog :visible.sync="warehousingVisbleDialog" :data="warehousingInfo" @change="onWarehousingChange"></asa-warehousing-dialog>
     </div>
 </template>
@@ -35,7 +35,7 @@ export default {
             props: {
                 columns: [
                     { name: "orderno", label: self._label('dingdanbianhao'), width: 300 },
-                    { name: "auditstatus", label: self._label('zhuangtai'), type: 'select', source: "confirmstatusstatus" }
+                    { name: "status", label: self._label('zhuangtai'), type: 'select', source: "orderstatus" }
                 ],
                 buttons: [{
                     label: self._label("shengchengrukudan"),
@@ -76,6 +76,12 @@ export default {
             self.rowIndex = rowIndex
             self._log(row)
             self.warehousingVisbleDialog = true;
+        },
+        goToWarehousing() {
+            let self = this
+            self.warehousingInfo = self.info;
+            self.warehousingVisbleDialog = true;
+            self.visibleDialog = false;
         },
         onChange(form) {
             let self = this

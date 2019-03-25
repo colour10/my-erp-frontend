@@ -91,6 +91,9 @@
                             <el-button :type="canConfirm?'primary':'info'" @click="confirmOrder(3)">{{_label("shenhetongguo")}}</el-button>
                             <el-button :type="canCancel?'primary':'info'" @click="cancelConfirm()">{{_label("quxiaoshenhe")}}</el-button>
                         </el-row>
+                        <el-row type="flex" justify="start">
+                            <el-button :type="canFinish?'primary':'info'" @click="finishOrder()">{{_label("dingdanwajie")}}</el-button>
+                        </el-row>
                     </el-col>
                 </el-row>
             </el-form>
@@ -242,6 +245,9 @@ export default {
                 self.$emit("change", {}, true)
             })
         },
+        finishOrder() {
+
+        },
         saveOrder(status) {
             //保存订单
             var self = this
@@ -355,6 +361,10 @@ export default {
         canSubmit() {
             var status = this.form.status;
             return status != 2 && status != 3
+        },
+        canFinish() {
+            var status = this.form.status;
+            return status == 3
         }
     },
     watch: {

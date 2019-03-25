@@ -90,8 +90,7 @@ export default {
                     var row = self.$refs.tablelist.getRow(self.rowIndex)
                     $ASA.copyTo(form, row)
                 }
-            }
-            self.rowIndex = -1
+            }            
         },
         isEditable(row) {
             var status = row.status;
