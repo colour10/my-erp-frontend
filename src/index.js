@@ -37,6 +37,8 @@ import Page_Sales from './component/page/Sales.vue'
 import Page_Login from './component/page/Login.vue'
 import Page_Confirmorder from './component/page/Confirmorder.vue'
 import Page_UserModifyPassword from './component/page/UserModifyPassword.vue'
+import Page_Warehousing from './component/page/Warehousing.vue'
+import Page_Requisition from './component/page/Requisition.vue'
 
 const components = [
     Simple_Admin_Page,
@@ -73,7 +75,9 @@ const components = [
     Page_Sales,
     Page_Login,
     Page_Confirmorder,
-    Page_UserModifyPassword
+    Page_UserModifyPassword,
+    Page_Warehousing,
+    Page_Requisition
 ]
 
 const paykeyboard = {

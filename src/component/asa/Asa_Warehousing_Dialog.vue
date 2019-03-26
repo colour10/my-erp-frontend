@@ -42,18 +42,15 @@
                     </el-col>
                     <el-col :span="6">
                         <el-row type="flex" justify="start">
-                            <el-button type="primary" @click="saveOrder(0)">{{_label("baocun")}}</el-button>
-                            <el-button :type="form.id?'primary':'info'" @click="showAttachment()">{{_label("fujian")}}</el-button>
-                            <el-tooltip class="item" effect="dark" content="Right Bottom 提示文字" placement="bottom">
-                                <el-button :type="form.id?'primary':'info'" @click="deleteOrder()">{{_label("shanchu")}}</el-button>
-                            </el-tooltip>
+                            <el-button :type="form.id>0?'info' :'primary'" @click="saveOrder()">{{_label("baocun")}}</el-button>
+                            <el-button type="primary" @click="showAttachment()">{{_label("fujian")}}</el-button>
                         </el-row>
                     </el-col>
                 </el-row>
             </el-form>
             <el-row type="flex" justify="end">
                 <el-col :offset="22" :span="2">
-                    <el-button type="primary" @click="showProduct()">{{_label("xuanzeshangpin")}}</el-button>
+                    <!--<el-button type="primary" @click="showProduct()">{{_label("xuanzeshangpin")}}</el-button>-->
                 </el-col>
             </el-row>
             <el-row>
@@ -61,7 +58,7 @@
                     <el-table :data="tabledata" border style="width:100%;" v-loading.fullscreen.lock="loading" :row-class-name="tableRowClassName">
                         <el-table-column prop="productname" :label="_label('shangpinmingcheng')" align="center">
                             <template v-slot="scope">
-                                {{scope.row.product.productname}}
+                                {{scope.row.productname}}
                             </template>
                         </el-table-column>
                         <el-table-column prop="label" :label="_label('chima')" width="100" align="center">
@@ -69,17 +66,17 @@
                                 {{scope.row.sizecontent.getLabel()}}
                             </template>
                         </el-table-column>
-                        <el-table-column prop="number" :label="_label('dinggoushuliang')" width="200" align="center">
+                        <el-table-column prop="number" :label="_label('fahuoshuliang')" width="200" align="center">
                             <template v-slot="scope">
-                                {{scope.row.orderdetails.number-scope.row.orderdetails.actualnumber}}
+                                {{scope.row.confirm_number}}
                             </template>
                         </el-table-column>
                         <el-table-column prop="number" :label="_label('daohuoshuliang')" width="200" align="center">
                             <template v-slot="scope">
-                                <el-input-number v-model="scope.row.number" :min="0" :disabled="scope.row.is_match==1"></el-input-number>
+                                <el-input-number v-model="scope.row.number" :min="0" :disabled="scope.row.is_match==1 || !isEditable"></el-input-number>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="number" :label="_label('shuliangxiangfu')" width="200" align="center">
+                        <el-table-column prop="number" :label="_label('shuliangxiangfu')" width="200" align="center" v-if="isEditable">
                             <template v-slot="scope">
                                 <el-switch v-model="scope.row.is_match" active-value="1" inactive-value="0" @change="onSwitchChange(scope.$index,scope.row)"></el-switch>
                             </template>
@@ -88,7 +85,7 @@
                 </el-col>
             </el-row>
         </el-dialog>
-        <asa-select-order-detail-dialog :visible.sync="pro" @select="onSelect"></asa-select-order-detail-dialog>
+        <!--<asa-select-order-detail-dialog :visible.sync="pro" @select="onSelect"></asa-select-order-detail-dialog>-->
     </div>
 </template>
 
@@ -98,6 +95,7 @@ import simple_select from '../Simple_Select.vue'
 import Asa_Select_Order_Detail_Dialog from './Asa_Select_Order_Detail_Dialog.vue'
 import DataSource from '../DataSource.js'
 
+const fetcherProduct = globals.getFetcher('product')
 
 export default {
     name: 'asa-warehousing-dialog',
@@ -105,51 +103,23 @@ export default {
         'simple-select': simple_select,
         'asa-select-order-detail-dialog': Asa_Select_Order_Detail_Dialog
     },
-    props: {
-        visible: {
-            type: Boolean
-        },
-        data: {
-            type: Object
-        }
-    },
+    props: ['visible', 'confirmorderid'],
     data() {
         var self = this;
 
         var dataSource = DataSource.getDataSource('sizecontent', globals.getLabel('lang'));
         return {
             form: {
+                orderno: "",
+                entrydate: "",
                 supplierid: "",
-                finalsupplierid: "",
+                warehouseid: "",
                 ageseasonid: "",
                 seasontype: "",
-                warehouseid: "",
                 property: "",
-                total: "",
-                currency: "",
                 exchangerate: "",
-                orderno: "",
-                paydate: "",
-                dd_company: "",
-                apickingdate: "",
-                flightno: "",
-                flightdate: "",
-                mblno: "",
-                hblno: "",
-                dispatchport: "",
-                deliveryport: "",
-                box_number: "",
-                weight: "",
-                volume: "",
-                chargedweight: "",
-                transcompany: "",
-                invoiceno: "",
-                aarrivaldate: "",
-                buyerid: "",
-                sellerid: "",
-                transporttype: "",
-                paytype: "",
-                auditstatus: "", //审核状态: 0-未提交审核；1-待审核；2-审核完成
+                makestaff: "",
+                makedate: "",
                 id: ""
             },
             tabledata: [],
@@ -163,10 +133,6 @@ export default {
         }
     },
     methods: {
-        createWarehousing() {
-            this._log("跳转")
-            this.$router.push("/user")
-        },
         onSwitchChange(rowIndex, row) {
             let self = this
             self._log(rowIndex, row)
@@ -174,63 +140,38 @@ export default {
         showProduct() {
             this.pro = true;
         },
-        onSelect(rows) {
-            var self = this;
-            self._log("onSelect", rows)
-            rows.forEach(item => {
-                //console.log(subDataSource, "sub")
-                //console.log(subDataSource.constructor==DataSource)
-                //item.orderdetailsid = item.id
-                //delete item.id
-                self.tabledata.unshift({
-                    product: item.product,
-                    sizecontent: item.sizecontent,
-                    orderdetails: item,
-                    productid: item.productid,
-                    sizecontentid: item.sizecontentid,
-                    number: item.select_number,
-                    orderdetailsid: item.id
-                })
-            })
-        },
-        saveOrder(auditstatus) {
+        saveOrder() {
             //保存订单
             var self = this
-            self.form.auditstatus = auditstatus
+
+            if (self.form.id > 0) {
+                return;
+            }
 
             var params = { form: self.form }
             var array = []
             params.list = self.tabledata.map(item => {
-                return { id: item.id, productid: item.productid, sizecontentid: item.sizecontentid, number: item.number, orderdetailsid: item.orderdetailsid }
+                return { confirmorderdetailsid: item.id, productid: item.productid, sizecontentid: item.sizecontentid, number: item.number, orderdetailsid: item.orderdetailsid }
             })
             self._log(JSON.stringify(params))
-            self._submit("/confirmorder/saveorder", { params: JSON.stringify(params) }, function(res) {
+            self._submit("/warehousing/create", { params: JSON.stringify(params) }, function(res) {
                 self._log(res)
                 if (res.id) {
                     self.form.id = res.id
                     self.formid = res.id
                 }
-                self.$emit("change", res.data.form)
+                self.$emit("change", res.form)
             });
-        },
-        deleteRow(rowIndex, row) {
-            var self = this;
-            self.$delete(self.tabledata, rowIndex)
         },
         showAttachment() {
 
-        },
-        deleteOrder() {
-            const self = this
-            if (!self.form.id) {
-                return
-            }
-            self._remove("/confirmorder/delete?id=" + self.form.id, function(res) {
-
-            });
         }
     },
-    computed: {},
+    computed: {
+        isEditable() {
+            return this.form.id == ""
+        }
+    },
     watch: {
         dialogVisible(newValue) {
             this.$emit("update:visible", newValue)
@@ -239,38 +180,52 @@ export default {
             //console.log("visible", newValue)
             this.dialogVisible = newValue
         },
-        data(newValue) {
+        confirmorderid(newValue) {
             var self = this
             var form = self.form;
-            self._log("copy data1", newValue, form)
+            self.tabledata = []
 
-            //清空当前表单数据，并复制新记录的数据
-            $ASA.empty(form)
-            $ASA.copyTo(newValue, form)
-            self._log("copy data2", newValue)
+            self._log("loading...", { confirmorderid: form.confirmorderid }, self.confirmorderid)
+                //加载数据
+            self._fetch("/warehousing/load", { confirmorderid: self.confirmorderid }, function(res) {
+                self._log("加载订单信息", res)
 
-            if (!self.form.id) {
-                self.tabledata = []
-            }
+                let response_data = res.data
+                if (response_data.form) {
+                    //已经生成过入库单
+                    $ASA.copyTo(response_data.form, form)
+                } else {
+                    //新建入库单
+                    let confirmorder = response_data.confirmorder
+                    form.confirmorderid = confirmorder.id
+                    form.seasontype = confirmorder.seasontype
+                    form.supplierid = confirmorder.supplierid
+                    form.warehouseid = confirmorder.warehouseid
+                    form.ageseasonid = confirmorder.ageseasonid
+                    form.exchangerate = confirmorder.exchangerate
+                    form.property = confirmorder.property
+                    form.id =""
+                }
 
-            //如果订单的id变化了，则清空明细，重新加载新订单的明细
-            if (form.id != "" && form.id != self.fomrid) {
-                self.tabledata = []
-                    //加载数据
-                self._fetch("/confirmorder/loadorder?id=" + form.id, function(res) {
-                    self._log("加载订单信息", res)
+                res.data.list.forEach(function(row) {
+                    self.dataSource.getRow(row.sizecontentid, data => {
+                        row.sizecontent = data
+                        row.is_match = 0
 
-                    res.data.list.forEach(function(row) {
-                        self.dataSource.getRow(row.sizecontentid, data => {
-                            row.sizecontent = data
-                            row.is_match = 0
-
-                            row.product = R.find(R.propEq('id', row.productid))(res.data.productlist)
-                            self.tabledata.push(row)
+                        //发货数量
+                        row.confirm_number = row.number;
+                        row.productname = ''
+                        fetcherProduct(row.productid, function(info) {
+                            //console.log(info, info.productname)
+                            row.productname = info.productname;
                         })
+                        self.tabledata.push(row)
                     })
                 })
-            }
+            })
+        },
+        '$store.state.warehousing' (newValue) {
+            this._log("state changed", newValue)
         }
     }
 }

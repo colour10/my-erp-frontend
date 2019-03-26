@@ -11,7 +11,7 @@
             </el-col>
         </el-row>
         <asa-order-confirm-dialog :visible.sync="visibleDialog" :data="info" @change="onChange" @warehousing="goToWarehousing"></asa-order-confirm-dialog>
-        <asa-warehousing-dialog :visible.sync="warehousingVisbleDialog" :data="warehousingInfo" @change="onWarehousingChange"></asa-warehousing-dialog>
+        <asa-warehousing-dialog :visible.sync="warehousingVisbleDialog" :confirmorderid="confirmorderid" @change="onWarehousingChange"></asa-warehousing-dialog>
     </div>
 </template>
 
@@ -50,7 +50,7 @@ export default {
             pro: false,
             info: {},
             rowIndex: -1,
-            warehousingInfo:{},            
+            confirmorderid:"",            
             warehousingVisbleDialog:false
         }
     },
@@ -72,14 +72,14 @@ export default {
         },
         showFormToWarehousing(rowIndex, row) {
             let self = this
-            self.warehousingInfo = row;
+            self.confirmorderid = row.id;
             self.rowIndex = rowIndex
             self._log(row)
             self.warehousingVisbleDialog = true;
         },
         goToWarehousing() {
             let self = this
-            self.warehousingInfo = self.info;
+            self.confirmorderid = self.info.id;
             self.warehousingVisbleDialog = true;
             self.visibleDialog = false;
         },

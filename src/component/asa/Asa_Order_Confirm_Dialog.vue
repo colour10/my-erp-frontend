@@ -241,8 +241,9 @@ export default {
     },
     methods: {
         createWarehousing() {
-            this._log("跳转")
-            this.$emit("warehousing")
+            let self = this;
+            self._log("跳转")
+            self.$emit("warehousing")
         },
         showProduct() {
             this.pro = true;

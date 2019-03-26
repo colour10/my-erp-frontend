@@ -150,18 +150,9 @@
                 </el-submenu>
                 <el-submenu index="6">
                     <template #title>{{_label("menu-6")}}</template>
-                    <el-submenu index="6-1">
-                        <template #title>{{_label("menu-6-1")}}</template>
-                        <el-menu-item index="6-1-1">
-                            <router-link to="/requisition">{{_label("menu-6-1-1")}}</router-link>
+                    <el-menu-item index="6-1">
+                            <router-link to="/requisition">{{_label("menu-6-1")}}</router-link>
                         </el-menu-item>
-                        <el-menu-item index="6-1-2">
-                            <router-link to="/requisition">{{_label("menu-6-1-2")}}</router-link>
-                        </el-menu-item>
-                        <el-menu-item index="6-1-3">
-                            <router-link to="/requisition">{{_label("menu-6-1-3")}}</router-link>
-                        </el-menu-item>
-                    </el-submenu>
                     <el-submenu index="6-2">
                         <template #title>{{_label("menu-6-2")}}</template>
                         <el-menu-item index="6-2-1">{{_label("menu-6-2-1")}}</el-menu-item>
@@ -270,9 +261,9 @@ const menus = {
     "5-1-1": "/order",
     "5-1": "/order",
     "5-2": "/confirmorder",
+    "5-3": "/warehousing",
     "5-3-1": "/warehousing",
-    "5-3-2": "/warehousing",
-    "6-1-1": "/requisition",
+    "6-1": "/requisition",
     "6-1-2": "/requisition",
     "6-1-3": "/requisition",
     "6-4": "/productstock",

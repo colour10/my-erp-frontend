@@ -121,4 +121,10 @@ options["orderstatus"] =  {hashtable:$ASAL.list_ordertatus}
 //发货单状态
 options["confirmstatusstatus"] =  {hashtable:$ASAL.list_confirmstatusstatus}
 
+//调拨类型
+options["requisitiontype"] =  {hashtable:$ASAL.list_requisitiontype}
+
+//调拨单状态
+options["requisitionstatus"] =  {hashtable:$ASAL.list_requisitionstatus}
+
 export default options
