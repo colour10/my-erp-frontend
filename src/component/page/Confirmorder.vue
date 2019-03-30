@@ -83,13 +83,23 @@ export default {
             self.warehousingVisbleDialog = true;
             self.visibleDialog = false;
         },
-        onChange(form) {
+        onChange(form, action) {
             let self = this
-            if (self.rowIndex < 0) {
-                self.$refs.tablelist.appendRow($ASA.clone(form))
+            let tablelist = self.$refs.tablelist
+            self._log("form", form)
+
+            let index = tablelist.findIndex(R.propEq('id', form.id))
+            if (index < 0) {
+                tablelist.appendRow($ASA.clone(form))
             } else {
-                var row = self.$refs.tablelist.getRow(self.rowIndex)
-                $ASA.copyTo(form, row)
+                if(action=='delete') {
+                    tablelist.deleteRow(index)
+                    self.visibleDialog = false;
+                }
+                else {
+                    var row = tablelist.getRow(index)
+                    $ASA.copyTo(form, row)
+                }                
             }
             self.rowIndex = -1
         },

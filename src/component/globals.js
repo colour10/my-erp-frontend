@@ -1,5 +1,6 @@
+import DataSource from './DataSource.js'
 const ASA = {}
-
+const $ = $ASA.$
 ASA.caches = {}
 
 ASA.get = function(url, callback) {
@@ -133,10 +134,149 @@ ASA.getLabelFetcher = function(name) {
         
         Promise.all(all_promise).then(function(results) {
             self.loading = false;
-            console.log(results)
+            //console.log(results)
             callback(results.map(item=>item[column]).join(","))
         });
     }
 }
+
+const createModel = function(tablename) {
+    return {
+        get:function(data, callback, depth) {
+            let self = this;
+            depth = depth || 0;
+            if(typeof(data)=='object') {
+                if(depth<=0) {
+                    callback(data)
+                }
+                else {
+                    self.init(depth, data, callback)
+                }
+            }
+            else {
+                self.fetch(depth, data, callback)
+            }
+        },
+        fetch:function(depth, id, callback) {
+            let self = this;
+            let fetcher = ASA.getFetcher(tablename)
+            fetcher(id, function(info){
+                if(depth<=0) {
+                    callback(info)
+                }
+                else {
+                    self.init(depth, info, callback)
+                }
+            })
+        },
+        init:function(depth, row, callback) {
+            let self = this
+            callback(row)        
+        }
+    }
+}
+
+
+const Warehouse = createModel("warehouse")
+const Product = $.extend(createModel("product"),{
+    init:function(depth, row, callback) {
+        let self = this
+        let arr = []
+        
+        const dataSource = DataSource.getDataSource('sizecontent', ASA.getLabel('lang'));      
+
+        arr.push(new Promise(function(resolve){
+            dataSource.filter({topid: row.sizetopid}, resolve)
+        }))
+
+        Promise.all(arr).then(function(results) {
+            console.log(results)
+            row.sizecontents = results[0]
+            callback(row)
+        });
+    }
+})
+
+const Goods = createModel("goods")
+const Productstock = $.extend(createModel("productstock"),{
+    init:function(depth, row, callback) {
+        let self = this
+        let arr = []
+        arr.push(new Promise(function(resolve){
+            Product.get(row.productid, resolve, depth-1)
+        }))
+
+        arr.push(new Promise(function(resolve){
+            Warehouse.get(row.warehouseid,resolve, depth-1)
+        }))
+
+        const dataSource = DataSource.getDataSource('sizecontent', ASA.getLabel('lang'));
+        arr.push(new Promise(function(resolve){
+            dataSource.getRow(row.sizecontentid, data => {
+                resolve(data)
+            })
+        }))
+
+        arr.push(new Promise(function(resolve){
+            Goods.get(row.goodsid,resolve, depth-1)
+        }))
+
+        Promise.all(arr).then(function(results) {
+            console.log(results)
+            //self.row.productname = results[0].row.productname
+            row.product = results[0]
+            //self.row.warehousename = results[1].row.name
+            row.warehouse =  results[1]
+            row.sizecontent = results[2]
+            row.goods =  results[3]
+            callback(row)
+        });
+    }
+})
+
+const OrderDetails = $.extend(createModel("orderdetails"),{
+    init:function(depth, row, callback) {
+        let self = this
+        let arr = []
+        arr.push(new Promise(function(resolve){
+            Product.get(row.productid, resolve, depth-1)
+        }))
+
+        const dataSource = DataSource.getDataSource('sizecontent', ASA.getLabel('lang'));
+        arr.push(new Promise(function(resolve){
+            dataSource.getRow(row.sizecontentid, data => {
+                resolve(data)
+            })
+        }))
+
+        Promise.all(arr).then(function(results) {
+            console.log(results)
+            //self.row.productname = results[0].row.productname
+            row.product = results[0]
+            //self.row.warehousename = results[1].row.name
+            row.sizecontent =  results[1]
+            callback(row)
+        });
+    }
+})
+
+const ConfirmorderDetails = $.extend(createModel("confirmorderdetails"),{
+    init:function(depth, row, callback) {
+        let self = this
+        let arr = []
+        arr.push(new Promise(function(resolve){            
+            OrderDetails.get(row.orderdetailsid, resolve, depth-1)
+        }))
+
+        Promise.all(arr).then(function(results) {
+            console.log(results)
+            //self.row.productname = results[0].row.productname
+            row.orderdetails = results[0]
+            callback(row)
+        });
+    }
+})
+
+export { Productstock,Warehouse,Product,Goods,OrderDetails,ConfirmorderDetails }
 
 export default ASA

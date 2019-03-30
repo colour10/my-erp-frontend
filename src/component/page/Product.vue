@@ -45,11 +45,11 @@
                                     </simple-select>
                                 </el-form-item>
                                 <el-form-item :label="_label('pinlei')">
-                                    <simple-select v-model="form.brandgroupid" source="brandgroup" :lang="lang">
+                                    <simple-select v-model="form.brandgroupid" source="brandgroup" :lang="lang" @change="onBrandGroupChange">
                                     </simple-select>
                                 </el-form-item>
                                 <el-form-item :label="_label('zipinlei')">
-                                    <simple-select v-model="form.childbrand" source="childproductgroup" :lang="lang">
+                                    <simple-select ref="childproductgroup" v-model="form.childbrand" source="childproductgroup" :lang="lang" :lazy="true">
                                     </simple-select>
                                 </el-form-item>
                                 <el-form-item :label="_label('chandi')">
@@ -321,7 +321,13 @@ export default {
             self.form.nationalprice = $ASA.round(self.form.nationalprice, 2)
 
             this.formTitle = $ASAL.xiugaixinxi;
+
+
             self.showDialog();
+            setTimeout(function(){
+                self.$refs.childproductgroup.load(item=>item.row.brandgroupid==self.form.brandgroupid)
+            },100)
+            
         },
         showDialog() {
             var self = this;
@@ -341,6 +347,12 @@ export default {
             self._remove("/user/delete?id=" + row.id, function(res) {
                 self.$delete(self.tableData, rowIndex)
             })
+        },
+        onBrandGroupChange(value) {
+            let self = this
+            
+            self._log(value)
+            self.$refs.childproductgroup.load(item=>item.row.brandgroupid==value)
         }
     }
 }

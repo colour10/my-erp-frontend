@@ -42,10 +42,13 @@
                             <el-input v-model="form.invoiceno"></el-input>
                         </el-form-item>
                         <el-form-item :label="_label('zongjine')">
-                            <sp-float-input placeholder="" v-model="form.total" class="input-with-select">
+
+                            <el-input placeholder="" :value="total_price" class="input-with-select" disabled>
+                                <template slot="prepend">
                                 <select-currency v-model="form.currency">
                                 </select-currency>
-                            </sp-float-input>
+                            </template>
+                            </el-input>
                         </el-form-item>
                         <el-form-item :label="_label('huilv')">
                             <sp-float-input v-model="form.exchangerate"></sp-float-input>
@@ -93,7 +96,7 @@
                         </el-row>
                         <el-row type="flex" justify="start">
                             <el-button :type="canFinish?'primary':'info'" @click="finishOrder()">{{_label("dingdanwajie")}}</el-button>
-                        </el-row>
+                        </el-row>                        
                     </el-col>
                 </el-row>
             </el-form>
@@ -113,6 +116,16 @@
                         <el-table-column prop="label" :label="_label('chima')" width="100" align="center">
                             <template v-slot="scope">
                                 {{scope.row.sizecontent.getLabel()}}
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="label" :label="_label('chengjiaojia')" width="100" align="center">
+                            <template v-slot="scope">
+                                {{scope.row.product.realprice}}
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="label" :label="_label('zongjia')" width="100" align="center">
+                            <template v-slot="scope">
+                                {{scope.row.product.realprice*scope.row.number}}
                             </template>
                         </el-table-column>
                         <el-table-column prop="number" :label="_label('dinggoushuliang')" width="200" align="center">
@@ -137,6 +150,7 @@
 import simple_select from '../Simple_Select.vue'
 import Asa_Select_Product_Dialog from './Asa_Select_Product_Dialog.vue'
 import DataSource from '../DataSource.js'
+import {Product} from "../globals.js"
 
 export default {
     name: 'asa-order-dialog',
@@ -198,39 +212,26 @@ export default {
         },
         onSelect(row) {
             var self = this;
-            self.dataSource.filter({
-                topid: row.sizetopid
-            }, data => {
-                let is_ignore = false;
-                data.map(item => {
+            Product.get(row,function(product){
+                self._log(product, "Product")
+
+                product.sizecontents.map(item => {
                     //查询是不是已经添加过
                     let is_exist = R.any(rowData => {
-                        self._log("any", rowData, row, item)
-                        return rowData.productid == row.id && rowData.sizecontentid == item.getValue()
+                        return rowData.product.id == row.id && rowData.sizecontent.getValue() == item.getValue()
                     })(self.tabledata)
-                    self._log("is_exist", is_exist)
+                    //self._log("is_exist", is_exist)
 
                     if (!is_exist) {
                         self.tabledata.unshift({
-                            productid: row.id,
-                            sizecontentid: item.getValue(),
-                            orderid: 0,
-                            number: 0,
+                            product: product,
                             sizecontent: item,
-                            product: row
+                            number: 0
                         })
-                    } else {
-                        //提示信息
-                        //is_ignore
-                        is_ignore = true
-
                     }
                 })
+            },1)
 
-                if (is_ignore) {
-                    self._info(self._label("order-add-warning"))
-                }
-            })
         },
         deleteOrder() {
             let self = this
@@ -257,17 +258,16 @@ export default {
                     return
                 }
             }
-            self.form.status = status;
 
             var params = {
-                form: self.form
+                form: $ASA.$.extend({},self.form,{status})
             }
             var array = []
             params.list = self.tabledata.map(item => {
                 return {
-                    productid: item.productid,
+                    productid: item.product.id,
                     id: item.id,
-                    sizecontentid: item.sizecontentid,
+                    sizecontentid: item.sizecontent.getValue(),
                     number: item.number
                 }
             })
@@ -365,6 +365,11 @@ export default {
         canFinish() {
             var status = this.form.status;
             return status == 3
+        },
+        total_price() {
+            return this.tabledata.reduce(function(total, current){
+                return total + current.number*current.product.realprice
+            }, 0)
         }
     },
     watch: {

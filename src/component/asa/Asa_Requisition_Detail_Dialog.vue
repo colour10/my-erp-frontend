@@ -8,7 +8,7 @@
                             {{form.apply_username}}
                         </el-form-item>
                         <el-form-item :label="_label('shenqingriqi')">
-                            {{data.apply_date}}
+                            {{rowdata.apply_date}}
                         </el-form-item>
                         <el-form-item :label="_label('zhuangtai')">
                             {{form.status_name}}
@@ -19,7 +19,7 @@
                             {{form.turnout_username}}
                         </el-form-item>
                         <el-form-item :label="_label('chukushijian')">
-                            {{data.turnout_date}}
+                            {{rowdata.turnout_date}}
                         </el-form-item>
                         <el-form-item :label="_label('diaochucangku')">
                             {{form.out_name}}
@@ -30,7 +30,7 @@
                             {{form.turnin_username}}
                         </el-form-item>
                         <el-form-item :label="_label('rukushijian')">
-                            {{data.turnin_date}}
+                            {{rowdata.turnin_date}}
                         </el-form-item>
                         <el-form-item :label="_label('diaorucangku')">
                             {{form.in_name}}
@@ -38,16 +38,16 @@
                     </el-col>
                     <el-col :span="6">
                         <el-row type="flex" justify="start">
-                            <el-button :type="data.status==2?'primary':'info'" @click="saveOrder(1)">{{_label("zuofei")}}</el-button>
-                            <el-button :type="data.status==2?'primary':'info'" @click="saveOrder(1)">{{_label("chukuqueren")}}</el-button>
-                            <el-button :type="data.status==3?'primary':'info'" @click="saveOrder(1)">{{_label("rukuqueren")}}</el-button>
+                            <el-button :type="rowdata.status==2?'primary':'info'" @click="saveOrder(1)">{{_label("zuofei")}}</el-button>
+                            <el-button :type="rowdata.status==2?'primary':'info'" @click="confirmout()">{{_label("chukuqueren")}}</el-button>
+                            <el-button :type="rowdata.status==3?'primary':'info'" @click="confirmin()">{{_label("rukuqueren")}}</el-button>
                         </el-row>
                     </el-col>
                 </el-row>
             </el-form>
             <el-row>
                 <el-col :span="24">
-                    <el-table :data="tabledata" stripe border style="width:100%;">
+                    <el-table ref="list" :data="tabledata" stripe border style="width:100%;">
                         <el-table-column prop="productname" :label="_label('chanpinmingcheng')" align="center">
                         </el-table-column>
                         <el-table-column prop="sizecontentname" :label="_label('chima')" width="100" align="center">
@@ -55,11 +55,18 @@
                                 {{scope.row.sizecontentname}}
                             </template>
                         </el-table-column>
-                        <el-table-column prop="number" :label="_label('diaoboshuliang')" width="200" align="center">
-                        </el-table-column>
-                        <el-table-column :label="_label('chukushuliang')" width="250" align="center">
+                        <el-table-column prop="number" :label="_label('diaoboshuliang')" width="200" align="center"></el-table-column>
+                        <el-table-column prop="out_number" :label="_label('chukushuliang')" width="200" align="center" v-if="rowdata.status>2" key="1"></el-table-column>
+                        <el-table-column prop="in_number" :label="_label('rukushuliang')" width="200" align="center" v-if="rowdata.status==5" key="2"></el-table-column>
+                        <el-table-column :label="_label('chukushuliang')" width="250" align="center" v-if="rowdata.status==2" key="3">
                             <template v-slot="scope">
-                                <el-input-number v-model="scope.row.select_number" :min="0" :max="scope.row.number"></el-input-number>
+                                <el-input-number v-model="scope.row.select_number" :min="0" :max="scope.row.number*1"></el-input-number>
+                            </template>
+                        </el-table-column>
+
+                        <el-table-column :label="_label('rukushuliang')" width="250" align="center" v-if="rowdata.status==3" key="4">
+                            <template v-slot="scope">
+                                <el-input-number v-model="scope.row.select_number" :min="0" :max="scope.row.out_number*1"></el-input-number>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -97,8 +104,7 @@ export default {
     },
     data() {
         var self = this;
-
-        self.init(self.data)
+        
         return {
             form: {
                 apply_username: "",
@@ -109,6 +115,12 @@ export default {
                 memo: "",
                 status_name: ""
             },
+            rowdata:{
+                status:"",
+                apply_date:"",
+                turnin_date:"",
+                turnout_date:""
+            },
             tabledata: [],
             dialogVisible: self.visible,
             lang: globals.getLabel('lang')
@@ -118,6 +130,10 @@ export default {
         init(row) {
             let self = this,
                 form = this.form
+
+            self._log(self.rowdata, row)
+            //self.rowdata = row
+            $ASA.copyTo(row, self.rowdata)
             if (row.apply_staff) {
                 fetcherUser(row.apply_staff, item => form.apply_username = item.login_name)
             }
@@ -162,10 +178,11 @@ export default {
 
                         self.tabledata.push(row)
                     })
+                    self.$refs.list.$forceUpdate()
                 })
             }
         },
-        saveOrder(status) {
+        doAction(action) {
             //保存订单
             var self = this
 
@@ -182,13 +199,26 @@ export default {
                 total_number += item.number;
             })
 
-            params.total = total_number==total ? 'all' : total;
+            params.total = "";
+            if(total==0) {
+                params.total = 'deny';
+            }
+            else if(total_number==total) {
+                params.total = "allow"
+            }
             params.list = array;
 
             self._log(JSON.stringify(params))
-/*            self._submit("/requisition/save", { params: JSON.stringify(params) }, function(res) {
-                self.$emit("change")
-            });*/
+            self._submit("/requisition/"+action, { params: JSON.stringify(params) }, function(res) {
+                self.$emit("change", res.data)
+                self.init(res.data)
+            });
+        },
+        confirmout() {
+            this.doAction('confirmout')
+        },
+        confirmin() {
+            this.doAction('confirmin')
         }
     },
     computed: {},
@@ -204,6 +234,9 @@ export default {
             this.init(newValue)
         }
     },
-    mounted: function() {}
+    mounted: function() {
+        let self = this
+        self.init(self.data)
+    }
 }
 </script>

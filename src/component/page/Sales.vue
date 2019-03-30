@@ -23,7 +23,7 @@ const _log = globals.logger("asapage-sales");
 
 var props = {
     columns: [
-        { name: "saleno", label: globals.getLabel('xiaoshoudanhao'), width: 300 },
+        { name: "orderno", label: globals.getLabel('xiaoshoudanhao'), width: 300 },
         { name: "salesstaff", label: globals.getLabel('xiaoshouren'), type: 'select', source: "user" },
         { name: "warehouseid", label: globals.getLabel('xiaoshoucangku'), type: 'select', source: "warehouse" },
         { name: "status", label: globals.getLabel('zhuangtai'), type: "select", source: "salestatus" },

@@ -42,6 +42,9 @@ export default {
         }
     },
     methods: {
+        findIndex(callback) {
+            return R.findIndex(callback)(this.tableData)
+        },
         appendRow: function(row) {
             this.tableData.push(row)
             return this.tableData.length-1;

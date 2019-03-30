@@ -116,6 +116,9 @@
                   <el-menu-item index="2-3-12">{{_label("menu-2-3-12")}}</el-menu-item>
                   <el-menu-item index="2-3-13">{{_label("menu-2-3-13")}}</el-menu-item>-->
                     </el-submenu>
+                    <el-menu-item index="2-4">
+                        <router-link to="/saleport">{{_label("menu-2-4")}}</router-link>
+                    </el-menu-item>
                 </el-submenu>
                 <el-submenu index="3">
                     <template #title>{{_label("menu-3")}}</template>
@@ -151,33 +154,33 @@
                 <el-submenu index="6">
                     <template #title>{{_label("menu-6")}}</template>
                     <el-menu-item index="6-1">
-                            <router-link to="/requisition">{{_label("menu-6-1")}}</router-link>
-                        </el-menu-item>
-                    <el-submenu index="6-2">
+                        <router-link to="/requisition">{{_label("menu-6-1")}}</router-link>
+                    </el-menu-item>
+                    <!--<el-submenu index="6-2">
                         <template #title>{{_label("menu-6-2")}}</template>
                         <el-menu-item index="6-2-1">{{_label("menu-6-2-1")}}</el-menu-item>
                         <el-menu-item index="6-2-2">{{_label("menu-6-2-2")}}</el-menu-item>
                     </el-submenu>
-                    <el-menu-item index="6-3">{{_label("menu-6-3")}}</el-menu-item>
+                    <el-menu-item index="6-3">{{_label("menu-6-3")}}</el-menu-item>-->
                     <el-menu-item index="6-4">
                         <router-link to="/productstock">{{_label("menu-6-4")}}</router-link>
                     </el-menu-item>
-                    <el-menu-item index="6-5">
+                    <!-- <el-menu-item index="6-5">
                         <router-link to="/productstockSnapshot">{{_label("menu-6-5")}}</router-link>
-                    </el-menu-item>
+                    </el-menu-item> -->
                 </el-submenu>
                 <el-submenu index="7">
                     <template #title>{{_label("menu-7")}}</template>
                     <el-menu-item index="7-1">
                         <router-link to="/sales">{{_label("menu-7-1")}}</router-link>
                     </el-menu-item>
-                    <!--<el-menu-item index="7-2">{{_label("menu-7-2")}}</el-menu-item>-->
+                    <!--<el-menu-item index="7-2">{{_label("menu-7-2")}}</el-menu-item>
                     <el-submenu index="7-4">
                         <template #title>{{_label("menu-7-4")}}</template>
                         <el-menu-item index="7-4-1">{{_label("menu-7-4-1")}}</el-menu-item>
                         <el-menu-item index="7-4-2">{{_label("menu-7-4-2")}}</el-menu-item>
                     </el-submenu>
-                    <el-menu-item index="7-5">{{_label("menu-7-5")}}</el-menu-item>
+                    <el-menu-item index="7-5">{{_label("menu-7-5")}}</el-menu-item>-->
                 </el-submenu>
                 <el-menu-item index="8-1">
                     <router-link to="/member">{{_label("menu-8-1")}}</router-link>

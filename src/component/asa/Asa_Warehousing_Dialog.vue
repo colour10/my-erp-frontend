@@ -58,17 +58,22 @@
                     <el-table :data="tabledata" border style="width:100%;" v-loading.fullscreen.lock="loading" :row-class-name="tableRowClassName">
                         <el-table-column prop="productname" :label="_label('shangpinmingcheng')" align="center">
                             <template v-slot="scope">
-                                {{scope.row.productname}}
+                                {{scope.row.orderdetails.product.productname}}
                             </template>
                         </el-table-column>
                         <el-table-column prop="label" :label="_label('chima')" width="100" align="center">
                             <template v-slot="scope">
-                                {{scope.row.sizecontent.getLabel()}}
+                                {{scope.row.orderdetails.sizecontent.getLabel()}}
                             </template>
                         </el-table-column>
                         <el-table-column prop="number" :label="_label('fahuoshuliang')" width="200" align="center">
                             <template v-slot="scope">
-                                {{scope.row.confirm_number}}
+                                {{scope.row.confirmdetails.number}}
+                            </template>
+                        </el-table-column>
+                        <el-table-column :label="_label('danjia')" width="200" align="center">
+                            <template v-slot="scope">
+                                {{scope.row.confirmdetails.price}}
                             </template>
                         </el-table-column>
                         <el-table-column prop="number" :label="_label('daohuoshuliang')" width="200" align="center">
@@ -90,12 +95,10 @@
 </template>
 
 <script>
-import globals from '../globals.js'
+import globals, { ConfirmorderDetails } from '../globals.js'
 import simple_select from '../Simple_Select.vue'
 import Asa_Select_Order_Detail_Dialog from './Asa_Select_Order_Detail_Dialog.vue'
 import DataSource from '../DataSource.js'
-
-const fetcherProduct = globals.getFetcher('product')
 
 export default {
     name: 'asa-warehousing-dialog',
@@ -107,7 +110,6 @@ export default {
     data() {
         var self = this;
 
-        var dataSource = DataSource.getDataSource('sizecontent', globals.getLabel('lang'));
         return {
             form: {
                 orderno: "",
@@ -127,15 +129,16 @@ export default {
             dialogVisible: self.visible,
             title: "",
             lang: "",
-            pro: false,
-            globals,
-            dataSource
+            pro: false
         }
     },
     methods: {
         onSwitchChange(rowIndex, row) {
             let self = this
             self._log(rowIndex, row)
+            if (row.is_match == 1) {
+                row.number = row.confirmdetails.number
+            }
         },
         showProduct() {
             this.pro = true;
@@ -204,23 +207,14 @@ export default {
                     form.ageseasonid = confirmorder.ageseasonid
                     form.exchangerate = confirmorder.exchangerate
                     form.property = confirmorder.property
-                    form.id =""
+                    form.id = ""
                 }
 
                 res.data.list.forEach(function(row) {
-                    self.dataSource.getRow(row.sizecontentid, data => {
-                        row.sizecontent = data
-                        row.is_match = 0
-
-                        //发货数量
-                        row.confirm_number = row.number;
-                        row.productname = ''
-                        fetcherProduct(row.productid, function(info) {
-                            //console.log(info, info.productname)
-                            row.productname = info.productname;
-                        })
-                        self.tabledata.push(row)
-                    })
+                    ConfirmorderDetails.get(row, function(detail) {
+                        //console.log(detail)
+                        self.tabledata.push({ confirmdetails: detail, orderdetails: detail.orderdetails, number: 0, is_match: 0 })
+                    }, 2)
                 })
             })
         },

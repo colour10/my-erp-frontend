@@ -82,7 +82,9 @@ export default {
             self.visibleDialog = false;
             self.$refs.tablelist.loadList();
         },
-        onRowChange(){},
+        onRowChange(){
+            this.$refs.tablelist.loadList();
+        },
         isEditable(row) {
             var status = row.status;
             return status == '1' || status == '' || !status

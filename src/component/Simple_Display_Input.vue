@@ -40,14 +40,14 @@ export default {
     methods: {
         convertValue(item) {
             var self = this;
-            self._log("item value", item)
+            //self._log("item value", item)
             return typeof(item)=='string' ? item.split(',') : item
         },
         loadList() {
             var self = this;
-            self._log(self.current_value,"..........")
+            //self._log(self.current_value, self.source, "..........")
             self.dataSource.getRowLabels(self.current_value, label_list=>{
-                self._log(label_list)
+                //self._log(label_list)
                 self.current_label = label_list
             })     
         }

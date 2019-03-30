@@ -22,7 +22,7 @@ var props = {
         buttons:[
             {name:"code", label:globals.getLabel('chakanziji'), width:200, disable_change:true, handler:function(rowIndex, row){
                 //console.log(rowIndex, row)   
-                props2.base.productgroupid = row.relateid;
+                props2.base.brandgroupid = row.id;
                 options.dialogVisible = true; 
                 //options.title = row.brandgroupname
             }}
@@ -41,7 +41,7 @@ var props2 = {
         controller:"childproductgroup",
         key_column:"name",
         base:{
-            productgroupid:""    
+            brandgroupid:""    
         }
     }
 

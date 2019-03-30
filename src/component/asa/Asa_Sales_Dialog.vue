@@ -4,37 +4,44 @@
             <el-form class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini">
                 <el-row :gutter="0">
                     <el-col :span="6">
+                        <el-form-item :label="_label('xiaoshouduankou')">
+                            <simple-select ref="saleportid" v-model="form.saleportid" source="saleport" :lang="lang" @change="onChange" :disabled="form.status!=0"></simple-select>
+                        </el-form-item>
+                        <el-form-item :label="_label('zhekou')">
+                            <el-input v-model="form.discount" disabled></el-input>
+                        </el-form-item>
+                        <el-form-item :label="_label('xiaoshoucangku')">
+                            <simple-select v-model="form.warehouseid" source="userwarehouse" :lang="lang" :disabled="form.status!=0" @change="onWarehouseChange"></simple-select>
+                        </el-form-item>
+                        <el-form-item :label="_label('xiaoshouriqi')">
+                            <el-date-picker v-model="form.salesdate" type="date" value-format="yyyy-MM-dd"></el-date-picker>
+                        </el-form-item>
                         <el-form-item :label="_label('huiyuan')">
                             <simple-select v-model="form.memberid" source="member" :lang="lang"></simple-select>
-                        </el-form-item>
+                        </el-form-item>                        
+                    </el-col>
+                    <el-col :span="6">
                         <el-form-item :label="_label('xiaoshouren')">
                             <simple-select v-model="form.salesstaff" source="user" :lang="lang"></simple-select>
                         </el-form-item>
                         <el-form-item :label="_label('waitudingdanhao')">
                             <el-input v-model="form.externalno"></el-input>
                         </el-form-item>
-                        <el-form-item :label="_label('xiaoshoucangku')">
-                            <simple-select v-model="form.warehouseid" source="warehouse" :lang="lang"></simple-select>
-                        </el-form-item>
                         <el-form-item :label="_label('duizhangdanhao')">
                             <el-input v-model="form.ordercode"></el-input>
                         </el-form-item>
+                        
+                        <el-form-item :label="_label('zhidanriqi')">
+                            <el-input :value="form.makedate" :placeholder="_label('zidonghuoqu')" disabled></el-input>
+                        </el-form-item>
+                        <el-form-item :label="_label('zhidanren')">
+                            <sp-display-input :value="form.makestaff" source="user"></sp-display-input>
+                        </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                        <el-form-item :label="_label('xiaoshouriqi')">
-                            <el-date-picker v-model="form.salesdate" type="date" value-format="yyyy-MM-dd"></el-date-picker>
-                        </el-form-item>
                         <el-form-item :label="_label('tihuofangshi')">
                             <simple-select v-model="form.pickingtype" source="pickingtype" :lang="lang"></simple-select>
                         </el-form-item>
-                        <el-form-item :label="_label('zhidanriqi')">
-                            <el-input :value="form.sys_create_date" :placeholder="_label('zidonghuoqu')" disabled></el-input>
-                        </el-form-item>
-                        <el-form-item :label="_label('zhidanren')">
-                            <sp-display-input :value="form.sys_create_stuff" source="user"></sp-display-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="6">
                         <el-form-item :label="_label('kuaidifukuanfang')">
                             <simple-select v-model="form.expresspaidtype" source="expresspaidtype" :lang="lang"></simple-select>
                         </el-form-item>
@@ -58,54 +65,117 @@
                     </el-col>
                 </el-row>
             </el-form>
-            <el-row type="flex" justify="end">
-                <el-col :offset="22" :span="2">
-                    <el-button type="primary" @click="showProduct()" :type="isEditable?'primary':'info'">{{_label("xuanzeshangpin")}}</el-button>
+            <el-row type="flex" justify="end" v-if="form.status==0">
+                <el-col :span="24">
+                    <search :base="base" @select="onSelect"></search>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="24">
-                    <el-table :data="tabledata" stripe border style="width:100%;" v-loading.fullscreen.lock="loading">
+                    <el-table :data="tabledata" stripe border style="width:100%;" v-if="form.status==0">
                         <el-table-column prop="productname" :label="_label('chanpinmingcheng')" align="center">
                             <template v-slot="scope">
-                                {{scope.row.product.productname}}
+                                {{scope.row.productstock.product.productname}}
                             </template>
                         </el-table-column>
-                        <el-table-column prop="label" :label="_label('chima')" width="100" align="center">
+                        <el-table-column prop="sizecontentname" :label="_label('chima')" width="100" align="center">
                             <template v-slot="scope">
-                                {{scope.row.sizecontent.getLabel()}}
+                                {{scope.row.productstock.sizecontent.getLabel()}}
                             </template>
                         </el-table-column>
-                        <el-table-column prop="number" :label="_label('dinggoushuliang')" width="200" align="center">
+                        <el-table-column prop="warehousename" :label="_label('cangku')" width="100" align="center">
                             <template v-slot="scope">
-                                <el-input-number v-model="scope.row.number" :min="1" :max="10" :disabled="!isEditable"></el-input-number>
+                                {{scope.row.productstock.warehouse.name}}
                             </template>
                         </el-table-column>
-                        <el-table-column :label="_label('caozuo')" width="150" align="center" v-if="isEditable">
+                        <el-table-column prop="warehouse_number" :label="_label('kucunshuliang')" width="100" align="center">
+                            <template v-slot="scope">
+                                {{scope.row.productstock.number}}
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="price" :label="_label('danjia')" width="100" align="center">
+                            <template v-slot="scope">
+                                {{scope.row.productstock.goods.price}}
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="price" :label="_label('zongjia')" width="100" align="center">
+                            <template v-slot="scope">
+                                {{form.discount*scope.row.productstock.goods.price*scope.row.number}}
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="number" :label="_label('shuliang')" width="200" align="center">
+                            <template v-slot="scope">
+                                <el-input-number v-model="scope.row.number" :min="1" :max="scope.row.productstock.warehouse.number*1"></el-input-number>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="number" :label="_label('chengjiaojia')" width="200" align="center">
+                            <template v-slot="scope">
+                                <el-input v-model="scope.row.dealprice" v-if="!scope.row.is_match"></el-input>
+                                <el-input :value="form.discount*scope.row.productstock.goods.price*scope.row.number" v-if="scope.row.is_match" disabled></el-input>
+                            </template>
+                        </el-table-column>
+                        <el-table-column :label="_label('jiagepipei')" width="150" align="center">
+                            <template v-slot="scope">
+                                <el-switch v-model="scope.row.is_match"></el-switch>
+                            </template>
+                        </el-table-column>
+                        <el-table-column :label="_label('caozuo')" width="150" align="center">
                             <template v-slot="scope">
                                 <el-button size="mini" type="danger" @click="deleteRow(scope.$index, scope.row)">{{_label('shanchu')}}</el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                    <el-table :data="tabledata" stripe border style="width:100%;" v-if="form.status!=0">
+                        <el-table-column prop="productname" :label="_label('chanpinmingcheng')" align="center">
+                        </el-table-column>
+                        <el-table-column prop="sizecontentname" :label="_label('chima')" width="100" align="center">
+                            <template v-slot="scope">
+                                {{scope.row.productstock.sizecontent.getLabel()}}
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="warehousename" :label="_label('cangku')" width="100" align="center">
+                            <template v-slot="scope">
+                                {{scope.row.productstock.warehouse.name}}
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="price" :label="_label('danjia')" width="100" align="center">
+                          <template v-slot="scope">
+                                {{scope.row.price}}
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="number" :label="_label('xiaoshoushuliang')" width="100" align="center">
+                          <template v-slot="scope">
+                                {{scope.row.number}}
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="discount" :label="_label('zongjia')" width="100" align="center">
+                            <template v-slot="scope">
+                                {{form.discount*scope.row.price*scope.row.number}}
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="dealprice" :label="_label('chengjiaozongjia')" width="200" align="center">
+                            <template v-slot="scope">
+                                {{getDealPrice(scope.row)}}
                             </template>
                         </el-table-column>
                     </el-table>
                 </el-col>
             </el-row>
         </el-dialog>
-        <asa-select-product-dialog :visible.sync="pro" @select="onSelect"></asa-select-product-dialog>
     </div>
 </template>
 
 <script>
-import globals from '../globals.js'
+import globals, { Productstock } from '../globals.js'
 import simple_select from '../Simple_Select.vue'
-import Asa_Select_Product_Dialog from './Asa_Select_Product_Dialog.vue'
+import Asa_Productstock_Search from './Asa_Productstock_Search.vue'
 import DataSource from '../DataSource.js'
-
 
 export default {
     name: 'asa-sales-dialog',
     components: {
         'simple-select': simple_select,
-        'asa-select-product-dialog': Asa_Select_Product_Dialog
+        'search': Asa_Productstock_Search
     },
     props: {
         visible: {
@@ -118,7 +188,6 @@ export default {
     data() {
         var self = this;
 
-        var dataSource = DataSource.getDataSource('sizecontent', globals.getLabel('lang'));
         return {
             form: {
                 memberid: "",
@@ -132,42 +201,40 @@ export default {
                 expressno: "",
                 expressfee: "",
                 address: "",
-                status: "", //销售单状态：0-预售 1-已售 2-作废
+                saleportid: "",
+                status: 0, //销售单状态：0-预售 1-已售 2-作废
+                discount: "",
+                makestaff: "",
+                makedate: "",
                 id: ""
             },
             tabledata: [],
             dialogVisible: self.visible,
             title: "",
             lang: "",
-            pro: false,
-            globals,
-            dataSource,
-            formid: ""
+            formid: "",
+            base:{
+              warehouseid:""
+            }
         }
     },
     methods: {
-        showProduct() {
-            let self = this
-            if (self.isEditable) {
-                self.pro = true;
+        getDealPrice(row) {
+            if (row.is_match == 0) {
+                return row.dealprice;
+            } else {
+                return row.price * row.number * this.form.discount;
             }
         },
-        onSelect(row) {
+        onChange(newValue, data) {
+            this.form.discount = data.discount
+        },
+        onWarehouseChange(newValue){
+            this.base.warehouseid = newValue;
+        },
+        onSelect(productstock) {
             var self = this;
-            self.dataSource.filter({
-                topid: row.sizetopid
-            }, data => {
-                data.map(item => {
-                    self.tabledata.unshift({
-                        productid: row.id,
-                        sizecontentid: item.getValue(),
-                        orderid: 0,
-                        number: 0,
-                        sizecontent: item,
-                        product: row
-                    })
-                })
-            })
+            self.tabledata.push({ productstock: productstock, number: 1, is_match: true, dealprice: 0, price: 0 })
         },
         saveOrder(status) {
             //保存订单
@@ -182,17 +249,22 @@ export default {
             var params = { form: self.form }
             var array = []
             params.list = self.tabledata.map(item => {
-                return { productid: item.productid, id: item.id, sizecontentid: item.sizecontentid, number: item.number }
+                return { productstockid: item.productstock.id, id: item.id, dealprice: item.dealprice, number: item.number, price: item.productstock.goods.price, is_match: item.is_match }
             })
             self._log(JSON.stringify(params))
             self._submit("/sales/savesale", {
                 params: JSON.stringify(params)
             }, function(res) {
-                self._log(res)
-                let form = res.data.form
-                if (form.id) {
-                    self.form.id = form.id
-                    self.formid = form.id
+                let data = res.data
+                if (data.form.id) {
+                    $ASA.copyTo(data.form, self.form)
+                    self.formid = self.form.id
+
+                    self.tabledata = []
+                    data.list.forEach(item => {
+                        self._log(item)
+                        self.appendRow(item)
+                    })
                 }
 
                 //通知列表，数据变化了
@@ -249,10 +321,14 @@ export default {
         },
         appendRow(row) {
             const self = this;
-            self.dataSource.getRow(row.sizecontentid, data => {
-                row.sizecontent = data
-                self.tabledata.unshift(row)
-            })
+
+            Productstock.get(row.productstock, function(result) {
+                self._log("Productstock", result)
+                row.productstock = result
+
+                row.is_match = parseInt(row.is_match) == 1
+                self.tabledata.push(row)
+            }, 1)
         }
     },
     computed: {

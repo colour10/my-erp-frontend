@@ -22,24 +22,24 @@
         <el-row>
             <el-col :span="24">
                 <el-table :data="tabledata" border style="width:100%;" v-loading.fullscreen.lock="loading" :row-class-name="tableRowClassName">
-                    <el-table-column prop="productname" :label="_label('shangpinmingcheng')" align="center">
+                    <el-table-column :label="_label('shangpinmingcheng')" align="center">
                         <template v-slot="scope">
-                            {{scope.row.product.productname}}
+                            {{scope.row.orderdetails.product.productname}}
                         </template>
                     </el-table-column>
-                    <el-table-column prop="label" :label="_label('chima')" width="100" align="center">
+                    <el-table-column :label="_label('chima')" width="100" align="center">
                         <template v-slot="scope">
-                            {{scope.row.sizecontent.getLabel()}}
+                            {{scope.row.orderdetails.sizecontent.getLabel()}}
                         </template>
                     </el-table-column>
-                    <el-table-column prop="number" :label="_label('shengyushuliang')" width="200" align="center">
+                    <el-table-column :label="_label('shengyushuliang')" width="200" align="center">
                         <template v-slot="scope">
-                            {{scope.row.number-scope.row.actualnumber}}
+                            {{scope.row.orderdetails.number-scope.row.orderdetails.confirm_number}}
                         </template>
                     </el-table-column>
-                    <el-table-column prop="number" :label="_label('dinggoushuliang')" width="200" align="center">
+                    <el-table-column :label="_label('fahuoshuliang')" width="200" align="center">
                         <template v-slot="scope">
-                            <el-input-number v-model="scope.row.select_number" :min="0" :max="scope.row.number-scope.row.actualnumber"></el-input-number>
+                            <el-input-number v-model="scope.row.number" :min="0" :max="scope.row.orderdetails.number-scope.row.orderdetails.confirm_number"></el-input-number>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import globals from '../globals.js'
+import globals,{OrderDetails} from '../globals.js'
 import simple_select from '../Simple_Select.vue'
 import DataSource from '../DataSource.js'
 
@@ -66,7 +66,6 @@ export default {
     data() {
         var self = this;
 
-        var dataSource = DataSource.getDataSource('sizecontent', globals.getLabel('lang'));
         return {
             form: {
                 supplierid: "",
@@ -75,37 +74,29 @@ export default {
             tabledata: [],
             dialogVisible: self.visible,
             title: "",
-            lang: "",
-            globals,
-            dataSource
+            lang: ""            
         }
     },
     methods: {
         tableRowClassName({ row, rowIndex }) {
             //_log(row)
-            if (row.select_number > 0) {
+            if (row.number > 0) {
                 //_log(row)
                 return "success-row"
             }
         },
         loadPage() {
             var self = this;
-            var form = self.form
-            self._fetch("/confirmorder/search", form, function(res) {
-                self._log("loadPage", res)
+            self._fetch("/confirmorder/search", self.form, function(res) {
+                //self._log("loadPage", res)
 
                 //处理商品信息列表
                 res.data.list.forEach(function(row) {
-                    self.dataSource.getRow(row.sizecontentid, data => {
-                        row.sizecontent = data
-                        row.select_number = 0 //默认0个
-
-                        row.product = R.find(R.propEq('id', row.productid))(res.data.productlist)
-                        self.tabledata.push(row)
-                    })
+                    OrderDetails.get(row, function(orderdetails) {
+                        self._log("detail", orderdetails)
+                        self.tabledata.push({number:0,orderdetails})
+                    },1)
                 })
-
-                //self.tabledata = res;
             });
         },
         onSearch() {
@@ -114,7 +105,8 @@ export default {
         onSelect() {
             var self = this
             self.dialogVisible = false;
-            self.$emit("select", self.tabledata.filter(item => item.select_number > 0))
+            self.$emit("select", self.tabledata.filter(item => item.number > 0))
+            self.tabledata = []
         }
     },
     mounted: function() {},

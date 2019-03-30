@@ -85,6 +85,8 @@ options["warehouse"] = {url:'/warehouse/list',oplabel:'name', opvalue:'id'}
 
 //供货商 发货单位
 options["supplier"] = {url:'/supplier/list',oplabel:'suppliername', opvalue:'id'}
+options["saleport"] = {url:'/saleport/list',oplabel:'name', opvalue:'id'}
+options["userwarehouse"] = {url:'/warehouse/userlist',oplabel:'name', opvalue:'id'}
 
 options["gender"] = {hashtable:$ASAL.list_gender}
 options["gender2"] = {hashtable:$ASAL.list_gender2}

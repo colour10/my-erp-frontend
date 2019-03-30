@@ -8,7 +8,8 @@ export default {
     props: {
         select_value:{
             default:""
-        }
+        },
+        value:{}
     },    
     model: {
         prop: 'select_value',
@@ -38,10 +39,20 @@ export default {
         current_value(newValue) {
             this.$emit("change", newValue)
         }
+        ,
+        value(newValue) {
+            self.current_value = newValue
+        }
     },
     mounted:function(){
         var self = this;
-        self.current_value = self.convertValue(self.select_value)
+        if(self.select_value) {
+            self.current_value = self.convertValue(self.select_value)
+        }
+
+        if(self.value) {
+            self.current_value = self.value;
+        }
     }
 }
 </script>

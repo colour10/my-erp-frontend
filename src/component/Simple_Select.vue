@@ -1,7 +1,7 @@
 <template>
-  <el-select v-model="currentValue" :placeholder="qingxuanze" style="width:150" @change="handleChange" filterable :disabled="disabled" :clearable="clearable">
-    <el-option v-for="(item,key) in data" :key="item.getKeyValue()" :label="item.getLabelValue()" :value="item.getKeyValue()"></el-option> 
-  </el-select>
+    <el-select v-model="currentValue" :placeholder="qingxuanze" style="width:150" @change="handleChange" filterable :disabled="disabled" :clearable="clearable">
+        <el-option v-for="(item,key) in data" :key="item.getKeyValue()" :label="item.getLabelValue()" :value="item.getKeyValue()"></el-option>
+    </el-select>
 </template>
 
 <script>
@@ -10,27 +10,29 @@ import DataSource from './DataSource.js'
 export default {
     name: 'simple-select',
     props: {
-        select_value:{
+        select_value: {
             required: true,
-            default:''
+            default: ''
         },
-        disabled:{
+        disabled: {
             type: Boolean,
-            default:false
+            default: false
         },
-        lang:{
+        lang: {
             type: String
         },
-        source:{
-            type:[String,Object],
-            required:true    
-        }  
-         ,
-        clearable:{
-            type:[Boolean],
-            required:false,
-            default:false    
-        }  
+        source: {
+            type: [String, Object],
+            required: true
+        },
+        clearable: {
+            type: [Boolean],
+            required: false,
+            default: false
+        },
+        lazy: {
+
+        }
     },
     model: {
         prop: 'select_value',
@@ -40,38 +42,63 @@ export default {
         var self = this
         var dataSource = DataSource.getDataSource(self.source, self.lang);
         var value = self.select_value
-        if(value=='0') {
-            value = ''   
+        if (value == '0') {
+            value = ''
         }
-        self._log(self.source, dataSource)
+        //self._log(self.source, dataSource)
         return {
-            currentValue:value,
-            data:[],
-            dataSource:dataSource,
-            qingxuanze:self._label('qingxuanze')
+            currentValue: value,
+            data: [],
+            dataSource: dataSource,
+            qingxuanze: self._label('qingxuanze')
         }
     },
     methods: {
         handleChange(newValue) {
             var self = this
-            self.$emit('change',newValue)
+            self.current(row => self.$emit('change', newValue, row.row))
+
+        },
+        current(callback) {
+            this.dataSource.getRow(this.currentValue, row => callback(row))
+        },
+        load(callback) {
+            var self = this;
+            self.data = []
+            self.dataSource.getData(function(data) {
+                self._log("load", data)
+                data.forEach(function(item) {
+                    if (callback(item)) {
+                        self.data.push(item)
+                    }
+                })
+
+            })
+        },
+        clear() {
+            this.$emit("change", "")
+            this.data = []
         }
     },
-    watch:{
+    watch: {
         select_value(newValue) {
-            if(newValue=='0') {
-                newValue = ''   
+            if (newValue == '0') {
+                newValue = ''
             }
             this.currentValue = newValue
         },
         lang(newValue) {
-            this.dataSource.setLang(newValue)   
+            this.dataSource.setLang(newValue)
         }
     },
-    mounted:function(){
+    mounted: function() {
         var self = this;
-        self.dataSource.getData(function(data){
-            self.data = data      
+
+        if (self.lazy == true) {
+            return
+        }
+        self.dataSource.getData(function(data) {
+            self.data = data
         })
     }
 }

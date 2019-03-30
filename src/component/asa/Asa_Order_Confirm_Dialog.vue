@@ -133,32 +133,44 @@
                     </el-col>
                 </el-row>
             </el-form>
-            <el-row type="flex" justify="end">
+            <el-row type="flex" justify="end" v-if="canSubmit">
                 <el-col :offset="22" :span="2">
                     <el-button type="primary" @click="showProduct()">{{_label("xuanzeshangpin")}}</el-button>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="24">
-                    <el-table :data="tabledata" border style="width:100%;" v-loading.fullscreen.lock="loading" :row-class-name="tableRowClassName">
-                        <el-table-column prop="productname" :label="_label('shangpinmingcheng')" align="center">
+                    <el-table :data="tabledata" border style="width:100%;" v-loading.fullscreen.lock="loading">
+                        <el-table-column :label="_label('shangpinmingcheng')" align="center">
                             <template v-slot="scope">
-                                {{scope.row.product.productname}}
+                                {{scope.row.orderdetails.product.productname}}
                             </template>
                         </el-table-column>
-                        <el-table-column prop="label" :label="_label('chima')" width="100" align="center">
+                        <el-table-column :label="_label('chima')" width="100" align="center">
                             <template v-slot="scope">
-                                {{scope.row.sizecontent.getLabel()}}
+                                {{scope.row.orderdetails.sizecontent.getLabel()}}
                             </template>
                         </el-table-column>
-                        <el-table-column prop="number" :label="_label('shengyushuliang')" width="200" align="center">
+                        <el-table-column :label="_label('shengyushuliang')" width="200" align="center" key="1">
                             <template v-slot="scope">
                                 {{scope.row.orderdetails.number-scope.row.orderdetails.actualnumber}}
                             </template>
                         </el-table-column>
-                        <el-table-column prop="number" :label="_label('dinggoushuliang')" width="200" align="center">
+
+                        <el-table-column :label="_label('zongjia')" width="200" align="center" key="2">
                             <template v-slot="scope">
-                                <el-input-number v-model="scope.row.number" :min="0" :max="scope.row.orderdetails.number-scope.row.orderdetails.actualnumber"></el-input-number>
+                                {{scope.row.number*scope.row.price}}
+                            </template>
+                        </el-table-column>
+                        <el-table-column :label="_label('dinggoushuliang')" width="200" align="center" key="3">
+                            <template v-slot="scope">
+                                <el-input-number v-model="scope.row.number" :min="0" :max="scope.row.orderdetails.number-scope.row.orderdetails.actualnumber" :disabled="!canSubmit"></el-input-number>
+                            </template>
+                        </el-table-column>
+
+                        <el-table-column :label="_label('danjia')" width="200" align="center" key="4">
+                            <template v-slot="scope">
+                                <el-input v-model="scope.row.price" :disabled="!canSubmit" :key="scope.row.orderdetails.id"></el-input>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -170,7 +182,7 @@
 </template>
 
 <script>
-import globals from '../globals.js'
+import globals,{ConfirmorderDetails} from '../globals.js'
 import simple_select from '../Simple_Select.vue'
 import Asa_Select_Order_Detail_Dialog from './Asa_Select_Order_Detail_Dialog.vue'
 import DataSource from '../DataSource.js'
@@ -252,19 +264,15 @@ export default {
             var self = this;
             self._log("onSelect", rows)
             rows.forEach(item => {
-                //console.log(subDataSource, "sub")
-                //console.log(subDataSource.constructor==DataSource)
-                //item.orderdetailsid = item.id
-                //delete item.id
-                self.tabledata.unshift({
-                    product: item.product,
-                    sizecontent: item.sizecontent,
-                    orderdetails: item,
-                    productid: item.productid,
-                    sizecontentid: item.sizecontentid,
-                    number: item.select_number,
-                    orderdetailsid: item.id
-                })
+                let newitem = $ASA.$.extend(true,{}, item)
+                let is_exist = R.any(rowData => {
+                    return rowData.orderdetails.id == newitem.orderdetails.id
+                })(self.tabledata)
+
+                if(!is_exist) {
+                    newitem.price = newitem.orderdetails.price;
+                    self.tabledata.unshift(newitem)
+                }                
             })
         },
         saveOrder(status) {
@@ -281,15 +289,17 @@ export default {
             var params = { form: self.form }
             var array = []
             params.list = self.tabledata.map(item => {
-                return { id: item.id, productid: item.productid, sizecontentid: item.sizecontentid, number: item.number, orderdetailsid: item.orderdetailsid }
+                return { id: item.id, number: item.number, orderdetailsid: item.orderdetails.id, price:item.price }
             })
             self._log(JSON.stringify(params))
             self._submit("/confirmorder/saveorder", { params: JSON.stringify(params) }, function(res) {
                 self._log(res)
-                if (res.id) {
-                    self.form.id = res.id
-                    self.formid = res.id
+                if (res.data.form.id) {
+                    self.form.id = res.data.form.id
+                    self.formid = res.data.form.id
                 }
+
+                $ASA.copyTo(res.data.form, self.form)
                 self.$emit("change", res.data.form)
             });
         },
@@ -337,7 +347,7 @@ export default {
                 return
             }
             self._remove("/confirmorder/delete?id=" + self.form.id, function(res) {
-
+                self.$emit("change", self.form, "delete")
             });
         }
     },
@@ -389,12 +399,9 @@ export default {
                     self._log("加载订单信息", res)
 
                     res.data.list.forEach(function(row) {
-                        self.dataSource.getRow(row.sizecontentid, data => {
-                            row.sizecontent = data
-
-                            row.product = R.find(R.propEq('id', row.productid))(res.data.productlist)
-                            self.tabledata.push(row)
-                        })
+                        ConfirmorderDetails.get(row, function(detail){
+                            self.tabledata.push(detail)
+                        },2)
                     })
                 })
             }
