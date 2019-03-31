@@ -63,7 +63,7 @@ export default {
                 })
             } 
             else { //val为空时，还原数组
-                self._log("self.dataCopy", self.dataCopy)
+                //self._log("self.dataCopy", self.dataCopy)
                 return self.dataCopy;
             }
         }

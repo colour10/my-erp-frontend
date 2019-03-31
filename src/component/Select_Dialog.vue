@@ -97,7 +97,7 @@ export default {
         },
         convertValue(value) {
             var self = this;
-            console.log("convertValue", self.source)
+            //console.log("convertValue", self.source)
             
             if(typeof(value)=='string') {
                 value = value.split(',')    
@@ -112,13 +112,13 @@ export default {
             });
             
             Promise.all(arr).then(data => {
-                console.log(data.join(","), "===")
+                //console.log(data.join(","), "===")
                 
                 //过滤掉找不到label的数据
                 var arr = R.filter(function(item){
                     return item[1]!=""    
                 })(data)
-                console.log(arr)
+                //console.log(arr)
                 
                 
                 self.checkList = R.map(R.head)(arr);
@@ -129,7 +129,7 @@ export default {
     watch:{
         select_value(newValue) {
             var self = this
-            console.log("change", newValue)
+            //console.log("change", newValue)
             self.convertValue(newValue)
             if(newValue.trim()!="") {
                 self.checkList = newValue.split(",");

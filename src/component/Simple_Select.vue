@@ -66,7 +66,7 @@ export default {
             var self = this;
             self.data = []
             self.dataSource.getData(function(data) {
-                self._log("load", data)
+                //self._log("load", data)
                 data.forEach(function(item) {
                     if (callback(item)) {
                         self.data.push(item)

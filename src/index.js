@@ -22,6 +22,7 @@ import Simple_Float_Input from './component/Simple_Float_Input.vue'
 import Asa_Order_Confirm_Dialog from './component/asa/Asa_Order_Confirm_Dialog.vue'
 import Asa_Select_Order_Detail_Dialog from './component/asa/Asa_Select_Order_Detail_Dialog.vue'
 import Asa_Warehousing_Dialog from './component/asa/Asa_Warehousing_Dialog.vue'
+import Asa_Product from './component/asa/Asa_Product.vue'
 
 import Page_Home from './component/page/Home.vue'
 import Page_Order from './component/page/Order.vue'
@@ -39,6 +40,7 @@ import Page_Confirmorder from './component/page/Confirmorder.vue'
 import Page_UserModifyPassword from './component/page/UserModifyPassword.vue'
 import Page_Warehousing from './component/page/Warehousing.vue'
 import Page_Requisition from './component/page/Requisition.vue'
+import Page_Productstock from './component/page/Productstock.vue'
 
 const components = [
     Simple_Admin_Page,
@@ -62,6 +64,7 @@ const components = [
     Asa_Order_Confirm_Dialog,
     Asa_Select_Order_Detail_Dialog,
     Asa_Warehousing_Dialog,
+    Asa_Product,
     Page_Home,
     Page_Order,
     Page_Producttemplate,
@@ -77,7 +80,8 @@ const components = [
     Page_Confirmorder,
     Page_UserModifyPassword,
     Page_Warehousing,
-    Page_Requisition
+    Page_Requisition,
+    Page_Productstock
 ]
 
 const paykeyboard = {

@@ -281,7 +281,6 @@ export default {
     data() {
         var self = this;
         return {
-            globals
         }
     },
     methods: {
@@ -292,7 +291,7 @@ export default {
             }
         },
         onSelect(index) {
-            this._log(index)
+            //this._log(index)
             if (menus[index]) {
                 this.$router.push(menus[index])
             }
@@ -301,13 +300,13 @@ export default {
     watch: {
         '$route' (newValue) {
             var self = this;
-            self._log("$route", this.$store.getters.is_login)
+            //self._log("$route", this.$store.getters.is_login)
             self.checkLogin()
         }
     },
     mounted: function() {
         this.checkLogin()
-        this._log("Global Function")
+        //this._log("Global Function")
     }
 }
 </script>

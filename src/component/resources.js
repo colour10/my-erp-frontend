@@ -23,69 +23,70 @@ options["test.datalist"] = {
 //options["currency"] = {url:'http://erp.localhost.com/common/currency',oplabel:'name', opvalue:'code'}
 
 //品牌
-options["brand"] = {url:'/brand/list',oplabel:'name', opvalue:'id'}
+options["brand"] = {url:'/l/brand',oplabel:'name', opvalue:'id'}
 
 //国家及地区
-options["country"] = {url:'/country/list',oplabel:'name', opvalue:'id'}
+options["country"] = {url:'/l/country',oplabel:'name', opvalue:'id'}
 
 //颜色模板
-options["colortemplate"] = {url:'/colortemplate/list',oplabel:'name', opvalue:'id'}
+options["colortemplate"] = {url:'/l/colortemplate',oplabel:'name', opvalue:'id'}
 
 //品牌分类
-options["brandgroup"] = {url:'/brandgroup/list',oplabel:'name', opvalue:'id'}
+options["brandgroup"] = {url:'/l/brandgroup',oplabel:'name', opvalue:'id'}
 
 //用户组
-options["group"] = {url:'/group/list',oplabel:'group_name', opvalue:'id'}
+options["group"] = {url:'/l/group',oplabel:'group_name', opvalue:'id'}
 
 //用户
-options["user"] = {url:'/user/list',oplabel:'login_name', opvalue:'id'}
+options["user"] = {url:'/l/user',oplabel:'login_name', opvalue:'id'}
 
 //部门列表
 options["department.single"] = {url:'/department/single',oplabel:'label', opvalue:'id'}
 
 //品牌子类
-options["childproductgroup"] = {url:'/childproductgroup/list',oplabel:'name', opvalue:'id'}
+options["childproductgroup"] = {url:'/l/childproductgroup',oplabel:'name', opvalue:'id'}
 
 //材质状态
-options["materialstatus"] = {url:'/materialstatus/list',oplabel:'name', opvalue:'id'}
+options["materialstatus"] = {url:'/l/materialstatus',oplabel:'name', opvalue:'id'}
 
 //场合风格
-options["occasionsstyle"] = {url:'/occasionsstyle/list',oplabel:'name', opvalue:'id'}
+options["occasionsstyle"] = {url:'/l/occasionsstyle',oplabel:'name', opvalue:'id'}
 
 //尺寸
-options["ulnarinch"] = {url:'/ulnarinch/list',oplabel:'name', opvalue:'id'}
+options["ulnarinch"] = {url:'/l/ulnarinch',oplabel:'name', opvalue:'id'}
 
 //年代
-options["ageseason"] = {url:'/ageseason/list',oplabel:'fullname', opvalue:'id'}
+options["ageseason"] = {url:'/l/ageseason',oplabel:'fullname', opvalue:'id'}
 
 //别名
-options["aliases"] = {url:'/aliases/list',oplabel:'name', opvalue:'id'}
+options["aliases"] = {url:'/l/aliases',oplabel:'name', opvalue:'id'}
 
 //防寒指数
-options["winterproofing"] = {url:'/winterproofing/list',oplabel:'name', opvalue:'id'}
+options["winterproofing"] = {url:'/l/winterproofing',oplabel:'name', opvalue:'id'}
 
 //尺码组
-options["sizetop"] = {url:'/sizetop/list',oplabel:'name', opvalue:'id'}
+options["sizetop"] = {url:'/l/sizetop',oplabel:'name', opvalue:'id'}
 
 //尺码组明细
-options["sizecontent"] = {url:'/sizecontent/list',oplabel:'content', opvalue:'id'}
+options["sizecontent"] = {url:'/l/sizecontent',oplabel:'content', opvalue:'id'}
 
 //成员
-options["member"] = {url:'/member/list',oplabel:'name', opvalue:'id'}
+options["member"] = {url:'/l/member',oplabel:'name', opvalue:'id'}
 
 //执行标准
-options["executioncategory"] = {url:'/executioncategory/list',oplabel:'name', opvalue:'id'}
+options["executioncategory"] = {url:'/l/executioncategory',oplabel:'name', opvalue:'id'}
 
 //安全类别
-options["securitycategory"] = {url:'/securitycategory/list',oplabel:'name', opvalue:'id'}
+options["securitycategory"] = {url:'/l/securitycategory',oplabel:'name', opvalue:'id'}
 
 
 //仓库
-options["warehouse"] = {url:'/warehouse/list',oplabel:'name', opvalue:'id'}
+options["warehouse"] = {url:'/l/warehouse',oplabel:'name', opvalue:'id'}
 
 //供货商 发货单位
-options["supplier"] = {url:'/supplier/list',oplabel:'suppliername', opvalue:'id'}
-options["saleport"] = {url:'/saleport/list',oplabel:'name', opvalue:'id'}
+options["supplier"] = {url:'/l/supplier',oplabel:'suppliername', opvalue:'id'}
+options["saleport"] = {url:'/l/saleport',oplabel:'name', opvalue:'id'}
+options["usersaleport"] = {url:'/user/saleportlist',oplabel:'name', opvalue:'id'}
 options["userwarehouse"] = {url:'/warehouse/userlist',oplabel:'name', opvalue:'id'}
 
 options["gender"] = {hashtable:$ASAL.list_gender}
@@ -128,5 +129,8 @@ options["requisitiontype"] =  {hashtable:$ASAL.list_requisitiontype}
 
 //调拨单状态
 options["requisitionstatus"] =  {hashtable:$ASAL.list_requisitionstatus}
+
+//仓库角色
+options["warehouserole"] =  {hashtable:$ASAL.list_warehouserole}
 
 export default options

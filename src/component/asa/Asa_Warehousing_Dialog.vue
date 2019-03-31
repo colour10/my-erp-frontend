@@ -4,32 +4,33 @@
             <el-form class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini">
                 <el-row :gutter="0">
                     <el-col :span="6">
-                        <el-form-item :label="_label('fahuodanhao')">
-                            <el-input v-model="form.orderno" disabled></el-input>
-                        </el-form-item>
                         <el-form-item :label="_label('rukuriqi')">
                             <el-date-picker v-model="form.entrydate" type="date" value-format="yyyy-MM-dd"></el-date-picker>
                         </el-form-item>
+                        <el-form-item :label="_label('fahuodanhao')">
+                            <el-input v-model="confirmorder.orderno" disabled></el-input>
+                        </el-form-item>
+                        
                         <el-form-item :label="_label('gonghuoshang')">
-                            <simple-select v-model="form.supplierid" source="supplier" :lang="lang"></simple-select>
+                            <simple-select v-model="confirmorder.supplierid" source="supplier" :lang="lang" disabled></simple-select>
                         </el-form-item>
                         <el-form-item :label="_label('cangku')">
-                            <simple-select v-model="form.warehouseid" source="warehouse" :lang="lang"></simple-select>
+                            <simple-select v-model="confirmorder.warehouseid" source="warehouse" :lang="lang" disabled></simple-select>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item :label="_label('niandaijijie')">
-                            <simple-select v-model="form.ageseasonid" source="ageseason" :lang="lang"></simple-select>
+                            <simple-select v-model="confirmorder.ageseasonid" source="ageseason" :lang="lang" disabled></simple-select>
                         </el-form-item>
                         <el-form-item :label="_label('niandaileixing')">
-                            <simple-select v-model="form.seasontype" source="seasontype" :lang="lang" :clearable="true"> </simple-select>
+                            <simple-select v-model="confirmorder.seasontype" source="seasontype" :lang="lang" :clearable="true" disabled> </simple-select>
                         </el-form-item>
                         <el-form-item :label="_label('shuxing')">
-                            <simple-select v-model="form.property" source="orderproperty" :lang="lang">
+                            <simple-select v-model="confirmorder.property" source="orderproperty" :lang="lang" disabled>
                             </simple-select>
                         </el-form-item>
                         <el-form-item :label="_label('huilv')">
-                            <sp-float-input v-model="form.exchangerate"></sp-float-input>
+                            <el-input v-model="confirmorder.exchangerate" disabled></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
@@ -100,6 +101,7 @@ import simple_select from '../Simple_Select.vue'
 import Asa_Select_Order_Detail_Dialog from './Asa_Select_Order_Detail_Dialog.vue'
 import DataSource from '../DataSource.js'
 
+const fetchNumber = globals.getFetcher("warehousingdetails")
 export default {
     name: 'asa-warehousing-dialog',
     components: {
@@ -114,15 +116,19 @@ export default {
             form: {
                 orderno: "",
                 entrydate: "",
+                makestaff: "",
+                makedate: "",
+                id: ""
+            },
+            confirmorder: {
+                id: "",
+                orderno: "",
                 supplierid: "",
                 warehouseid: "",
                 ageseasonid: "",
                 seasontype: "",
                 property: "",
-                exchangerate: "",
-                makestaff: "",
-                makedate: "",
-                id: ""
+                exchangerate: ""
             },
             tabledata: [],
             formid: "",
@@ -151,10 +157,10 @@ export default {
                 return;
             }
 
-            var params = { form: self.form }
+            var params = { form: $ASA.extend({confirmorderid:self.confirmorder.id},self.form) }
             var array = []
             params.list = self.tabledata.map(item => {
-                return { confirmorderdetailsid: item.id, productid: item.productid, sizecontentid: item.sizecontentid, number: item.number, orderdetailsid: item.orderdetailsid }
+                return { confirmorderdetailsid: item.confirmdetails.id, number:item.number, orderdetailsid:item.orderdetails.id }
             })
             self._log(JSON.stringify(params))
             self._submit("/warehousing/create", { params: JSON.stringify(params) }, function(res) {
@@ -197,23 +203,24 @@ export default {
                 if (response_data.form) {
                     //已经生成过入库单
                     $ASA.copyTo(response_data.form, form)
-                } else {
+                }
+                if(response_data.confirmorder){
                     //新建入库单
                     let confirmorder = response_data.confirmorder
-                    form.confirmorderid = confirmorder.id
-                    form.seasontype = confirmorder.seasontype
-                    form.supplierid = confirmorder.supplierid
-                    form.warehouseid = confirmorder.warehouseid
-                    form.ageseasonid = confirmorder.ageseasonid
-                    form.exchangerate = confirmorder.exchangerate
-                    form.property = confirmorder.property
-                    form.id = ""
+                    $ASA.copyTo(confirmorder, self.confirmorder)
                 }
 
                 res.data.list.forEach(function(row) {
                     ConfirmorderDetails.get(row, function(detail) {
                         //console.log(detail)
-                        self.tabledata.push({ confirmdetails: detail, orderdetails: detail.orderdetails, number: 0, is_match: 0 })
+                        let obj = { confirmdetails: detail, orderdetails: detail.orderdetails, number: 0, is_match: 0 }
+                        self.tabledata.push(obj)
+                        fetchNumber(row.id, function(item){
+                            self._log(item)
+                            if(item) {
+                                obj.number = item.number;
+                            }
+                        })
                     }, 2)
                 })
             })

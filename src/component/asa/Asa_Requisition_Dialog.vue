@@ -7,16 +7,15 @@
                         <el-form-item :label="_label('tongyidiaoru')">
                             <el-switch v-model="form.allin" active-value="1" inactive-value="0"></el-switch>
                         </el-form-item>
-
                         <el-form-item :label="_label('diaoruku')">
                             <simple-select v-model="form.in_id" source="warehouse" :lang="lang" :disabled="form.allin==0">
                             </simple-select>
-                        </el-form-item>                        
+                        </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item :label="_label('beizhu')">
                             <el-input v-model="form.memo"></el-input>
-                        </el-form-item>                        
+                        </el-form-item>
                     </el-col>
                     <el-col :span="6">
                     </el-col>
@@ -29,20 +28,26 @@
             </el-form>
             <el-row type="flex" justify="end">
                 <el-col :span="24">
-                    <search @select="onSelect"></search>                    
+                    <search @select="onSelect"></search>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="24">
                     <el-table :data="tabledata" stripe border style="width:100%;">
                         <el-table-column prop="productname" :label="_label('chanpinmingcheng')" align="center">
-                        </el-table-column>
-                        <el-table-column prop="sizecontentname" :label="_label('chima')" width="100" align="center">
                             <template v-slot="scope">
-                                {{scope.row.sizecontentname}}
+                                {{scope.row.product.productname}}
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="label" :label="_label('chima')" width="100" align="center">
+                            <template v-slot="scope">
+                                {{scope.row.sizecontent.getLabel()}}
                             </template>
                         </el-table-column>
                         <el-table-column prop="warehousename" :label="_label('cangku')" width="100" align="center">
+                            <template v-slot="scope">
+                                {{scope.row.warehouse.name}}
+                            </template>
                         </el-table-column>
                         <el-table-column prop="number" :label="_label('kucunshuliang')" width="200" align="center">
                         </el-table-column>
@@ -52,13 +57,11 @@
                                 <simple-select v-if="form.allin==1" v-model="form.in_id" source="warehouse" :lang="lang" disabled></simple-select>
                             </template>
                         </el-table-column>
-
                         <el-table-column prop="select_number" :label="_label('diaoboshuliang')" width="200" align="center">
                             <template v-slot="scope">
                                 <el-input-number v-model="scope.row.select_number" :min="1" :max="scope.row.number*1"></el-input-number>
                             </template>
                         </el-table-column>
-
                         <el-table-column :label="_label('caozuo')" width="150" align="center">
                             <template v-slot="scope">
                                 <el-button size="mini" type="danger" @click="deleteRow(scope.$index, scope.row)">{{_label('shanchu')}}</el-button>
@@ -87,7 +90,7 @@ export default {
     components: {
         'simple-select': simple_select,
         'asa-select-product-dialog': Asa_Select_Product_Dialog,
-        'search' : Asa_Productstock_Search
+        'search': Asa_Productstock_Search
     },
     props: {
         visible: {
@@ -99,7 +102,7 @@ export default {
     },
     data() {
         var self = this;
-        
+
         return {
             form: {
                 allin: 0,
@@ -116,12 +119,12 @@ export default {
         onSelect(row) {
             var self = this;
             let index = R.findIndex(R.propEq("id", row.id))(self.tabledata)
-            if(index<0) {
+            if (index < 0) {
                 row.select_number = 1
-                row.number = row.number*1
+                row.number = row.number * 1
                 row.in_id = ""
-                self.tabledata.unshift(JSON.parse(JSON.stringify(row)))
-            }            
+                self.tabledata.unshift(row)
+            }
         },
         saveOrder(status) {
             //保存订单
@@ -134,22 +137,20 @@ export default {
             var params = { form: self.form }
             var array = []
             params.list = self.tabledata.map(item => {
-                if(self.form.requisitiontype==2) {
-                    return { out_id: item.warehouseid, productstockid: item.id, number: item.select_number, in_id:self.form.in_id }
+                if (self.form.allin == 1) {
+                    return { out_id: item.warehouseid, productstockid: item.id, number: item.select_number, in_id: self.form.in_id }
+                } else {
+                    return { out_id: item.warehouseid, productstockid: item.id, number: item.select_number, in_id: item.in_id }
                 }
-                else {
-                    return { out_id: item.warehouseid, productstockid: item.id, number: item.select_number, in_id:item.in_id }
-                }
-                
+
             })
             self._log(JSON.stringify(params))
-            self._submit("/requisition/save", { params: JSON.stringify(params) }, function(res) {                
+            self._submit("/requisition/save", { params: JSON.stringify(params) }, function(res) {
                 self.$emit("change")
             });
         }
     },
-    computed: {
-    },
+    computed: {},
     watch: {
         dialogVisible(newValue) {
             this.$emit("update:visible", newValue)
@@ -159,7 +160,6 @@ export default {
             this.dialogVisible = newValue
         }
     },
-    mounted: function() {
-    }
+    mounted: function() {}
 }
 </script>

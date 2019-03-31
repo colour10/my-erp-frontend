@@ -30,6 +30,10 @@ DataRow.prototype.getRow = function(key) {
     return key ? this.row[key] : this.row;
 }
 
+DataRow.prototype.getObject = function() {
+    return {id:this.getValue(), name:this.getLabel()}
+}
+
 
 function DataSource(options, lang) {
     var self = this;
@@ -139,7 +143,7 @@ DataSource.prototype.sub = function(condition, callback) {
         })
 
         var result = result.map(item=>item.getRow())
-        _log(result,"999")
+        //_log(result,"999")
         var sub = new DataSource({datalist:result, oplabel:self.oplabel, opvalue:self.opvalue},self.lang)
         sub.init()
         callback(sub)

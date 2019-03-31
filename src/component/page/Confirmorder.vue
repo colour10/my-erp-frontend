@@ -67,14 +67,14 @@ export default {
             let self = this
             self.info = row;
             self.rowIndex = rowIndex
-            self._log(row)
+            //self._log(row)
             self.showForm()
         },
         showFormToWarehousing(rowIndex, row) {
             let self = this
             self.confirmorderid = row.id;
             self.rowIndex = rowIndex
-            self._log(row)
+            //self._log(row)
             self.warehousingVisbleDialog = true;
         },
         goToWarehousing() {
@@ -86,7 +86,7 @@ export default {
         onChange(form, action) {
             let self = this
             let tablelist = self.$refs.tablelist
-            self._log("form", form)
+            //self._log("form", form)
 
             let index = tablelist.findIndex(R.propEq('id', form.id))
             if (index < 0) {

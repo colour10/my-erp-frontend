@@ -29,7 +29,8 @@ export default {
             props: {
                 columns: [
                     { name: "orderno", label: self._label('rukudanhao'), width: 300 },
-                    { name: "entrydate", label: self._label('rukuriqi')}
+                    { name: "entrydate", label: self._label('rukuriqi')},
+                    { name: "makestaff", label: self._label('zhidanren'),source:"user",type:"select"}
                 ],
                 controller: "warehousing",
                 actionwidth: 300

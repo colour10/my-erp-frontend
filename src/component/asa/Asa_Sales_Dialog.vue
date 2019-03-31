@@ -5,7 +5,7 @@
                 <el-row :gutter="0">
                     <el-col :span="6">
                         <el-form-item :label="_label('xiaoshouduankou')">
-                            <simple-select ref="saleportid" v-model="form.saleportid" source="saleport" :lang="lang" @change="onChange" :disabled="form.status!=0"></simple-select>
+                            <simple-select ref="saleportid" v-model="form.saleportid" source="usersaleport" :lang="lang" @change="onChange" :disabled="form.status!=0"></simple-select>
                         </el-form-item>
                         <el-form-item :label="_label('zhekou')">
                             <el-input v-model="form.discount" disabled></el-input>

@@ -68,7 +68,7 @@ export default {
             var self = this
             if (self.onclickupdate) {
                 self.onclickupdate(rowIndex, row)
-                self._log("click edit")
+                //self._log("click edit")
             }
         },
         getImageStyle(column) {

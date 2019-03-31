@@ -1,10 +1,10 @@
 <template>
-    <div>
+    <div style="width:100%">
         <el-form class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini">
             <el-row :gutter="0">
                 <el-col :span="6">
                     <el-form-item :label="_label('cangku')">
-                        <simple-select v-model="form.warehouseid" source="warehouse" :lang="lang" :disabled="warehouseIsDisabled"></simple-select>
+                        <simple-select v-model="form.warehouseid" source="warehouse" :lang="lang"></simple-select>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6">
@@ -15,9 +15,9 @@
             </el-row>
         </el-form>
         <el-table :data="searchresult" stripe border style="width:100%;" v-loading.fullscreen.lock="loading">
-            <el-table-column prop="productname" :label="_label('chanpinmingcheng')" align="center">
+            <el-table-column prop="productname" :label="_label('chanpinmingcheng')" align="center" sortable>
                 <template v-slot="scope">
-                    {{scope.row.product.productname}}
+                    <el-button type="text" @click="selectRow(scope.row)">{{scope.row.product.productname}}</el-button>
                 </template>
             </el-table-column>
             <el-table-column prop="label" :label="_label('chima')" width="100" align="center">
@@ -25,7 +25,7 @@
                     {{scope.row.sizecontent.getLabel()}}
                 </template>
             </el-table-column>
-            <el-table-column prop="warehousename" :label="_label('cangku')" width="100" align="center">
+            <el-table-column prop="warehouseid" sortable :label="_label('cangku')" width="100" align="center">
                 <template v-slot="scope">
                     {{scope.row.warehouse.name}}
                 </template>
@@ -35,26 +35,22 @@
                     {{scope.row.number}}
                 </template>
             </el-table-column>
-            <el-table-column :label="_label('caozuo')" width="150" align="center">
-                <template v-slot="scope">
-                    <el-button size="mini" type="primary" @click="selectRow(scope.row)">{{_label('xuanze')}}</el-button>
-                </template>
-            </el-table-column>
         </el-table>
+
+        <product ref="product"></product>
     </div>
 </template>
 
 <script>
-import globals, { Productstock } from '../globals.js'
-import simple_select from '../Simple_Select.vue'
-import DataSource from '../DataSource.js'
+import globals,{Productstock} from '../globals.js'
+import Product from '../asa/Asa_Product.vue'
 
 export default {
-    name: 'asa-requisition-dialog',
+    name: 'asapage-productstock',
     components: {
-        'simple-select': simple_select,
+        "product":Product
     },
-    props: ["base"],
+    props: {},
     data() {
         var self = this;
 
@@ -71,49 +67,27 @@ export default {
             //查询库存商品
             let self = this
 
-            if(self.warehouseIsDisabled==true && self.form.warehouseid=="") {
-                alert(self._label("choice_warehouse"));
-                return 
-            }
-
-            self._fetch("/productstock/page", self.form, function(res) {
+            self._fetch("/productstock/search", self.form, function(res) {
                 //self._log("/productstock/page", res)
                 self.searchresult = []
                 res.data.forEach(function(item) {
                     Productstock.get(item, function(result) {
                         self.searchresult.push(result)
-                    }, 1)
+                    }, 2)
                 })
             })
         },
         selectRow(row) {
-            this._log(row)
-            this.$emit("select", $ASA.extend(true, {}, row))
+            this.$refs.product.setInfo(row.product).show()
+            //this.$emit("select", row)
         }
     },
     computed: {
-        warehouseIsDisabled() {
-            var base = this.base;
-            return base && typeof(base.warehouseid) != 'undefined'
-        }
     },
     watch: {
-        base: {
-            handler: function(newValue, oldValue) {
-                var self = this;
-                var base = this.base;
-                if (base.warehouseid) {
-                    self.form.warehouseid = base.warehouseid;
-                }
-            },
-            deep: true
-        }
     },
     mounted: function() {
-        var base = this.base;
-        if (base && base.warehouseid) {
-            self.warehouseid = base.warehouseid;
-        }
+        //this.$refs.product.show();
     }
 }
 </script>

@@ -1,14 +1,18 @@
 <template>
     <div>
         <el-dialog :title="title" :visible.sync="dialogVisible" :center="true" :fullscreen="true" :modal="false">
-            <el-form class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini">
+            <el-form ref="order-form" class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini" :rules="rules" :inline-message="true">
                 <el-row :gutter="0">
                     <el-col :span="6">
-                        <el-form-item :label="_label('yewuleixing')">
+                        <el-form-item :label="_label('shuxing')" required prop="property">
+                            <simple-select v-model="form.property" source="orderproperty" :lang="lang">
+                            </simple-select>
+                        </el-form-item>
+                        <el-form-item :label="_label('yewuleixing')" required prop="bussinesstype">
                             <simple-select v-model="form.bussinesstype" source="bussinesstype" :lang="lang">
                             </simple-select>
                         </el-form-item>
-                        <el-form-item :label="_label('gonghuoshang')">
+                        <el-form-item :label="_label('gonghuoshang')" required prop="supplierid">
                             <simple-select v-model="form.supplierid" source="supplier" :lang="lang">
                             </simple-select>
                         </el-form-item>
@@ -16,15 +20,11 @@
                             <simple-select v-model="form.finalsupplierid" source="supplier" :lang="lang">
                             </simple-select>
                         </el-form-item>
-                        <el-form-item :label="_label('niandaijijie')">
+                        <el-form-item :label="_label('niandaijijie')" required prop="ageseason">
                             <simple-select v-model="form.ageseason" source="ageseason" :lang="lang"></simple-select>
                         </el-form-item>
                         <el-form-item :label="_label('niandaileixing')">
                             <simple-select v-model="form.seasontype" source="seasontype" :lang="lang">
-                            </simple-select>
-                        </el-form-item>
-                        <el-form-item :label="_label('nannvkuan')">
-                            <simple-select v-model="form.formtype" source="formtype" :lang="lang">
                             </simple-select>
                         </el-form-item>
                         <el-form-item :label="_label('dingdanriqi')">
@@ -42,12 +42,11 @@
                             <el-input v-model="form.invoiceno"></el-input>
                         </el-form-item>
                         <el-form-item :label="_label('zongjine')">
-
                             <el-input placeholder="" :value="total_price" class="input-with-select" disabled>
                                 <template slot="prepend">
-                                <select-currency v-model="form.currency">
-                                </select-currency>
-                            </template>
+                                    <select-currency v-model="form.currency">
+                                    </select-currency>
+                                </template>
                             </el-input>
                         </el-form-item>
                         <el-form-item :label="_label('huilv')">
@@ -56,8 +55,8 @@
                         <el-form-item :label="_label('zhekou')">
                             <sp-float-input v-model="form.discount"></sp-float-input>
                         </el-form-item>
-                        <el-form-item :label="_label('shuxing')">
-                            <simple-select v-model="form.property" source="orderproperty" :lang="lang">
+                        <el-form-item :label="_label('nannvkuan')">
+                            <simple-select v-model="form.formtype" source="formtype" :lang="lang">
                             </simple-select>
                         </el-form-item>
                     </el-col>
@@ -96,7 +95,7 @@
                         </el-row>
                         <el-row type="flex" justify="start">
                             <el-button :type="canFinish?'primary':'info'" @click="finishOrder()">{{_label("dingdanwajie")}}</el-button>
-                        </el-row>                        
+                        </el-row>
                     </el-col>
                 </el-row>
             </el-form>
@@ -150,7 +149,9 @@
 import simple_select from '../Simple_Select.vue'
 import Asa_Select_Product_Dialog from './Asa_Select_Product_Dialog.vue'
 import DataSource from '../DataSource.js'
-import {Product} from "../globals.js"
+import globals,{ Product } from "../globals.js"
+
+const _label = globals.getLabel
 
 export default {
     name: 'asa-order-dialog',
@@ -197,6 +198,12 @@ export default {
                 status: "", //状态，1=保存；2=送审；3=审核完成
                 id: ""
             },
+            rules: {
+                bussinesstype: { required: true, message: _label("8000") },
+                supplierid: { required: true, message: _label("8000") },
+                ageseason: { required: true, message: _label("8000") },
+                property: { required: true, message: _label("8000") }
+            },
             tabledata: [],
             dialogVisible: self.visible,
             title: "",
@@ -212,15 +219,15 @@ export default {
         },
         onSelect(row) {
             var self = this;
-            Product.get(row,function(product){
+            Product.get(row, function(product) {
                 self._log(product, "Product")
 
                 product.sizecontents.map(item => {
                     //查询是不是已经添加过
                     let is_exist = R.any(rowData => {
-                        return rowData.product.id == row.id && rowData.sizecontent.getValue() == item.getValue()
-                    })(self.tabledata)
-                    //self._log("is_exist", is_exist)
+                            return rowData.product.id == row.id && rowData.sizecontent.getValue() == item.getValue()
+                        })(self.tabledata)
+                        //self._log("is_exist", is_exist)
 
                     if (!is_exist) {
                         self.tabledata.unshift({
@@ -230,7 +237,7 @@ export default {
                         })
                     }
                 })
-            },1)
+            }, 1)
 
         },
         deleteOrder() {
@@ -253,42 +260,50 @@ export default {
             //保存订单
             var self = this
 
-            if (status == 2) {
-                if (!confirm(self._label('order_submit_confirm'))) {
-                    return
-                }
-            }
 
-            var params = {
-                form: $ASA.$.extend({},self.form,{status})
-            }
-            var array = []
-            params.list = self.tabledata.map(item => {
-                return {
-                    productid: item.product.id,
-                    id: item.id,
-                    sizecontentid: item.sizecontent.getValue(),
-                    number: item.number
+            this.$refs["order-form"].validate(function(valid) {
+                if (!valid) {
+                    return false;
                 }
+
+                if (status == 2) {
+                    if (!confirm(self._label('order_submit_confirm'))) {
+                        return
+                    }
+                }
+
+                var params = {
+                    form: $ASA.$.extend({}, self.form, { status })
+                }
+                var array = []
+                params.list = self.tabledata.map(item => {
+                    return {
+                        productid: item.product.id,
+                        id: item.id,
+                        sizecontentid: item.sizecontent.getValue(),
+                        number: item.number
+                    }
+                })
+                self._log(JSON.stringify(params))
+                self._submit("/order/saveorder", {
+                    params: JSON.stringify(params)
+                }, function(res) {
+                    self._log(res)
+                    let data = res.data
+                    if (data.form.id) {
+                        $ASA.copyTo(data.form, self.form)
+                        self.formid = self.form.id
+
+                        self.tabledata = []
+                        data.list.forEach(item => {
+                            self._log(item)
+                            self.appendRow(item)
+                        })
+                    }
+                    self.$emit("change", data.form)
+                });
             })
-            self._log(JSON.stringify(params))
-            self._submit("/order/saveorder", {
-                params: JSON.stringify(params)
-            }, function(res) {
-                self._log(res)
-                let data = res.data
-                if (data.form.id) {
-                    $ASA.copyTo(data.form, self.form)
-                    self.formid = self.form.id
 
-                    self.tabledata=[]
-                    data.list.forEach(item => {
-                        self._log(item)
-                        self.appendRow(item)
-                    })
-                }
-                self.$emit("change", data.form)
-            });
         },
         confirmOrder(status) {
             let self = this
@@ -306,7 +321,7 @@ export default {
                 });
             })
         },
-        cancelConfirm(){
+        cancelConfirm() {
             let self = this
             if (!self.canCancel) {
                 return
@@ -367,8 +382,8 @@ export default {
             return status == 3
         },
         total_price() {
-            return this.tabledata.reduce(function(total, current){
-                return total + current.number*current.product.realprice
+            return this.tabledata.reduce(function(total, current) {
+                return total + current.number * current.product.realprice
             }, 0)
         }
     },

@@ -132,7 +132,7 @@ export default {
         },
         onTabClick(tab){
             var self = this;
-            $ASA.post("/user/list", {groupid:self.form.id}, function(res){
+            $ASA.post("/l/user", {groupid:self.form.id}, function(res){
                 console.log(res)
                 self.user_list = res.data;
             })

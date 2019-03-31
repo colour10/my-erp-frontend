@@ -137,7 +137,7 @@ export default {
     watch:{
         base:{
             handler:function(newValue,oldValue){
-                console.log("change",newValue,oldValue)
+                //console.log("change",newValue,oldValue)
             },
             deep: true
         }

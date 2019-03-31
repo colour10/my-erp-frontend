@@ -53,7 +53,7 @@ export default {
             var loginParams = { username: self.ruleForm2.account, password: self.ruleForm2.checkPass };
             var options = {
                 onSuccess:function(res){
-                    self._log("login success", res)
+                    //self._log("login success", res)
                     self.logining = false;
 
                     self.$store.commit({
@@ -78,7 +78,7 @@ export default {
               self._fetch("/login/logout", {}, function(res){
                   self.$store.commit("logout")
                   self.$router.push("/login/login")
-                  self._log("logout")
+                  //self._log("logout")
               })
           }
           else {
@@ -111,14 +111,14 @@ export default {
     watch:{
         "$route"(newValue, oldValue) {
             var self = this
-            self._log(newValue, this.$router.params)
-            self._log(this.$store)
+            //self._log(newValue, this.$router.params)
+            //self._log(this.$store)
             self.doAction(newValue.params.action)
         }
     },
     mounted:function() {
         var self = this
-        self._log("mounted", self.$route.params)
+        //self._log("mounted", self.$route.params)
         self.doAction(self.$route.params.action)
     }
   }

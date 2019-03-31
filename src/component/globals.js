@@ -1,4 +1,5 @@
 import DataSource from './DataSource.js'
+import List from './list.js'
 const ASA = {}
 const $ = $ASA.$
 ASA.caches = {}
@@ -190,7 +191,7 @@ const Product = $.extend(createModel("product"),{
         }))
 
         Promise.all(arr).then(function(results) {
-            console.log(results)
+            //console.log(results)
             row.sizecontents = results[0]
             callback(row)
         });
@@ -222,7 +223,7 @@ const Productstock = $.extend(createModel("productstock"),{
         }))
 
         Promise.all(arr).then(function(results) {
-            console.log(results)
+            //console.log(results)
             //self.row.productname = results[0].row.productname
             row.product = results[0]
             //self.row.warehousename = results[1].row.name
@@ -250,7 +251,7 @@ const OrderDetails = $.extend(createModel("orderdetails"),{
         }))
 
         Promise.all(arr).then(function(results) {
-            console.log(results)
+            //console.log(results)
             //self.row.productname = results[0].row.productname
             row.product = results[0]
             //self.row.warehousename = results[1].row.name
@@ -269,7 +270,7 @@ const ConfirmorderDetails = $.extend(createModel("confirmorderdetails"),{
         }))
 
         Promise.all(arr).then(function(results) {
-            console.log(results)
+            //console.log(results)
             //self.row.productname = results[0].row.productname
             row.orderdetails = results[0]
             callback(row)
@@ -277,6 +278,12 @@ const ConfirmorderDetails = $.extend(createModel("confirmorderdetails"),{
     }
 })
 
+const ProductCodeList = function(productid, callback){
+    $ASA.post("/product/codelist", {id:productid}, function(res){
+        callback(res.data)
+    },'json');
+}
+export {ProductCodeList}
 export { Productstock,Warehouse,Product,Goods,OrderDetails,ConfirmorderDetails }
 
 export default ASA

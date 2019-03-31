@@ -37,7 +37,7 @@ export default {
     methods: {
         handleAvatarSuccess(response, file, fileList) {
             var self = this
-            self._log(response,file)
+            //self._log(response,file)
             //file.name = response["files"][file.name]
             var params = {
                 productid:self.productid,
@@ -52,9 +52,9 @@ export default {
         }, 
         loadList() {
             var self = this
-            $ASA.post("/picture/list", {productid:self.productid}, function(res){
-                self._log("==========",res)   
-                self.data = res; 
+            $ASA.post("/l/picture", {productid:self.productid}, function(res){
+                //self._log("==========",res)   
+                self.data = res.data; 
             },'json')
         }
     },
