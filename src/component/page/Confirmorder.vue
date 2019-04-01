@@ -88,7 +88,7 @@ export default {
             let tablelist = self.$refs.tablelist
             //self._log("form", form)
 
-            let index = tablelist.findIndex(R.propEq('id', form.id))
+            let index = tablelist.findIndex(item=>item.id==form.id)
             if (index < 0) {
                 tablelist.appendRow($ASA.clone(form))
             } else {

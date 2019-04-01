@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-dialog :title="title" :visible.sync="dialogVisible" :center="true" :fullscreen="true" :modal="false">
+        <el-dialog :title="title" :visible.sync="dialogVisible" :center="true" :fullscreen="true" :modal="false" @close="clearValidate">
             <el-form ref="order-form" class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini" :rules="rules" :inline-message="true">
                 <el-row :gutter="0">
                     <el-col :span="6">
@@ -224,10 +224,9 @@ export default {
 
                 product.sizecontents.map(item => {
                     //查询是不是已经添加过
-                    let is_exist = R.any(rowData => {
+                    let is_exist = self.tabledata.some(rowData => {
                             return rowData.product.id == row.id && rowData.sizecontent.getValue() == item.getValue()
-                        })(self.tabledata)
-                        //self._log("is_exist", is_exist)
+                        })
 
                     if (!is_exist) {
                         self.tabledata.unshift({
@@ -408,6 +407,8 @@ export default {
             if (!self.form.id) {
                 self.tabledata = []
             }
+            
+            self.clearValidate(50)
 
             //如果订单的id变化了，则清空明细，重新加载新订单的明细
             if (form.id != "" && form.id != self.fomrid) {

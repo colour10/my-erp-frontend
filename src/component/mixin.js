@@ -117,6 +117,20 @@ export default {
                 title: self._label("tishi"),
                 message: message
             });
+        },
+        clearValidate(delay) {
+            let form = this.$refs['order-form']
+
+            if(form) {
+                if(delay && delay>0) {
+                    setTimeout(function(){
+                        form.clearValidate()
+                    },delay)
+                }
+                else {
+                    form.clearValidate()
+                }
+            }
         }
     }
 }

@@ -99,17 +99,16 @@ ASA.getFetcher = function(name) {
                             params[key] = Object.keys(store.list[key])
                         })
                         $ASA.post("/common/loadname", {
-                            params: JSON.stringify(params),
+                            params: JSON.stringify(params)
                         }, function(res) {
-                            //console.log("++++++++", res)
-                            const mapf = function(value,key) {
-                                //console.log("merge", key, store.result[key], value)
-                                store.result[key] = R.merge(store.result[key], value)
+
+                            Object.keys(res).forEach(function(key){
+                                let value = res[key];
+                                store.result[key] = Object.assign(store.result[key], value)
                                 //console.log(key, store.temp[key])
                                 store.list[key] = store.temp[key];
                                 store.temp[key] = {};
-                            }
-                            R.forEachObjIndexed(mapf, res)
+                            })
 
                             store.loading = false
                             //console.log(result,"result")
@@ -126,7 +125,7 @@ ASA.getLabelFetcher = function(name) {
     let fetcher = ASA.getFetcher(name)
 
     return function(ids, column, callback) {
-        console.log("ids", ids)
+        //console.log("ids", ids)
         var all_promise = ids.split(",").map(function(id){
             return new Promise(function(resolve, reject){
                 fetcher(id, resolve);

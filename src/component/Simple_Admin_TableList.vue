@@ -43,7 +43,7 @@ export default {
     },
     methods: {
         findIndex(callback) {
-            return R.findIndex(callback)(this.tableData)
+            return this.tableData.findIndex(callback)
         },
         appendRow: function(row) {
             this.tableData.push(row)

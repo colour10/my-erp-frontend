@@ -115,14 +115,14 @@ export default {
                 //console.log(data.join(","), "===")
                 
                 //过滤掉找不到label的数据
-                var arr = R.filter(function(item){
+                var arr = data.filter(function(item){
                     return item[1]!=""    
-                })(data)
+                })
                 //console.log(arr)
                 
                 
-                self.checkList = R.map(R.head)(arr);
-                self.currentText = R.map(R.nth(1))(arr).join(",")
+                self.checkList = arr.map(item=>item[0]);
+                self.currentText = arr.map(item=>item[1]).join(",")
             }) 
         }
     },

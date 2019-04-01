@@ -171,19 +171,17 @@ DataSource.prototype.setLabelName = function(name) {
 }
 
 DataSource.prototype.getLabelList = function(valueList, callback) {
+    _log("getLabelList",valueList)
     this.getData( data => {
-        //_log(valueList, data, '+++++++')    
-        
-        var fmap = R.map(function(value){
-            var equals = item=>value==item.getValue()
-            return R.find(equals)(data)        
-        })(valueList)
+        _log(valueList, data, '+++++++')   
 
+        let list = valueList.map(function(value){
+            return data.find(item=>value==item.getValue())
+        }).filter(item=>item).map(item=>item.getLabel())
+_log(list)
 
-        //过滤掉空值
-        fmap = R.filter(R.identity)(fmap)
         
-        callback(R.map(R.invoker(0,"getLabel"))(fmap))
+        callback(list)
     })
 }
 

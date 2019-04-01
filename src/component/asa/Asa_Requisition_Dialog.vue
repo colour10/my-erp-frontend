@@ -118,7 +118,7 @@ export default {
     methods: {
         onSelect(row) {
             var self = this;
-            let index = R.findIndex(R.propEq("id", row.id))(self.tabledata)
+            let index = self.tabledata.findIndex(item=>item.id==row.id)
             if (index < 0) {
                 row.select_number = 1
                 row.number = row.number * 1

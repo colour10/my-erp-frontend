@@ -23,7 +23,8 @@
                         </el-form>
                     </el-col>
                 </el-row>
-                <el-form class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini">
+
+                <el-form ref="order-form" class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini" :rules="rules" :inline-message="true">
                     <el-row :gutter="0">
                         <el-col :span="8">
                             <el-form-item :label="_label('pinpai')">
@@ -121,7 +122,7 @@
                                 <select-dialog v-model="form.season" source="season" style="width:150" :lang="lang">
                                 </select-dialog>
                             </el-form-item>
-                            <el-form-item :label="_label('chima')">
+                            <el-form-item :label="_label('chima')" required prop="sizetopid">
                                 <simple-select v-model="form.sizetopid" source="sizetop" :lang="lang">
                                 </simple-select>
                             </el-form-item>
@@ -137,8 +138,8 @@
                                 <simple-select v-model="form.securitycategory" source="securitycategory" :lang="lang">
                                 </simple-select>
                             </el-form-item>
-                            <el-form-item :label="_label('guigexinghao')">
-                                <el-input v-model="form.password"></el-input>
+                            <el-form-item :label="_label('guigexinghao')" required prop="guigexinghao">
+                                <el-input v-model="form.guigexinghao"></el-input>
                             </el-form-item>
                             <el-form-item :label="_label('zuihouruku')">
                                 <el-input v-model="form.password"></el-input>
@@ -174,18 +175,18 @@
                 <el-col :offset="11" :span="2">
                     <el-button type="primary" @click="onSaveGoodsCode" v-if="option.isedit">{{_label("baocun")}}</el-button>
                 </el-col>
-
-                
             </el-tab-pane>
         </el-tabs>
     </el-dialog>
 </template>
 
 <script>
-import globals,{ProductCodeList} from '../globals.js'
+import globals, { ProductCodeList } from '../globals.js'
 import List from '../list.js'
+import {Rules} from '../rules.js'
 import DataSource from '../DataSource.js'
 const _log = globals.logger("asa-product");
+const _label = globals.getLabel
 
 export default {
     name: 'asa-product',
@@ -266,7 +267,12 @@ export default {
                 wordcode_2: "",
                 wordcode_3: "",
                 wordcode_4: "",
-                productno: ""
+                productno: "",
+                guigexinghao:''
+            },
+            rules: {
+                sizetopid: Rules.id({ required: true, message: _label("8000") }),
+                guigexinghao: Rules.english(3,10,{ required: true, message: _label("8000") }),
             },
             sizecontents: [],
             sizecontents_loaded: false,
@@ -275,62 +281,70 @@ export default {
             option: {
                 isedit: false
             },
-            currentTab:"product"
+            currentTab: "product"
         }
     },
     methods: {
         onSubmit() {
             var self = this;
-            if (self.form.id == "") {
-                self._submit("/product/add", self.form, function() {
-                    self.$refs.tablelist.appendRow($ASA.clone(self.form))
-                })
-            } else {
-                self._submit("/product/edit", self.form, function() {
-                    $ASA.copyTo(self.form, self.row)
-                })
-            }
+
+            this.$refs["order-form"].validate(function(valid) {
+                if (!valid) {
+                    return false;
+                }
+
+                if (self.form.id == "") {
+                    self._submit("/product/add", self.form, function() {
+                        self.$refs.tablelist.appendRow($ASA.clone(self.form))
+                    })
+                } else {
+                    self._submit("/product/edit", self.form, function() {
+                        $ASA.copyTo(self.form, self.row)
+                    })
+                }
+            })
+
+
         },
         onSaveGoodsCode() {
             let self = this
             console.log("savecode")
-            let params = {productid:self.form.id}
-            params.list = self.sizecontents.map(function(item){
-                return {sizecontentid:item.id,goods_code:item.goods_code}
+            let params = { productid: self.form.id }
+            params.list = self.sizecontents.map(function(item) {
+                return { sizecontentid: item.id, goods_code: item.goods_code }
             })
 
             self._submit("/product/savecode", {
                 params: JSON.stringify(params)
-            }, function(res) {
-            });
+            }, function(res) {});
         },
         onTabClick(tab) {
             const self = this
             if (tab.name == 'code' && self.sizecontents_loaded == false) {
                 let source = DataSource.getDataSource("sizecontent", self.lang)
-                source.filter({ topid: self.form.sizetopid }, function(list) {                    
+                source.filter({ topid: self.form.sizetopid }, function(list) {
                     list.forEach(item => {
-                        let o = $ASA.extend({goods_code:""}, item.getObject())
+                        let o = $ASA.extend({ goods_code: "" }, item.getObject())
                         self.sizecontents.push(o)
                     })
 
                     let ntlist = new List(self.sizecontents)
-                    new ProductCodeList(self.form.id, function(data){
+                    new ProductCodeList(self.form.id, function(data) {
                         console.log(data)
-                        data.forEach(function(item){
-                            let index = ntlist.findIndex('id',item.sizecontentid)
-                            if(index>=0) {
+                        data.forEach(function(item) {
+                            let index = ntlist.findIndex('id', item.sizecontentid)
+                            if (index >= 0) {
                                 self.sizecontents[index].goods_code = item.goods_code
                             }
                         })
                     })
 
-                    
-                    
+
+
                 })
                 self.sizecontents_loaded = true;
 
-                
+
             }
         },
         setInfo(row) {
@@ -345,6 +359,8 @@ export default {
             setTimeout(function() {
                 self.$refs.childproductgroup.load(item => item.row.brandgroupid == self.form.brandgroupid)
             }, 100)
+
+            self.clearValidate(50)
 
             self.sizecontents_loaded = false;
             self.sizecontents = []
@@ -367,6 +383,8 @@ export default {
             self.activeName = "info"
             self.sizecontents_loaded = false;
             self.sizecontents = []
+
+            self.clearValidate(50)
             return self
         },
         onBrandGroupChange(value) {

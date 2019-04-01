@@ -265,9 +265,9 @@ export default {
             self._log("onSelect", rows)
             rows.forEach(item => {
                 let newitem = $ASA.$.extend(true,{}, item)
-                let is_exist = R.any(rowData => {
+                let is_exist = self.tabledata.some(rowData => {
                     return rowData.orderdetails.id == newitem.orderdetails.id
-                })(self.tabledata)
+                })
 
                 if(!is_exist) {
                     newitem.price = newitem.orderdetails.price;
