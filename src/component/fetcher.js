@@ -1,3 +1,5 @@
+import {httpPost} from "./http.js"
+
 const store = {
     list: {},
     temp: {},
@@ -38,7 +40,7 @@ const getFetcher = function(name) {
                         Object.keys(store.list).forEach(function(key){
                             params[key] = Object.keys(store.list[key])
                         })
-                        $ASA.post("/common/loadname", {
+                        httpPost("/common/loadname", {
                             params: JSON.stringify(params)
                         }, function(res) {
 

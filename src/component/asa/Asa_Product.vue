@@ -27,26 +27,26 @@
                 <el-form ref="order-form" class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini" :rules="rules" :inline-message="true">
                     <el-row :gutter="0">
                         <el-col :span="8">
-                            <el-form-item :label="_label('pinpai')" required prop="brandid">
+                            <el-form-item :label="_label('pinpai')" prop="brandid">
                                 <simple-select v-model="form.brandid" source="brand" :lang="lang">
                                 </simple-select>
                             </el-form-item>
-                            <el-form-item :label="_label('pinlei')" required prop="brandgroupid">
+                            <el-form-item :label="_label('pinlei')" prop="brandgroupid">
                                 <simple-select v-model="form.brandgroupid" source="brandgroup" :lang="lang" @change="onBrandGroupChange">
                                 </simple-select>
                             </el-form-item>
-                            <el-form-item :label="_label('zipinlei')" required prop="childproductgroup">
-                                <simple-select ref="childproductgroup" v-model="form.childbrand" source="childproductgroup" :lang="lang" :lazy="true">
+                            <el-form-item :label="_label('zipinlei')" prop="childbrand">
+                                <simple-select ref="childbrand" v-model="form.childbrand" source="childproductgroup" :lang="lang" :lazy="true">
                                 </simple-select>
                             </el-form-item>
-                            <el-form-item :label="_label('chandi')" required prop="countries">
+                            <el-form-item :label="_label('chandi')" prop="countries">
                                 <select-dialog v-model="form.countries" source="country" :lang="lang"></select-dialog>
                             </el-form-item>
-                            <el-form-item :label="_label('pinpaiseban')" required prop="brandcolor">
+                            <el-form-item :label="_label('pinpaiseban')" prop="brandcolor">
                                 <select-dialog v-model="form.brandcolor" source="colortemplate" :lang="lang">
                                 </select-dialog>
                             </el-form-item>
-                            <el-form-item :label="_label('caizhizhuangtai')" required prop="materialstatus">
+                            <el-form-item :label="_label('caizhizhuangtai')" prop="materialstatus">
                                 <select-dialog v-model="form.materialstatus" source="materialstatus" :lang="lang">
                                 </select-dialog>
                             </el-form-item>
@@ -62,13 +62,13 @@
                                 <select-dialog v-model="form.occasion" source="occasionsstyle" style="width:150" :lang="lang">
                                 </select-dialog>
                             </el-form-item>
-                            <el-form-item :label="_label('bihefangshi')">
-                                <select-dialog v-model="form.closeway" source="occasionsstyle" style="width:150" :lang="lang">
+                            <el-form-item :label="_label('bihefangshi')" prop="closedway">
+                                <select-dialog v-model="form.closedway" source="closedway" style="width:150" :lang="lang">
                                 </select-dialog>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            <el-form-item :label="_label('niandai')">
+                            <el-form-item :label="_label('niandai')" prop="ageseason">
                                 <select-dialog v-model="form.ageseason" source="ageseason" style="width:150" :lang="lang">
                                 </select-dialog>
                             </el-form-item>
@@ -122,7 +122,7 @@
                                 <select-dialog v-model="form.season" source="season" style="width:150" :lang="lang">
                                 </select-dialog>
                             </el-form-item>
-                            <el-form-item :label="_label('chima')" required prop="sizetopid">
+                            <el-form-item :label="_label('chima')" prop="sizetopid">
                                 <simple-select v-model="form.sizetopid" source="sizetop" :lang="lang">
                                 </simple-select>
                             </el-form-item>
@@ -269,17 +269,17 @@ export default {
                 wordcode_3: "",
                 wordcode_4: "",
                 productno: "",
-                guigexinghao:''
+                closedway:''
             },
             rules: {
                 sizetopid: Rules.id({ required: true, message: _label("8000") }),
-                brandgroupid: Rules.required({ message: _label("8000") }),
-                childbrand: Rules.required({ message: _label("8000") }),
-                brandid: Rules.required({ message: _label("8000") }),
+                brandgroupid: Rules.id({ message: _label("8000") }),
+                childbrand: Rules.id({ message: _label("8000") }),
+                brandid: Rules.id({ message: _label("8000") }),
                 countries: Rules.required({ message: _label("8000") }),
-                brandcolor: Rules.required({ message: _label("8000") })
-                //brandgroupid: Rules.required({ message: _label("8000") }),
-                //brandgroupid: Rules.required({ message: _label("8000") }),
+                brandcolor: Rules.required({ message: _label("8000") }),
+                ageseason: Rules.required({ message: _label("8000") }),
+                closedway: Rules.required({ message: _label("8000") }),
             },
             sizecontents: [],
             sizecontents_loaded: false,
@@ -366,7 +366,7 @@ export default {
             self.form.nationalprice = $ASA.round(self.form.nationalprice, 2)
 
             setTimeout(function() {
-                self.$refs.childproductgroup.load(item => item.row.brandgroupid == self.form.brandgroupid)
+                self.$refs.childbrand.load(item => item.row.brandgroupid == self.form.brandgroupid)
             }, 100)
 
             self.clearValidate(50)
@@ -400,7 +400,7 @@ export default {
             let self = this
 
             self._log(value)
-            self.$refs.childproductgroup.load(item => item.row.brandgroupid == value)
+            self.$refs.childbrand.load(item => item.row.brandgroupid == value)
         }
     }
 }

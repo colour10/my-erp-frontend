@@ -79,6 +79,9 @@ options["executioncategory"] = {url:'/l/executioncategory',oplabel:'name', opval
 //安全类别
 options["securitycategory"] = {url:'/l/securitycategory',oplabel:'name', opvalue:'id'}
 
+//闭合方式
+options["closedway"] = {url:'/l/closedway',oplabel:'name', opvalue:'id'}
+
 
 //仓库
 options["warehouse"] = {url:'/l/warehouse',oplabel:'name', opvalue:'id'}
