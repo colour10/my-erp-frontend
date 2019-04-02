@@ -49,7 +49,9 @@
 </template>
 
 <script>
-import globals,{OrderDetails} from '../globals.js'
+import globals from '../globals.js'
+import { OrderDetails } from "../model.js"
+
 import simple_select from '../Simple_Select.vue'
 import DataSource from '../DataSource.js'
 

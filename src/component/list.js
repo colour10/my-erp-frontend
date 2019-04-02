@@ -17,7 +17,8 @@ List.prototype.findIndex = function(name, value) {
             }
             return true;
         }
-    })    
+    })
 }
+
 export {List}
 export default List

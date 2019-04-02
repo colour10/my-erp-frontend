@@ -182,7 +182,8 @@
 </template>
 
 <script>
-import globals,{ConfirmorderDetails} from '../globals.js'
+import globals from '../globals.js'
+import { ConfirmorderDetails } from "../model.js"
 import simple_select from '../Simple_Select.vue'
 import Asa_Select_Order_Detail_Dialog from './Asa_Select_Order_Detail_Dialog.vue'
 import DataSource from '../DataSource.js'

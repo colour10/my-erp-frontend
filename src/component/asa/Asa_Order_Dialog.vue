@@ -149,7 +149,8 @@
 import simple_select from '../Simple_Select.vue'
 import Asa_Select_Product_Dialog from './Asa_Select_Product_Dialog.vue'
 import DataSource from '../DataSource.js'
-import globals,{ Product } from "../globals.js"
+import globals from "../globals.js"
+import { Product } from "../model.js"
 
 const _label = globals.getLabel
 

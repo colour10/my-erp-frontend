@@ -32,6 +32,7 @@
 <script>
 import DataSource from './DataSource.js'
 import globals from './globals.js'
+const _label = globals.getLabel
 
 export default {
     name: 'multiple-admin-tablelist',
@@ -46,9 +47,9 @@ export default {
         return {
             tableData:[] ,
             componenToptions:options,
-            languages:$ASAL.list_languages,
+            languages:_label("list_languages"),
             loading:true,
-            current_lang:$ASAL.lang
+            current_lang:_label("lang")
         }
     },
     methods: {
@@ -94,7 +95,7 @@ export default {
             var value = row[column_name]; 
             
             if(column.type=='switch') {
-                return value=='1'? $ASAL.yes : $ASAL.no;   
+                return value=='1'? _label("yes") : _label("no");   
             }   
             else if(column.type=='select') {
                 //异步加载数据，然后重新渲染列表

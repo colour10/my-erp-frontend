@@ -35,7 +35,11 @@ export default {
             props: {
                 columns: [
                     { name: "orderno", label: self._label('dingdanbianhao'), width: 300 },
-                    { name: "status", label: self._label('zhuangtai'), type: 'select', source: "orderstatus" }
+                    { name: "warehouseid", label: self._label('daohuocangku'), type:'select', source:'warehouse' },
+                    { name: "supplierid", label: globals.getLabel('gonghuoshang'), type: 'select', source: "supplier" },
+                    { name: "ageseasonid", label: globals.getLabel('niandaijijie'), type: 'select', source: "ageseason" },
+                    { name: "status", label: self._label('zhuangtai'), type: 'select', source: "orderstatus" },
+                    { name: "makestaff", label: self._label('zhidanren'), type: 'select', source: "user" }
                 ],
                 buttons: [{
                     label: self._label("shengchengrukudan"),

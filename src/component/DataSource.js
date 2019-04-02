@@ -1,7 +1,6 @@
-import globals from './globals.js'
 import resources_options from './resources.js'
+import {httpGet} from './http.js'
 
-const _log = globals.logger("DataSource");
 const resources = {};
 
 function DataRow(row, dataSource) {
@@ -95,7 +94,7 @@ DataSource.prototype.loadList = function() {
     var self = this;
     var options = self.options;
     var params = options.params || {}
-    globals.get(options.url, function(res){
+    httpGet(options.url, function(res){
         res.data.forEach(function(item){
             var row = new DataRow(item, self)
             self.hashtable[item[self.opvalue]] = row; 
@@ -171,15 +170,12 @@ DataSource.prototype.setLabelName = function(name) {
 }
 
 DataSource.prototype.getLabelList = function(valueList, callback) {
-    _log("getLabelList",valueList)
+    //_log("getLabelList",valueList)
     this.getData( data => {
-        _log(valueList, data, '+++++++')   
-
+        //_log(valueList, data, '+++++++') 
         let list = valueList.map(function(value){
             return data.find(item=>value==item.getValue())
         }).filter(item=>item).map(item=>item.getLabel())
-_log(list)
-
         
         callback(list)
     })

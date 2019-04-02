@@ -81,11 +81,12 @@ import globals from '../globals.js'
 import simple_select from '../Simple_Select.vue'
 import Asa_Select_Product_Dialog from './Asa_Select_Product_Dialog.vue'
 import DataSource from '../DataSource.js'
+import {getFetcher} from "../fetcher.js"
 
-const fetcherProduct = globals.getFetcher('product')
+const fetcherProduct = getFetcher('product')
 const dataSource = DataSource.getDataSource('requisitionstatus', globals.getLabel('lang'));
-const fetcherWarehouse = globals.getFetcher('warehouse')
-const fetcherUser = globals.getFetcher('user')
+const fetcherWarehouse = getFetcher('warehouse')
+const fetcherUser = getFetcher('user')
 const sizecontent = DataSource.getDataSource('sizecontent', globals.getLabel('lang'));
 
 export default {

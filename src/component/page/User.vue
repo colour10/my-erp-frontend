@@ -77,6 +77,7 @@ import globals from '../globals.js'
 import Simple_Admin_TableList from '../Simple_Admin_TableList.vue'
 
 const _log = globals.logger("asapage-producttemplate");
+const _label = globals.getLabel
 
 const base = {
     userid:""
@@ -85,7 +86,7 @@ const base = {
 var props = {
     columns: [{
         name: "login_name",
-        label: $ASAL.dengluming,
+        label: _label("dengluming"),
         is_create: true,
         is_update: true,
         is_show: true,
@@ -93,7 +94,7 @@ var props = {
         width: 200
     }, {
         name: "real_name",
-        label: $ASAL.xingming,
+        label: _label("xingming"),
         is_create: true,
         is_update: true,
         is_show: true,
@@ -105,8 +106,8 @@ var props = {
 
 const props2 = {
     columns: [
-        {name:"warehouseid", label:$ASAL["cangku"], type:'select', source:"warehouse"},
-        {name:"warehouseroleid", label:$ASAL["juese"], type:'select', source:"warehouserole"}
+        {name:"warehouseid", label:_label("cangku"), type:'select', source:"warehouse"},
+        {name:"warehouseroleid", label:_label("juese"), type:'select', source:"warehouserole"}
     ],
     controller: "warehouseuser",
     base:base
@@ -120,7 +121,7 @@ export default {
     data() {
         return {
             dialogVisible: false,
-            lang: globals.getLabel("lang"),
+            lang: _label("lang"),
             form: {
                 id: '',
                 login_name: '',

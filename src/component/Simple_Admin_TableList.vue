@@ -26,6 +26,8 @@
 <script>
 import DataSource from './DataSource.js'
 import globals from './globals.js'
+const _label = globals.getLabel
+
 
 export default {
     name: 'simple-admin-tablelist',
@@ -48,6 +50,9 @@ export default {
         appendRow: function(row) {
             this.tableData.push(row)
             return this.tableData.length-1;
+        },
+        updateRow: function(rowIndex, row) {
+            Object.assign(this.tableData[rowIndex], row)
         },
         getRow: function(rowIndex) {
             return this.tableData[rowIndex]
@@ -86,11 +91,11 @@ export default {
             let self = this
             var value = row[column.name]
             if (column.type == 'switch') {
-                return value == '1' ? $ASAL.yes : $ASAL.no;
+                return value == '1' ? _label("yes") : _label("no");
             } else if (column.type == 'select') {
                 //异步加载数据，然后重新渲染列表
                 if (!column.dataSource) {
-                    column.dataSource = DataSource.getDataSource(column.source, globals.getLabel("lang"));
+                    column.dataSource = DataSource.getDataSource(column.source, _label("lang"));
                 }
 
                 if (row[column.name + "__columncopy"] != value && value) {
@@ -108,7 +113,7 @@ export default {
             } else if (column.type == 'select-dialog') {
                 //异步加载数据，然后重新渲染列表
                 if (!column.dataSource) {
-                    column.dataSource = DataSource.getDataSource(column.source, globals.getLabel("lang"));
+                    column.dataSource = DataSource.getDataSource(column.source, _label("lang"));
                 }
 
                 if (row[column.name + "__columncopy"] != value && row[column.name + "__loading"] != "1") {

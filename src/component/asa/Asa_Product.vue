@@ -27,26 +27,26 @@
                 <el-form ref="order-form" class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini" :rules="rules" :inline-message="true">
                     <el-row :gutter="0">
                         <el-col :span="8">
-                            <el-form-item :label="_label('pinpai')">
+                            <el-form-item :label="_label('pinpai')" required prop="brandid">
                                 <simple-select v-model="form.brandid" source="brand" :lang="lang">
                                 </simple-select>
                             </el-form-item>
-                            <el-form-item :label="_label('pinlei')">
+                            <el-form-item :label="_label('pinlei')" required prop="brandgroupid">
                                 <simple-select v-model="form.brandgroupid" source="brandgroup" :lang="lang" @change="onBrandGroupChange">
                                 </simple-select>
                             </el-form-item>
-                            <el-form-item :label="_label('zipinlei')">
+                            <el-form-item :label="_label('zipinlei')" required prop="childproductgroup">
                                 <simple-select ref="childproductgroup" v-model="form.childbrand" source="childproductgroup" :lang="lang" :lazy="true">
                                 </simple-select>
                             </el-form-item>
-                            <el-form-item :label="_label('chandi')">
+                            <el-form-item :label="_label('chandi')" required prop="countries">
                                 <select-dialog v-model="form.countries" source="country" :lang="lang"></select-dialog>
                             </el-form-item>
-                            <el-form-item :label="_label('pinpaiseban')">
+                            <el-form-item :label="_label('pinpaiseban')" required prop="brandcolor">
                                 <select-dialog v-model="form.brandcolor" source="colortemplate" :lang="lang">
                                 </select-dialog>
                             </el-form-item>
-                            <el-form-item :label="_label('caizhizhuangtai')">
+                            <el-form-item :label="_label('caizhizhuangtai')" required prop="materialstatus">
                                 <select-dialog v-model="form.materialstatus" source="materialstatus" :lang="lang">
                                 </select-dialog>
                             </el-form-item>
@@ -138,7 +138,7 @@
                                 <simple-select v-model="form.securitycategory" source="securitycategory" :lang="lang">
                                 </simple-select>
                             </el-form-item>
-                            <el-form-item :label="_label('guigexinghao')" required prop="guigexinghao">
+                            <el-form-item :label="_label('guigexinghao')">
                                 <el-input v-model="form.guigexinghao"></el-input>
                             </el-form-item>
                             <el-form-item :label="_label('zuihouruku')">
@@ -181,7 +181,8 @@
 </template>
 
 <script>
-import globals, { ProductCodeList } from '../globals.js'
+import globals from '../globals.js'
+import { ProductCodeList } from "../model.js"
 import List from '../list.js'
 import {Rules} from '../rules.js'
 import DataSource from '../DataSource.js'
@@ -194,7 +195,7 @@ export default {
     data() {
         return {
             dialogVisible: false,
-            lang: $ASAL.lang,
+            lang: _label("lang"),
             form: {
                 id: '',
                 productname: "",
@@ -272,12 +273,18 @@ export default {
             },
             rules: {
                 sizetopid: Rules.id({ required: true, message: _label("8000") }),
-                guigexinghao: Rules.english(3,10,{ required: true, message: _label("8000") }),
+                brandgroupid: Rules.required({ message: _label("8000") }),
+                childbrand: Rules.required({ message: _label("8000") }),
+                brandid: Rules.required({ message: _label("8000") }),
+                countries: Rules.required({ message: _label("8000") }),
+                brandcolor: Rules.required({ message: _label("8000") })
+                //brandgroupid: Rules.required({ message: _label("8000") }),
+                //brandgroupid: Rules.required({ message: _label("8000") }),
             },
             sizecontents: [],
             sizecontents_loaded: false,
-            datetime: $ASAL._date,
-            adduser: $ASAL._currentUsername,
+            datetime: _label("_date"),
+            adduser: _label("_currentUsername"),
             option: {
                 isedit: false
             },
@@ -295,11 +302,13 @@ export default {
 
                 if (self.form.id == "") {
                     self._submit("/product/add", self.form, function() {
-                        self.$refs.tablelist.appendRow($ASA.clone(self.form))
+                        //self.$refs.tablelist.appendRow($ASA.clone(self.form))
+                        self.$emit("change", Object.assign({}, self.form), "create")
                     })
                 } else {
                     self._submit("/product/edit", self.form, function() {
-                        $ASA.copyTo(self.form, self.row)
+                        //$ASA.copyTo(self.form, self.row)
+                        self.$emit("change", Object.assign({}, self.form), "update")
                     })
                 }
             })

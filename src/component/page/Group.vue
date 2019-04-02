@@ -63,12 +63,13 @@ import globals from '../globals.js'
 import Simple_Admin_TableList from '../Simple_Admin_TableList.vue'
 
 const _log = globals.logger("asapage-group");
+const _label = globals.getLabel
 
 const props = {
     columns:[
         {
             name:"group_name", 
-            label:$ASAL.zumingcheng, 
+            label:_label("zumingcheng"), 
             is_create:true, 
             is_update:true, 
             is_show:true, 
@@ -113,12 +114,12 @@ export default {
             activeName:"info",
             
             labels:{
-                shanchu:$ASAL.shanchu,
-                baocun:$ASAL.baocun,
-                xinjian:$ASAL.xinjian,
-                action:$ASAL.caozuo,
-                zuxinxi:$ASAL.zuxinxi,
-                language:$ASAL.yuyan
+                shanchu:_label("shanchu"),
+                baocun:_label("baocun"),
+                xinjian:_label("xinjian"),
+                action:_label("caozuo"),
+                zuxinxi:_label("zuxinxi"),
+                language:_label("yuyan")
             },
             globals
         }
@@ -169,7 +170,7 @@ export default {
                 });
             }
 
-            self.formTitle = $ASAL.tianjiaxinxi;
+            self.formTitle = _label("tianjiaxinxi");
             self.activeName = "info"
             self.showDialog();
         },
@@ -179,7 +180,7 @@ export default {
             self.row = row;
             $ASA.copyTo(row, this.form)
 
-            this.formTitle = $ASAL.xiugaixinxi;
+            this.formTitle = _label("xiugaixinxi");
             self.showDialog();
         },
         showDialog() {

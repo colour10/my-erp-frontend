@@ -38,6 +38,9 @@
 </template>
 
 <script>
+import globals from './globals.js'
+const _label = globals.getLabel
+
 export default {
     name: 'simple-admin-page',
     props: ['columns','buttons',"options","controller", "base"],
@@ -61,13 +64,13 @@ export default {
             form: form,
             rowIndex:"",
             formTitle:"",
-            lang:$ASAL.lang,
+            lang:_label("lang"),
             componenToptions:options,
             labels:{
-                xinjian:$ASAL.xinjian,
-                bianji:$ASAL.bianji,
-                shanchu:$ASAL.shanchu,
-                baocun:$ASAL.baocun
+                xinjian:_label("xinjian"),
+                bianji:_label("bianji"),
+                shanchu:_label("shanchu"),
+                baocun:_label("baocun")
             }
         }
     },
@@ -105,14 +108,14 @@ export default {
                 });
             }
 
-            self.showDialog($ASAL.tianjiaxinxi);
+            self.showDialog(_label("tianjiaxinxi"));
         },
         showFormToEdit(rowIndex, row){
             var self = this
             self.rowIndex = rowIndex;
             $ASA.copyTo(row, this.form)
             
-            self.showDialog($ASAL.xiugaixinxi);
+            self.showDialog(_label("xiugaixinxi"));
         },
         showDialog(formTitle) {
             var self = this;

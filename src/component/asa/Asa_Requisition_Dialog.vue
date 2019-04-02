@@ -80,10 +80,11 @@ import simple_select from '../Simple_Select.vue'
 import Asa_Select_Product_Dialog from './Asa_Select_Product_Dialog.vue'
 import Asa_Productstock_Search from './Asa_Productstock_Search.vue'
 import DataSource from '../DataSource.js'
+import {getFetcher} from "../fetcher.js"
 
-const fetcherProduct = globals.getFetcher('product')
+const fetcherProduct = getFetcher('product')
 const dataSource = DataSource.getDataSource('sizecontent', globals.getLabel('lang'));
-const fetcherWarehouse = globals.getFetcher('warehouse')
+const fetcherWarehouse = getFetcher('warehouse')
 
 export default {
     name: 'asa-requisition-dialog',

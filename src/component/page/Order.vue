@@ -24,9 +24,11 @@ const _log = globals.logger("asapage-order");
 var props = {
     columns: [
         { name: "orderno", label: globals.getLabel('dingdanbianhao'), width: 300 },
+        { name: "supplierid", label: globals.getLabel('gonghuoshang'), type: 'select', source: "supplier" },
+        { name: "ageseason", label: globals.getLabel('niandaijijie'), type: 'select', source: "ageseason" },
         { name: "bussinesstype", label: globals.getLabel('yewuleixing'), type: 'select', source: "bussinesstype" },
         { name: "status", label: globals.getLabel('zhuangtai'), type: 'select', source: "orderstatus" },
-        //{name:"address", label:"<?=$system_language['dizhi']?>"},
+        { name: "makedate", label: globals.getLabel('dingdanriqi') }
         //{name:"zipcode", label:"<?=$system_language['youbian']?>"}, 
 
         //{name:"contact", label:"<?=$system_language['lianxiren']?>"}, 

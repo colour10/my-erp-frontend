@@ -47,6 +47,8 @@
 </template>
 
 <script>
+import globals from './globals.js'
+const _label = globals.getLabel
 
 export default {
     name: 'multiple-admin-page',
@@ -65,7 +67,7 @@ export default {
         var columns = this.columns
         var column;
         
-        var languages = $ASAL.list_languages;
+        var languages = _label("list_languages");
         var keys = Object.keys(languages)
         for(var i=0;i<columns.length;i++) {
             column = columns[i]
@@ -85,17 +87,17 @@ export default {
             form: form,
             rowIndex:"",            
             formTitle:"",
-            lang:$ASAL.lang,
+            lang:_label("lang"),
             componenToptions:options,
             languages:languages,
             labels:{
-                baocun: $ASAL.baocun,
-                xinjian: $ASAL.xinjian,
-                shanchu: $ASAL.shanchu,
-                yuyan: $ASAL.yuyan,
-                caozuo:$ASAL.caozuo,
-                shangchuan:$ASAL.shangchuan,
-                qingxuanze:$ASAL.qingxuanze
+                baocun: _label("baocun"),
+                xinjian: _label("xinjian"),
+                shanchu: _label("shanchu"),
+                yuyan: _label("yuyan"),
+                caozuo:_label("caozuo"),
+                shangchuan:_label("shangchuan"),
+                qingxuanze:_label("qingxuanze")
             }
         }
     },
@@ -131,8 +133,8 @@ export default {
                     self.form[key] =  self.base[key]
                 });
             }
-            self.lang = $ASAL.lang;
-            self.showDialog($ASAL.tianjiaxinxi);
+            self.lang = _label("lang");
+            self.showDialog(_label("tianjiaxinxi"));
         },
         showFormToUpdate(rowIndex, row, lang){
             var self = this
@@ -140,7 +142,7 @@ export default {
             self.lang = lang;
             $ASA.copyTo(row, self.form);
 
-            self.showDialog($ASAL.xiugaixinxi);
+            self.showDialog(_label("xiugaixinxi"));
         },
         getColumnName(column){
             return column.is_multiple? column.name + "_" + this.lang: column.name;

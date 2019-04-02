@@ -6,6 +6,8 @@
 </template>
 
 <script>
+import globals from './globals.js'
+const _label = globals.getLabel
 
 export default {
     name: 'simple-avatar',
@@ -26,7 +28,7 @@ export default {
     data() {
         return {
             imageurl:this.select_value,
-            image_url_prex:$ASAL._image_url_prex
+            image_url_prex:_label("_image_url_prex")
         }
     },
     methods: {

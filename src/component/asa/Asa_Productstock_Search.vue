@@ -45,7 +45,8 @@
 </template>
 
 <script>
-import globals, { Productstock } from '../globals.js'
+import globals from '../globals.js'
+import { Productstock } from "../model.js"
 import simple_select from '../Simple_Select.vue'
 import DataSource from '../DataSource.js'
 

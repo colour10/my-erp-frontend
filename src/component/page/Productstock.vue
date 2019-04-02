@@ -42,7 +42,9 @@
 </template>
 
 <script>
-import globals,{Productstock} from '../globals.js'
+import globals from '../globals.js'
+import { Productstock } from "../model.js"
+
 import Product from '../asa/Asa_Product.vue'
 
 export default {
