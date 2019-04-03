@@ -2,6 +2,7 @@ import DataSource from './DataSource.js'
 import List from './list.js'
 import {getFetcher} from "./fetcher.js"
 import {getLabel} from "./globals.js"
+import {httpPost} from "./http.js"
 
 const createModel = function(tablename) {
     return {
@@ -220,7 +221,7 @@ const ConfirmorderDetails = Object.assign(createModel("confirmorderdetails"),{
 })
 
 const ProductCodeList = function(productid, callback){
-    $ASA.post("/product/codelist", {id:productid}, function(res){
+    httpPost("/product/codelist", {id:productid}, function(res){
         callback(res.data)
     },'json');
 }

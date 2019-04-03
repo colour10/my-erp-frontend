@@ -2,15 +2,16 @@ var path = require('path')
 var webpack = require('webpack')
 
 module.exports = {
-/*  entry: './src/main.js',
+  /*entry: './src/main.js',
   output: {
     path: path.resolve(__dirname, './dist'),
     publicPath: '/dist/',
     filename: 'asa.js'
   },*/
   entry: {
-    asa:'./src/index.js',
-    shop:'./src/shop.js'
+    //asa:'./src/index.js',
+    shop:'./src/shop.js',
+    asa:'./src/main.js'
   },
   output: {
     path: path.resolve(__dirname, './dist'),
@@ -62,7 +63,15 @@ module.exports = {
   performance: {
     hints: false
   },
-  devtool: '#eval-source-map'
+  devtool: '#eval-source-map',
+  externals: {
+    jquery: 'jQuery',
+    'vue': 'Vue',
+    'vue-router': 'VueRouter',
+    'vuex': 'Vuex',
+    'element-ui/lib/theme-chalk/index.css':'element-ui/lib/theme-chalk/index.css',
+    'element-ui': 'ELEMENT'
+  }
 }
 
 if (process.env.NODE_ENV === 'production') {

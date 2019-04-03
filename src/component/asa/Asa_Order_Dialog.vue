@@ -273,7 +273,7 @@ export default {
                 }
 
                 var params = {
-                    form: $ASA.$.extend({}, self.form, { status })
+                    form: globals.$.extend({}, self.form, { status })
                 }
                 var array = []
                 params.list = self.tabledata.map(item => {
@@ -291,7 +291,7 @@ export default {
                     self._log(res)
                     let data = res.data
                     if (data.form.id) {
-                        $ASA.copyTo(data.form, self.form)
+                        globals.copyTo(data.form, self.form)
                         self.formid = self.form.id
 
                         self.tabledata = []
@@ -401,8 +401,8 @@ export default {
             self._log("copy data1", newValue, form)
 
             //清空当前表单数据，并复制新记录的数据
-            $ASA.empty(form)
-            $ASA.copyTo(newValue, form)
+            globals.empty(form)
+            globals.copyTo(newValue, form)
             self._log("copy data2", newValue)
 
             if (!self.form.id) {
@@ -429,7 +429,7 @@ export default {
     },
     mounted: function() {
         var self = this;
-        $ASA.copyTo(self.data, this.form)
+        globals.copyTo(self.data, this.form)
     }
 }
 </script>

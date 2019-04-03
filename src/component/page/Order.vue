@@ -2,7 +2,7 @@
     <div style="width:100%">
         <el-row>
             <el-col :span="2" :offset="22">
-                <el-button type="primary" @click="showFormToCreate()">{{globals.getLabel('xinjian')}}</el-button>
+                <el-button type="primary" @click="showFormToCreate()">{{_label('xinjian')}}</el-button>
             </el-col>
         </el-row>
         <el-row :gutter="20">
@@ -20,15 +20,16 @@ import Asa_Order_Dialog from '../asa/Asa_Order_Dialog.vue'
 import Simple_Admin_TableList from '../Simple_Admin_TableList.vue'
 
 const _log = globals.logger("asapage-order");
+const _label = globals.getLabel
 
 var props = {
     columns: [
-        { name: "orderno", label: globals.getLabel('dingdanbianhao'), width: 300 },
-        { name: "supplierid", label: globals.getLabel('gonghuoshang'), type: 'select', source: "supplier" },
-        { name: "ageseason", label: globals.getLabel('niandaijijie'), type: 'select', source: "ageseason" },
-        { name: "bussinesstype", label: globals.getLabel('yewuleixing'), type: 'select', source: "bussinesstype" },
-        { name: "status", label: globals.getLabel('zhuangtai'), type: 'select', source: "orderstatus" },
-        { name: "makedate", label: globals.getLabel('dingdanriqi') }
+        { name: "orderno", label: _label('dingdanbianhao'), width: 300 },
+        { name: "supplierid", label: _label('gonghuoshang'), type: 'select', source: "supplier" },
+        { name: "ageseason", label: _label('niandaijijie'), type: 'select', source: "ageseason" },
+        { name: "bussinesstype", label: _label('yewuleixing'), type: 'select', source: "bussinesstype" },
+        { name: "status", label: _label('zhuangtai'), type: 'select', source: "orderstatus" },
+        { name: "makedate", label: _label('dingdanriqi') }
         //{name:"zipcode", label:"<?=$system_language['youbian']?>"}, 
 
         //{name:"contact", label:"<?=$system_language['lianxiren']?>"}, 
@@ -51,8 +52,7 @@ export default {
     data() {
         var self = this;
 
-        return {
-            globals,
+        return {            
             props: props,
             visibleDialog: false,
             pro: false,
@@ -87,10 +87,10 @@ export default {
             }
             else {
                 if (self.rowIndex < 0) {
-                    self.rowIndex = self.$refs.tablelist.appendRow($ASA.clone(form))
+                    self.rowIndex = self.$refs.tablelist.appendRow(globals.clone(form))
                 } else {
                     var row = self.$refs.tablelist.getRow(self.rowIndex)
-                    $ASA.copyTo(form, row)
+                    globals.copyTo(form, row)
                 }
             }            
         },

@@ -134,7 +134,7 @@ export default {
 
             self._log(self.rowdata, row)
             //self.rowdata = row
-            $ASA.copyTo(row, self.rowdata)
+            globals.copyTo(row, self.rowdata)
             if (row.apply_staff) {
                 fetcherUser(row.apply_staff, item => form.apply_username = item.login_name)
             }

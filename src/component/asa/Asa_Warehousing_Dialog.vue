@@ -160,7 +160,7 @@ export default {
                 return;
             }
 
-            var params = { form: $ASA.extend({confirmorderid:self.confirmorder.id},self.form) }
+            var params = { form: globals.extend({confirmorderid:self.confirmorder.id},self.form) }
             var array = []
             params.list = self.tabledata.map(item => {
                 return { confirmorderdetailsid: item.confirmdetails.id, number:item.number, orderdetailsid:item.orderdetails.id }
@@ -205,12 +205,12 @@ export default {
                 let response_data = res.data
                 if (response_data.form) {
                     //已经生成过入库单
-                    $ASA.copyTo(response_data.form, form)
+                    globals.copyTo(response_data.form, form)
                 }
                 if(response_data.confirmorder){
                     //新建入库单
                     let confirmorder = response_data.confirmorder
-                    $ASA.copyTo(confirmorder, self.confirmorder)
+                    globals.copyTo(confirmorder, self.confirmorder)
                 }
 
                 res.data.list.forEach(function(row) {

@@ -259,7 +259,7 @@ export default {
             }, function(res) {
                 let data = res.data
                 if (data.form.id) {
-                    $ASA.copyTo(data.form, self.form)
+                    globals.copyTo(data.form, self.form)
                     self.formid = self.form.id
 
                     self.tabledata = []
@@ -361,12 +361,12 @@ export default {
         data(newValue) {
             var self = this
             var form = self.form;
-            self._log("copy data1", newValue, form)
+            //self._log("copy data1", newValue, form)
 
             //清空当前表单数据，并复制新记录的数据
-            $ASA.empty(form)
-            $ASA.copyTo(newValue, form)
-            self._log("copy data2", newValue)
+            globals.empty(form)
+            globals.copyTo(newValue, form)
+            //self._log("copy data2", newValue)
 
             //如果订单的id变化了，则清空明细，重新加载新订单的明细
             if (form.id != self.fomrid) {

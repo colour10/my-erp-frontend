@@ -1,14 +1,8 @@
-import Vue from 'vue';
-import VueRouter from 'vue-router'
-import ElementUI from 'element-ui';
-import 'element-ui/lib/theme-chalk/index.css';    
-Vue.use(ElementUI);
+const Vue = require('vue')
+const Router = require('vue-router') 
+const Vuex = require('vuex')
 
-
-import Vuex from 'vuex'
-
-Vue.use(Vuex)
-Vue.use(VueRouter)
+import {getComponentSimple,getComponent} from './component/prop.js'
 
 import mixin from './component/mixin.js'
 Vue.mixin(mixin)
@@ -127,26 +121,26 @@ const routes = [
             {path: '/product', component: Page_Product},   
             {path: '/requisition', component: Page_Requisition},     
             {path: '/user/modifypassword', component: Page_UserModifyPassword},                
-            {path:'/ageseason', component:$ASA.getComponentSimple("ageseason")},
-            {path:'/ulnarinch', component:$ASA.getComponent("ulnarinch")},
-            {path:'/winterproofing', component:$ASA.getComponent("winterproofing")},
-            {path:'/washinginstructions', component:$ASA.getComponent("washinginstructions")},
-            {path:'/securitycategory', component:$ASA.getComponent("securitycategory")},
-            {path:'/executioncategory', component:$ASA.getComponent("executioncategory")},
-            {path:'/closedway', component:$ASA.getComponent("closedway")},
-            {path:'/occasionsstyle', component:$ASA.getComponent("occasionsstyle")},
-            {path:'/productparts', component:$ASA.getComponent("productparts")},
-            {path:'/productinnards', component:$ASA.getComponent("productinnards")},
-            {path:'/warehouse', component:$ASA.getComponentSimple("warehouse")},
-            {path:'/country', component:$ASA.getComponent("country")},
-            {path:'/materialnote', component:$ASA.getComponent("materialnote")},
-            {path:'/materialstatus', component:$ASA.getComponent("materialstatus")},
-            {path:'/material', component:$ASA.getComponent("material")},
+            {path:'/ageseason', component:getComponentSimple("ageseason")},
+            {path:'/ulnarinch', component:getComponent("ulnarinch")},
+            {path:'/winterproofing', component:getComponent("winterproofing")},
+            {path:'/washinginstructions', component:getComponent("washinginstructions")},
+            {path:'/securitycategory', component:getComponent("securitycategory")},
+            {path:'/executioncategory', component:getComponent("executioncategory")},
+            {path:'/closedway', component:getComponent("closedway")},
+            {path:'/occasionsstyle', component:getComponent("occasionsstyle")},
+            {path:'/productparts', component:getComponent("productparts")},
+            {path:'/productinnards', component:getComponent("productinnards")},
+            {path:'/warehouse', component:getComponentSimple("warehouse")},
+            {path:'/country', component:getComponent("country")},
+            {path:'/materialnote', component:getComponent("materialnote")},
+            {path:'/materialstatus', component:getComponent("materialstatus")},
+            {path:'/material', component:getComponent("material")},
             {path:'/producttemplate', component:Page_Producttemplate},
-            {path:'/member', component:$ASA.getComponentSimple("member")},
-            {path:'/colortemplate', component:$ASA.getComponent("colortemplate")},
-            {path:'/supplier', component:$ASA.getComponentSimple("supplier")},
-            {path:'/saleport', component:$ASA.getComponentSimple("saleport")}
+            {path:'/member', component:getComponentSimple("member")},
+            {path:'/colortemplate', component:getComponent("colortemplate")},
+            {path:'/supplier', component:getComponentSimple("supplier")},
+            {path:'/saleport', component:getComponentSimple("saleport")}
         ]
     },
     {path: '/login/:action', component: Page_Login},

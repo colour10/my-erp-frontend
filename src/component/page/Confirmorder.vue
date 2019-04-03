@@ -94,7 +94,7 @@ export default {
 
             let index = tablelist.findIndex(item=>item.id==form.id)
             if (index < 0) {
-                tablelist.appendRow($ASA.clone(form))
+                tablelist.appendRow(globals.clone(form))
             } else {
                 if(action=='delete') {
                     tablelist.deleteRow(index)
@@ -102,7 +102,7 @@ export default {
                 }
                 else {
                     var row = tablelist.getRow(index)
-                    $ASA.copyTo(form, row)
+                    globals.copyTo(form, row)
                 }                
             }
             self.rowIndex = -1

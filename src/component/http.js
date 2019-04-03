@@ -4,10 +4,10 @@ const ASAP = window.ASAP || {}
 const caches = {}
 const host ='http://erp.localhost.com'
 const httpGet = function(url, callback) {
-    console.log(window.ASAP)
+    //console.log(window.ASAP)
     if(window.ASAP && window.ASAP.$session_id) {
         let session_id = window.ASAP.$session_id
-        url = url.indexOf('?')>=0 ? url+'&_session_id='+session_id : url + '&_session_id='+session_id
+        url = url.indexOf('?')>=0 ? url+'&_session_id='+session_id : url + '?_session_id='+session_id
     }
     if (caches[url]) {
         if (caches[url].loaded == false) {

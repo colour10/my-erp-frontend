@@ -70,16 +70,16 @@ export default {
             const self = this
             self.info = row;
             self.rowIndex = rowIndex
-            self._log(row)
+            //self._log(row)
             self.showForm()
         },
         onChange(form) {
             let self = this
             if (self.rowIndex < 0) {
-                self.$refs.tablelist.appendRow($ASA.clone(form))
+                self.$refs.tablelist.appendRow(globals.clone(form))
             } else {
                 var row = self.$refs.tablelist.getRow(self.rowIndex)
-                $ASA.copyTo(form, row)
+                globals.copyTo(form, row)
             }
             self.rowIndex = -1
         },

@@ -157,14 +157,14 @@ export default {
     methods: {
         onSubmit() {
             var self = this;
-            let params = $ASA.extend({saleportids:self.saleport.join(',')}, self.form)
+            let params = globals.extend({saleportids:self.saleport.join(',')}, self.form)
             if (self.form.id == "") {                
                 self._submit("/user/add", params, function() {
-                    self.$refs.tablelist.appendRow($ASA.clone(self.form))
+                    self.$refs.tablelist.appendRow(globals.clone(self.form))
                 })
             } else {
                 self._submit("/user/edit", params, function() {
-                    $ASA.copyTo(self.form, self.row)
+                    globals.copyTo(self.form, self.row)
                 })
             }
         },
@@ -176,7 +176,7 @@ export default {
                 self.saleport_loaded = true;
                 //this._log("saleport")
                 self._fetch("/l/saleport", {}, function(res) {
-                    console.log(res)
+                    //console.log(res)
                     self.saleport_list = res.data; //.forEach(item=>self.saleport_list.push(item))
                 })
             } else if (tab.name == 'warehouse' && self.warehouse_loaded == false) {
@@ -191,7 +191,7 @@ export default {
             var self = this
             self.rowIndex = rowIndex;
             self.row = row;
-            $ASA.copyTo(row, this.form)
+            globals.copyTo(row, this.form)
             self.saleport = row.saleportids? row.saleportids.split(","):[]
             base.userid = row.id;
 
@@ -203,7 +203,7 @@ export default {
         },
         showFormToCreate() {
             var self = this;
-            $ASA.empty(self.form)
+            globals.empty(self.form)
 
             self.showDialog();
         }

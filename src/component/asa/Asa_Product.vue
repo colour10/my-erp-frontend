@@ -235,12 +235,10 @@ export default {
 
                 if (self.form.id == "") {
                     self._submit("/product/add", self.form, function() {
-                        //self.$refs.tablelist.appendRow($ASA.clone(self.form))
                         self.$emit("change", Object.assign({}, self.form), "create")
                     })
                 } else {
                     self._submit("/product/edit", self.form, function() {
-                        //$ASA.copyTo(self.form, self.row)
                         self.$emit("change", Object.assign({}, self.form), "update")
                     })
                 }
@@ -266,7 +264,7 @@ export default {
                 let source = DataSource.getDataSource("sizecontent", self.lang)
                 source.filter({ topid: self.form.sizetopid }, function(list) {
                     list.forEach(item => {
-                        let o = $ASA.extend({ goods_code: "" }, item.getObject())
+                        let o = globals.extend({ goods_code: "" }, item.getObject())
                         self.sizecontents.push(o)
                     })
 
@@ -292,10 +290,10 @@ export default {
         setInfo(row) {
             var self = this
             self.row = row;
-            $ASA.copyTo(row, this.form)
-            self.form.factoryprice = $ASA.round(self.form.factoryprice, 2)
-            self.form.wordprice = $ASA.round(self.form.wordprice, 2)
-            self.form.nationalprice = $ASA.round(self.form.nationalprice, 2)
+            globals.copyTo(row, this.form)
+            self.form.factoryprice = globals.round(self.form.factoryprice, 2)
+            self.form.wordprice = globals.round(self.form.wordprice, 2)
+            self.form.nationalprice = globals.round(self.form.nationalprice, 2)
 
             setTimeout(function() {
                 self.$refs.childbrand.load(item => item.row.brandgroupid == self.form.brandgroupid)
@@ -319,7 +317,7 @@ export default {
         },
         clearInfo() {
             var self = this;
-            $ASA.empty(self.form)
+            globals.empty(self.form)
 
             self.activeName = "info"
             self.sizecontents_loaded = false;

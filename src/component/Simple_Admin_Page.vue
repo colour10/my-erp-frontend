@@ -80,7 +80,7 @@ export default {
             self.form.lang = self.lang;
             if(self.form.id=="") {
                 self._submit("/"+self.controller+"/add", self.form, function(){
-                    self.$refs.tablelist.appendRow($ASA.clone(self.form))
+                    self.$refs.tablelist.appendRow(globals.clone(self.form))
                     
                     if(self.auto_hide!==false) {
                         self.dialogVisible = false
@@ -90,7 +90,7 @@ export default {
             else {
                 self._submit("/"+self.controller+"/edit", self.form, function(){
                     var row = self.$refs.tablelist.getRow(self.rowIndex)
-                    $ASA.copyTo(self.form, row)
+                    globals.copyTo(self.form, row)
                     if(self.auto_hide!==false) {
                         self.dialogVisible = false
                     }
@@ -100,7 +100,7 @@ export default {
         },
         showFormToCreate() {
             var self = this;
-            $ASA.empty(self.form)
+            globals.empty(self.form)
 
             if(self.base) {
                 Object.keys(self.base).forEach(function(key){
@@ -113,7 +113,7 @@ export default {
         showFormToEdit(rowIndex, row){
             var self = this
             self.rowIndex = rowIndex;
-            $ASA.copyTo(row, this.form)
+            globals.copyTo(row, this.form)
             
             self.showDialog(_label("xiugaixinxi"));
         },

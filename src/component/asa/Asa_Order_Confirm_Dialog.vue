@@ -265,7 +265,7 @@ export default {
             var self = this;
             self._log("onSelect", rows)
             rows.forEach(item => {
-                let newitem = $ASA.$.extend(true,{}, item)
+                let newitem = globals.extend(true,{}, item)
                 let is_exist = self.tabledata.some(rowData => {
                     return rowData.orderdetails.id == newitem.orderdetails.id
                 })
@@ -300,7 +300,7 @@ export default {
                     self.formid = res.data.form.id
                 }
 
-                $ASA.copyTo(res.data.form, self.form)
+                globals.copyTo(res.data.form, self.form)
                 self.$emit("change", res.data.form)
             });
         },
@@ -381,12 +381,12 @@ export default {
         data(newValue) {
             var self = this
             var form = self.form;
-            self._log("copy data1", newValue, form)
+            //self._log("copy data1", newValue, form)
 
             //清空当前表单数据，并复制新记录的数据
-            $ASA.empty(form)
-            $ASA.copyTo(newValue, form)
-            self._log("copy data2", newValue)
+            globals.empty(form)
+            globals.copyTo(newValue, form)
+            //self._log("copy data2", newValue)
 
             if (!self.form.id) {
                 self.tabledata = []

@@ -20,7 +20,7 @@ export default {
             const self = this
             options = options || {}
             httpPost(path, form, function(result) {
-                console.log(result)
+                //console.log(result)
                 if (result.messages.length > 0) {
                     //提示信息
                     if (options.showMessage == true) {

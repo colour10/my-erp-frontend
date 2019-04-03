@@ -120,19 +120,19 @@ export default {
             var self = this;
             if (self.form.id == "") {
                 self._submit("/" + props.controller + "/add", self.form, function() {
-                    self.$refs.tablelist.appendRow($ASA.clone(self.form))
+                    self.$refs.tablelist.appendRow(globals.clone(self.form))
                         //self.dialogVisible = false
                 })
             } else {
                 self._submit("/" + props.controller + "/edit", self.form, function() {
-                    $ASA.copyTo(self.form, self.row)
+                    globals.copyTo(self.form, self.row)
                         //self.dialogVisible = false
                 })
             }
         },
         showFormToCreate() {
             var self = this;
-            $ASA.empty(self.form)
+            globals.empty(self.form)
 
             if (self.base) {
                 Object.keys(self.base).forEach(function(key) {
@@ -148,7 +148,7 @@ export default {
             var self = this
             self.rowIndex = rowIndex;
             self.row = row;
-            $ASA.copyTo(row, this.form)
+            globals.copyTo(row, this.form)
 
             this.formTitle = _label("xiugaixinxi");
             self.showDialog();

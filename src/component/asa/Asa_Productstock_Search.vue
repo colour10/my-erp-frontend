@@ -89,7 +89,7 @@ export default {
         },
         selectRow(row) {
             this._log(row)
-            this.$emit("select", $ASA.extend(true, {}, row))
+            this.$emit("select", globals.extend(true, {}, row))
         }
     },
     computed: {

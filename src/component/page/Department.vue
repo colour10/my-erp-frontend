@@ -103,8 +103,6 @@ export default {
         onEdit() {
             var self = this
             self._submit("/department/edit", this.form, function(res) {
-                //$ASA.copyTo(self.form, self.node.data)
-                //console.log(self.node.data, self.form)
                 self.node.data.label = self.form.name;
                 self.node.data.remark = self.form.remark;
                 self.dialogTableVisible = false
@@ -112,9 +110,8 @@ export default {
         },
         deleteDepart() {
             var self = this  
-            $ASA.remove.call(this, "/department/delete?id=" + self.form.id, function(res) {
-                $ASA.deleteObject(self.node.parent.data.children, self.node.data)
-                console.log(self.$refs,self.node.parent.data.id)
+            self._remove("/department/delete?id=" + self.form.id, function(res) {
+                globals.deleteObject(self.node.parent.data.children, self.node.data)
                 self.$refs.tree.setCurrentKey(self.node.parent.data.id);
                 self.selectNode(self.node.parent)
             })    
@@ -145,7 +142,7 @@ export default {
     },    
     mounted:function(){
         const self = this
-        $ASA.post("/department/departments", {}, function(data){
+        self._fetch("/department/departments", {}, function(data){
             self.data = data
         },"json")
     }
