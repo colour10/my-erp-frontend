@@ -61,6 +61,10 @@ export default {
                         auth:res.auth
                     })
 
+                    
+                    window.ASAP.$session_id = res.session_id;
+                    console.log(window.ASAP)
+
                     self.$router.push("/")
                 },
                 onFail:function() {

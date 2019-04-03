@@ -57,7 +57,7 @@
                 </el-tab-pane>
                 <el-tab-pane :label="_label('sale-port')" name="saleport">
                     <el-checkbox-group v-model="saleport">
-                        <el-checkbox v-for="item in saleport_list" :label="item.id">{{item.name}}</el-checkbox>
+                        <el-checkbox v-for="item in saleport_list" :label="item.id" :key="item.id">{{item.name}}</el-checkbox>
                     </el-checkbox-group>
                 </el-tab-pane>
                 <el-tab-pane :label="_label('cangku')" name="warehouse">

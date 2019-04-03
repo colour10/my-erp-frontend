@@ -106,7 +106,7 @@
             </el-row>
             <el-row>
                 <el-col :span="24">
-                    <el-table :data="tabledata" stripe border style="width:100%;" v-loading.fullscreen.lock="loading">
+                    <el-table :data="tabledata" stripe border style="width:100%;">
                         <el-table-column prop="productname" :label="_label('chanpinmingcheng')" align="center">
                             <template v-slot="scope">
                                 {{scope.row.product.productname}}
@@ -119,12 +119,12 @@
                         </el-table-column>
                         <el-table-column prop="label" :label="_label('chengjiaojia')" width="100" align="center">
                             <template v-slot="scope">
-                                {{scope.row.product.realprice}}
+                                {{scope.row.product.retailprice}}
                             </template>
                         </el-table-column>
                         <el-table-column prop="label" :label="_label('zongjia')" width="100" align="center">
                             <template v-slot="scope">
-                                {{scope.row.product.realprice*scope.row.number}}
+                                {{scope.row.product.retailprice*scope.row.number}}
                             </template>
                         </el-table-column>
                         <el-table-column prop="number" :label="_label('dinggoushuliang')" width="200" align="center">
@@ -415,7 +415,7 @@ export default {
             if (form.id != "" && form.id != self.fomrid) {
                 self.tabledata = []
                     //加载数据
-                self._fetch("/order/loadorder?id=" + form.id, function(res) {
+                self._fetch("/order/loadorder", {id:form.id}, function(res) {
                     self._log("加载订单信息", res)
                     if (res.data.list) {
                         res.data.list.forEach(item => {

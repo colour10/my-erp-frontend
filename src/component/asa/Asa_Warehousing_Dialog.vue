@@ -56,7 +56,7 @@
             </el-row>
             <el-row>
                 <el-col :span="24">
-                    <el-table :data="tabledata" border style="width:100%;" v-loading.fullscreen.lock="loading" :row-class-name="tableRowClassName">
+                    <el-table :data="tabledata" border style="width:100%;">
                         <el-table-column prop="productname" :label="_label('shangpinmingcheng')" align="center">
                             <template v-slot="scope">
                                 {{scope.row.orderdetails.product.productname}}

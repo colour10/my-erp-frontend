@@ -8,7 +8,7 @@
 
     <el-row :gutter="20">
       <el-col :span="24">
-        <simple-admin-tablelist ref="tablelist" :controller="controller" :key_column="key_column" :columns="columns" :buttons="buttons" :options="options" :base="base" :onclickupdate="showFormToEdit"></simple-admin-tablelist>
+        <simple-admin-tablelist ref="tablelist" :controller="controller" :columns="columns" :buttons="buttons" :options="options" :base="base" :onclickupdate="showFormToEdit"></simple-admin-tablelist>
       </el-col>
     </el-row>
 

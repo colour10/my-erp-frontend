@@ -20,7 +20,8 @@ export default {
         },
         lang:{
             type: String
-        }
+        },
+        disabled:{}
     },
     model: {
         prop: 'select_value',

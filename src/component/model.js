@@ -71,9 +71,9 @@ const ProductDetail = Object.assign(createModel("product"),{
             dataSource.filter({topid: row.sizetopid}, resolve)
         }))
 
-        const childproductgroup = DataSource.getDataSource('childproductgroup', getLabel('lang'));      
+        const brandgroupchild = DataSource.getDataSource('brandgroupchild', getLabel('lang'));      
         arr.push(new Promise(function(resolve){
-            childproductgroup.getRowLabel(row.childbrand, resolve)
+            brandgroupchild.getRowLabel(row.childbrand, resolve)
         }))
 
         const brandgroup = DataSource.getDataSource('brandgroup', getLabel('lang'));      

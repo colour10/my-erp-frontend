@@ -1,24 +1,6 @@
 <template>
-  <div id="app">
-    <el-col span="24" offset="2">
-      
-      <el-table :data="searchresult" stripe border style="width:100%;" v-loading.fullscreen.lock="loading">
-            <el-table-column prop="x0" label="尺码" width="100" align="center">
-            </el-table-column>
-            <el-table-column prop="x1" label="肩宽" width="100" align="center">
-            </el-table-column>
-            <el-table-column prop="x2" label="胸围" width="100" align="center">
-            </el-table-column>
-            <el-table-column prop="x3" label="腰围" width="100" align="center">
-            </el-table-column>
-            <el-table-column prop="x4" label="下摆围"  width="100" align="center">
-            </el-table-column>
-            <el-table-column prop="x5" label="衣长" width="100" align="center">
-            </el-table-column>
-            <el-table-column prop="x6" label="袖长" width="100" align="center"> 
-            </el-table-column>
-        </el-table>
-    </el-col>
+  <div id="app">    
+    <router-view></router-view>
   </div>
 </template>
 

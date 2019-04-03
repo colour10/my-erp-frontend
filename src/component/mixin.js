@@ -1,4 +1,5 @@
 import globals from './globals.js'
+import {httpPost,httpGet} from './http.js'
 
 const _label = globals.getLabel;
 
@@ -18,7 +19,8 @@ export default {
         _fetch(path, form, options) {
             const self = this
             options = options || {}
-            $ASA.post(path, form, function(result) {
+            httpPost(path, form, function(result) {
+                console.log(result)
                 if (result.messages.length > 0) {
                     //提示信息
                     if (options.showMessage == true) {
@@ -81,7 +83,7 @@ export default {
                 cancelButtonText: _label('cancel'),
                 type: 'warning'
             }).then(() => {
-                $ASA.get(path, function(result) {
+                httpGet(path, function(result) {
                     if (result.messages.length > 0) {
                         const h = self.$createElement;
                         var message = h("ul", null, result.messages.map(function(v) {

@@ -44,13 +44,7 @@ options["user"] = {url:'/l/user',oplabel:'login_name', opvalue:'id'}
 options["department.single"] = {url:'/department/single',oplabel:'label', opvalue:'id'}
 
 //品牌子类
-options["childproductgroup"] = {url:'/l/childproductgroup',oplabel:'name', opvalue:'id'}
-
-//材质状态
-options["materialstatus"] = {url:'/l/materialstatus',oplabel:'name', opvalue:'id'}
-
-//场合风格
-options["occasionsstyle"] = {url:'/l/occasionsstyle',oplabel:'name', opvalue:'id'}
+options["brandgroupchild"] = {url:'/l/brandgroupchild',oplabel:'name', opvalue:'id'}
 
 //尺寸
 options["ulnarinch"] = {url:'/l/ulnarinch',oplabel:'name', opvalue:'id'}
@@ -61,9 +55,6 @@ options["ageseason"] = {url:'/l/ageseason',oplabel:'fullname', opvalue:'id'}
 //别名
 options["aliases"] = {url:'/l/aliases',oplabel:'name', opvalue:'id'}
 
-//防寒指数
-options["winterproofing"] = {url:'/l/winterproofing',oplabel:'name', opvalue:'id'}
-
 //尺码组
 options["sizetop"] = {url:'/l/sizetop',oplabel:'name', opvalue:'id'}
 
@@ -72,15 +63,6 @@ options["sizecontent"] = {url:'/l/sizecontent',oplabel:'content', opvalue:'id'}
 
 //成员
 options["member"] = {url:'/l/member',oplabel:'name', opvalue:'id'}
-
-//执行标准
-options["executioncategory"] = {url:'/l/executioncategory',oplabel:'name', opvalue:'id'}
-
-//安全类别
-options["securitycategory"] = {url:'/l/securitycategory',oplabel:'name', opvalue:'id'}
-
-//闭合方式
-options["closedway"] = {url:'/l/closedway',oplabel:'name', opvalue:'id'}
 
 
 //仓库

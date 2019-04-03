@@ -1,6 +1,14 @@
-const caches = {}
+import $ from 'jquery'
 
+const ASAP = window.ASAP || {}
+const caches = {}
+const host ='http://erp.localhost.com'
 const httpGet = function(url, callback) {
+    console.log(window.ASAP)
+    if(window.ASAP && window.ASAP.$session_id) {
+        let session_id = window.ASAP.$session_id
+        url = url.indexOf('?')>=0 ? url+'&_session_id='+session_id : url + '&_session_id='+session_id
+    }
     if (caches[url]) {
         if (caches[url].loaded == false) {
             var func = (function f() {
@@ -20,7 +28,7 @@ const httpGet = function(url, callback) {
             loaded: false
         }
 
-        $ASA.get(url, function(res) {
+        $.get(host+url, function(res) {
             caches[url].loaded = true;
             caches[url].data = res;
             callback(res)
@@ -28,7 +36,13 @@ const httpGet = function(url, callback) {
     }
 }
 
-const httpPost = $ASA.post
+const httpPost = function(url, params, callback) {
+    if(window.ASAP && window.ASAP.$session_id) {
+        params._session_id = window.ASAP.$session_id
+    }
 
-export { httpGet, httpPost}
+    $.post(host+url, params, callback,"json")
+}
+
+export { httpGet, httpPost, host}
 export default {};

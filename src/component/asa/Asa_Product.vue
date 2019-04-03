@@ -15,10 +15,10 @@
                                 <el-input v-model="form.productname"></el-input>
                             </el-form-item>
                             <el-form-item :label="_label('guojima')">
-                                <el-input v-model="form.wordcode_1" style="width:100px;"></el-input>
-                                <el-input v-model="form.wordcode_2" style="width:100px;"></el-input>
-                                <el-input v-model="form.wordcode_3" style="width:100px;"></el-input>
-                                <el-input v-model="form.wordcode_4" style="width:100px;"></el-input>
+                                <el-input v-model="form.wordcode_1" style="width:110px;"></el-input>
+                                <el-input v-model="form.wordcode_2" style="width:110px;"></el-input>
+                                <el-input v-model="form.wordcode_3" style="width:110px;"></el-input>
+                                <el-input v-model="form.wordcode_4" style="width:110px;"></el-input>
                             </el-form-item>
                         </el-form>
                     </el-col>
@@ -36,7 +36,7 @@
                                 </simple-select>
                             </el-form-item>
                             <el-form-item :label="_label('zipinlei')" prop="childbrand">
-                                <simple-select ref="childbrand" v-model="form.childbrand" source="childproductgroup" :lang="lang" :lazy="true">
+                                <simple-select ref="childbrand" v-model="form.childbrand" source="brandgroupchild" :lang="lang" :lazy="true">
                                 </simple-select>
                             </el-form-item>
                             <el-form-item :label="_label('chandi')" prop="countries">
@@ -45,33 +45,18 @@
                             <el-form-item :label="_label('pinpaiseban')" prop="brandcolor">
                                 <select-dialog v-model="form.brandcolor" source="colortemplate" :lang="lang">
                                 </select-dialog>
-                            </el-form-item>
-                            <el-form-item :label="_label('caizhizhuangtai')" prop="materialstatus">
-                                <select-dialog v-model="form.materialstatus" source="materialstatus" :lang="lang">
-                                </select-dialog>
-                            </el-form-item>
-                            <el-form-item :label="_label('changhefengge')">
-                                <select-dialog v-model="form.occasion" source="occasionsstyle" style="width:150" :lang="lang">
-                                </select-dialog>
-                            </el-form-item>
-                            <el-form-item :label="_label('shangpinchicun')">
-                                <simple-select v-model="form.ulnarinch" source="ulnarinch" style="width:150" :lang="lang">
-                                </simple-select>
-                            </el-form-item>
-                            <el-form-item :label="_label('shangpinmiaoshu')">
-                                <select-dialog v-model="form.occasion" source="occasionsstyle" style="width:150" :lang="lang">
-                                </select-dialog>
-                            </el-form-item>
-                            <el-form-item :label="_label('bihefangshi')" prop="closedway">
-                                <select-dialog v-model="form.closedway" source="closedway" style="width:150" :lang="lang">
-                                </select-dialog>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="8">
+                            </el-form-item>                            
                             <el-form-item :label="_label('niandai')" prop="ageseason">
                                 <select-dialog v-model="form.ageseason" source="ageseason" style="width:150" :lang="lang">
                                 </select-dialog>
                             </el-form-item>
+                            <el-form-item :label="_label('chima')" prop="sizetopid">
+                                <simple-select v-model="form.sizetopid" source="sizetop" :lang="lang">
+                                </simple-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            
                             <el-form-item :label="_label('shangpinbieming')">
                                 <select-dialog v-model="form.aliases" source="aliases" style="width:150" :lang="lang">
                                 </select-dialog>
@@ -84,12 +69,8 @@
                                 <select-dialog v-model="form.series_id2" source="aliases" style="width:150" :lang="lang">
                                 </select-dialog>
                             </el-form-item>
-                            <el-form-item :label="_label('fanghanzhishu')">
-                                <simple-select v-model="form.winterproofing" source="winterproofing" style="width:150" :lang="lang">
-                                </simple-select>
-                            </el-form-item>
                             <el-form-item :label="_label('chengjiaojiage')">
-                                <el-input placeholder="" v-model="form.realprice" class="input-with-select">
+                                <el-input placeholder="" v-model="form.retailprice" class="input-with-select">
                                     <select-currency v-model="form.retailpricecurrency" slot="prepend">
                                     </select-currency>
                                 </el-input>
@@ -108,12 +89,13 @@
                             </el-form-item>
                             <el-form-item :label="_label('guoneilingshoujia')">
                                 <el-input v-model="form.nationalprice"></el-input>
-                            </el-form-item>
-                            <el-form-item :label="_label('chicunbeizhu')">
-                                <el-input v-model="form.ulnarinch_memo"></el-input>
-                            </el-form-item>
+                            </el-form-item>                            
                         </el-col>
                         <el-col :span="8">
+                            <el-form-item :label="_label('shangpinchicun')">
+                                <simple-select v-model="form.ulnarinch" source="ulnarinch" style="width:150" :lang="lang">
+                                </simple-select>
+                            </el-form-item>
                             <el-form-item :label="_label('xingbie')">
                                 <select-dialog v-model="form.gender" source="gender" style="width:150" :lang="lang">
                                 </select-dialog>
@@ -121,28 +103,12 @@
                             <el-form-item :label="_label('jijie')">
                                 <select-dialog v-model="form.season" source="season" style="width:150" :lang="lang">
                                 </select-dialog>
-                            </el-form-item>
-                            <el-form-item :label="_label('chima')" prop="sizetopid">
-                                <simple-select v-model="form.sizetopid" source="sizetop" :lang="lang">
-                                </simple-select>
-                            </el-form-item>
-                            <el-form-item :label="_label('chimaguige')">
-                                <simple-select v-model="form.ulnarinch" source="ulnarinch" :lang="lang">
-                                </simple-select>
-                            </el-form-item>
-                            <el-form-item :label="_label('zhixingbiaozhun')">
-                                <simple-select v-model="form.executioncategory" source="executioncategory" :lang="lang">
-                                </simple-select>
-                            </el-form-item>
-                            <el-form-item :label="_label('anquanleibie')">
-                                <simple-select v-model="form.securitycategory" source="securitycategory" :lang="lang">
-                                </simple-select>
-                            </el-form-item>
-                            <el-form-item :label="_label('guigexinghao')">
-                                <el-input v-model="form.guigexinghao"></el-input>
-                            </el-form-item>
+                            </el-form-item>                            
                             <el-form-item :label="_label('zuihouruku')">
                                 <el-input v-model="form.password"></el-input>
+                            </el-form-item>
+                            <el-form-item :label="_label('chicunbeizhu')">
+                                <el-input v-model="form.ulnarinch_memo"></el-input>
                             </el-form-item>
                             <el-form-item :label="_label('jiandangshijian')">
                                 <el-input v-model="datetime" disabled></el-input>
@@ -163,7 +129,7 @@
                 <sp-album :productid="form.id"></sp-album>
             </el-tab-pane>
             <el-tab-pane :label="_label('shangpinhuohao')" name="code">
-                <el-table :data="sizecontents" border style="width:100%;" v-loading.fullscreen.lock="loading" :row-class-name="tableRowClassName">
+                <el-table :data="sizecontents" border style="width:100%;">
                     <el-table-column prop="name" :label="_label('chima')" align="center">
                     </el-table-column>
                     <el-table-column prop="goods_code" :label="_label('shangpinhuohao')" width="350" align="center">
@@ -199,29 +165,18 @@ export default {
             form: {
                 id: '',
                 productname: "",
-                decade: "",
                 brandid: '',
                 brandgroupid: "",
                 childbrand: "",
                 productsize: "",
                 countries: "",
                 brandcolor: "",
-                securitycategory: "",
-                executioncategory: "",
                 material: "",
                 productparst: "",
-                occasion: "",
                 producttemplate: "",
-                materialstatus: "",
                 spring: "",
                 picture: "",
                 picture2: "",
-                summer: "",
-                autumn: "",
-                winter: "",
-                oldasacode: "",
-                officialwebsite: "",
-                oldbarcode: "",
                 laststoragedate: "",
                 aliases_1: "",
                 aliases_2: "",
@@ -229,34 +184,14 @@ export default {
                 series_id: "",
                 series2_id: "",
                 ulnarinch: "",
-                vat: "",
-                tariff: "",
-                basecurrency: "",
-                baseprice: "",
-                entrymonth: "",
                 factoryprice: "",
                 factorypricecurrency: "",
-                realprice: "",
                 retailpricecurrency: "",
-                dutyparagraph: "",
                 orderprice: "",
                 orderpricecurrency: "",
                 retailprice: "",
                 groupid: "",
-                iskj: "",
-                bxzs: "",
-                hbzs: "",
-                rrzs: "",
-                tlzs: "",
-                salemethodid: "",
                 nationalprice: "",
-                taxrate: "",
-                isjh: "",
-                inlenth: "",
-                jdname: "",
-                winterproofing: "",
-                isfj: "",
-                discount: "",
                 ulnarinch_memo: "",
                 wordprice: "",
                 wordpricecurrency: "",
@@ -267,9 +202,7 @@ export default {
                 wordcode_1: "",
                 wordcode_2: "",
                 wordcode_3: "",
-                wordcode_4: "",
-                productno: "",
-                closedway:''
+                wordcode_4: ""
             },
             rules: {
                 sizetopid: Rules.id({ required: true, message: _label("8000") }),
@@ -361,7 +294,6 @@ export default {
             self.row = row;
             $ASA.copyTo(row, this.form)
             self.form.factoryprice = $ASA.round(self.form.factoryprice, 2)
-            self.form.realprice = $ASA.round(self.form.realprice, 2)
             self.form.wordprice = $ASA.round(self.form.wordprice, 2)
             self.form.nationalprice = $ASA.round(self.form.nationalprice, 2)
 

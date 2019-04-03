@@ -38,7 +38,7 @@ var props2 = {
             {name:"producttemplateid", label:globals.getLabel('chimamoban'), type:'select', source:"sizetop"},
             {name:"weight", label:globals.getLabel('maozhong')},
         ],
-        controller:"childproductgroup",
+        controller:"brandgroupchild",
         key_column:"name",
         base:{
             brandgroupid:""    

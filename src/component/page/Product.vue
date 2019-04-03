@@ -16,7 +16,7 @@
 
 <script>
 import globals from '../globals.js'
-import Multiple_Admin_Page from '../Multiple_Admin_Page.vue'
+import Simple_Admin_TableList from '../Simple_Admin_TableList.vue'
 import Product from '../asa/Asa_Product.vue'
 
 const _log = globals.logger("asapage-product");
@@ -37,7 +37,7 @@ var props = {
 export default {
     name: 'asapage-product',
     components: {
-        'multiple-admin-page': Multiple_Admin_Page,
+        'simple-admin-tablelist': Simple_Admin_TableList,
         "product":Product
     },
     data() {

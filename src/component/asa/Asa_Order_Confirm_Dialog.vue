@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-dialog :title="title" :visible.sync="dialogVisible" :center="true" :fullscreen="true" :modal="false">
+        <el-dialog :visible.sync="dialogVisible" :center="true" :fullscreen="true" :modal="false">
             <el-form class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini">
                 <el-row :gutter="0">
                     <el-col :span="6">
@@ -53,7 +53,7 @@
                         <el-form-item :label="_label('daidiandanwei')">
                             <simple-select v-model="form.dd_company" source="supplier" :lang="lang"></simple-select>
                         </el-form-item>
-                        <el-form-item :label="_label('anpaitihuoshijian')" class="mini" class="font12">
+                        <el-form-item :label="_label('anpaitihuoshijian')" class="mini font12">
                             <el-date-picker v-model="form.apickingdate" type="date" value-format="yyyy-MM-dd"></el-date-picker>
                         </el-form-item>
                         <el-form-item :label="_label('hangbanhao')">
@@ -140,7 +140,7 @@
             </el-row>
             <el-row>
                 <el-col :span="24">
-                    <el-table :data="tabledata" border style="width:100%;" v-loading.fullscreen.lock="loading">
+                    <el-table :data="tabledata" border style="width:100%;">
                         <el-table-column :label="_label('shangpinmingcheng')" align="center">
                             <template v-slot="scope">
                                 {{scope.row.orderdetails.product.productname}}
@@ -396,7 +396,7 @@ export default {
             if (form.id != "" && form.id != self.fomrid) {
                 self.tabledata = []
                     //加载数据
-                self._fetch("/confirmorder/loadorder?id=" + form.id, function(res) {
+                self._fetch("/confirmorder/loadorder", {id:form.id}, function(res) {
                     self._log("加载订单信息", res)
 
                     res.data.list.forEach(function(row) {

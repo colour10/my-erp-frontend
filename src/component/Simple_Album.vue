@@ -4,19 +4,19 @@
         <img :src="_label('_image_url_prex')+item.filename" class="avatar" />
       </el-col>
       <el-col :span="4">
-        <el-upload class="avatar-uploader" action="/common/upload?category=product" multiple :show-file-list="false" :on-success="handleAvatarSuccess">
-          <img v-if="imageurl" :src="_label('_image_url_prex')+imageurl" class="avatar">
-          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+        <el-upload class="avatar-uploader" :action="host+'/common/upload?category=product'" multiple :show-file-list="false" :on-success="handleAvatarSuccess">
+          <i class="el-icon-plus avatar-uploader-icon"></i>
         </el-upload>
       </el-col>
     </el-row>  
 </template>
 
 <script>
-//import DataSource from './DataSource.js'
+import {httpPost,host} from './http.js'
 import globals from './globals.js'
 import avatar from './Simple_Avatar.vue'
 
+console.log(host)
 export default {
     name: 'sp-album',
     components: {
@@ -31,7 +31,8 @@ export default {
     },
     data() {        
         return {
-            data:[]
+            data:[],
+            host
         }
     },
     methods: {
@@ -52,7 +53,7 @@ export default {
         }, 
         loadList() {
             var self = this
-            $ASA.post("/l/picture", {productid:self.productid}, function(res){
+            httpPost("/l/picture", {productid:self.productid}, function(res){
                 //self._log("==========",res)   
                 self.data = res.data; 
             },'json')

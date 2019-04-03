@@ -1,5 +1,5 @@
 <template>
-    <el-dialog :title="title" :visible.sync="dialogVisible" :center="true" :fullscreen="true" :modal="false">
+    <el-dialog :visible.sync="dialogVisible" :center="true" :fullscreen="true" :modal="false">
         <el-form class="user-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini">
             <el-row :gutter="0">
                 <el-col :span="6">
@@ -21,7 +21,7 @@
         </el-form>
         <el-row>
             <el-col :span="24">
-                <el-table :data="tabledata" border style="width:100%;" v-loading.fullscreen.lock="loading" :row-class-name="tableRowClassName">
+                <el-table :data="tabledata" border style="width:100%;">
                     <el-table-column :label="_label('shangpinmingcheng')" align="center">
                         <template v-slot="scope">
                             {{scope.row.orderdetails.product.productname}}

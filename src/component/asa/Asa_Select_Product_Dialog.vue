@@ -29,7 +29,7 @@
       <el-row>
         <el-col :span="24">
 
-          <el-table :data="tabledata" stripe border style="width:100%;" v-loading.fullscreen.lock="loading">
+          <el-table :data="tabledata" stripe border style="width:100%;">
             <el-table-column prop="productname" :label="globals.getLabel('shangpinmingcheng')" align="center"></el-table-column>
 
 
@@ -77,8 +77,8 @@ export default {
         loadPage() {
             var self = this;
             var form = self.form
-            $ASA.post("/product/search", {productname:form.productname}, function(res){
-                self.tabledata = res;
+            self._fetch("/product/search", {productname:form.productname}, function(res){
+                self.tabledata = res.data;
             },'json');
         },
         onSearch(){

@@ -14,7 +14,7 @@
     </el-table-column>-->
             <el-table-column :label="_label('caozuo')" :width="actionwidth||150" align="center">
                 <template v-slot="scope">
-                    <el-button size="mini" :type="item.type||''" @click="item.handler(scope.$index, scope.row, item)" v-for="item in buttons">{{item.label}}</el-button>
+                    <el-button size="mini" :type="item.type||''" @click="item.handler(scope.$index, scope.row, item)" v-for="item in buttons" :key="item.label">{{item.label}}</el-button>
                     <el-button size="mini" @click="handleClickUpdate(scope.$index, scope.row)" v-if="isEditable(scope.row)">{{_label('bianji')}}</el-button>
                     <el-button size="mini" type="danger" @click="onClickDelete(scope.$index, scope.row)" v-if="isDeletable(scope.row)">{{_label('shanchu')}}</el-button>
                 </template>
@@ -163,7 +163,7 @@ export default {
 
             self._fetch("/" + self.controller + "/page", params, function(res) {
                 //self._log(res)
-                res.data.forEach(item => self.tableData.push(asa.extend(item, obj)))
+                res.data.forEach(item => self.tableData.push(Object.assign(item, obj)))
             });
         },
         isDeletable(row) {

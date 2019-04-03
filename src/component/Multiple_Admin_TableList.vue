@@ -1,14 +1,14 @@
 <template>
   <el-table :data="tableData" stripe border style="width:100%;" v-loading.fullscreen.lock="loading">
-    <el-table-column :prop="name" :label="item.label" align="center" :width="item.width||180" v-if="!item.is_hide" v-for="item in columns" :key="item.name">
+    <el-table-column :prop="item.name" :label="item.label" align="center" :width="item.width||180" v-if="!item.is_hide" v-for="item in columns" :key="item.name">
       <template v-slot="scope">
         <img v-if="item.is_image" :src="_label('_image_url_prex')+scope.row[item.name]" :style="getImageStyle(item)">
-        <span v-if="!item.is_image && !item.html">{{item.convert?item.convert(scope.row,scope.rowIndex,item):convert(scope.row,item, rowIndex)}}</span>
+        <span v-if="!item.is_image && !item.html">{{item.convert?item.convert(scope.row,scope.rowIndex,item):convert(scope.row, item, scope.rowIndex)}}</span>
         <span v-if="item.html" v-html="item.html">{{item.html}}</span>
       </template>            
     </el-table-column>
     
-    <el-table-column :label="item.label" align="center" :width="item.width||180" v-for="item in buttons" >
+    <el-table-column :label="item.label" align="center" :width="item.width||180" v-for="item in buttons" :key="item.label">
       <template v-slot="scope">
         <el-button type="info" circle @click="item.handler(scope.$index, scope.row, item)">{{item.label}}</el-button>
       </template>            

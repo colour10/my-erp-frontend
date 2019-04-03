@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-dialog :title="title" :visible.sync="dialogVisible" :center="true" :fullscreen="true" :modal="false">
+        <el-dialog :visible.sync="dialogVisible" :center="true" :fullscreen="true" :modal="false">
             <el-form class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini">
                 <el-row :gutter="0">
                     <el-col :span="6">

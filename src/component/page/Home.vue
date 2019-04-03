@@ -18,105 +18,40 @@
                 </el-submenu>
                 <el-submenu index="2">
                     <template #title>{{_label("menu-2")}}</template>
-                    <el-submenu index="2-1">
-                        <template #title>{{_label("menu-2-1")}}</template>
-                        <el-menu-item index="2-1-1">
-                            <router-link to="/brand">{{_label("menu-2-1-1")}}</router-link>
-                        </el-menu-item>
-                        <el-menu-item index="2-1-2">
-                            <router-link to="/brandgroup">{{_label("menu-2-1-2")}}</router-link>
-                        </el-menu-item>
-                        <el-menu-item index="2-1-3">
-                            <router-link to="/ageseason">{{_label("menu-2-1-3")}}</router-link>
-                        </el-menu-item>
-                        <el-menu-item index="2-1-4">
-                            <router-link to="/colortemplate">{{_label("menu-2-1-4")}}</router-link>
-                        </el-menu-item>
-                        <el-menu-item index="2-1-5">
-                            <router-link to="/sizetop">{{_label("menu-2-1-5")}}</router-link>
-                        </el-menu-item>
-                        <el-menu-item index="2-1-19">
-                            <router-link to="/producttemplate">{{_label("menu-2-1-19")}}</router-link>
-                        </el-menu-item>
-                        <el-menu-item index="2-1-6">
-                            <router-link to="/material">{{_label("menu-2-1-6")}}</router-link>
-                        </el-menu-item>
-                        <el-menu-item index="2-1-17">
-                            <router-link to="/materialstatus">{{_label("menu-2-1-17")}}</router-link>
-                        </el-menu-item>
-                        <el-menu-item index="2-1-18">
-                            <router-link to="/materialnote">{{_label("menu-2-1-18")}}</router-link>
-                        </el-menu-item>
-                        <el-menu-item index="2-1-7">
-                            <router-link to="/ulnarinch">{{_label("menu-2-1-7")}}</router-link>
-                        </el-menu-item>
-                        <!--<el-menu-item index="2-1-8"><router-link to="/aliases">{{_label("menu-2-1-8")}}</router-link></el-menu-item>-->
-                        <el-menu-item index="2-1-9">
-                            <router-link to="/productinnards">{{_label("menu-2-1-9")}}</router-link>
-                        </el-menu-item>
-                        <el-menu-item index="2-1-10">
-                            <router-link to="/productparts">{{_label("menu-2-1-10")}}</router-link>
-                        </el-menu-item>
-                        <el-menu-item index="2-1-11">
-                            <router-link to="/occasionsstyle">{{_label("menu-2-1-11")}}</router-link>
-                        </el-menu-item>
-                        <el-menu-item index="2-1-12">
-                            <router-link to="/closedway">{{_label("menu-2-1-12")}}</router-link>
-                        </el-menu-item>
-                        <el-menu-item index="2-1-13">
-                            <router-link to="/executioncategory">{{_label("menu-2-1-13")}}</router-link>
-                        </el-menu-item>
-                        <el-menu-item index="2-1-14">
-                            <router-link to="/securitycategory">{{_label("menu-2-1-14")}}</router-link>
-                        </el-menu-item>
-                        <el-menu-item index="2-1-15">
-                            <router-link to="/washinginstructions">{{_label("menu-2-1-15")}}</router-link>
-                        </el-menu-item>
-                        <el-menu-item index="2-1-16">
-                            <router-link to="/winterproofing">{{_label("menu-2-1-16")}}</router-link>
-                        </el-menu-item>
-                    </el-submenu>
-                    <!-- <el-submenu index="2-2">
-                        <template #title>{{_label("menu-2-2")}}</template>
-                        <el-menu-item index="2-2-1">
-                            <router-link to="/productprice">{{_label("menu-2-2-1")}}</router-link>
-                        </el-menu-item>
-                        <el-menu-item index="2-2-2">
-                            <router-link to="/costformula">{{_label("menu-2-2-2")}}</router-link>
-                        </el-menu-item>
-                    </el-submenu> -->
-                    <el-submenu index="2-3">
-                        <template #title>{{_label("menu-2-3")}}</template>
-                        <el-menu-item index="2-3-1">
-                            <router-link to="/warehouse">{{_label("menu-2-3-1")}}</router-link>
-                        </el-menu-item>
-                        <!-- <el-menu-item index="2-3-2">
-                            <router-link to="/salesport">{{_label("menu-2-3-2")}}</router-link>
-                        </el-menu-item> -->
-                        <el-menu-item index="2-3-3">
-                            <router-link to="/country">{{_label("menu-2-3-3")}}</router-link>
-                        </el-menu-item>
-                        <!--<el-menu-item index="2-3-4">
-                            <router-link to="/feenames">{{_label("menu-2-3-4")}}</router-link>
-                        </el-menu-item>
-                        <el-menu-item index="2-3-5">
-                            <router-link to="/shippingtype">{{_label("menu-2-3-5")}}</router-link>
-                        </el-menu-item>
-                        <el-menu-item index="2-3-6">
-                            <router-link to="/salesmethods">{{_label("menu-2-3-6")}}</router-link>
-                        </el-menu-item>
-                        <el-menu-item index="2-3-7">
-                            <router-link to="/businesstype">{{_label("menu-2-3-7")}}</router-link>
-                        </el-menu-item>-->
-                        <!--<el-menu-item index="2-3-9"><router-link to="/reportstyle">{{_label("menu-2-3-9")}}</router-link></el-menu-item>
-                        <el-menu-item index="2-3-10">
-                            <router-link to="/imagetool">{{_label("menu-2-3-10")}}</router-link>
-                        </el-menu-item>-->
-                        <!--<el-menu-item index="2-3-11"><router-link to="/pricesource">{{_label("menu-2-3-11")}}</router-link></el-menu-item>
-                  <el-menu-item index="2-3-12">{{_label("menu-2-3-12")}}</el-menu-item>
-                  <el-menu-item index="2-3-13">{{_label("menu-2-3-13")}}</el-menu-item>-->
-                    </el-submenu>
+                    <el-menu-item index="2-1">
+                        <router-link to="/brand">{{_label("menu-2-1-1")}}</router-link>
+                    </el-menu-item>
+                    <el-menu-item index="2-2">
+                        <router-link to="/brandgroup">{{_label("menu-2-1-2")}}</router-link>
+                    </el-menu-item>
+                    <el-menu-item index="2-3">
+                        <router-link to="/ageseason">{{_label("menu-2-1-3")}}</router-link>
+                    </el-menu-item>
                     <el-menu-item index="2-4">
+                        <router-link to="/colortemplate">{{_label("menu-2-1-4")}}</router-link>
+                    </el-menu-item>
+                    <el-menu-item index="2-5">
+                        <router-link to="/sizetop">{{_label("menu-2-1-5")}}</router-link>
+                    </el-menu-item>
+                    <el-menu-item index="2-6">
+                        <router-link to="/producttemplate">{{_label("menu-2-1-19")}}</router-link>
+                    </el-menu-item>
+                    <el-menu-item index="2-7">
+                        <router-link to="/material">{{_label("menu-2-1-6")}}</router-link>
+                    </el-menu-item>
+                    <el-menu-item index="2-8">
+                        <router-link to="/materialnote">{{_label("menu-2-1-18")}}</router-link>
+                    </el-menu-item>
+                    <el-menu-item index="2-9">
+                        <router-link to="/ulnarinch">{{_label("menu-2-1-7")}}</router-link>
+                    </el-menu-item>
+                    <el-menu-item index="2-10">
+                        <router-link to="/warehouse">{{_label("menu-2-3-1")}}</router-link>
+                    </el-menu-item>
+                    <el-menu-item index="2-11">
+                        <router-link to="/country">{{_label("menu-2-3-3")}}</router-link>
+                    </el-menu-item>
+                    <el-menu-item index="2-12">
                         <router-link to="/saleport">{{_label("menu-2-4")}}</router-link>
                     </el-menu-item>
                 </el-submenu>
@@ -182,9 +117,6 @@
                     </el-submenu>
                     <el-menu-item index="7-5">{{_label("menu-7-5")}}</el-menu-item>-->
                 </el-submenu>
-                <el-menu-item index="8-1">
-                    <router-link to="/member">{{_label("menu-8-1")}}</router-link>
-                </el-menu-item>
                 <!--<el-submenu index="9">
                 <template #title>{{_label("menu-9")}}</template>
                 <el-menu-item index="9-1">{{_label("menu-9-1")}}</el-menu-item>
@@ -239,10 +171,10 @@ const menus = {
     "2-1-8": "/aliases",
     "2-1-9": "/productinnards",
     "2-1-10": "/productparts",
-    "2-1-11": "/occasionsstyle",
-    "2-1-12": "/closedway",
-    "2-1-13": "/executioncategory",
-    "2-1-14": "/securitycategory",
+    // "2-1-11": "/occasionsstyle",
+    //"2-1-12": "/closedway",
+    //"2-1-13": "/executioncategory",
+    //"2-1-14": "/securitycategory",
     "2-1-15": "/washinginstructions",
     "2-1-16": "/winterproofing",
     "2-2-1": "/productprice",
@@ -250,12 +182,8 @@ const menus = {
     "2-3-1": "/warehouse",
     "2-3-2": "/salesport",
     "2-3-3": "/country",
-    "2-3-4": "/feenames",
-    "2-3-5": "/shippingtype",
-    "2-3-6": "/salesmethods",
-    "2-3-7": "/businesstype",
     "2-3-9": "/reportstyle",
-    "2-3-10": "/imagetool",
+    //"2-3-10": "/imagetool",
     "2-3-11": "/pricesource",
     "3-1": "/product",
     "3-2": "/picture",
@@ -272,7 +200,6 @@ const menus = {
     "6-4": "/productstock",
     "6-5": "/productstockSnapshot",
     "7-1": "/sales",
-    "8-1": "/member",
     "11-2": "/user/modifypassword",
     "11-3": "/login/logout"
 }
@@ -280,8 +207,7 @@ export default {
     name: 'asapage-home',
     data() {
         var self = this;
-        return {
-        }
+        return {}
     },
     methods: {
         checkLogin() {
@@ -306,7 +232,7 @@ export default {
     },
     mounted: function() {
         this.checkLogin()
-        //this._log("Global Function")
+            //this._log("Global Function")
     }
 }
 </script>
