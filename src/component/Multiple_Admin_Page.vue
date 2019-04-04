@@ -2,7 +2,7 @@
     <div>
         <el-row>
             <el-col :span="24">
-                <el-button type="primary" @click="showFormToCreate()">{{labels.xinjian}}</el-button>
+                <el-button type="primary" @click="showFormToCreate()">{{_label("xinjian")}}</el-button>
             </el-col>
         </el-row>
         <el-row :gutter="20">
@@ -20,17 +20,17 @@
                             <simple-select :ref="item.name" v-if="item.type=='select'" v-model="form[item.name]" :source="item.source" :lang="lang">
                             </simple-select>
                             <el-upload :ref="item.name" :action="'/common/upload?category='+controller" v-if="item.type=='upload'" :multiple="item.multiple || false" :limit="item.limit || 1" :on-success="getUploadSuccessCallback(item)" :on-remove="getRemoveUploadFileCallback(item)">
-                                <el-button size="small" type="primary">{{labels.shangchuan}}</el-button>
+                                <el-button size="small" type="primary">{{_label("shangchuan")}}</el-button>
                             </el-upload>
                         </el-form-item>
-                        <el-form-item :label="labels.yuyan">
-                            <el-select v-model="lang" :placeholder="labels.choice" disabled>
+                        <el-form-item :label="_label('yuyan')">
+                            <el-select v-model="lang" :placeholder="_label('choice')" disabled>
                                 <el-option v-for="item in languages" :key="item.code" :label="item.name" :value="item.code">
                                 </el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item>
-                            <el-button type="primary" @click="onSubmit">{{labels.baocun}}</el-button>
+                            <el-button type="primary" @click="onSubmit">{{_label("baocun")}}</el-button>
                         </el-form-item>
                     </el-form>
                 </el-col>
@@ -82,15 +82,6 @@ export default {
             lang: _label("lang"),
             componenToptions: options,
             languages: languages,
-            labels: {
-                baocun: _label("baocun"),
-                xinjian: _label("xinjian"),
-                shanchu: _label("shanchu"),
-                yuyan: _label("yuyan"),
-                caozuo: _label("caozuo"),
-                shangchuan: _label("shangchuan"),
-                qingxuanze: _label("qingxuanze")
-            }
         }
     },
     methods: {

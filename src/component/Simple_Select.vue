@@ -6,6 +6,8 @@
 
 <script>
 import DataSource from './DataSource.js'
+import globals from './globals.js'
+const _label = globals.getLabel
 
 export default {
     name: 'simple-select',
@@ -19,7 +21,8 @@ export default {
             default: false
         },
         lang: {
-            type: String
+            type: String,
+            default:_label("lang")
         },
         source: {
             type: [String, Object],

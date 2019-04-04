@@ -25,8 +25,8 @@ export default {
       return {
         logining: false,
         ruleForm2: {
-          account: '',
-          checkPass: ''
+          account: 'admin',
+          checkPass: '123456'
         },
         rules2: {
           account: [
@@ -63,7 +63,7 @@ export default {
 
                     
                     window.ASAP.$session_id = res.session_id;
-                    console.log(window.ASAP)
+                    //console.log(window.ASAP)
 
                     self.$router.push("/")
                 },

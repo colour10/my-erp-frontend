@@ -21,9 +21,85 @@
                                 <el-input v-model="form.wordcode_4" style="width:110px;"></el-input>
                             </el-form-item>
                         </el-form>
+                        <el-col :span="4">
+                            <div class="color-group">
+                                <div class="box" style="width:36px;">
+                                    <i class="el-icon-plus color-group-icon"></i>
+                                </div>
+                            </div>
+                        </el-col>
+                        <el-col :span="4">
+                            <div class="color-group">
+                                <div class="box" style="width:36px;">
+                                    <i class="el-icon-plus color-group-icon"></i>
+                                </div>
+                            </div>
+                        </el-col>
+                        <el-col :span="4">
+                            <div class="color-group">
+                                <div class="box" style="width:36px;">
+                                    <i class="el-icon-plus color-group-icon"></i>
+                                </div>
+                            </div>
+                        </el-col>
+                        <el-col :span="4">
+                            <div class="color-group">
+                                <div class="box" style="width:36px;">
+                                    <i class="el-icon-plus color-group-icon"></i>
+                                </div>
+                            </div>
+                        </el-col>
+                        <el-col :span="4">
+                            <div class="color-group">
+                                <div class="box" style="width:36px;">
+                                    <i class="el-icon-plus color-group-icon"></i>
+                                </div>
+                            </div>
+                        </el-col>
+                        <el-col :span="4">
+                            <div class="color-group">
+                                <div class="box" style="width:36px;">
+                                    <i class="el-icon-plus color-group-icon"></i>
+                                </div>
+                            </div>
+                        </el-col>
+                        <el-col :span="4">
+                            <div class="color-group">
+                                <div class="box" style="width:36px;">
+                                    <i class="el-icon-plus color-group-icon"></i>
+                                </div>
+                            </div>
+                        </el-col>
+                        <el-col :span="4">
+                            <div class="color-group">
+                                <div class="box" style="width:36px;">
+                                    <i class="el-icon-plus color-group-icon"></i>
+                                </div>
+                            </div>
+                        </el-col>
+                        <el-col :span="4">
+                            <div class="color-group">
+                                <div class="box" style="width:36px;">
+                                    <i class="el-icon-plus color-group-icon"></i>
+                                </div>
+                            </div>
+                        </el-col>
+                        <el-col :span="4">
+                            <div class="color-group">
+                                <div class="box" style="width:36px;">
+                                    <i class="el-icon-plus color-group-icon"></i>
+                                </div>
+                            </div>
+                        </el-col>
+                        <el-col :span="4">
+                            <div class="color-group">
+                                <div class="box" style="width:36px;">
+                                    <i class="el-icon-plus color-group-icon"></i>
+                                </div>
+                            </div>
+                        </el-col>
                     </el-col>
                 </el-row>
-
                 <el-form ref="order-form" class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini" :rules="rules" :inline-message="true">
                     <el-row :gutter="0">
                         <el-col :span="8">
@@ -43,9 +119,9 @@
                                 <select-dialog v-model="form.countries" source="country" :lang="lang"></select-dialog>
                             </el-form-item>
                             <el-form-item :label="_label('pinpaiseban')" prop="brandcolor">
-                                <select-dialog v-model="form.brandcolor" source="colortemplate" :lang="lang">
-                                </select-dialog>
-                            </el-form-item>                            
+                                <simple-select v-model="form.brandcolor" source="colortemplate" :lang="lang">
+                                </simple-select>
+                            </el-form-item>
                             <el-form-item :label="_label('niandai')" prop="ageseason">
                                 <select-dialog v-model="form.ageseason" source="ageseason" style="width:150" :lang="lang">
                                 </select-dialog>
@@ -56,7 +132,6 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            
                             <el-form-item :label="_label('shangpinbieming')">
                                 <select-dialog v-model="form.aliases" source="aliases" style="width:150" :lang="lang">
                                 </select-dialog>
@@ -89,7 +164,7 @@
                             </el-form-item>
                             <el-form-item :label="_label('guoneilingshoujia')">
                                 <el-input v-model="form.nationalprice"></el-input>
-                            </el-form-item>                            
+                            </el-form-item>
                         </el-col>
                         <el-col :span="8">
                             <el-form-item :label="_label('shangpinchicun')">
@@ -103,7 +178,7 @@
                             <el-form-item :label="_label('jijie')">
                                 <select-dialog v-model="form.season" source="season" style="width:150" :lang="lang">
                                 </select-dialog>
-                            </el-form-item>                            
+                            </el-form-item>
                             <el-form-item :label="_label('zuihouruku')">
                                 <el-input v-model="form.password"></el-input>
                             </el-form-item>
@@ -142,26 +217,75 @@
                     <el-button type="primary" @click="onSaveGoodsCode" v-if="option.isedit">{{_label("baocun")}}</el-button>
                 </el-col>
             </el-tab-pane>
+            <el-tab-pane :label="_label('tongkuanduose')" name="colorgroup">
+                <searchpanel @select="onSelectProduct"></searchpanel>
+                
+                <el-table :data="colors" border style="width:100%;" :header-cell-style="countHeaderStyle">
+                    <el-table-column prop="brandcolor" :label="_label('yanse')" width="240" align="center">
+                        <template v-slot="scope">
+                            <simple-select v-model="scope.row.brandcolor" source="colortemplate" :lang="lang" :disabled="scope.row.id>0">
+                            </simple-select>
+                        </template>
+                    </el-table-column>
+                    <el-table-column :label="_label('guojima')" align="center">
+                        <el-table-column prop="goods_code" width="130" align="center">
+                            <template v-slot="scope">
+                                <el-input v-model="scope.row.wordcode_1" :disabled="scope.row.id>0"></el-input>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="goods_code" width="130" align="center">
+                            <template v-slot="scope">
+                                <el-input v-model="scope.row.wordcode_2" :disabled="scope.row.id>0"></el-input>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="goods_code" width="130" align="center">
+                            <template v-slot="scope">
+                                <el-input v-model="scope.row.wordcode_3" :disabled="scope.row.id>0"></el-input>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="goods_code" width="130" align="center">
+                            <template v-slot="scope">
+                                <el-input v-model="scope.row.wordcode_4" :disabled="scope.row.id>0"></el-input>
+                            </template>
+                        </el-table-column>
+                    </el-table-column>
+                    <el-table-column prop="goods_code" :label="_label('caozuo')" width="150" align="center">
+                        <template v-slot="scope">
+                            <el-button type="danger" @click="onDeleteColorGroup(scope, scope.row)" v-if="option.isedit">{{_label("shanchu")}}</el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+                <el-col :offset="9" :span="6" style="padding:5px">
+                    <el-button type="primary" @click="onSaveColorGroup" v-if="option.isedit">{{_label("baocun")}}</el-button>
+                    <el-button type="primary" @click="onAppendColor" v-if="option.isedit">{{_label("zhuijia")}}</el-button>
+                </el-col>
+            </el-tab-pane>
         </el-tabs>
     </el-dialog>
 </template>
 
 <script>
-import globals from '../globals.js'
+import globals,{extract} from '../globals.js'
 import { ProductCodeList } from "../model.js"
 import List from '../list.js'
-import {Rules} from '../rules.js'
+import { Rules } from '../rules.js'
 import DataSource from '../DataSource.js'
+import Asa_Product_Search_Panel from './Asa_Product_Search_Panel.vue'
 const _log = globals.logger("asa-product");
 const _label = globals.getLabel
 
 export default {
     name: 'asa-product',
-    components: {},
+    components: {
+        searchpanel:Asa_Product_Search_Panel
+    },
     data() {
         return {
             dialogVisible: false,
             lang: _label("lang"),
+            search:{
+                is_show:false
+            },
             form: {
                 id: '',
                 productname: "",
@@ -174,7 +298,6 @@ export default {
                 material: "",
                 productparst: "",
                 producttemplate: "",
-                spring: "",
                 picture: "",
                 picture2: "",
                 laststoragedate: "",
@@ -216,6 +339,8 @@ export default {
             },
             sizecontents: [],
             sizecontents_loaded: false,
+            colors: [],
+            colors_loaded: false,
             datetime: _label("_date"),
             adduser: _label("_currentUsername"),
             option: {
@@ -243,12 +368,14 @@ export default {
                     })
                 }
             })
-
-
+        },
+        onSelectProduct(info){
+            let self = this
+            self.colors.push(info)
         },
         onSaveGoodsCode() {
             let self = this
-            console.log("savecode")
+
             let params = { productid: self.form.id }
             params.list = self.sizecontents.map(function(item) {
                 return { sizecontentid: item.id, goods_code: item.goods_code }
@@ -257,6 +384,38 @@ export default {
             self._submit("/product/savecode", {
                 params: JSON.stringify(params)
             }, function(res) {});
+        },
+        onSaveColorGroup() {
+            //保存同款多色数据
+            let self = this;
+            let params = {productid:self.form.id}
+            params.list = self.colors.map(item=>extract(item,['id','brandcolor','wordcode_1','wordcode_2','wordcode_3','wordcode_4']))
+            self._log(params)
+            self._submit("/product/savecolorgroup", {
+                params: JSON.stringify(params)
+            }, function(res) {
+                
+            });
+        },
+        onAppendColor() {
+            this.colors.push({
+                brandcolor: "",
+                wordcode_1: "",
+                wordcode_2: "",
+                wordcode_3: "",
+                wordcode_4: "",
+                id: ""
+            })
+        },
+        onDeleteColorGroup({ $index, row }, rowIndex) {
+            let self = this
+            self.$delete(self.colors, $index)
+        },
+        countHeaderStyle({ row, column, rowIndex, columnIndex }) {
+            //console.log(row, column, rowIndex, columnIndex)
+            if (rowIndex == 1) {
+                return { display: 'none' }
+            }
         },
         onTabClick(tab) {
             const self = this
@@ -278,12 +437,9 @@ export default {
                             }
                         })
                     })
-
-
-
                 })
                 self.sizecontents_loaded = true;
-
+            } else if (tab.name == 'colorgroup' && self.colors_loaded == false) {
 
             }
         },

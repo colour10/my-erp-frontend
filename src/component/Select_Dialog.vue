@@ -4,14 +4,14 @@
     <el-button slot="append" icon="el-icon-more" @click="showPanel"></el-button>
   </el-input>
   
-  <el-dialog class="user-form" :title="labels.formTitle" :visible.sync="dialogVisible" :center="true" :width="componenToptions.dialogWidth||'40%'" :modal="false">
+  <el-dialog class="user-form" :title="_label('qingxuanze')" :visible.sync="dialogVisible" :center="true" :width="componenToptions.dialogWidth||'40%'" :modal="false">
     <el-checkbox-group v-model="checkList" @change="handleChange">
       <el-checkbox :label="item.getKeyValue()" v-for="(item,key) in data" :key="item.getKeyValue()">{{item.getLabelValue()}}</el-checkbox>
     </el-checkbox-group>
     
     <div slot="footer" class="dialog-footer" v-if="!auto_model">    
-      <el-button type="primary" @click="handleSelect">{{labels.ok}}</el-button>
-      <el-button @click="handleCancel">{{labels.cancel}}</el-button>
+      <el-button type="primary" @click="handleSelect">{{_label("ok")}}</el-button>
+      <el-button @click="handleCancel">{{_label("cancel")}}</el-button>
     </div>
   </el-dialog>
 </div>
@@ -21,6 +21,8 @@
 <script>
 import DataSource from './DataSource.js'
 import globals from './globals.js'
+
+const _label = globals.getLabel
 
 export default {
     name: 'select-dialog',
@@ -55,37 +57,35 @@ export default {
     },
     data() {
         var self = this
-        var dataSource = DataSource.getDataSource(self.source, self.lang);
+        
         
         return {
             currentText:"",
             checkList:[],
             data:[],
             componenToptions:{},            
-            dialogVisible:false,
-            labels:{
-                formTitle:globals.getLabel('qingxuanze'),
-                ok:globals.getLabel('ok'),
-                cancel:globals.getLabel('cancel')
-            },
-            dataSource:dataSource
+            dialogVisible:false
         }
     },
     methods: {
         handleSelect() {
             var self = this;
-            //self.convertValue(self.checkList)
             self.$emit('change',self.checkList.join(","))    
             self.dialogVisible = false;  
         },
         handleCancel() {
             var self = this;
             self.convertValue(self.select_value)
-            self.checkList = self.select_value.split(",")
+            //self.checkList = self.select_value.split(",")
             self.dialogVisible = false;  
         },
         showPanel(){
-            this.dialogVisible = true;    
+            var self = this;
+
+            self.getDataSource().getData(function(data){
+                self.data = data
+                self.dialogVisible = true;        
+            })                 
         },
         handleChange(newValue) {
             var self = this;
@@ -97,33 +97,17 @@ export default {
         },
         convertValue(value) {
             var self = this;
-            //console.log("convertValue", self.source)
-            
-            if(typeof(value)=='string') {
-                value = value.split(',')    
-            }
-            
-            var arr = value.map(function(key){
-                return new Promise(function(resolve, reject){
-                    self.dataSource.getRowLabel(key,function(label){
-                        resolve([key,label])
-                    });
-                })
-            });
-            
-            Promise.all(arr).then(data => {
-                //console.log(data.join(","), "===")
-                
-                //过滤掉找不到label的数据
-                var arr = data.filter(function(item){
-                    return item[1]!=""    
-                })
-                //console.log(arr)
-                
-                
-                self.checkList = arr.map(item=>item[0]);
-                self.currentText = arr.map(item=>item[1]).join(",")
-            }) 
+            //self._log("convertValue", value)
+
+            self.getDataSource().getRowLabels(value, function(labels){
+                self._log("convertValue", self.source, self.lang, labels)
+                self.checkList = value.split(",")
+                self.currentText = labels
+            })            
+        },
+        getDataSource() {
+            var self = this;
+            return DataSource.getDataSource(self.source, self.lang);
         }
     },
     watch:{
@@ -131,34 +115,12 @@ export default {
             var self = this
             //console.log("change", newValue)
             self.convertValue(newValue)
-            if(newValue.trim()!="") {
-                self.checkList = newValue.split(",");
-            }
-            else {
-                self.checkList = []
-            }
-        },
-        lang(newValue) {
-            this.dataSource.setLang(newValue)   
         }
     },
     mounted:function(){
         var self = this;
         var txt = self.select_value ||""
         self.convertValue(txt)
-        if(txt.trim()!="") {
-            self.checkList = self.select_value.split(",");
-            
-//            self.checkList = self.checkList.filter(function(key){
-//                console.log(self.dataSource.getRowLabel(key))
-//                return self.dataSource.getRowLabel(key)!="";
-//            })
-//            console.log(self.checkList)
-        }
-        
-        self.dataSource.getData(function(data){
-            self.data = data      
-        })        
     }
 }
 </script>

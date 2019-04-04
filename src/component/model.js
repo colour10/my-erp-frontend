@@ -92,16 +92,6 @@ const ProductDetail = Object.assign(createModel("product"),{
             brandcolor.getRowLabels(row.brandcolor, resolve)
         }))
 
-        const executioncategory = DataSource.getDataSource('executioncategory', getLabel('lang'));      
-        arr.push(new Promise(function(resolve){
-            executioncategory.getRowLabels(row.executioncategory, resolve)
-        }))
-
-        const securitycategory = DataSource.getDataSource('securitycategory', getLabel('lang'));      
-        arr.push(new Promise(function(resolve){
-            securitycategory.getRowLabels(row.securitycategory, resolve)
-        }))
-
         const season = DataSource.getDataSource('season', getLabel('lang'));      
         arr.push(new Promise(function(resolve){
             season.getRowLabels(row.season, resolve)
@@ -112,16 +102,6 @@ const ProductDetail = Object.assign(createModel("product"),{
             ageseason.getRowLabels(row.ageseason, resolve)
         }))
 
-        const materialstatus = DataSource.getDataSource('materialstatus', getLabel('lang'));      
-        arr.push(new Promise(function(resolve){
-            materialstatus.getRowLabels(row.materialstatus, resolve)
-        }))
-
-        const occasion = DataSource.getDataSource('occasionsstyle', getLabel('lang'));      
-        arr.push(new Promise(function(resolve){
-            occasion.getRowLabels(row.occasion, resolve)
-        }))
-
         Promise.all(arr).then(function(results) {
             //console.log(results)
             row.sizecontents = results[0]
@@ -129,12 +109,8 @@ const ProductDetail = Object.assign(createModel("product"),{
             row.brandgroup_label = results[2]
             row.countries_label = results[3]
             row.brandcolor_label = results[4]
-            row.executioncategory_label = results[5]
-            row.securitycategory_label = results[6]
-            row.season_label = results[7]
-            row.ageseason_label = results[8]
-            row.materialstatus_label = results[9]
-            row.occasion_label = results[10]
+            row.season_label = results[5]
+            row.ageseason_label = results[6]
             callback(row)
         });
     }

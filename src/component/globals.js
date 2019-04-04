@@ -61,10 +61,17 @@ const deleteObject = function(arr, obj) {
     return arr
 }
 
+const extract = function(object, keys){
+    let obj = {}
+    keys.forEach(key=>obj[key] = object[key])
+    return obj
+}
+
 export {
     getLabel,
     logger,
-    extend
+    extend,
+    extract
 }
 export default {
     getLabel,
@@ -74,5 +81,6 @@ export default {
     empty,
     round,
     deleteObject,
-    copyTo
+    copyTo,
+    extract
 }
