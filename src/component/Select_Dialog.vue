@@ -22,8 +22,6 @@
 import DataSource from './DataSource.js'
 import globals from './globals.js'
 
-const _label = globals.getLabel
-
 export default {
     name: 'select-dialog',
     props: {
@@ -100,7 +98,7 @@ export default {
             //self._log("convertValue", value)
 
             self.getDataSource().getRowLabels(value, function(labels){
-                self._log("convertValue", self.source, self.lang, labels)
+                //self._log("convertValue", self.source, self.lang, labels)
                 self.checkList = value.split(",")
                 self.currentText = labels
             })            

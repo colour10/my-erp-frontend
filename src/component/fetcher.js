@@ -1,11 +1,18 @@
 import {httpPost} from "./http.js"
 
-const store = {
-    list: {},
-    temp: {},
-    result: {},
-    loading: false
-};
+if(typeof(window.ASAP)=='undefined') {
+    window.ASAP = {}
+}
+
+if(!window.ASAP.$store) {
+    window.ASAP.$store = {
+        list: {},
+        temp: {},
+        result: {},
+        loading: false
+    };
+}
+const store = window.ASAP.$store
 
 const getFetcher = function(name) {
     if (!store.list[name]) {

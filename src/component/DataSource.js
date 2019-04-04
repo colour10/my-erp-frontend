@@ -169,23 +169,6 @@ DataSource.prototype.setLabelName = function(name) {
     this.oplabel = name
 }
 
-DataSource.prototype.getLabelList = function(valueList, callback) {
-    //_log("getLabelList",valueList)
-    this.getData( data => {
-        //_log(valueList, data, '+++++++') 
-        let list = valueList.map(function(value){
-            return data.find(item=>value==item.getValue())
-        }).filter(item=>item).map(item=>item.getLabel())
-        
-        callback(list)
-    })
-}
-
-/*
-DataSource.prototype.setValueName = function(name) {
-    self.opvalue = name
-}*/
-
 DataSource.prototype.getRow = function(keyValue, callback) {
     var self = this;
     var func = function f(){
@@ -212,31 +195,26 @@ DataSource.prototype.getRowLabel = function(keyValue, callback) {
     });
 }
 
-DataSource.prototype.getRowLabels = function(keyValues, callback) {
+DataSource.prototype.getRows = function(keyValues, callback) {
     var self = this;
     keyValues = typeof(keyValues)=='string' ? keyValues.split(",") : keyValues;
 
-    this.getLabelList(keyValues, function(list){
-        callback(list.join(","))
+    this.getData( data => {
+        //_log(valueList, data, '+++++++') 
+        let list = keyValues.map(function(value){
+            return data.find(item=>value==item.getValue())
+        }).filter(item=>item)
+        
+        callback(list)
     })
-    
-/*    var all_promise = keyValues.map(function(item){
-        return new Promise(function(resolve, reject){
-            self.getRow(item,function(row){
-                if(row) {
-                    resolve(row.getLabelValue())
-                }
-                else {
-                    resolve("");
-                }    
-            });
-        });
-    })
-    
-    Promise.all(all_promise).then(function(results) {
-        self.loading = false;
-        callback(results.join(","))
-    });*/    
+}
+
+DataSource.prototype.getRowLabels = function(keyValues, callback) {
+    var self = this;
+
+    this.getRows(keyValues, function(list){
+        callback(list.map(item=>item.getLabel()).join(","))
+    })    
 }
 
 DataSource.getDataSource = function(resourceName, lang) {

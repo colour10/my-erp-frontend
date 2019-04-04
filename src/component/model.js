@@ -102,6 +102,29 @@ const ProductDetail = Object.assign(createModel("product"),{
             ageseason.getRowLabels(row.ageseason, resolve)
         }))
 
+        //颜色分组
+        arr.push(new Promise(function(resolve){
+            if(row.product_group=='') {
+                resolve([])
+                return 
+            }
+
+            let list = row.product_group.split('|').map(item=>item.split(','))
+
+            brandcolor.getData(function(data){
+                let array = list.map(function(item){
+                    let row = data.find(function(row){
+                        //console.log(row,item[1], "===", row.getValue())
+                        return item[1]==row.getValue()
+                    })
+                    //console.log(row, item, "+++")
+                    return {id:item[0], colortemplateid:item[1], colorlabel:row.getLabel(),colorcode:row.row.code}
+                })
+
+                resolve(array)
+            })
+        }))
+
         Promise.all(arr).then(function(results) {
             //console.log(results)
             row.sizecontents = results[0]
@@ -111,6 +134,7 @@ const ProductDetail = Object.assign(createModel("product"),{
             row.brandcolor_label = results[4]
             row.season_label = results[5]
             row.ageseason_label = results[6]
+            row.colors = results[7]
             callback(row)
         });
     }

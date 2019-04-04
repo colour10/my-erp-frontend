@@ -21,75 +21,13 @@
                                 <el-input v-model="form.wordcode_4" style="width:110px;"></el-input>
                             </el-form-item>
                         </el-form>
-                        <el-col :span="4">
-                            <div class="color-group">
-                                <div class="box" style="width:36px;">
-                                    <i class="el-icon-plus color-group-icon"></i>
+                        <el-col :span="4" v-for="item in colors2" :key="item.colortemplateid">
+                            <el-tooltip class="item" effect="dark" :content="item.colorlabel" placement="top-start">    
+                            <div class="color-group" @click="onClickColor(item.id)">
+                                <div class="box" :style="'width:36px;height:36px;background:'+item.colorcode">
                                 </div>
                             </div>
-                        </el-col>
-                        <el-col :span="4">
-                            <div class="color-group">
-                                <div class="box" style="width:36px;">
-                                    <i class="el-icon-plus color-group-icon"></i>
-                                </div>
-                            </div>
-                        </el-col>
-                        <el-col :span="4">
-                            <div class="color-group">
-                                <div class="box" style="width:36px;">
-                                    <i class="el-icon-plus color-group-icon"></i>
-                                </div>
-                            </div>
-                        </el-col>
-                        <el-col :span="4">
-                            <div class="color-group">
-                                <div class="box" style="width:36px;">
-                                    <i class="el-icon-plus color-group-icon"></i>
-                                </div>
-                            </div>
-                        </el-col>
-                        <el-col :span="4">
-                            <div class="color-group">
-                                <div class="box" style="width:36px;">
-                                    <i class="el-icon-plus color-group-icon"></i>
-                                </div>
-                            </div>
-                        </el-col>
-                        <el-col :span="4">
-                            <div class="color-group">
-                                <div class="box" style="width:36px;">
-                                    <i class="el-icon-plus color-group-icon"></i>
-                                </div>
-                            </div>
-                        </el-col>
-                        <el-col :span="4">
-                            <div class="color-group">
-                                <div class="box" style="width:36px;">
-                                    <i class="el-icon-plus color-group-icon"></i>
-                                </div>
-                            </div>
-                        </el-col>
-                        <el-col :span="4">
-                            <div class="color-group">
-                                <div class="box" style="width:36px;">
-                                    <i class="el-icon-plus color-group-icon"></i>
-                                </div>
-                            </div>
-                        </el-col>
-                        <el-col :span="4">
-                            <div class="color-group">
-                                <div class="box" style="width:36px;">
-                                    <i class="el-icon-plus color-group-icon"></i>
-                                </div>
-                            </div>
-                        </el-col>
-                        <el-col :span="4">
-                            <div class="color-group">
-                                <div class="box" style="width:36px;">
-                                    <i class="el-icon-plus color-group-icon"></i>
-                                </div>
-                            </div>
+                            </el-tooltip>
                         </el-col>
                         <el-col :span="4">
                             <div class="color-group">
@@ -266,7 +204,7 @@
 
 <script>
 import globals,{extract} from '../globals.js'
-import { ProductCodeList } from "../model.js"
+import { ProductCodeList,ProductDetail } from "../model.js"
 import List from '../list.js'
 import { Rules } from '../rules.js'
 import DataSource from '../DataSource.js'
@@ -334,13 +272,13 @@ export default {
                 brandid: Rules.id({ message: _label("8000") }),
                 countries: Rules.required({ message: _label("8000") }),
                 brandcolor: Rules.required({ message: _label("8000") }),
-                ageseason: Rules.required({ message: _label("8000") }),
-                closedway: Rules.required({ message: _label("8000") }),
+                ageseason: Rules.required({ message: _label("8000") })
             },
             sizecontents: [],
             sizecontents_loaded: false,
             colors: [],
             colors_loaded: false,
+            colors2:[],//仅仅用来显示多色
             datetime: _label("_date"),
             adduser: _label("_currentUsername"),
             option: {
@@ -394,7 +332,7 @@ export default {
             self._submit("/product/savecolorgroup", {
                 params: JSON.stringify(params)
             }, function(res) {
-                
+
             });
         },
         onAppendColor() {
@@ -412,7 +350,6 @@ export default {
             self.$delete(self.colors, $index)
         },
         countHeaderStyle({ row, column, rowIndex, columnIndex }) {
-            //console.log(row, column, rowIndex, columnIndex)
             if (rowIndex == 1) {
                 return { display: 'none' }
             }
@@ -443,9 +380,17 @@ export default {
 
             }
         },
+        onClickColor(productid) {
+            var self = this
+            ProductDetail.get(productid,function(info){
+                self.setInfo(info)
+            },1)
+        },
         setInfo(row) {
             var self = this
-            self.row = row;
+            ProductDetail.get(row,function(info){
+                self.colors2 = info.colors
+            },1)
             globals.copyTo(row, this.form)
             self.form.factoryprice = globals.round(self.form.factoryprice, 2)
             self.form.wordprice = globals.round(self.form.wordprice, 2)

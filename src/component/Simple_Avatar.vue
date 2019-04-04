@@ -1,5 +1,5 @@
 <template>
-  <el-upload class="avatar-uploader" action="/common/upload?category=product" :show-file-list="false" :on-success="handleAvatarSuccess">
+  <el-upload class="avatar-uploader" :action="host+'/common/upload?category=product'" :show-file-list="false" :on-success="handleAvatarSuccess">
     <img v-if="imageurl" :src="image_url_prex+imageurl" class="avatar">
     <i v-else class="el-icon-plus avatar-uploader-icon"></i>
   </el-upload>
@@ -7,6 +7,7 @@
 
 <script>
 import globals from './globals.js'
+import {httpPost,host} from './http.js'
 const _label = globals.getLabel
 
 export default {
@@ -28,6 +29,7 @@ export default {
     data() {
         return {
             imageurl:this.select_value,
+            host,
             image_url_prex:_label("_image_url_prex")
         }
     },
