@@ -30,7 +30,7 @@
                             </el-tooltip>
                         </el-col>
                         <el-col :span="4">
-                            <div class="color-group">
+                            <div class="color-group" @click="onClickColorToEdit">
                                 <div class="box" style="width:36px;">
                                     <i class="el-icon-plus color-group-icon"></i>
                                 </div>
@@ -156,7 +156,7 @@
                 </el-col>
             </el-tab-pane>
             <el-tab-pane :label="_label('tongkuanduose')" name="colorgroup">
-                <searchpanel @select="onSelectProduct"></searchpanel>
+                <searchpanel ref="searchpanel" @select="onSelectProduct"></searchpanel>
                 
                 <el-table :data="colors" border style="width:100%;" :header-cell-style="countHeaderStyle">
                     <el-table-column prop="brandcolor" :label="_label('yanse')" width="240" align="center">
@@ -189,7 +189,7 @@
                     </el-table-column>
                     <el-table-column prop="goods_code" :label="_label('caozuo')" width="150" align="center">
                         <template v-slot="scope">
-                            <el-button type="danger" @click="onDeleteColorGroup(scope, scope.row)" v-if="option.isedit">{{_label("shanchu")}}</el-button>
+                            <el-button type="danger" @click="onDeleteColorGroup(scope, scope.row)" v-if="option.isedit && form.id!=scope.row.id">{{_label("shanchu")}}</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -211,6 +211,8 @@ import DataSource from '../DataSource.js'
 import Asa_Product_Search_Panel from './Asa_Product_Search_Panel.vue'
 const _log = globals.logger("asa-product");
 const _label = globals.getLabel
+
+const color_keys = ['id','brandcolor','wordcode_1','wordcode_2','wordcode_3','wordcode_4']
 
 export default {
     name: 'asa-product',
@@ -309,7 +311,12 @@ export default {
         },
         onSelectProduct(info){
             let self = this
-            self.colors.push(info)
+            if(self.colors.findIndex(item=>item.id==info.id)>=0) {
+                self._info("is exist.")
+            }
+            else {
+                self.colors.push(extract(info, color_keys))
+            }            
         },
         onSaveGoodsCode() {
             let self = this
@@ -327,12 +334,20 @@ export default {
             //保存同款多色数据
             let self = this;
             let params = {productid:self.form.id}
-            params.list = self.colors.map(item=>extract(item,['id','brandcolor','wordcode_1','wordcode_2','wordcode_3','wordcode_4']))
+            params.list = self.colors.map(item=>extract(item,color_keys))
             self._log(params)
             self._submit("/product/savecolorgroup", {
                 params: JSON.stringify(params)
             }, function(res) {
+                self.setInfo(res.data.form)
+                res.data.list.forEach(function(item){
+                    self.colors.push(extract(item, color_keys))
+                    self._log(item)
+                })
+                self.colors_loaded = true
 
+                self.$emit("change", Object.assign({}, self.form), "update")
+                self.currentTab = "colorgroup"
             });
         },
         onAppendColor() {
@@ -366,7 +381,7 @@ export default {
 
                     let ntlist = new List(self.sizecontents)
                     new ProductCodeList(self.form.id, function(data) {
-                        console.log(data)
+                        //console.log(data)
                         data.forEach(function(item) {
                             let index = ntlist.findIndex('id', item.sizecontentid)
                             if (index >= 0) {
@@ -377,8 +392,24 @@ export default {
                 })
                 self.sizecontents_loaded = true;
             } else if (tab.name == 'colorgroup' && self.colors_loaded == false) {
-
+                self.loadColorGroupList();
             }
+        },
+        loadColorGroupList() {
+            let self = this;
+            self._fetch("/product/getcolorgrouplist", {id:self.form.id}, function(res){
+                //console.log(res)
+                res.data.forEach(function(item){
+                    self.colors.push(extract(item, ['brandcolor', 'id', 'wordcode_1', 'wordcode_2', 'wordcode_3', 'wordcode_4']))
+                    ///self._log(item)
+                })
+                self.colors_loaded = true;
+            })
+        },
+        onClickColorToEdit() {
+            let self = this
+            self.currentTab = "colorgroup"
+            self.loadColorGroupList();
         },
         onClickColor(productid) {
             var self = this
@@ -388,6 +419,9 @@ export default {
         },
         setInfo(row) {
             var self = this
+            self.colors_loaded = false;
+            self.colors = []
+
             ProductDetail.get(row,function(info){
                 self.colors2 = info.colors
             },1)
@@ -398,6 +432,7 @@ export default {
 
             setTimeout(function() {
                 self.$refs.childbrand.load(item => item.row.brandgroupid == self.form.brandgroupid)
+                self.$refs.searchpanel.clear()
             }, 100)
 
             self.clearValidate(50)

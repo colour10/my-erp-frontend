@@ -109,6 +109,7 @@ export default {
         clear() {
             let self = this
             globals.empty(self.form)
+            self.searchresult = []
             return self
         },
         selectRow(row) {
