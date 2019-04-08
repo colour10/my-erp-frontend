@@ -46,6 +46,9 @@
                             <el-button :type="form.id>0?'info' :'primary'" @click="saveOrder()">{{_label("baocun")}}</el-button>
                             <el-button type="primary" @click="showAttachment()">{{_label("fujian")}}</el-button>
                         </el-row>
+                        <el-row type="flex" justify="start">
+                            <el-button type="primary" @click="onQuit">{{_label("tuichu")}}</el-button>
+                        </el-row>
                     </el-col>
                 </el-row>
             </el-form>
@@ -142,6 +145,9 @@ export default {
         }
     },
     methods: {
+        onQuit() {
+            this.dialogVisible = false
+        },
         onSwitchChange(rowIndex, row) {
             let self = this
             self._log(rowIndex, row)

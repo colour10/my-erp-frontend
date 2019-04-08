@@ -22,6 +22,7 @@
                     <el-col :span="6">
                         <el-row type="flex" justify="start">
                             <el-button type="primary" @click="saveOrder(1)">{{_label("shenqing")}}</el-button>
+                            <el-button type="primary" @click="onQuit">{{_label("tuichu")}}</el-button>
                         </el-row>
                     </el-col>
                 </el-row>
@@ -117,6 +118,9 @@ export default {
         }
     },
     methods: {
+        onQuit() {
+            this.dialogVisible = false
+        },
         onSelect(row) {
             var self = this;
             let index = self.tabledata.findIndex(item=>item.id==row.id)

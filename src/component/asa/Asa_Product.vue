@@ -22,11 +22,11 @@
                             </el-form-item>
                         </el-form>
                         <el-col :span="4" v-for="item in colors2" :key="item.colortemplateid">
-                            <el-tooltip class="item" effect="dark" :content="item.colorlabel" placement="top-start">    
-                            <div class="color-group" @click="onClickColor(item.id)">
-                                <div class="box" :style="'width:36px;height:36px;background:'+item.colorcode">
+                            <el-tooltip class="item" effect="dark" :content="item.colorlabel" placement="top-start">
+                                <div class="color-group" @click="onClickColor(item.id)">
+                                    <div class="box" :style="'width:36px;height:36px;background:'+item.colorcode">
+                                    </div>
                                 </div>
-                            </div>
                             </el-tooltip>
                         </el-col>
                         <el-col :span="4">
@@ -132,16 +132,17 @@
                         </el-col>
                     </el-row>
                     <el-row :gutter="0">
-                        <el-col :span="2" :offset="11">
-                            <el-button type="primary" @click="onSubmit" v-if="option.isedit">{{_label("tijiao")}}</el-button>
+                        <el-col :span="6" :offset="9">
+                            <el-button type="primary" @click="onSubmit" v-if="option.isedit">{{_label("baocun")}}</el-button>
+                            <el-button type="primary" @click="onQuit">{{_label("tuichu")}}</el-button>
                         </el-col>
                     </el-row>
                 </el-form>
             </el-tab-pane>
-            <el-tab-pane :label="_label('shangpintupian')" name="album">
-                <sp-album :productid="form.id"></sp-album>
+            <el-tab-pane :label="_label('shangpintupian')" name="album" :disabled="form.id==''">
+                <sp-album :productid="form.id" ref="album"></sp-album>
             </el-tab-pane>
-            <el-tab-pane :label="_label('shangpinhuohao')" name="code">
+            <el-tab-pane :label="_label('shangpinhuohao')" name="code" :disabled="form.id==''">
                 <el-table :data="sizecontents" border style="width:100%;">
                     <el-table-column prop="name" :label="_label('chima')" align="center">
                     </el-table-column>
@@ -151,13 +152,13 @@
                         </template>
                     </el-table-column>
                 </el-table>
-                <el-col :offset="11" :span="2">
+                <el-col :offset="9" :span="6">
                     <el-button type="primary" @click="onSaveGoodsCode" v-if="option.isedit">{{_label("baocun")}}</el-button>
+                    <el-button type="primary" @click="onQuit">{{_label("tuichu")}}</el-button>
                 </el-col>
             </el-tab-pane>
-            <el-tab-pane :label="_label('tongkuanduose')" name="colorgroup">
+            <el-tab-pane :label="_label('tongkuanduose')" name="colorgroup" :disabled="form.id==''">
                 <searchpanel ref="searchpanel" @select="onSelectProduct"></searchpanel>
-                
                 <el-table :data="colors" border style="width:100%;" :header-cell-style="countHeaderStyle">
                     <el-table-column prop="brandcolor" :label="_label('yanse')" width="240" align="center">
                         <template v-slot="scope">
@@ -193,9 +194,10 @@
                         </template>
                     </el-table-column>
                 </el-table>
-                <el-col :offset="9" :span="6" style="padding:5px">
+                <el-col :offset="8" :span="8" style="padding:5px">
                     <el-button type="primary" @click="onSaveColorGroup" v-if="option.isedit">{{_label("baocun")}}</el-button>
                     <el-button type="primary" @click="onAppendColor" v-if="option.isedit">{{_label("zhuijia")}}</el-button>
+                    <el-button type="primary" @click="onQuit">{{_label("tuichu")}}</el-button>
                 </el-col>
             </el-tab-pane>
         </el-tabs>
@@ -203,8 +205,8 @@
 </template>
 
 <script>
-import globals,{extract} from '../globals.js'
-import { ProductCodeList,ProductDetail } from "../model.js"
+import globals, { extract } from '../globals.js'
+import { ProductCodeList, ProductDetail } from "../model.js"
 import List from '../list.js'
 import { Rules } from '../rules.js'
 import DataSource from '../DataSource.js'
@@ -212,19 +214,19 @@ import Asa_Product_Search_Panel from './Asa_Product_Search_Panel.vue'
 const _log = globals.logger("asa-product");
 const _label = globals.getLabel
 
-const color_keys = ['id','brandcolor','wordcode_1','wordcode_2','wordcode_3','wordcode_4']
+const color_keys = ['id', 'brandcolor', 'wordcode_1', 'wordcode_2', 'wordcode_3', 'wordcode_4']
 
 export default {
     name: 'asa-product',
     components: {
-        searchpanel:Asa_Product_Search_Panel
+        searchpanel: Asa_Product_Search_Panel
     },
     data() {
         return {
             dialogVisible: false,
             lang: _label("lang"),
-            search:{
-                is_show:false
+            search: {
+                is_show: false
             },
             form: {
                 id: '',
@@ -269,9 +271,9 @@ export default {
             },
             rules: {
                 sizetopid: Rules.id({ required: true, message: _label("8000") }),
-                brandgroupid: Rules.id({ message: _label("8000") }),
-                childbrand: Rules.id({ message: _label("8000") }),
-                brandid: Rules.id({ message: _label("8000") }),
+                brandgroupid: Rules.id({ required: true,message: _label("8000") }),
+                childbrand: Rules.id({ required: true,message: _label("8000") }),
+                brandid: Rules.id({ required: true,message: _label("8000") }),
                 countries: Rules.required({ message: _label("8000") }),
                 brandcolor: Rules.required({ message: _label("8000") }),
                 ageseason: Rules.required({ message: _label("8000") })
@@ -280,7 +282,7 @@ export default {
             sizecontents_loaded: false,
             colors: [],
             colors_loaded: false,
-            colors2:[],//仅仅用来显示多色
+            colors2: [], //仅仅用来显示多色
             datetime: _label("_date"),
             adduser: _label("_currentUsername"),
             option: {
@@ -290,6 +292,9 @@ export default {
         }
     },
     methods: {
+        onQuit() {
+            this.dialogVisible = false
+        },
         onSubmit() {
             var self = this;
 
@@ -309,14 +314,13 @@ export default {
                 }
             })
         },
-        onSelectProduct(info){
+        onSelectProduct(info) {
             let self = this
-            if(self.colors.findIndex(item=>item.id==info.id)>=0) {
+            if (self.colors.findIndex(item => item.id == info.id) >= 0) {
                 self._info("is exist.")
-            }
-            else {
+            } else {
                 self.colors.push(extract(info, color_keys))
-            }            
+            }
         },
         onSaveGoodsCode() {
             let self = this
@@ -333,14 +337,14 @@ export default {
         onSaveColorGroup() {
             //保存同款多色数据
             let self = this;
-            let params = {productid:self.form.id}
-            params.list = self.colors.map(item=>extract(item,color_keys))
+            let params = { productid: self.form.id }
+            params.list = self.colors.map(item => extract(item, color_keys))
             self._log(params)
             self._submit("/product/savecolorgroup", {
                 params: JSON.stringify(params)
             }, function(res) {
                 self.setInfo(res.data.form)
-                res.data.list.forEach(function(item){
+                res.data.list.forEach(function(item) {
                     self.colors.push(extract(item, color_keys))
                     self._log(item)
                 })
@@ -394,14 +398,22 @@ export default {
             } else if (tab.name == 'colorgroup' && self.colors_loaded == false) {
                 self.loadColorGroupList();
             }
+            else if(tab.name=='album') {
+                setTimeout(function() {
+                    self.$refs.album.loadList()
+                }, 100)
+            }
         },
         loadColorGroupList() {
             let self = this;
-            self._fetch("/product/getcolorgrouplist", {id:self.form.id}, function(res){
+            if (self.colors_loaded == true) {
+                return;
+            }
+            self._fetch("/product/getcolorgrouplist", { id: self.form.id }, function(res) {
                 //console.log(res)
-                res.data.forEach(function(item){
+                res.data.forEach(function(item) {
                     self.colors.push(extract(item, ['brandcolor', 'id', 'wordcode_1', 'wordcode_2', 'wordcode_3', 'wordcode_4']))
-                    ///self._log(item)
+                        ///self._log(item)
                 })
                 self.colors_loaded = true;
             })
@@ -413,35 +425,38 @@ export default {
         },
         onClickColor(productid) {
             var self = this
-            ProductDetail.get(productid,function(info){
+            ProductDetail.get(productid, function(info) {
                 self.setInfo(info)
-            },1)
+            }, 1)
         },
         setInfo(row) {
             var self = this
             self.colors_loaded = false;
             self.colors = []
 
-            ProductDetail.get(row,function(info){
-                self.colors2 = info.colors
-            },1)
-            globals.copyTo(row, this.form)
-            self.form.factoryprice = globals.round(self.form.factoryprice, 2)
-            self.form.wordprice = globals.round(self.form.wordprice, 2)
-            self.form.nationalprice = globals.round(self.form.nationalprice, 2)
+            return new Promise((resolve, reject) => {
+                ProductDetail.get(row, function(info) {
+                    self.colors2 = info.colors
 
-            setTimeout(function() {
-                self.$refs.childbrand.load(item => item.row.brandgroupid == self.form.brandgroupid)
-                self.$refs.searchpanel.clear()
-            }, 100)
+                    globals.copyTo(info, self.form)
+                    self.form.factoryprice = globals.round(self.form.factoryprice, 2)
+                    self.form.wordprice = globals.round(self.form.wordprice, 2)
+                    self.form.nationalprice = globals.round(self.form.nationalprice, 2)
 
-            self.clearValidate(50)
+                    setTimeout(function() {
+                        self.$refs.childbrand.load(item => item.row.brandgroupid == self.form.brandgroupid)
+                        self.$refs.searchpanel.clear()
+                    }, 100)
 
-            self.sizecontents_loaded = false;
-            self.sizecontents = []
-            self.currentTab = 'product'
+                    self.clearValidate(50)
 
-            return self;
+                    self.sizecontents_loaded = false;
+                    self.sizecontents = []
+                    self.currentTab = 'product'
+
+                    resolve(self)
+                }, 1)
+            })
         },
         edit(isedit) {
             this.option.isedit = isedit
@@ -455,9 +470,10 @@ export default {
             var self = this;
             globals.empty(self.form)
 
-            self.activeName = "info"
+            self.currentTab = "product"
             self.sizecontents_loaded = false;
             self.sizecontents = []
+            self.colors2 = []
 
             self.clearValidate(50)
             return self

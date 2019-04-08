@@ -14,7 +14,7 @@
                 </el-col>
             </el-row>
         </el-form>
-        <el-table :data="searchresult" stripe border style="width:100%;" v-loading.fullscreen.lock="loading">
+        <el-table :data="searchresult" stripe border style="width:100%;">
             <el-table-column prop="productname" :label="_label('chanpinmingcheng')" align="center" sortable>
                 <template v-slot="scope">
                     <el-button type="text" @click="selectRow(scope.row)">{{scope.row.product.productname}}</el-button>
@@ -80,7 +80,7 @@ export default {
             })
         },
         selectRow(row) {
-            this.$refs.product.setInfo(row.product).show()
+            this.$refs.product.setInfo(row.product).then(product=>product.show() )     
             //this.$emit("select", row)
         }
     },

@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-row>
-            <el-col :span="24">
+            <el-col :span="2" :offset="22">
                 <el-button type="primary" @click="showFormToCreate()">{{globals.getLabel("button-create")}}</el-button>
             </el-col>
         </el-row>
@@ -24,11 +24,12 @@ const _label = globals.getLabel
 
 var props = {
     columns: [
-        { name: "picture", label: _label("zhutu"), is_image: true, image_width: 80, image_height: 80 },
-        { name: "picture2", label: _label("futu"), is_image: true, image_width: 80, image_height: 80 },
+        { name: "picture", label: _label("zhutu"), is_image: true, image_width: 80, image_height: 80, width:100},
+        { name: "picture2", label: _label("futu"), is_image: true, image_width: 80, image_height: 80, width:100 },
         { name: "productname", label: _label("shangpinmingcheng"),width:300},
+        { name: "brandcolor", label: _label("yanse"), type: "select", source: "colortemplate"},
         { name: "brandgroupid", label: _label("pinlei"), type: "select", source: "brandgroup" },
-        { name: "brandid", label: _label("zipinlei"), type: "select", source: "brand" },
+        { name: "brandid", label: _label("pinpai"), type: "select", source: "brand" },
         { name: "countries", label: _label("chandi"), type: "select-dialog", source: "country" }
     ],
     controller: "product"
@@ -47,7 +48,7 @@ export default {
     },
     methods: {
         showFormToEdit(rowIndex, row) {
-            this.$refs.product.setInfo(row).edit(true).show()            
+            this.$refs.product.setInfo(row).then(product=>product.edit(true).show() )           
         },
         showFormToCreate() {
             this.$refs.product.clearInfo().edit(true).show()

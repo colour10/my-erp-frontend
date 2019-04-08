@@ -17,7 +17,7 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onEdit" :disabled="is_save_disabled">{{globals.getLabel('button-save')}}</el-button>
-        <el-button  type="warning" @click="deleteDepart" :disabled="is_save_disabled">{{globals.getLabel('button-delete')}}</el-button>
+        <el-button  type="danger" @click="deleteDepart" :disabled="is_save_disabled">{{globals.getLabel('button-delete')}}</el-button>
       </el-form-item>
     </el-form>
   </el-col>
@@ -142,8 +142,8 @@ export default {
     },    
     mounted:function(){
         const self = this
-        self._fetch("/department/departments", {}, function(data){
-            self.data = data
+        self._fetch("/department/departments", {}, function(res){
+            self.data = res.data
         },"json")
     }
 }

@@ -1,5 +1,5 @@
 <template>
-    <div style="width:100%">
+    <div>
         <el-row>
             <el-col :span="2" :offset="22">
                 <el-button type="primary" @click="showFormToCreate()">{{_label('xinjian')}}</el-button>

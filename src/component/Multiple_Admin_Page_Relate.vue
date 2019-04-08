@@ -7,12 +7,12 @@
         </el-row>
         <el-row :gutter="20">
             <el-col :span="24">
-                <multiple-admin-tablelist ref="tablelist" :controller="controller" :key_column="key_column" :columns="columns" :buttons="buttons" :options="options" :base="base" :actions="actions" :onclickupdate="showFormToUpdate"></multiple-admin-tablelist>
+                <multiple-admin-tablelist ref="tablelist" :controller="controller" :key_column="key_column" :columns="columns" :buttons="buttons" :options="options" :base="base" :onclickupdate="showFormToUpdate"></multiple-admin-tablelist>
             </el-col>
         </el-row>
         <el-dialog class="user-form" :title="formTitle" :visible.sync="dialogVisible" :center="true" :width="componenToptions.dialogWidth||'40%'" :modal="false">
-            <el-row>
-                <el-col :span="24">
+            <el-tabs type="border-card" @tab-click="onTabClick" v-model="currentTab">
+                <el-tab-pane :label="_label('user-setting')" name="product">
                     <el-form ref="form" :model="form" label-width="100px" :inline="componenToptions.inline||false" :size="componenToptions.formSize||'medium'">
                         <el-form-item :label="item.label" v-if="!item.is_edit_hide" v-for="item in columns" :key="item.name" :class="item.class?item.class:''">
                             <el-input :ref="item.name" @keyup.enter.native="onSubmit" :type="item.type?item.type:'text'" v-if="!item.type||item.type=='input'||item.type=='textarea'" v-model="form[getColumnName(item)]"></el-input>
@@ -34,21 +34,27 @@
                             <el-button type="primary" @click="onQuit">{{_label("tuichu")}}</el-button>
                         </el-form-item>
                     </el-form>
-                </el-col>
-            </el-row>
+                </el-tab-pane>
+                <el-tab-pane :label="_label('shangpintupian')" name="child">
+                    <multiple v-bind="subprops"></multiple>
+                </el-tab-pane>
+            </el-tabs>
         </el-dialog>
     </div>
 </template>
 
 <script>
 import globals from './globals.js'
+import Multiple_Admin_Page from './Multiple_Admin_Page.vue'
 const _label = globals.getLabel
+
+const subbase = {}
 
 export default {
     name: 'multiple-admin-page',
-    props: ['columns', "buttons", "options", "controller", "base", "key_column", "auto_hide", "actions"],
+    props: ['columns', "buttons", "options", "controller", "base", "key_column", "auto_hide", "subprops"],
     components: {
-
+        multiple:Multiple_Admin_Page
     },
     data() {
         var form = {
@@ -73,7 +79,7 @@ export default {
                 form[column.name] = ""
             }
         }
-        //console.log(columns,form)
+        
 
         return {
             dialogVisible: false,
@@ -83,6 +89,7 @@ export default {
             lang: _label("lang"),
             componenToptions: options,
             languages: languages,
+            subbase:subbase
         }
     },
     methods: {

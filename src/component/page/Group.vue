@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-row>
-            <el-col :span="24">
+            <el-col :span="2" :offset="22">
                 <el-button type="primary" @click="showFormToCreate()">{{_label("xinjian")}}</el-button>
             </el-col>
         </el-row>
@@ -23,12 +23,14 @@
                         </el-form-item>
                         <el-form-item>
                             <el-button type="primary" @click="onSubmit">{{_label("baocun")}}</el-button>
+                            <el-button type="primary" @click="onQuit">{{_label("tuichu")}}</el-button>
                         </el-form-item>
                     </el-form>
                 </el-tab-pane>
                 <el-tab-pane :label="globals.getLabel('quanxian')" :disabled="!form.id">
                     <el-tree ref="tree" :data="permission_data" node-key="id" show-checkbox :expand-on-click-node="false"></el-tree>
                     <el-button type="primary" @click="onSavePermission">{{_label("baocun")}}</el-button>
+                    <el-button type="primary" @click="onQuit">{{_label("tuichu")}}</el-button>
                 </el-tab-pane>
                 <el-tab-pane :label="_label('zuneirenyuan')" name="user-list" :disabled="!form.id">
                     <el-table :data="user_list" stripe border style="width: 100%;">
@@ -42,9 +44,14 @@
                             </template>
                         </el-table-column>
                     </el-table>
+                    <el-row>
+                        <el-col :span="24" style="text-align:center;">
+                            <el-button type="primary" @click="onQuit">{{_label("tuichu")}}</el-button>
+                        </el-col>
+                    </el-row>
                 </el-tab-pane>
             </el-tabs>
-        </el-dialog> 
+        </el-dialog>
     </div>
 </template>
 
@@ -96,6 +103,9 @@ export default {
         }
     },
     methods: {
+        onQuit() {
+            this.dialogVisible = false
+        },
         handleDeleteUser(rowIndex, row) {
             var self = this;
             self._remove("/user/deletegroup", { groupid: '', id: row.id }, function() {

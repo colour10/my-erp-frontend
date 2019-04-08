@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-row>
-      <el-col :span="24">
+      <el-col :span="2" :offset="22">
         <el-button type="primary" @click="showFormToCreate()">{{labels.xinjian}}</el-button>
       </el-col>
     </el-row>
@@ -31,6 +31,7 @@
     <el-row>
       <el-col :span="24" style="text-align:center;">
         <el-button type="primary" @click="onSubmit" style="margin:auto;">{{labels.baocun}}</el-button>
+        <el-button type="primary" @click="onQuit">{{_label("tuichu")}}</el-button>
       </el-col>
     </el-row>
     </el-dialog>
@@ -75,6 +76,9 @@ export default {
         }
     },
     methods: {
+        onQuit() {
+            this.dialogVisible = false
+        },
         onSubmit() {            
             var self = this;
             self.form.lang = self.lang;

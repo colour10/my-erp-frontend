@@ -117,4 +117,7 @@ options["requisitionstatus"] =  {hashtable:_label("list_requisitionstatus")}
 //仓库角色
 options["warehouserole"] =  {hashtable:_label("list_warehouserole")}
 
+//客户类型
+options["suppliertype"] =  {hashtable:_label("list_suppliertype")}
+
 export default options

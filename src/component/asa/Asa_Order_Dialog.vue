@@ -96,6 +96,9 @@
                         <el-row type="flex" justify="start">
                             <el-button :type="canFinish?'primary':'info'" @click="finishOrder()">{{_label("dingdanwajie")}}</el-button>
                         </el-row>
+                        <el-row type="flex" justify="start">
+                            <el-button type="primary" @click="onQuit">{{_label("tuichu")}}</el-button>
+                        </el-row>
                     </el-col>
                 </el-row>
             </el-form>
@@ -215,6 +218,9 @@ export default {
         }
     },
     methods: {
+        onQuit() {
+            this.dialogVisible = false
+        },
         showProduct() {
             this.pro = true;
         },

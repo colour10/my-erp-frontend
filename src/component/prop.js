@@ -188,9 +188,20 @@ const props = {
 
     "supplier": {
         columns: [{
-            name: "suppliercode",
-            label: _label("gonghuoshangbianma"),
+            name: "nickname",
+            label: _label("nicheng"),
             class: "width2"
+        },
+        {
+            name: "suppliercode",
+            label: _label("bianma"),
+            class: "width2"
+        }, {
+            name: "suppliertype",
+            label: _label("leixing"),
+            class: "width2",
+            type:"select",
+            source:"suppliertype"
         }, {
             name: "countrycity",
             label: _label("guojiachengshi"),
@@ -199,7 +210,7 @@ const props = {
             source: "country"
         }, {
             name: "suppliername",
-            label: _label("gonghuoshangmingcheng"),
+            label: _label("mingcheng"),
             class: "width1"
         }, {
             name: "address",
@@ -209,11 +220,6 @@ const props = {
         }, {
             name: "englishname",
             label: _label("yingwenmingcheng"),
-            class: "width1",
-            is_hide: true
-        }, {
-            name: "english_address",
-            label: _label("gonghuoshangbianma"),
             class: "width1",
             is_hide: true
         }, {
@@ -256,10 +262,6 @@ const props = {
             label: _label("zhongzhishijian"),
             class: "width2",
             is_hide: true
-        }, {
-            name: "type",
-            label: _label("leixing"),
-            class: "width2"
         }, {
             name: "phone",
             label: _label("dianhua"),

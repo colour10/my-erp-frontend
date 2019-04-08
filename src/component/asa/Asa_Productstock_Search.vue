@@ -14,7 +14,7 @@
                 </el-col>
             </el-row>
         </el-form>
-        <el-table :data="searchresult" stripe border style="width:100%;" v-loading.fullscreen.lock="loading">
+        <el-table :data="searchresult" stripe border style="width:100%;">
             <el-table-column prop="productname" :label="_label('chanpinmingcheng')" align="center">
                 <template v-slot="scope">
                     {{scope.row.product.productname}}

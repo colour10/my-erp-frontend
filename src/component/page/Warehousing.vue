@@ -1,5 +1,5 @@
 <template>
-    <div style="width:100%">
+    <div>
         <el-row :gutter="20">
             <el-col :span="24">
                 <simple-admin-tablelist ref="tablelist" v-bind="props" :onclickupdate="showFormToEdit" :isdelete="false"></simple-admin-tablelist>

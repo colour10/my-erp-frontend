@@ -42,6 +42,9 @@
                             <el-button :type="rowdata.status==2?'primary':'info'" @click="confirmout()">{{_label("chukuqueren")}}</el-button>
                             <el-button :type="rowdata.status==3?'primary':'info'" @click="confirmin()">{{_label("rukuqueren")}}</el-button>
                         </el-row>
+                        <el-row>
+                            <el-button type="primary" @click="onQuit">{{_label("tuichu")}}</el-button>
+                        </el-row>
                     </el-col>
                 </el-row>
             </el-form>
@@ -128,6 +131,9 @@ export default {
         }
     },
     methods: {
+        onQuit() {
+            this.dialogVisible = false
+        },
         init(row) {
             let self = this,
                 form = this.form

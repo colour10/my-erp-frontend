@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-row>
-            <el-col :span="24">
+            <el-col :span="2" :offset="22">
                 <el-button type="primary" @click="showFormToCreate()">{{_label("button-create")}}</el-button>
             </el-col>
         </el-row>
@@ -66,8 +66,9 @@
                 <el-tab-pane :label="_label('gerenshezhi')" name="setting">个人设置</el-tab-pane>
             </el-tabs>
             <span slot="footer" class="dialog-footer">
-    <el-button type="primary" @click="onSubmit">{{_label('baocun')}}</el-button>
-  </span>
+                <el-button type="primary" @click="onSubmit">{{_label('baocun')}}</el-button>
+                <el-button type="primary" @click="onQuit">{{_label("tuichu")}}</el-button>
+            </span>
         </el-dialog>
     </div>
 </template>
@@ -80,7 +81,7 @@ const _log = globals.logger("asapage-producttemplate");
 const _label = globals.getLabel
 
 const base = {
-    userid:""
+    userid: ""
 }
 
 var props = {
@@ -106,11 +107,11 @@ var props = {
 
 const props2 = {
     columns: [
-        {name:"warehouseid", label:_label("cangku"), type:'select', source:"warehouse"},
-        {name:"warehouseroleid", label:_label("juese"), type:'select', source:"warehouserole"}
+        { name: "warehouseid", label: _label("cangku"), type: 'select', source: "warehouse" },
+        { name: "warehouseroleid", label: _label("juese"), type: 'select', source: "warehouserole" }
     ],
     controller: "warehouseuser",
-    base:base
+    base: base
 }
 
 export default {
@@ -146,7 +147,7 @@ export default {
             saleport: [],
             warehouse: [],
             props: props,
-            props2:props2,
+            props2: props2,
             currentTab: "user",
             saleport_list: [], //销售端口信息
             saleport_loaded: false,
@@ -155,10 +156,13 @@ export default {
         }
     },
     methods: {
+        onQuit() {
+            this.dialogVisible = false
+        },
         onSubmit() {
             var self = this;
-            let params = globals.extend({saleportids:self.saleport.join(',')}, self.form)
-            if (self.form.id == "") {                
+            let params = globals.extend({ saleportids: self.saleport.join(',') }, self.form)
+            if (self.form.id == "") {
                 self._submit("/user/add", params, function() {
                     self.$refs.tablelist.appendRow(globals.clone(self.form))
                 })
@@ -192,7 +196,7 @@ export default {
             self.rowIndex = rowIndex;
             self.row = row;
             globals.copyTo(row, this.form)
-            self.saleport = row.saleportids? row.saleportids.split(","):[]
+            self.saleport = row.saleportids ? row.saleportids.split(",") : []
             base.userid = row.id;
 
             self.showDialog();
