@@ -2,7 +2,11 @@ import $ from 'jquery'
 
 const ASAP = window.ASAP || {}
 const caches = {}
-const host ='http://erp.localhost.com'
+let host =''
+if(window.location.href.indexOf('http://localhost')>=0) {
+    host ='http://erp.localhost.com'
+}
+
 const httpGet = function(url, callback) {
     //console.log(window.ASAP)
     if(window.ASAP && window.ASAP.$session_id) {

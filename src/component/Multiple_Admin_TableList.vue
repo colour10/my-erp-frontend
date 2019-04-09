@@ -12,7 +12,7 @@
                 <el-button type="text" @click="item.handler(scope.$index, scope.row, item)">{{item.label}}</el-button>
             </template>
         </el-table-column>
-        <el-table-column prop="lang_code" :label="_label('yuyan')" width="180" align="center">
+        <el-table-column prop="lang_code" :label="_label('yuyan')" width="220" align="center">
             <template v-slot="scope">
                 <span v-for="(item, key) in languages" :key="item.code" :value="item.code">
          <el-button :type="isSettingLanguage(scope.row, item.code)?'primary':'info'" circle @click="showFormToUpdate(scope.$index, scope.row, item.code)">{{item.shortName}}</el-button>
@@ -64,7 +64,7 @@ export default {
         showFormToUpdate(rowIndex, row, lang) {
             var self = this
             self.rowIndex = rowIndex;
-            console.log(rowIndex, row, lang)
+            //console.log(rowIndex, row, lang)
             self.onclickupdate(rowIndex, row, lang)
         },
         handleAction({$index, row}, item) {

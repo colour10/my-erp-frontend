@@ -39,6 +39,7 @@ export default {
           ]
         },
         checked: true,
+        languages:globals.getLabel("list_languages"),
         isShowForm:false
       };
     },

@@ -7,6 +7,8 @@ function DataRow(row, dataSource) {
     var self = this;
     self.row = row
     self.dataSource = dataSource;
+    self.keyName = dataSource.getLabelName()
+    self.lang = dataSource.getLang()
 }
 
 DataRow.prototype.getKeyValue = function() {
@@ -195,8 +197,10 @@ DataSource.prototype.getRowLabel = function(keyValue, callback) {
     });
 }
 
-DataSource.prototype.getRows = function(keyValues, callback) {
+DataSource.prototype.getRows = function(keyValues='', callback) {
     var self = this;
+    keyValues = keyValues || ""
+
     keyValues = typeof(keyValues)=='string' ? keyValues.split(",") : keyValues;
 
     this.getData( data => {
@@ -215,6 +219,16 @@ DataSource.prototype.getRowLabels = function(keyValues, callback) {
     this.getRows(keyValues, function(list){
         callback(list.map(item=>item.getLabel()).join(","))
     })    
+}
+
+DataSource.prototype.getList = function() {
+    var self = this;
+
+    return new Promise((resolve)=>{
+        self.getData(data=>{
+            resolve(data.map(item=>item.getObject()))
+        })
+    })   
 }
 
 DataSource.getDataSource = function(resourceName, lang) {
@@ -246,6 +260,12 @@ DataSource.getDataSource = function(resourceName, lang) {
         /*resources[resourceName] = new DataSource(resources_options[resourceName], lang)
         return resources[resourceName]   */  
     }
+}
+
+DataSource.createSource = function(datalist, oplabel, opvalue, lang) {
+    let source = new DataSource({datalist, oplabel, opvalue}, lang)
+    source.init()
+    return source;
 }
 
 export default DataSource

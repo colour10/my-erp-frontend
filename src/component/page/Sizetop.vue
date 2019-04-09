@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import globals from '../globals.js'
+import globals,{_label} from '../globals.js'
 import Multiple_Admin_Page from '../Multiple_Admin_Page.vue'
 
 const _log = globals.logger("asapage-sizetop");
@@ -32,13 +32,30 @@ var props = {
 
 var props2 = {
     columns:[            
-        {name:"content", label:globals.getLabel('neirong'), is_multiple:true, is_focus:true},
-        {name:"sortnum", label:globals.getLabel('xuhao')},
+        {name:"content", label:globals.getLabel('neirong'), is_multiple:true, is_focus:true}
     ],
+    actions: [{
+        label: _label('xiangshang'),
+        handler: function(rowIndex, row, vm) {
+            vm._fetch("/sizecontent/up", {id:row.id}, function(){
+                vm.loadList(i=>i)
+            })
+        }
+    },{
+        label: _label('xiangxia'),
+        handler: function(rowIndex, row, vm) {
+            vm._fetch("/sizecontent/down", {id:row.id}, function(){
+                vm.loadList(i=>i)
+            })
+        }
+    }],
     controller:"sizecontent",
     key_column:"content",
     base:{
         topid:""    
+    },
+    options: {
+        action_width:300
     }
 }
 

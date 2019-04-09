@@ -33,19 +33,18 @@
                     <el-menu-item index="2-5">
                         <router-link to="/sizetop">{{_label("menu-2-1-5")}}</router-link>
                     </el-menu-item>
-                    <el-menu-item index="2-6">
+                    <!-- <el-menu-item index="2-6">
                         <router-link to="/producttemplate">{{_label("menu-2-1-19")}}</router-link>
-                    </el-menu-item>
+                    </el-menu-item> -->
                     <el-menu-item index="2-7">
                         <router-link to="/material">{{_label("menu-2-1-6")}}</router-link>
                     </el-menu-item>
-                    <el-menu-item index="2-8">
+                    <!-- <el-menu-item index="2-8">
                         <router-link to="/materialnote">{{_label("menu-2-1-18")}}</router-link>
-                    </el-menu-item>
+                    </el-menu-item> -->
                     <el-menu-item index="2-9">
                         <router-link to="/ulnarinch">{{_label("menu-2-1-7")}}</router-link>
                     </el-menu-item>
-
                     <el-menu-item index="2-10">
                         <router-link to="/warehouse">{{_label("menu-2-3-1")}}</router-link>
                     </el-menu-item>
@@ -56,16 +55,9 @@
                         <router-link to="/saleport">{{_label("menu-2-4")}}</router-link>
                     </el-menu-item>
                 </el-submenu>
-                <el-submenu index="3">
-                    <template #title>{{_label("menu-3")}}</template>
-                    <el-menu-item index="3-1">
-                        <router-link to="/product">{{_label("menu-3-1")}}</router-link>
-                    </el-menu-item>
-                    <el-menu-item index="3-2">
-                        <router-link to="/picture">{{_label("menu-3-2")}}</router-link>
-                    </el-menu-item>
-                    <el-menu-item index="3-3">{{_label("menu-3-3")}}</el-menu-item>
-                </el-submenu>
+                <el-menu-item index="3-1">
+                    <router-link to="/product">{{_label("menu-3-1")}}</router-link>
+                </el-menu-item>
                 <el-menu-item index="4-1">
                     <router-link to="/supplier">{{_label("menu-4")}}</router-link>
                 </el-menu-item>

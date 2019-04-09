@@ -253,13 +253,18 @@ const props = {
             class: "width2",
             is_hide: true
         }, {
-            name: "registered",
-            label: _label("zhuceshijian"),
+            name: "qq",
+            label: _label("qq"),
             class: "width2",
             is_hide: true
         }, {
-            name: "endtime",
-            label: _label("zhongzhishijian"),
+            name: "weixin",
+            label: _label("weixin"),
+            class: "width2",
+            is_hide: true
+        }, {
+            name: "alipay",
+            label: _label("alipay"),
             class: "width2",
             is_hide: true
         }, {

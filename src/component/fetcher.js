@@ -14,6 +14,19 @@ if(!window.ASAP.$store) {
 }
 const store = window.ASAP.$store
 
+const clear = function(name, id) {
+    console.log("clear",name,id)
+    if(store.result[name]) {
+        if(id) {
+            store.result[name][id] = undefined
+        } 
+        else {
+            store.result[name] = {}
+        }
+    }
+    
+}
+
 const getFetcher = function(name) {
     if (!store.list[name]) {
         store.list[name] = {}
@@ -88,5 +101,5 @@ const getFetcherMultiple = function(name) {
         });
     }
 }
-export {getFetcher,getFetcherMultiple}
-export default {getFetcher, getFetcherMultiple}
+export {getFetcher,getFetcherMultiple,clear}
+export default {getFetcher, getFetcherMultiple, clear}

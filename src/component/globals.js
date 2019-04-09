@@ -69,6 +69,7 @@ const extract = function(object, keys){
 
 export {
     getLabel,
+    getLabel as _label,
     logger,
     extend,
     extract

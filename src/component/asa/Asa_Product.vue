@@ -1,7 +1,7 @@
 <template>
     <el-dialog :title="_label('chanpinguanli')" :visible.sync="dialogVisible" :center="true" width="1000px">
         <el-tabs type="border-card" @tab-click="onTabClick" v-model="currentTab">
-            <el-tab-pane :label="_label('user-setting')" name="product">
+            <el-tab-pane :label="_label('jibenziliao')" name="product">
                 <el-row>
                     <el-col :span="5">
                         <simple-avatar v-model="form.picture"></simple-avatar>
@@ -65,8 +65,11 @@
                                 </select-dialog>
                             </el-form-item>
                             <el-form-item :label="_label('chima')" prop="sizetopid">
-                                <simple-select v-model="form.sizetopid" source="sizetop" :lang="lang">
+                                <simple-select v-model="form.sizetopid" source="sizetop" :lang="lang" @change="onSizetopidChange">
                                 </simple-select>
+                            </el-form-item>
+                            <el-form-item :label="_label('chima')" prop="sizetopid">
+                                <selectpanel v-model="form.sizecontentids" ref="sizecontentids"> </selectpanel>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
@@ -200,6 +203,9 @@
                     <el-button type="primary" @click="onQuit">{{_label("tuichu")}}</el-button>
                 </el-col>
             </el-tab-pane>
+            <el-tab-pane :label="_label('shangpinshuxing')" name="property" :disabled="form.id==''">
+                <property :productid="form.id" ref="property" @quit="onQuit" :option="option"></property>
+            </el-tab-pane>
         </el-tabs>
     </el-dialog>
 </template>
@@ -211,6 +217,9 @@ import List from '../list.js'
 import { Rules } from '../rules.js'
 import DataSource from '../DataSource.js'
 import Asa_Product_Search_Panel from './Asa_Product_Search_Panel.vue'
+import Asa_Product_Property from './Asa_Product_Property.vue'
+import Select_Dialog_Common from '../Select_Dialog_Common.vue'
+
 const _log = globals.logger("asa-product");
 const _label = globals.getLabel
 
@@ -219,7 +228,9 @@ const color_keys = ['id', 'brandcolor', 'wordcode_1', 'wordcode_2', 'wordcode_3'
 export default {
     name: 'asa-product',
     components: {
-        searchpanel: Asa_Product_Search_Panel
+        searchpanel: Asa_Product_Search_Panel,
+        property: Asa_Product_Property,
+        selectpanel: Select_Dialog_Common
     },
     data() {
         return {
@@ -264,6 +275,7 @@ export default {
                 season: "",
                 ageseason: "",
                 sizetopid: "",
+                sizecontentids: "",
                 wordcode_1: "",
                 wordcode_2: "",
                 wordcode_3: "",
@@ -271,9 +283,9 @@ export default {
             },
             rules: {
                 sizetopid: Rules.id({ required: true, message: _label("8000") }),
-                brandgroupid: Rules.id({ required: true,message: _label("8000") }),
-                childbrand: Rules.id({ required: true,message: _label("8000") }),
-                brandid: Rules.id({ required: true,message: _label("8000") }),
+                brandgroupid: Rules.id({ required: true, message: _label("8000") }),
+                childbrand: Rules.id({ required: true, message: _label("8000") }),
+                brandid: Rules.id({ required: true, message: _label("8000") }),
                 countries: Rules.required({ message: _label("8000") }),
                 brandcolor: Rules.required({ message: _label("8000") }),
                 ageseason: Rules.required({ message: _label("8000") })
@@ -304,14 +316,25 @@ export default {
                 }
 
                 if (self.form.id == "") {
-                    self._submit("/product/add", self.form, function() {
+                    self._submit("/product/add", self.form, function(res) {
                         self.$emit("change", Object.assign({}, self.form), "create")
+                        self.setInfo(res.id)
                     })
                 } else {
                     self._submit("/product/edit", self.form, function() {
                         self.$emit("change", Object.assign({}, self.form), "update")
+                        self.setInfo(self.form.id)
                     })
                 }
+            })
+        },
+        onSizetopidChange(newvalue) {
+            let self = this
+            self._log(newvalue)
+            let source = DataSource.getDataSource("sizecontent", self.lang)
+            source.filter({ topid: self.form.sizetopid }, function(list) {
+                let data = list.map(item => item.getObject())
+                self.$refs['sizecontentids'].setData(data)
             })
         },
         onSelectProduct(info) {
@@ -343,7 +366,7 @@ export default {
             self._submit("/product/savecolorgroup", {
                 params: JSON.stringify(params)
             }, function(res) {
-                self.setInfo(res.data.form)
+                self.setInfo(self.form.id)
                 res.data.list.forEach(function(item) {
                     self.colors.push(extract(item, color_keys))
                     self._log(item)
@@ -376,29 +399,20 @@ export default {
         onTabClick(tab) {
             const self = this
             if (tab.name == 'code' && self.sizecontents_loaded == false) {
-                let source = DataSource.getDataSource("sizecontent", self.lang)
-                source.filter({ topid: self.form.sizetopid }, function(list) {
-                    list.forEach(item => {
-                        let o = globals.extend({ goods_code: "" }, item.getObject())
-                        self.sizecontents.push(o)
-                    })
-
-                    let ntlist = new List(self.sizecontents)
-                    new ProductCodeList(self.form.id, function(data) {
-                        //console.log(data)
-                        data.forEach(function(item) {
-                            let index = ntlist.findIndex('id', item.sizecontentid)
-                            if (index >= 0) {
-                                self.sizecontents[index].goods_code = item.goods_code
-                            }
-                        })
+                let ntlist = new List(self.sizecontents)
+                new ProductCodeList(self.form.id, function(data) {
+                    //console.log(data)
+                    data.forEach(function(item) {
+                        let index = ntlist.findIndex('id', item.sizecontentid)
+                        if (index >= 0) {
+                            self.sizecontents[index].goods_code = item.goods_code
+                        }
                     })
                 })
                 self.sizecontents_loaded = true;
             } else if (tab.name == 'colorgroup' && self.colors_loaded == false) {
                 self.loadColorGroupList();
-            }
-            else if(tab.name=='album') {
+            } else if (tab.name == 'album') {
                 setTimeout(function() {
                     self.$refs.album.loadList()
                 }, 100)
@@ -425,9 +439,7 @@ export default {
         },
         onClickColor(productid) {
             var self = this
-            ProductDetail.get(productid, function(info) {
-                self.setInfo(info)
-            }, 1)
+            self.setInfo(productid)
         },
         setInfo(row) {
             var self = this
@@ -435,8 +447,18 @@ export default {
             self.colors = []
 
             return new Promise((resolve, reject) => {
-                ProductDetail.get(row, function(info) {
+                ProductDetail.load({ data: row, depth: 1, isCache: false }).then(function(info) {
+                    //self._log(info)
+                    //设置默认值
+                    info = globals.extend({sizecontentids:""}, info);
+                    //console.log(info,'----------')
+
                     self.colors2 = info.colors
+                    self.sizecontents = info.sizecontents.map(item => {
+                        return globals.extend({ goods_code: "" }, item.getObject())
+                    })
+                    self.sizecontents_loaded = false;
+                    //self._log(self.sizecontents)
 
                     globals.copyTo(info, self.form)
                     self.form.factoryprice = globals.round(self.form.factoryprice, 2)
@@ -446,16 +468,17 @@ export default {
                     setTimeout(function() {
                         self.$refs.childbrand.load(item => item.row.brandgroupid == self.form.brandgroupid)
                         self.$refs.searchpanel.clear()
+                        self.$refs.property.setProduct(info)
+                        self.onSizetopidChange()
                     }, 100)
 
                     self.clearValidate(50)
 
-                    self.sizecontents_loaded = false;
-                    self.sizecontents = []
+
                     self.currentTab = 'product'
 
                     resolve(self)
-                }, 1)
+                })
             })
         },
         edit(isedit) {
@@ -481,7 +504,7 @@ export default {
         onBrandGroupChange(value) {
             let self = this
 
-            self._log(value)
+            //self._log(value)
             self.$refs.childbrand.load(item => item.row.brandgroupid == value)
         }
     }

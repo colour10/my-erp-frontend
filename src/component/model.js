@@ -1,14 +1,14 @@
 import DataSource from './DataSource.js'
 import List from './list.js'
-import {getFetcher} from "./fetcher.js"
+import {getFetcher,clear} from "./fetcher.js"
 import {getLabel} from "./globals.js"
 import {httpPost} from "./http.js"
 
 const createModel = function(tablename) {
     return {
-        get:function(data, callback, depth) {
+        get:function(data, callback, depth=0) {
             let self = this;
-            depth = depth || 0;
+
             if(typeof(data)=='object') {
                 if(depth<=0) {
                     callback(data)
@@ -20,6 +20,28 @@ const createModel = function(tablename) {
             else {
                 self.fetch(depth, data, callback)
             }
+        },
+        load:function({data, depth=0, isCache=true}){
+            let self = this;
+
+            //清空缓存
+            if(!isCache) {
+                clear(tablename)
+            }
+            
+            return new Promise((resolve, reject)=>{
+                if(typeof(data)=='object') {
+                    if(depth<=0) {
+                        resolve(data)
+                    }
+                    else {
+                        self.init(depth, data, resolve)
+                    }
+                }
+                else {
+                    self.fetch(depth, data, resolve)
+                }
+            });
         },
         fetch:function(depth, id, callback) {
             let self = this;
@@ -69,7 +91,7 @@ const ProductDetail = Object.assign(createModel("product"),{
         //尺码组
         const dataSource = DataSource.getDataSource('sizecontent', getLabel('lang'));      
         arr.push(new Promise(function(resolve){
-            dataSource.filter({topid: row.sizetopid}, resolve)
+            dataSource.getRows(row.sizecontentids, resolve)
         }))
 
         const brandgroupchild = DataSource.getDataSource('brandgroupchild', getLabel('lang'));      

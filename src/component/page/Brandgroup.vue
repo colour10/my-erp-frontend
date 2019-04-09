@@ -49,7 +49,7 @@ const props2 = {
         width: 150,
         disable_change: true,
         handler: function(rowIndex, row) {
-            props3.base.parent_id = row.id;
+            props3.base.brandgroupchildid = row.id;
             options.dialogVisible2 = true;
         }
     }],
@@ -67,23 +67,22 @@ const props3 = {
     actions: [{
         label: _label('xiangshang'),
         handler: function(rowIndex, row, vm) {
-            vm._fetch("/property/up", {id:row.id}, function(){
+            vm._fetch("/brandgroupchildproperty/up", {id:row.id}, function(){
                 vm.loadList(i=>i)
             })
         }
     },{
         label: _label('xiangxia'),
         handler: function(rowIndex, row, vm) {
-            vm._fetch("/property/down", {id:row.id}, function(){
+            vm._fetch("/brandgroupchildproperty/down", {id:row.id}, function(){
                 vm.loadList(i=>i)
             })
         }
     }],
-    controller: "property",
+    controller: "brandgroupchildproperty",
     key_column: "name",
     base: {
-        parent_id: "",
-        parent_type:1
+        brandgroupchildid: ""
     },
     options: {
         action_width:300

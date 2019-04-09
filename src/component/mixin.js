@@ -57,12 +57,29 @@ export default {
                     }
                 }
             }, "json")
-
+        },
+        _fetchPromise(path, form) {
+            const self = this
+            return new Promise((resolve, reject)=>{
+                self._fetch(path, form, function(res){
+                    resolve(res)
+                })
+            })
         },
         _submit(path, form, options) {
             const self = this
             options = options || {}
             options.showMessage = true
+
+            self._fetch(path, form, options)
+        },
+        _submitPromise(path, form) {
+            const self = this
+
+            return new Promise((resolve, reject)=>{
+                resolve.showMessage = true
+                self._fetch(path, form, resolve)
+            })
 
             self._fetch(path, form, options)
         },
