@@ -18,7 +18,7 @@
                         </el-form-item>
                         <el-form-item :label="_label('huiyuan')">
                             <simple-select v-model="form.memberid" source="member" :lang="lang"></simple-select>
-                        </el-form-item>                        
+                        </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item :label="_label('xiaoshouren')">
@@ -30,7 +30,6 @@
                         <el-form-item :label="_label('duizhangdanhao')">
                             <el-input v-model="form.ordercode"></el-input>
                         </el-form-item>
-                        
                         <el-form-item :label="_label('zhidanriqi')">
                             <el-input :value="form.makedate" :placeholder="_label('zidonghuoqu')" disabled></el-input>
                         </el-form-item>
@@ -56,12 +55,19 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                        <el-button :type="canYushou?'primary':'info'" @click="yushou()">{{_label("yushou")}}</el-button>
-                        <el-button :type="canTijiao?'primary':'info'" @click="tijiao()">{{_label("tijiao")}}</el-button>
-                        <el-button :type="form.id>0 && form.status!=2 ?'primary':'info'" @click="showAttachment()">{{_label("fujian")}}</el-button>
-                        <el-tooltip class="item" effect="dark" content="Right Bottom 提示文字" placement="bottom">
-                            <el-button :type="canZuofei?'primary':'info'" @click="zuofei()">{{_label("zuofei")}}</el-button>
-                        </el-tooltip>
+                        <auth auth="sales">
+                            <el-row type="flex" justify="start">
+                                <el-button :type="canYushou?'primary':'info'" @click="yushou()">{{_label("yushou")}}</el-button>
+                                <el-button :type="canTijiao?'primary':'info'" @click="tijiao()">{{_label("tijiao")}}</el-button>
+                                <el-button :type="form.id>0 && form.status!=2 ?'primary':'info'" @click="showAttachment()">{{_label("fujian")}}</el-button>
+                                <el-tooltip class="item" effect="dark" content="Right Bottom 提示文字" placement="bottom">
+                                    <el-button :type="canZuofei?'primary':'info'" @click="zuofei()">{{_label("zuofei")}}</el-button>
+                                </el-tooltip>
+                            </el-row>
+                        </auth>
+                        <el-row>
+                            <el-button type="primary" @click="onQuit">{{_label("tuichu")}}</el-button>
+                        </el-row>
                     </el-col>
                 </el-row>
             </el-form>
@@ -139,12 +145,12 @@
                             </template>
                         </el-table-column>
                         <el-table-column prop="price" :label="_label('danjia')" width="100" align="center">
-                          <template v-slot="scope">
+                            <template v-slot="scope">
                                 {{scope.row.price}}
                             </template>
                         </el-table-column>
                         <el-table-column prop="number" :label="_label('xiaoshoushuliang')" width="100" align="center">
-                          <template v-slot="scope">
+                            <template v-slot="scope">
                                 {{scope.row.number}}
                             </template>
                         </el-table-column>
@@ -215,12 +221,15 @@ export default {
             title: "",
             lang: "",
             formid: "",
-            base:{
-              warehouseid:""
+            base: {
+                warehouseid: ""
             }
         }
     },
     methods: {
+        onQuit() {
+            this.dialogVisible = false
+        },
         getDealPrice(row) {
             if (row.is_match == 0) {
                 return row.dealprice;
@@ -231,7 +240,7 @@ export default {
         onChange(newValue, data) {
             this.form.discount = data.discount
         },
-        onWarehouseChange(newValue){
+        onWarehouseChange(newValue) {
             this.base.warehouseid = newValue;
         },
         onSelect(productstock) {
@@ -366,7 +375,7 @@ export default {
             //清空当前表单数据，并复制新记录的数据
             globals.empty(form)
             globals.copyTo(newValue, form)
-            //self._log("copy data2", newValue)
+                //self._log("copy data2", newValue)
 
             //如果订单的id变化了，则清空明细，重新加载新订单的明细
             if (form.id != self.fomrid) {

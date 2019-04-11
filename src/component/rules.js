@@ -16,5 +16,9 @@ Rules.required = function(obj) {
     return Object.assign({ required: true }, obj)
 }
 
+Rules.username = function(obj) {
+    return Object.assign({pattern: new RegExp("^[a-z0-9]{3,50}$"),required: true}, obj)
+}
+
 export {Rules}
 export default Rules

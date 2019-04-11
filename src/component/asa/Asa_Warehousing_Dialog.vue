@@ -10,7 +10,6 @@
                         <el-form-item :label="_label('fahuodanhao')">
                             <el-input v-model="confirmorder.orderno" disabled></el-input>
                         </el-form-item>
-                        
                         <el-form-item :label="_label('gonghuoshang')">
                             <simple-select v-model="confirmorder.supplierid" source="supplier" :lang="lang" disabled></simple-select>
                         </el-form-item>
@@ -43,7 +42,9 @@
                     </el-col>
                     <el-col :span="6">
                         <el-row type="flex" justify="start">
-                            <el-button :type="form.id>0?'info' :'primary'" @click="saveOrder()">{{_label("baocun")}}</el-button>
+                            <auth auth="warehousing">
+                                <el-button :type="form.id>0?'info' :'primary'" @click="saveOrder()">{{_label("baocun")}}</el-button>
+                            </auth>
                             <el-button type="primary" @click="showAttachment()">{{_label("fujian")}}</el-button>
                         </el-row>
                         <el-row type="flex" justify="start">
@@ -105,7 +106,7 @@ import { ConfirmorderDetails } from "../model.js"
 import simple_select from '../Simple_Select.vue'
 import Asa_Select_Order_Detail_Dialog from './Asa_Select_Order_Detail_Dialog.vue'
 import DataSource from '../DataSource.js'
-import {getFetcher} from "../fetcher.js"
+import { getFetcher } from "../fetcher.js"
 
 const fetchNumber = getFetcher("warehousingdetails")
 export default {
@@ -166,10 +167,10 @@ export default {
                 return;
             }
 
-            var params = { form: globals.extend({confirmorderid:self.confirmorder.id},self.form) }
+            var params = { form: globals.extend({ confirmorderid: self.confirmorder.id }, self.form) }
             var array = []
             params.list = self.tabledata.map(item => {
-                return { confirmorderdetailsid: item.confirmdetails.id, number:item.number, orderdetailsid:item.orderdetails.id }
+                return { confirmorderdetailsid: item.confirmdetails.id, number: item.number, orderdetailsid: item.orderdetails.id }
             })
             self._log(JSON.stringify(params))
             self._submit("/warehousing/create", { params: JSON.stringify(params) }, function(res) {
@@ -213,7 +214,7 @@ export default {
                     //已经生成过入库单
                     globals.copyTo(response_data.form, form)
                 }
-                if(response_data.confirmorder){
+                if (response_data.confirmorder) {
                     //新建入库单
                     let confirmorder = response_data.confirmorder
                     globals.copyTo(confirmorder, self.confirmorder)
@@ -224,9 +225,9 @@ export default {
                         //console.log(detail)
                         let obj = { confirmdetails: detail, orderdetails: detail.orderdetails, number: 0, is_match: 0 }
                         self.tabledata.push(obj)
-                        fetchNumber(row.id, function(item){
+                        fetchNumber(row.id, function(item) {
                             self._log(item)
-                            if(item) {
+                            if (item) {
                                 obj.number = item.number;
                             }
                         })

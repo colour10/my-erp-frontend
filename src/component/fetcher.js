@@ -15,7 +15,7 @@ if(!window.ASAP.$store) {
 const store = window.ASAP.$store
 
 const clear = function(name, id) {
-    console.log("clear",name,id)
+    //console.log("clear",name,id)
     if(store.result[name]) {
         if(id) {
             store.result[name][id] = undefined

@@ -77,8 +77,7 @@ export default {
                 return 
             }
 
-            self._fetch("/productstock/page", self.form, function(res) {
-                //self._log("/productstock/page", res)
+            self._fetch("/productstock/search", self.form, function(res) {
                 self.searchresult = []
                 res.data.forEach(function(item) {
                     Productstock.get(item, function(result) {

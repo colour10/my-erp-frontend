@@ -71,7 +71,7 @@ const Product = Object.assign(createModel("product"),{
         
         const sizecontent = DataSource.getDataSource('sizecontent', getLabel('lang'));
         arr.push(new Promise(function(resolve){
-            sizecontent.filter({topid: row.sizetopid}, resolve)
+            sizecontent.getRows(row.sizecontentids, resolve)
         }))
 
         Promise.all(arr).then(function(results) {

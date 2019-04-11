@@ -83,7 +83,7 @@ export default {
             if (value == '') {
                 self.checkList = []
             } else {
-                self._log("convertValue", value)
+                //self._log("convertValue", value)
                 self.checkList = value.split(',')
                 self.convertText()
             }

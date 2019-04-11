@@ -115,33 +115,40 @@
                     </el-col>
                     <el-col :span="6">
                         <el-row type="flex" justify="start">
-                            <el-button :type="canSubmit?'primary':'info'" @click="saveOrder(1)">{{_label("baocun")}}</el-button>
-                            <el-button :type="canSubmit?'primary':'info'" @click="saveOrder(2)">{{_label("tijiaoshenhe")}}</el-button>
+                            <auth auth="confirmorder-submit">
+                                <el-button :type="canSubmit?'primary':'info'" @click="saveOrder(1)">{{_label("baocun")}}</el-button>
+                                <el-button :type="canSubmit?'primary':'info'" @click="saveOrder(2)">{{_label("tijiaoshenhe")}}</el-button>
+                            </auth>
                             <el-button :type="form.id?'primary':'info'" @click="showAttachment()">{{_label("fujian")}}</el-button>
-                            <el-tooltip class="item" effect="dark" content="Right Bottom 提示文字" placement="bottom">
+                            <auth auth="confirmorder-submit">
                                 <el-button :type="canDelete?'primary':'info'" @click="deleteOrder()">{{_label("shanchu")}}</el-button>
-                            </el-tooltip>
+                            </auth>
                         </el-row>
-                        <el-row type="flex" justify="start">
-                            <el-button :type="canConfirm?'primary':'info'" @click="confirmOrder(1)">{{_label("tuihui")}}</el-button>
-                            <el-button :type="canConfirm?'primary':'info'" @click="confirmOrder(3)">{{_label("shenhetongguo")}}</el-button>
-                            <el-button :type="canCancel?'primary':'info'" @click="cancelConfirm()">{{_label("quxiaoshenhe")}}</el-button>
-                        </el-row>
-                        <el-row type="flex" justify="start">
-                            <el-button :type="canCancel?'primary':'info'" @click="createWarehousing()">{{_label("shengchengrukudan")}}</el-button>
-                        </el-row>
-
+                        <auth auth="confirmorder-confirm">
+                            <el-row type="flex" justify="start">
+                                <el-button :type="canConfirm?'primary':'info'" @click="confirmOrder(1)">{{_label("tuihui")}}</el-button>
+                                <el-button :type="canConfirm?'primary':'info'" @click="confirmOrder(3)">{{_label("shenhetongguo")}}</el-button>
+                                <el-button :type="canCancel?'primary':'info'" @click="cancelConfirm()">{{_label("quxiaoshenhe")}}</el-button>
+                            </el-row>
+                        </auth>
+                        <auth auth="warehousing">
+                            <el-row type="flex" justify="start">
+                                <el-button :type="canCancel?'primary':'info'" @click="createWarehousing()">{{_label("shengchengrukudan")}}</el-button>
+                            </el-row>
+                        </auth>
                         <el-row type="flex" justify="start">
                             <el-button type="primary" @click="onQuit">{{_label("tuichu")}}</el-button>
                         </el-row>
                     </el-col>
                 </el-row>
             </el-form>
-            <el-row type="flex" justify="end" v-if="canSubmit">
-                <el-col :offset="22" :span="2">
-                    <el-button type="primary" @click="showProduct()">{{_label("xuanzeshangpin")}}</el-button>
-                </el-col>
-            </el-row>
+            <auth auth="confirmorder-submit">
+                <el-row type="flex" justify="end" v-if="canSubmit">
+                    <el-col :offset="22" :span="2">
+                        <el-button type="primary" @click="showProduct()">{{_label("xuanzeshangpin")}}</el-button>
+                    </el-col>
+                </el-row>
+            </auth>
             <el-row>
                 <el-col :span="24">
                     <el-table :data="tabledata" border style="width:100%;">
@@ -160,7 +167,6 @@
                                 {{scope.row.orderdetails.number-scope.row.orderdetails.actualnumber}}
                             </template>
                         </el-table-column>
-
                         <el-table-column :label="_label('zongjia')" width="200" align="center" key="2">
                             <template v-slot="scope">
                                 {{scope.row.number*scope.row.price}}
@@ -171,7 +177,6 @@
                                 <el-input-number v-model="scope.row.number" :min="0" :max="scope.row.orderdetails.number-scope.row.orderdetails.actualnumber" :disabled="!canSubmit"></el-input-number>
                             </template>
                         </el-table-column>
-
                         <el-table-column :label="_label('danjia')" width="200" align="center" key="4">
                             <template v-slot="scope">
                                 <el-input v-model="scope.row.price" :disabled="!canSubmit" :key="scope.row.orderdetails.id"></el-input>
@@ -272,20 +277,20 @@ export default {
             var self = this;
             self._log("onSelect", rows)
             rows.forEach(item => {
-                let newitem = globals.extend(true,{}, item)
+                let newitem = globals.extend(true, {}, item)
                 let is_exist = self.tabledata.some(rowData => {
                     return rowData.orderdetails.id == newitem.orderdetails.id
                 })
 
-                if(!is_exist) {
+                if (!is_exist) {
                     newitem.price = newitem.orderdetails.price;
                     self.tabledata.unshift(newitem)
-                }                
+                }
             })
         },
         saveOrder(status) {
             //保存订单
-            var self = this            
+            var self = this
 
             if (status == 2) {
                 if (!confirm(self._label('order_submit_confirm'))) {
@@ -297,7 +302,7 @@ export default {
             var params = { form: self.form }
             var array = []
             params.list = self.tabledata.map(item => {
-                return { id: item.id, number: item.number, orderdetailsid: item.orderdetails.id, price:item.price }
+                return { id: item.id, number: item.number, orderdetailsid: item.orderdetails.id, price: item.price }
             })
             self._log(JSON.stringify(params))
             self._submit("/confirmorder/saveorder", { params: JSON.stringify(params) }, function(res) {
@@ -327,7 +332,7 @@ export default {
                 });
             })
         },
-        cancelConfirm(){
+        cancelConfirm() {
             let self = this
             if (!self.canCancel) {
                 return
@@ -393,7 +398,7 @@ export default {
             //清空当前表单数据，并复制新记录的数据
             globals.empty(form)
             globals.copyTo(newValue, form)
-            //self._log("copy data2", newValue)
+                //self._log("copy data2", newValue)
 
             if (!self.form.id) {
                 self.tabledata = []
@@ -403,13 +408,13 @@ export default {
             if (form.id != "" && form.id != self.fomrid) {
                 self.tabledata = []
                     //加载数据
-                self._fetch("/confirmorder/loadorder", {id:form.id}, function(res) {
+                self._fetch("/confirmorder/loadorder", { id: form.id }, function(res) {
                     self._log("加载订单信息", res)
 
                     res.data.list.forEach(function(row) {
-                        ConfirmorderDetails.get(row, function(detail){
+                        ConfirmorderDetails.get(row, function(detail) {
                             self.tabledata.push(detail)
-                        },2)
+                        }, 2)
                     })
                 })
             }

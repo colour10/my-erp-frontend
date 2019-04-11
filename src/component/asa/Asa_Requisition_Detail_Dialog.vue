@@ -90,7 +90,7 @@ const fetcherProduct = getFetcher('product')
 const dataSource = DataSource.getDataSource('requisitionstatus', globals.getLabel('lang'));
 const fetcherWarehouse = getFetcher('warehouse')
 const fetcherUser = getFetcher('user')
-const sizecontent = DataSource.getDataSource('sizecontent', globals.getLabel('lang'));
+
 
 export default {
     name: 'asa-requisition-detail-dialog',
@@ -170,6 +170,8 @@ export default {
                     //加载数据
                 self._fetch("/requisition/load", { requisitionid: row.id }, function(res) {
                     self._log("调拨单列表", res)
+
+                    const sizecontent = DataSource.getDataSource('sizecontent', globals.getLabel('lang'));
 
                     res.data.forEach(function(row) {
                         row.sizecontentname = ""

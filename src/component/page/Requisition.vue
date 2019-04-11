@@ -2,7 +2,9 @@
     <div style="width:100%">
         <el-row>
             <el-col :span="2" :offset="22">
+                <auth auth="requisition">
                 <el-button type="primary" @click="showFormToCreate()">{{_label('xinjian')}}</el-button>
+            </auth>
             </el-col>
         </el-row>
         <el-row :gutter="20">

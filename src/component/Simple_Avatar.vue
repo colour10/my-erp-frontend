@@ -1,5 +1,5 @@
 <template>
-  <el-upload class="avatar-uploader" :action="host+'/common/upload?category=product'" :show-file-list="false" :on-success="handleAvatarSuccess">
+  <el-upload class="avatar-uploader" :action="host+'/common/upload?category=product'" :show-file-list="false" :on-success="handleAvatarSuccess" :disabled="disabled">
     <img v-if="imageurl" :src="image_url_prex+imageurl" class="avatar">
     <i v-else class="el-icon-plus avatar-uploader-icon"></i>
   </el-upload>
@@ -20,6 +20,10 @@ export default {
         },
         lang:{
             type: String
+        },
+        disabled:{
+            type:Boolean,
+            default:false
         }
     },
     model: {

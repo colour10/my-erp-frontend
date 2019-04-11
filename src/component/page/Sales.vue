@@ -2,7 +2,9 @@
     <div>
         <el-row>
             <el-col :span="2" :offset="22">
+                <auth auth="sales">
                 <el-button type="primary" @click="showFormToCreate()">{{globals.getLabel('xinjian')}}</el-button>
+            </auth>
             </el-col>
         </el-row>
         <el-row :gutter="20">

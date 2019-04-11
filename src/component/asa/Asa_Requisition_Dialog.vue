@@ -21,7 +21,9 @@
                     </el-col>
                     <el-col :span="6">
                         <el-row type="flex" justify="start">
-                            <el-button type="primary" @click="saveOrder(1)">{{_label("shenqing")}}</el-button>
+                            <auth auth="requisition">
+                                <el-button type="primary" @click="saveOrder(1)">{{_label("shenqing")}}</el-button>
+                            </auth>
                             <el-button type="primary" @click="onQuit">{{_label("tuichu")}}</el-button>
                         </el-row>
                     </el-col>
@@ -81,10 +83,9 @@ import simple_select from '../Simple_Select.vue'
 import Asa_Select_Product_Dialog from './Asa_Select_Product_Dialog.vue'
 import Asa_Productstock_Search from './Asa_Productstock_Search.vue'
 import DataSource from '../DataSource.js'
-import {getFetcher} from "../fetcher.js"
+import { getFetcher } from "../fetcher.js"
 
 const fetcherProduct = getFetcher('product')
-const dataSource = DataSource.getDataSource('sizecontent', globals.getLabel('lang'));
 const fetcherWarehouse = getFetcher('warehouse')
 
 export default {
@@ -123,7 +124,7 @@ export default {
         },
         onSelect(row) {
             var self = this;
-            let index = self.tabledata.findIndex(item=>item.id==row.id)
+            let index = self.tabledata.findIndex(item => item.id == row.id)
             if (index < 0) {
                 row.select_number = 1
                 row.number = row.number * 1

@@ -21,8 +21,10 @@
         </el-table-column>
         <el-table-column :label="_label('caozuo')" :width="componenToptions.action_width||150" align="center">
             <template v-slot="scope">
-                <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">{{_label("shanchu")}}</el-button>
-                <el-button size="mini" @click="handleAction(scope,item)" v-for="item in actions" :key="item.label">{{item.label}}</el-button>
+                <auth :auth="controller">
+                    <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">{{_label("shanchu")}}</el-button>
+                </auth>
+                <el-button size="mini" @click="handleAction(scope,item)" v-for="item in actions" :key="item.label" v-if="isShow(item)">{{item.label}}</el-button>
             </template>
         </el-table-column>
     </el-table>
@@ -67,8 +69,16 @@ export default {
             //console.log(rowIndex, row, lang)
             self.onclickupdate(rowIndex, row, lang)
         },
-        handleAction({$index, row}, item) {
+        handleAction({ $index, row }, item) {
             item.handler($index, row, this)
+        },
+        isShow(item) {
+            if(item.isShow) {
+                return item.isShow(this)
+            }
+            else {
+                return true;
+            }
         },
         handleDelete(rowIndex, row) {
             var self = this

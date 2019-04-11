@@ -2,7 +2,7 @@
     <div>
         <el-row>
             <el-col :span="2" :offset="22">
-                <el-button type="primary" @click="showFormToCreate()">{{_label("xinjian")}}</el-button>
+                <auth :auth="controller"><el-button type="primary" @click="showFormToCreate()">{{_label("xinjian")}}</el-button></auth>
             </el-col>
         </el-row>
         <el-row :gutter="20">
@@ -30,7 +30,7 @@
                             </el-select>
                         </el-form-item>
                         <el-form-item>
-                            <el-button type="primary" @click="onSubmit">{{_label("baocun")}}</el-button>
+                            <auth :auth="controller"><el-button type="primary" @click="onSubmit">{{_label("baocun")}}</el-button></auth>
                             <el-button type="primary" @click="onQuit">{{_label("tuichu")}}</el-button>
                         </el-form-item>
                     </el-form>

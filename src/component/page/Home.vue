@@ -161,7 +161,7 @@ const menus = {
     "2-8": "/materialnote",
     "2-9": "/ulnarinch",
     "2-10": "/warehouse",
-    "2-12": "/salesport",
+    "2-12": "/saleport",
     "2-11": "/country",
     "3-1": "/product",
     "3-2": "/picture",
@@ -210,7 +210,7 @@ export default {
     },
     mounted: function() {
         this.checkLogin()
-            //this._log("Global Function")
+        this._log("Global Function", this.$store.getters.allow("brand"))
     }
 }
 </script>

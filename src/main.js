@@ -37,6 +37,7 @@ import Asa_Order_Confirm_Dialog from './component/asa/Asa_Order_Confirm_Dialog.v
 import Asa_Select_Order_Detail_Dialog from './component/asa/Asa_Select_Order_Detail_Dialog.vue'
 import Asa_Warehousing_Dialog from './component/asa/Asa_Warehousing_Dialog.vue'
 import Asa_Product from './component/asa/Asa_Product.vue'
+import Auth from './component/Auth.vue'
 
 
 import Page_Home from './component/page/Home.vue'
@@ -80,6 +81,7 @@ const components = [
     Asa_Select_Order_Detail_Dialog,
     Asa_Warehousing_Dialog,
     Asa_Product,
+    Auth,
     Page_Home,
     Page_Order,
     Page_Producttemplate,
@@ -163,6 +165,11 @@ const store = new Vuex.Store({
           }
           else {
               return false;
+          }
+      },
+      allow(state) {
+          return permission=>{
+              return state.auth && state.auth.permissions && state.auth.permissions.findIndex(item=>item.name==permission)>=0
           }
       }
   },

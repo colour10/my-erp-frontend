@@ -20,8 +20,7 @@ const _label = globals.getLabel
 
 const props = {
     columns: [
-        { name: "name", label: _label('pinleimingcheng'), is_multiple: true, is_focus: true },
-        { name: "code", label: _label('pinleibianma') }
+        { name: "name", label: _label('pinleimingcheng'), is_multiple: true, is_focus: true }
     ],
     buttons: [{
         name: "code",
@@ -70,6 +69,9 @@ const props3 = {
             vm._fetch("/brandgroupchildproperty/up", {id:row.id}, function(){
                 vm.loadList(i=>i)
             })
+        },
+        isShow:function(vm) {
+            return vm.$store.getters.allow('brandgroup')
         }
     },{
         label: _label('xiangxia'),
@@ -77,6 +79,9 @@ const props3 = {
             vm._fetch("/brandgroupchildproperty/down", {id:row.id}, function(){
                 vm.loadList(i=>i)
             })
+        },
+        isShow:function(vm) {
+            return vm.$store.getters.allow('brandgroup')
         }
     }],
     controller: "brandgroupchildproperty",

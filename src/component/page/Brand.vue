@@ -29,9 +29,8 @@ export default {
                 columns: [
                     { name: "id", label: "LOGO", is_edit_hide: true, is_image: true },
                     { name: "name", label: globals.getLabel('pinpaimingcheng'), is_multiple: true, is_focus: true },
-                    { name: "code", label: globals.getLabel('pinpaibianhao') },
                     { name: "countryid", label: globals.getLabel('guishuguojia'), type: "select", source: "country" },
-                    { name: "brandgroupid", label: globals.getLabel('pinpaifenlei'), type: "select", source: "brandgroup" },
+                    //{ name: "brandgroupid", label: globals.getLabel('pinpaifenlei'), type: "select", source: "brandgroup" },
                     { name: "memo", label: globals.getLabel('memo'), type: "textarea", is_hide: true },
                     { name: "officialwebsite", label: globals.getLabel('guanwangdizhi'), is_hide: true }
                 ],

@@ -2,7 +2,7 @@
     <div>
         <el-row>
             <el-col :span="2" :offset="22">
-                <el-button type="primary" @click="showFormToCreate()">{{_label("xinjian")}}</el-button>
+                <auth auth="group"><el-button type="primary" @click="showFormToCreate()">{{_label("xinjian")}}</el-button></auth>
             </el-col>
         </el-row>
         <el-row :gutter="20">
@@ -15,21 +15,17 @@
                 <el-tab-pane :label="_label('group-info')" name="info">
                     <el-form ref="form" :model="form" label-width="100px">
                         <el-form-item :label="item.label" v-if="!item.is_hidden" v-for="item in props.columns" :key="item.name">
-                            <el-input :ref="item.name" @keyup.enter.native="onSubmit" v-if="!item.type||item.type=='input'" v-model="form[item.name]" :disabled="isFormDisabled(item)"></el-input>
-                            <el-switch :ref="item.name" v-if="item.type=='switch'" v-model="form[item.name]" :disabled="isFormDisabled(item)" active-value="1" inactive-value="0"></el-switch>
-                            <el-select :ref="item.name" v-model="form[item.name]" placeholder="choice" v-if="item.type=='select'">
-                                <el-option v-for="(label,value) in item.data_source" :key="value" :label="label" :value="value"></el-option>
-                            </el-select>
+                            <el-input :ref="item.name" @keyup.enter.native="onSubmit" v-if="!item.type||item.type=='input'" v-model="form[item.name]"></el-input>
                         </el-form-item>
                         <el-form-item>
-                            <el-button type="primary" @click="onSubmit">{{_label("baocun")}}</el-button>
+                            <auth auth="group"><el-button type="primary" @click="onSubmit">{{_label("baocun")}}</el-button></auth>
                             <el-button type="primary" @click="onQuit">{{_label("tuichu")}}</el-button>
                         </el-form-item>
                     </el-form>
                 </el-tab-pane>
                 <el-tab-pane :label="globals.getLabel('quanxian')" :disabled="!form.id">
                     <el-tree ref="tree" :data="permission_data" node-key="id" show-checkbox :expand-on-click-node="false"></el-tree>
-                    <el-button type="primary" @click="onSavePermission">{{_label("baocun")}}</el-button>
+                    <auth auth="group"><el-button type="primary" @click="onSavePermission">{{_label("baocun")}}</el-button></auth>
                     <el-button type="primary" @click="onQuit">{{_label("tuichu")}}</el-button>
                 </el-tab-pane>
                 <el-tab-pane :label="_label('zuneirenyuan')" name="user-list" :disabled="!form.id">
@@ -40,7 +36,7 @@
                         </el-table-column>
                         <el-table-column :label="globals.getLabel('caozuo')" width="150" align="center">
                             <template v-slot="scope">
-                                <el-button size="mini" type="danger" @click="handleDeleteUser(scope.$index, scope.row)">{{_label("shanchu")}}</el-button>
+                                <auth auth="group"><el-button size="mini" type="danger" @click="handleDeleteUser(scope.$index, scope.row)">{{_label("shanchu")}}</el-button></auth>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -121,8 +117,8 @@ export default {
         },
         onSavePermission() {
             var self = this;
-            var keys = self.$refs.tree.getCheckedKeys()
-            self._submit("/permissiongroup/setting", { groupid: self.form.id, keys: keys.join(",") }, function(res) {
+            var keys = self.$refs.tree.getCheckedKeys(true)
+            self._submit("/group/setting", { groupid: self.form.id, keys: keys.join(",") }, function(res) {
                 self._log(res)
             })
         },
@@ -154,13 +150,24 @@ export default {
             self.activeName = "info"
             self.showDialog();
         },
-        showFormToEdit(rowIndex, row) {
+        async showFormToEdit(rowIndex, row) {
             var self = this
             self.rowIndex = rowIndex;
             self.row = row;
             globals.copyTo(row, this.form)
 
             this.formTitle = _label("xiugaixinxi");
+
+            let permissions = await self._fetchPromise("/group/getpermissions", {groupid:self.form.id})
+        self._log(permissions)
+            let keys = permissions.data.map(item=>item.permissionid)
+
+
+            setTimeout(function(){
+                self.$refs.tree.setCheckedKeys(keys);
+            },100)
+            
+
             self.showDialog();
         },
         showDialog() {
@@ -186,11 +193,10 @@ export default {
             return (form.id == '' && !column.is_create) || (form.id != '' && !column.is_update)
         }
     },
-    mounted: function() {
+    mounted: async function() {
         const self = this
-        self._fetch("/permission/tree", {}, function(permission_data) {
-            self.permission_data = permission_data.data
-        }, "json")
+        let result = await self._fetchPromise("/permission/tree", {})
+        self.permission_data = result.data;
     }
 }
 </script>

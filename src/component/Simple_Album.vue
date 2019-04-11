@@ -3,11 +3,13 @@
         <el-col :span="4" v-for="item in data" :key="item.id" style="margin-bottom: 20px;">
             <img :src="_label('_image_url_prex')+item.filename" class="avatar" />
         </el-col>
+        <auth auth="product">
         <el-col :span="4">
             <el-upload class="avatar-uploader" :action="host+'/common/upload?category=product'" multiple :show-file-list="false" :on-success="handleAvatarSuccess">
                 <i class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
         </el-col>
+    </auth>
     </el-row>
 </template>
 

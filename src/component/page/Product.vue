@@ -2,10 +2,12 @@
     <div>
         <el-row>
             <el-col :span="2" :offset="22">
-                <el-button type="primary" @click="showFormToCreate()">{{globals.getLabel("button-create")}}</el-button>
+                <auth auth="product">
+                    <el-button type="primary" @click="showFormToCreate()">{{globals.getLabel("button-create")}}</el-button>
+                </auth>
             </el-col>
         </el-row>
-        <el-row :gutter="20">
+        <el-row :gutter="20" class="product">
             <el-col :span="24">
                 <simple-admin-tablelist ref="tablelist" v-bind="props" :onclickupdate="showFormToEdit"></simple-admin-tablelist>
             </el-col>
@@ -24,10 +26,10 @@ const _label = globals.getLabel
 
 var props = {
     columns: [
-        { name: "picture", label: _label("zhutu"), is_image: true, image_width: 80, image_height: 80, width:100},
-        { name: "picture2", label: _label("futu"), is_image: true, image_width: 80, image_height: 80, width:100 },
-        { name: "productname", label: _label("shangpinmingcheng"),width:300},
-        { name: "brandcolor", label: _label("yanse"), type: "select", source: "colortemplate"},
+        { name: "picture", label: _label("zhutu"), is_image: true, image_width: 80, image_height: 80, width: 100 },
+        { name: "picture2", label: _label("futu"), is_image: true, image_width: 80, image_height: 80, width: 100 },
+        { name: "productname", label: _label("shangpinmingcheng"), width: 300 },
+        { name: "brandcolor", label: _label("yanse"), type: "select", source: "colortemplate" },
         { name: "brandgroupid", label: _label("pinlei"), type: "select", source: "brandgroup" },
         { name: "brandid", label: _label("pinpai"), type: "select", source: "brand" },
         { name: "countries", label: _label("chandi"), type: "select-dialog", source: "country" }
@@ -39,16 +41,16 @@ export default {
     name: 'asapage-product',
     components: {
         'simple-admin-tablelist': Simple_Admin_TableList,
-        "product":Product
+        "product": Product
     },
     data() {
-        return {            
+        return {
             props: props,
         }
     },
     methods: {
         showFormToEdit(rowIndex, row) {
-            this.$refs.product.setInfo(row).then(product=>product.edit(true).show() )           
+            this.$refs.product.setInfo(row).then(product => product.edit(true).show())
         },
         showFormToCreate() {
             this.$refs.product.clearInfo().edit(true).show()
@@ -58,15 +60,13 @@ export default {
             let tablelist = self.$refs.tablelist
 
             self._log(rowdata)
-            if(type=='create') {
+            if (type == 'create') {
                 tablelist.appendRow(rowdata)
-            }
-            else {
-                let index = tablelist.findIndex(item=>item.id==rowdata.id)
-                if(index<0) {
+            } else {
+                let index = tablelist.findIndex(item => item.id == rowdata.id)
+                if (index < 0) {
                     tablelist.appendRow(rowdata)
-                }
-                else {
+                } else {
                     tablelist.updateRow(index, rowdata)
                 }
             }

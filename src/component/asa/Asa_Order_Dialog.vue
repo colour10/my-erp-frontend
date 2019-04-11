@@ -83,19 +83,25 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                        <el-row type="flex" justify="start">
-                            <el-button :type="canSubmit?'primary':'info'" @click="saveOrder(1)">{{_label("baocun")}}</el-button>
-                            <el-button :type="canSubmit?'primary':'info'" @click="saveOrder(2)">{{_label("tijiaoshenhe")}}</el-button>
-                            <el-button :type="canDelete?'primary':'info'" @click="deleteOrder()">{{_label("shanchu")}}</el-button>
-                        </el-row>
-                        <el-row type="flex" justify="start">
-                            <el-button :type="canConfirm?'primary':'info'" @click="confirmOrder(1)">{{_label("tuihui")}}</el-button>
-                            <el-button :type="canConfirm?'primary':'info'" @click="confirmOrder(3)">{{_label("shenhetongguo")}}</el-button>
-                            <el-button :type="canCancel?'primary':'info'" @click="cancelConfirm()">{{_label("quxiaoshenhe")}}</el-button>
-                        </el-row>
-                        <el-row type="flex" justify="start">
-                            <el-button :type="canFinish?'primary':'info'" @click="finishOrder()">{{_label("dingdanwajie")}}</el-button>
-                        </el-row>
+                        <auth auth="order-submit">
+                            <el-row type="flex" justify="start">
+                                <el-button :type="canSubmit?'primary':'info'" @click="saveOrder(1)">{{_label("baocun")}}</el-button>
+                                <el-button :type="canSubmit?'primary':'info'" @click="saveOrder(2)">{{_label("tijiaoshenhe")}}</el-button>
+                                <el-button :type="canDelete?'primary':'info'" @click="deleteOrder()">{{_label("shanchu")}}</el-button>
+                            </el-row>
+                        </auth>
+                        <auth auth="order-confirm">
+                            <el-row type="flex" justify="start">
+                                <el-button :type="canConfirm?'primary':'info'" @click="confirmOrder(1)">{{_label("tuihui")}}</el-button>
+                                <el-button :type="canConfirm?'primary':'info'" @click="confirmOrder(3)">{{_label("shenhetongguo")}}</el-button>
+                                <el-button :type="canCancel?'primary':'info'" @click="cancelConfirm()">{{_label("quxiaoshenhe")}}</el-button>
+                            </el-row>
+                        </auth>
+                        <auth auth="order-finish">
+                            <el-row type="flex" justify="start">
+                                <el-button :type="canFinish?'primary':'info'" @click="finishOrder()">{{_label("dingdanwajie")}}</el-button>
+                            </el-row>
+                        </auth>
                         <el-row type="flex" justify="start">
                             <el-button type="primary" @click="onQuit">{{_label("tuichu")}}</el-button>
                         </el-row>
@@ -226,14 +232,14 @@ export default {
         },
         onSelect(row) {
             var self = this;
-            Product.get(row, function(product) {
-                self._log(product, "Product")
+            Product.load({ data: row, depth: 1 }).then(function(product) {
+                //self._log(product, "Product")
 
                 product.sizecontents.map(item => {
                     //查询是不是已经添加过
                     let is_exist = self.tabledata.some(rowData => {
-                            return rowData.product.id == row.id && rowData.sizecontent.getValue() == item.getValue()
-                        })
+                        return rowData.product.id == row.id && rowData.sizecontent.getValue() == item.getValue()
+                    })
 
                     if (!is_exist) {
                         self.tabledata.unshift({
@@ -243,7 +249,7 @@ export default {
                         })
                     }
                 })
-            }, 1)
+            })
 
         },
         deleteOrder() {
@@ -336,14 +342,14 @@ export default {
                 self._submit("/order/cancel", {
                     id: self.form.id
                 }, function(res) {
-                    self._log(res)
+                    //self._log(res)
                     self.form.status = 2
                     self.$emit("change", self.form)
                 });
             })
         },
         getRowCount(rowIndex, row) {
-            this._log(row, "getRowCount")
+            //this._log(row, "getRowCount")
             return row.sizetoplist.reduce((total, item) => total += item.number, 0)
         },
         deleteRow(rowIndex, row) {
@@ -404,28 +410,28 @@ export default {
         data(newValue) {
             var self = this
             var form = self.form;
-            self._log("copy data1", newValue, form)
+            //self._log("copy data1", newValue, form)
 
             //清空当前表单数据，并复制新记录的数据
             globals.empty(form)
             globals.copyTo(newValue, form)
-            self._log("copy data2", newValue)
+                //self._log("copy data2", newValue)
 
             if (!self.form.id) {
                 self.tabledata = []
             }
-            
+
             self.clearValidate(50)
 
             //如果订单的id变化了，则清空明细，重新加载新订单的明细
             if (form.id != "" && form.id != self.fomrid) {
                 self.tabledata = []
                     //加载数据
-                self._fetch("/order/loadorder", {id:form.id}, function(res) {
-                    self._log("加载订单信息", res)
+                self._fetch("/order/loadorder", { id: form.id }, function(res) {
+                    //self._log("加载订单信息", res)
                     if (res.data.list) {
                         res.data.list.forEach(item => {
-                            self._log(item)
+                            //self._log(item)
                             self.appendRow(item)
                         })
                     }

@@ -2,7 +2,9 @@
     <div>
         <el-row>
             <el-col :span="2" :offset="22">
-                <el-button type="primary" @click="showFormToCreate()">{{_label("button-create")}}</el-button>
+                <auth auth="user">
+                    <el-button type="primary" @click="showFormToCreate()">{{_label("button-create")}}</el-button>
+                </auth>
             </el-col>
         </el-row>
         <el-row :gutter="20">
@@ -13,8 +15,8 @@
         <el-dialog class="user-form" :title="_label('yonghuxinxi')" :visible.sync="dialogVisible" :center="true" width="500">
             <el-tabs type="border-card" @tab-click="onTabClick" activeName="user">
                 <el-tab-pane :label="_label('user-setting')" name="user">
-                    <el-form class="order-form" :model="form" label-width="100px" :inline="true" style="width:700px;" size="small">
-                        <el-form-item :label="_label('user-loginname')">
+                    <el-form ref="order-form" class="order-form" :model="form" label-width="100px" :inline="true" style="width:700px;" size="small" :rules="rules" :inline-message="true">
+                        <el-form-item :label="_label('user-loginname')" prop="login_name">
                             <el-input v-model="form.login_name"></el-input>
                         </el-form-item>
                         <el-form-item :label="_label('password')">
@@ -66,7 +68,9 @@
                 <el-tab-pane :label="_label('gerenshezhi')" name="setting">个人设置</el-tab-pane>
             </el-tabs>
             <span slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="onSubmit">{{_label('baocun')}}</el-button>
+                <auth auth="user">
+                    <el-button type="primary" @click="onSubmit">{{_label('baocun')}}</el-button>
+                </auth>
                 <el-button type="primary" @click="onQuit">{{_label("tuichu")}}</el-button>
             </span>
         </el-dialog>
@@ -76,6 +80,7 @@
 <script>
 import globals from '../globals.js'
 import Simple_Admin_TableList from '../Simple_Admin_TableList.vue'
+import { Rules } from '../rules.js'
 
 const _log = globals.logger("asapage-producttemplate");
 const _label = globals.getLabel
@@ -144,6 +149,9 @@ export default {
                 countryid: "",
                 address: ""
             },
+            rules:{
+                login_name:Rules.username({})
+            },
             saleport: [],
             warehouse: [],
             props: props,
@@ -161,16 +169,18 @@ export default {
         },
         onSubmit() {
             var self = this;
-            let params = globals.extend({ saleportids: self.saleport.join(',') }, self.form)
-            if (self.form.id == "") {
-                self._submit("/user/add", params, function() {
-                    self.$refs.tablelist.appendRow(globals.clone(self.form))
-                })
-            } else {
-                self._submit("/user/edit", params, function() {
-                    globals.copyTo(self.form, self.row)
-                })
-            }
+            self.validate().then(()=>{
+                let params = globals.extend({ saleportids: self.saleport.join(',') }, self.form)
+                if (self.form.id == "") {
+                    self._submit("/user/add", params, function() {
+                        self.$refs.tablelist.appendRow(globals.clone(self.form))
+                    })
+                } else {
+                    self._submit("/user/edit", params, function() {
+                        globals.copyTo(self.form, self.row)
+                    })
+                }
+            })            
         },
         onTabClick(tab) {
             let self = this
@@ -209,7 +219,9 @@ export default {
             var self = this;
             globals.empty(self.form)
 
+            self.clearValidate(50)
             self.showDialog();
+
         }
     }
 }

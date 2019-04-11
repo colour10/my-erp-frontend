@@ -80,8 +80,6 @@ export default {
                 resolve.showMessage = true
                 self._fetch(path, form, resolve)
             })
-
-            self._fetch(path, form, options)
         },
         _confirm(message, callback) {
             var self = this;
@@ -139,10 +137,12 @@ export default {
         },
         clearValidate(delay) {
             let form = this.$refs['order-form']
+            //console.log(form)
 
             if(form) {
                 if(delay && delay>0) {
                     setTimeout(function(){
+                        //console.log("clearValidate")
                         form.clearValidate()
                     },delay)
                 }
@@ -150,6 +150,17 @@ export default {
                     form.clearValidate()
                 }
             }
+        },
+        validate() {
+            let self = this
+            return new Promise((resolve,reject)=>{
+                self.$refs["order-form"].validate(function(valid) {
+                    if(valid) {
+                        resolve()
+                    }
+                })
+            })
+            
         }
     }
 }

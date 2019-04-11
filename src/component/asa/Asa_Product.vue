@@ -4,10 +4,10 @@
             <el-tab-pane :label="_label('jibenziliao')" name="product">
                 <el-row>
                     <el-col :span="5">
-                        <simple-avatar v-model="form.picture"></simple-avatar>
+                        <simple-avatar v-model="form.picture" :disabled="!$store.getters.allow('product')"></simple-avatar>
                     </el-col>
                     <el-col :span="5">
-                        <simple-avatar v-model="form.picture2"></simple-avatar>
+                        <simple-avatar v-model="form.picture2" :disabled="!$store.getters.allow('product')"></simple-avatar>
                     </el-col>
                     <el-col :span="14">
                         <el-form ref="form" :model="form" label-width="80px" size="mini">
@@ -29,6 +29,7 @@
                                 </div>
                             </el-tooltip>
                         </el-col>
+                        <auth auth="product">
                         <el-col :span="4">
                             <div class="color-group" @click="onClickColorToEdit">
                                 <div class="box" style="width:36px;">
@@ -36,6 +37,7 @@
                                 </div>
                             </div>
                         </el-col>
+                    </auth>
                     </el-col>
                 </el-row>
                 <el-form ref="order-form" class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini" :rules="rules" :inline-message="true">
@@ -136,7 +138,7 @@
                     </el-row>
                     <el-row :gutter="0">
                         <el-col :span="6" :offset="9">
-                            <el-button type="primary" @click="onSubmit" v-if="option.isedit">{{_label("baocun")}}</el-button>
+                            <auth auth="product"><el-button type="primary" @click="onSubmit" v-if="option.isedit">{{_label("baocun")}}</el-button></auth>
                             <el-button type="primary" @click="onQuit">{{_label("tuichu")}}</el-button>
                         </el-col>
                     </el-row>
@@ -156,12 +158,12 @@
                     </el-table-column>
                 </el-table>
                 <el-col :offset="9" :span="6">
-                    <el-button type="primary" @click="onSaveGoodsCode" v-if="option.isedit">{{_label("baocun")}}</el-button>
+                    <auth auth="product"><el-button type="primary" @click="onSaveGoodsCode" v-if="option.isedit">{{_label("baocun")}}</el-button></auth>
                     <el-button type="primary" @click="onQuit">{{_label("tuichu")}}</el-button>
                 </el-col>
             </el-tab-pane>
             <el-tab-pane :label="_label('tongkuanduose')" name="colorgroup" :disabled="form.id==''">
-                <searchpanel ref="searchpanel" @select="onSelectProduct"></searchpanel>
+                <auth auth="product"><searchpanel ref="searchpanel" @select="onSelectProduct"></searchpanel></auth>
                 <el-table :data="colors" border style="width:100%;" :header-cell-style="countHeaderStyle">
                     <el-table-column prop="brandcolor" :label="_label('yanse')" width="240" align="center">
                         <template v-slot="scope">
@@ -193,13 +195,13 @@
                     </el-table-column>
                     <el-table-column prop="goods_code" :label="_label('caozuo')" width="150" align="center">
                         <template v-slot="scope">
-                            <el-button type="danger" @click="onDeleteColorGroup(scope, scope.row)" v-if="option.isedit && form.id!=scope.row.id">{{_label("shanchu")}}</el-button>
+                            <auth auth="product"><el-button type="danger" @click="onDeleteColorGroup(scope, scope.row)" v-if="option.isedit && form.id!=scope.row.id">{{_label("shanchu")}}</el-button></auth>
                         </template>
                     </el-table-column>
                 </el-table>
                 <el-col :offset="8" :span="8" style="padding:5px">
-                    <el-button type="primary" @click="onSaveColorGroup" v-if="option.isedit">{{_label("baocun")}}</el-button>
-                    <el-button type="primary" @click="onAppendColor" v-if="option.isedit">{{_label("zhuijia")}}</el-button>
+                    <auth auth="product"><el-button type="primary" @click="onSaveColorGroup" v-if="option.isedit">{{_label("baocun")}}</el-button>
+                    <el-button type="primary" @click="onAppendColor" v-if="option.isedit">{{_label("zhuijia")}}</el-button></auth>
                     <el-button type="primary" @click="onQuit">{{_label("tuichu")}}</el-button>
                 </el-col>
             </el-tab-pane>
@@ -330,7 +332,7 @@ export default {
         },
         onSizetopidChange(newvalue) {
             let self = this
-            self._log(newvalue)
+            //self._log(newvalue)
             let source = DataSource.getDataSource("sizecontent", self.lang)
             source.filter({ topid: self.form.sizetopid }, function(list) {
                 let data = list.map(item => item.getObject())
@@ -362,7 +364,7 @@ export default {
             let self = this;
             let params = { productid: self.form.id }
             params.list = self.colors.map(item => extract(item, color_keys))
-            self._log(params)
+            //self._log(params)
             self._submit("/product/savecolorgroup", {
                 params: JSON.stringify(params)
             }, function(res) {
@@ -467,7 +469,9 @@ export default {
 
                     setTimeout(function() {
                         self.$refs.childbrand.load(item => item.row.brandgroupid == self.form.brandgroupid)
-                        self.$refs.searchpanel.clear()
+                        if(self.$refs.searchpanel) {
+                            self.$refs.searchpanel.clear()
+                        }
                         self.$refs.property.setProduct(info)
                         self.onSizetopidChange()
                     }, 100)
