@@ -16,7 +16,7 @@
                 <template v-slot="scope">
                     <el-button size="mini" :type="item.type||''" @click="item.handler(scope.$index, scope.row, item)" v-for="item in buttons" :key="item.label" v-if="isShow(item)">{{item.label}}</el-button>
                     <el-button size="mini" @click="handleClickUpdate(scope.$index, scope.row)" v-if="isEditable(scope.row)">{{_label('bianji')}}</el-button>
-                    <auth :auth="controller">
+                    <auth :auth="authname">
                         <el-button size="mini" type="danger" @click="onClickDelete(scope.$index, scope.row)" v-if="isDeletable(scope.row)">{{_label('shanchu')}}</el-button>
                     </auth>
                 </template>
@@ -33,7 +33,7 @@ const _label = globals.getLabel
 
 export default {
     name: 'simple-admin-tablelist',
-    props: ['columns', "buttons", "controller", "base", "onclickupdate", 'isedit', 'isdelete', "actionwidth"],
+    props: ['columns', "buttons", "controller", "base", "onclickupdate", 'isedit', 'isdelete', "actionwidth", "authname"],
     components: {
 
     },
@@ -71,13 +71,14 @@ export default {
             var self = this
             return self.$delete(self.tableData, rowIndex)
         },
-        onClickDelete(rowIndex, row) {
+        async onClickDelete(rowIndex, row) {
             var self = this
             self.rowIndex = rowIndex;
 
-            self._remove("/" + self.controller + "/delete?id=" + row.id, function() {
+            let result = await self._remove("/" + self.controller + "/delete", {id:row.id})
+            if(result==true) {
                 self.$delete(self.tableData, rowIndex)
-            })
+            }
         },
         handleClickUpdate(rowIndex, row) {
             var self = this
@@ -199,7 +200,7 @@ export default {
     watch: {
         base: {
             handler: function(newValue, oldValue) {
-                //this._log("change",newValue,oldValue)
+                this._log("change",newValue,oldValue)
                 this.loadList()
             },
             deep: true

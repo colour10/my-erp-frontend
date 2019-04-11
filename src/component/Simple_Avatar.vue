@@ -7,7 +7,7 @@
 
 <script>
 import globals from './globals.js'
-import {httpPost,host} from './http.js'
+import {host} from './http.js'
 const _label = globals.getLabel
 
 export default {

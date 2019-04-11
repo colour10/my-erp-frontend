@@ -60,9 +60,7 @@ const getFetcher = function(name) {
                         Object.keys(store.list).forEach(function(key){
                             params[key] = Object.keys(store.list[key])
                         })
-                        httpPost("/common/loadname", {
-                            params: JSON.stringify(params)
-                        }, function(res) {
+                        httpPost("/common/loadname", { params: JSON.stringify(params) }).then(function(res) {
 
                             Object.keys(res).forEach(function(key){
                                 let value = res[key];
@@ -75,7 +73,7 @@ const getFetcher = function(name) {
                             store.loading = false
                             //console.log(result,"result")
                             callback(store.result[name][id])
-                        }, "json")
+                        })
                     }
                 }
             }, 100)

@@ -102,6 +102,11 @@
                                 <el-button :type="canFinish?'primary':'info'" @click="finishOrder()">{{_label("dingdanwajie")}}</el-button>
                             </el-row>
                         </auth>
+                        <auth auth="order-submit">
+                            <el-row>
+                                <el-button type="primary" @click="addPayment">{{_label("tianjiashoukuan")}}</el-button>
+                            </el-row>
+                        </auth>
                         <el-row type="flex" justify="start">
                             <el-button type="primary" @click="onQuit">{{_label("tuichu")}}</el-button>
                         </el-row>
@@ -149,6 +154,9 @@
                     </el-table>
                 </el-col>
             </el-row>
+            <el-row>
+                <simple-admin-page v-bind="props" ref="payment" :hide-create="true"></simple-admin-page>
+            </el-row>
         </el-dialog>
         <asa-select-product-dialog :visible.sync="pro" @select="onSelect"></asa-select-product-dialog>
     </div>
@@ -162,6 +170,28 @@ import globals from "../globals.js"
 import { Product } from "../model.js"
 
 const _label = globals.getLabel
+
+const props = {
+    columns: [
+        { name: "payment_type", label: _label("fukuanleixing"), type: 'select', source: "paymenttype" },
+        { name: "currency", label: _label("bizhong"), type: 'select', source: "currency" },
+        { name: "amount", label: _label("jine") },
+        { name: "paymentdate", label: _label("fukuanriqi"), type:"date" },
+        { name: "memo", label: _label("beizhu") },
+        { name: "makestaff", label: _label("tijiaoren"),  type: 'select', source: "user", is_edit_hide:true },
+        { name: "status", label: _label("yiruzhang"), type:"switch", is_edit_hide:true }
+    ],
+    controller: "orderpayment",
+    auth: "order-submit",    
+    base:{
+      orderid:''
+    },
+    options:{
+        isedit:(item)=>item.status==0,
+        isdelete:(item)=>item.status==0,
+        autoreload:true
+    }
+}
 
 export default {
     name: 'asa-order-dialog',
@@ -180,7 +210,7 @@ export default {
     data() {
         var self = this;
 
-        var dataSource = DataSource.getDataSource('sizecontent', self._label('lang'));
+        
         return {
             form: {
                 bussinesstype: "",
@@ -219,13 +249,18 @@ export default {
             title: "",
             lang: "",
             pro: false,
-            dataSource,
-            formid: ''
+            formid: '',
+            props
         }
     },
     methods: {
         onQuit() {
             this.dialogVisible = false
+        },
+        addPayment() {
+            let self = this;
+            props.base.orderid = self.form.id
+            self.$refs.payment.showFormToCreate();
         },
         showProduct() {
             this.pro = true;
@@ -358,7 +393,8 @@ export default {
         },
         appendRow(row) {
             const self = this;
-            self.dataSource.getRow(row.sizecontentid, data => {
+            let dataSource = DataSource.getDataSource('sizecontent', self._label('lang'));
+            dataSource.getRow(row.sizecontentid, data => {
                 row.sizecontent = data
                 self.tabledata.push(row)
             })

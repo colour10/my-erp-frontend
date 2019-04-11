@@ -72,16 +72,16 @@ export default {
         showFormToEdit(rowIndex, row) {
             this.info = row;
             this.rowIndex = rowIndex
-            console.log(row)
+            //console.log(row)
             this.showForm()
         },
         onChange(form, isdelete) {
             let self = this
 
-            self._log(form,isdelete)
+            //self._log(form,isdelete)
             if(isdelete) {
                  if (self.rowIndex >= 0) {
-                    self._log("删除订单")
+                    //self._log("删除订单")
                     self.$refs.tablelist.deleteRow(self.rowIndex)
                 }
             }

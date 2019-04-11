@@ -58,7 +58,7 @@ export default {
             self.data = []
 
             if(self.productid && self.productid>0) {
-                httpPost("/product/picture", { id: self.productid }, function(res) {
+                httpPost("/product/picture", { id: self.productid }).then(function(res) {
                     self.data = res.data;
                     self.loaded = true;
                 })

@@ -19,7 +19,7 @@ export default {
         _fetch(path, form, options) {
             const self = this
             options = options || {}
-            httpPost(path, form, function(result) {
+            httpPost(path, form).then(function(result) {
                 //console.log(result)
                 if (result.messages.length > 0) {
                     //提示信息
@@ -56,7 +56,7 @@ export default {
                         options.onSuccess(result)
                     }
                 }
-            }, "json")
+            })
         },
         _fetchPromise(path, form) {
             const self = this
@@ -91,41 +91,43 @@ export default {
                 callback()
             }).catch(() => {});
         },
-        _remove(path, options) {
+        async _remove(path, form, options) {
             var self = this;
-            self.$confirm(_label('delete_warning'), _label('tip'), {
-                confirmButtonText: _label('ok'),
-                cancelButtonText: _label('cancel'),
-                type: 'warning'
-            }).then(() => {
-                httpGet(path, function(result) {
-                    if (result.messages.length > 0) {
-                        const h = self.$createElement;
-                        var message = h("ul", null, result.messages.map(function(v) {
-                            return h("li", null, v)
-                        }))
+            
+            try {
+                await self.$confirm(_label('delete_warning'), _label('tip'), {
+                    confirmButtonText: _label('ok'),
+                    cancelButtonText: _label('cancel'),
+                    type: 'warning'
+                })
 
-                        self.$alert(message, _label("error_tip"), {
-                            confirmButtonText: _label("ok")
-                        });
+                let result = await httpPost(path, form);
 
-                        if (options && typeof(options.onFail) == 'function') {
-                            options.onFail()
-                        }
-                    } else {
-                        self.$message({
-                            message: _label('delete_success'),
-                            type: 'success'
-                        });
+                if (result.messages.length > 0) {
+                    const h = self.$createElement;
+                    var message = h("ul", null, result.messages.map(function(v) {
+                        return h("li", null, v)
+                    }))
 
-                        if (typeof(options) == 'function') {
-                            options(result)
-                        } else if (options && typeof(options.onSuccess) == 'function') {
-                            options.onSuccess(result)
-                        }
-                    }
-                }, "json")
-            }).catch(() => {});
+                    self.$alert(message, _label("error_tip"), {
+                        confirmButtonText: _label("ok")
+                    });
+
+                    return false;
+                } 
+                else {
+                    self.$message({
+                        message: _label('delete_success'),
+                        type: 'success'
+                    });
+
+                    return true;
+                }
+            }
+            catch(e) {
+                //self._log(e)
+                return false
+            }
         },
         _info(message) {
             let self = this

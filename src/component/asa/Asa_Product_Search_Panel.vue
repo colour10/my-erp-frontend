@@ -92,6 +92,7 @@ export default {
 
             self._fetch("/product/search", self.form, function(res) {
                 self.searchresult = []
+                //self._log(res)
                 res.data.forEach(function(item) {
                     ProductDetail.get(item, function(result) {
                         //self._log(result)

@@ -1,6 +1,6 @@
 <template>
     <el-select v-model="currentValue" :placeholder="qingxuanze" style="width:150" @change="handleChange" filterable :disabled="disabled" :clearable="clearable">
-        <el-option v-for="(item,key) in data" :key="item.getKeyValue()" :label="item.getLabelValue()" :value="item.getKeyValue()"></el-option>
+        <el-option v-for="(item,key) in data" :key="item.getLabelValue()" :label="item.getLabelValue()" :value="item.getKeyValue()"></el-option>
     </el-select>
 </template>
 
@@ -69,7 +69,7 @@ export default {
             var self = this;
             self.data = []
             self.dataSource.getData(function(data) {
-                //self._log("load", data)
+                self._log("load", data)
                 data.forEach(function(item) {
                     if (callback(item)) {
                         self.data.push(item)
@@ -101,6 +101,7 @@ export default {
             return
         }
         self.dataSource.getData(function(data) {
+            self._log("load", data)
             self.data = data
         })
     }

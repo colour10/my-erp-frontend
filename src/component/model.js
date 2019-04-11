@@ -243,9 +243,9 @@ const ConfirmorderDetails = Object.assign(createModel("confirmorderdetails"),{
 })
 
 const ProductCodeList = function(productid, callback){
-    httpPost("/product/codelist", {id:productid}, function(res){
+    httpPost("/product/codelist", {id:productid}).then(function(res){
         callback(res.data)
-    },'json');
+    });
 }
 export {ProductCodeList,ProductDetail}
 export { Productstock,Warehouse,Product,Goods,OrderDetails,ConfirmorderDetails }

@@ -40,7 +40,8 @@ export default {
         },
         checked: true,
         languages:globals.getLabel("list_languages"),
-        isShowForm:false
+        isShowForm:false,
+        back:""
       };
     },
     methods: {
@@ -66,7 +67,7 @@ export default {
                     window.ASAP.$session_id = res.session_id;
                     //console.log(window.ASAP)
 
-                    self.$router.push("/")
+                    self.goToPage()
                 },
                 onFail:function() {
                     self.logining = false
@@ -79,10 +80,12 @@ export default {
       },
       doAction(action) {
           var self = this
+
+          self._log("action", action, self.$route)
           if(action=='logout') {
               self._fetch("/login/logout", {}, function(res){
                   self.$store.commit("logout")
-                  self.$router.push("/login/login")
+                  self.$router.push({path:"/login/login"})
                   //self._log("logout")
               })
           }
@@ -91,22 +94,33 @@ export default {
                   self.$router.push("/") 
               }  
               else {
+                  self.back = self.$route.query.back
                   self._fetch("/login/checklogin", {}, function(res){
                       if(res.code==200 && res.auth && res.auth.id && res.auth.id>0) {
                           self.$store.commit({
                               type:"login",
                               auth:res.auth
                           })
-                          self.$router.push("/") 
+                          self.goToPage()
                       }
                       else {
-                          self.$router.push("/login/login") 
+                          //self.$router.push("/login/login") 
                           self.isShowForm = true;
                       }
                   })
               }
           }
+      },
+      goToPage() {
+          let self = this
+          //登录成功后进入下一页
+          let url = "/"
+          if(self.back && self.back.length>0) {
+              url = self.back
+          }
+          self.$router.push(url) 
       }
+
     },
     computed:{
         isShow() {
@@ -116,14 +130,14 @@ export default {
     watch:{
         "$route"(newValue, oldValue) {
             var self = this
-            //self._log(newValue, this.$router.params)
+            
             //self._log(this.$store)
             self.doAction(newValue.params.action)
         }
     },
     mounted:function() {
         var self = this
-        //self._log("mounted", self.$route.params)
+        self._log("mounted", self.$route.params)
         self.doAction(self.$route.params.action)
     }
   }

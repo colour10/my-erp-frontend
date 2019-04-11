@@ -64,6 +64,11 @@
                                     <el-button :type="canZuofei?'primary':'info'" @click="zuofei()">{{_label("zuofei")}}</el-button>
                                 </el-tooltip>
                             </el-row>
+                          </auth>
+                            <auth auth="sales">
+                            <el-row>
+                                <el-button type="primary" @click="addReceive">{{_label("tianjiashoukuan")}}</el-button>
+                            </el-row>
                         </auth>
                         <el-row>
                             <el-button type="primary" @click="onQuit">{{_label("tuichu")}}</el-button>
@@ -167,17 +172,41 @@
                     </el-table>
                 </el-col>
             </el-row>
+            <el-row>
+                <simple-admin-page v-bind="props" ref="receive" :hide-create="true"></simple-admin-page>
+            </el-row>
         </el-dialog>
     </div>
 </template>
 
 <script>
-import globals from '../globals.js'
+import globals, { _label } from '../globals.js'
 import { Productstock } from "../model.js"
 
 import simple_select from '../Simple_Select.vue'
 import Asa_Productstock_Search from './Asa_Productstock_Search.vue'
 import DataSource from '../DataSource.js'
+
+const props = {
+    columns: [
+        { name: "payment_type", label: _label("fukuanleixing"), type: 'select', source: "paymenttype" },
+        { name: "currency", label: _label("bizhong"), type: 'select', source: "currency" },
+        { name: "amount", label: _label("jine") },
+        { name: "paymentdate", label: _label("fukuanriqi"), type:"date" },
+        { name: "memo", label: _label("beizhu") },
+        { name: "makestaff", label: _label("tijiaoren"),  type: 'select', source: "user", is_edit_hide:true },
+        { name: "status", label: _label("yiruzhang"), type:"switch", is_edit_hide:true }
+    ],
+    controller: "salesreceive",
+    auth: "sales",    
+    base:{
+      salesid:''
+    },
+    options:{
+        isedit:(item)=>item.status==0,
+        isdelete:(item)=>item.status==0
+    }
+}
 
 export default {
     name: 'asa-sales-dialog',
@@ -223,12 +252,18 @@ export default {
             formid: "",
             base: {
                 warehouseid: ""
-            }
+            },
+            props
         }
     },
     methods: {
         onQuit() {
             this.dialogVisible = false
+        },
+        addReceive() {
+            let self = this;
+            props.base.salesid = self.form.id
+            self.$refs.receive.showFormToCreate();
         },
         getDealPrice(row) {
             if (row.is_match == 0) {
@@ -375,7 +410,7 @@ export default {
             //清空当前表单数据，并复制新记录的数据
             globals.empty(form)
             globals.copyTo(newValue, form)
-                //self._log("copy data2", newValue)
+            props.base.salesid = form.id
 
             //如果订单的id变化了，则清空明细，重新加载新订单的明细
             if (form.id != self.fomrid) {
@@ -383,18 +418,17 @@ export default {
 
                 if (form.id != "") {
                     //加载数据
-                    self._fetch("/sales/loadsale?id=" + form.id, function(res) {
-                        self._log("加载订单信息", res)
+                    self._fetchPromise("/sales/loadsale", { id: form.id }).then(function(res) {
+                        //self._log("加载订单信息", res)
                         if (res.data.list) {
                             res.data.list.forEach(item => {
-                                self._log(item)
+                                //self._log(item)
                                 self.appendRow(item)
                             })
                         }
                     })
                 }
             }
-
         }
     }
 }

@@ -96,7 +96,7 @@ DataSource.prototype.loadList = function() {
     var self = this;
     var options = self.options;
     var params = options.params || {}
-    httpGet(options.url, function(res){
+    httpGet(options.url).then( function(res){
         res.data.forEach(function(item){
             var row = new DataRow(item, self)
             self.hashtable[item[self.opvalue]] = row; 
@@ -126,7 +126,7 @@ DataSource.prototype.filter = function(condition, callback) {
         var keys = Object.keys(condition)
         
         var result = data.filter(row=>{
-            //_log("DataSource.filter", row, keys.every(key=>condition[key]==row.getRow(key)))
+            console.log("DataSource.filter", row, keys.every(key=>condition[key]==row.getRow(key)))
             return keys.every(key=>condition[key]==row.getRow(key))    
         })
         callback(result)
