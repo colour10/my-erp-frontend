@@ -30,21 +30,21 @@
                             </el-tooltip>
                         </el-col>
                         <auth auth="product">
-                        <el-col :span="4">
-                            <div class="color-group" @click="onClickColorToEdit">
-                                <div class="box" style="width:36px;">
-                                    <i class="el-icon-plus color-group-icon"></i>
+                            <el-col :span="4">
+                                <div class="color-group" @click="onClickColorToEdit">
+                                    <div class="box" style="width:36px;">
+                                        <i class="el-icon-plus color-group-icon"></i>
+                                    </div>
                                 </div>
-                            </div>
-                        </el-col>
-                    </auth>
+                            </el-col>
+                        </auth>
                     </el-col>
                 </el-row>
                 <el-form ref="order-form" class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini" :rules="rules" :inline-message="true">
                     <el-row :gutter="0">
                         <el-col :span="8">
                             <el-form-item :label="_label('pinpai')" prop="brandid">
-                                <simple-select v-model="form.brandid" source="brand" :lang="lang">
+                                <simple-select v-model="form.brandid" source="brand" :lang="lang" @change="onBrandChange">
                                 </simple-select>
                             </el-form-item>
                             <el-form-item :label="_label('pinlei')" prop="brandgroupid">
@@ -75,17 +75,18 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            <el-form-item :label="_label('shangpinbieming')">
-                                <select-dialog v-model="form.aliases" source="aliases" style="width:150" :lang="lang">
+                            <el-form-item :label="_label('shangpinmiaoshu')">
+                                <select-dialog v-model="form.productmemoids" source="productmemo" style="width:150" :lang="lang">
                                 </select-dialog>
+                            </el-form-item>
+                            <el-form-item :label="_label('shangpinbieming')">
+                                <selectpanel v-model="form.aliases" ref="aliases" style="width:150"></selectpanel>
                             </el-form-item>
                             <el-form-item :label="_label('shangpinxilie')">
-                                <select-dialog v-model="form.series_id" source="aliases" style="width:150" :lang="lang">
-                                </select-dialog>
+                                <selectpanel v-model="form.series" ref="series" style="width:150" @change="onSeriesChange"> </selectpanel>
                             </el-form-item>
                             <el-form-item :label="_label('shangpinzixilie')">
-                                <select-dialog v-model="form.series_id2" source="aliases" style="width:150" :lang="lang">
-                                </select-dialog>
+                                <selectpanel v-model="form.series2" ref="series2" style="width:150"> </selectpanel>
                             </el-form-item>
                             <el-form-item :label="_label('chengjiaojiage')">
                                 <el-input placeholder="" v-model="form.retailprice" class="input-with-select">
@@ -138,7 +139,9 @@
                     </el-row>
                     <el-row :gutter="0">
                         <el-col :span="6" :offset="9">
-                            <auth auth="product"><el-button type="primary" @click="onSubmit" v-if="option.isedit">{{_label("baocun")}}</el-button></auth>
+                            <auth auth="product">
+                                <el-button type="primary" @click="onSubmit" v-if="option.isedit">{{_label("baocun")}}</el-button>
+                            </auth>
                             <el-button type="primary" @click="onQuit">{{_label("tuichu")}}</el-button>
                         </el-col>
                     </el-row>
@@ -158,12 +161,16 @@
                     </el-table-column>
                 </el-table>
                 <el-col :offset="9" :span="6">
-                    <auth auth="product"><el-button type="primary" @click="onSaveGoodsCode" v-if="option.isedit">{{_label("baocun")}}</el-button></auth>
+                    <auth auth="product">
+                        <el-button type="primary" @click="onSaveGoodsCode" v-if="option.isedit">{{_label("baocun")}}</el-button>
+                    </auth>
                     <el-button type="primary" @click="onQuit">{{_label("tuichu")}}</el-button>
                 </el-col>
             </el-tab-pane>
             <el-tab-pane :label="_label('tongkuanduose')" name="colorgroup" :disabled="form.id==''">
-                <auth auth="product"><searchpanel ref="searchpanel" @select="onSelectProduct"></searchpanel></auth>
+                <auth auth="product">
+                    <searchpanel ref="searchpanel" @select="onSelectProduct"></searchpanel>
+                </auth>
                 <el-table :data="colors" border style="width:100%;" :header-cell-style="countHeaderStyle">
                     <el-table-column prop="brandcolor" :label="_label('yanse')" width="240" align="center">
                         <template v-slot="scope">
@@ -195,13 +202,17 @@
                     </el-table-column>
                     <el-table-column prop="goods_code" :label="_label('caozuo')" width="150" align="center">
                         <template v-slot="scope">
-                            <auth auth="product"><el-button type="danger" @click="onDeleteColorGroup(scope, scope.row)" v-if="option.isedit && form.id!=scope.row.id">{{_label("shanchu")}}</el-button></auth>
+                            <auth auth="product">
+                                <el-button type="danger" @click="onDeleteColorGroup(scope, scope.row)" v-if="option.isedit && form.id!=scope.row.id">{{_label("shanchu")}}</el-button>
+                            </auth>
                         </template>
                     </el-table-column>
                 </el-table>
                 <el-col :offset="8" :span="8" style="padding:5px">
-                    <auth auth="product"><el-button type="primary" @click="onSaveColorGroup" v-if="option.isedit">{{_label("baocun")}}</el-button>
-                    <el-button type="primary" @click="onAppendColor" v-if="option.isedit">{{_label("zhuijia")}}</el-button></auth>
+                    <auth auth="product">
+                        <el-button type="primary" @click="onSaveColorGroup" v-if="option.isedit">{{_label("baocun")}}</el-button>
+                        <el-button type="primary" @click="onAppendColor" v-if="option.isedit">{{_label("zhuijia")}}</el-button>
+                    </auth>
                     <el-button type="primary" @click="onQuit">{{_label("tuichu")}}</el-button>
                 </el-col>
             </el-tab-pane>
@@ -256,11 +267,9 @@ export default {
                 picture: "",
                 picture2: "",
                 laststoragedate: "",
-                aliases_1: "",
-                aliases_2: "",
                 aliases: "",
-                series_id: "",
-                series2_id: "",
+                series: "",
+                series2: "",
                 ulnarinch: "",
                 factoryprice: "",
                 factorypricecurrency: "",
@@ -278,6 +287,7 @@ export default {
                 ageseason: "",
                 sizetopid: "",
                 sizecontentids: "",
+                productmemoids: "", //商品描述
                 wordcode_1: "",
                 wordcode_2: "",
                 wordcode_3: "",
@@ -332,11 +342,35 @@ export default {
         },
         onSizetopidChange(newvalue) {
             let self = this
-            //self._log(newvalue)
+                //self._log(newvalue)
             let source = DataSource.getDataSource("sizecontent", self.lang)
             source.filter({ topid: self.form.sizetopid }, function(list) {
                 let data = list.map(item => item.getObject())
                 self.$refs['sizecontentids'].setData(data)
+            })
+        },
+        onBrandChange(newvalue) {
+            let self = this
+                //self._log(newvalue)
+            let source = DataSource.getDataSource("aliases", self.lang)
+            source.filter({ brandid: self.form.brandid }, function(list) {
+                let data = list.map(item => item.getObject())
+                self.$refs['aliases'].setData(data)
+            })
+
+            let series = DataSource.getDataSource("series", self.lang)
+            series.filter({ brandid: self.form.brandid }, function(list) {
+                let data = list.map(item => item.getObject())
+                self.$refs['series'].setData(data)
+            })
+        },
+        onSeriesChange(newvalue) {
+            let self = this
+                //self._log(newvalue)
+            let source = DataSource.getDataSource("series2", self.lang)
+            source.filter({ seriesid: self.form.series }, function(list) {
+                let data = list.map(item => item.getObject())
+                self.$refs['series2'].setData(data)
             })
         },
         onSelectProduct(info) {
@@ -364,7 +398,7 @@ export default {
             let self = this;
             let params = { productid: self.form.id }
             params.list = self.colors.map(item => extract(item, color_keys))
-            //self._log(params)
+                //self._log(params)
             self._submit("/product/savecolorgroup", {
                 params: JSON.stringify(params)
             }, function(res) {
@@ -452,7 +486,7 @@ export default {
                 ProductDetail.load({ data: row, depth: 1, isCache: false }).then(function(info) {
                     //self._log(info)
                     //设置默认值
-                    info = globals.extend({sizecontentids:""}, info);
+                    info = globals.extend({ sizecontentids: "" }, info);
                     //console.log(info,'----------')
 
                     self.colors2 = info.colors
@@ -469,7 +503,7 @@ export default {
 
                     setTimeout(function() {
                         self.$refs.childbrand.load(item => item.row.brandgroupid == self.form.brandgroupid)
-                        if(self.$refs.searchpanel) {
+                        if (self.$refs.searchpanel) {
                             self.$refs.searchpanel.clear()
                         }
                         self.$refs.property.setProduct(info)

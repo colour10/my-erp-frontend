@@ -33,9 +33,9 @@
                     <el-menu-item index="2-5">
                         <router-link to="/sizetop">{{_label("menu-2-1-5")}}</router-link>
                     </el-menu-item>
-                    <!-- <el-menu-item index="2-6">
-                        <router-link to="/producttemplate">{{_label("menu-2-1-19")}}</router-link>
-                    </el-menu-item> -->
+                    <el-menu-item index="2-6">
+                        <router-link to="/productmemo">{{_label("shangpinmiaoshu")}}</router-link>
+                    </el-menu-item>
                     <el-menu-item index="2-7">
                         <router-link to="/material">{{_label("menu-2-1-6")}}</router-link>
                     </el-menu-item>
@@ -156,7 +156,7 @@ const menus = {
     "2-3": "/ageseason",
     "2-4": "/colortemplate",
     "2-5": "/sizetop",
-    "2-6": "/producttemplate",
+    "2-6": "/productmemo",
     "2-7": "/material",
     "2-8": "/materialnote",
     "2-9": "/ulnarinch",

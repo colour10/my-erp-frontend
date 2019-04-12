@@ -186,6 +186,18 @@ const props = {
         key_column: "name"
     },
 
+    "productmemo": {
+        columns: [{
+                name: "name",
+                label: _label("mingcheng"),
+                is_multiple: true,
+                is_focus: true
+            }
+        ],
+        controller: "productmemo",
+        key_column: "name"
+    },
+
     "supplier": {
         columns: [{
             name: "nickname",

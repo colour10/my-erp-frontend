@@ -70,7 +70,8 @@ const props = {
         width: 200,
         is_focus: true
     }],
-    controller: "group"
+    controller: "group",
+    authname:"group"
 }
 
 export default {

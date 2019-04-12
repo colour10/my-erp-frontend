@@ -96,6 +96,8 @@ export default {
         convertValue(value) {
             var self = this;
             //self._log("convertValue", value)
+            //
+            value = !value ? "":value
 
             self.getDataSource().getRowLabels(value, function(labels){
                 //self._log("convertValue", self.source, self.lang, labels)

@@ -1,39 +1,45 @@
 <template>
-    <el-table :data="tableData" stripe border style="width:100%;" v-loading.fullscreen.lock="loading">
-        <el-table-column :prop="item.name" :label="item.label" align="center" :width="item.width||180" v-if="!item.is_hide" v-for="item in columns" :key="item.name">
-            <template v-slot="scope">
-                <img v-if="item.is_image" :src="_label('_image_url_prex')+scope.row[item.name]" :style="getImageStyle(item)">
-                <span v-if="!item.is_image && !item.html">{{item.convert?item.convert(scope.row,scope.rowIndex,item):convert(scope.row, item, scope.rowIndex)}}</span>
-                <span v-if="item.html" v-html="item.html">{{item.html}}</span>
-            </template>
-        </el-table-column>
-        <el-table-column :label="item.label" align="center" :width="item.width||180" v-for="item in buttons" :key="item.label">
-            <template v-slot="scope">
-                <el-button type="text" @click="item.handler(scope.$index, scope.row, item)">{{item.label}}</el-button>
-            </template>
-        </el-table-column>
-        <el-table-column prop="lang_code" :label="_label('yuyan')" width="220" align="center">
-            <template v-slot="scope">
-                <span v-for="(item, key) in languages" :key="item.code" :value="item.code">
+    <div>
+        <el-table :data="tableData" stripe border style="width:100%;" v-loading.fullscreen.lock="loading">
+            <el-table-column :prop="item.name" :label="item.label" align="center" :width="item.width||180" v-if="!item.is_hide" v-for="item in columns" :key="item.name">
+                <template v-slot="scope">
+                    <img v-if="item.is_image" :src="getImageSrc(scope.row, item)" :style="getImageStyle(item)">
+                    <span v-if="!item.is_image && !item.html">{{item.convert?item.convert(scope.row,scope.rowIndex,item):convert(scope.row, item, scope.rowIndex)}}</span>
+                    <span v-if="item.html" v-html="item.html">{{item.html}}</span>
+                </template>
+            </el-table-column>
+            <el-table-column :label="item.label" align="center" :width="item.width||180" v-for="item in buttons" :key="item.label">
+                <template v-slot="scope">
+                    <el-button type="text" @click="item.handler(scope.$index, scope.row, item)">{{item.label}}</el-button>
+                </template>
+            </el-table-column>
+            <el-table-column prop="lang_code" :label="_label('yuyan')" width="220" align="center">
+                <template v-slot="scope">
+                    <span v-for="(item, key) in languages" :key="item.code" :value="item.code">
          <el-button :type="isSettingLanguage(scope.row, item.code)?'primary':'info'" circle @click="showFormToUpdate(scope.$index, scope.row, item.code)">{{item.shortName}}</el-button>
        </span>
-            </template>
-        </el-table-column>
-        <el-table-column :label="_label('caozuo')" :width="componenToptions.action_width||150" align="center">
-            <template v-slot="scope">
-                <auth :auth="controller">
-                    <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">{{_label("shanchu")}}</el-button>
-                </auth>
-                <el-button size="mini" @click="handleAction(scope,item)" v-for="item in actions" :key="item.label" v-if="isShow(item)">{{item.label}}</el-button>
-            </template>
-        </el-table-column>
-    </el-table>
+                </template>
+            </el-table-column>
+            <el-table-column :label="_label('caozuo')" :width="componenToptions.action_width||150" align="center">
+                <template v-slot="scope">
+                    <auth :auth="controller">
+                        <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">{{_label("shanchu")}}</el-button>
+                    </auth>
+                    <el-button size="mini" @click="handleAction(scope,item)" v-for="item in actions" :key="item.label" v-if="isShow(item)">{{item.label}}</el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pagination.current*1" :page-sizes="pagination.pageSizes" :page-size="pagination.pageSize*1" layout="total, sizes, prev, pager, next, jumper" :total="pagination.total*1">
+        </el-pagination>
+    </div>
 </template>
 
 <script>
 import DataSource from './DataSource.js'
-import globals from './globals.js'
+import globals,{extend} from './globals.js'
+import {host} from './http.js'
 const _label = globals.getLabel
+const pageSizes = [10, 15, 30, 50, 100]
 
 export default {
     name: 'multiple-admin-tablelist',
@@ -50,11 +56,25 @@ export default {
             tableData: [],
             componenToptions: options,
             languages: _label("list_languages"),
-            loading: true,
-            current_lang: _label("lang")
+            loading: false,
+            current_lang: _label("lang"),
+            pagination: {
+                pageSizes,
+                pageSize: 15,
+                total: 0,
+                current: 1
+            }
         }
     },
     methods: {
+        handleSizeChange(pageSize) {
+            this.pagination.pageSize = pageSize
+            this.loadList()
+        },
+        handleCurrentChange(current){
+            this.pagination.current = current
+            this.loadList()
+        },
         appendRow: function(newRow, rowIndex) {
             var self = this;
             console.log(newRow, rowIndex)
@@ -73,10 +93,9 @@ export default {
             item.handler($index, row, this)
         },
         isShow(item) {
-            if(item.isShow) {
+            if (item.isShow) {
                 return item.isShow(this)
-            }
-            else {
+            } else {
                 return true;
             }
         },
@@ -86,6 +105,15 @@ export default {
             self._remove("/" + self.controller + "/delete?id=" + row.id, function() {
                 self.$delete(self.tableData, rowIndex)
             })
+        },
+        getImageSrc(row, column) {
+            if(row[column.name] && row[column.name].length>0) {
+                //this._log(row[column.name])
+                return _label('_image_url_prex')+row[column.name]
+            }
+            else {
+                return host + '/imgs/none.png';
+            }
         },
         getImageStyle(column) {
             var styles = "";
@@ -128,11 +156,15 @@ export default {
                 return value;
             }
         },
-        loadList(cb) {
+        loadList() {
             var self = this;
             self.tableData = []
 
-            var params = {}
+            let params = {
+                page:self.pagination.current,
+                pageSize:self.pagination.pageSize
+            }
+
             if (self.base) {
                 Object.keys(self.base).forEach(function(key) {
                     params[key] = self.base[key]
@@ -153,7 +185,8 @@ export default {
             self._fetch("/" + self.controller + "/page", params, function(res) {
                 //console.log(res)
                 res.data.forEach(item => self.tableData.push(globals.extend(item, obj)))
-                cb()
+
+                extend(self.pagination,res.pagination)                
             });
         }
     },
@@ -161,7 +194,7 @@ export default {
         base: {
             handler: function(newValue, oldValue) {
                 //console.log("change",newValue,oldValue)
-                this.loadList(function() {})
+                this.loadList()
             },
             deep: true
         }
@@ -170,13 +203,7 @@ export default {
     mounted: function() {
         var self = this;
 
-        var load_page = new Promise(function(resolve, reject) {
-            self.loadList(resolve)
-        });
-
-        Promise.all([load_page]).then(function(results) {
-            self.loading = false;
-        });
+        self.loadList()
     }
 }
 </script>

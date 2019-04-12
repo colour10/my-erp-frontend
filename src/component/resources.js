@@ -60,6 +60,14 @@ options["sizetop"] = {url:'/l/sizetop',oplabel:'name', opvalue:'id'}
 //尺码组明细
 options["sizecontent"] = {url:'/l/sizecontent',oplabel:'content', opvalue:'id'}
 
+//商品描述
+options["productmemo"] = {url:'/l/productmemo',oplabel:'name', opvalue:'id'}
+
+//商品系列
+options["series"] = {url:'/l/series',oplabel:'name', opvalue:'id'}
+
+//商品子系列
+options["series2"] = {url:'/l/series2',oplabel:'name', opvalue:'id'}
 //成员
 options["member"] = {url:'/l/member',oplabel:'name', opvalue:'id'}
 

@@ -142,7 +142,8 @@ const routes = [
             {path:'/member', component:getComponentSimple("member")},
             {path:'/colortemplate', component:getComponent("colortemplate")},
             {path:'/supplier', component:getComponentSimple("supplier")},
-            {path:'/saleport', component:getComponentSimple("saleport")}
+            {path:'/saleport', component:getComponentSimple("saleport")},
+            {path:'/productmemo', component:getComponent("productmemo")}
         ]
     },
     {path: '/login/:action', component: Page_Login},

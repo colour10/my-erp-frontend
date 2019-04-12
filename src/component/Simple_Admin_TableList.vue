@@ -3,7 +3,7 @@
         <el-table :data="tableData" stripe border style="width: 100%;">
             <el-table-column :prop="item.name" :label="item.label" align="center" :width="item.width||180" v-if="!item.is_hide" v-for="item in columns" :key="item.name">
                 <template v-slot="scope">
-                    <img v-if="item.is_image" :src="_label('_image_url_prex')+scope.row[item.name]" :style="getImageStyle(item)">
+                    <img v-if="item.is_image" :src="getImageSrc(scope.row, item)" :style="getImageStyle(item)">
                     <span v-if="!item.is_image" :style="getStyle(item,scope.row)">{{item.convert?item.convert(scope.row,scope.rowIndex,item):convert(scope.row,item, rowIndex)}}</span>
                 </template>
             </el-table-column>
@@ -22,15 +22,18 @@
                 </template>
             </el-table-column>
         </el-table>
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pagination.current*1" :page-sizes="pagination.pageSizes" :page-size="pagination.pageSize*1" layout="total, sizes, prev, pager, next, jumper" :total="pagination.total*1">
+        </el-pagination>
     </div>
 </template>
 
 <script>
 import DataSource from './DataSource.js'
-import globals from './globals.js'
+import globals,{extend} from './globals.js'
+import {host} from './http.js'
 const _label = globals.getLabel
 
-
+const pageSizes = [10, 15,30, 50, 100]
 export default {
     name: 'simple-admin-tablelist',
     props: ['columns', "buttons", "controller", "base", "onclickupdate", 'isedit', 'isdelete', "actionwidth", "authname"],
@@ -42,15 +45,28 @@ export default {
 
         return {
             rowIndex: "",
-            tableData: []
+            tableData: [],
+            pagination:{
+                pageSizes,
+                pageSize:15,
+                total:0,
+                current:1
+            }
         }
     },
     methods: {
+        handleSizeChange(pageSize) {
+            this.pagination.pageSize = pageSize
+            this.loadList()
+        },
+        handleCurrentChange(current){
+            this.pagination.current = current
+            this.loadList()
+        },
         isShow(item) {
-            if(item.isShow) {
+            if (item.isShow) {
                 return item.isShow(this)
-            }
-            else {
+            } else {
                 return true;
             }
         },
@@ -59,7 +75,7 @@ export default {
         },
         appendRow: function(row) {
             this.tableData.push(row)
-            return this.tableData.length-1;
+            return this.tableData.length - 1;
         },
         updateRow: function(rowIndex, row) {
             Object.assign(this.tableData[rowIndex], row)
@@ -75,8 +91,8 @@ export default {
             var self = this
             self.rowIndex = rowIndex;
 
-            let result = await self._remove("/" + self.controller + "/delete", {id:row.id})
-            if(result==true) {
+            let result = await self._remove("/" + self.controller + "/delete", { id: row.id })
+            if (result == true) {
                 self.$delete(self.tableData, rowIndex)
             }
         },
@@ -84,7 +100,16 @@ export default {
             var self = this
             if (self.onclickupdate) {
                 self.onclickupdate(rowIndex, row)
-                //self._log("click edit")
+                    //self._log("click edit")
+            }
+        },
+        getImageSrc(row, column) {
+            if(row[column.name] && row[column.name].length>0) {
+                //this._log(row[column.name])
+                return _label('_image_url_prex')+row[column.name]
+            }
+            else {
+                return host + '/imgs/none.png';
             }
         },
         getImageStyle(column) {
@@ -148,7 +173,10 @@ export default {
             var self = this;
             self.tableData = []
 
-            var params = {}
+            let params = {
+                page:self.pagination.current,
+                pageSize:self.pagination.pageSize
+            }
 
             if (self.base) {
                 Object.keys(self.base).forEach(function(key) {
@@ -172,14 +200,17 @@ export default {
             self._fetch("/" + self.controller + "/page", params, function(res) {
                 //self._log(res)
                 res.data.forEach(item => self.tableData.push(Object.assign(item, obj)))
+
+                //let pagination = res.pagination;
+                extend(self.pagination,res.pagination)
+
             });
         },
         isDeletable(row) {
             let self = this
             if (typeof(self.isdelete) == 'function') {
                 return self.isdelete(row)
-            }
-            else if(typeof(self.isdelete)=='boolean'){
+            } else if (typeof(self.isdelete) == 'boolean') {
                 return self.isdelete
             }
 
@@ -197,7 +228,7 @@ export default {
     watch: {
         base: {
             handler: function(newValue, oldValue) {
-                this._log("change",newValue,oldValue)
+                this._log("change", newValue, oldValue)
                 this.loadList()
             },
             deep: true

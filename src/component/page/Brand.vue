@@ -1,5 +1,5 @@
 <template>
-    <div style="width:100%">
+    <div style="width:100%" class="product">
         <multiple-admin-page v-bind="props" ref="page"></multiple-admin-page>
         <asa-brandtab :visible.sync="base.visible" :brandid="base.brandid"></asa-brandtab>
     </div>
@@ -27,7 +27,7 @@ export default {
         return {
             props: {
                 columns: [
-                    { name: "id", label: "LOGO", is_edit_hide: true, is_image: true },
+                    { name: "filename", label: "LOGO", is_edit_hide: true, is_image: true, image_width: 50, image_height: 50, width: 100},
                     { name: "name", label: globals.getLabel('pinpaimingcheng'), is_multiple: true, is_focus: true },
                     { name: "countryid", label: globals.getLabel('guishuguojia'), type: "select", source: "country" },
                     //{ name: "brandgroupid", label: globals.getLabel('pinpaifenlei'), type: "select", source: "brandgroup" },
