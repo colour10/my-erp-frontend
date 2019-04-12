@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import globals from '../globals.js'
+import globals,{ASAP} from '../globals.js'
 import Simple_Admin_TableList from '../Simple_Admin_TableList.vue'
 import Product from '../asa/Asa_Product.vue'
 
@@ -47,6 +47,12 @@ export default {
         return {
             props: props,
         }
+    },
+    beforeCreate(){
+        console.log("beforeCreate", ASAP)
+        ASAP.resources = {}
+        ASAP.caches = {}
+        console.log("Product","clear cache")
     },
     methods: {
         showFormToEdit(rowIndex, row) {

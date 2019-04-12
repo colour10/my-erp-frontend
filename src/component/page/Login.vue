@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import globals from '../globals.js'
+import {_label,ASAP} from '../globals.js'
 
 export default {
     name:"asapage-login",
@@ -39,7 +39,7 @@ export default {
           ]
         },
         checked: true,
-        languages:globals.getLabel("list_languages"),
+        languages:_label("list_languages"),
         isShowForm:false,
         back:""
       };
@@ -64,7 +64,7 @@ export default {
                     })
 
                     
-                    window.ASAP.$session_id = res.session_id;
+                    ASAP.$session_id = res.session_id;
                     //console.log(window.ASAP)
 
                     self.goToPage()

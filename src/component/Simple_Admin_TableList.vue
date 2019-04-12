@@ -105,12 +105,11 @@ export default {
                 return value == '1' ? _label("yes") : _label("no");
             } else if (column.type == 'select') {
                 //异步加载数据，然后重新渲染列表
-                if (!column.dataSource) {
-                    column.dataSource = DataSource.getDataSource(column.source, _label("lang"));
-                }
+                let dataSource = DataSource.getDataSource(column.source, _label("lang"));
+                //self._log("init, dataSource", column.source)
 
                 if (row[column.name + "__columncopy"] != value && value) {
-                    column.dataSource.getRow(value, function(rowInfo) {
+                    dataSource.getRow(value, function(rowInfo) {
                         if (typeof(rowInfo) != 'object') {
                             return
                         }
@@ -122,14 +121,12 @@ export default {
                 }
                 return row[column.name + "__label"]
             } else if (column.type == 'select-dialog') {
-                //异步加载数据，然后重新渲染列表
-                if (!column.dataSource) {
-                    column.dataSource = DataSource.getDataSource(column.source, _label("lang"));
-                }
+                //
+                let dataSource = DataSource.getDataSource(column.source, _label("lang"));
 
                 if (row[column.name + "__columncopy"] != value && row[column.name + "__loading"] != "1") {
                     row[column.name + "__loading"] = 1;
-                    column.dataSource.getRowLabels(value, function(label) {
+                    dataSource.getRowLabels(value, function(label) {
                         row[column.name + "__label"] = label;
                         row[column.name + "__columncopy"] = value;
                     });

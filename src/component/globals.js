@@ -1,3 +1,24 @@
+
+const ASAP = window.ASAP || {
+    caches:{}, //httpGet的缓存对象
+    $store: {  //fetcher的缓存对象
+        list: {},
+        temp: {},
+        result: {},
+        loading: false
+    },
+    resources:{}  //DataSource缓存对象
+}
+
+if(window.location.href.indexOf('http://localhost')>=0) {
+    //npm run dev 调试模式
+    ASAP.dev = true;
+    ASAP.host = 'http://erp.localhost.com'
+}
+else {
+    ASAP.host = ''
+}
+
 const getLabel = function(name) {
     if (typeof($ASAL) != 'undefined' && $ASAL[name]) {
         return $ASAL[name]
@@ -68,6 +89,7 @@ const extract = function(object, keys){
 }
 
 export {
+    ASAP,
     getLabel,
     getLabel as _label,
     logger,

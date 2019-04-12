@@ -1,18 +1,7 @@
 import {httpPost} from "./http.js"
+import {ASAP} from "./globals.js"
 
-if(typeof(window.ASAP)=='undefined') {
-    window.ASAP = {}
-}
-
-if(!window.ASAP.$store) {
-    window.ASAP.$store = {
-        list: {},
-        temp: {},
-        result: {},
-        loading: false
-    };
-}
-const store = window.ASAP.$store
+const store = ASAP.$store
 
 const clear = function(name, id) {
     //console.log("clear",name,id)

@@ -1,7 +1,6 @@
 import resources_options from './resources.js'
 import {httpGet} from './http.js'
-
-const resources = {};
+import {ASAP} from "./globals.js"
 
 function DataRow(row, dataSource) {
     var self = this;
@@ -103,7 +102,7 @@ DataSource.prototype.loadList = function() {
             self.data.push(row)   
         })
         self.is_loaded = true;
-    },'json');
+    });
 }
 
 DataSource.prototype.getData = function(callback) {
@@ -126,7 +125,7 @@ DataSource.prototype.filter = function(condition, callback) {
         var keys = Object.keys(condition)
         
         var result = data.filter(row=>{
-            console.log("DataSource.filter", row, keys.every(key=>condition[key]==row.getRow(key)))
+            //console.log("DataSource.filter", row, keys.every(key=>condition[key]==row.getRow(key)))
             return keys.every(key=>condition[key]==row.getRow(key))    
         })
         callback(result)
@@ -173,16 +172,9 @@ DataSource.prototype.setLabelName = function(name) {
 
 DataSource.prototype.getRow = function(keyValue, callback) {
     var self = this;
-    var func = function f(){
-        if(self.is_loaded) {
-            callback(self.hashtable[keyValue])
-        }
-        else {    
-            setTimeout(f, 50)
-        }
-    }
-
-    func();
+    self.getData(()=>{
+        callback(self.hashtable[keyValue])
+    })
 }
 
 DataSource.prototype.getRowLabel = function(keyValue, callback) {
@@ -236,6 +228,8 @@ DataSource.getDataSource = function(resourceName, lang) {
         return resourceName;
     }
 
+    let resources = ASAP.resources
+
     if(resources[resourceName]) {
         resources[resourceName].setLang(lang)
         return resources[resourceName]   
@@ -257,8 +251,6 @@ DataSource.getDataSource = function(resourceName, lang) {
         }
         
         return typeof(resourceName)=="string" ? create(): tmp_create();
-        /*resources[resourceName] = new DataSource(resources_options[resourceName], lang)
-        return resources[resourceName]   */  
     }
 }
 
