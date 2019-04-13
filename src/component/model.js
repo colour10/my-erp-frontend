@@ -298,5 +298,23 @@ const Orderpayment = Object.assign(createModel("orderpayment"),{
 })
 export {Order,Orderpayment}
 
+const Sales = createModel("sales")
+const Salesreceive = Object.assign(createModel("orderpayment"),{
+    init:function(depth, row, callback) {
+        let self = this
+
+        let runner = promiseAll(row)
+        runner.push(Sales.load({data:row.salesid}), 'sales')
+        runner.push(getDataSource("paymenttype").getRowLabel(row.payment_type), 'payment_type_label')
+        runner.push(getDataSource("currency").getRowLabel(row.currency), 'currency_label')
+        runner.push(switchData(row.status), "status_label")
+        runner.push(getDataSource("user").getRowLabel(row.makestaff), "makestaff_name")
+        runner.push(getDataSource("user").getRowLabel(row.confirmstaff), "confirmstaff_name")
+
+        runner.all().then(callback)
+    }
+})
+export {Sales,Salesreceive}
+
 export { Productstock,Warehouse,Product,Goods,OrderDetails,ConfirmorderDetails }
 export default {}

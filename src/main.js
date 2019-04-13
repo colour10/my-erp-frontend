@@ -39,6 +39,7 @@ import Asa_Warehousing_Dialog from './component/asa/Asa_Warehousing_Dialog.vue'
 import Asa_Product from './component/asa/Asa_Product.vue'
 import Auth from './component/Auth.vue'
 import Orderpayment from './component/page/Orderpayment.vue'
+import Salesreceive from './component/page/Salesreceive.vue'
 
 
 import Page_Home from './component/page/Home.vue'
@@ -125,6 +126,7 @@ const routes = [
             {path: '/requisition', component: Page_Requisition},     
             {path: '/user/modifypassword', component: Page_UserModifyPassword},    
             {path: '/orderpayment', component: Orderpayment},    
+            {path: '/salesreceive', component: Salesreceive},    
             {path:'/ageseason', component:getComponentSimple("ageseason")},
             {path:'/ulnarinch', component:getComponent("ulnarinch")},
             {path:'/winterproofing', component:getComponent("winterproofing")},
