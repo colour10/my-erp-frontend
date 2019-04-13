@@ -29,7 +29,7 @@
                 </template>
             </el-table-column>
         </el-table>
-        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pagination.current*1" :page-sizes="pagination.pageSizes" :page-size="pagination.pageSize*1" layout="total, sizes, prev, pager, next, jumper" :total="pagination.total*1">
+        <el-pagination v-if="tableData.length<pagination.total" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pagination.current*1" :page-sizes="pagination.pageSizes" :page-size="pagination.pageSize*1" layout="total, sizes, prev, pager, next, jumper" :total="pagination.total*1">
         </el-pagination>
     </div>
 </template>
@@ -38,8 +38,6 @@
 import DataSource from './DataSource.js'
 import globals,{extend,_label} from './globals.js'
 import {host} from './http.js'
-
-const pageSizes = [10, 15, 30, 50, 100]
 
 export default {
     name: 'multiple-admin-tablelist',
@@ -59,7 +57,7 @@ export default {
             loading: false,
             current_lang: _label("lang"),
             pagination: {
-                pageSizes,
+                pageSizes:globals.pageSizes,
                 pageSize: 15,
                 total: 0,
                 current: 1

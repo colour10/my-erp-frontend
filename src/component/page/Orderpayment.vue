@@ -38,12 +38,14 @@
                 </template>
             </el-table-column>
         </el-table>
+        <el-pagination v-if="searchresult.length<pagination.total" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pagination.current*1" :page-sizes="pagination.pageSizes" :page-size="pagination.pageSize*1" layout="total, sizes, prev, pager, next, jumper" :total="pagination.total*1">
+        </el-pagination>
         <simpleform name="orderpayment" authname="payment-confirm" ref="orderpayment" :title="_label('querenfukuan')" @submit="onConfirm" :isEditable="(f)=>f.status==0"></simpleform>
     </div>
 </template>
 
 <script>
-import { _label } from '../globals.js'
+import globals,{ _label } from '../globals.js'
 import { extract,extend } from '../object.js'
 import { Orderpayment } from "../model.js"
 import Simple_Form from "../Simple_Form.vue"
@@ -62,7 +64,13 @@ export default {
             form: {
                 warehouseid: ""
             },
-            searchresult: []
+            searchresult: [],
+            pagination:{
+                pageSizes:globals.pageSizes,
+                pageSize:15,
+                total:0,
+                current:1
+            }
         }
     },
     methods: {
@@ -78,6 +86,8 @@ export default {
                 self._log("Orderpayment Record", row)
                 self.searchresult.push(row)
             })
+
+            extend(self.pagination,result.pagination)
         },
         confirmPayment({$index, row}) {
             let self = this;
@@ -92,8 +102,17 @@ export default {
                 let result = await self._submit("/orderpayment/confirm", extract(form,['id','paymentdate','memo']))
                 let info = extend(form, result.data)
                 self.$refs['orderpayment'].setInfo(info)
-                extend(self.searchresult[self.index],result.data)
+
+                self.search()
             })
+        },
+        handleSizeChange(pageSize) {
+            this.pagination.pageSize = pageSize
+            this.loadList()
+        },
+        handleCurrentChange(current){
+            this.pagination.current = current
+            this.loadList()
         }
     },
     computed: {},

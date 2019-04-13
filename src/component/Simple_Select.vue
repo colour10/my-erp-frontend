@@ -52,7 +52,7 @@ export default {
             currentValue: value,
             data: [],
             dataSource: dataSource,
-            qingxuanze: self._label('qingxuanze')
+            qingxuanze: _label('qingxuanze')
         }
     },
     methods: {
@@ -68,7 +68,7 @@ export default {
             var self = this;
             self.data = []
             self.dataSource.getData(function(data) {
-                self._log("load", data)
+                //self._log("load", data)
                 data.forEach(function(item) {
                     if (callback(item)) {
                         self.data.push(item)
@@ -100,7 +100,7 @@ export default {
             return
         }
         self.dataSource.getData(function(data) {
-            self._log("load", data)
+            //self._log("load", data)
             self.data = data
         })
     }

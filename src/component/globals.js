@@ -88,6 +88,8 @@ const extract = function(object, keys){
     return obj
 }
 
+const pageSizes = [10, 15,30, 50, 100]
+
 export {
     ASAP,
     getLabel,
@@ -105,5 +107,6 @@ export default {
     round,
     deleteObject,
     copyTo,
-    extract
+    extract,
+    pageSizes
 }
