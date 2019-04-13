@@ -39,7 +39,7 @@ export default {
         },
         submitForm() {
             let self = this
-            self._submit("/user/modifypassword", self.form)
+            self._submit("/user/modifypassword", self.form).then(()=>{})
         }
     }
 }

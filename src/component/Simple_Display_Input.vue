@@ -4,7 +4,7 @@
 
 <script>
 import DataSource from './DataSource.js'
-import globals from './globals.js'
+import globals,{_label} from './globals.js'
 
 export default {
     name: 'sp-display-input',
@@ -13,7 +13,7 @@ export default {
     props: {
         lang:{
             type: String,
-            default: globals.getLabel('lang')
+            default: _label('lang')
         },
         source:{
             type:String,

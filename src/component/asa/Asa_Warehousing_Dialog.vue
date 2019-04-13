@@ -172,8 +172,8 @@ export default {
             params.list = self.tabledata.map(item => {
                 return { confirmorderdetailsid: item.confirmdetails.id, number: item.number, orderdetailsid: item.orderdetails.id }
             })
-            self._log(JSON.stringify(params))
-            self._submit("/warehousing/create", { params: JSON.stringify(params) }, function(res) {
+            //self._log(JSON.stringify(params))
+            self._submit("/warehousing/create", { params: JSON.stringify(params) }).then(function(res) {
                 self._log(res)
                 if (res.id) {
                     self.form.id = res.id
@@ -204,10 +204,10 @@ export default {
             var form = self.form;
             self.tabledata = []
 
-            self._log("loading...", { confirmorderid: form.confirmorderid }, self.confirmorderid)
+            //self._log("loading...", { confirmorderid: form.confirmorderid }, self.confirmorderid)
                 //加载数据
-            self._fetch("/warehousing/load", { confirmorderid: self.confirmorderid }, function(res) {
-                self._log("加载订单信息", res)
+            self._fetch("/warehousing/load", { confirmorderid: self.confirmorderid }).then(function(res) {
+                //self._log("加载订单信息", res)
 
                 let response_data = res.data
                 if (response_data.form) {
@@ -226,7 +226,7 @@ export default {
                         let obj = { confirmdetails: detail, orderdetails: detail.orderdetails, number: 0, is_match: 0 }
                         self.tabledata.push(obj)
                         fetchNumber(row.id, function(item) {
-                            self._log(item)
+                            //self._log(item)
                             if (item) {
                                 obj.number = item.number;
                             }

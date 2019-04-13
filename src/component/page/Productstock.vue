@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import globals from '../globals.js'
+import {_label} from '../globals.js'
 import { Productstock } from "../model.js"
 
 import Product from '../asa/Asa_Product.vue'
@@ -61,7 +61,7 @@ export default {
                 warehouseid: ""
             },
             searchresult: [],
-            lang: globals.getLabel('lang')
+            lang: _label('lang')
         }
     },
     methods: {
@@ -69,7 +69,7 @@ export default {
             //查询库存商品
             let self = this
 
-            self._fetch("/productstock/search", self.form, function(res) {
+            self._fetch("/productstock/search", self.form).then(function(res) {
                 //self._log("/productstock/page", res)
                 self.searchresult = []
                 res.data.forEach(function(item) {

@@ -36,9 +36,9 @@
 
 <script>
 import DataSource from './DataSource.js'
-import globals,{extend} from './globals.js'
+import globals,{extend,_label} from './globals.js'
 import {host} from './http.js'
-const _label = globals.getLabel
+
 const pageSizes = [10, 15, 30, 50, 100]
 
 export default {
@@ -102,7 +102,7 @@ export default {
         handleDelete(rowIndex, row) {
             var self = this
 
-            self._remove("/" + self.controller + "/delete?id=" + row.id, function() {
+            self._remove("/" + self.controller + "/delete?id=" + row.id).then(function() {
                 self.$delete(self.tableData, rowIndex)
             })
         },
@@ -182,7 +182,7 @@ export default {
                 }
             }
 
-            self._fetch("/" + self.controller + "/page", params, function(res) {
+            self._fetch("/" + self.controller + "/page", params).then(function(res) {
                 //console.log(res)
                 res.data.forEach(item => self.tableData.push(globals.extend(item, obj)))
 

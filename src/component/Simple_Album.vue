@@ -48,7 +48,7 @@ export default {
                 filename: response["files"][file.name]
             }
 
-            self._submit("/picture/add", params, function(res) {
+            self._submit("/picture/add", params).then(function(res) {
                 params.id = res.id;
                 self.data.push(params)
             })

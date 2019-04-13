@@ -309,6 +309,28 @@ const props = {
             is_focus: true
         }],
         controller: "saleport"
+    },
+    "orderpayment":{
+        columns: [
+            { name: "orderno", label: _label("dingdanhao"), type: 'label'},
+            { name: "payment_type", label: _label("fukuanleixing"), type: 'select', source: "paymenttype" },
+            { name: "currency", label: _label("bizhong"), type: 'select', source: "currency" },
+            { name: "amount", label: _label("jine") },
+            { name: "paymentdate", label: _label("fukuanriqi"), type:"date" },
+            { name: "memo", label: _label("beizhu") },
+            { name: "makestaff", label: _label("tijiaoren"),  type: 'select', source: "user", is_edit_hide:true },
+            { name: "status", label: _label("yiruzhang"), type:"switch", is_edit_hide:true }
+        ],
+        controller: "orderpayment",
+        auth: "order-submit",    
+        base:{
+          orderid:''
+        },
+        options:{
+            isedit:(item)=>item.status==0,
+            isdelete:(item)=>item.status==0,
+            autoreload:true
+        }
     }
 }
 
@@ -334,5 +356,9 @@ const getComponentSimple = function(name) {
     }
 }
 
-export {getComponentSimple,getComponent}
+const getProp = function(name) {
+    return props[name]
+}
+
+export {getComponentSimple,getComponent, getProp}
 export default {getComponentSimple,getComponent}

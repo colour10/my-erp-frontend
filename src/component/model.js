@@ -4,6 +4,37 @@ import {getFetcher,clear} from "./fetcher.js"
 import {getLabel} from "./globals.js"
 import {httpPost} from "./http.js"
 
+const getDataSource = function(name) {
+    return DataSource.getDataSource(name, getLabel('lang'))
+}
+
+const promiseAll = function(data) {
+    return {
+        promises:[],
+        names:[],
+        push:function(promise, name){
+            this.promises.push(promise)
+            this.names.push(name)
+        },
+        all:async function(){
+            let self = this;
+            let results = await Promise.all(self.promises)
+            results.forEach((item,index)=>{
+                let key = self.names[index]
+                data[key] = item
+            })
+
+            return data;
+        }
+    }
+}
+
+const switchData = function(value) {
+    return new Promise((resolve)=>{
+        resolve(value==1 || value=='1' ? getLabel('yes') : getLabel("no"))
+    })
+}
+
 const createModel = function(tablename) {
     return {
         get:function(data, callback, depth=0) {
@@ -248,5 +279,24 @@ const ProductCodeList = function(productid, callback){
     });
 }
 export {ProductCodeList,ProductDetail}
+
+const Order = createModel("order")
+const Orderpayment = Object.assign(createModel("orderpayment"),{
+    init:function(depth, row, callback) {
+        let self = this
+
+        let runner = promiseAll(row)
+        runner.push(Order.load({data:row.orderid}), 'order')
+        runner.push(getDataSource("paymenttype").getRowLabel(row.payment_type), 'payment_type_label')
+        runner.push(getDataSource("currency").getRowLabel(row.currency), 'currency_label')
+        runner.push(switchData(row.status), "status_label")
+        runner.push(getDataSource("user").getRowLabel(row.makestaff), "makestaff_name")
+        runner.push(getDataSource("user").getRowLabel(row.confirmstaff), "confirmstaff_name")
+
+        runner.all().then(callback)
+    }
+})
+export {Order,Orderpayment}
+
 export { Productstock,Warehouse,Product,Goods,OrderDetails,ConfirmorderDetails }
 export default {}

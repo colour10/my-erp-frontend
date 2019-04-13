@@ -110,6 +110,23 @@
                     </el-submenu>
                     <el-menu-item index="7-5">{{_label("menu-7-5")}}</el-menu-item>-->
                 </el-submenu>
+                <el-submenu index="8">
+                    <template #title>{{_label("menu-8")}}</template>
+                    <el-menu-item index="8-1">
+                        <router-link to="/orderpayment">{{_label("dingdanjiesuan")}}</router-link>
+                    </el-menu-item>
+
+                    <el-menu-item index="8-2">
+                        <router-link to="/salesreceive">{{_label("xiaoshoujiesuan")}}</router-link>
+                    </el-menu-item>
+                    <!--<el-menu-item index="7-2">{{_label("menu-7-2")}}</el-menu-item>
+                    <el-submenu index="7-4">
+                        <template #title>{{_label("menu-7-4")}}</template>
+                        <el-menu-item index="7-4-1">{{_label("menu-7-4-1")}}</el-menu-item>
+                        <el-menu-item index="7-4-2">{{_label("menu-7-4-2")}}</el-menu-item>
+                    </el-submenu>
+                    <el-menu-item index="7-5">{{_label("menu-7-5")}}</el-menu-item>-->
+                </el-submenu>
                 <!--<el-submenu index="9">
                 <template #title>{{_label("menu-9")}}</template>
                 <el-menu-item index="9-1">{{_label("menu-9-1")}}</el-menu-item>

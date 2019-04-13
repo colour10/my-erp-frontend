@@ -89,7 +89,7 @@ export default {
         },
         loadPage() {
             var self = this;
-            self._fetch("/confirmorder/search", self.form, function(res) {
+            self._fetch("/confirmorder/search", self.form).then(function(res) {
                 //self._log("loadPage", res)
 
                 //处理商品信息列表

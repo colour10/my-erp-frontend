@@ -1,14 +1,8 @@
-import globals from './globals.js'
+import {_label,extend} from './globals.js'
 import {httpPost,httpGet} from './http.js'
-
-const _label = globals.getLabel;
+import {isArray, initObject} from './array.js'
 
 export default {
-    data() {
-        return {
-            globals
-        }
-    },
     methods: {
         _log() {
             var arr = Array.prototype.slice.call(arguments)
@@ -16,70 +10,51 @@ export default {
             console.log.apply(console, arr);
         },
         _label,
-        _fetch(path, form, options) {
+        _fetch(path, form, options={}) {
             const self = this
-            options = options || {}
-            httpPost(path, form).then(function(result) {
-                //console.log(result)
-                if (result.messages.length > 0) {
-                    //提示信息
-                    if (options.showMessage == true) {
-                        const h = self.$createElement;
-                        var message = h("ul", null, result.messages.map(function(v) {
-                            return h("li", null, v)
-                        }))
+            return new Promise((resolve,reject)=>{
+                httpPost(path, form).then(function(result) {
+                    //console.log(result)
+                    if (result.messages.length > 0) {
+                        //提示信息
+                        if (options.showMessage == true) {
+                            const h = self.$createElement;
+                            var message = h("ul", null, result.messages.map(function(v) {
+                                return h("li", null, v)
+                            }))
 
-                        self.$alert(message, _label("error_tip"), {
-                            confirmButtonText: _label("ok")
-                        });
-                    }
+                            self.$alert(message, _label("error_tip"), {
+                                confirmButtonText: _label("ok")
+                            });
 
-                    if (options && typeof(options.onFail) == 'function') {
-                        options.onFail()
-                    }
-                } else {
-                    if (options.showMessage == true) {
-                        let tip = options && options.successTip ? options.successTip : 'success'
-                        self.$message({
-                            message: _label(tip),
-                            type: 'success'
-                        });
-                    }
+                            if(options.isReject) {
+                                reject()
+                            }
+                        }
+                    } else {
+                        if (options.showMessage == true) {
+                            let tip = options && options.successTip ? options.successTip : 'success'
+                            self.$message({
+                                message: _label(tip),
+                                type: 'success'
+                            });
+                        }
 
-                    if (result.is_add == "1") {
-                        form.id = result.id;
-                    }
+                        if (result.is_add == "1") {
+                            form.id = result.id;
+                        }
 
-                    if (typeof(options) == 'function') {
-                        options(result)
-                    } else if (options && typeof(options.onSuccess) == 'function') {
-                        options.onSuccess(result)
+                        resolve(result)
                     }
-                }
-            })
-        },
-        _fetchPromise(path, form) {
-            const self = this
-            return new Promise((resolve, reject)=>{
-                self._fetch(path, form, function(res){
-                    resolve(res)
                 })
-            })
+            })            
         },
         _submit(path, form, options) {
             const self = this
             options = options || {}
             options.showMessage = true
 
-            self._fetch(path, form, options)
-        },
-        _submitPromise(path, form) {
-            const self = this
-
-            return new Promise((resolve, reject)=>{
-                resolve.showMessage = true
-                self._fetch(path, form, resolve)
-            })
+            return self._fetch(path, form, options)
         },
         _confirm(message, callback) {
             var self = this;
@@ -163,6 +138,19 @@ export default {
                 })
             })
             
+        },
+        _setting(name, value) {
+            let self = this;
+            if(isArray(name)) {
+                extend(self.setting, initObject(name,value))
+            }
+            else if(typeof(name)=='object') {
+                extend(self.setting, name)
+            }
+            else {
+                self.setting[name] = value;
+            }
+            return self
         }
     }
 }

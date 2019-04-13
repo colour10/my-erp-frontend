@@ -4,14 +4,14 @@
     <el-button slot="append" icon="el-icon-more" @click="showPanel"></el-button>
   </el-input>
   
-  <el-dialog class="user-form" :title="labels.formTitle" :visible.sync="dialogVisible" :center="true" :width="componenToptions.dialogWidth||'40%'" :modal="false">  
+  <el-dialog class="user-form" :title="_label('qingxuanze')" :visible.sync="dialogVisible" :center="true" :width="componenToptions.dialogWidth||'40%'" :modal="false">  
     <el-radio-group v-model="currentValue" @change="handleChange">
       <el-radio :label="item.getKeyValue()" v-for="(item,key) in data" :key="item.getKeyValue()">{{item.getLabelValue()}}</el-radio>
     </el-radio-group>
     
     <div slot="footer" class="dialog-footer" v-if="!auto_model">    
-      <el-button type="primary" @click="handleSelect">{{labels.ok}}</el-button>
-      <el-button @click="handleCancel">{{labels.cancel}}</el-button>
+      <el-button type="primary" @click="handleSelect">{{_label('ok')}}</el-button>
+      <el-button @click="handleCancel">{{_label('cancel')}}</el-button>
     </div>
   </el-dialog>
 </div>
@@ -63,18 +63,12 @@ export default {
         
         var dataSource = DataSource.getDataSource(self.source, self.lang);
         
-        console.log(dataSource,"dataSource")
         return {
             currentText:"",
             currentValue:"",
             data:[],
             componenToptions:{},            
             dialogVisible:false,
-            labels:{
-                formTitle:globals.getLabel('qingxuanze'),
-                ok:globals.getLabel('ok'),
-                cancel:globals.getLabel('cancel')
-            },
             dataSource:dataSource
         }
     },

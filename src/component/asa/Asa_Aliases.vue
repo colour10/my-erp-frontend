@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import globals from '../globals.js'
+import {_label} from '../globals.js'
 
 export default {
     name: 'asa-aliases',
@@ -17,8 +17,8 @@ export default {
         return {
             props:{
                 columns:[
-                    {name:"name", label:globals.getLabel('biemingmingcheng'), is_multiple:true, is_focus:true},
-                    {name:"code", label:globals.getLabel('biemingbianma')}
+                    {name:"name", label:_label('biemingmingcheng'), is_multiple:true, is_focus:true},
+                    {name:"code", label:_label('biemingbianma')}
                 ],
                 controller:"aliases",
                 key_column:"name",

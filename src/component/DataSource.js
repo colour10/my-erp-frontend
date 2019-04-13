@@ -95,8 +95,8 @@ DataSource.prototype.loadList = function() {
     var self = this;
     var options = self.options;
     var params = options.params || {}
-    httpGet(options.url).then( function(res){
-        res.data.forEach(function(item){
+    httpGet(options.url).then( function({data=[]}={}){
+        data.forEach(function(item){
             var row = new DataRow(item, self)
             self.hashtable[item[self.opvalue]] = row; 
             self.data.push(row)   
@@ -178,15 +178,25 @@ DataSource.prototype.getRow = function(keyValue, callback) {
 }
 
 DataSource.prototype.getRowLabel = function(keyValue, callback) {
-    var self = this;
-    self.getRow(keyValue,function(row){
-        if(row) {
-            callback(row.getLabelValue())
-        }
-        else {
-            callback("");   
-        }    
+    let self = this;
+    
+    let promise = new Promise((resolve)=>{
+        self.getRow(keyValue,function(row){
+            if(row) {
+                resolve(row.getLabelValue())
+            }
+            else {
+                resolve("");   
+            }    
+        });
     });
+
+    if(typeof(callback)=='function') {
+        promise.then(callback)
+    }
+    else {
+        return promise;
+    }
 }
 
 DataSource.prototype.getRows = function(keyValues='', callback) {

@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import globals from '../globals.js'
+import {_label} from '../globals.js'
     
 export default {
     name: 'asa-series',
@@ -24,11 +24,11 @@ export default {
         return {
             props:{
                 columns:[
-                    {name:"name", label:globals.getLabel('xiliemingcheng'), is_multiple:true, is_focus:true},
-                    {name:"code", label:globals.getLabel('xiliebianma')}
+                    {name:"name", label:_label('xiliemingcheng'), is_multiple:true, is_focus:true},
+                    {name:"code", label:_label('xiliebianma')}
                 ],
                 buttons:[
-                    {name:"code", label:globals.getLabel('zixilie'), width:200, handler:function(rowIndex, row){
+                    {name:"code", label:_label('zixilie'), width:200, handler:function(rowIndex, row){
                         self.props2.base.seriesid = row.id;
                         self.dialogVisible = true; 
                     }}
@@ -41,8 +41,8 @@ export default {
             },
             props2:{
                 columns:[            
-                    {name:"name", label:globals.getLabel('mingcheng'), is_multiple:true, is_focus:true},
-                    {name:"code", label:globals.getLabel('bianma')}
+                    {name:"name", label:_label('mingcheng'), is_multiple:true, is_focus:true},
+                    {name:"code", label:_label('bianma')}
                 ],
                 controller:"series2",
                 key_column:"name",

@@ -80,14 +80,14 @@
 </template>
 
 <script>
-import globals from '../globals.js'
+import globals,{_label} from '../globals.js'
 import simple_select from '../Simple_Select.vue'
 import Asa_Select_Product_Dialog from './Asa_Select_Product_Dialog.vue'
 import DataSource from '../DataSource.js'
 import {getFetcher} from "../fetcher.js"
 
 const fetcherProduct = getFetcher('product')
-const dataSource = DataSource.getDataSource('requisitionstatus', globals.getLabel('lang'));
+const dataSource = DataSource.getDataSource('requisitionstatus', _label('lang'));
 const fetcherWarehouse = getFetcher('warehouse')
 const fetcherUser = getFetcher('user')
 
@@ -127,7 +127,7 @@ export default {
             },
             tabledata: [],
             dialogVisible: self.visible,
-            lang: globals.getLabel('lang')
+            lang: _label('lang')
         }
     },
     methods: {
@@ -168,10 +168,10 @@ export default {
             if (row.id) {
                 self.tabledata = []
                     //加载数据
-                self._fetch("/requisition/load", { requisitionid: row.id }, function(res) {
+                self._fetch("/requisition/load", { requisitionid: row.id }).then(function(res) {
                     self._log("调拨单列表", res)
 
-                    const sizecontent = DataSource.getDataSource('sizecontent', globals.getLabel('lang'));
+                    const sizecontent = DataSource.getDataSource('sizecontent', _label('lang'));
 
                     res.data.forEach(function(row) {
                         row.sizecontentname = ""
@@ -218,7 +218,7 @@ export default {
             params.list = array;
 
             self._log(JSON.stringify(params))
-            self._submit("/requisition/"+action, { params: JSON.stringify(params) }, function(res) {
+            self._submit("/requisition/"+action, { params: JSON.stringify(params) }).then(function(res) {
                 self.$emit("change", res.data)
                 self.init(res.data)
             });

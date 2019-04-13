@@ -3,7 +3,7 @@
         <el-row>
             <el-col :span="2" :offset="22">
                 <auth auth="sales">
-                <el-button type="primary" @click="showFormToCreate()">{{globals.getLabel('xinjian')}}</el-button>
+                <el-button type="primary" @click="showFormToCreate()">{{_label('xinjian')}}</el-button>
             </auth>
             </el-col>
         </el-row>
@@ -17,18 +17,16 @@
 </template>
 
 <script>
-import globals from '../globals.js'
+import globals,{_label} from '../globals.js'
 import Asa_Sales_Dialog from '../asa/Asa_Sales_Dialog.vue'
 import Simple_Admin_TableList from '../Simple_Admin_TableList.vue'
 
-const _log = globals.logger("asapage-sales");
-
 var props = {
     columns: [
-        { name: "orderno", label: globals.getLabel('xiaoshoudanhao'), width: 300 },
-        { name: "salesstaff", label: globals.getLabel('xiaoshouren'), type: 'select', source: "user" },
-        { name: "warehouseid", label: globals.getLabel('xiaoshoucangku'), type: 'select', source: "warehouse" },
-        { name: "status", label: globals.getLabel('zhuangtai'), type: "select", source: "salestatus" },
+        { name: "orderno", label: _label('xiaoshoudanhao'), width: 300 },
+        { name: "salesstaff", label: _label('xiaoshouren'), type: 'select', source: "user" },
+        { name: "warehouseid", label: _label('xiaoshoucangku'), type: 'select', source: "warehouse" },
+        { name: "status", label: _label('zhuangtai'), type: "select", source: "salestatus" },
         //{name:"zipcode", label:"<?=$system_language['youbian']?>"}, 
 
         //{name:"contact", label:"<?=$system_language['lianxiren']?>"}, 

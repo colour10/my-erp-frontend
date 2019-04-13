@@ -78,12 +78,9 @@
 </template>
 
 <script>
-import globals from '../globals.js'
+import globals,{_label} from '../globals.js'
 import Simple_Admin_TableList from '../Simple_Admin_TableList.vue'
 import { Rules } from '../rules.js'
-
-const _log = globals.logger("asapage-producttemplate");
-const _label = globals.getLabel
 
 const base = {
     userid: ""
@@ -172,11 +169,11 @@ export default {
             self.validate().then(()=>{
                 let params = globals.extend({ saleportids: self.saleport.join(',') }, self.form)
                 if (self.form.id == "") {
-                    self._submit("/user/add", params, function() {
+                    self._submit("/user/add", params).then(function() {
                         self.$refs.tablelist.appendRow(globals.clone(self.form))
                     })
                 } else {
-                    self._submit("/user/edit", params, function() {
+                    self._submit("/user/edit", params).then(function() {
                         globals.copyTo(self.form, self.row)
                     })
                 }
@@ -189,13 +186,13 @@ export default {
             if (tab.name == 'saleport' && self.saleport_loaded == false) {
                 self.saleport_loaded = true;
                 //this._log("saleport")
-                self._fetch("/l/saleport", {}, function(res) {
+                self._fetch("/l/saleport", {}).then(function(res) {
                     //console.log(res)
                     self.saleport_list = res.data; //.forEach(item=>self.saleport_list.push(item))
                 })
             } else if (tab.name == 'warehouse' && self.warehouse_loaded == false) {
                 self.warehouse_loaded = true;
-                self._fetch("/l/warehouse", {}, function(res) {
+                self._fetch("/l/warehouse", {}).then(function(res) {
                     console.log(res)
                     self.warehouse_list = res.data; //.forEach(item=>self.saleport_list.push(item))
                 })

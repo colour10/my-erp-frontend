@@ -15,12 +15,9 @@
 </template>
 
 <script>
-import globals from '../globals.js'
+import globals,{_label} from '../globals.js'
 import Asa_Order_Dialog from '../asa/Asa_Order_Dialog.vue'
 import Simple_Admin_TableList from '../Simple_Admin_TableList.vue'
-
-const _log = globals.logger("asapage-order");
-const _label = globals.getLabel
 
 var props = {
     columns: [

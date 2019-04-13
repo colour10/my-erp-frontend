@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import globals from '../globals.js'
+import globals,{_label} from '../globals.js'
 import Asa_Warehousing_Dialog from '../asa/Asa_Warehousing_Dialog.vue'
 import Simple_Admin_TableList from '../Simple_Admin_TableList.vue'
 
@@ -34,15 +34,15 @@ export default {
             globals,
             props: {
                 columns: [
-                    { name: "orderno", label: self._label('dingdanbianhao'), width: 300 },
-                    { name: "warehouseid", label: self._label('daohuocangku'), type:'select', source:'warehouse' },
-                    { name: "supplierid", label: globals.getLabel('gonghuoshang'), type: 'select', source: "supplier" },
-                    { name: "ageseasonid", label: globals.getLabel('niandaijijie'), type: 'select', source: "ageseason" },
-                    { name: "status", label: self._label('zhuangtai'), type: 'select', source: "orderstatus" },
-                    { name: "makestaff", label: self._label('zhidanren'), type: 'select', source: "user" }
+                    { name: "orderno", label: _label('dingdanbianhao'), width: 300 },
+                    { name: "warehouseid", label: _label('daohuocangku'), type:'select', source:'warehouse' },
+                    { name: "supplierid", label: _label('gonghuoshang'), type: 'select', source: "supplier" },
+                    { name: "ageseasonid", label: _label('niandaijijie'), type: 'select', source: "ageseason" },
+                    { name: "status", label: _label('zhuangtai'), type: 'select', source: "orderstatus" },
+                    { name: "makestaff", label: _label('zhidanren'), type: 'select', source: "user" }
                 ],
                 buttons: [{
-                    label: self._label("shengchengrukudan"),
+                    label: _label("shengchengrukudan"),
                     handler: function(rowIndex, row, column) {
                         self.showFormToWarehousing(rowIndex,row)
                     },

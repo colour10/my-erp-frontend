@@ -3,7 +3,7 @@
         <el-row>
             <el-col :span="2" :offset="22">
                 <auth auth="product">
-                    <el-button type="primary" @click="showFormToCreate()">{{globals.getLabel("button-create")}}</el-button>
+                    <el-button type="primary" @click="showFormToCreate()">{{_label("button-create")}}</el-button>
                 </auth>
             </el-col>
         </el-row>
@@ -17,24 +17,22 @@
 </template>
 
 <script>
-import globals,{ASAP} from '../globals.js'
+import globals,{ASAP,_label} from '../globals.js'
 import Simple_Admin_TableList from '../Simple_Admin_TableList.vue'
 import Product from '../asa/Asa_Product.vue'
 
-const _log = globals.logger("asapage-product");
-const _label = globals.getLabel
-
 var props = {
     columns: [
-        { name: "picture", label: _label("zhutu"), is_image: true, image_width: 80, image_height: 80, width: 100 },
-        { name: "picture2", label: _label("futu"), is_image: true, image_width: 80, image_height: 80, width: 100 },
+        { name: "picture", label: _label("zhutu"), is_image: true, image_width: 40, image_height: 40, width: 60 },
+        { name: "picture2", label: _label("futu"), is_image: true, image_width: 40, image_height: 40, width: 60 },
         { name: "productname", label: _label("shangpinmingcheng"), width: 300 },
         { name: "brandcolor", label: _label("yanse"), type: "select", source: "colortemplate" },
         { name: "brandgroupid", label: _label("pinlei"), type: "select", source: "brandgroup" },
         { name: "brandid", label: _label("pinpai"), type: "select", source: "brand" },
         { name: "countries", label: _label("chandi"), type: "select-dialog", source: "country" }
     ],
-    controller: "product"
+    controller: "product",
+    authname:"product"
 }
 
 export default {
@@ -49,10 +47,10 @@ export default {
         }
     },
     beforeCreate(){
-        console.log("beforeCreate", ASAP)
+        //console.log("beforeCreate", ASAP)
         ASAP.resources = {}
         ASAP.caches = {}
-        console.log("Product","clear cache")
+        //console.log("Product","clear cache")
     },
     methods: {
         showFormToEdit(rowIndex, row) {
@@ -65,7 +63,7 @@ export default {
             let self = this
             let tablelist = self.$refs.tablelist
 
-            self._log(rowdata)
+            //self._log(rowdata)
             if (type == 'create') {
                 tablelist.appendRow(rowdata)
             } else {

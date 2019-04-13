@@ -6,12 +6,11 @@
 </template>
 
 <script>
-import globals from '../globals.js'
+import {_label} from '../globals.js'
 import Multiple_Admin_Page from '../Multiple_Admin_Page.vue'
 import Asa_BrandTab from '../asa/Asa_BrandTab.vue'
 
 
-const _log = globals.logger("asapage-brand");
 const base = {
     brandid: "",
     visible: false
@@ -28,15 +27,15 @@ export default {
             props: {
                 columns: [
                     { name: "filename", label: "LOGO", is_edit_hide: true, is_image: true, image_width: 50, image_height: 50, width: 100},
-                    { name: "name", label: globals.getLabel('pinpaimingcheng'), is_multiple: true, is_focus: true },
-                    { name: "countryid", label: globals.getLabel('guishuguojia'), type: "select", source: "country" },
-                    //{ name: "brandgroupid", label: globals.getLabel('pinpaifenlei'), type: "select", source: "brandgroup" },
-                    { name: "memo", label: globals.getLabel('memo'), type: "textarea", is_hide: true },
-                    { name: "officialwebsite", label: globals.getLabel('guanwangdizhi'), is_hide: true }
+                    { name: "name", label: _label('pinpaimingcheng'), is_multiple: true, is_focus: true },
+                    { name: "countryid", label: _label('guishuguojia'), type: "select", source: "country" },
+                    //{ name: "brandgroupid", label: _label('pinpaifenlei'), type: "select", source: "brandgroup" },
+                    { name: "memo", label: _label('memo'), type: "textarea", is_hide: true },
+                    { name: "officialwebsite", label: _label('guanwangdizhi'), is_hide: true }
                 ],
                 buttons: [{
                     name: "code",
-                    label: globals.getLabel('guanlianxinxi'),
+                    label: _label('guanlianxinxi'),
                     width: 200,
                     handler: function(rowIndex, row) {
                         base.brandid = row.id;
@@ -52,7 +51,6 @@ export default {
                 key_column: "name"
 
             },
-            globals,
             base
         }
     },

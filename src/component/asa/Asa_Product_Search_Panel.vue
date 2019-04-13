@@ -90,7 +90,7 @@ export default {
             //查询库存商品
             let self = this
 
-            self._fetch("/product/search", self.form, function(res) {
+            self._fetch("/product/search", self.form).then(function(res) {
                 self.searchresult = []
                 //self._log(res)
                 res.data.forEach(function(item) {

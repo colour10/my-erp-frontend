@@ -1,0 +1,106 @@
+<template>
+    <div style="width:100%">
+        <el-form class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini">
+            <el-row :gutter="0">
+                <el-col :span="6">
+                    <el-form-item :label="_label('dingda')">
+                        <simple-select v-model="form.warehouseid" source="warehouse" :lang="_label('lang')"></simple-select>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="6">
+                    <el-row type="flex" justify="start">
+                        <el-button type="primary" @click="search()">{{_label("chaxun")}}</el-button>
+                    </el-row>
+                </el-col>
+            </el-row>
+        </el-form>
+        <el-table :data="searchresult" stripe border style="width:100%;">
+            <el-table-column prop="orderno" :label="_label('dingdanhao')" align="center" sortable>
+                <template v-slot="scope">
+                    {{scope.row.order.orderno}}
+                </template>
+            </el-table-column>
+            <el-table-column prop="payment_type_label" :label="_label('fukuanleixing')" width="100" align="center"></el-table-column>
+            <el-table-column prop="amount" :label="_label('jine')" width="100" align="center"></el-table-column>
+            <el-table-column prop="currency_label" :label="_label('bizhong')" width="100" align="center"></el-table-column>
+            <el-table-column prop="paymentdate" :label="_label('fukuanriqi')" width="100" align="center"></el-table-column>
+            <el-table-column prop="memo" :label="_label('beizhu')" width="100" align="center"></el-table-column>
+            <el-table-column prop="makestaff_name" :label="_label('tijiaoren')" width="100" align="center"></el-table-column>
+            <el-table-column prop="maketime" :label="_label('tijiaoshijian')" width="170" align="center"></el-table-column>
+            <el-table-column prop="confirmstaff_name" :label="_label('tijiaoren')" width="100" align="center"></el-table-column>
+            <el-table-column prop="confirmtime" :label="_label('tijiaoshijian')" width="170" align="center"></el-table-column>
+            <el-table-column prop="status_label" sortable :label="_label('yiruzhang')" width="100" align="center"></el-table-column>
+            <el-table-column :label="_label('caozuo')" align="center">
+                <template v-slot="scope">
+                    <auth auth="payment-confirm">
+                        <el-button size="mini" @click="confirmPayment(scope)">{{_label("xiangqing")}}</el-button>
+                    </auth>
+                </template>
+            </el-table-column>
+        </el-table>
+        <simpleform name="orderpayment" authname="payment-confirm" ref="orderpayment" :title="_label('querenfukuan')" @submit="onConfirm" :isEditable="(f)=>f.status==0"></simpleform>
+    </div>
+</template>
+
+<script>
+import { _label } from '../globals.js'
+import { extract,extend } from '../object.js'
+import { Orderpayment } from "../model.js"
+import Simple_Form from "../Simple_Form.vue"
+
+
+export default {
+    name: 'asapage-orderpayment',
+    components: {
+        "simpleform":Simple_Form
+    },
+    props: {},
+    data() {
+        var self = this;
+
+        return {
+            form: {
+                warehouseid: ""
+            },
+            searchresult: []
+        }
+    },
+    methods: {
+        async search() {
+            //查询库存商品
+            let self = this
+
+            let result = await self._fetch("/orderpayment/search", self.form)
+                //self._log(result)
+            self.searchresult = []
+            result.data.forEach(async function(item) {
+                let row = await Orderpayment.load({ data: item, depth: 1 })
+                self._log("Orderpayment Record", row)
+                self.searchresult.push(row)
+            })
+        },
+        confirmPayment({$index, row}) {
+            let self = this;
+            row.orderno = row.order.orderno
+            self.$refs['orderpayment'].setInfo(row).setDisabled(['payment_type', 'amount', 'currency'], true)._setting({submitButtonText:_label('querenfukuan')}).show()
+            self.index = $index
+        },
+        async onConfirm(form) {
+            let self = this;
+            this._log("确认保存",form)
+            self._confirm(_label("confirm-payment?"), async ()=>{
+                let result = await self._submit("/orderpayment/confirm", extract(form,['id','paymentdate','memo']))
+                let info = extend(form, result.data)
+                self.$refs['orderpayment'].setInfo(info)
+                extend(self.searchresult[self.index],result.data)
+            })
+        }
+    },
+    computed: {},
+    watch: {},
+    mounted: function() {
+        //this.$refs.product.show();
+
+    }
+}
+</script>

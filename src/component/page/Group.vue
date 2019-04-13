@@ -23,7 +23,7 @@
                         </el-form-item>
                     </el-form>
                 </el-tab-pane>
-                <el-tab-pane :label="globals.getLabel('quanxian')" :disabled="!form.id">
+                <el-tab-pane :label="_label('quanxian')" :disabled="!form.id">
                     <el-tree ref="tree" :data="permission_data" node-key="id" show-checkbox :expand-on-click-node="false"></el-tree>
                     <auth auth="group"><el-button type="primary" @click="onSavePermission">{{_label("baocun")}}</el-button></auth>
                     <el-button type="primary" @click="onQuit">{{_label("tuichu")}}</el-button>
@@ -34,7 +34,7 @@
                         </el-table-column>
                         <el-table-column prop="real_name" :label="_label('xingming')" align="center" width="180">
                         </el-table-column>
-                        <el-table-column :label="globals.getLabel('caozuo')" width="150" align="center">
+                        <el-table-column :label="_label('caozuo')" width="150" align="center">
                             <template v-slot="scope">
                                 <auth auth="group"><el-button size="mini" type="danger" @click="handleDeleteUser(scope.$index, scope.row)">{{_label("shanchu")}}</el-button></auth>
                             </template>
@@ -52,11 +52,8 @@
 </template>
 
 <script>
-import globals from '../globals.js'
+import globals,{_label} from '../globals.js'
 import Simple_Admin_TableList from '../Simple_Admin_TableList.vue'
-
-const _log = globals.logger("asapage-group");
-const _label = globals.getLabel
 
 const props = {
     columns: [{
@@ -105,13 +102,13 @@ export default {
         },
         handleDeleteUser(rowIndex, row) {
             var self = this;
-            self._remove("/user/deletegroup", { groupid: '', id: row.id }, function() {
+            self._remove("/user/deletegroup", { groupid: '', id: row.id }).then(function() {
                 self.$delete(self.user_list, rowIndex)
             })
         },
         onTabClick(tab) {
             var self = this;
-            self._fetch("/l/user", { groupid: self.form.id }, function(res) {
+            self._fetch("/l/user", { groupid: self.form.id }).then(function(res) {
                 console.log(res)
                 self.user_list = res.data;
             })
@@ -119,19 +116,19 @@ export default {
         onSavePermission() {
             var self = this;
             var keys = self.$refs.tree.getCheckedKeys(true)
-            self._submit("/group/setting", { groupid: self.form.id, keys: keys.join(",") }, function(res) {
+            self._submit("/group/setting", { groupid: self.form.id, keys: keys.join(",") }).then(function(res) {
                 self._log(res)
             })
         },
         onSubmit() {
             var self = this;
             if (self.form.id == "") {
-                self._submit("/" + props.controller + "/add", self.form, function() {
+                self._submit("/" + props.controller + "/add", self.form).then(function() {
                     self.$refs.tablelist.appendRow(globals.clone(self.form))
                         //self.dialogVisible = false
                 })
             } else {
-                self._submit("/" + props.controller + "/edit", self.form, function() {
+                self._submit("/" + props.controller + "/edit", self.form).then(function() {
                     globals.copyTo(self.form, self.row)
                         //self.dialogVisible = false
                 })
@@ -159,8 +156,8 @@ export default {
 
             this.formTitle = _label("xiugaixinxi");
 
-            let permissions = await self._fetchPromise("/group/getpermissions", {groupid:self.form.id})
-        self._log(permissions)
+            let permissions = await self._fetch("/group/getpermissions", {groupid:self.form.id})
+            self._log(permissions)
             let keys = permissions.data.map(item=>item.permissionid)
 
 
@@ -196,7 +193,7 @@ export default {
     },
     mounted: async function() {
         const self = this
-        let result = await self._fetchPromise("/permission/tree", {})
+        let result = await self._fetch("/permission/tree", {})
         self.permission_data = result.data;
     }
 }

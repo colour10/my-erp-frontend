@@ -191,7 +191,7 @@
 </template>
 
 <script>
-import globals from '../globals.js'
+import globals,{_label} from '../globals.js'
 import { ConfirmorderDetails } from "../model.js"
 import simple_select from '../Simple_Select.vue'
 import Asa_Select_Order_Detail_Dialog from './Asa_Select_Order_Detail_Dialog.vue'
@@ -215,7 +215,7 @@ export default {
     data() {
         var self = this;
 
-        var dataSource = DataSource.getDataSource('sizecontent', globals.getLabel('lang'));
+        var dataSource = DataSource.getDataSource('sizecontent', _label('lang'));
         return {
             form: {
                 supplierid: "",
@@ -257,7 +257,6 @@ export default {
             title: "",
             lang: "",
             pro: false,
-            globals,
             dataSource
         }
     },
@@ -304,8 +303,8 @@ export default {
             params.list = self.tabledata.map(item => {
                 return { id: item.id, number: item.number, orderdetailsid: item.orderdetails.id, price: item.price }
             })
-            self._log(JSON.stringify(params))
-            self._submit("/confirmorder/saveorder", { params: JSON.stringify(params) }, function(res) {
+            //self._log(JSON.stringify(params))
+            self._submit("/confirmorder/saveorder", { params: JSON.stringify(params) }).then(function(res) {
                 self._log(res)
                 if (res.data.form.id) {
                     self.form.id = res.data.form.id
@@ -322,10 +321,7 @@ export default {
                 return
             }
             self._confirm(self._label("confirm-order"), function() {
-                self._submit("/confirmorder/confirm", {
-                    id: self.form.id,
-                    status: status
-                }, function(res) {
+                self._submit("/confirmorder/confirm", { id: self.form.id, status: status }).then(function(res) {
                     self._log(res)
                     self.form.status = status
                     self.$emit("change", self.form)
@@ -338,9 +334,7 @@ export default {
                 return
             }
             self._confirm(self._label("confirm-order-cancel"), function() {
-                self._submit("/confirmorder/cancel", {
-                    id: self.form.id
-                }, function(res) {
+                self._submit("/confirmorder/cancel", { id: self.form.id }).then(function(res) {
                     self._log(res)
                     self.form.status = 2
                     self.$emit("change", self.form)
@@ -359,7 +353,7 @@ export default {
             if (!self.form.id) {
                 return
             }
-            self._remove("/confirmorder/delete?id=" + self.form.id, function(res) {
+            self._remove("/confirmorder/delete?id=" + self.form.id).then(function(res) {
                 self.$emit("change", self.form, "delete")
             });
         }
@@ -408,7 +402,7 @@ export default {
             if (form.id != "" && form.id != self.fomrid) {
                 self.tabledata = []
                     //加载数据
-                self._fetch("/confirmorder/loadorder", { id: form.id }, function(res) {
+                self._fetch("/confirmorder/loadorder", { id: form.id }).then(function(res) {
                     self._log("加载订单信息", res)
 
                     res.data.list.forEach(function(row) {

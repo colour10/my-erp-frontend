@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import globals from '../globals.js'
+import globals,{_label} from '../globals.js'
 import { Productstock } from "../model.js"
 import simple_select from '../Simple_Select.vue'
 import DataSource from '../DataSource.js'
@@ -64,7 +64,7 @@ export default {
                 warehouseid: ""
             },
             searchresult: [],
-            lang: globals.getLabel('lang')
+            lang: _label('lang')
         }
     },
     methods: {
@@ -77,7 +77,7 @@ export default {
                 return 
             }
 
-            self._fetch("/productstock/search", self.form, function(res) {
+            self._fetch("/productstock/search", self.form).then(function(res) {
                 self.searchresult = []
                 res.data.forEach(function(item) {
                     Productstock.get(item, function(result) {
@@ -87,7 +87,7 @@ export default {
             })
         },
         selectRow(row) {
-            this._log(row)
+            //this._log(row)
             this.$emit("select", globals.extend(true, {}, row))
         }
     },

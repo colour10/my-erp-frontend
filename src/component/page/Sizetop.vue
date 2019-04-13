@@ -9,18 +9,16 @@
 </template>
 
 <script>
-import globals,{_label} from '../globals.js'
+import {_label} from '../globals.js'
 import Multiple_Admin_Page from '../Multiple_Admin_Page.vue'
-
-const _log = globals.logger("asapage-sizetop");
 
 var props = {
     columns:[            
-        {name:"name", label:globals.getLabel('mingcheng'), is_multiple:true, is_focus:true},
-        {name:"code", label:globals.getLabel('bianhao')}
+        {name:"name", label:_label('mingcheng'), is_multiple:true, is_focus:true},
+        {name:"code", label:_label('bianhao')}
     ],
     buttons:[
-        {name:"code", label:globals.getLabel('chakanziji'), width:200, disable_change:true, handler:function(rowIndex, row){
+        {name:"code", label:_label('chakanziji'), width:200, disable_change:true, handler:function(rowIndex, row){
             //console.log(rowIndex, row)   
             props2.base.topid = row.id;
             options.dialogVisible = true; 
@@ -32,19 +30,19 @@ var props = {
 
 var props2 = {
     columns:[            
-        {name:"content", label:globals.getLabel('neirong'), is_multiple:true, is_focus:true}
+        {name:"content", label:_label('neirong'), is_multiple:true, is_focus:true}
     ],
     actions: [{
         label: _label('xiangshang'),
         handler: function(rowIndex, row, vm) {
-            vm._fetch("/sizecontent/up", {id:row.id}, function(){
+            vm._fetch("/sizecontent/up", {id:row.id}).then(function(){
                 vm.loadList(i=>i)
             })
         }
     },{
         label: _label('xiangxia'),
         handler: function(rowIndex, row, vm) {
-            vm._fetch("/sizecontent/down", {id:row.id}, function(){
+            vm._fetch("/sizecontent/down", {id:row.id}).then(function(){
                 vm.loadList(i=>i)
             })
         }
@@ -60,7 +58,6 @@ var props2 = {
 }
 
 const options = {
-    globals,
     props:props,
     props2:props2,
     dialogVisible:false,

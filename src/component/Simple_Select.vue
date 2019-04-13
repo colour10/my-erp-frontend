@@ -6,8 +6,7 @@
 
 <script>
 import DataSource from './DataSource.js'
-import globals from './globals.js'
-const _label = globals.getLabel
+import globals,{_label} from './globals.js'
 
 export default {
     name: 'simple-select',

@@ -41,8 +41,7 @@
 </template>
 
 <script>
-import globals from './globals.js'
-const _label = globals.getLabel
+import globals,{_label} from './globals.js'
 
 export default {
     name: 'multiple-admin-page',
@@ -93,7 +92,7 @@ export default {
             var self = this;
             self.form.lang = self.lang;
             if (self.form.id == "") {
-                self._submit("/" + self.controller + "/add", self.form, function() {
+                self._submit("/" + self.controller + "/add", self.form).then(function() {
                     self.$refs.tablelist.appendRow(globals.clone(self.form))
 
                     if (self.auto_hide !== false) {
@@ -101,7 +100,7 @@ export default {
                     }
                 })
             } else {
-                self._submit("/" + self.controller + "/edit", self.form, function() {
+                self._submit("/" + self.controller + "/edit", self.form).then(function() {
                     var row = self.$refs.tablelist.getRow(self.rowIndex)
                     globals.copyTo(self.form, row)
                     if (self.auto_hide !== false) {
@@ -201,7 +200,7 @@ export default {
     watch: {
         base: {
             handler: function(newValue, oldValue) {
-                console.log("change", newValue, oldValue)
+                //console.log("change", newValue, oldValue)
                     //this.loadList(function(){})
             },
             deep: true

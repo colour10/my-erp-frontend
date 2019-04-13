@@ -166,30 +166,28 @@
 import simple_select from '../Simple_Select.vue'
 import Asa_Select_Product_Dialog from './Asa_Select_Product_Dialog.vue'
 import DataSource from '../DataSource.js'
-import globals from "../globals.js"
+import globals,{_label} from "../globals.js"
 import { Product } from "../model.js"
-
-const _label = globals.getLabel
 
 const props = {
     columns: [
         { name: "payment_type", label: _label("fukuanleixing"), type: 'select', source: "paymenttype" },
         { name: "currency", label: _label("bizhong"), type: 'select', source: "currency" },
         { name: "amount", label: _label("jine") },
-        { name: "paymentdate", label: _label("fukuanriqi"), type:"date" },
+        { name: "paymentdate", label: _label("fukuanriqi"), type: "date" },
         { name: "memo", label: _label("beizhu") },
-        { name: "makestaff", label: _label("tijiaoren"),  type: 'select', source: "user", is_edit_hide:true },
-        { name: "status", label: _label("yiruzhang"), type:"switch", is_edit_hide:true }
+        { name: "makestaff", label: _label("tijiaoren"), type: 'select', source: "user", is_edit_hide: true },
+        { name: "status", label: _label("yiruzhang"), type: "switch", is_edit_hide: true }
     ],
     controller: "orderpayment",
-    auth: "order-submit",    
-    base:{
-      orderid:''
+    auth: "order-submit",
+    base: {
+        orderid: ''
     },
-    options:{
-        isedit:(item)=>item.status==0,
-        isdelete:(item)=>item.status==0,
-        autoreload:true
+    options: {
+        isedit: (item) => item.status == 0,
+        isdelete: (item) => item.status == 0,
+        autoreload: true
     }
 }
 
@@ -210,7 +208,7 @@ export default {
     data() {
         var self = this;
 
-        
+
         return {
             form: {
                 bussinesstype: "",
@@ -293,7 +291,7 @@ export default {
                 return
             }
 
-            self._remove("/order/delete?id=" + self.form.id, function() {
+            self._remove("/order/delete?id=" + self.form.id).then(function() {
                 self.dialogVisible = false
                 self.form.id = ""
 
@@ -324,17 +322,15 @@ export default {
                 }
                 var array = []
                 params.list = self.tabledata.map(item => {
-                    return {
-                        productid: item.product.id,
-                        id: item.id,
-                        sizecontentid: item.sizecontent.getValue(),
-                        number: item.number
-                    }
-                })
-                self._log(JSON.stringify(params))
-                self._submit("/order/saveorder", {
-                    params: JSON.stringify(params)
-                }, function(res) {
+                        return {
+                            productid: item.product.id,
+                            id: item.id,
+                            sizecontentid: item.sizecontent.getValue(),
+                            number: item.number
+                        }
+                    })
+                    //self._log(JSON.stringify(params))
+                self._submit("/order/saveorder", { params: JSON.stringify(params) }).then(function(res) {
                     self._log(res)
                     let data = res.data
                     if (data.form.id) {
@@ -358,10 +354,7 @@ export default {
                 return
             }
             self._confirm(self._label("confirm-order"), function() {
-                self._submit("/order/confirm", {
-                    id: self.form.id,
-                    status: status
-                }, function(res) {
+                self._submit("/order/confirm", { id: self.form.id, status: status }).then(function(res) {
                     self._log(res)
                     self.form.status = status
                     self.$emit("change", self.form)
@@ -374,9 +367,7 @@ export default {
                 return
             }
             self._confirm(self._label("confirm-order-cancel"), function() {
-                self._submit("/order/cancel", {
-                    id: self.form.id
-                }, function(res) {
+                self._submit("/order/cancel", { id: self.form.id }).then(function(res) {
                     //self._log(res)
                     self.form.status = 2
                     self.$emit("change", self.form)
@@ -463,7 +454,7 @@ export default {
             if (form.id != "" && form.id != self.fomrid) {
                 self.tabledata = []
                     //加载数据
-                self._fetch("/order/loadorder", { id: form.id }, function(res) {
+                self._fetch("/order/loadorder", { id: form.id }).then(function(res) {
                     //self._log("加载订单信息", res)
                     if (res.data.list) {
                         res.data.list.forEach(item => {

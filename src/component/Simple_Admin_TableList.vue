@@ -16,7 +16,7 @@
                 <template v-slot="scope">
                     <el-button size="mini" :type="item.type||''" @click="item.handler(scope.$index, scope.row, item)" v-for="item in buttons" :key="item.label" v-if="isShow(item)">{{item.label}}</el-button>
                     <el-button size="mini" @click="handleClickUpdate(scope.$index, scope.row)" v-if="isEditable(scope.row)">{{_label('bianji')}}</el-button>
-                    <auth :auth="authname">
+                    <auth :auth="authname||controller">
                         <el-button size="mini" type="danger" @click="onClickDelete(scope.$index, scope.row)" v-if="isDeletable(scope.row)">{{_label('shanchu')}}</el-button>
                     </auth>
                 </template>
@@ -29,9 +29,8 @@
 
 <script>
 import DataSource from './DataSource.js'
-import globals,{extend} from './globals.js'
+import globals,{extend,_label} from './globals.js'
 import {host} from './http.js'
-const _label = globals.getLabel
 
 const pageSizes = [10, 15,30, 50, 100]
 export default {
@@ -129,7 +128,7 @@ export default {
             if (column.type == 'switch') {
                 return value == '1' ? _label("yes") : _label("no");
             } else if (column.type == 'select') {
-                //Òì²½¼ÓÔØÊý¾Ý£¬È»ºóÖØÐÂäÖÈ¾ÁÐ±í
+                //Ã’Ã¬Â²Â½Â¼Ã“Ã”Ã˜ÃŠÃ½Â¾ÃÂ£Â¬ÃˆÂ»ÂºÃ³Ã–Ã˜ÃÃ‚Ã¤Ã–ÃˆÂ¾ÃÃÂ±Ã­
                 let dataSource = DataSource.getDataSource(column.source, _label("lang"));
                 //self._log("init, dataSource", column.source)
 
@@ -197,7 +196,7 @@ export default {
 
             var asa = self.$asa;
 
-            self._fetch("/" + self.controller + "/page", params, function(res) {
+            self._fetch("/" + self.controller + "/page", params).then(function(res) {
                 //self._log(res)
                 res.data.forEach(item => self.tableData.push(Object.assign(item, obj)))
 

@@ -8,19 +8,17 @@
 </template>
 
 <script>
-import globals from '../globals.js'
+import {_label} from '../globals.js'
 import Multiple_Admin_Page from '../Multiple_Admin_Page.vue'
-
-const _log = globals.logger("asapage-producttemplate");
 
 var props = {
     columns: [
-        { name: "name", label: globals.getLabel("mobanmingcheng"), is_multiple: true, is_focus: true },
-        { name: "picture", label: globals.getLabel("tupian"), type: "upload", multiple: false, limit: 1, is_image: true, image_width: 60, image_height: 60 }
+        { name: "name", label: _label("mobanmingcheng"), is_multiple: true, is_focus: true },
+        { name: "picture", label: _label("tupian"), type: "upload", multiple: false, limit: 1, is_image: true, image_width: 60, image_height: 60 }
     ],
     buttons: [{
         name: "code",
-        label: globals.getLabel("chakanziji"),
+        label: _label("chakanziji"),
         width: 200,
         disable_change: true,
         handler: function(rowIndex, row) {
@@ -36,8 +34,8 @@ var props = {
 
 var props2 = {
     columns: [
-        { name: "name", label: globals.getLabel("biaoti"), is_multiple: true, is_focus: true },
-        { name: "sortnum", label: globals.getLabel("xuhao") }
+        { name: "name", label: _label("biaoti"), is_multiple: true, is_focus: true },
+        { name: "sortnum", label: _label("xuhao") }
     ],
     controller: "templatemanage",
     key_column: "name",
@@ -47,7 +45,6 @@ var props2 = {
 }
 
 const options = {
-    globals,
     props: props,
     props2: props2,
     dialogVisible: false,

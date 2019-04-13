@@ -98,7 +98,7 @@ export default {
         },
         onEdit() {
             var self = this
-            self._submit("/department/edit", this.form, function(res) {
+            self._submit("/department/edit", this.form).then(function(res) {
                 self.node.data.label = self.form.name;
                 self.node.data.remark = self.form.remark;
                 self.dialogTableVisible = false
@@ -106,7 +106,7 @@ export default {
         },
         deleteDepart() {
             var self = this
-            self._remove("/department/delete?id=" + self.form.id, function(res) {
+            self._remove("/department/delete?id=" + self.form.id).then(function(res) {
                 globals.deleteObject(self.node.parent.data.children, self.node.data)
                 self.$refs.tree.setCurrentKey(self.node.parent.data.id);
                 self.selectNode(self.node.parent)
@@ -125,7 +125,7 @@ export default {
         },
         onCreate() {
             var self = this
-            self._submit("/department/add", this.form_create, function() {
+            self._submit("/department/add", this.form_create).then(function() {
                 var newNode = {}
                 newNode.label = self.form_create.name;
                 newNode.remark = self.form_create.remark;
@@ -138,9 +138,9 @@ export default {
     },
     mounted: function() {
         const self = this
-        self._fetch("/department/departments", {}, function(res) {
+        self._fetch("/department/departments", {}).then(function(res) {
             self.data = res.data
-        }, "json")
+        })
     }
 }
 </script>

@@ -12,11 +12,8 @@
 </template>
 
 <script>
-import globals from '../globals.js'
+import globals,{_label} from '../globals.js'
 import Multiple_Admin_Page from '../Multiple_Admin_Page.vue'
-
-const _log = globals.logger("asapage-brandgroup");
-const _label = globals.getLabel
 
 const props = {
     columns: [
@@ -66,7 +63,7 @@ const props3 = {
     actions: [{
         label: _label('xiangshang'),
         handler: function(rowIndex, row, vm) {
-            vm._fetch("/brandgroupchildproperty/up", {id:row.id}, function(){
+            vm._fetch("/brandgroupchildproperty/up", {id:row.id}).then(function(){
                 vm.loadList(i=>i)
             })
         },
@@ -76,7 +73,7 @@ const props3 = {
     },{
         label: _label('xiangxia'),
         handler: function(rowIndex, row, vm) {
-            vm._fetch("/brandgroupchildproperty/down", {id:row.id}, function(){
+            vm._fetch("/brandgroupchildproperty/down", {id:row.id}).then(function(){
                 vm.loadList(i=>i)
             })
         },
@@ -95,7 +92,6 @@ const props3 = {
 }
 
 const options = {
-    globals,
     props: props,
     props2: props2,
     props3: props3,

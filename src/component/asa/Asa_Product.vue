@@ -210,8 +210,10 @@
                 </el-table>
                 <el-col :offset="8" :span="8" style="padding:5px">
                     <auth auth="product">
-                        <el-button type="primary" @click="onSaveColorGroup" v-if="option.isedit">{{_label("baocun")}}</el-button>
-                        <el-button type="primary" @click="onAppendColor" v-if="option.isedit">{{_label("zhuijia")}}</el-button>
+                        <div>
+                            <el-button type="primary" @click="onSaveColorGroup" v-if="option.isedit">{{_label("baocun")}}</el-button>
+                            <el-button type="primary" @click="onAppendColor" v-if="option.isedit">{{_label("zhuijia")}}</el-button>
+                        </div>
                     </auth>
                     <el-button type="primary" @click="onQuit">{{_label("tuichu")}}</el-button>
                 </el-col>
@@ -224,7 +226,7 @@
 </template>
 
 <script>
-import globals, { extract } from '../globals.js'
+import globals, { extract,_label } from '../globals.js'
 import { ProductCodeList, ProductDetail } from "../model.js"
 import List from '../list.js'
 import { Rules } from '../rules.js'
@@ -232,9 +234,6 @@ import DataSource from '../DataSource.js'
 import Asa_Product_Search_Panel from './Asa_Product_Search_Panel.vue'
 import Asa_Product_Property from './Asa_Product_Property.vue'
 import Select_Dialog_Common from '../Select_Dialog_Common.vue'
-
-const _log = globals.logger("asa-product");
-const _label = globals.getLabel
 
 const color_keys = ['id', 'brandcolor', 'wordcode_1', 'wordcode_2', 'wordcode_3', 'wordcode_4']
 
@@ -328,12 +327,12 @@ export default {
                 }
 
                 if (self.form.id == "") {
-                    self._submit("/product/add", self.form, function(res) {
+                    self._submit("/product/add", self.form).then(function(res) {
                         self.$emit("change", Object.assign({}, self.form), "create")
                         self.setInfo(res.id)
                     })
                 } else {
-                    self._submit("/product/edit", self.form, function() {
+                    self._submit("/product/edit", self.form).then(function() {
                         self.$emit("change", Object.assign({}, self.form), "update")
                         self.setInfo(self.form.id)
                     })
@@ -389,9 +388,7 @@ export default {
                 return { sizecontentid: item.id, goods_code: item.goods_code }
             })
 
-            self._submit("/product/savecode", {
-                params: JSON.stringify(params)
-            }, function(res) {});
+            self._submit("/product/savecode", { params: JSON.stringify(params) }).then(() => {});
         },
         onSaveColorGroup() {
             //保存同款多色数据
@@ -399,9 +396,7 @@ export default {
             let params = { productid: self.form.id }
             params.list = self.colors.map(item => extract(item, color_keys))
                 //self._log(params)
-            self._submit("/product/savecolorgroup", {
-                params: JSON.stringify(params)
-            }, function(res) {
+            self._submit("/product/savecolorgroup", { params: JSON.stringify(params) }).then(function(res) {
                 self.setInfo(self.form.id)
                 res.data.list.forEach(function(item) {
                     self.colors.push(extract(item, color_keys))
@@ -459,7 +454,7 @@ export default {
             if (self.colors_loaded == true) {
                 return;
             }
-            self._fetch("/product/getcolorgrouplist", { id: self.form.id }, function(res) {
+            self._fetch("/product/getcolorgrouplist", { id: self.form.id }).then(function(res) {
                 //console.log(res)
                 res.data.forEach(function(item) {
                     self.colors.push(extract(item, ['brandcolor', 'id', 'wordcode_1', 'wordcode_2', 'wordcode_3', 'wordcode_4']))

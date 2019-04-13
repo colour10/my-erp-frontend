@@ -78,7 +78,7 @@
 </template>
 
 <script>
-import globals from '../globals.js'
+import globals,{_label} from '../globals.js'
 import simple_select from '../Simple_Select.vue'
 import Asa_Select_Product_Dialog from './Asa_Select_Product_Dialog.vue'
 import Asa_Productstock_Search from './Asa_Productstock_Search.vue'
@@ -115,7 +115,7 @@ export default {
             },
             tabledata: [],
             dialogVisible: self.visible,
-            lang: globals.getLabel('lang')
+            lang: _label('lang')
         }
     },
     methods: {
@@ -151,7 +151,7 @@ export default {
 
             })
             self._log(JSON.stringify(params))
-            self._submit("/requisition/save", { params: JSON.stringify(params) }, function(res) {
+            self._submit("/requisition/save", { params: JSON.stringify(params) }).then(function(res) {
                 self.$emit("change")
             });
         }

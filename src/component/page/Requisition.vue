@@ -19,20 +19,19 @@
 </template>
 
 <script>
-import globals from '../globals.js'
+import {_label} from '../globals.js'
 import Asa_Requisition_Dialog from '../asa/Asa_Requisition_Dialog.vue'
 import Asa_Requisition_Detail_Dialog from '../asa/Asa_Requisition_Detail_Dialog.vue'
 import Simple_Admin_TableList from '../Simple_Admin_TableList.vue'
 
 const page_name = "asapage-requisition";
-const _log = globals.logger(page_name);
 
 var props = {
     columns: [
-        { name: "out_id", label: globals.getLabel('diaochuku'), type: 'select', source: "warehouse" },
-        { name: "in_id", label: globals.getLabel('diaoruku'), type: 'select', source: "warehouse" },
-        { name: "apply_staff", label: globals.getLabel('shenqingren'), type: 'select', source: "user" },
-        { name: "status", label: globals.getLabel("zhuangtai"), type: "select", source: "requisitionstatus" }
+        { name: "out_id", label: _label('diaochuku'), type: 'select', source: "warehouse" },
+        { name: "in_id", label: _label('diaoruku'), type: 'select', source: "warehouse" },
+        { name: "apply_staff", label: _label('shenqingren'), type: 'select', source: "user" },
+        { name: "status", label: _label("zhuangtai"), type: "select", source: "requisitionstatus" }
         //{name:"zipcode", label:"<?=$system_language['youbian']?>"}, 
 
         //{name:"contact", label:"<?=$system_language['lianxiren']?>"}, 

@@ -4,10 +4,10 @@
             <el-tab-pane label="LOGO" name="logo">
             </el-tab-pane>
             <!--别名-->
-            <el-tab-pane :label="globals.getLabel('bieming')">
+            <el-tab-pane :label="_label('bieming')">
                 <asa-aliases :brandid="brandid"></asa-aliases>
             </el-tab-pane>
-            <el-tab-pane :label="globals.getLabel('xilie')">
+            <el-tab-pane :label="_label('xilie')">
                 <asa-series :brandid="brandid"></asa-series>
             </el-tab-pane>
         </el-tabs>
@@ -31,8 +31,7 @@ export default {
         var self = this;
         return {
             activeName: "logo",
-            currentVisible: self.visible,
-            globals: globals
+            currentVisible: self.visible
         }
     },
     methods: {

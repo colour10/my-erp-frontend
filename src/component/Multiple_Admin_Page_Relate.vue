@@ -44,9 +44,9 @@
 </template>
 
 <script>
-import globals from './globals.js'
+import globals,{_label} from './globals.js'
 import Multiple_Admin_Page from './Multiple_Admin_Page.vue'
-const _label = globals.getLabel
+
 
 const subbase = {}
 
@@ -100,7 +100,7 @@ export default {
             var self = this;
             self.form.lang = self.lang;
             if (self.form.id == "") {
-                self._submit("/" + self.controller + "/add", self.form, function() {
+                self._submit("/" + self.controller + "/add", self.form).then(function() {
                     self.$refs.tablelist.appendRow(globals.clone(self.form))
 
                     if (self.auto_hide !== false) {
@@ -108,7 +108,7 @@ export default {
                     }
                 })
             } else {
-                self._submit("/" + self.controller + "/edit", self.form, function() {
+                self._submit("/" + self.controller + "/edit", self.form).then(function() {
                     var row = self.$refs.tablelist.getRow(self.rowIndex)
                     globals.copyTo(self.form, row)
                     if (self.auto_hide !== false) {

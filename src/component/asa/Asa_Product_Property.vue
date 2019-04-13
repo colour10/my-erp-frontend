@@ -47,7 +47,7 @@ export default {
 
             let params = {id:self.product.id}
             params.list = globals.extend({}, self.data)
-            let result = self._submitPromise("/product/saveproperty", {params:JSON.stringify(params)})
+            let result = self._submit("/product/saveproperty", {params:JSON.stringify(params)})
             //self._log(result)
         },
         async setProduct(product) {
@@ -61,13 +61,13 @@ export default {
         },
         async load() {
             let self = this
-            let res = await self._fetchPromise("/brandgroupchildproperty/page", { brandgroupchildid: self.product.childbrand })
+            let res = await self._fetch("/brandgroupchildproperty/page", { brandgroupchildid: self.product.childbrand })
             //console.log(res, "haha")
 
             self.properties = await DataSource.createSource(res.data, "name", "id", _label('lang')).getList()
 
             //加载数据
-            res = await self._fetchPromise("/product/getproperties", {id:self.product.id})
+            res = await self._fetch("/product/getproperties", {id:self.product.id})
             //self._log(res)
 
             let obj = {}

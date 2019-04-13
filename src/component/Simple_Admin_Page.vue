@@ -79,7 +79,7 @@ export default {
             var self = this;
             self.form.lang = self.lang;
             if (self.form.id == "") {
-                self._submit("/" + self.controller + "/add", self.form, function() {
+                self._submit("/" + self.controller + "/add", self.form).then(function() {
                     if(self.componenToptions.autoreload==true) {
                         self.$refs.tablelist.loadList()
                     }
@@ -92,7 +92,7 @@ export default {
                     }
                 })
             } else {
-                self._submit("/" + self.controller + "/edit", self.form, function() {                    
+                self._submit("/" + self.controller + "/edit", self.form).then(function() {                    
                     if(self.componenToptions.autoreload==true) {
                         self.$refs.tablelist.loadList()
                     }

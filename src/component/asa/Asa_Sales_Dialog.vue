@@ -64,8 +64,8 @@
                                     <el-button :type="canZuofei?'primary':'info'" @click="zuofei()">{{_label("zuofei")}}</el-button>
                                 </el-tooltip>
                             </el-row>
-                          </auth>
-                            <auth auth="sales">
+                        </auth>
+                        <auth auth="sales">
                             <el-row>
                                 <el-button type="primary" @click="addReceive">{{_label("tianjiashoukuan")}}</el-button>
                             </el-row>
@@ -192,19 +192,19 @@ const props = {
         { name: "payment_type", label: _label("fukuanleixing"), type: 'select', source: "paymenttype" },
         { name: "currency", label: _label("bizhong"), type: 'select', source: "currency" },
         { name: "amount", label: _label("jine") },
-        { name: "paymentdate", label: _label("fukuanriqi"), type:"date" },
+        { name: "paymentdate", label: _label("fukuanriqi"), type: "date" },
         { name: "memo", label: _label("beizhu") },
-        { name: "makestaff", label: _label("tijiaoren"),  type: 'select', source: "user", is_edit_hide:true },
-        { name: "status", label: _label("yiruzhang"), type:"switch", is_edit_hide:true }
+        { name: "makestaff", label: _label("tijiaoren"), type: 'select', source: "user", is_edit_hide: true },
+        { name: "status", label: _label("yiruzhang"), type: "switch", is_edit_hide: true }
     ],
     controller: "salesreceive",
-    auth: "sales",    
-    base:{
-      salesid:''
+    auth: "sales",
+    base: {
+        salesid: ''
     },
-    options:{
-        isedit:(item)=>item.status==0,
-        isdelete:(item)=>item.status==0
+    options: {
+        isedit: (item) => item.status == 0,
+        isdelete: (item) => item.status == 0
     }
 }
 
@@ -297,10 +297,8 @@ export default {
             params.list = self.tabledata.map(item => {
                 return { productstockid: item.productstock.id, id: item.id, dealprice: item.dealprice, number: item.number, price: item.productstock.goods.price, is_match: item.is_match }
             })
-            self._log(JSON.stringify(params))
-            self._submit("/sales/savesale", {
-                params: JSON.stringify(params)
-            }, function(res) {
+            //self._log(JSON.stringify(params))
+            self._submit("/sales/savesale", { params: JSON.stringify(params) }).then(function(res) {
                 let data = res.data
                 if (data.form.id) {
                     globals.copyTo(data.form, self.form)
@@ -418,7 +416,7 @@ export default {
 
                 if (form.id != "") {
                     //加载数据
-                    self._fetchPromise("/sales/loadsale", { id: form.id }).then(function(res) {
+                    self._fetch("/sales/loadsale", { id: form.id }).then(function(res) {
                         //self._log("加载订单信息", res)
                         if (res.data.list) {
                             res.data.list.forEach(item => {

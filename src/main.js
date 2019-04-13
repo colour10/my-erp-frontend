@@ -38,6 +38,7 @@ import Asa_Select_Order_Detail_Dialog from './component/asa/Asa_Select_Order_Det
 import Asa_Warehousing_Dialog from './component/asa/Asa_Warehousing_Dialog.vue'
 import Asa_Product from './component/asa/Asa_Product.vue'
 import Auth from './component/Auth.vue'
+import Orderpayment from './component/page/Orderpayment.vue'
 
 
 import Page_Home from './component/page/Home.vue'
@@ -122,7 +123,8 @@ const routes = [
             {path: '/sizetop', component: Page_Sizetop},
             {path: '/product', component: Page_Product},   
             {path: '/requisition', component: Page_Requisition},     
-            {path: '/user/modifypassword', component: Page_UserModifyPassword},                
+            {path: '/user/modifypassword', component: Page_UserModifyPassword},    
+            {path: '/orderpayment', component: Orderpayment},    
             {path:'/ageseason', component:getComponentSimple("ageseason")},
             {path:'/ulnarinch', component:getComponent("ulnarinch")},
             {path:'/winterproofing', component:getComponent("winterproofing")},
