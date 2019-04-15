@@ -1,5 +1,5 @@
 const Vue = require('vue')
-const Router = require('vue-router') 
+const VueRouter = require('vue-router') 
 const Vuex = require('vuex')
 
 import {getComponentSimple,getComponent} from './component/prop.js'
@@ -37,6 +37,7 @@ import Asa_Order_Confirm_Dialog from './component/asa/Asa_Order_Confirm_Dialog.v
 import Asa_Select_Order_Detail_Dialog from './component/asa/Asa_Select_Order_Detail_Dialog.vue'
 import Asa_Warehousing_Dialog from './component/asa/Asa_Warehousing_Dialog.vue'
 import Asa_Product from './component/asa/Asa_Product.vue'
+import CheckboxGroup from './component/CheckboxGroup.vue'
 import Auth from './component/Auth.vue'
 import Orderpayment from './component/page/Orderpayment.vue'
 import Salesreceive from './component/page/Salesreceive.vue'
@@ -84,6 +85,7 @@ const components = [
     Asa_Warehousing_Dialog,
     Asa_Product,
     Auth,
+    CheckboxGroup,
     Page_Home,
     Page_Order,
     Page_Producttemplate,
@@ -155,6 +157,7 @@ const routes = [
 ]
 
 const router = new VueRouter({
+  mode:'history',//default-->hash
     routes // (缩写) 相当于 routes: routes
 })
 
@@ -188,6 +191,8 @@ const store = new Vuex.Store({
   }
 })
 
+console.log(VueRouter)
+console.log("+++++++++++++", VueRouter, router, router.resolve)
 const app = new Vue({
     router,
     store,

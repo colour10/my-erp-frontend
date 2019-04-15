@@ -1,6 +1,6 @@
 <template>
     <section class="el-container is-vertical" style="height: auto; border: 1px solid rgb(238, 238, 238);">
-        <header class="el-header" style="height: 60px; text-align: left; font-size: 24px;">{{_label("system_name")}}</header>
+        <!--<header class="el-header" style="height: 60px; text-align: left; font-size: 24px;">{{_label("system_name")}}</header>-->
         <div id="top-menu">
             <el-menu class="el-menu-demo" mode="horizontal" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b" @select="onSelect">
                 <el-submenu index="1">
@@ -151,6 +151,7 @@
                     <el-menu-item index="11-4" data-href="/">首页生成器</el-menu-item>
                 </el-submenu>
             </el-menu>
+
         </div>
         <section class="el-container">
             <router-view></router-view>
@@ -213,9 +214,13 @@ export default {
             }
         },
         onSelect(index) {
-            //this._log(index)
+            this._log(this.$router)
             if (menus[index]) {
                 this.$router.push(menus[index])
+                /*const {href} = this.$router.resolve({
+                    path: menus[index]
+                })
+              window.open(href, '_blank')*/
             }
         }
     },

@@ -116,12 +116,12 @@
                                 </simple-select>
                             </el-form-item>
                             <el-form-item :label="_label('xingbie')">
-                                <select-dialog v-model="form.gender" source="gender" style="width:150" :lang="lang">
-                                </select-dialog>
+                                <sp-checkboxgroup v-model="form.gender" source="gender" style="width:150" :lang="lang" class="supermini">
+                                </sp-checkboxgroup>
                             </el-form-item>
                             <el-form-item :label="_label('jijie')">
-                                <select-dialog v-model="form.season" source="season" style="width:150" :lang="lang">
-                                </select-dialog>
+                                <sp-checkboxgroup v-model="form.season" source="season" style="width:150" :lang="lang" class="supermini">
+                                </sp-checkboxgroup>
                             </el-form-item>
                             <el-form-item :label="_label('zuihouruku')">
                                 <el-input v-model="form.password"></el-input>
