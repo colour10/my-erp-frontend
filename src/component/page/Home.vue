@@ -1,5 +1,5 @@
 <template>
-    <section class="el-container is-vertical" style="height: auto; border: 1px solid rgb(238, 238, 238);">
+    <section class="el-container is-vertical" style="height: auto; border: 0px solid rgb(238, 238, 238);">
         <!--<header class="el-header" style="height: 60px; text-align: left; font-size: 24px;">{{_label("system_name")}}</header>-->
         <div id="top-menu">
             <el-menu class="el-menu-demo" mode="horizontal" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b" @select="onSelect">
@@ -234,6 +234,7 @@ export default {
     mounted: function() {
         this.checkLogin()
         this._log("Global Function", this.$store.getters.allow("brand"))
+        this._log(this._getClientHeight())
     }
 }
 </script>

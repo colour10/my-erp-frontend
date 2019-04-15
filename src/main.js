@@ -177,7 +177,8 @@ const store = new Vuex.Store({
       },
       allow(state) {
           return permission=>{
-              return state.auth && state.auth.permissions && state.auth.permissions.findIndex(item=>item.name==permission)>=0
+              return true;
+              //return state.auth && state.auth.permissions && state.auth.permissions.findIndex(item=>item.name==permission)>=0
           }
       }
   },

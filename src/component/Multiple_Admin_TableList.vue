@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-table :data="tableData" stripe border style="width:100%;" v-loading.fullscreen.lock="loading">
+        <el-table :data="tableData" stripe border style="width:100%;" v-loading.fullscreen.lock="loading" :height="componenToptions.tableHeight">
             <el-table-column :prop="item.name" :label="item.label" align="center" :width="item.width||180" v-if="!item.is_hide" v-for="item in columns" :key="item.name">
                 <template v-slot="scope">
                     <img v-if="item.is_image" :src="getImageSrc(scope.row, item)" :style="getImageStyle(item)">

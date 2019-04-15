@@ -1,5 +1,5 @@
 <template>
-    <div style="width:100%" class="product">
+    <div style="width:99%" class="product">
         <multiple-admin-page v-bind="props" ref="page"></multiple-admin-page>
         <asa-brandtab :visible.sync="base.visible" :brandid="base.brandid"></asa-brandtab>
     </div>
@@ -43,6 +43,7 @@ export default {
                     }
                 }],
                 options: {
+                    tableHeight:this._getAvailableHeight(),
                     dialogWidth: '30%',
                     formSize: 'small',
                     inline: false
