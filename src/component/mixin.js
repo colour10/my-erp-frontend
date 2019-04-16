@@ -151,12 +151,6 @@ export default {
                 self.setting[name] = value;
             }
             return self
-        },
-        _getClientHeight() {
-            return document.documentElement.clientHeight
-        },
-        _getAvailableHeight() {
-            return this._getClientHeight()-200;
         }
     }
 }

@@ -15,6 +15,9 @@
                     <el-menu-item index="1-4">
                         <router-link to="/department">{{_label("menu-1-4")}}</router-link>
                     </el-menu-item>
+                    <el-menu-item index="1-5">
+                        <router-link to="/system">{{_label("xitongshezhi")}}</router-link>
+                    </el-menu-item>
                 </el-submenu>
                 <el-submenu index="2">
                     <template #title>{{_label("menu-2")}}</template>
@@ -115,7 +118,6 @@
                     <el-menu-item index="8-1">
                         <router-link to="/orderpayment">{{_label("dingdanjiesuan")}}</router-link>
                     </el-menu-item>
-
                     <el-menu-item index="8-2">
                         <router-link to="/salesreceive">{{_label("xiaoshoujiesuan")}}</router-link>
                     </el-menu-item>
@@ -151,8 +153,14 @@
                     <el-menu-item index="11-4" data-href="/">首页生成器</el-menu-item>
                 </el-submenu>
             </el-menu>
-
         </div>
+        <!--
+        <el-breadcrumb separator="/" style="padding-top:30px;">
+            <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+            <el-breadcrumb-item><a href="/">活动管理</a></el-breadcrumb-item>
+            <el-breadcrumb-item>活动列表</el-breadcrumb-item>
+            <el-breadcrumb-item>活动详情</el-breadcrumb-item>
+        </el-breadcrumb>-->
         <section class="el-container">
             <router-view></router-view>
         </section>
@@ -208,16 +216,16 @@ export default {
     methods: {
         checkLogin() {
             const self = this
-            self._log(this.$route.path)
+                //self._log(this.$route.path)
             if (!self.$store.getters.is_login) {
-                self.$router.push({path:"/login/login", query:{back:this.$route.path}})
+                self.$router.push({ path: "/login/login", query: { back: this.$route.path } })
             }
         },
         onSelect(index) {
-            this._log(this.$router)
+            //this._log(this.$router)
             if (menus[index]) {
                 this.$router.push(menus[index])
-                /*const {href} = this.$router.resolve({
+                    /*const {href} = this.$router.resolve({
                     path: menus[index]
                 })
               window.open(href, '_blank')*/
@@ -233,8 +241,7 @@ export default {
     },
     mounted: function() {
         this.checkLogin()
-        this._log("Global Function", this.$store.getters.allow("brand"))
-        this._log(this._getClientHeight())
+            //this._log("Global Function", this.$store.getters.allow("brand"))
     }
 }
 </script>

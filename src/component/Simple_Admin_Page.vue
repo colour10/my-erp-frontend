@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-row>
-            <el-col :span="2" :offset="22">
+            <el-col :span="2">
                 <auth :auth="authname">
                     <el-button type="primary" @click="showFormToCreate()" v-if="hideCreate!==true">{{_label("xinjian")}}</el-button>
                 </auth>
@@ -9,13 +9,13 @@
         </el-row>
         <el-row :gutter="20">
             <el-col :span="24">
-                <simple-admin-tablelist ref="tablelist" :controller="controller" :columns="columns" :buttons="buttons" :options="options" :base="base" :authname="authname" :isedit="componenToptions.isedit" :isdelete="componenToptions.isdelete" :onclickupdate="showFormToEdit"></simple-admin-tablelist>
+                <simple-admin-tablelist ref="tablelist" :controller="controller" :columns="columns" :actions="actions" :buttons="buttons" :options="options" :base="base" :authname="authname" :isedit="componenToptions.isedit" :isdelete="componenToptions.isdelete" :onclickupdate="showFormToEdit"></simple-admin-tablelist>
             </el-col>
         </el-row>
-        <el-dialog class="user-form" :title="formTitle" :visible.sync="dialogVisible" :center="true" :width="componenToptions.dialogWidth||'40%'" :modal="false">
+        <el-dialog :title="formTitle" :visible.sync="dialogVisible" :center="true" :width="componenToptions.dialogWidth||'40%'" :modal="false">
             <el-row>
-                <el-col :span="24">
-                    <el-form ref="form" :model="form" label-width="100px" :inline="componenToptions.inline||false" :size="componenToptions.formSize||'medium'">
+                <el-col :span="24" class="user-form">
+                    <el-form class="user-form" ref="form" :model="form" label-width="100px" :inline="componenToptions.inline||false" :size="componenToptions.formSize||'mini'">
                         <el-form-item :label="item.label" v-if="!item.is_edit_hide" v-for="item in columns" :key="item.name" :class="item.class?item.class:''">
                             <el-input :ref="item.name" @keyup.enter.native="onSubmit" :type="item.type?item.type:'text'" v-if="!item.type||item.type=='input'||item.type=='textarea'" v-model="form[item.name]"></el-input>
                             <el-switch :ref="item.name" v-if="item.type=='switch'" v-model="form[item.name]" active-value="1" inactive-value="0"></el-switch>
@@ -42,7 +42,7 @@ import globals,{_label} from './globals.js'
 
 export default {
     name: 'simple-admin-page',
-    props: ['columns', 'buttons', "options", "controller", "base", "auth", "hideCreate"],
+    props: ['columns', 'buttons', "options", "controller", "base", "auth", "hideCreate",'actions'],
     components: {
 
     },

@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-row>
-            <el-col :span="2" :offset="22">
+            <el-col :span="2">
                 <auth auth="user">
                     <el-button type="primary" @click="showFormToCreate()">{{_label("button-create")}}</el-button>
                 </auth>

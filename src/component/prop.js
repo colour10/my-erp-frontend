@@ -364,7 +364,106 @@ const props = {
             isdelete:(item)=>item.status==0,
             autoreload:true
         }
+    },
+
+    "company":{
+        columns: [
+            { name: "name", label: _label("mingcheng"), class: "width2"},
+            { name: "countryid", label: _label("guojiadiqu"), type: 'select', source: "country", class: "width2" },
+            { name: "address", label: _label("dizhi"), class: "width1", is_hide: true }, 
+            {
+            name: "englishname",
+            label: _label("yingwenmingcheng"),
+            class: "width1",
+            is_hide: true
+        }, {
+            name: "website",
+            label: _label("wangzhi"),
+            class: "width2",
+            is_hide: true
+        }, {
+            name: "fax",
+            label: _label("chuanzhen"),
+            class: "width2",
+            is_hide: true
+        }, {
+            name: "legal",
+            label: _label("faren"),
+            class: "width2",
+            is_hide: true
+        }, {
+            name: "registeredcapital",
+            label: _label("zhuceziben"),
+            class: "width2",
+            is_hide: true
+        }, {
+            name: "businesslicense",
+            label: _label("yingyezhizhaohao"),
+            class: "width2",
+            is_hide: true
+        }, {
+            name: "heading",
+            label: _label("shuihao"),
+            class: "width2",
+            is_hide: true
+        }
+        ],
+        controller: "company",
+        auth: "company"
+    },
+    "companyinvoice":{
+        columns: [
+            { name: "name", label: _label("mingcheng"), class: "width1"},
+            { name: "telephone", label: _label("dianhua"), class: "width1"},
+            { name: "address", label: _label("dizhi"), class: "width1", is_hide: true }, 
+            { name: "bank", label: _label("kaihuhang"), class: "width1" }, 
+            { name: "bank_account", label: _label("yinhangzhanghao"), class: "width1" }
+        ],
+        controller: "companyinvoice",
+        auth: "company",
+        base:{
+          companyid:''
+        }
+    },
+    "supplierinvoice":{
+        columns: [
+            { name: "name", label: _label("mingcheng"), class: "width1"},
+            { name: "telephone", label: _label("dianhua"), class: "width1"},
+            { name: "address", label: _label("dizhi"), class: "width1", is_hide: true }, 
+            { name: "bank", label: _label("kaihuhang"), class: "width1" }, 
+            { name: "bank_account", label: _label("yinhangzhanghao"), class: "width1" }
+        ],
+        controller: "supplierinvoice",
+        auth: "supplier",
+        base:{
+          supplierid:''
+        },
+        options:{
+            dialogWidth:'800px'
+        }
+    },
+    "supplierbank":{
+        columns: [
+            { name: "name", label: _label("mingcheng"), class: "width2"},
+            { name: "currency", label: _label("bizhong"), class: "width2", type:"select", source:"currency"},
+            { name: "address", label: _label("dizhi"), class: "width1", is_hide: true }, 
+            { name: "bank_name", label: _label("yinhangmingcheng"), class: "width1" }, 
+            { name: "bank_depart", label: _label("fenhangmingcheng"), class: "width1", is_hide: true },
+            { name: "bank_address", label: _label("yinhangdizhi"), class: "width1", is_hide: true }, 
+            { name: "account", label: _label("yinhangzhanghao"), class: "width2"},
+            { name: "bank_code", label: _label("guojima"), class: "width2"},
+        ],
+        controller: "supplierbank",
+        auth: "supplier",
+        base:{
+          supplierid:''
+        },
+        options:{
+            dialogWidth:'800px',
+            inline:true
+        }
     }
+
 }
 
 const getComponent = function(name) {

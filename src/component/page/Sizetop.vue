@@ -3,7 +3,7 @@
         <multiple-admin-page v-bind="props" ref="page"></multiple-admin-page>
 
         <el-dialog class="user-form" :title="title" :visible.sync="dialogVisible" :center="true" width="80%">
-            <multiple-admin-page v-bind="props2" ref="page2"></multiple-admin-page>
+            <simple-admin-page v-bind="props2" ref="page2"></simple-admin-page>
         </el-dialog>
     </div>
 </template>
@@ -30,7 +30,7 @@ var props = {
 
 var props2 = {
     columns:[            
-        {name:"content", label:_label('neirong'), is_multiple:true, is_focus:true}
+        {name:"name", label:_label('neirong'), is_focus:true}
     ],
     actions: [{
         label: _label('xiangshang'),
@@ -53,7 +53,7 @@ var props2 = {
         topid:""    
     },
     options: {
-        action_width:300
+        action_width:350
     }
 }
 

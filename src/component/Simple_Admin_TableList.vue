@@ -1,24 +1,24 @@
 <template>
     <div>
         <el-table :data="tableData" stripe border style="width: 100%;" :height="tableHeight">
-            <el-table-column :prop="item.name" :label="item.label" align="center" :width="item.width||180" v-if="!item.is_hide" v-for="item in columns" :key="item.name">
+            <el-table-column :prop="item.name" :label="item.label" :width="item.width||180" v-if="!item.is_hide" v-for="item in columns" :key="item.name">
                 <template v-slot="scope">
                     <img v-if="item.is_image" :src="getImageSrc(scope.row, item)" :style="getImageStyle(item)">
                     <span v-if="!item.is_image" :style="getStyle(item,scope.row)">{{item.convert?item.convert(scope.row,scope.rowIndex,item):convert(scope.row,item, rowIndex)}}</span>
                 </template>
             </el-table-column>
-            <!--<el-table-column :label="item.label" align="center" :width="item.width||180" v-for="item in buttons" >
-      <template v-slot="scope">
-        <el-button type="info" circle @click="item.handler(scope.$index, scope.row, item)">{{item.label}}</el-button>
-      </template>            
-    </el-table-column>-->
-            <el-table-column :label="_label('caozuo')" :width="actionwidth||150" align="center">
+            <el-table-column :label="item.label" align="center" :width="item.width||180" v-for="item in buttons" :key="item.label">
                 <template v-slot="scope">
-                    <el-button size="mini" :type="item.type||''" @click="item.handler(scope.$index, scope.row, item)" v-for="item in buttons" :key="item.label" v-if="isShow(item)">{{item.label}}</el-button>
+                    <el-button type="text" @click="item.handler(scope.$index, scope.row, item)">{{item.label}}</el-button>
+                </template>
+            </el-table-column>
+            <el-table-column :label="_label('caozuo')" :width="localOptions.action_width||150" align="center">
+                <template v-slot="scope">
                     <el-button size="mini" @click="handleClickUpdate(scope.$index, scope.row)" v-if="isEditable(scope.row)">{{_label('bianji')}}</el-button>
                     <auth :auth="authname||controller">
                         <el-button size="mini" type="danger" @click="onClickDelete(scope.$index, scope.row)" v-if="isDeletable(scope.row)">{{_label('shanchu')}}</el-button>
                     </auth>
+                    <el-button size="mini" @click="handleAction(scope,item)" v-for="item in actions" :key="item.label" v-if="isShow(item)">{{item.label}}</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -29,28 +29,30 @@
 
 <script>
 import DataSource from './DataSource.js'
-import globals,{extend,_label} from './globals.js'
-import {host} from './http.js'
+import globals, { extend, _label } from './globals.js'
+import { host } from './http.js'
 
 
 export default {
     name: 'simple-admin-tablelist',
-    props: ['columns', "buttons", "controller", "base", "onclickupdate", 'isedit', 'isdelete', "actionwidth", "authname", "tableHeight"],
+    props: ['columns', "buttons", "controller", "base", "onclickupdate", 'isedit', 'isdelete', "options", "authname", "tableHeight", 'actions'],
     components: {
 
     },
     data() {
-        var base = this.base || {}
+        let base = this.base || {}
+        let localOptions = this.options || {}
 
         return {
             rowIndex: "",
             tableData: [],
-            pagination:{
-                pageSizes:globals.pageSizes,
-                pageSize:20,
-                total:0,
-                current:1
-            }
+            pagination: {
+                pageSizes: globals.pageSizes,
+                pageSize: 20,
+                total: 0,
+                current: 1
+            },
+            localOptions
         }
     },
     methods: {
@@ -58,7 +60,7 @@ export default {
             this.pagination.pageSize = pageSize
             this.loadList()
         },
-        handleCurrentChange(current){
+        handleCurrentChange(current) {
             this.pagination.current = current
             this.loadList()
         },
@@ -68,6 +70,9 @@ export default {
             } else {
                 return true;
             }
+        },
+        handleAction({ $index, row }, item) {
+            item.handler($index, row, this)
         },
         findIndex(callback) {
             return this.tableData.findIndex(callback)
@@ -83,11 +88,11 @@ export default {
             return this.tableData[rowIndex]
         },
         deleteRow: function(rowIndex) {
-            var self = this
+            let self = this
             return self.$delete(self.tableData, rowIndex)
         },
         async onClickDelete(rowIndex, row) {
-            var self = this
+            let self = this
             self.rowIndex = rowIndex;
 
             let result = await self._remove("/" + self.controller + "/delete", { id: row.id })
@@ -96,23 +101,22 @@ export default {
             }
         },
         handleClickUpdate(rowIndex, row) {
-            var self = this
+            let self = this
             if (self.onclickupdate) {
                 self.onclickupdate(rowIndex, row)
                     //self._log("click edit")
             }
         },
         getImageSrc(row, column) {
-            if(row[column.name] && row[column.name].length>0) {
+            if (row[column.name] && row[column.name].length > 0) {
                 //this._log(row[column.name])
-                return _label('_image_url_prex')+row[column.name]
-            }
-            else {
+                return _label('_image_url_prex') + row[column.name]
+            } else {
                 return host + '/imgs/none.png';
             }
         },
         getImageStyle(column) {
-            var styles = "";
+            let styles = "";
             if (column.image_width) {
                 styles += "width:" + column.image_width + 'px;'
             }
@@ -124,7 +128,7 @@ export default {
         },
         convert(row, column, rowIndex) {
             let self = this
-            var value = row[column.name]
+            let value = row[column.name]
             if (column.type == 'switch') {
                 return value == '1' ? _label("yes") : _label("no");
             } else if (column.type == 'select') {
@@ -173,8 +177,8 @@ export default {
             self.tableData = []
 
             let params = {
-                page:self.pagination.current,
-                pageSize:self.pagination.pageSize
+                page: self.pagination.current,
+                pageSize: self.pagination.pageSize
             }
 
             if (self.base) {
@@ -201,7 +205,7 @@ export default {
                 res.data.forEach(item => self.tableData.push(Object.assign(item, obj)))
 
                 //let pagination = res.pagination;
-                extend(self.pagination,res.pagination)
+                extend(self.pagination, res.pagination)
 
             });
         },
@@ -227,7 +231,7 @@ export default {
     watch: {
         base: {
             handler: function(newValue, oldValue) {
-                this._log("change", newValue, oldValue)
+                //this._log("change", newValue, oldValue)
                 this.loadList()
             },
             deep: true

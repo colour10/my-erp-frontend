@@ -60,6 +60,8 @@ import Page_UserModifyPassword from './component/page/UserModifyPassword.vue'
 import Page_Warehousing from './component/page/Warehousing.vue'
 import Page_Requisition from './component/page/Requisition.vue'
 import Page_Productstock from './component/page/Productstock.vue'
+import System from './component/system/index.vue'
+import Supplier from './component/supplier/index.vue'
 
 const components = [
     Simple_Admin_Page,
@@ -100,9 +102,7 @@ const components = [
     Page_Login,
     Page_Confirmorder,
     Page_UserModifyPassword,
-    Page_Warehousing,
-    Page_Requisition,
-    Page_Productstock
+    Page_Warehousing
 ]
 
 components.forEach(component => {
@@ -128,7 +128,9 @@ const routes = [
             {path: '/requisition', component: Page_Requisition},     
             {path: '/user/modifypassword', component: Page_UserModifyPassword},    
             {path: '/orderpayment', component: Orderpayment},    
-            {path: '/salesreceive', component: Salesreceive},    
+            {path: '/salesreceive', component: Salesreceive},   
+            {path: '/system', component: System}, 
+
             {path:'/ageseason', component:getComponentSimple("ageseason")},
             {path:'/ulnarinch', component:getComponent("ulnarinch")},
             {path:'/winterproofing', component:getComponent("winterproofing")},
@@ -147,7 +149,7 @@ const routes = [
             {path:'/producttemplate', component:Page_Producttemplate},
             {path:'/member', component:getComponentSimple("member")},
             {path:'/colortemplate', component:getComponent("colortemplate")},
-            {path:'/supplier', component:getComponentSimple("supplier")},
+            {path:'/supplier', component:Supplier},
             {path:'/saleport', component:getComponentSimple("saleport")},
             {path:'/productmemo', component:getComponent("productmemo")}
         ]
@@ -192,8 +194,8 @@ const store = new Vuex.Store({
   }
 })
 
-console.log(VueRouter)
-console.log("+++++++++++++", VueRouter, router, router.resolve)
+//console.log(VueRouter)
+//console.log("+++++++++++++", VueRouter, router, router.resolve)
 const app = new Vue({
     router,
     store,
