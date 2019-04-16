@@ -47,7 +47,7 @@ export default {
             tableData: [],
             pagination:{
                 pageSizes:globals.pageSizes,
-                pageSize:15,
+                pageSize:20,
                 total:0,
                 current:1
             }

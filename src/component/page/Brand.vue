@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import {_label} from '../globals.js'
+import {_label,getAvailableHeight} from '../globals.js'
 import Multiple_Admin_Page from '../Multiple_Admin_Page.vue'
 import Asa_BrandTab from '../asa/Asa_BrandTab.vue'
 
@@ -43,7 +43,7 @@ export default {
                     }
                 }],
                 options: {
-                    tableHeight:this._getAvailableHeight(),
+                    tableHeight:getAvailableHeight(),
                     dialogWidth: '30%',
                     formSize: 'small',
                     inline: false

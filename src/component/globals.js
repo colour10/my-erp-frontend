@@ -1,3 +1,4 @@
+import {client} from "./browser.js"
 
 const ASAP = window.ASAP || {
     caches:{}, //httpGet的缓存对象
@@ -88,7 +89,11 @@ const extract = function(object, keys){
     return obj
 }
 
-const pageSizes = [10, 15,30, 50, 100]
+const getAvailableHeight = function() {
+    return client.height-200;
+}
+
+const pageSizes = [10, 20, 30, 50, 100]
 
 export {
     ASAP,
@@ -96,7 +101,8 @@ export {
     getLabel as _label,
     logger,
     extend,
-    extract
+    extract,
+    getAvailableHeight
 }
 export default {
     getLabel,
@@ -108,5 +114,6 @@ export default {
     deleteObject,
     copyTo,
     extract,
-    pageSizes
+    pageSizes,
+    getAvailableHeight
 }

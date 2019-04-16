@@ -1,6 +1,8 @@
 <template>
     <div>
         <el-row>
+            <el-col :span="2">
+            </el-col>
             <el-col :span="2" :offset="22">
                 <auth auth="order-submit"><el-button type="primary" @click="showFormToCreate()">{{_label('xinjian')}}</el-button></auth>
             </el-col>

@@ -2,7 +2,9 @@
     <div>
         <el-row>
             <el-col :span="2" :offset="22">
-                <auth :auth="controller"><el-button type="primary" @click="showFormToCreate()">{{_label("xinjian")}}</el-button></auth>
+                <auth :auth="controller">
+                    <el-button type="primary" @click="showFormToCreate()">{{_label("xinjian")}}</el-button>
+                </auth>
             </el-col>
         </el-row>
         <el-row :gutter="20">
@@ -14,23 +16,28 @@
             <el-row>
                 <el-col :span="24">
                     <el-form ref="form" :model="form" label-width="100px" :inline="componenToptions.inline||false" :size="componenToptions.formSize||'medium'">
-                        <el-form-item :label="item.label" v-if="!item.is_edit_hide" v-for="item in columns" :key="item.name" :class="item.class?item.class:''">
-                            <el-input :ref="item.name" @keyup.enter.native="onSubmit" :type="item.type?item.type:'text'" v-if="!item.type||item.type=='input'||item.type=='textarea'" v-model="form[getColumnName(item)]"></el-input>
-                            <el-switch :ref="item.name" v-if="item.type=='switch'" v-model="form[item.name]" active-value="1" inactive-value="0"></el-switch>
-                            <simple-select :ref="item.name" v-if="item.type=='select'" v-model="form[item.name]" :source="item.source" :lang="lang">
-                            </simple-select>
-                            <el-upload :ref="item.name" :action="'/common/upload?category='+controller" v-if="item.type=='upload'" :multiple="item.multiple || false" :limit="item.limit || 1" :on-success="getUploadSuccessCallback(item)" :on-remove="getRemoveUploadFileCallback(item)">
-                                <el-button size="small" type="primary">{{_label("shangchuan")}}</el-button>
-                            </el-upload>
-                        </el-form-item>
-                        <el-form-item :label="_label('yuyan')">
-                            <el-select v-model="lang" :placeholder="_label('choice')" disabled>
-                                <el-option v-for="item in languages" :key="item.code" :label="item.name" :value="item.code">
-                                </el-option>
-                            </el-select>
-                        </el-form-item>
+                        <template v-for="item in columns">
+                            <template v-if="item.is_multiple">
+                                <el-form-item :label="item.label+'('+language.shortName+')'" v-if="!item.is_edit_hide" v-for="language in languages" :key="language.code" :class="item.class?item.class:''">
+                                    <el-input :type="item.type?item.type:'text'" v-if="!item.type||item.type=='input'||item.type=='textarea'" v-model="form[getColumnName(item,language)]"></el-input>
+                                </el-form-item>
+                            </template>
+                            <template v-if="!item.is_multiple">
+                                <el-form-item :label="item.label" v-if="!item.is_edit_hide" :key="item.name" :class="item.class?item.class:''">
+                                    <el-input :ref="item.name" @keyup.enter.native="onSubmit" :type="item.type?item.type:'text'" v-if="!item.type||item.type=='input'||item.type=='textarea'" v-model="form[getColumnName(item)]"></el-input>
+                                    <el-switch :ref="item.name" v-if="item.type=='switch'" v-model="form[item.name]" active-value="1" inactive-value="0"></el-switch>
+                                    <simple-select :ref="item.name" v-if="item.type=='select'" v-model="form[item.name]" :source="item.source" :lang="lang">
+                                    </simple-select>
+                                    <el-upload :ref="item.name" :action="'/common/upload?category='+controller" v-if="item.type=='upload'" :multiple="item.multiple || false" :limit="item.limit || 1" :on-success="getUploadSuccessCallback(item)" :on-remove="getRemoveUploadFileCallback(item)">
+                                        <el-button size="small" type="primary">{{_label("shangchuan")}}</el-button>
+                                    </el-upload>
+                                </el-form-item>
+                            </template>
+                        </template>
                         <el-form-item>
-                            <auth :auth="controller"><el-button type="primary" @click="onSubmit">{{_label("baocun")}}</el-button></auth>
+                            <auth :auth="controller">
+                                <el-button type="primary" @click="onSubmit">{{_label("baocun")}}</el-button>
+                            </auth>
                             <el-button type="primary" @click="onQuit">{{_label("tuichu")}}</el-button>
                         </el-form-item>
                     </el-form>
@@ -41,7 +48,7 @@
 </template>
 
 <script>
-import globals,{_label} from './globals.js'
+import globals, { _label } from './globals.js'
 
 export default {
     name: 'multiple-admin-page',
@@ -121,25 +128,26 @@ export default {
             self.lang = _label("lang");
             self.showDialog(_label("tianjiaxinxi"));
         },
-        showFormToUpdate(rowIndex, row, lang) {
+        showFormToUpdate(rowIndex, row) {
             var self = this
             self.rowIndex = rowIndex;
-            self.lang = lang;
             globals.copyTo(row, self.form);
 
             self.showDialog(_label("xiugaixinxi"));
         },
-        getColumnName(column) {
-            return column.is_multiple ? column.name + "_" + this.lang : column.name;
+        getColumnName(column, language) {
+            this._log(column, language)
+            return column.is_multiple ? column.name + "_" + language.code : column.name;
         },
         getUploadSuccessCallback(column) {
             var self = this;
             if (!column.success_callback) {
                 console.log(column, "44")
+
                 column.success_callback = function(response, file, fileList) {
                     //console.log(response["files"], file, fileList)                
                     file.name = response["files"][file.name]
-
+                    self.form[column.name] = ""
                     self.form[column.name] += "," + file.name
                     self.form[column.name] = self.form[column.name].replace(/^,/, "")
                 }
@@ -201,7 +209,7 @@ export default {
         base: {
             handler: function(newValue, oldValue) {
                 //console.log("change", newValue, oldValue)
-                    //this.loadList(function(){})
+                //this.loadList(function(){})
             },
             deep: true
         }

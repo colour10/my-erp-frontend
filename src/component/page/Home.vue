@@ -157,7 +157,7 @@
             <router-view></router-view>
         </section>
         <div id="footer">
-            <el-footer class="el-footer"></el-footer>
+            <!--<el-footer class="el-footer"></el-footer>-->
         </div>
     </section>
 </template>

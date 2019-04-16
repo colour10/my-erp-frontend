@@ -1,4 +1,4 @@
-import {getLabel} from "./globals.js"
+import {getLabel, getAvailableHeight} from "./globals.js"
 const _label = getLabel
 
 const props = {
@@ -117,8 +117,16 @@ const props = {
             is_multiple: true,
             is_focus: true
         }, {
+            name: "name_en",
+            label: _label("guojiamingcheng")+'['+_label("en")+"]",
+            is_edit_hide:true
+        },{
             name: "code",
-            label: _label("guojiadaima")
+            label: _label("guojiadaima3")
+        },
+        {
+            name: "code_short",
+            label: _label("guojiadaima2")
         }, {
             name: "localcurrency",
             label: _label("bizhong"),
@@ -126,7 +134,10 @@ const props = {
             source: "currency"
         }],
         controller: "country",
-        key_column: "name"
+        key_column: "name"/*,
+        options:{
+            tableHeight:getAvailableHeight()
+        }*/
     },
 
     "materialnote": {

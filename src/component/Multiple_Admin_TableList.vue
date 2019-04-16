@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-table :data="tableData" stripe border style="width:100%;" v-loading.fullscreen.lock="loading" :height="componenToptions.tableHeight">
-            <el-table-column :prop="item.name" :label="item.label" align="center" :width="item.width||180" v-if="!item.is_hide" v-for="item in columns" :key="item.name">
+            <el-table-column :prop="item.name" :label="item.label" align="center" :width="item.width||150" v-if="!item.is_hide" v-for="item in columns" :key="item.name">
                 <template v-slot="scope">
                     <img v-if="item.is_image" :src="getImageSrc(scope.row, item)" :style="getImageStyle(item)">
                     <span v-if="!item.is_image && !item.html">{{item.convert?item.convert(scope.row,scope.rowIndex,item):convert(scope.row, item, scope.rowIndex)}}</span>
@@ -13,21 +13,25 @@
                     <el-button type="text" @click="item.handler(scope.$index, scope.row, item)">{{item.label}}</el-button>
                 </template>
             </el-table-column>
-            <el-table-column prop="lang_code" :label="_label('yuyan')" width="220" align="center">
-                <template v-slot="scope">
-                    <span v-for="(item, key) in languages" :key="item.code" :value="item.code">
-         <el-button :type="isSettingLanguage(scope.row, item.code)?'primary':'info'" circle @click="showFormToUpdate(scope.$index, scope.row, item.code)">{{item.shortName}}</el-button>
-       </span>
-                </template>
-            </el-table-column>
             <el-table-column :label="_label('caozuo')" :width="componenToptions.action_width||150" align="center">
                 <template v-slot="scope">
+                    <auth :auth="controller">
+                        <el-button size="mini" @click="showFormToUpdate(scope.$index, scope.row)">{{_label("bianji")}}</el-button>
+                    </auth>
                     <auth :auth="controller">
                         <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">{{_label("shanchu")}}</el-button>
                     </auth>
                     <el-button size="mini" @click="handleAction(scope,item)" v-for="item in actions" :key="item.label" v-if="isShow(item)">{{item.label}}</el-button>
                 </template>
             </el-table-column>
+            <el-table-column prop="lang_code" :label="_label('yuyan')" width="220" align="center">
+                <template v-slot="scope">
+                    <template v-for="(item, key) in languages">
+                        <el-button :type="isSettingLanguage(scope.row, item.code)?'primary':'info'" circle style="margin:0px">{{item.shortName}}</el-button>
+                    </template>
+                </template>
+            </el-table-column>
+            
         </el-table>
         <el-pagination v-if="tableData.length<pagination.total" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pagination.current*1" :page-sizes="pagination.pageSizes" :page-size="pagination.pageSize*1" layout="total, sizes, prev, pager, next, jumper" :total="pagination.total*1">
         </el-pagination>
@@ -36,8 +40,8 @@
 
 <script>
 import DataSource from './DataSource.js'
-import globals,{extend,_label} from './globals.js'
-import {host} from './http.js'
+import globals, { extend, _label } from './globals.js'
+import { host } from './http.js'
 
 export default {
     name: 'multiple-admin-tablelist',
@@ -57,8 +61,8 @@ export default {
             loading: false,
             current_lang: _label("lang"),
             pagination: {
-                pageSizes:globals.pageSizes,
-                pageSize: 15,
+                pageSizes: globals.pageSizes,
+                pageSize: 20,
                 total: 0,
                 current: 1
             }
@@ -69,7 +73,7 @@ export default {
             this.pagination.pageSize = pageSize
             this.loadList()
         },
-        handleCurrentChange(current){
+        handleCurrentChange(current) {
             this.pagination.current = current
             this.loadList()
         },
@@ -81,11 +85,11 @@ export default {
         getRow: function(rowIndex) {
             return this.tableData[rowIndex]
         },
-        showFormToUpdate(rowIndex, row, lang) {
+        showFormToUpdate(rowIndex, row) {
             var self = this
             self.rowIndex = rowIndex;
             //console.log(rowIndex, row, lang)
-            self.onclickupdate(rowIndex, row, lang)
+            self.onclickupdate(rowIndex, row)
         },
         handleAction({ $index, row }, item) {
             item.handler($index, row, this)
@@ -105,11 +109,10 @@ export default {
             })
         },
         getImageSrc(row, column) {
-            if(row[column.name] && row[column.name].length>0) {
+            if (row[column.name] && row[column.name].length > 0) {
                 //this._log(row[column.name])
-                return _label('_image_url_prex')+row[column.name]
-            }
-            else {
+                return _label('_image_url_prex') + row[column.name]
+            } else {
                 return host + '/imgs/none.png';
             }
         },
@@ -159,8 +162,8 @@ export default {
             self.tableData = []
 
             let params = {
-                page:self.pagination.current,
-                pageSize:self.pagination.pageSize
+                page: self.pagination.current,
+                pageSize: self.pagination.pageSize
             }
 
             if (self.base) {
@@ -184,7 +187,7 @@ export default {
                 //console.log(res)
                 res.data.forEach(item => self.tableData.push(globals.extend(item, obj)))
 
-                extend(self.pagination,res.pagination)                
+                extend(self.pagination, res.pagination)
             });
         }
     },

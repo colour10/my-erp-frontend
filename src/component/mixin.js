@@ -156,7 +156,7 @@ export default {
             return document.documentElement.clientHeight
         },
         _getAvailableHeight() {
-            return this._getClientHeight()-250;
+            return this._getClientHeight()-200;
         }
     }
 }

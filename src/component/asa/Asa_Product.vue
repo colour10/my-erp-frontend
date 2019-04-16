@@ -1,5 +1,5 @@
 <template>
-    <el-dialog :title="_label('chanpinguanli')" :visible.sync="dialogVisible" :center="true" width="1000px">
+    <el-dialog :title="_label('chanpinguanli')" :visible.sync="dialogVisible" :center="true" width="1200px">
         <el-tabs type="border-card" @tab-click="onTabClick" v-model="currentTab">
             <el-tab-pane :label="_label('jibenziliao')" name="product">
                 <el-row>
@@ -208,7 +208,7 @@
                         </template>
                     </el-table-column>
                 </el-table>
-                <el-col :offset="8" :span="8" style="padding:5px">
+                <el-col :offset="8" :span="8" style="padding-top:5px">
                     <auth auth="product">
                         <div>
                             <el-button type="primary" @click="onSaveColorGroup" v-if="option.isedit">{{_label("baocun")}}</el-button>
