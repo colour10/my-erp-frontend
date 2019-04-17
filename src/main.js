@@ -39,8 +39,9 @@ import Asa_Warehousing_Dialog from './component/asa/Asa_Warehousing_Dialog.vue'
 import Asa_Product from './component/asa/Asa_Product.vue'
 import CheckboxGroup from './component/CheckboxGroup.vue'
 import Auth from './component/Auth.vue'
-import Orderpayment from './component/page/Orderpayment.vue'
-import Salesreceive from './component/page/Salesreceive.vue'
+import Orderpayment from './component/orderpayment/index.vue'
+import Salesreceive from './component/salesreceive/index.vue'
+import Table from './component/table.js'
 
 
 import Page_Home from './component/page/Home.vue'
@@ -59,7 +60,7 @@ import Page_Confirmorder from './component/page/Confirmorder.vue'
 import Page_UserModifyPassword from './component/page/UserModifyPassword.vue'
 import Page_Warehousing from './component/page/Warehousing.vue'
 import Page_Requisition from './component/page/Requisition.vue'
-import Page_Productstock from './component/page/Productstock.vue'
+import Productstock from './component/productstock/index.vue'
 import System from './component/system/index.vue'
 import Supplier from './component/supplier/index.vue'
 
@@ -88,6 +89,7 @@ const components = [
     Asa_Product,
     Auth,
     CheckboxGroup,
+    Table,
     Page_Home,
     Page_Order,
     Page_Producttemplate,
@@ -120,7 +122,7 @@ const routes = [
             {path: '/user', component: Page_User},
             {path: '/group', component: Page_Group},
             {path: '/department', component: Page_Department},
-            {path: '/productstock', component: Page_Productstock},
+            {path: '/productstock', component: Productstock},
             {path: '/brand', component: Page_Brand},
             {path: '/brandgroup', component: Page_Brandgroup},
             {path: '/sizetop', component: Page_Sizetop},

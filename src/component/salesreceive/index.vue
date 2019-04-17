@@ -14,10 +14,10 @@
                 </el-col>
             </el-row>
         </el-form>
-        <el-table :data="searchresult" stripe border style="width:100%;">
+        <sp-table :data="searchresult" border style="width:100%;">
             <el-table-column prop="orderno" :label="_label('dingdanhao')" align="center" sortable>
                 <template v-slot="scope">
-                    {{scope.row.order.orderno}}
+                    {{scope.row.sales.orderno}}
                 </template>
             </el-table-column>
             <el-table-column prop="payment_type_label" :label="_label('fukuanleixing')" width="100" align="center"></el-table-column>
@@ -32,27 +32,27 @@
             <el-table-column prop="status_label" sortable :label="_label('yiruzhang')" width="100" align="center"></el-table-column>
             <el-table-column :label="_label('caozuo')" align="center">
                 <template v-slot="scope">
-                    <auth auth="payment-confirm">
+                    <auth auth="receive-confirm">
                         <el-button size="mini" @click="confirmPayment(scope)">{{_label("xiangqing")}}</el-button>
                     </auth>
                 </template>
             </el-table-column>
-        </el-table>
+        </sp-table>
         <el-pagination v-if="searchresult.length<pagination.total" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pagination.current*1" :page-sizes="pagination.pageSizes" :page-size="pagination.pageSize*1" layout="total, sizes, prev, pager, next, jumper" :total="pagination.total*1">
         </el-pagination>
-        <simpleform name="orderpayment" authname="payment-confirm" ref="orderpayment" :title="_label('querenfukuan')" @submit="onConfirm" :isEditable="(f)=>f.status==0"></simpleform>
+        <simpleform name="salesreceive" authname="receive-confirm" ref="salesreceive" :title="_label('querenfukuan')" @submit="onConfirm" :isEditable="(f)=>f.status==0"></simpleform>
     </div>
 </template>
 
 <script>
 import globals,{ _label } from '../globals.js'
 import { extract,extend } from '../object.js'
-import { Orderpayment } from "../model.js"
+import { Salesreceive } from "../model.js"
 import Simple_Form from "../Simple_Form.vue"
 
 
 export default {
-    name: 'asapage-orderpayment',
+    name: 'asapage-salesreceive',
     components: {
         "simpleform":Simple_Form
     },
@@ -78,11 +78,11 @@ export default {
             //查询库存商品
             let self = this
 
-            let result = await self._fetch("/orderpayment/search", self.form)
+            let result = await self._fetch("/salesreceive/search", self.form)
                 //self._log(result)
             self.searchresult = []
             result.data.forEach(async function(item) {
-                let row = await Orderpayment.load({ data: item, depth: 1 })
+                let row = await Salesreceive.load({ data: item, depth: 1 })
                 //self._log("Orderpayment Record", row)
                 self.searchresult.push(row)
             })
@@ -91,17 +91,17 @@ export default {
         },
         confirmPayment({$index, row}) {
             let self = this;
-            row.orderno = row.order.orderno
-            self.$refs['orderpayment'].setInfo(row).setDisabled(['payment_type', 'amount', 'currency'], true)._setting({submitButtonText:_label('querenfukuan')}).show()
+            row.orderno = row.sales.orderno
+            self.$refs['salesreceive'].setInfo(row).setDisabled(['payment_type', 'amount', 'currency'], true)._setting({submitButtonText:_label('querenfukuan')}).show()
             self.index = $index
         },
         async onConfirm(form) {
             let self = this;
             //this._log("确认保存",form)
             self._confirm(_label("confirm-payment?"), async ()=>{
-                let result = await self._submit("/orderpayment/confirm", extract(form,['id','paymentdate','memo']))
+                let result = await self._submit("/salesreceive/confirm", extract(form,['id','paymentdate','memo']))
                 let info = extend(form, result.data)
-                self.$refs['orderpayment'].setInfo(info)
+                self.$refs['salesreceive'].setInfo(info)
 
                 self.search()
             })

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-table :data="tableData" stripe border style="width:100%;" v-loading.fullscreen.lock="loading" :height="componenToptions.tableHeight">
+        <sp-table :data="tableData" border style="width:100%;" v-loading.fullscreen.lock="loading" :height="componenToptions.tableHeight">
             <el-table-column :prop="item.name" :label="item.label" :width="item.width||150" v-if="!item.is_hide" v-for="item in columns" :key="item.name">
                 <template v-slot="scope">
                     <img v-if="item.is_image" :src="getImageSrc(scope.row, item)" :style="getImageStyle(item)">
@@ -32,7 +32,7 @@
                 </template>
             </el-table-column>
             
-        </el-table>
+        </sp-table>
         <el-pagination v-if="tableData.length<pagination.total" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pagination.current*1" :page-sizes="pagination.pageSizes" :page-size="pagination.pageSize*1" layout="total, sizes, prev, pager, next, jumper" :total="pagination.total*1">
         </el-pagination>
     </div>

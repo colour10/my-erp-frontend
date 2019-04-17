@@ -14,7 +14,7 @@
                 </el-col>
             </el-row>
         </el-form>
-        <el-table :data="searchresult" stripe border style="width:100%;">
+        <sp-table :data="searchresult" border style="width:100%;">
             <el-table-column prop="productname" :label="_label('chanpinmingcheng')" align="center" sortable>
                 <template v-slot="scope">
                     <el-button type="text" @click="selectRow(scope.row)">{{scope.row.product.productname}}</el-button>
@@ -35,7 +35,7 @@
                     {{scope.row.number}}
                 </template>
             </el-table-column>
-        </el-table>
+        </sp-table>
 
         <product ref="product"></product>
     </div>
