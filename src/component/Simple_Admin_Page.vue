@@ -2,9 +2,7 @@
     <div>
         <el-row>
             <el-col :span="2">
-                <auth :auth="authname">
-                    <el-button type="primary" @click="showFormToCreate()" v-if="hideCreate!==true">{{_label("xinjian")}}</el-button>
-                </auth>
+                <au-button :auth="authname" type="primary" @click="showFormToCreate()" v-if="hideCreate!==true">{{_label("xinjian")}}</au-button>
             </el-col>
         </el-row>
         <el-row :gutter="20">
@@ -15,11 +13,11 @@
         <el-dialog :title="formTitle" :visible.sync="dialogVisible" :center="true" :width="componenToptions.dialogWidth||'40%'" :modal="false">
             <el-row>
                 <el-col :span="24" class="user-form">
-                    <el-form class="user-form" ref="form" :model="form" label-width="100px" :inline="componenToptions.inline||false" :size="componenToptions.formSize||'mini'">
+                    <el-form class="user-form" ref="form" :model="form" label-width="100px" :inline="componenToptions.inline||false" :size="componenToptions.formSize||'medium'">
                         <el-form-item :label="item.label" v-if="!item.is_edit_hide" v-for="item in columns" :key="item.name" :class="item.class?item.class:''">
                             <el-input :ref="item.name" @keyup.enter.native="onSubmit" :type="item.type?item.type:'text'" v-if="!item.type||item.type=='input'||item.type=='textarea'" v-model="form[item.name]"></el-input>
                             <el-switch :ref="item.name" v-if="item.type=='switch'" v-model="form[item.name]" active-value="1" inactive-value="0"></el-switch>
-                            <simple-select :ref="item.name" v-if="item.type=='select'" v-model="form[item.name]" :source="item.source" :lang="lang"></simple-select>
+                            <simple-select :ref="item.name" v-if="item.type=='select'" v-model="form[item.name]" :source="item.source" :lang="lang" @change="onChange(item)"></simple-select>
                             <el-date-picker :ref="item.name" v-if="item.type=='date'" v-model="form[item.name]" type="date" value-format="yyyy-MM-dd" placeholder=""></el-date-picker>
                         </el-form-item>
                     </el-form>
@@ -27,9 +25,7 @@
             </el-row>
             <el-row>
                 <el-col :span="24" style="text-align:center;">
-                    <auth :auth="authname">
-                        <el-button type="primary" @click="onSubmit" style="margin:auto;">{{_label("baocun")}}</el-button>
-                    </auth>
+                    <au-button :auth="authname" type="primary" @click="onSubmit" style="margin:auto;">{{_label("baocun")}}</au-button>
                     <el-button type="primary" @click="onQuit">{{_label("tuichu")}}</el-button>
                 </el-col>
             </el-row>
@@ -39,6 +35,7 @@
 
 <script>
 import globals,{_label} from './globals.js'
+import Bus from './bus.js'
 
 export default {
     name: 'simple-admin-page',
@@ -74,6 +71,16 @@ export default {
     methods: {
         onQuit() {
             this.dialogVisible = false
+        },
+        onChange(column){
+            let self = this;
+            self._log(column)
+            
+            if(column.trigger) {
+                let value = self.form[column.name]
+                self._log(self.$refs[column.trigger])
+                self.$refs[column.trigger][0].load(value)
+            }
         },
         onSubmit() {
             var self = this;

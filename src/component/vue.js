@@ -4,7 +4,7 @@ const extendComponent = function(component, wrapInfo) {
     wrapInfo.props = component.props;
     wrapInfo.methods = wrapInfo.methods || {}
     wrapInfo.methods.paramsPipe = wrapInfo.methods.paramsPipe || function(p){}
-    wrapInfo.render = function(h) {
+    wrapInfo.methods.doRender = function(h) {
         const slots = Object.keys(this.$slots)
             .reduce((arr, key) => arr.concat(this.$slots[key]), [])
             .map(vnode => {
@@ -23,6 +23,11 @@ const extendComponent = function(component, wrapInfo) {
         this.paramsPipe(params);
 
         return h(component, params, slots)
+    }
+
+    wrapInfo.render = wrapInfo.render || function(h) {
+        //console.log(this)
+        return this.doRender(h)
     }
 
     return wrapInfo

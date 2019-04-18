@@ -89,10 +89,7 @@
                                 {{scope.row.productstock.product.productname}}
                             </template>
                         </el-table-column>
-                        <el-table-column prop="sizecontentname" :label="_label('chima')" width="100" align="center">
-                            <template v-slot="scope">
-                                {{scope.row.productstock.sizecontent.getLabel()}}
-                            </template>
+                        <el-table-column prop="sizecontent_label" :label="_label('chima')" width="100" align="center">
                         </el-table-column>
                         <el-table-column prop="warehousename" :label="_label('cangku')" width="100" align="center">
                             <template v-slot="scope">
@@ -139,10 +136,7 @@
                     <el-table :data="tabledata" stripe border style="width:100%;" v-if="form.status!=0">
                         <el-table-column prop="productname" :label="_label('chanpinmingcheng')" align="center">
                         </el-table-column>
-                        <el-table-column prop="sizecontentname" :label="_label('chima')" width="100" align="center">
-                            <template v-slot="scope">
-                                {{scope.row.productstock.sizecontent.getLabel()}}
-                            </template>
+                        <el-table-column prop="sizecontent_label" :label="_label('chima')" width="100" align="center">
                         </el-table-column>
                         <el-table-column prop="warehousename" :label="_label('cangku')" width="100" align="center">
                             <template v-slot="scope">

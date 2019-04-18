@@ -64,17 +64,12 @@ export default {
         current(callback) {
             this.dataSource.getRow(this.currentValue, row => callback(row))
         },
-        load(callback) {
+        load(value) {
             var self = this;
             self.data = []
-            self.dataSource.getData(function(data) {
-                //self._log("load", data)
-                data.forEach(function(item) {
-                    if (callback(item)) {
-                        self.data.push(item)
-                    }
-                })
-
+            self.dataSource.getRowsByParent(value).then(function(data) {
+                //self._log("load",data)
+                self.data = data;
             })
         },
         clear() {

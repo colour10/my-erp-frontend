@@ -14,7 +14,7 @@ import Multiple_Admin_Page from '../Multiple_Admin_Page.vue'
 
 var props = {
     columns:[            
-        {name:"name", label:_label('mingcheng'), is_multiple:true, is_focus:true},
+        {name:"name", label:_label('mingcheng'), is_multiple:true, is_focus:true, sortable:true},
         {name:"code", label:_label('bianhao')}
     ],
     buttons:[
@@ -33,6 +33,13 @@ var props2 = {
         {name:"name", label:_label('neirong'), is_focus:true}
     ],
     actions: [{
+        label: _label('dingbu'),
+        handler: function(rowIndex, row, vm) {
+            vm._fetch("/sizecontent/top", {id:row.id}).then(function(){
+                vm.loadList(i=>i)
+            })
+        }
+    },{
         label: _label('xiangshang'),
         handler: function(rowIndex, row, vm) {
             vm._fetch("/sizecontent/up", {id:row.id}).then(function(){
@@ -46,6 +53,13 @@ var props2 = {
                 vm.loadList(i=>i)
             })
         }
+    },{
+        label: _label('dibu'),
+        handler: function(rowIndex, row, vm) {
+            vm._fetch("/sizecontent/bottom", {id:row.id}).then(function(){
+                vm.loadList(i=>i)
+            })
+        }
     }],
     controller:"sizecontent",
     key_column:"content",
@@ -53,7 +67,7 @@ var props2 = {
         topid:""    
     },
     options: {
-        action_width:350
+        action_width:450
     }
 }
 

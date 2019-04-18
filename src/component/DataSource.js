@@ -43,6 +43,7 @@ function DataSource(options, lang) {
     self.options = options;
     self.oplabel = options.oplabel || 'name'
     self.opvalue = options.opvalue || 'value'
+    self.parent = options.parent;
     self.is_loaded = false;
             
     //_log(data_source.hashtable, data_source.datalist, data_source.url)    
@@ -213,6 +214,21 @@ DataSource.prototype.getRows = function(keyValues='', callback) {
         
         callback(list)
     })
+}
+
+DataSource.prototype.getRowsByParent = function(parent) {
+    var self = this;
+
+    return new Promise(resolve=>{
+        self.getData( data => {
+            //console.log(data, parent)
+            let list = data.filter(function(value){
+                return value.row[self.parent] == parent
+            })
+            
+            resolve(list)
+        })
+    })    
 }
 
 DataSource.prototype.getRowLabels = function(keyValues, callback) {

@@ -42,9 +42,9 @@
                     <el-menu-item index="2-7">
                         <router-link to="/material">{{_label("menu-2-1-6")}}</router-link>
                     </el-menu-item>
-                    <!-- <el-menu-item index="2-8">
-                        <router-link to="/materialnote">{{_label("menu-2-1-18")}}</router-link>
-                    </el-menu-item> -->
+                    <el-menu-item index="2-8">
+                        <router-link to="/currency">{{_label("huobiguanli")}}</router-link>
+                    </el-menu-item>
                     <el-menu-item index="2-9">
                         <router-link to="/ulnarinch">{{_label("menu-2-1-7")}}</router-link>
                     </el-menu-item>
@@ -56,6 +56,9 @@
                     </el-menu-item>
                     <el-menu-item index="2-12">
                         <router-link to="/saleport">{{_label("menu-2-4")}}</router-link>
+                    </el-menu-item>
+                    <el-menu-item index="2-13">
+                        <router-link to="/price">{{_label("jiageguanli")}}</router-link>
                     </el-menu-item>
                 </el-submenu>
                 <el-menu-item index="3-1">
@@ -177,6 +180,7 @@ const menus = {
     "1-1": "/user",
     "1-2": "/group",
     "1-4": "/department",
+    "1-5": "/system",
     "2-1": "/brand",
     "2-2": "/brandgroup",
     "2-3": "/ageseason",
@@ -184,11 +188,12 @@ const menus = {
     "2-5": "/sizetop",
     "2-6": "/productmemo",
     "2-7": "/material",
-    "2-8": "/materialnote",
+    "2-8": "/currency",
     "2-9": "/ulnarinch",
     "2-10": "/warehouse",
     "2-12": "/saleport",
     "2-11": "/country",
+    "2-13": "/price",
     "3-1": "/product",
     "3-2": "/picture",
     "4-1": "/supplier",

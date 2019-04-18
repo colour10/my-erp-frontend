@@ -5,14 +5,11 @@
 </template>
 
 <script>
-import globals from '../globals.js'
-import simple_select from '../Simple_Select.vue'
 import Asa_Product_Search_Panel from './Asa_Product_Search_Panel.vue'
 
 export default {
     name: 'asa-select-product-dialog',
     components:{
-        'simple-select':simple_select,
         searchpanel:Asa_Product_Search_Panel
     },
     props: {
@@ -20,11 +17,9 @@ export default {
             type: Boolean
         },
     },
-    data() {
-        var self = this;        
-        
+    data() {        
         return {
-            dialogVisible:self.visible
+            dialogVisible:this.visible
         }
     },
     methods:{
@@ -33,8 +28,6 @@ export default {
             self.dialogVisible = false;
             self.$emit("select", row)
         }
-    },
-    mounted:function(){        
     },
     watch:{
         dialogVisible(newValue) {

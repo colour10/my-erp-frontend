@@ -197,36 +197,14 @@ const Goods = createModel("goods")
 const Productstock = Object.assign(createModel("productstock"),{
     init:function(depth, row, callback) {
         let self = this
-        let arr = []
-        arr.push(new Promise(function(resolve){
-            Product.get(row.productid, resolve, depth-1)
-        }))
 
-        arr.push(new Promise(function(resolve){
-            Warehouse.get(row.warehouseid,resolve, depth-1)
-        }))
+        let runner = promiseAll(row)
+        runner.push(Product.load({data:row.productid}), 'product')
+        runner.push(Warehouse.load({data:row.warehouseid}), 'warehouse')
+        runner.push(Goods.load({data:row.goodsid}), 'goods')
+        runner.push(getDataSource("sizecontent").getRowLabel(row.sizecontentid), 'sizecontent_label')
 
-        const dataSource = DataSource.getDataSource('sizecontent', getLabel('lang'));
-        arr.push(new Promise(function(resolve){
-            dataSource.getRow(row.sizecontentid, data => {
-                resolve(data)
-            })
-        }))
-
-        arr.push(new Promise(function(resolve){
-            Goods.get(row.goodsid,resolve, depth-1)
-        }))
-
-        Promise.all(arr).then(function(results) {
-            //console.log(results)
-            //self.row.productname = results[0].row.productname
-            row.product = results[0]
-            //self.row.warehousename = results[1].row.name
-            row.warehouse =  results[1]
-            row.sizecontent = results[2]
-            row.goods =  results[3]
-            callback(row)
-        });
+        runner.all().then(callback)
     }
 })
 

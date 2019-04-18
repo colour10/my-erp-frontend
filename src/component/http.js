@@ -28,7 +28,7 @@ const httpGet = function(url, {enableCache=true}={}) {
 
                 func();
             } else {
-                console.log("httpGet", "from cache", url);
+                //console.log("httpGet", "from cache", url);
                 resolve(caches[url].data, true)
             }
         } else {
@@ -36,7 +36,7 @@ const httpGet = function(url, {enableCache=true}={}) {
                 loaded: false
             }
 
-            console.log("httpGet", url);
+            //console.log("httpGet", url);
             $.get(host+url, function(res) {
                 caches[url].loaded = true;
                 caches[url].data = res;

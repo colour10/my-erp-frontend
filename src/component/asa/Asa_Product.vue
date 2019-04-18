@@ -538,7 +538,7 @@ export default {
             let self = this
 
             //self._log(value)
-            self.$refs.childbrand.load(item => item.row.brandgroupid == value)
+            self.$refs.childbrand.load(value)
         }
     }
 }

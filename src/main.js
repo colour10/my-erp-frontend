@@ -42,6 +42,7 @@ import Auth from './component/Auth.vue'
 import Orderpayment from './component/orderpayment/index.vue'
 import Salesreceive from './component/salesreceive/index.vue'
 import Table from './component/table.js'
+import Authbutton from './component/authbutton.js'
 
 
 import Page_Home from './component/page/Home.vue'
@@ -51,9 +52,9 @@ import Page_User from './component/page/User.vue'
 import Page_Group from './component/page/Group.vue'
 import Page_Department from './component/page/Department.vue'
 import Page_Brand from './component/page/Brand.vue'
-import Page_Brandgroup from './component/page/Brandgroup.vue'
-import Page_Sizetop from './component/page/Sizetop.vue'
-import Page_Product from './component/page/Product.vue'
+import Brandgroup from './component/brandgroup/index.vue'
+import Sizetop from './component/sizetop/index.vue'
+import Product from './component/product/index.vue'
 import Page_Sales from './component/page/Sales.vue'
 import Page_Login from './component/page/Login.vue'
 import Page_Confirmorder from './component/page/Confirmorder.vue'
@@ -90,6 +91,7 @@ const components = [
     Auth,
     CheckboxGroup,
     Table,
+    Authbutton/*,
     Page_Home,
     Page_Order,
     Page_Producttemplate,
@@ -98,13 +100,11 @@ const components = [
     Page_Department,
     Page_Brand,
     Page_Brandgroup,
-    Page_Sizetop,
-    Page_Product,
     Page_Sales,
     Page_Login,
     Page_Confirmorder,
     Page_UserModifyPassword,
-    Page_Warehousing
+    Page_Warehousing*/
 ]
 
 components.forEach(component => {
@@ -124,9 +124,9 @@ const routes = [
             {path: '/department', component: Page_Department},
             {path: '/productstock', component: Productstock},
             {path: '/brand', component: Page_Brand},
-            {path: '/brandgroup', component: Page_Brandgroup},
-            {path: '/sizetop', component: Page_Sizetop},
-            {path: '/product', component: Page_Product},   
+            {path: '/brandgroup', component: Brandgroup},
+            {path: '/sizetop', component: Sizetop},
+            {path: '/product', component: Product},   
             {path: '/requisition', component: Page_Requisition},     
             {path: '/user/modifypassword', component: Page_UserModifyPassword},    
             {path: '/orderpayment', component: Orderpayment},    
@@ -137,9 +137,9 @@ const routes = [
             {path:'/ulnarinch', component:getComponent("ulnarinch")},
             {path:'/winterproofing', component:getComponent("winterproofing")},
             {path:'/washinginstructions', component:getComponent("washinginstructions")},
-            {path:'/securitycategory', component:getComponent("securitycategory")},
+            {path:'/currency', component:getComponent("currency")},
             {path:'/executioncategory', component:getComponent("executioncategory")},
-            {path:'/closedway', component:getComponent("closedway")},
+            {path:'/price', component:getComponentSimple("price")},
             {path:'/occasionsstyle', component:getComponent("occasionsstyle")},
             {path:'/productparts', component:getComponent("productparts")},
             {path:'/productinnards', component:getComponent("productinnards")},

@@ -43,7 +43,7 @@ options["user"] = {url:'/l/user',oplabel:'login_name', opvalue:'id'}
 options["department.single"] = {url:'/department/single',oplabel:'label', opvalue:'id'}
 
 //品牌子类
-options["brandgroupchild"] = {url:'/l/brandgroupchild',oplabel:'name', opvalue:'id'}
+options["brandgroupchild"] = {url:'/l/brandgroupchild',oplabel:'name', opvalue:'id', parent:'brandgroupid'}
 
 //尺寸
 options["ulnarinch"] = {url:'/l/ulnarinch',oplabel:'name', opvalue:'id'}
@@ -83,7 +83,7 @@ options["userwarehouse"] = {url:'/warehouse/userlist',oplabel:'name', opvalue:'i
 
 options["gender"] = {hashtable:_label("list_gender")}
 options["gender2"] = {hashtable:_label("list_gender2")}
-options["currency"] = {hashlist:_label("list_currency"),oplabel:'name', opvalue:'id'}
+options["currency"] = {url:'/l/currency',oplabel:'name', opvalue:'id'}
 options["season"] = {hashtable:_label("list_season")}
 options["orderproperty"] = {hashtable:_label("list_orderproperty")}
 options["bussinesstype"] = {hashlist:_label("list_bussinesstype"),oplabel:'name', opvalue:'id'}

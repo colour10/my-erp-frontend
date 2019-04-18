@@ -136,7 +136,7 @@ export default {
             self.showDialog(_label("xiugaixinxi"));
         },
         getColumnName(column, language) {
-            this._log(column, language)
+            //this._log(column, language)
             return column.is_multiple ? column.name + "_" + language.code : column.name;
         },
         getUploadSuccessCallback(column) {

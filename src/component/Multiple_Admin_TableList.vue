@@ -1,7 +1,7 @@
 <template>
     <div>
-        <sp-table :data="tableData" border style="width:100%;" v-loading.fullscreen.lock="loading" :height="componenToptions.tableHeight">
-            <el-table-column :prop="item.name" :label="item.label" :width="item.width||150" v-if="!item.is_hide" v-for="item in columns" :key="item.name">
+        <sp-table :data="tableData" border style="width:100%;" v-loading.fullscreen.lock="loading" :height="componenToptions.tableHeight" @sort-change="onSortChange">
+            <el-table-column :prop="item.name" :label="item.label" :width="item.width||150" v-if="!item.is_hide" v-for="item in columns" :key="item.name" :sortable="true">
                 <template v-slot="scope">
                     <img v-if="item.is_image" :src="getImageSrc(scope.row, item)" :style="getImageStyle(item)">
                     <span v-if="!item.is_image && !item.html">{{item.convert?item.convert(scope.row,scope.rowIndex,item):convert(scope.row, item, scope.rowIndex)}}</span>
@@ -52,7 +52,7 @@ export default {
     data() {
         var options = this.options || {}
         var base = this.base || {}
-        this._log(this.actions)
+        //this._log(this.actions)
 
         return {
             tableData: [],
@@ -63,12 +63,16 @@ export default {
             pagination: {
                 pageSizes: globals.pageSizes,
                 pageSize: 20,
+                totalPages:0,
                 total: 0,
                 current: 1
             }
         }
     },
     methods: {
+        onSortChange({ column, prop, order }) {
+            //this._log(column, prop, order)
+        },
         handleSizeChange(pageSize) {
             this.pagination.pageSize = pageSize
             this.loadList()

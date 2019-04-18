@@ -20,10 +20,7 @@
                     <el-button type="text" @click="selectRow(scope.row)">{{scope.row.product.productname}}</el-button>
                 </template>
             </el-table-column>
-            <el-table-column prop="label" :label="_label('chima')" width="100" align="center">
-                <template v-slot="scope">
-                    {{scope.row.sizecontent.getLabel()}}
-                </template>
+            <el-table-column  prop="sizecontent_label" :label="_label('chima')" width="100" align="center" sortable>
             </el-table-column>
             <el-table-column prop="warehouseid" sortable :label="_label('cangku')" width="100" align="center">
                 <template v-slot="scope">

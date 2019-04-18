@@ -140,15 +140,16 @@ const props = {
         }*/
     },
 
-    "materialnote": {
-        columns: [{
-            name: "content",
-            label: _label("caizhibeizhu"),
-            is_multiple: true,
-            is_focus: true
-        }],
-        controller: "materialnote",
-        key_column: "content"
+    "currency": {
+        columns: [
+            { name: "name", label: _label("mingcheng"), is_multiple: true,  is_focus: true }, 
+            { name: "code", label: _label("bianma") }
+        ],
+        controller: "currency",
+        key_column: "name"/*,
+        options:{
+            tableHeight:getAvailableHeight()
+        }*/
     },
 
     "material": {
@@ -462,8 +463,23 @@ const props = {
             dialogWidth:'800px',
             inline:true
         }
+    },
+    "price":{
+        columns: [
+            { name: "brandid", label: _label("pinpai"), type:"select", source:"brand"},
+            { name: "brandgroupid", label: _label("pinlei"), type:"select", source:"brandgroup", trigger:"brandgroupchildid"},
+            { name: "brandgroupchildid", label: _label("zipinlei"), type:"select", source:"brandgroupchild"},
+            { name: "ageseasonid", label: _label("niandai"), type:"select", source:"ageseason"},
+            { name: "seriesid", label: _label("xilie"), type:"select", source:"series"},
+            { name: "discount", label: _label("xishu") }
+        ],
+        controller: "price",
+        auth: "price",
+        options:{
+            dialogWidth:"400px", 
+            autoreload:true
+        }
     }
-
 }
 
 const getComponent = function(name) {
