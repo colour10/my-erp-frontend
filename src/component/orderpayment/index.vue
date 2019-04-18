@@ -1,18 +1,10 @@
 <template>
     <div style="width:100%">
-        <el-form class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini">
-            <el-row :gutter="0">
-                <el-col :span="6">
-                    <el-form-item :label="_label('dingda')">
-                        <simple-select v-model="form.warehouseid" source="warehouse" :lang="_label('lang')"></simple-select>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="6">
-                    <el-row type="flex" justify="start">
-                        <as-button type="primary" @click="search()">{{_label("chaxun")}}</as-button>
-                    </el-row>
-                </el-col>
-            </el-row>
+        <el-form :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini">
+            <el-form-item :label="_label('dingda')">
+                <simple-select v-model="form.warehouseid" source="warehouse" :lang="_label('lang')"></simple-select>
+                <as-button type="primary" @click="search()">{{_label("chaxun")}}</as-button>
+            </el-form-item>
         </el-form>
         <sp-table :data="searchresult" border style="width:100%;">
             <el-table-column prop="orderno" :label="_label('dingdanhao')" align="center" sortable>
@@ -45,7 +37,6 @@
 </template>
 
 <script>
-
 import globals, { _label } from '../globals.js'
 import { extract, extend } from '../object.js'
 import { Orderpayment } from "../model.js"

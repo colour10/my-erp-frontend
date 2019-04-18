@@ -162,9 +162,6 @@ const props = {
             label: _label("caizhimingcheng"),
             is_multiple: true,
             is_focus: true
-        }, {
-            name: "englishname",
-            label: _label("yingwenmingcheng")
         }],
         controller: "material",
         key_column: "name"

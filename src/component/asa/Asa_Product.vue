@@ -116,8 +116,8 @@
                                 </simple-select>
                             </el-form-item>
                             <el-form-item :label="_label('xingbie')">
-                                <sp-checkboxgroup v-model="form.gender" source="gender" style="width:150" :lang="lang" class="supermini">
-                                </sp-checkboxgroup>
+                                <sp-radio-group v-model="form.gender" source="gender" style="width:150" :lang="lang" class="supermini">
+                                </sp-radio-group>
                             </el-form-item>
                             <el-form-item :label="_label('jijie')">
                                 <sp-checkboxgroup v-model="form.season" source="season" style="width:150" :lang="lang" class="supermini">
@@ -169,7 +169,7 @@
             </el-tab-pane>
             <el-tab-pane :label="_label('tongkuanduose')" name="colorgroup" :disabled="form.id==''">
                 <auth auth="product">
-                    <searchpanel ref="searchpanel" @select="onSelectProduct"></searchpanel>
+                    <searchpanel ref="searchpanel" @select="onSelectProduct" :filter="searchProductFilter"></searchpanel>
                 </auth>
                 <el-table :data="colors" border style="width:100%;" :header-cell-style="countHeaderStyle">
                     <el-table-column prop="brandcolor" :label="_label('yanse')" width="240" align="center">
@@ -313,6 +313,9 @@ export default {
     methods: {
         onQuit() {
             this.dialogVisible = false
+        },
+        searchProductFilter(product){
+            return this.colors.findIndex(item=>item.id==product.id)<0
         },
         onSubmit() {
             var self = this;

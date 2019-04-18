@@ -44,6 +44,7 @@ import Salesreceive from './component/salesreceive/index.vue'
 import Table from './component/table.js'
 import Authbutton from './component/authbutton.js'
 import Button from './component/button.js'
+import RadioGroup from './component/radio-group.vue'
 
 
 import Page_Home from './component/page/Home.vue'
@@ -93,20 +94,8 @@ const components = [
     CheckboxGroup,
     Table,
     Button,
-    Authbutton/*,
-    Page_Home,
-    Page_Order,
-    Page_Producttemplate,
-    Page_User,
-    Page_Group,
-    Page_Department,
-    Page_Brand,
-    Page_Brandgroup,
-    Page_Sales,
-    Page_Login,
-    Page_Confirmorder,
-    Page_UserModifyPassword,
-    Page_Warehousing*/
+    Authbutton,
+    RadioGroup
 ]
 
 components.forEach(component => {

@@ -63,7 +63,7 @@ import { ProductDetail } from "../model.js"
 
 export default {
     name: "asa-search-panel",
-    props: {},
+    props: ['filter'],
     data() {
         return {
             is_show: false,
@@ -93,7 +93,7 @@ export default {
             self._fetch("/product/search", self.form).then(function(res) {
                 self.searchresult = []
                 //self._log(res)
-                res.data.forEach(function(item) {
+                res.data.filter(item=>typeof(self.filter)=='function'? self.filter(item):true).forEach(function(item) {
                     ProductDetail.get(item, function(result) {
                         //self._log(result)
                         self.searchresult.push(result)

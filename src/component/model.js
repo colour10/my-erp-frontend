@@ -162,7 +162,11 @@ const ProductDetail = Object.assign(createModel("product"),{
                 return 
             }
 
-            let list = row.product_group.split('|').map(item=>item.split(','))
+            let product_group = row.product_group || ""
+            if(product_group=='') {
+                return resolve([])
+            }
+            let list = product_group.split('|').map(item=>item.split(','))
 
             brandcolor.getData(function(data){
                 let array = list.map(function(item){

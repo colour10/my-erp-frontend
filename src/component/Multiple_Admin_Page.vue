@@ -1,15 +1,26 @@
 <template>
     <div>
         <el-row>
-            <el-col :span="2">
-                <auth :auth="controller">
-                    <as-button type="primary" @click="showFormToCreate()">{{_label("xinjian")}}</as-button>
-                </auth>
+            <el-col :span="24">
+                <slot name="form">
+                    <el-form ref="search-form" :model="form" label-width="80px" size="mini" :inline="true" @submit.native.prevent>
+                        <el-row :gutter="0">
+                            <el-col :span="24">
+                                <el-form-item>
+                                    <el-input v-model="searchform.keyword" width="250" style="width:250px;" @keyup.enter.native="onSearch"></el-input>
+                                    <as-button type="primary" @click="onSearch" size="mini">{{_label("chaxun")}}</as-button>
+                                    <au-button :auth="controller" type="primary" @click="showFormToCreate()">{{_label("xinjian")}}</au-button>
+                                </el-form-item>                                
+                            </el-col>
+                        </el-row>
+                    </el-form>
+                </slot>                
             </el-col>
         </el-row>
         <el-row :gutter="20">
             <el-col :span="24">
-                <multiple-admin-tablelist ref="tablelist" :controller="controller" :key_column="key_column" :columns="columns" :buttons="buttons" :options="options" :base="base" :actions="actions" :onclickupdate="showFormToUpdate"></multiple-admin-tablelist>
+                <multiple-admin-tablelist ref="tablelist" :controller="controller" :key_column="key_column" :columns="columns" :buttons="buttons" :options="options" :base="base" :actions="actions" :onclickupdate="showFormToUpdate">
+                </multiple-admin-tablelist>
             </el-col>
         </el-row>
         <el-dialog class="user-form" :title="formTitle" :visible.sync="dialogVisible" :center="true" :width="componenToptions.dialogWidth||'40%'" :modal="false">
@@ -82,6 +93,8 @@ export default {
         //console.log(columns,form)
 
         return {
+            searchform:{
+            },
             dialogVisible: false,
             form: form,
             rowIndex: "",
@@ -115,6 +128,11 @@ export default {
                     }
                 })
             }
+        },
+        onSearch() {
+            let self = this
+            self._log(self.searchform)
+            self.$refs.tablelist.search(self.searchform)
         },
         showFormToCreate() {
             var self = this;

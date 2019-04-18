@@ -1,18 +1,10 @@
 <template>
     <div style="width:100%">
-        <el-form class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini">
-            <el-row :gutter="0">
-                <el-col :span="6">
-                    <el-form-item :label="_label('dingda')">
-                        <simple-select v-model="form.warehouseid" source="warehouse" :lang="_label('lang')"></simple-select>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="6">
-                    <el-row type="flex" justify="start">
-                        <as-button type="primary" @click="search()">{{_label("chaxun")}}</as-button>
-                    </el-row>
-                </el-col>
-            </el-row>
+        <el-form :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini">
+            <el-form-item :label="_label('dingda')">
+                <simple-select v-model="form.warehouseid" source="warehouse" :lang="_label('lang')"></simple-select>
+                <as-button type="primary" @click="search()">{{_label("chaxun")}}</as-button>
+            </el-form-item>
         </el-form>
         <sp-table :data="searchresult" border style="width:100%;">
             <el-table-column prop="orderno" :label="_label('dingdanhao')" align="center" sortable>
@@ -45,8 +37,8 @@
 </template>
 
 <script>
-import globals,{ _label } from '../globals.js'
-import { extract,extend } from '../object.js'
+import globals, { _label } from '../globals.js'
+import { extract, extend } from '../object.js'
 import { Salesreceive } from "../model.js"
 import Simple_Form from "../Simple_Form.vue"
 
@@ -54,7 +46,7 @@ import Simple_Form from "../Simple_Form.vue"
 export default {
     name: 'asapage-salesreceive',
     components: {
-        "simpleform":Simple_Form
+        "simpleform": Simple_Form
     },
     props: {},
     data() {
@@ -65,11 +57,11 @@ export default {
                 warehouseid: ""
             },
             searchresult: [],
-            pagination:{
-                pageSizes:globals.pageSizes,
-                pageSize:15,
-                total:0,
-                current:1
+            pagination: {
+                pageSizes: globals.pageSizes,
+                pageSize: 15,
+                total: 0,
+                current: 1
             }
         }
     },
@@ -83,23 +75,23 @@ export default {
             self.searchresult = []
             result.data.forEach(async function(item) {
                 let row = await Salesreceive.load({ data: item, depth: 1 })
-                //self._log("Orderpayment Record", row)
+                    //self._log("Orderpayment Record", row)
                 self.searchresult.push(row)
             })
 
-            extend(self.pagination,result.pagination)
+            extend(self.pagination, result.pagination)
         },
-        confirmPayment({$index, row}) {
+        confirmPayment({ $index, row }) {
             let self = this;
             row.orderno = row.sales.orderno
-            self.$refs['salesreceive'].setInfo(row).setDisabled(['payment_type', 'amount', 'currency'], true)._setting({submitButtonText:_label('querenfukuan')}).show()
+            self.$refs['salesreceive'].setInfo(row).setDisabled(['payment_type', 'amount', 'currency'], true)._setting({ submitButtonText: _label('querenfukuan') }).show()
             self.index = $index
         },
         async onConfirm(form) {
             let self = this;
             //this._log("确认保存",form)
-            self._confirm(_label("confirm-payment?"), async ()=>{
-                let result = await self._submit("/salesreceive/confirm", extract(form,['id','paymentdate','memo']))
+            self._confirm(_label("confirm-payment?"), async() => {
+                let result = await self._submit("/salesreceive/confirm", extract(form, ['id', 'paymentdate', 'memo']))
                 let info = extend(form, result.data)
                 self.$refs['salesreceive'].setInfo(info)
 
@@ -110,7 +102,7 @@ export default {
             this.pagination.pageSize = pageSize
             this.loadList()
         },
-        handleCurrentChange(current){
+        handleCurrentChange(current) {
             this.pagination.current = current
             this.loadList()
         }

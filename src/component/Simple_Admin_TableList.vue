@@ -1,7 +1,7 @@
 <template>
     <div>
         <sp-table :data="tableData" border style="width: 100%;" :height="tableHeight">
-            <el-table-column :prop="item.name" :label="item.label" :width="item.width||180" v-if="!item.is_hide" v-for="item in columns" :key="item.name" :sortable="true">
+            <el-table-column :prop="item.name" :label="item.label" :width="item.width||180" v-if="!item.is_hide" v-for="item in columns" :key="item.name" :sortable="!item.is_image">
                 <template v-slot="scope">
                     <img v-if="item.is_image" :src="getImageSrc(scope.row, item)" :style="getImageStyle(item)">
                     <span v-if="!item.is_image" :style="getStyle(item,scope.row)">{{item.convert?item.convert(scope.row,scope.rowIndex,item):convert(scope.row,item, rowIndex)}}</span>
@@ -52,10 +52,15 @@ export default {
                 total: 0,
                 current: 1
             },
-            localOptions
+            localOptions,
+            searchform:{}
         }
     },
     methods: {
+        search(params) {
+            this.searchform = extend({},params)
+            this.loadList()
+        },
         handleSizeChange(pageSize) {
             this.pagination.pageSize = pageSize
             this.loadList()
@@ -176,17 +181,10 @@ export default {
             var self = this;
             self.tableData = []
 
-            let params = {
+            let params = extend( {
                 page: self.pagination.current,
                 pageSize: self.pagination.pageSize
-            }
-
-            if (self.base) {
-                Object.keys(self.base).forEach(function(key) {
-                    params[key] = self.base[key]
-                });
-                //self._log(self.base)
-            }
+            }, self.searchform, self.base)
 
             var obj = {}
             var columns = self.columns;

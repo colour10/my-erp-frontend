@@ -1,8 +1,16 @@
 <template>
     <div>
         <el-row>
-            <el-col :span="2">
-                <au-button :auth="authname" type="primary" @click="showFormToCreate()" v-if="hideCreate!==true">{{_label("xinjian")}}</au-button>
+            <el-col :span="24">
+                <slot name="form">
+                    <el-form ref="search-form" :model="form" label-width="80px" size="mini" :inline="true" @submit.native.prevent>
+                        <el-form-item>
+                            <el-input v-model="searchform.keyword" width="250" style="width:250px;" @keyup.enter.native="onSearch"></el-input>
+                            <as-button type="primary" @click="onSearch" size="mini">{{_label("chaxun")}}</as-button>
+                            <au-button :auth="authname" type="primary" @click="showFormToCreate()" v-if="hideCreate!==true">{{_label("xinjian")}}</au-button>
+                        </el-form-item>
+                    </el-form>
+                </slot>
             </el-col>
         </el-row>
         <el-row :gutter="20">
@@ -34,12 +42,12 @@
 </template>
 
 <script>
-import globals,{_label} from './globals.js'
+import globals, { _label } from './globals.js'
 import Bus from './bus.js'
 
 export default {
     name: 'simple-admin-page',
-    props: ['columns', 'buttons', "options", "controller", "base", "auth", "hideCreate",'actions'],
+    props: ['columns', 'buttons', "options", "controller", "base", "auth", "hideCreate", 'actions'],
     components: {
 
     },
@@ -65,18 +73,24 @@ export default {
             formTitle: "",
             lang: _label("lang"),
             componenToptions: options,
-            authname: authname
+            authname: authname,
+            searchform:{}
         }
     },
     methods: {
         onQuit() {
             this.dialogVisible = false
         },
-        onChange(column){
+        onSearch() {
+            let self = this
+            //self._log(self.searchform)
+            self.$refs.tablelist.search(self.searchform)
+        },
+        onChange(column) {
             let self = this;
             self._log(column)
-            
-            if(column.trigger) {
+
+            if (column.trigger) {
                 let value = self.form[column.name]
                 self._log(self.$refs[column.trigger])
                 self.$refs[column.trigger][0].load(value)
@@ -87,23 +101,21 @@ export default {
             self.form.lang = self.lang;
             if (self.form.id == "") {
                 self._submit("/" + self.controller + "/add", self.form).then(function() {
-                    if(self.componenToptions.autoreload==true) {
+                    if (self.componenToptions.autoreload == true) {
                         self.$refs.tablelist.loadList()
-                    }
-                    else {
+                    } else {
                         self.$refs.tablelist.appendRow(globals.clone(self.form))
-                    }                    
+                    }
 
                     if (self.auto_hide !== false) {
                         self.dialogVisible = false
                     }
                 })
             } else {
-                self._submit("/" + self.controller + "/edit", self.form).then(function() {                    
-                    if(self.componenToptions.autoreload==true) {
+                self._submit("/" + self.controller + "/edit", self.form).then(function() {
+                    if (self.componenToptions.autoreload == true) {
                         self.$refs.tablelist.loadList()
-                    }
-                    else {
+                    } else {
                         let row = self.$refs.tablelist.getRow(self.rowIndex)
                         globals.copyTo(self.form, row)
                     }

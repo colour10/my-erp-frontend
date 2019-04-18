@@ -82,6 +82,7 @@ export default {
             
             if (value == '') {
                 self.checkList = []
+                self.currentText = ""
             } else {
                 //self._log("convertValue", value)
                 self.checkList = value.split(',')

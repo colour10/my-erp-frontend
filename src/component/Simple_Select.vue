@@ -1,5 +1,5 @@
 <template>
-    <el-select v-model="currentValue" :placeholder="qingxuanze" style="width:150" @change="handleChange" filterable :disabled="disabled" :clearable="clearable">
+    <el-select v-model="currentValue" :placeholder="placeholder" style="width:150" @change="handleChange" filterable :disabled="disabled" :clearable="clearable">
         <el-option v-for="(item,key) in data" :key="item.getKeyValue()" :label="item.getLabelValue()" :value="item.getKeyValue()"></el-option>
     </el-select>
 </template>
@@ -34,6 +34,10 @@ export default {
         },
         lazy: {
 
+        },
+        placeholder:{
+            type:String,
+            default:_label('qingxuanze')
         }
     },
     model: {
@@ -51,14 +55,13 @@ export default {
         return {
             currentValue: value,
             data: [],
-            dataSource: dataSource,
-            qingxuanze: _label('qingxuanze')
+            dataSource: dataSource
         }
     },
     methods: {
         handleChange(newValue) {
             var self = this
-            self.current(row => self.$emit('change', newValue, row.row))
+            self.current(row => self.$emit('change', newValue, row ? row.row : {}))
 
         },
         current(callback) {

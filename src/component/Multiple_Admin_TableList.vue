@@ -1,5 +1,9 @@
 <template>
     <div>
+        <slot name="form" v-bind:search="loadList">
+            <slot name="create"></slot>
+        </slot>
+        
         <sp-table :data="tableData" border style="width:100%;" v-loading.fullscreen.lock="loading" :height="componenToptions.tableHeight" @sort-change="onSortChange">
             <el-table-column :prop="item.name" :label="item.label" :width="item.width||150" v-if="!item.is_hide" v-for="item in columns" :key="item.name" :sortable="true">
                 <template v-slot="scope">
@@ -66,10 +70,17 @@ export default {
                 totalPages:0,
                 total: 0,
                 current: 1
+            },
+            searchform:{
+
             }
         }
     },
     methods: {
+        search(params) {
+            this.searchform = extend({},params)
+            this.loadList()
+        },
         onSortChange({ column, prop, order }) {
             //this._log(column, prop, order)
         },
@@ -165,7 +176,7 @@ export default {
             var self = this;
             self.tableData = []
 
-            let params = {
+            /*let params = {
                 page: self.pagination.current,
                 pageSize: self.pagination.pageSize
             }
@@ -175,7 +186,11 @@ export default {
                     params[key] = self.base[key]
                 });
                 //console.log(self.base)
-            }
+            }*/
+            let params = extend( {
+                page: self.pagination.current,
+                pageSize: self.pagination.pageSize
+            }, self.searchform, self.base)
 
             var obj = {}
             var columns = self.columns;

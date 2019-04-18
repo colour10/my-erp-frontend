@@ -22,7 +22,7 @@ options["test.datalist"] = {
 //options["currency"] = {url:'http://erp.localhost.com/common/currency',oplabel:'name', opvalue:'code'}
 
 //品牌
-options["brand"] = {url:'/l/brand',oplabel:'name', opvalue:'id'}
+options["brand"] = {url:'/l/brand',oplabel:'name_en', opvalue:'id'}
 
 //国家及地区
 options["country"] = {url:'/l/country',oplabel:'name', opvalue:'id', model:'country'}

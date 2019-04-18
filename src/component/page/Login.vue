@@ -80,7 +80,7 @@ export default {
         doAction(action) {
             var self = this
 
-            self._log("action", action, self.$route)
+            //self._log("action", action, self.$route)
             if (action == 'logout') {
                 self._fetch("/login/logout", {}).then(function(res) {
                     self.$store.commit("logout")
@@ -133,7 +133,7 @@ export default {
     },
     mounted: function() {
         var self = this
-        self._log("mounted", self.$route.params)
+        //self._log("mounted", self.$route.params)
         self.doAction(self.$route.params.action)
     }
 }
