@@ -1,15 +1,15 @@
 <template>
     <div>
         <el-input :placeholder="placeholder" v-model="currentText" :readonly="true">
-            <el-button slot="append" icon="el-icon-more" @click="dialogVisible = true"></el-button>
+            <as-button slot="append" icon="el-icon-more" @click="dialogVisible = true"></as-button>
         </el-input>
         <el-dialog class="user-form" :title="_label('qingxuanze')" :visible.sync="dialogVisible" :center="true" :width="componenToptions.dialogWidth||'40%'" :modal="false">
             <el-checkbox-group v-model="checkList" @change="handleChange">
                 <el-checkbox :label="item.id" v-for="(item,key) in data" :key="item.id">{{item.name}}</el-checkbox>
             </el-checkbox-group>
             <div slot="footer" class="dialog-footer" v-if="!auto_model">
-                <el-button type="primary" @click="handleSelect">{{_label("ok")}}</el-button>
-                <el-button @click="handleCancel">{{_label("cancel")}}</el-button>
+                <as-button type="primary" @click="handleSelect">{{_label("ok")}}</as-button>
+                <as-button @click="handleCancel">{{_label("cancel")}}</as-button>
             </div>
         </el-dialog>
     </div>

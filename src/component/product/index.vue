@@ -3,7 +3,7 @@
         <el-row>
             <el-col :span="2">
                 <auth auth="product">
-                    <el-button type="primary" @click="showFormToCreate()">{{_label("button-create")}}</el-button>
+                    <as-button type="primary" @click="showFormToCreate()">{{_label("button-create")}}</as-button>
                 </auth>
             </el-col>
         </el-row>

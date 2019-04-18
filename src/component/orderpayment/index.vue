@@ -9,7 +9,7 @@
                 </el-col>
                 <el-col :span="6">
                     <el-row type="flex" justify="start">
-                        <el-button type="primary" @click="search()">{{_label("chaxun")}}</el-button>
+                        <as-button type="primary" @click="search()">{{_label("chaxun")}}</as-button>
                     </el-row>
                 </el-col>
             </el-row>
@@ -33,7 +33,7 @@
             <el-table-column :label="_label('caozuo')" align="center">
                 <template v-slot="scope">
                     <auth auth="payment-confirm">
-                        <el-button size="mini" @click="confirmPayment(scope)">{{_label("xiangqing")}}</el-button>
+                        <as-button size="mini" @click="confirmPayment(scope)">{{_label("xiangqing")}}</as-button>
                     </auth>
                 </template>
             </el-table-column>

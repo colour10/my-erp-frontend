@@ -14,8 +14,8 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="6">
-                    <el-button size="mini" type="primary" @click="onSearch">{{_label("chaxun")}}</el-button>
-                    <el-button size="mini" type="primary" @click="onSelect">{{_label("querensuoxuan")}}</el-button>
+                    <as-button size="mini" type="primary" @click="onSearch">{{_label("chaxun")}}</as-button>
+                    <as-button size="mini" type="primary" @click="onSelect">{{_label("querensuoxuan")}}</as-button>
                 </el-col>
             </el-row>
         </el-form>

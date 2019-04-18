@@ -9,16 +9,16 @@
             </el-table-column>
             <el-table-column :label="item.label" align="center" :width="item.width||180" v-for="item in buttons" :key="item.label">
                 <template v-slot="scope">
-                    <el-button type="text" @click="item.handler(scope.$index, scope.row, item)">{{item.label}}</el-button>
+                    <as-button type="text" @click="item.handler(scope.$index, scope.row, item)">{{item.label}}</as-button>
                 </template>
             </el-table-column>
             <el-table-column :label="_label('caozuo')" :width="localOptions.action_width||150" align="center">
                 <template v-slot="scope">
-                    <el-button size="mini" @click="handleClickUpdate(scope.$index, scope.row)" v-if="isEditable(scope.row)">{{_label('bianji')}}</el-button>
+                    <as-button size="mini" @click="handleClickUpdate(scope.$index, scope.row)" v-if="isEditable(scope.row)">{{_label('bianji')}}</as-button>
                     <auth :auth="authname||controller">
-                        <el-button size="mini" type="danger" @click="onClickDelete(scope.$index, scope.row)" v-if="isDeletable(scope.row)">{{_label('shanchu')}}</el-button>
+                        <as-button size="mini" type="danger" @click="onClickDelete(scope.$index, scope.row)" v-if="isDeletable(scope.row)">{{_label('shanchu')}}</as-button>
                     </auth>
-                    <el-button size="mini" @click="handleAction(scope,item)" v-for="item in actions" :key="item.label" v-if="isShow(item)">{{item.label}}</el-button>
+                    <as-button size="mini" @click="handleAction(scope,item)" v-for="item in actions" :key="item.label" v-if="isShow(item)">{{item.label}}</as-button>
                 </template>
             </el-table-column>
         </sp-table>

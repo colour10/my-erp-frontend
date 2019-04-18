@@ -2,7 +2,7 @@
     <div>
         <el-row>
             <el-col :span="2">
-                <auth auth="group"><el-button type="primary" @click="showFormToCreate()">{{_label("xinjian")}}</el-button></auth>
+                <auth auth="group"><as-button type="primary" @click="showFormToCreate()">{{_label("xinjian")}}</as-button></auth>
             </el-col>
         </el-row>
         <el-row :gutter="20">
@@ -18,15 +18,15 @@
                             <el-input :ref="item.name" @keyup.enter.native="onSubmit" v-if="!item.type||item.type=='input'" v-model="form[item.name]"></el-input>
                         </el-form-item>
                         <el-form-item>
-                            <auth auth="group"><el-button type="primary" @click="onSubmit">{{_label("baocun")}}</el-button></auth>
-                            <el-button type="primary" @click="onQuit">{{_label("tuichu")}}</el-button>
+                            <auth auth="group"><as-button type="primary" @click="onSubmit">{{_label("baocun")}}</as-button></auth>
+                            <as-button type="primary" @click="onQuit">{{_label("tuichu")}}</as-button>
                         </el-form-item>
                     </el-form>
                 </el-tab-pane>
                 <el-tab-pane :label="_label('quanxian')" :disabled="!form.id">
                     <el-tree ref="tree" :data="permission_data" node-key="id" show-checkbox :expand-on-click-node="false"></el-tree>
-                    <auth auth="group"><el-button type="primary" @click="onSavePermission">{{_label("baocun")}}</el-button></auth>
-                    <el-button type="primary" @click="onQuit">{{_label("tuichu")}}</el-button>
+                    <auth auth="group"><as-button type="primary" @click="onSavePermission">{{_label("baocun")}}</as-button></auth>
+                    <as-button type="primary" @click="onQuit">{{_label("tuichu")}}</as-button>
                 </el-tab-pane>
                 <el-tab-pane :label="_label('zuneirenyuan')" name="user-list" :disabled="!form.id">
                     <el-table :data="user_list" stripe border style="width: 100%;">
@@ -36,13 +36,13 @@
                         </el-table-column>
                         <el-table-column :label="_label('caozuo')" width="150" align="center">
                             <template v-slot="scope">
-                                <auth auth="group"><el-button size="mini" type="danger" @click="handleDeleteUser(scope.$index, scope.row)">{{_label("shanchu")}}</el-button></auth>
+                                <auth auth="group"><as-button size="mini" type="danger" @click="handleDeleteUser(scope.$index, scope.row)">{{_label("shanchu")}}</as-button></auth>
                             </template>
                         </el-table-column>
                     </el-table>
                     <el-row>
                         <el-col :span="24" style="text-align:center;">
-                            <el-button type="primary" @click="onQuit">{{_label("tuichu")}}</el-button>
+                            <as-button type="primary" @click="onQuit">{{_label("tuichu")}}</as-button>
                         </el-col>
                     </el-row>
                 </el-tab-pane>

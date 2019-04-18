@@ -140,9 +140,9 @@
                     <el-row :gutter="0">
                         <el-col :span="6" :offset="9">
                             <auth auth="product">
-                                <el-button type="primary" @click="onSubmit" v-if="option.isedit">{{_label("baocun")}}</el-button>
+                                <as-button type="primary" @click="onSubmit" v-if="option.isedit">{{_label("baocun")}}</as-button>
                             </auth>
-                            <el-button type="primary" @click="onQuit">{{_label("tuichu")}}</el-button>
+                            <as-button type="primary" @click="onQuit">{{_label("tuichu")}}</as-button>
                         </el-col>
                     </el-row>
                 </el-form>
@@ -162,9 +162,9 @@
                 </el-table>
                 <el-col :offset="9" :span="6">
                     <auth auth="product">
-                        <el-button type="primary" @click="onSaveGoodsCode" v-if="option.isedit">{{_label("baocun")}}</el-button>
+                        <as-button type="primary" @click="onSaveGoodsCode" v-if="option.isedit">{{_label("baocun")}}</as-button>
                     </auth>
-                    <el-button type="primary" @click="onQuit">{{_label("tuichu")}}</el-button>
+                    <as-button type="primary" @click="onQuit">{{_label("tuichu")}}</as-button>
                 </el-col>
             </el-tab-pane>
             <el-tab-pane :label="_label('tongkuanduose')" name="colorgroup" :disabled="form.id==''">
@@ -203,19 +203,15 @@
                     <el-table-column prop="goods_code" :label="_label('caozuo')" width="150" align="center">
                         <template v-slot="scope">
                             <auth auth="product">
-                                <el-button type="danger" @click="onDeleteColorGroup(scope, scope.row)" v-if="option.isedit && form.id!=scope.row.id">{{_label("shanchu")}}</el-button>
+                                <as-button type="danger" @click="onDeleteColorGroup(scope, scope.row)" v-if="option.isedit && form.id!=scope.row.id">{{_label("shanchu")}}</as-button>
                             </auth>
                         </template>
                     </el-table-column>
                 </el-table>
                 <el-col :offset="8" :span="8" style="padding-top:5px">
-                    <auth auth="product">
-                        <div>
-                            <el-button type="primary" @click="onSaveColorGroup" v-if="option.isedit">{{_label("baocun")}}</el-button>
-                            <el-button type="primary" @click="onAppendColor" v-if="option.isedit">{{_label("zhuijia")}}</el-button>
-                        </div>
-                    </auth>
-                    <el-button type="primary" @click="onQuit">{{_label("tuichu")}}</el-button>
+                    <au-button auth="product" type="primary" @click="onSaveColorGroup" v-if="option.isedit">{{_label("baocun")}}</au-button>
+                    <au-button auth="product" type="primary" @click="onAppendColor" v-if="option.isedit">{{_label("zhuijia")}}</au-button>                    
+                    <as-button type="primary" @click="onQuit">{{_label("tuichu")}}</as-button>
                 </el-col>
             </el-tab-pane>
             <el-tab-pane :label="_label('shangpinshuxing')" name="property" :disabled="form.id==''">

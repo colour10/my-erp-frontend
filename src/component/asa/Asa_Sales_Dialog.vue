@@ -57,21 +57,21 @@
                     <el-col :span="6">
                         <auth auth="sales">
                             <el-row type="flex" justify="start">
-                                <el-button :type="canYushou?'primary':'info'" @click="yushou()">{{_label("yushou")}}</el-button>
-                                <el-button :type="canTijiao?'primary':'info'" @click="tijiao()">{{_label("tijiao")}}</el-button>
-                                <el-button :type="form.id>0 && form.status!=2 ?'primary':'info'" @click="showAttachment()">{{_label("fujian")}}</el-button>
+                                <as-button :type="canYushou?'primary':'info'" @click="yushou()">{{_label("yushou")}}</as-button>
+                                <as-button :type="canTijiao?'primary':'info'" @click="tijiao()">{{_label("tijiao")}}</as-button>
+                                <as-button :type="form.id>0 && form.status!=2 ?'primary':'info'" @click="showAttachment()">{{_label("fujian")}}</as-button>
                                 <el-tooltip class="item" effect="dark" content="Right Bottom 提示文字" placement="bottom">
-                                    <el-button :type="canZuofei?'primary':'info'" @click="zuofei()">{{_label("zuofei")}}</el-button>
+                                    <as-button :type="canZuofei?'primary':'info'" @click="zuofei()">{{_label("zuofei")}}</as-button>
                                 </el-tooltip>
                             </el-row>
                         </auth>
                         <auth auth="sales">
                             <el-row>
-                                <el-button type="primary" @click="addReceive">{{_label("tianjiashoukuan")}}</el-button>
+                                <as-button type="primary" @click="addReceive">{{_label("tianjiashoukuan")}}</as-button>
                             </el-row>
                         </auth>
                         <el-row>
-                            <el-button type="primary" @click="onQuit">{{_label("tuichu")}}</el-button>
+                            <as-button type="primary" @click="onQuit">{{_label("tuichu")}}</as-button>
                         </el-row>
                     </el-col>
                 </el-row>
@@ -129,7 +129,7 @@
                         </el-table-column>
                         <el-table-column :label="_label('caozuo')" width="150" align="center">
                             <template v-slot="scope">
-                                <el-button size="mini" type="danger" @click="deleteRow(scope.$index, scope.row)">{{_label('shanchu')}}</el-button>
+                                <as-button size="mini" type="danger" @click="deleteRow(scope.$index, scope.row)">{{_label('shanchu')}}</as-button>
                             </template>
                         </el-table-column>
                     </el-table>

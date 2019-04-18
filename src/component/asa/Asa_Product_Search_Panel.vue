@@ -9,9 +9,9 @@
                         <el-input v-model="form.wordcode_3" style="width:110px;"></el-input>
                         <el-input v-model="form.wordcode_4" style="width:110px;"></el-input>
                     </el-form-item>
-                    <el-button type="primary" @click="search" v-if="option.isedit" size="mini">{{_label("tijiao")}}</el-button>
-                    <el-button type="primary" @click="clear" v-if="option.isedit" size="mini">{{_label("qingkong")}}</el-button>
-                    <el-checkbox v-model="is_show">高级搜索</el-checkbox>
+                    <as-button type="primary" @click="search" v-if="option.isedit" size="mini">{{_label("tijiao")}}</as-button>
+                    <as-button type="primary" @click="clear" v-if="option.isedit" size="mini">{{_label("qingkong")}}</as-button>
+                    <el-checkbox v-model="is_show">{{_label("as-button")}}</el-checkbox>
                 </el-col>
             </el-row>
             <el-row :gutter="0" v-show="is_show">
@@ -48,7 +48,7 @@
                     <el-table-column prop="childbrand_label" :label="_label('zipinlei')" width="120" align="center"> </el-table-column>
                     <el-table-column :label="_label('caozuo')" width="100" align="center">
                         <template v-slot="scope">
-                            <el-button size="mini" type="primary" @click="selectRow(scope.row)">{{_label('xuanze')}}</el-button>
+                            <as-button size="mini" type="primary" @click="selectRow(scope.row)">{{_label('xuanze')}}</as-button>
                         </template>
                     </el-table-column>
                 </el-table>

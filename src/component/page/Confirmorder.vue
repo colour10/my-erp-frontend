@@ -2,7 +2,7 @@
     <div>
         <el-row>
             <el-col :span="2">
-                <auth auth="confirmorder-submit"><el-button type="primary" @click="showFormToCreate()">{{_label('xinjian')}}</el-button></auth>
+                <auth auth="confirmorder-submit"><as-button type="primary" @click="showFormToCreate()">{{_label('xinjian')}}</as-button></auth>
             </el-col>
         </el-row>
         <el-row :gutter="20">

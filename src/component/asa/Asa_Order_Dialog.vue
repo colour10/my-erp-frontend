@@ -83,39 +83,31 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                        <auth auth="order-submit">
-                            <el-row type="flex" justify="start">
-                                <el-button :type="canSubmit?'primary':'info'" @click="saveOrder(1)">{{_label("baocun")}}</el-button>
-                                <el-button :type="canSubmit?'primary':'info'" @click="saveOrder(2)">{{_label("tijiaoshenhe")}}</el-button>
-                                <el-button :type="canDelete?'primary':'info'" @click="deleteOrder()">{{_label("shanchu")}}</el-button>
-                            </el-row>
-                        </auth>
-                        <auth auth="order-confirm">
-                            <el-row type="flex" justify="start">
-                                <el-button :type="canConfirm?'primary':'info'" @click="confirmOrder(1)">{{_label("tuihui")}}</el-button>
-                                <el-button :type="canConfirm?'primary':'info'" @click="confirmOrder(3)">{{_label("shenhetongguo")}}</el-button>
-                                <el-button :type="canCancel?'primary':'info'" @click="cancelConfirm()">{{_label("quxiaoshenhe")}}</el-button>
-                            </el-row>
-                        </auth>
-                        <auth auth="order-finish">
-                            <el-row type="flex" justify="start">
-                                <el-button :type="canFinish?'primary':'info'" @click="finishOrder()">{{_label("dingdanwajie")}}</el-button>
-                            </el-row>
-                        </auth>
-                        <auth auth="order-submit">
-                            <el-row>
-                                <el-button type="primary" @click="addPayment">{{_label("tianjiashoukuan")}}</el-button>
-                            </el-row>
-                        </auth>
                         <el-row type="flex" justify="start">
-                            <el-button type="primary" @click="onQuit">{{_label("tuichu")}}</el-button>
+                            <au-button auth="order-submit" :type="canSubmit?'primary':'info'" @click="saveOrder(1)">{{_label("baocun")}}</au-button>
+                            <au-button auth="order-submit" :type="canSubmit?'primary':'info'" @click="saveOrder(2)">{{_label("tijiaoshenhe")}}</au-button>
+                            <au-button auth="order-submit" :type="canDelete?'primary':'info'" @click="deleteOrder()">{{_label("shanchu")}}</au-button>
+                        </el-row>
+                        <el-row type="flex" justify="start">
+                            <au-button auth="order-confirm" :type="canConfirm?'primary':'info'" @click="confirmOrder(1)">{{_label("tuihui")}}</au-button>
+                            <au-button auth="order-confirm" :type="canConfirm?'primary':'info'" @click="confirmOrder(3)">{{_label("shenhetongguo")}}</au-button>
+                            <au-button auth="order-confirm" :type="canCancel?'primary':'info'" @click="cancelConfirm()">{{_label("quxiaoshenhe")}}</au-button>
+                        </el-row>
+                        <el-row type="flex" justify="start">
+                            <au-button auth="order-finish" :type="canFinish?'primary':'info'" @click="finishOrder()">{{_label("dingdanwajie")}}</au-button>
+                        </el-row>
+                        <el-row>
+                            <au-button auth="order-submit" type="primary" @click="addPayment">{{_label("tianjiashoukuan")}}</au-button>
+                        </el-row>
+                        <el-row type="flex" justify="start">
+                            <as-button type="primary" @click="onQuit">{{_label("tuichu")}}</as-button>
                         </el-row>
                     </el-col>
                 </el-row>
             </el-form>
             <el-row type="flex" justify="end">
                 <el-col :offset="22" :span="2">
-                    <el-button v-if="isEditable" :type="buttontype" @click="showProduct()">{{_label("xuanzeshangpin")}}</el-button>
+                    <as-button v-if="isEditable" :type="buttontype" @click="showProduct()">{{_label("xuanzeshangpin")}}</as-button>
                 </el-col>
             </el-row>
             <el-row>
@@ -148,7 +140,7 @@
                         </el-table-column>
                         <el-table-column :label="_label('caozuo')" width="150" align="center" v-if="isEditable">
                             <template v-slot="scope">
-                                <el-button size="mini" type="danger" @click="deleteRow(scope.$index, scope.row)">{{_label('shanchu')}}</el-button>
+                                <as-button size="mini" type="danger" @click="deleteRow(scope.$index, scope.row)">{{_label('shanchu')}}</as-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -166,7 +158,7 @@
 import simple_select from '../Simple_Select.vue'
 import Asa_Select_Product_Dialog from './Asa_Select_Product_Dialog.vue'
 import DataSource from '../DataSource.js'
-import globals,{_label} from "../globals.js"
+import globals, { _label } from "../globals.js"
 import { Product } from "../model.js"
 
 const props = {

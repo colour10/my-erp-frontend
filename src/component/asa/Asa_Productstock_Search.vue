@@ -9,7 +9,7 @@
                 </el-col>
                 <el-col :span="6">
                     <el-row type="flex" justify="start">
-                        <el-button type="primary" @click="search()">{{_label("chaxun")}}</el-button>
+                        <as-button type="primary" @click="search()">{{_label("chaxun")}}</as-button>
                     </el-row>
                 </el-col>
             </el-row>
@@ -33,7 +33,7 @@
             </el-table-column>
             <el-table-column :label="_label('caozuo')" width="150" align="center">
                 <template v-slot="scope">
-                    <el-button size="mini" type="primary" @click="selectRow(scope.row)">{{_label('xuanze')}}</el-button>
+                    <as-button size="mini" type="primary" @click="selectRow(scope.row)">{{_label('xuanze')}}</as-button>
                 </template>
             </el-table-column>
         </el-table>

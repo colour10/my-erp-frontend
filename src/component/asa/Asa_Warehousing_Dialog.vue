@@ -43,19 +43,19 @@
                     <el-col :span="6">
                         <el-row type="flex" justify="start">
                             <auth auth="warehousing">
-                                <el-button :type="form.id>0?'info' :'primary'" @click="saveOrder()">{{_label("baocun")}}</el-button>
+                                <as-button :type="form.id>0?'info' :'primary'" @click="saveOrder()">{{_label("baocun")}}</as-button>
                             </auth>
-                            <el-button type="primary" @click="showAttachment()">{{_label("fujian")}}</el-button>
+                            <as-button type="primary" @click="showAttachment()">{{_label("fujian")}}</as-button>
                         </el-row>
                         <el-row type="flex" justify="start">
-                            <el-button type="primary" @click="onQuit">{{_label("tuichu")}}</el-button>
+                            <as-button type="primary" @click="onQuit">{{_label("tuichu")}}</as-button>
                         </el-row>
                     </el-col>
                 </el-row>
             </el-form>
             <el-row type="flex" justify="end">
                 <el-col :offset="22" :span="2">
-                    <!--<el-button type="primary" @click="showProduct()">{{_label("xuanzeshangpin")}}</el-button>-->
+                    <!--<as-button type="primary" @click="showProduct()">{{_label("xuanzeshangpin")}}</as-button>-->
                 </el-col>
             </el-row>
             <el-row>

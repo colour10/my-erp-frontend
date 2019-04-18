@@ -3,7 +3,7 @@
         <el-row>
             <el-col :span="2">
                 <auth auth="user">
-                    <el-button type="primary" @click="showFormToCreate()">{{_label("button-create")}}</el-button>
+                    <as-button type="primary" @click="showFormToCreate()">{{_label("button-create")}}</as-button>
                 </auth>
             </el-col>
         </el-row>
@@ -69,9 +69,9 @@
             </el-tabs>
             <span slot="footer" class="dialog-footer">
                 <auth auth="user">
-                    <el-button type="primary" @click="onSubmit">{{_label('baocun')}}</el-button>
+                    <as-button type="primary" @click="onSubmit">{{_label('baocun')}}</as-button>
                 </auth>
-                <el-button type="primary" @click="onQuit">{{_label("tuichu")}}</el-button>
+                <as-button type="primary" @click="onQuit">{{_label("tuichu")}}</as-button>
             </span>
         </el-dialog>
     </div>

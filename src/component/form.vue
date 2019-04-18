@@ -18,7 +18,7 @@
         <el-row>
             <el-col :span="24" style="text-align:center;">
                 <auth :auth="authname">
-                    <el-button type="primary" @click="onSubmit" style="margin:auto;" v-if="isEditable(form)">{{setting.submitButtonText}}</el-button>
+                    <as-button type="primary" @click="onSubmit" style="margin:auto;" v-if="isEditable(form)">{{setting.submitButtonText}}</as-button>
                 </auth>
                 <slot name="button"></slot>
             </el-col>

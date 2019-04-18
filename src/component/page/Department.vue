@@ -5,7 +5,7 @@
                 <el-tree ref="tree" :data="data" node-key="id" :props="defaultProps" default-expand-all :expand-on-click-node="false" @node-click="onNodeClick"></el-tree>
             </el-col>
             <el-col :span="7" v-if="form.id>0">
-                <auth auth="department"><el-button type="primary" @click="showDepartCreate" style="margin-bottom:30px;">{{_label('depart-create')}}</el-button></auth>
+                <auth auth="department"><as-button type="primary" @click="showDepartCreate" style="margin-bottom:30px;">{{_label('depart-create')}}</as-button></auth>
                 <el-form ref="form" :model="form" label-width="80px">
                     <el-form-item :label="_label('depart-name')">
                         <el-input v-model="form.name"></el-input>
@@ -15,8 +15,8 @@
                     </el-form-item>
                     <el-form-item>
                         <auth auth="department">
-                        <el-button type="primary" @click="onEdit" :disabled="is_save_disabled">{{_label('button-save')}}</el-button>
-                        <el-button type="danger" @click="deleteDepart" :disabled="is_save_disabled">{{_label('button-delete')}}</el-button>
+                        <as-button type="primary" @click="onEdit" :disabled="is_save_disabled">{{_label('button-save')}}</as-button>
+                        <as-button type="danger" @click="deleteDepart" :disabled="is_save_disabled">{{_label('button-delete')}}</as-button>
                     </auth>
                     </el-form-item>
                 </el-form>
@@ -39,8 +39,8 @@
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer" style="text-align:center">
-                <el-button type="primary" @click="onCreate">{{_label('button-ok')}}</el-button>
-                <el-button @click="dialogTableVisible = false">{{_label('button-cancel')}}</el-button>
+                <as-button type="primary" @click="onCreate">{{_label('button-ok')}}</as-button>
+                <as-button @click="dialogTableVisible = false">{{_label('button-cancel')}}</as-button>
             </div>
         </el-dialog>
     </div>

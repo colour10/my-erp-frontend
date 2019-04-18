@@ -117,27 +117,27 @@
                         <el-row type="flex" justify="start">
                             <au-button auth="confirmorder-submit" :type="canSubmit?'primary':'info'" @click="saveOrder(1)">{{_label("baocun")}}</au-button>
                             <auth auth="confirmorder-submit">                                
-                                <el-button :type="canSubmit?'primary':'info'" @click="saveOrder(2)">{{_label("tijiaoshenhe")}}</el-button>
+                                <as-button :type="canSubmit?'primary':'info'" @click="saveOrder(2)">{{_label("tijiaoshenhe")}}</as-button>
                             </auth>
-                            <el-button :type="form.id?'primary':'info'" @click="showAttachment()">{{_label("fujian")}}</el-button>
+                            <as-button :type="form.id?'primary':'info'" @click="showAttachment()">{{_label("fujian")}}</as-button>
                             <auth auth="confirmorder-submit">
-                                <el-button :type="canDelete?'primary':'info'" @click="deleteOrder()">{{_label("shanchu")}}</el-button>
+                                <as-button :type="canDelete?'primary':'info'" @click="deleteOrder()">{{_label("shanchu")}}</as-button>
                             </auth>
                         </el-row>
                         <auth auth="confirmorder-confirm">
                             <el-row type="flex" justify="start">
-                                <el-button :type="canConfirm?'primary':'info'" @click="confirmOrder(1)">{{_label("tuihui")}}</el-button>
-                                <el-button :type="canConfirm?'primary':'info'" @click="confirmOrder(3)">{{_label("shenhetongguo")}}</el-button>
-                                <el-button :type="canCancel?'primary':'info'" @click="cancelConfirm()">{{_label("quxiaoshenhe")}}</el-button>
+                                <as-button :type="canConfirm?'primary':'info'" @click="confirmOrder(1)">{{_label("tuihui")}}</as-button>
+                                <as-button :type="canConfirm?'primary':'info'" @click="confirmOrder(3)">{{_label("shenhetongguo")}}</as-button>
+                                <as-button :type="canCancel?'primary':'info'" @click="cancelConfirm()">{{_label("quxiaoshenhe")}}</as-button>
                             </el-row>
                         </auth>
                         <auth auth="warehousing">
                             <el-row type="flex" justify="start">
-                                <el-button :type="canCancel?'primary':'info'" @click="createWarehousing()">{{_label("shengchengrukudan")}}</el-button>
+                                <as-button :type="canCancel?'primary':'info'" @click="createWarehousing()">{{_label("shengchengrukudan")}}</as-button>
                             </el-row>
                         </auth>
                         <el-row type="flex" justify="start">
-                            <el-button type="primary" @click="onQuit">{{_label("tuichu")}}</el-button>
+                            <as-button type="primary" @click="onQuit">{{_label("tuichu")}}</as-button>
                         </el-row>
                     </el-col>
                 </el-row>
@@ -145,7 +145,7 @@
             <auth auth="confirmorder-submit">
                 <el-row type="flex" justify="end" v-if="canSubmit">
                     <el-col :offset="22" :span="2">
-                        <el-button type="primary" @click="showProduct()">{{_label("xuanzeshangpin")}}</el-button>
+                        <as-button type="primary" @click="showProduct()">{{_label("xuanzeshangpin")}}</as-button>
                     </el-col>
                 </el-row>
             </auth>

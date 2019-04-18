@@ -10,8 +10,8 @@
     <el-input type="password" v-model="form.confirm_password" autocomplete="off"></el-input>
   </el-form-item>
   <el-form-item>
-    <el-button type="primary" @click="submitForm()">提交</el-button>
-    <el-button @click="resetForm()">重置</el-button>
+    <as-button type="primary" @click="submitForm()">提交</as-button>
+    <as-button @click="resetForm()">重置</as-button>
   </el-form-item>
 </el-form>    
 </template>

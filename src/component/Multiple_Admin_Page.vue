@@ -3,7 +3,7 @@
         <el-row>
             <el-col :span="2">
                 <auth :auth="controller">
-                    <el-button type="primary" @click="showFormToCreate()">{{_label("xinjian")}}</el-button>
+                    <as-button type="primary" @click="showFormToCreate()">{{_label("xinjian")}}</as-button>
                 </auth>
             </el-col>
         </el-row>
@@ -29,16 +29,16 @@
                                     <simple-select :ref="item.name" v-if="item.type=='select'" v-model="form[item.name]" :source="item.source" :lang="lang">
                                     </simple-select>
                                     <el-upload :ref="item.name" :action="'/common/upload?category='+controller" v-if="item.type=='upload'" :multiple="item.multiple || false" :limit="item.limit || 1" :on-success="getUploadSuccessCallback(item)" :on-remove="getRemoveUploadFileCallback(item)">
-                                        <el-button size="small" type="primary">{{_label("shangchuan")}}</el-button>
+                                        <as-button size="small" type="primary">{{_label("shangchuan")}}</as-button>
                                     </el-upload>
                                 </el-form-item>
                             </template>
                         </template>
                         <el-form-item>
                             <auth :auth="controller">
-                                <el-button type="primary" @click="onSubmit">{{_label("baocun")}}</el-button>
+                                <as-button type="primary" @click="onSubmit">{{_label("baocun")}}</as-button>
                             </auth>
-                            <el-button type="primary" @click="onQuit">{{_label("tuichu")}}</el-button>
+                            <as-button type="primary" @click="onQuit">{{_label("tuichu")}}</as-button>
                         </el-form-item>
                     </el-form>
                 </el-col>

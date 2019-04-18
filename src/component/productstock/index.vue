@@ -9,7 +9,7 @@
                 </el-col>
                 <el-col :span="6">
                     <el-row type="flex" justify="start">
-                        <el-button type="primary" @click="search()">{{_label("chaxun")}}</el-button>
+                        <as-button type="primary" @click="search()">{{_label("chaxun")}}</as-button>
                     </el-row>
                 </el-col>
             </el-row>
@@ -17,7 +17,7 @@
         <sp-table :data="searchresult" border style="width:100%;">
             <el-table-column prop="productname" :label="_label('chanpinmingcheng')" align="center" sortable>
                 <template v-slot="scope">
-                    <el-button type="text" @click="selectRow(scope.row)">{{scope.row.product.productname}}</el-button>
+                    <as-button type="text" @click="selectRow(scope.row)">{{scope.row.product.productname}}</as-button>
                 </template>
             </el-table-column>
             <el-table-column  prop="sizecontent_label" :label="_label('chima')" width="100" align="center" sortable>

@@ -10,24 +10,24 @@
             </el-table-column>
             <el-table-column :label="item.label" align="center" :width="item.width||180" v-for="item in buttons" :key="item.label">
                 <template v-slot="scope">
-                    <el-button type="text" @click="item.handler(scope.$index, scope.row, item)">{{item.label}}</el-button>
+                    <as-button type="text" @click="item.handler(scope.$index, scope.row, item)">{{item.label}}</as-button>
                 </template>
             </el-table-column>
             <el-table-column :label="_label('caozuo')" :width="componenToptions.action_width||150" align="center">
                 <template v-slot="scope">
                     <auth :auth="controller">
-                        <el-button size="mini" @click="showFormToUpdate(scope.$index, scope.row)">{{_label("bianji")}}</el-button>
+                        <as-button size="mini" @click="showFormToUpdate(scope.$index, scope.row)">{{_label("bianji")}}</as-button>
                     </auth>
                     <auth :auth="controller">
-                        <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">{{_label("shanchu")}}</el-button>
+                        <as-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">{{_label("shanchu")}}</as-button>
                     </auth>
-                    <el-button size="mini" @click="handleAction(scope,item)" v-for="item in actions" :key="item.label" v-if="isShow(item)">{{item.label}}</el-button>
+                    <as-button size="mini" @click="handleAction(scope,item)" v-for="item in actions" :key="item.label" v-if="isShow(item)">{{item.label}}</as-button>
                 </template>
             </el-table-column>
             <el-table-column prop="lang_code" :label="_label('yuyan')" width="220" align="center">
                 <template v-slot="scope">
                     <template v-for="(item, key) in languages">
-                        <el-button :type="isSettingLanguage(scope.row, item.code)?'primary':'info'" circle style="margin:0px">{{item.shortName}}</el-button>
+                        <as-button :type="isSettingLanguage(scope.row, item.code)?'primary':'info'" circle style="margin:0px">{{item.shortName}}</as-button>
                     </template>
                 </template>
             </el-table-column>

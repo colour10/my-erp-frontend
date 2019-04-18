@@ -38,12 +38,12 @@
                     </el-col>
                     <el-col :span="6">
                         <el-row type="flex" justify="start">
-                            <el-button :type="rowdata.status==2?'primary':'info'" @click="saveOrder(1)">{{_label("zuofei")}}</el-button>
-                            <el-button :type="rowdata.status==2?'primary':'info'" @click="confirmout()">{{_label("chukuqueren")}}</el-button>
-                            <el-button :type="rowdata.status==3?'primary':'info'" @click="confirmin()">{{_label("rukuqueren")}}</el-button>
+                            <as-button :type="rowdata.status==2?'primary':'info'" @click="saveOrder(1)">{{_label("zuofei")}}</as-button>
+                            <as-button :type="rowdata.status==2?'primary':'info'" @click="confirmout()">{{_label("chukuqueren")}}</as-button>
+                            <as-button :type="rowdata.status==3?'primary':'info'" @click="confirmin()">{{_label("rukuqueren")}}</as-button>
                         </el-row>
                         <el-row>
-                            <el-button type="primary" @click="onQuit">{{_label("tuichu")}}</el-button>
+                            <as-button type="primary" @click="onQuit">{{_label("tuichu")}}</as-button>
                         </el-row>
                     </el-col>
                 </el-row>

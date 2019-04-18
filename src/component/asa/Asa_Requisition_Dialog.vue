@@ -22,9 +22,9 @@
                     <el-col :span="6">
                         <el-row type="flex" justify="start">
                             <auth auth="requisition">
-                                <el-button type="primary" @click="saveOrder(1)">{{_label("shenqing")}}</el-button>
+                                <as-button type="primary" @click="saveOrder(1)">{{_label("shenqing")}}</as-button>
                             </auth>
-                            <el-button type="primary" @click="onQuit">{{_label("tuichu")}}</el-button>
+                            <as-button type="primary" @click="onQuit">{{_label("tuichu")}}</as-button>
                         </el-row>
                     </el-col>
                 </el-row>
@@ -64,7 +64,7 @@
                         </el-table-column>
                         <el-table-column :label="_label('caozuo')" width="150" align="center">
                             <template v-slot="scope">
-                                <el-button size="mini" type="danger" @click="deleteRow(scope.$index, scope.row)">{{_label('shanchu')}}</el-button>
+                                <as-button size="mini" type="danger" @click="deleteRow(scope.$index, scope.row)">{{_label('shanchu')}}</as-button>
                             </template>
                         </el-table-column>
                     </el-table>

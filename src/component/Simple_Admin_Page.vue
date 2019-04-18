@@ -26,7 +26,7 @@
             <el-row>
                 <el-col :span="24" style="text-align:center;">
                     <au-button :auth="authname" type="primary" @click="onSubmit" style="margin:auto;">{{_label("baocun")}}</au-button>
-                    <el-button type="primary" @click="onQuit">{{_label("tuichu")}}</el-button>
+                    <as-button type="primary" @click="onQuit">{{_label("tuichu")}}</as-button>
                 </el-col>
             </el-row>
         </el-dialog>

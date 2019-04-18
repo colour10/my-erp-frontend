@@ -13,8 +13,8 @@
             </el-table-column>
         </el-table>
         <el-col :offset="8" :span="8" style="padding:5px">
-            <auth auth="product"><el-button type="primary" @click="onSave" v-if="option.isedit">{{_label("baocun")}}</el-button></auth>
-            <el-button type="primary" @click="onQuit">{{_label("tuichu")}}</el-button>
+            <auth auth="product"><as-button type="primary" @click="onSave" v-if="option.isedit">{{_label("baocun")}}</as-button></auth>
+            <as-button type="primary" @click="onQuit">{{_label("tuichu")}}</as-button>
         </el-col>
     </div>
 </template>

@@ -2,7 +2,7 @@
     <div>
         <el-row>
             <el-col :span="2" :offset="22">
-                <el-button type="primary" @click="showFormToCreate()">{{_label("xinjian")}}</el-button>
+                <as-button type="primary" @click="showFormToCreate()">{{_label("xinjian")}}</as-button>
             </el-col>
         </el-row>
         <el-row :gutter="20">
@@ -20,7 +20,7 @@
                             <simple-select :ref="item.name" v-if="item.type=='select'" v-model="form[item.name]" :source="item.source" :lang="lang">
                             </simple-select>
                             <el-upload :ref="item.name" :action="'/common/upload?category='+controller" v-if="item.type=='upload'" :multiple="item.multiple || false" :limit="item.limit || 1" :on-success="getUploadSuccessCallback(item)" :on-remove="getRemoveUploadFileCallback(item)">
-                                <el-button size="small" type="primary">{{_label("shangchuan")}}</el-button>
+                                <as-button size="small" type="primary">{{_label("shangchuan")}}</as-button>
                             </el-upload>
                         </el-form-item>
                         <el-form-item :label="_label('yuyan')">
@@ -30,8 +30,8 @@
                             </el-select>
                         </el-form-item>
                         <el-form-item>
-                            <el-button type="primary" @click="onSubmit">{{_label("baocun")}}</el-button>
-                            <el-button type="primary" @click="onQuit">{{_label("tuichu")}}</el-button>
+                            <as-button type="primary" @click="onSubmit">{{_label("baocun")}}</as-button>
+                            <as-button type="primary" @click="onQuit">{{_label("tuichu")}}</as-button>
                         </el-form-item>
                     </el-form>
                 </el-tab-pane>
@@ -46,7 +46,6 @@
 <script>
 import globals,{_label} from './globals.js'
 import Multiple_Admin_Page from './Multiple_Admin_Page.vue'
-
 
 const subbase = {}
 

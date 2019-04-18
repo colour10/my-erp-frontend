@@ -43,6 +43,7 @@ import Orderpayment from './component/orderpayment/index.vue'
 import Salesreceive from './component/salesreceive/index.vue'
 import Table from './component/table.js'
 import Authbutton from './component/authbutton.js'
+import Button from './component/button.js'
 
 
 import Page_Home from './component/page/Home.vue'
@@ -51,7 +52,7 @@ import Page_Producttemplate from './component/page/Producttemplate.vue'
 import Page_User from './component/page/User.vue'
 import Page_Group from './component/page/Group.vue'
 import Page_Department from './component/page/Department.vue'
-import Page_Brand from './component/page/Brand.vue'
+import Brand from './component/brand/index.vue'
 import Brandgroup from './component/brandgroup/index.vue'
 import Sizetop from './component/sizetop/index.vue'
 import Product from './component/product/index.vue'
@@ -91,6 +92,7 @@ const components = [
     Auth,
     CheckboxGroup,
     Table,
+    Button,
     Authbutton/*,
     Page_Home,
     Page_Order,
@@ -123,7 +125,7 @@ const routes = [
             {path: '/group', component: Page_Group},
             {path: '/department', component: Page_Department},
             {path: '/productstock', component: Productstock},
-            {path: '/brand', component: Page_Brand},
+            {path: '/brand', component: Brand},
             {path: '/brandgroup', component: Brandgroup},
             {path: '/sizetop', component: Sizetop},
             {path: '/product', component: Product},   

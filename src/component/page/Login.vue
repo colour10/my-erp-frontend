@@ -9,8 +9,8 @@
         </el-form-item>
         <!--<el-checkbox v-model="checked" checked class="remember">记住密码</el-checkbox>-->
         <el-form-item style="width:100%;">
-            <el-button type="primary" style="width:100%;" @click.native.prevent="handleSubmit2" :loading="logining">{{_label("denglu")}}</el-button>
-            <!--<el-button @click.native.prevent="handleReset2">重置</el-button>-->
+            <as-button type="primary" style="width:100%;" @click.native.prevent="handleSubmit2" :loading="logining">{{_label("denglu")}}</as-button>
+            <!--<as-button @click.native.prevent="handleReset2">重置</as-button>-->
         </el-form-item>
     </el-form>
 </template>
