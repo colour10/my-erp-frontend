@@ -1,7 +1,7 @@
 <template>
     <el-row :gutter="10">
         <el-col :span="4" v-for="item in data" :key="item.id" style="margin-bottom: 20px;">
-            <img :src="_label('_image_url_prex')+item.filename" class="avatar" />
+            <img :src="_fileLink(item.filename)" class="avatar" />
         </el-col>
         <auth auth="product">
         <el-col :span="4">

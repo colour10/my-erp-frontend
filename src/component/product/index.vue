@@ -22,8 +22,8 @@ import Product from '../asa/Asa_Product.vue'
 
 var props = {
     columns: [
-        { name: "picture", label: _label("zhutu"), is_image: true, image_width: 50, image_height: 50, width: 60 },
-        { name: "picture2", label: _label("futu"), is_image: true, image_width: 50, image_height: 50, width: 60 },
+        { name: "picture", label: _label("zhutu"), is_image: true, image_width: 50, image_height: 50, width: 60, className:'picture'},
+        { name: "picture2", label: _label("futu"), is_image: true, image_width: 50, image_height: 50, width: 60, className:'picture' },
         { name: "productname", label: _label("shangpinmingcheng"), width: 300 },
         { name: "brandcolor", label: _label("yanse"), type: "select", source: "colortemplate" },
         { name: "brandgroupid", label: _label("pinlei"), type: "select", source: "brandgroup" },

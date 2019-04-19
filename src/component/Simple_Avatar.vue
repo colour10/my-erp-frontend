@@ -1,6 +1,6 @@
 <template>
     <el-upload class="avatar-uploader" :action="host+'/common/upload?category=product'" :show-file-list="false" :on-success="handleAvatarSuccess" :disabled="disabled">
-        <img v-if="imageurl" :src="image_url_prex+imageurl" class="avatar">
+        <img v-if="imageurl" :src="_fileLink(imageurl)" class="avatar">
         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
     </el-upload>
 </template>
@@ -32,8 +32,7 @@ export default {
     data() {
         return {
             imageurl: this.select_value,
-            host,
-            image_url_prex: _label("_image_url_prex")
+            host
         }
     },
     methods: {

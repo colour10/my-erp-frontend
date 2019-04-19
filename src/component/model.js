@@ -175,7 +175,7 @@ const ProductDetail = Object.assign(createModel("product"),{
                         return item[1]==row.getValue()
                     })
                     //console.log(row, item, "+++")
-                    return {id:item[0], colortemplateid:item[1], colorlabel:row.getLabel(),colorcode:row.row.code}
+                    return {id:item[0], colortemplateid:item[1], colorlabel:row.getLabel(), picture:row.row.picture}
                 })
 
                 resolve(array)

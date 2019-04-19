@@ -142,8 +142,9 @@ const props = {
 
     "currency": {
         columns: [
-            { name: "name", label: _label("mingcheng"), is_multiple: true,  is_focus: true }, 
-            { name: "code", label: _label("bianma") }
+            { name: "code", label: _label("bianma") },
+            { name: "name", label: _label("mingcheng"), is_multiple: true,  is_focus: true }
+            
         ],
         controller: "currency",
         key_column: "name"/*,

@@ -1,5 +1,5 @@
 import {_label,extend} from './globals.js'
-import {httpPost,httpGet} from './http.js'
+import {httpPost,httpGet, host} from './http.js'
 import {isArray, initObject} from './array.js'
 
 export default {
@@ -151,6 +151,13 @@ export default {
                 self.setting[name] = value;
             }
             return self
+        },
+        _fileLink(file) {
+            if(file=='') {
+                return host+'/imgs/none.png';
+            }
+
+            return _label('_image_url_prex') + file
         }
     }
 }

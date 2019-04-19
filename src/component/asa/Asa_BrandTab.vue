@@ -1,5 +1,5 @@
 <template>
-    <el-dialog class="user-form" :title="''" :visible="currentVisible" :center="true" @close="onClose" width="80%">
+    <el-dialog class="user-form" :title="title" :visible="currentVisible" :center="true" @close="onClose" width="80%">
         <el-tabs type="border-card" @tab-click="onTabClick" v-model="activeName">
             <el-tab-pane label="LOGO" name="logo">
             </el-tab-pane>
@@ -25,7 +25,8 @@ export default {
         },
         brandid: {
             type: [String, Number]
-        }
+        },
+        title:{}
     },
     data() {
         var self = this;

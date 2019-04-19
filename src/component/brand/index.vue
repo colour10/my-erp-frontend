@@ -1,7 +1,7 @@
 <template>
-    <div style="width:99%" class="product">
-        <multiple-admin-page v-bind="props" ref="page"></multiple-admin-page>
-        <asa-brandtab :visible.sync="base.visible" :brandid="base.brandid"></asa-brandtab>
+    <div style="width:99%">
+        <multiple-admin-page v-bind="props" ref="page" class="product"></multiple-admin-page>
+        <asa-brandtab :visible.sync="base.visible" :brandid="base.brandid" :title="title"></asa-brandtab>
     </div>
 </template>
 
@@ -23,10 +23,12 @@ export default {
         'asa-brandtab': Asa_BrandTab
     },
     data() {
+        let self = this;
+
         return {
             props: {
                 columns: [
-                    { name: "filename", label: "LOGO", is_edit_hide: true, is_image: true, image_width: 50, image_height: 50, width: 100},
+                    { name: "filename", label: "LOGO", is_edit_hide: true, is_image: true, image_width: 50, image_height: 50, width: 55, className:"picture"},
                     { name: "name", label: _label('pinpaimingcheng'), is_multiple: true, is_focus: true },
                     { name: "countryid", label: _label('guishuguojia'), type: "select", source: "country" },
                     //{ name: "brandgroupid", label: _label('pinpaifenlei'), type: "select", source: "brandgroup" },
@@ -38,6 +40,7 @@ export default {
                     label: _label('guanlianxinxi'),
                     width: 200,
                     handler: function(rowIndex, row) {
+                        self.title = row['name_'+_label('lang')]
                         base.brandid = row.id;
                         base.visible = true;
                     }
@@ -52,7 +55,8 @@ export default {
                 key_column: "name"
 
             },
-            base
+            base,
+            title:""
         }
     },
     methods: {},

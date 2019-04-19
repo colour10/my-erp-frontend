@@ -201,8 +201,11 @@ export default {
         },
         confirmorderid(newValue) {
             var self = this
-            var form = self.form;
+            
             self.tabledata = []
+
+            globals.empty(self.form)
+            let form = self.form;
 
             //self._log("loading...", { confirmorderid: form.confirmorderid }, self.confirmorderid)
                 //加载数据

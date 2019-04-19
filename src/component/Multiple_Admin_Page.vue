@@ -10,11 +10,11 @@
                                     <el-input v-model="searchform.keyword" width="250" style="width:250px;" @keyup.enter.native="onSearch"></el-input>
                                     <as-button type="primary" @click="onSearch" size="mini">{{_label("chaxun")}}</as-button>
                                     <au-button :auth="controller" type="primary" @click="showFormToCreate()">{{_label("xinjian")}}</au-button>
-                                </el-form-item>                                
+                                </el-form-item>
                             </el-col>
                         </el-row>
                     </el-form>
-                </slot>                
+                </slot>
             </el-col>
         </el-row>
         <el-row :gutter="20">
@@ -45,13 +45,13 @@
                                 </el-form-item>
                             </template>
                         </template>
-                        <el-form-item>
-                            <auth :auth="controller">
-                                <as-button type="primary" @click="onSubmit">{{_label("baocun")}}</as-button>
-                            </auth>
-                            <as-button type="primary" @click="onQuit">{{_label("tuichu")}}</as-button>
-                        </el-form-item>
                     </el-form>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="24" style="text-align:center;">
+                    <au-button :auth="controller" type="primary" @click="onSubmit">{{_label("baocun")}}</au-button>
+                    <as-button type="primary" @click="onQuit">{{_label("tuichu")}}</as-button>
                 </el-col>
             </el-row>
         </el-dialog>
@@ -93,8 +93,7 @@ export default {
         //console.log(columns,form)
 
         return {
-            searchform:{
-            },
+            searchform: {},
             dialogVisible: false,
             form: form,
             rowIndex: "",

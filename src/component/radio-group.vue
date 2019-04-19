@@ -1,6 +1,6 @@
 <template>
     <el-radio-group v-model="currentValue" @change="handleChange" :disabled="disabled">
-        <el-radio :label="item.getKeyValue()" v-for="(item,key) in data" :key="item.getKeyValue()">{{item.getLabelValue()}}</el-radio>
+        <el-col :span="span" v-for="(item,key) in data" :key="item.getKeyValue()"><el-radio :label="item.getKeyValue()">{{item.getLabelValue()}}</el-radio></el-col>
     </el-radio-group>
 </template>
 
@@ -26,8 +26,10 @@ export default {
         source: {
             type: String,
             required: true
+        },
+        span:{
+            type:Number
         }
-
     },
     model: {
         prop: 'select_value',

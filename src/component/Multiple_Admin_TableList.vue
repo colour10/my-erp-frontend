@@ -4,8 +4,8 @@
             <slot name="create"></slot>
         </slot>
         
-        <sp-table :data="tableData" border style="width:100%;" v-loading.fullscreen.lock="loading" :height="componenToptions.tableHeight" @sort-change="onSortChange">
-            <el-table-column :prop="item.name" :label="item.label" :width="item.width||150" v-if="!item.is_hide" v-for="item in columns" :key="item.name" :sortable="true">
+        <sp-table :data="tableData" border style="width:100%;" v-loading.fullscreen.lock="loading" :height="componenToptions.tableHeight" @sort-change="onSortChange" :cell-class-name="getCellClassName">
+            <el-table-column :prop="item.name" :label="item.label" :width="item.width||150" v-if="!item.is_hide" v-for="item in columns" :key="item.name" :sortable="!item.is_image">
                 <template v-slot="scope">
                     <img v-if="item.is_image" :src="getImageSrc(scope.row, item)" :style="getImageStyle(item)">
                     <span v-if="!item.is_image && !item.html">{{item.convert?item.convert(scope.row,scope.rowIndex,item):convert(scope.row, item, scope.rowIndex)}}</span>
@@ -60,6 +60,7 @@ export default {
 
         return {
             tableData: [],
+            cellClasses:{},
             componenToptions: options,
             languages: _label("list_languages"),
             loading: false,
@@ -71,9 +72,7 @@ export default {
                 total: 0,
                 current: 1
             },
-            searchform:{
-
-            }
+            searchform:{}
         }
     },
     methods: {
@@ -124,12 +123,12 @@ export default {
             })
         },
         getImageSrc(row, column) {
+            let picture = ""
             if (row[column.name] && row[column.name].length > 0) {
-                //this._log(row[column.name])
-                return _label('_image_url_prex') + row[column.name]
-            } else {
-                return host + '/imgs/none.png';
+                picture = row[column.name]
             }
+
+            return this._fileLink(picture)
         },
         getImageStyle(column) {
             var styles = "";
@@ -141,6 +140,15 @@ export default {
                 styles += "height:" + column.image_height + 'px;'
             }
             return styles;
+        },
+        getCellClassName({row, column, rowIndex, columnIndex}) {
+            let self = this
+            //this._log(row, column, rowIndex, columnIndex)
+            if(column.property) {
+                if(self.cellClasses[column.property]) {
+                    return self.cellClasses[column.property]
+                }
+            }
         },
         isSettingLanguage(row, lang) {
             var column_name = this.key_column + "_" + lang
@@ -224,6 +232,11 @@ export default {
         var self = this;
 
         self.loadList()
+        self.columns.forEach(item=>{
+            if(item.className) {
+                self.cellClasses[item.name] = item.className
+            }
+        })
     }
 }
 </script>

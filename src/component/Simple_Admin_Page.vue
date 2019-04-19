@@ -3,13 +3,15 @@
         <el-row>
             <el-col :span="24">
                 <slot name="form">
-                    <el-form ref="search-form" :model="form" label-width="80px" size="mini" :inline="true" @submit.native.prevent>
+                    <el-form ref="search-form" :model="form" label-width="80px" size="mini" :inline="true" @submit.native.prevent v-if="hideForm!==true">
                         <el-form-item>
                             <el-input v-model="searchform.keyword" width="250" style="width:250px;" @keyup.enter.native="onSearch"></el-input>
                             <as-button type="primary" @click="onSearch" size="mini">{{_label("chaxun")}}</as-button>
                             <au-button :auth="authname" type="primary" @click="showFormToCreate()" v-if="hideCreate!==true">{{_label("xinjian")}}</au-button>
                         </el-form-item>
                     </el-form>
+
+                    <au-button :auth="authname" type="primary" @click="showFormToCreate()" v-if="hideCreate!==true && hideForm===true">{{_label("xinjian")}}</au-button>
                 </slot>
             </el-col>
         </el-row>
@@ -47,7 +49,7 @@ import Bus from './bus.js'
 
 export default {
     name: 'simple-admin-page',
-    props: ['columns', 'buttons', "options", "controller", "base", "auth", "hideCreate", 'actions'],
+    props: ['columns', 'buttons', "options", "controller", "base", "auth", "hideCreate", 'hideForm', 'actions'],
     components: {
 
     },

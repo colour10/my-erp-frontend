@@ -24,7 +24,7 @@
                         <el-col :span="4" v-for="item in colors2" :key="item.colortemplateid">
                             <el-tooltip class="item" effect="dark" :content="item.colorlabel" placement="top-start">
                                 <div class="color-group" @click="onClickColor(item.id)">
-                                    <div class="box" :style="'width:36px;height:36px;background:'+item.colorcode">
+                                    <div class="box" :style="getColorStyle(item)">
                                     </div>
                                 </div>
                             </el-tooltip>
@@ -43,6 +43,11 @@
                 <el-form ref="order-form" class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini" :rules="rules" :inline-message="true">
                     <el-row :gutter="0">
                         <el-col :span="8">
+                            <el-form-item :label="_label('niandai')" prop="ageseason">
+                                <select-dialog v-model="form.ageseason" source="ageseason" style="width:150" :lang="lang">
+                                </select-dialog>
+                            </el-form-item>
+
                             <el-form-item :label="_label('pinpai')" prop="brandid">
                                 <simple-select v-model="form.brandid" source="brand" :lang="lang" @change="onBrandChange">
                                 </simple-select>
@@ -55,44 +60,36 @@
                                 <simple-select ref="childbrand" v-model="form.childbrand" source="brandgroupchild" :lang="lang" :lazy="true">
                                 </simple-select>
                             </el-form-item>
-                            <el-form-item :label="_label('chandi')" prop="countries">
-                                <select-dialog v-model="form.countries" source="country" :lang="lang"></select-dialog>
-                            </el-form-item>
-                            <el-form-item :label="_label('pinpaiseban')" prop="brandcolor">
-                                <simple-select v-model="form.brandcolor" source="colortemplate" :lang="lang">
-                                </simple-select>
-                            </el-form-item>
-                            <el-form-item :label="_label('niandai')" prop="ageseason">
-                                <select-dialog v-model="form.ageseason" source="ageseason" style="width:150" :lang="lang">
-                                </select-dialog>
-                            </el-form-item>
-                            <el-form-item :label="_label('chima')" prop="sizetopid">
+                            <el-form-item :label="_label('chimazu')" prop="sizetopid">
                                 <simple-select v-model="form.sizetopid" source="sizetop" :lang="lang" @change="onSizetopidChange">
                                 </simple-select>
                             </el-form-item>
-                            <el-form-item :label="_label('chima')" prop="sizetopid">
+                            <el-form-item :label="_label('chimamingxi')" prop="sizetopid">
                                 <selectpanel v-model="form.sizecontentids" ref="sizecontentids"> </selectpanel>
                             </el-form-item>
+                            
+                            <el-form-item :label="_label('pinpaiseban')" prop="brandcolor">
+                                <simple-select v-model="form.brandcolor" source="colortemplate" :lang="lang">
+                                    <template v-slot="{row}">
+                                        <div class="imgline">
+                                        <img :src="_fileLink(row.row.picture)" class="icon"> <span>{{row.getLabel()}}</span>
+                                    </div>
+                                    </template>
+                                </simple-select>
+                            </el-form-item>                           
+                            
                         </el-col>
                         <el-col :span="8">
+                            <el-form-item :label="_label('shangpinchicun')">
+                                <simple-select v-model="form.ulnarinch" source="ulnarinch" style="width:150" :lang="lang">
+                                </simple-select>
+                            </el-form-item>
                             <el-form-item :label="_label('shangpinmiaoshu')">
                                 <select-dialog v-model="form.productmemoids" source="productmemo" style="width:150" :lang="lang">
                                 </select-dialog>
                             </el-form-item>
-                            <el-form-item :label="_label('shangpinbieming')">
-                                <selectpanel v-model="form.aliases" ref="aliases" style="width:150"></selectpanel>
-                            </el-form-item>
                             <el-form-item :label="_label('shangpinxilie')">
                                 <selectpanel v-model="form.series" ref="series" style="width:150" @change="onSeriesChange"> </selectpanel>
-                            </el-form-item>
-                            <el-form-item :label="_label('shangpinzixilie')">
-                                <selectpanel v-model="form.series2" ref="series2" style="width:150"> </selectpanel>
-                            </el-form-item>
-                            <el-form-item :label="_label('chengjiaojiage')">
-                                <el-input placeholder="" v-model="form.retailprice" class="input-with-select">
-                                    <select-currency v-model="form.retailpricecurrency" slot="prepend">
-                                    </select-currency>
-                                </el-input>
                             </el-form-item>
                             <el-form-item :label="_label('chuchangjia')">
                                 <el-input placeholder="" v-model="form.factoryprice" class="input-with-select">
@@ -106,34 +103,40 @@
                                     </select-currency>
                                 </el-input>
                             </el-form-item>
-                            <el-form-item :label="_label('guoneilingshoujia')">
-                                <el-input v-model="form.nationalprice"></el-input>
+
+                            <el-form-item :label="_label('benguolingshoujia')">
+                                <el-input placeholder="" v-model="form.nationalprice" class="input-with-select">
+                                    <select-currency v-model="form.nationalpricecurrency" slot="prepend">
+                                    </select-currency>
+                                </el-input>
+                            </el-form-item>
+                            <el-form-item :label="_label('chandi')" prop="countries">
+                                <select-dialog v-model="form.countries" source="country" :lang="lang"></select-dialog>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            <el-form-item :label="_label('shangpinchicun')">
-                                <simple-select v-model="form.ulnarinch" source="ulnarinch" style="width:150" :lang="lang">
-                                </simple-select>
-                            </el-form-item>
+                            
                             <el-form-item :label="_label('xingbie')">
-                                <sp-radio-group v-model="form.gender" source="gender" style="width:150" :lang="lang" class="supermini">
+                                <sp-radio-group v-model="form.gender" source="gender" :span="8" :lang="lang" class="supermini">
                                 </sp-radio-group>
                             </el-form-item>
                             <el-form-item :label="_label('jijie')">
-                                <sp-checkboxgroup v-model="form.season" source="season" style="width:150" :lang="lang" class="supermini">
-                                </sp-checkboxgroup>
+                                <template #label>
+                                    <sp-checkbox class="siji" v-model="siji">{{_label("siji")}}</sp-checkbox>
+                                </template>
+                                <el-col :span="12"><sp-checkbox v-model="form.spring">{{_label("chun")}}</sp-checkbox></el-col>
+                                <el-col :span="12"><sp-checkbox v-model="form.summer">{{_label("xia")}}</sp-checkbox></el-col>
+                                <el-col :span="12"><sp-checkbox v-model="form.fall">{{_label("qiu")}}</sp-checkbox></el-col>
+                                <el-col :span="12"><sp-checkbox v-model="form.winter">{{_label("dong")}}</sp-checkbox></el-col>
                             </el-form-item>
                             <el-form-item :label="_label('zuihouruku')">
                                 <el-input v-model="form.password"></el-input>
                             </el-form-item>
-                            <el-form-item :label="_label('chicunbeizhu')">
-                                <el-input v-model="form.ulnarinch_memo"></el-input>
+                            <el-form-item :label="_label('beizhu')">
+                                <el-input v-model="form.memo"></el-input>
                             </el-form-item>
-                            <el-form-item :label="_label('jiandangshijian')">
-                                <el-input v-model="datetime" disabled></el-input>
-                            </el-form-item>
-                            <el-form-item :label="_label('jiandangren')">
-                                <el-input v-model="adduser" disabled></el-input>
+                            <el-form-item :label="_label('jiandang')">
+                                <span>{{adduser}}({{datetime}})</span>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -147,14 +150,17 @@
                     </el-row>
                 </el-form>
             </el-tab-pane>
-            <el-tab-pane :label="_label('shangpintupian')" name="album" :disabled="form.id==''">
-                <sp-album :productid="form.id" ref="album"></sp-album>
+
+            <el-tab-pane :label="_label('shangpinchicun')" name="property" :disabled="form.id==''">
+                <property :productid="form.id" ref="property" @quit="onQuit" :option="option"></property>
             </el-tab-pane>
-            <el-tab-pane :label="_label('shangpinhuohao')" name="code" :disabled="form.id==''">
+
+            
+            <el-tab-pane :label="_label('shangpintiaoma')" name="code" :disabled="form.id==''">
                 <el-table :data="sizecontents" border style="width:100%;">
-                    <el-table-column prop="name" :label="_label('chima')" align="center">
+                    <el-table-column prop="name" :label="_label('chima')" align="center" width="100">
                     </el-table-column>
-                    <el-table-column prop="goods_code" :label="_label('shangpinhuohao')" width="350" align="center">
+                    <el-table-column prop="goods_code" :label="_label('shangpintiaoma')" width="350" align="center">
                         <template v-slot="scope">
                             <el-input v-model="scope.row.goods_code"></el-input>
                         </template>
@@ -214,9 +220,11 @@
                     <as-button type="primary" @click="onQuit">{{_label("tuichu")}}</as-button>
                 </el-col>
             </el-tab-pane>
-            <el-tab-pane :label="_label('shangpinshuxing')" name="property" :disabled="form.id==''">
-                <property :productid="form.id" ref="property" @quit="onQuit" :option="option"></property>
+
+            <el-tab-pane :label="_label('shangpintupian')" name="album" :disabled="form.id==''">
+                <sp-album :productid="form.id" ref="album"></sp-album>
             </el-tab-pane>
+            
         </el-tabs>
     </el-dialog>
 </template>
@@ -224,6 +232,8 @@
 <script>
 import globals, { extract,_label } from '../globals.js'
 import { ProductCodeList, ProductDetail } from "../model.js"
+import {initObject} from "../array.js"
+import {extend} from "../object.js"
 import List from '../list.js'
 import { Rules } from '../rules.js'
 import DataSource from '../DataSource.js'
@@ -262,9 +272,7 @@ export default {
                 picture: "",
                 picture2: "",
                 laststoragedate: "",
-                aliases: "",
                 series: "",
-                series2: "",
                 ulnarinch: "",
                 factoryprice: "",
                 factorypricecurrency: "",
@@ -272,13 +280,15 @@ export default {
                 orderprice: "",
                 orderpricecurrency: "",
                 retailprice: "",
-                groupid: "",
                 nationalprice: "",
-                ulnarinch_memo: "",
+                memo: "",
                 wordprice: "",
                 wordpricecurrency: "",
                 gender: "",
-                season: "",
+                spring: "",
+                summer: "",
+                fall: "",
+                winter: "",
                 ageseason: "",
                 sizetopid: "",
                 sizecontentids: "",
@@ -293,7 +303,6 @@ export default {
                 brandgroupid: Rules.id({ required: true, message: _label("8000") }),
                 childbrand: Rules.id({ required: true, message: _label("8000") }),
                 brandid: Rules.id({ required: true, message: _label("8000") }),
-                countries: Rules.required({ message: _label("8000") }),
                 brandcolor: Rules.required({ message: _label("8000") }),
                 ageseason: Rules.required({ message: _label("8000") })
             },
@@ -307,12 +316,21 @@ export default {
             option: {
                 isedit: false
             },
-            currentTab: "product"
+            currentTab: "product",
+            siji:"" //控制四季全选
         }
     },
     methods: {
         onQuit() {
             this.dialogVisible = false
+        },
+        getColorStyle(item){
+            return {
+                width:'36px',
+                height:'36px',
+                background: 'url("'+this._fileLink(item.picture)+'") no-repeat center'
+            }
+
         },
         searchProductFilter(product){
             return this.colors.findIndex(item=>item.id==product.id)<0
@@ -345,6 +363,9 @@ export default {
             source.filter({ topid: self.form.sizetopid }, function(list) {
                 let data = list.map(item => item.getObject())
                 self.$refs['sizecontentids'].setData(data)
+                if(data.length==1) {
+                    self.form.sizecontentids = data[0].id
+                }
             })
         },
         onBrandChange(newvalue) {
@@ -408,10 +429,11 @@ export default {
             });
         },
         onAppendColor() {
-            this.colors.push({
+            let self = this
+            self.colors.push({
                 brandcolor: "",
-                wordcode_1: "",
-                wordcode_2: "",
+                wordcode_1: self.form.wordcode_1,
+                wordcode_2: self.form.wordcode_2,
                 wordcode_3: "",
                 wordcode_4: "",
                 id: ""
@@ -538,6 +560,12 @@ export default {
 
             //self._log(value)
             self.$refs.childbrand.load(value)
+        }
+    },
+    watch:{
+        siji:function(newValue){
+            let self = this
+            extend(self.form,initObject(['spring','summer', 'fall', 'winter'],newValue))
         }
     }
 }

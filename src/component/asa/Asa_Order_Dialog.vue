@@ -97,7 +97,7 @@
                             <au-button auth="order-finish" :type="canFinish?'primary':'info'" @click="finishOrder()">{{_label("dingdanwajie")}}</au-button>
                         </el-row>
                         <el-row>
-                            <au-button auth="order-submit" type="primary" @click="addPayment">{{_label("tianjiashoukuan")}}</au-button>
+                            <au-button auth="order-submit" :type="canSubmitPayment?'primary':'info'" @click="addPayment">{{_label("tianjiashoukuan")}}</au-button>
                         </el-row>
                         <el-row type="flex" justify="start">
                             <as-button type="primary" @click="onQuit">{{_label("tuichu")}}</as-button>
@@ -147,7 +147,7 @@
                 </el-col>
             </el-row>
             <el-row>
-                <simple-admin-page v-bind="props" ref="payment" :hide-create="true"></simple-admin-page>
+                <simple-admin-page v-bind="props" ref="payment" :hide-create="true" :hide-form="true" v-if="form.id>0"></simple-admin-page>
             </el-row>
         </el-dialog>
         <asa-select-product-dialog :visible.sync="pro" @select="onSelect"></asa-select-product-dialog>
@@ -249,8 +249,10 @@ export default {
         },
         addPayment() {
             let self = this;
-            props.base.orderid = self.form.id
-            self.$refs.payment.showFormToCreate();
+            if (self.canSubmitPayment()) {
+                props.base.orderid = self.form.id
+                self.$refs.payment.showFormToCreate();
+            }
         },
         showProduct() {
             this.pro = true;
@@ -310,7 +312,7 @@ export default {
                 }
 
                 var params = {
-                    form: globals.$.extend({}, self.form, { status })
+                    form: globals.extend({}, self.form, { status })
                 }
                 var array = []
                 params.list = self.tabledata.map(item => {
@@ -326,8 +328,10 @@ export default {
                     self._log(res)
                     let data = res.data
                     if (data.form.id) {
+
                         globals.copyTo(data.form, self.form)
                         self.formid = self.form.id
+                        props.base.orderid = self.form.id
 
                         self.tabledata = []
                         data.list.forEach(item => {
@@ -411,6 +415,9 @@ export default {
         canFinish() {
             var status = this.form.status;
             return status == 3
+        },
+        canSubmitPayment() {
+            return this.form.id > 0
         },
         total_price() {
             return this.tabledata.reduce(function(total, current) {

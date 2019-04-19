@@ -1,6 +1,6 @@
 <template>
     <div>
-        <sp-table :data="tableData" border style="width: 100%;" :height="tableHeight">
+        <sp-table :data="tableData" border style="width: 100%;" :height="tableHeight" :cell-class-name="getCellClassName">
             <el-table-column :prop="item.name" :label="item.label" :width="item.width||180" v-if="!item.is_hide" v-for="item in columns" :key="item.name" :sortable="!item.is_image">
                 <template v-slot="scope">
                     <img v-if="item.is_image" :src="getImageSrc(scope.row, item)" :style="getImageStyle(item)">
@@ -53,6 +53,7 @@ export default {
                 current: 1
             },
             localOptions,
+            cellClasses:{},
             searchform:{}
         }
     },
@@ -60,6 +61,15 @@ export default {
         search(params) {
             this.searchform = extend({},params)
             this.loadList()
+        },
+        getCellClassName({row, column, rowIndex, columnIndex}) {
+            let self = this
+            //this._log(row, column, rowIndex, columnIndex)
+            if(column.property) {
+                if(self.cellClasses[column.property]) {
+                    return self.cellClasses[column.property]
+                }
+            }
         },
         handleSizeChange(pageSize) {
             this.pagination.pageSize = pageSize
@@ -113,12 +123,12 @@ export default {
             }
         },
         getImageSrc(row, column) {
+            let picture = ""
             if (row[column.name] && row[column.name].length > 0) {
-                //this._log(row[column.name])
-                return _label('_image_url_prex') + row[column.name]
-            } else {
-                return host + '/imgs/none.png';
+                picture = row[column.name]
             }
+
+            return this._fileLink(picture)
         },
         getImageStyle(column) {
             let styles = "";
@@ -237,8 +247,15 @@ export default {
     },
     computed: {},
     mounted: function() {
+        let self = this
         //this._log(onClickUpdate)
         this.loadList()
+
+        self.columns.forEach(item=>{
+            if(item.className) {
+                self.cellClasses[item.name] = item.className
+            }
+        })
     }
 }
 </script>

@@ -147,9 +147,7 @@ const menus = {
 export default {
     name: 'asapage-home',
     data() {
-        var self = this;
         return {
-            current: ""
         }
     },
     methods: {
@@ -161,14 +159,14 @@ export default {
             }
         },
         onSelect(index, indexPath) {
-            this._log(index, indexPath)
+            //this._log(index, indexPath)
             this.$router.push('/'+index)
         }
     },
     watch: {
         '$route' (newValue) {
             var self = this;
-            self._log("$route", this.$route)
+            //self._log("$route", this.$route)
             self.checkLogin()
         }
     },
@@ -178,8 +176,7 @@ export default {
         }
     },
     mounted: function() {
-        this.checkLogin()
-        
+        this.checkLogin()        
     }
 }
 </script>

@@ -55,21 +55,15 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                        <auth auth="sales">
-                            <el-row type="flex" justify="start">
-                                <as-button :type="canYushou?'primary':'info'" @click="yushou()">{{_label("yushou")}}</as-button>
-                                <as-button :type="canTijiao?'primary':'info'" @click="tijiao()">{{_label("tijiao")}}</as-button>
-                                <as-button :type="form.id>0 && form.status!=2 ?'primary':'info'" @click="showAttachment()">{{_label("fujian")}}</as-button>
-                                <el-tooltip class="item" effect="dark" content="Right Bottom 提示文字" placement="bottom">
-                                    <as-button :type="canZuofei?'primary':'info'" @click="zuofei()">{{_label("zuofei")}}</as-button>
-                                </el-tooltip>
-                            </el-row>
-                        </auth>
-                        <auth auth="sales">
-                            <el-row>
-                                <as-button type="primary" @click="addReceive">{{_label("tianjiashoukuan")}}</as-button>
-                            </el-row>
-                        </auth>
+                        <el-row type="flex" justify="start">
+                            <au-button auth="sales" :type="canYushou?'primary':'info'" @click="yushou()">{{_label("yushou")}}</au-button>
+                            <au-button auth="sales" :type="canTijiao?'primary':'info'" @click="tijiao()">{{_label("tijiao")}}</au-button>
+                            <au-button auth="sales" :type="form.id>0 && form.status!=2 ?'primary':'info'" @click="showAttachment()">{{_label("fujian")}}</au-button>
+                            <au-button auth="sales" :type="canZuofei?'primary':'info'" @click="zuofei()">{{_label("zuofei")}}</au-button>
+                        </el-row>
+                        <el-row>
+                            <au-button auth="sales" :type="form.id>0 ?'primary':'info'" @click="addReceive">{{_label("tianjiashoukuan")}}</au-button>
+                        </el-row>
                         <el-row>
                             <as-button type="primary" @click="onQuit">{{_label("tuichu")}}</as-button>
                         </el-row>
@@ -167,7 +161,7 @@
                 </el-col>
             </el-row>
             <el-row>
-                <simple-admin-page v-bind="props" ref="receive" :hide-create="true"></simple-admin-page>
+                <simple-admin-page v-bind="props" ref="receive" :hide-create="true" :hide-form="true" v-if="form.id>0"></simple-admin-page>
             </el-row>
         </el-dialog>
     </div>
@@ -256,8 +250,10 @@ export default {
         },
         addReceive() {
             let self = this;
-            props.base.salesid = self.form.id
-            self.$refs.receive.showFormToCreate();
+            if (self.form.id > 0) {
+                props.base.salesid = self.form.id
+                self.$refs.receive.showFormToCreate();
+            }
         },
         getDealPrice(row) {
             if (row.is_match == 0) {
@@ -289,14 +285,15 @@ export default {
             var params = { form: self.form }
             var array = []
             params.list = self.tabledata.map(item => {
-                return { productstockid: item.productstock.id, id: item.id, dealprice: item.dealprice, number: item.number, price: item.productstock.goods.price, is_match: item.is_match }
-            })
-            //self._log(JSON.stringify(params))
+                    return { productstockid: item.productstock.id, id: item.id, dealprice: item.dealprice, number: item.number, price: item.productstock.goods.price, is_match: item.is_match }
+                })
+                //self._log(JSON.stringify(params))
             self._submit("/sales/savesale", { params: JSON.stringify(params) }).then(function(res) {
                 let data = res.data
                 if (data.form.id) {
                     globals.copyTo(data.form, self.form)
                     self.formid = self.form.id
+                    props.base.salesid = self.form.id
 
                     self.tabledata = []
                     data.list.forEach(item => {

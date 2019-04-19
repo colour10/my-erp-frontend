@@ -1,8 +1,7 @@
 <template>
-  <el-select v-model="currentValue" placeholder="" style="width:150" @change="handleChange" filterable :filter-method="filterCurrency" :disabled="disabled">
+  <el-select v-model="currentValue" placeholder="" style="width:100" @change="handleChange" filterable :filter-method="filterCurrency" :disabled="disabled">
     <el-option v-for="item in current_list" :key="item.getKeyValue()" :value="item.getKeyValue()" :label="item.getLabelValue()">
       <span style="float: left">{{ item.getRow().code }}</span>
-      <span style="float: right; color: #8492a6; font-size: 13px">{{ item.getRow().name }}</span>
     </el-option>
     
   </el-select>

@@ -42,6 +42,7 @@ import Auth from './component/Auth.vue'
 import Orderpayment from './component/orderpayment/index.vue'
 import Salesreceive from './component/salesreceive/index.vue'
 import Table from './component/table.js'
+import Checkbox from './component/checkbox.js'
 import Authbutton from './component/authbutton.js'
 import Button from './component/button.js'
 import RadioGroup from './component/radio-group.vue'
@@ -93,6 +94,7 @@ const components = [
     Auth,
     CheckboxGroup,
     Table,
+    Checkbox,
     Button,
     Authbutton,
     RadioGroup
