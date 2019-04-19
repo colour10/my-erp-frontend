@@ -62,7 +62,7 @@ export default {
             tableData: [],
             cellClasses:{},
             componenToptions: options,
-            languages: _label("list_languages"),
+            languages: _label("languages"),
             loading: false,
             current_lang: _label("lang"),
             pagination: {

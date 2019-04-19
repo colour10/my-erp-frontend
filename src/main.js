@@ -47,23 +47,23 @@ import Authbutton from './component/authbutton.js'
 import Button from './component/button.js'
 import RadioGroup from './component/radio-group.vue'
 
-
-import Page_Home from './component/page/Home.vue'
-import Page_Order from './component/page/Order.vue'
-import Page_Producttemplate from './component/page/Producttemplate.vue'
-import Page_User from './component/page/User.vue'
-import Page_Group from './component/page/Group.vue'
-import Page_Department from './component/page/Department.vue'
+import Creator from './component/develop/index.vue'
+import Home from './component/home/index.vue'
+import Order from './component/order/index.vue'
+import Producttemplate from './component/producttemplate/index.vue'
+import User from './component/user/index.vue'
+import Group from './component/group/index.vue'
+import Department from './component/department/index.vue'
 import Brand from './component/brand/index.vue'
 import Brandgroup from './component/brandgroup/index.vue'
 import Sizetop from './component/sizetop/index.vue'
 import Product from './component/product/index.vue'
-import Page_Sales from './component/page/Sales.vue'
-import Page_Login from './component/page/Login.vue'
-import Page_Confirmorder from './component/page/Confirmorder.vue'
-import Page_UserModifyPassword from './component/page/UserModifyPassword.vue'
-import Page_Warehousing from './component/page/Warehousing.vue'
-import Page_Requisition from './component/page/Requisition.vue'
+import Sales from './component/sales/index.vue'
+import Login from './component/login/index.vue'
+import Confirmorder from './component/confirmorder/index.vue'
+import ModifyPassword from './component/user/modify-password.vue'
+import Warehousing from './component/warehousing/index.vue'
+import Requisition from './component/requisition/index.vue'
 import Productstock from './component/productstock/index.vue'
 import System from './component/system/index.vue'
 import Supplier from './component/supplier/index.vue'
@@ -96,7 +96,7 @@ const components = [
     Table,
     Checkbox,
     Button,
-    Authbutton,
+    Authbutton, 
     RadioGroup
 ]
 
@@ -106,25 +106,27 @@ components.forEach(component => {
 
 const routes = [
     {
-        path: '/', component: Page_Home,
+        path: '/', component: Home,
         children:[
-            {path: '/order', component: Page_Order},
-            {path: '/confirmorder', component: Page_Confirmorder},
-            {path:'/warehousing', component:Page_Warehousing},
-            {path: '/sales', component: Page_Sales},
-            {path: '/user', component: Page_User},
-            {path: '/group', component: Page_Group},
-            {path: '/department', component: Page_Department},
+            {path: '/order', component: Order},
+            {path: '/confirmorder', component: Confirmorder},
+            {path:'/warehousing', component:Warehousing},
+            {path: '/sales', component: Sales},
+            {path: '/user', component: User},
+            {path: '/group', component: Group},
+            {path: '/department', component: Department},
             {path: '/productstock', component: Productstock},
             {path: '/brand', component: Brand},
             {path: '/brandgroup', component: Brandgroup},
             {path: '/sizetop', component: Sizetop},
             {path: '/product', component: Product},   
-            {path: '/requisition', component: Page_Requisition},     
-            {path: '/user/modifypassword', component: Page_UserModifyPassword},    
+            {path: '/requisition', component: Requisition},     
+            {path: '/user/modifypassword', component: ModifyPassword},    
             {path: '/orderpayment', component: Orderpayment},    
             {path: '/salesreceive', component: Salesreceive},   
             {path: '/system', component: System}, 
+            {path: '/develop', component: Creator}, 
+            {path:'/producttemplate', component:Producttemplate},
 
             {path:'/ageseason', component:getComponentSimple("ageseason")},
             {path:'/ulnarinch', component:getComponent("ulnarinch")},
@@ -132,6 +134,7 @@ const routes = [
             {path:'/washinginstructions', component:getComponent("washinginstructions")},
             {path:'/currency', component:getComponent("currency")},
             {path:'/executioncategory', component:getComponent("executioncategory")},
+            {path:'/pricesetting', component:getComponentSimple("pricesetting")},
             {path:'/price', component:getComponentSimple("price")},
             {path:'/occasionsstyle', component:getComponent("occasionsstyle")},
             {path:'/productparts', component:getComponent("productparts")},
@@ -140,16 +143,17 @@ const routes = [
             {path:'/country', component:getComponent("country")},
             {path:'/materialnote', component:getComponent("materialnote")},
             {path:'/materialstatus', component:getComponent("materialstatus")},
-            {path:'/material', component:getComponent("material")},
-            {path:'/producttemplate', component:Page_Producttemplate},
+            {path:'/material', component:getComponent("material")},           
             {path:'/member', component:getComponentSimple("member")},
             {path:'/colortemplate', component:getComponent("colortemplate")},
             {path:'/supplier', component:Supplier},
             {path:'/saleport', component:getComponentSimple("saleport")},
-            {path:'/productmemo', component:getComponent("productmemo")}
+            {path:'/productmemo', component:getComponent("productmemo")},
+            {path:'/saletype', component:getComponent("saletype")},
+            {path:'/exchangerate', component:getComponentSimple("exchangerate")},
         ]
     },
-    {path: '/login/:action', component: Page_Login},
+    {path: '/login/:action', component: Login},
     {path: '/login', redirect: { path: '/login/login' }}
 ]
 

@@ -369,43 +369,16 @@ const props = {
         columns: [
             { name: "name", label: _label("mingcheng"), class: "width2"},
             { name: "countryid", label: _label("guojiadiqu"), type: 'select', source: "country", class: "width2" },
+            { name: "language", label: _label("morenyuyan"), type: 'select', source: "languages", class: "width2" },
+            { name: "currencyid", label: _label("benguohuobi"), type: 'select', source: "currency", class: "width2" },
             { name: "address", label: _label("dizhi"), class: "width1", is_hide: true }, 
-            {
-            name: "englishname",
-            label: _label("yingwenmingcheng"),
-            class: "width1",
-            is_hide: true
-        }, {
-            name: "website",
-            label: _label("wangzhi"),
-            class: "width2",
-            is_hide: true
-        }, {
-            name: "fax",
-            label: _label("chuanzhen"),
-            class: "width2",
-            is_hide: true
-        }, {
-            name: "legal",
-            label: _label("faren"),
-            class: "width2",
-            is_hide: true
-        }, {
-            name: "registeredcapital",
-            label: _label("zhuceziben"),
-            class: "width2",
-            is_hide: true
-        }, {
-            name: "businesslicense",
-            label: _label("yingyezhizhaohao"),
-            class: "width2",
-            is_hide: true
-        }, {
-            name: "heading",
-            label: _label("shuihao"),
-            class: "width2",
-            is_hide: true
-        }
+            { name: "englishname", label: _label("yingwenmingcheng"), class: "width1", is_hide: true }, 
+            { name: "website", label: _label("wangzhi"), class: "width2", is_hide: true }, 
+            { name: "fax", label: _label("chuanzhen"), class: "width2", is_hide: true }, 
+            { name: "legal", label: _label("faren"), class: "width2", is_hide: true }, 
+            { name: "registeredcapital", label: _label("zhuceziben"), class: "width2", is_hide: true }, 
+            { name: "businesslicense", label: _label("yingyezhizhaohao"), class: "width2", is_hide: true }, 
+            { name: "heading", label: _label("shuihao"), class: "width2", is_hide: true }
         ],
         controller: "company",
         auth: "company"
@@ -462,8 +435,9 @@ const props = {
             inline:true
         }
     },
-    "price":{
+    "pricesetting":{
         columns: [
+            { name: "priceid", label: _label("jiagemingcheng"), type:"select", source:"price"},
             { name: "brandid", label: _label("pinpai"), type:"select", source:"brand"},
             { name: "brandgroupid", label: _label("pinlei"), type:"select", source:"brandgroup", trigger:"brandgroupchildid"},
             { name: "brandgroupchildid", label: _label("zipinlei"), type:"select", source:"brandgroupchild"},
@@ -471,13 +445,52 @@ const props = {
             { name: "seriesid", label: _label("xilie"), type:"select", source:"series"},
             { name: "discount", label: _label("xishu") }
         ],
+        controller: "pricesetting",
+        auth: "pricesetting",
+        options:{
+            dialogWidth:"400px", 
+            autoreload:true
+        }
+    },
+    "price":{
+        columns: [
+            { name: "countryid", label: _label("guojiadiqu"), type:"select", source:"country"},
+            { name: "pricetype", label: _label("jiageleixing"), type:"select", source:"pricetype"},            
+            { name: "currencyid", label: _label("bizhong"), type:"select", source:"currency"}
+        ],
         controller: "price",
         auth: "price",
         options:{
             dialogWidth:"400px", 
             autoreload:true
         }
-    }
+    },
+    "saletype":{
+        columns: [
+            { name: "name", label: _label("mingcheng"), is_multiple: true, is_focus:true},
+            { name: "color", label: _label("yanse")}
+        ],
+        controller: "saletype",
+        auth: "saletype",
+        options:{
+            dialogWidth:"400px", 
+            autoreload:true
+        },
+        key_column: "name"
+    },
+    "exchangerate":{
+        columns: [
+            { name: "currency_from", label: _label("huichuhuobi"), type:"select", source:"currency"},
+            { name: "currency_to", label: _label("huiruhuobi"), type:"select", source:"currency"},
+            { name: "rate", label: _label("huilv")}
+        ],
+        controller: "exchangerate",
+        auth: "exchangerate",
+        options:{
+            dialogWidth:"400px", 
+            autoreload:true
+        }
+    },
 }
 
 const getComponent = function(name) {

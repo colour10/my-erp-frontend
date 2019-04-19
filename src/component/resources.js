@@ -1,6 +1,6 @@
 import {getLabel} from "./globals.js"
 const _label = getLabel
-
+const list = _label("list")
 const options = {};
 
 options["test.hashtable"] = {
@@ -71,6 +71,8 @@ options["series2"] = {url:'/l/series2',oplabel:'name', opvalue:'id'}
 //成员
 options["member"] = {url:'/l/member',oplabel:'name', opvalue:'id'}
 
+//价格定义
+options["price"] = {url:'/l/price',oplabel:'name', opvalue:'id'}
 
 //仓库
 options["warehouse"] = {url:'/l/warehouse',oplabel:'name', opvalue:'id'}
@@ -81,54 +83,58 @@ options["saleport"] = {url:'/l/saleport',oplabel:'name', opvalue:'id'}
 options["usersaleport"] = {url:'/user/saleportlist',oplabel:'name', opvalue:'id'}
 options["userwarehouse"] = {url:'/warehouse/userlist',oplabel:'name', opvalue:'id'}
 
-options["gender"] = {hashtable:_label("list_gender")}
-options["gender2"] = {hashtable:_label("list_gender2")}
+options["gender"] = {hashtable:list.gender}
+options["gender2"] = {hashtable:list.gender2}
 options["currency"] = {url:'/l/currency',oplabel:'name', opvalue:'id'}
-options["season"] = {hashtable:_label("list_season")}
-options["orderproperty"] = {hashtable:_label("list_orderproperty")}
-options["bussinesstype"] = {hashlist:_label("list_bussinesstype"),oplabel:'name', opvalue:'id'}
+options["season"] = {hashtable:list.season}
+options["orderproperty"] = {hashtable:list.orderproperty}
+options["bussinesstype"] = {hashlist:list.bussinesstype,oplabel:'name', opvalue:'id'}
 options["sessionmark"] = {hashtable:{"SS":"SS","FW":"FW","XX":"XX"}}
 options["seasontype"] = {hashtable:{"0":"Pre","1":"Main","2":"Fashion"}}
 
 
-options["formtype"] = {hashtable:_label("list_formtype")}
-options["languages"] = {hashlist:_label("list_languages"),oplabel:'name', opvalue:'code'}
+options["formtype"] = {hashtable:list.formtype}
+options["languages"] = {hashlist:_label('languages'),oplabel:'name', opvalue:'code'}
 
 //提货方式
-options["pickingtype"] = {hashtable:_label("list_pickingtype")}
+options["pickingtype"] = {hashtable:list.pickingtype}
 
 //快递付款类型
-options["expresspaidtype"] =  {hashtable:_label("list_expresspaidtype")}
+options["expresspaidtype"] =  {hashtable:list.expresspaidtype}
 
 //运输方式
-options["transporttype"] =  {hashtable:_label("list_transporttype")}
+options["transporttype"] =  {hashtable:list.transporttype}
 
 //支付方式
-options["paytype"] =  {hashtable:_label("list_paytype")}
+options["paytype"] =  {hashtable:list.paytype}
 
 
 //销售单状态
-options["salestatus"] =  {hashtable:_label("list_salestatus")}
+options["salestatus"] =  {hashtable:list.salestatus}
 
 //订单状态
-options["orderstatus"] =  {hashtable:_label("list_ordertatus")}
+options["orderstatus"] =  {hashtable:list.ordertatus}
 
 //发货单状态
-options["confirmstatusstatus"] =  {hashtable:_label("list_confirmstatusstatus")}
+options["confirmstatusstatus"] =  {hashtable:list.confirmstatusstatus}
 
 //调拨类型
-options["requisitiontype"] =  {hashtable:_label("list_requisitiontype")}
+options["requisitiontype"] =  {hashtable:list.requisitiontype}
 
 //调拨单状态
-options["requisitionstatus"] =  {hashtable:_label("list_requisitionstatus")}
+options["requisitionstatus"] =  {hashtable:list.requisitionstatus}
 
 //仓库角色
-options["warehouserole"] =  {hashtable:_label("list_warehouserole")}
+options["warehouserole"] =  {hashtable:list.warehouserole}
 
 //客户类型
-options["suppliertype"] =  {hashtable:_label("list_suppliertype")}
+options["suppliertype"] =  {hashtable:list.suppliertype}
 
 //付款类型
-options["paymenttype"] =  {hashtable:_label("list_paymenttype")}
+options["paymenttype"] =  {hashtable:list.paymenttype}
+
+//价格类型
+options["pricetype"] =  {hashtable:list.pricetype}
+
 
 export default options

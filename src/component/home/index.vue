@@ -25,7 +25,10 @@
                     <el-menu-item index="warehouse">{{_label("menu-2-3-1")}}</el-menu-item>
                     <el-menu-item index="country">{{_label("menu-2-3-3")}}</el-menu-item>
                     <el-menu-item index="saleport">{{_label("menu-2-4")}}</el-menu-item>
-                    <el-menu-item index="price">{{_label("jiageguanli")}}</el-menu-item>
+                    <el-menu-item index="price">{{_label("jiagedingyi")}}</el-menu-item>
+                    <el-menu-item index="pricesetting">{{_label("jiageshezhi")}}</el-menu-item>
+                    <el-menu-item index="saletype">{{_label("xiaoshoushuxing")}}</el-menu-item>
+                    <el-menu-item index="exchangerate">{{_label("huilvguanli")}}</el-menu-item>
                 </el-submenu>
                 <el-menu-item index="product">{{_label("menu-3-1")}}</el-menu-item>
                 <el-menu-item index="supplier">{{_label("menu-4")}}</el-menu-item>
@@ -93,6 +96,7 @@
                 <el-submenu index="11">
                     <template #title>{{_label("menu-11")}}</template>
                     <el-menu-item index="user/modifypassword">{{_label("menu-11-2")}}</el-menu-item>
+                    <el-menu-item index="develop">生成器</el-menu-item>
                     <el-menu-item index="login/logout">{{_label("menu-11-3")}}</el-menu-item>
                 </el-submenu>
             </el-menu>
@@ -130,7 +134,8 @@ const menus = {
     "warehouse":_label("menu-2-3-1"),
     "country":_label("menu-2-3-3"),
     "saleport":_label("menu-2-4"),
-    "price":_label("jiageguanli"),
+    "price":_label("jiagedingyi"),
+    "pricesetting":_label("jiageshezhi"),
     "product":_label("menu-3-1"),
     "supplier":_label("menu-4"),
     "order":_label("menu-5-1-1"),
@@ -142,7 +147,10 @@ const menus = {
     "orderpayment":_label("dingdanjiesuan"),
     "salesreceive":_label("xiaoshoujiesuan"),
     "user/modifypassword":_label("menu-11-2"),
-    "login/logout":_label("menu-11-3")
+    "login/logout":_label("menu-11-3"),
+    "saletype":_label('xiaoshoushuxing'),
+    "exchangerate":_label('huilvguanli'),
+    "develop":"生成器"
 }
 export default {
     name: 'asapage-home',

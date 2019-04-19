@@ -47,7 +47,6 @@
                                 <select-dialog v-model="form.ageseason" source="ageseason" style="width:150" :lang="lang">
                                 </select-dialog>
                             </el-form-item>
-
                             <el-form-item :label="_label('pinpai')" prop="brandid">
                                 <simple-select v-model="form.brandid" source="brand" :lang="lang" @change="onBrandChange">
                                 </simple-select>
@@ -67,17 +66,15 @@
                             <el-form-item :label="_label('chimamingxi')" prop="sizetopid">
                                 <selectpanel v-model="form.sizecontentids" ref="sizecontentids"> </selectpanel>
                             </el-form-item>
-                            
                             <el-form-item :label="_label('pinpaiseban')" prop="brandcolor">
                                 <simple-select v-model="form.brandcolor" source="colortemplate" :lang="lang">
                                     <template v-slot="{row}">
                                         <div class="imgline">
-                                        <img :src="_fileLink(row.row.picture)" class="icon"> <span>{{row.getLabel()}}</span>
-                                    </div>
+                                            <img :src="_fileLink(row.row.picture)" class="icon"> <span>{{row.getLabel()}}</span>
+                                        </div>
                                     </template>
                                 </simple-select>
-                            </el-form-item>                           
-                            
+                            </el-form-item>
                         </el-col>
                         <el-col :span="8">
                             <el-form-item :label="_label('shangpinchicun')">
@@ -103,7 +100,6 @@
                                     </select-currency>
                                 </el-input>
                             </el-form-item>
-
                             <el-form-item :label="_label('benguolingshoujia')">
                                 <el-input placeholder="" v-model="form.nationalprice" class="input-with-select">
                                     <select-currency v-model="form.nationalpricecurrency" slot="prepend">
@@ -115,7 +111,6 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            
                             <el-form-item :label="_label('xingbie')">
                                 <sp-radio-group v-model="form.gender" source="gender" :span="8" :lang="lang" class="supermini">
                                 </sp-radio-group>
@@ -124,10 +119,18 @@
                                 <template #label>
                                     <sp-checkbox class="siji" v-model="siji">{{_label("siji")}}</sp-checkbox>
                                 </template>
-                                <el-col :span="12"><sp-checkbox v-model="form.spring">{{_label("chun")}}</sp-checkbox></el-col>
-                                <el-col :span="12"><sp-checkbox v-model="form.summer">{{_label("xia")}}</sp-checkbox></el-col>
-                                <el-col :span="12"><sp-checkbox v-model="form.fall">{{_label("qiu")}}</sp-checkbox></el-col>
-                                <el-col :span="12"><sp-checkbox v-model="form.winter">{{_label("dong")}}</sp-checkbox></el-col>
+                                <el-col :span="12">
+                                    <sp-checkbox v-model="form.spring">{{_label("chun")}}</sp-checkbox>
+                                </el-col>
+                                <el-col :span="12">
+                                    <sp-checkbox v-model="form.summer">{{_label("xia")}}</sp-checkbox>
+                                </el-col>
+                                <el-col :span="12">
+                                    <sp-checkbox v-model="form.fall">{{_label("qiu")}}</sp-checkbox>
+                                </el-col>
+                                <el-col :span="12">
+                                    <sp-checkbox v-model="form.winter">{{_label("dong")}}</sp-checkbox>
+                                </el-col>
                             </el-form-item>
                             <el-form-item :label="_label('zuihouruku')">
                                 <el-input v-model="form.password"></el-input>
@@ -142,20 +145,15 @@
                     </el-row>
                     <el-row :gutter="0">
                         <el-col :span="6" :offset="9">
-                            <auth auth="product">
-                                <as-button type="primary" @click="onSubmit" v-if="option.isedit">{{_label("baocun")}}</as-button>
-                            </auth>
+                            <as-button auth="product" type="primary" @click="onSubmit" v-if="option.isedit">{{_label("baocun")}}</as-button>
                             <as-button type="primary" @click="onQuit">{{_label("tuichu")}}</as-button>
                         </el-col>
                     </el-row>
                 </el-form>
             </el-tab-pane>
-
             <el-tab-pane :label="_label('shangpinchicun')" name="property" :disabled="form.id==''">
                 <property :productid="form.id" ref="property" @quit="onQuit" :option="option"></property>
             </el-tab-pane>
-
-            
             <el-tab-pane :label="_label('shangpintiaoma')" name="code" :disabled="form.id==''">
                 <el-table :data="sizecontents" border style="width:100%;">
                     <el-table-column prop="name" :label="_label('chima')" align="center" width="100">
@@ -167,9 +165,7 @@
                     </el-table-column>
                 </el-table>
                 <el-col :offset="9" :span="6">
-                    <auth auth="product">
-                        <as-button type="primary" @click="onSaveGoodsCode" v-if="option.isedit">{{_label("baocun")}}</as-button>
-                    </auth>
+                    <as-button auth="product" type="primary" @click="onSaveGoodsCode" v-if="option.isedit">{{_label("baocun")}}</as-button>
                     <as-button type="primary" @click="onQuit">{{_label("tuichu")}}</as-button>
                 </el-col>
             </el-tab-pane>
@@ -216,24 +212,22 @@
                 </el-table>
                 <el-col :offset="8" :span="8" style="padding-top:5px">
                     <au-button auth="product" type="primary" @click="onSaveColorGroup" v-if="option.isedit">{{_label("baocun")}}</au-button>
-                    <au-button auth="product" type="primary" @click="onAppendColor" v-if="option.isedit">{{_label("zhuijia")}}</au-button>                    
+                    <au-button auth="product" type="primary" @click="onAppendColor" v-if="option.isedit">{{_label("zhuijia")}}</au-button>
                     <as-button type="primary" @click="onQuit">{{_label("tuichu")}}</as-button>
                 </el-col>
             </el-tab-pane>
-
             <el-tab-pane :label="_label('shangpintupian')" name="album" :disabled="form.id==''">
                 <sp-album :productid="form.id" ref="album"></sp-album>
             </el-tab-pane>
-            
         </el-tabs>
     </el-dialog>
 </template>
 
 <script>
-import globals, { extract,_label } from '../globals.js'
+import globals, { extract, _label } from '../globals.js'
 import { ProductCodeList, ProductDetail } from "../model.js"
-import {initObject} from "../array.js"
-import {extend} from "../object.js"
+import { initObject } from "../array.js"
+import { extend } from "../object.js"
 import List from '../list.js'
 import { Rules } from '../rules.js'
 import DataSource from '../DataSource.js'
@@ -317,23 +311,23 @@ export default {
                 isedit: false
             },
             currentTab: "product",
-            siji:"" //控制四季全选
+            siji: "" //控制四季全选
         }
     },
     methods: {
         onQuit() {
             this.dialogVisible = false
         },
-        getColorStyle(item){
+        getColorStyle(item) {
             return {
-                width:'36px',
-                height:'36px',
-                background: 'url("'+this._fileLink(item.picture)+'") no-repeat center'
+                width: '36px',
+                height: '36px',
+                background: 'url("' + this._fileLink(item.picture) + '") no-repeat center'
             }
 
         },
-        searchProductFilter(product){
-            return this.colors.findIndex(item=>item.id==product.id)<0
+        searchProductFilter(product) {
+            return this.colors.findIndex(item => item.id == product.id) < 0
         },
         onSubmit() {
             var self = this;
@@ -363,7 +357,7 @@ export default {
             source.filter({ topid: self.form.sizetopid }, function(list) {
                 let data = list.map(item => item.getObject())
                 self.$refs['sizecontentids'].setData(data)
-                if(data.length==1) {
+                if (data.length == 1) {
                     self.form.sizecontentids = data[0].id
                 }
             })
@@ -562,10 +556,10 @@ export default {
             self.$refs.childbrand.load(value)
         }
     },
-    watch:{
-        siji:function(newValue){
+    watch: {
+        siji: function(newValue) {
             let self = this
-            extend(self.form,initObject(['spring','summer', 'fall', 'winter'],newValue))
+            extend(self.form, initObject(['spring', 'summer', 'fall', 'winter'], newValue))
         }
     }
 }

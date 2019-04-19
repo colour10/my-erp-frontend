@@ -38,7 +38,7 @@ export default {
                 ]
             },
             checked: true,
-            languages: _label("list_languages"),
+            languages: _label("languages"),
             isShowForm: false,
             back: ""
         };

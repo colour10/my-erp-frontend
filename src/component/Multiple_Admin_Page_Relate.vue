@@ -66,7 +66,7 @@ export default {
         var columns = this.columns
         var column;
 
-        var languages = _label("list_languages");
+        var languages = _label("languages");
         var keys = Object.keys(languages)
         for (var i = 0; i < columns.length; i++) {
             column = columns[i]
