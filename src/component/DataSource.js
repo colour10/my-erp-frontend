@@ -206,14 +206,23 @@ DataSource.prototype.getRows = function(keyValues='', callback) {
 
     keyValues = typeof(keyValues)=='string' ? keyValues.split(",") : keyValues;
 
-    this.getData( data => {
-        //_log(valueList, data, '+++++++') 
-        let list = keyValues.map(function(value){
-            return data.find(item=>value==item.getValue())
-        }).filter(item=>item)
-        
-        callback(list)
-    })
+    let promise = new Promise(resolve=>{
+        self.getData( data => {
+            //_log(valueList, data, '+++++++') 
+            let list = keyValues.map(function(value){
+                return data.find(item=>value==item.getValue())
+            }).filter(item=>item)
+            
+            resolve(list)
+        })
+    });
+    
+    if(typeof(callback)=='function') {
+        promise.then(callback)
+    }
+    else {
+        return promise;
+    }
 }
 
 DataSource.prototype.getRowsByParent = function(parent) {

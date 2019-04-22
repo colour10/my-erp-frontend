@@ -64,7 +64,7 @@ options["sizecontent"] = {url:'/l/sizecontent',oplabel:'name', opvalue:'id'}
 options["productmemo"] = {url:'/l/productmemo',oplabel:'name', opvalue:'id'}
 
 //商品系列
-options["series"] = {url:'/l/series',oplabel:'name', opvalue:'id'}
+options["series"] = {url:'/l/series',oplabel:'name', opvalue:'id', parent:'brandid'}
 
 //商品子系列
 options["series2"] = {url:'/l/series2',oplabel:'name', opvalue:'id'}
@@ -138,6 +138,9 @@ options["pricetype"] =  {hashtable:list.pricetype}
 
 //价格取整规则
 options["pricefilter"] =  {hashtable:list.pricefilter}
+
+//残次品等级
+options["defectivelevel"] =  {hashtable:list.defectivelevel}
 
 
 export default options

@@ -225,6 +225,9 @@
             <el-tab-pane :label="_label('jiage')" name="pricetab" :disabled="form.id==''">
                 <pricetab :productid="form.id" ref="pricetab" @quit="onQuit" :option="option"></pricetab>
             </el-tab-pane>
+            <el-tab-pane :label="_label('kucun')" name="productstock" :disabled="form.id==''">
+                <productstock :productid="form.id" ref="productstock" @quit="onQuit" :option="option"></productstock>
+            </el-tab-pane>
         </el-tabs>
     </el-dialog>
 </template>
@@ -241,6 +244,7 @@ import Asa_Product_Search_Panel from './Asa_Product_Search_Panel.vue'
 import Asa_Product_Property from './Asa_Product_Property.vue'
 import Select_Dialog_Common from '../Select_Dialog_Common.vue'
 import Asa_Product_Price from './Asa_Product_Price.vue'
+import Asa_Product_ProductStock from './Asa_Product_ProductStock.vue'
 
 const color_keys = ['id', 'brandcolor', 'wordcode_1', 'wordcode_2', 'wordcode_3', 'wordcode_4']
 
@@ -250,6 +254,7 @@ export default {
         searchpanel: Asa_Product_Search_Panel,
         property: Asa_Product_Property,
         pricetab:Asa_Product_Price,
+        productstock:Asa_Product_ProductStock,
         selectpanel: Select_Dialog_Common
     },
     data() {
@@ -482,6 +487,11 @@ export default {
                     self.$refs.pricetab.load()
                 }, 50)
             }
+            else if(tab.name=='productstock') {
+                setTimeout(function() {
+                    self.$refs.productstock.load()
+                }, 50)
+            }
         },
         loadColorGroupList() {
             let self = this;
@@ -536,7 +546,6 @@ export default {
                             self.$refs.searchpanel.clear()
                         }
                         self.$refs.property.setProduct(info)
-                        self.$refs.pricetab.setProduct(info)
                         self.onSizetopidChange()
                     }, 100)
 

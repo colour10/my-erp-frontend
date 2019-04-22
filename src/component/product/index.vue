@@ -18,39 +18,53 @@
 </template>
 
 <script>
-import globals,{ASAP,_label} from '../globals.js'
-import Product from '../asa/Asa_Product.vue'
+import globals, { ASAP, _label } from '../globals.js'
+import Asa_Product from '../asa/Asa_Product.vue'
 import ImagePreview from '../image-preview.js'
 
 var props = {
     columns: [
-        { name: "picture", label: _label("zhutu"), is_image: true, image_width: 50, image_height: 50, width: 60, className:'picture'},
-        { name: "picture2", label: _label("futu"), is_image: true, image_width: 50, image_height: 50, width: 60, className:'picture' },
-        { name: "productname", label: _label("shangpinmingcheng"), width: 300 },
-        { name: "brandcolor", label: _label("yanse"), type: "select", source: "colortemplate" },
-        { name: "brandgroupid", label: _label("pinlei"), type: "select", source: "brandgroup" },
-        { name: "brandid", label: _label("pinpai"), type: "select", source: "brand" },
-        { name: "countries", label: _label("chandi"), type: "select-dialog", source: "country" }
+        { name: "picture", label: _label("zhutu"), is_image: true, image_width: 50, image_height: 50, width: 60, className: 'picture' },
+        { name: "picture2", label: _label("futu"), is_image: true, image_width: 50, image_height: 50, width: 60, className: 'picture' }, 
+        {
+            name: "productname",
+            label: _label("shangpinmingcheng"),
+            width: 300,
+            convert: function(row, rowIndex, column) {
+                return [row.brand_label, row.gender_label, row.brandcolor_label, row.childbrand_label].join('/')
+            }
+        },
+        { name: "ageseason", label: _label("niandai"), type: "select", source: "ageseason" },
+
+        { name: "nationalpricecurrency_label", label: _label("benguolingshoujia"), width: 100 },
+        { name: "nationalprice", label: _label("benguolingshoujia"), width: 100 },
+
+        { name: "factorypricecurrency_label", label: _label("chuchangjia"), width: 100 },
+        { name: "factoryprice", label: _label("chuchangjia"), width: 100 },
+
+        { name: "wordpricecurrency_label", label: _label("guojilingshoujia"), width: 100 },
+        { name: "wordprice", label: _label("guojilingshoujia"), width: 100 },
     ],
     controller: "product",
-    authname:"product"
+    tableModel: 'ProductDetail',
+    authname: "product"
 }
 
 export default {
     name: 'asapage-product',
     components: {
-        "product": Product
+        "product": Asa_Product
     },
     data() {
         return {
             props: props,
         }
     },
-    beforeCreate(){
+    beforeCreate() {
         //console.log("beforeCreate", ASAP)
         ASAP.resources = {}
         ASAP.caches = {}
-        //console.log("Product","clear cache")
+            //console.log("Product","clear cache")
     },
     methods: {
         showFormToEdit(rowIndex, row) {
@@ -60,7 +74,7 @@ export default {
             this.$refs.product.clearInfo().edit(true).show()
         },
         onPreview(url) {
-            ImagePreview.show({url})
+            ImagePreview.show({ url })
         },
         onChange(rowdata, type) {
             let self = this

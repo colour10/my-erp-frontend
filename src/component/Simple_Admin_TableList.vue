@@ -31,17 +31,23 @@
 import DataSource from './DataSource.js'
 import globals, { extend, _label } from './globals.js'
 import { host } from './http.js'
+import allModels from "./model.js"
 
-
+let model
 export default {
     name: 'simple-admin-tablelist',
-    props: ['columns', "buttons", "controller", "base", "onclickupdate", 'isedit', 'isdelete', "options", "authname", "tableHeight", 'actions'],
+    props: ['columns', "buttons", "controller", "base", "onclickupdate", 'isedit', 'isdelete', "options", "authname", "tableHeight", 'actions', 'tableModel'],
     components: {
 
     },
     data() {
-        let base = this.base || {}
-        let localOptions = this.options || {}
+        let self = this
+        let base = self.base || {}
+        let localOptions = self.options || {}
+
+        if(self.tableModel && allModels[self.tableModel]) {
+            model = allModels[self.tableModel]
+        }
 
         return {
             rowIndex: "",
@@ -213,7 +219,17 @@ export default {
 
             self._fetch("/" + self.controller + "/page", params).then(function(res) {
                 //self._log(res)
-                res.data.forEach(item => self.tableData.push(Object.assign(item, obj)))
+                if(model) {
+                    //console.log(model)
+                    res.data.forEach(item => {
+                        model.load({data:Object.assign(item, obj) ,depth:1}).then(rowinfo=>{
+                            self.tableData.push(rowinfo)
+                        })
+                    })
+                }
+                else {
+                    res.data.forEach(item => self.tableData.push(Object.assign(item, obj)))
+                }
 
                 //let pagination = res.pagination;
                 extend(self.pagination, res.pagination)

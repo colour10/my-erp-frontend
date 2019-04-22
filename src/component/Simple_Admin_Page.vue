@@ -94,8 +94,11 @@ export default {
 
             if (column.trigger) {
                 let value = self.form[column.name]
-                self._log(self.$refs[column.trigger])
-                self.$refs[column.trigger][0].load(value)
+
+                column.trigger.forEach(name=>{
+                    self._log(self.$refs[name])
+                    self.$refs[name][0].load(value)
+                })                
             }
         },
         onSubmit() {

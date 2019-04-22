@@ -117,46 +117,25 @@ const Product = Object.assign(createModel("product"),{
 const ProductDetail = Object.assign(createModel("product"),{
     init:function(depth, row, callback) {
         let self = this
-        let arr = []
-        
-        //尺码组
-        const dataSource = DataSource.getDataSource('sizecontent', getLabel('lang'));      
-        arr.push(new Promise(function(resolve){
-            dataSource.getRows(row.sizecontentids, resolve)
-        }))
 
-        const brandgroupchild = DataSource.getDataSource('brandgroupchild', getLabel('lang'));      
-        arr.push(new Promise(function(resolve){
-            brandgroupchild.getRowLabel(row.childbrand, resolve)
-        }))
-
-        const brandgroup = DataSource.getDataSource('brandgroup', getLabel('lang'));      
-        arr.push(new Promise(function(resolve){
-            brandgroup.getRowLabel(row.brandgroupid, resolve)
-        }))
-
-        const country = DataSource.getDataSource('country', getLabel('lang'));      
-        arr.push(new Promise(function(resolve){
-            country.getRowLabels(row.countries, resolve)
-        }))
-
-        const brandcolor = DataSource.getDataSource('colortemplate', getLabel('lang'));      
-        arr.push(new Promise(function(resolve){
-            brandcolor.getRowLabels(row.brandcolor, resolve)
-        }))
-
-        const season = DataSource.getDataSource('season', getLabel('lang'));      
-        arr.push(new Promise(function(resolve){
-            season.getRowLabels(row.season, resolve)
-        }))
-
-        const ageseason = DataSource.getDataSource('ageseason', getLabel('lang'));      
-        arr.push(new Promise(function(resolve){
-            ageseason.getRowLabels(row.ageseason, resolve)
-        }))
+        let runner = promiseAll(row)
+        //runner.push(Product.load({data:row.productid}), 'product')
+        //runner.push(Warehouse.load({data:row.warehouseid}), 'warehouse')
+        //runner.push(Goods.load({data:row.goodsid}), 'goods')
+        runner.push(getDataSource("sizecontent").getRows(row.sizecontentids), 'sizecontents')
+        runner.push(getDataSource("brandgroupchild").getRowLabel(row.childbrand), 'childbrand_label')
+        runner.push(getDataSource("brandgroup").getRowLabel(row.brandgroupid), 'brandgroup_label')
+        runner.push(getDataSource("country").getRowLabel(row.countries), 'countries_label')
+        runner.push(getDataSource("colortemplate").getRowLabel(row.brandcolor), 'brandcolor_label')
+        runner.push(getDataSource("ageseason").getRowLabel(row.ageseason), 'ageseason_label')
+        runner.push(getDataSource("brand").getRowLabel(row.brandid), 'brand_label')
+        runner.push(getDataSource("gender").getRowLabel(row.gender), 'gender_label')
+        runner.push(getDataSource("currency").getRowLabel(row.wordpricecurrency), 'wordpricecurrency_label')
+        runner.push(getDataSource("currency").getRowLabel(row.factorypricecurrency), 'factorypricecurrency_label')
+        runner.push(getDataSource("currency").getRowLabel(row.nationalpricecurrency), 'nationalpricecurrency_label')
 
         //颜色分组
-        arr.push(new Promise(function(resolve){
+        runner.push(new Promise(function(resolve){
             if(row.product_group=='') {
                 resolve([])
                 return 
@@ -168,7 +147,7 @@ const ProductDetail = Object.assign(createModel("product"),{
             }
             let list = product_group.split('|').map(item=>item.split(','))
 
-            brandcolor.getData(function(data){
+            getDataSource("colortemplate").getData(function(data){
                 let array = list.map(function(item){
                     let row = data.find(function(row){
                         //console.log(row,item[1], "===", row.getValue())
@@ -180,20 +159,10 @@ const ProductDetail = Object.assign(createModel("product"),{
 
                 resolve(array)
             })
-        }))
+        }), 'colors')
 
-        Promise.all(arr).then(function(results) {
-            //console.log(results)
-            row.sizecontents = results[0]
-            row.childbrand_label = results[1]
-            row.brandgroup_label = results[2]
-            row.countries_label = results[3]
-            row.brandcolor_label = results[4]
-            row.season_label = results[5]
-            row.ageseason_label = results[6]
-            row.colors = results[7]
-            callback(row)
-        });
+
+        runner.all().then(callback)
     }
 })
 
@@ -207,6 +176,8 @@ const Productstock = Object.assign(createModel("productstock"),{
         runner.push(Warehouse.load({data:row.warehouseid}), 'warehouse')
         runner.push(Goods.load({data:row.goodsid}), 'goods')
         runner.push(getDataSource("sizecontent").getRowLabel(row.sizecontentid), 'sizecontent_label')
+        runner.push(getDataSource("orderproperty").getRowLabel(row.property), 'property_label')
+        runner.push(getDataSource("defectivelevel").getRowLabel(row.defective_level), 'defectivelevel_label')
 
         runner.all().then(callback)
     }
@@ -299,4 +270,6 @@ const Salesreceive = Object.assign(createModel("orderpayment"),{
 export {Sales,Salesreceive}
 
 export { Productstock,Warehouse,Product,Goods,OrderDetails,ConfirmorderDetails }
-export default {}
+export default {
+    ProductDetail
+}

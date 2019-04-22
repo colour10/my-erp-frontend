@@ -32,12 +32,11 @@ export default {
     components: {
         simpleform
     },
-    props: ["option"],
+    props: ["option","productid"],
     data() {
         var self = this;
 
         return {
-            product: {},
             data: [],
             loaded:false
         }
@@ -50,7 +49,7 @@ export default {
             let self = this;
             //this._log("确认保存",form)
             let params = extract(form, ['price','currencyid'])
-            params.productid = self.product.id
+            params.productid = self.productid
             params.priceid = form.id
             let result = await self._submit("/product/saveprice", params)
             self.load()
@@ -60,9 +59,8 @@ export default {
             row.pricename = row.name
             self.$refs['productprice'].setInfo(row)._setting({ submitButtonText: _label('baocun') }).show()
         },
-        async setProduct(product) {
+        async setProduct() {
             let self = this;
-            self.product = product
             self.loaded = false
             self.data = [];
 
@@ -75,7 +73,7 @@ export default {
             }
 
             //加载数据
-            let res = await self._fetch("/product/getprices", {id:self.product.id})
+            let res = await self._fetch("/product/getprices", {id:self.productid})
             self._log(res)
 
             let source = DataSource.getDataSource("currency")
@@ -89,7 +87,13 @@ export default {
             return self;
         }
     },
-    computed: {},
-    watch: {}
+    mounted: function(){
+        this.setProduct()
+    },
+    watch: {
+        productid(newValue) {
+            this.setProduct()
+        }
+    }
 }
 </script>

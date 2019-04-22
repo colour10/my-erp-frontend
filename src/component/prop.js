@@ -209,97 +209,22 @@ const props = {
     },
 
     "supplier": {
-        columns: [{
-            name: "nickname",
-            label: _label("nicheng"),
-            class: "width2"
-        },
-        {
-            name: "suppliercode",
-            label: _label("bianma"),
-            class: "width2"
-        }, {
-            name: "suppliertype",
-            label: _label("leixing"),
-            class: "width2",
-            type:"select",
-            source:"suppliertype"
-        }, {
-            name: "countrycity",
-            label: _label("guojiachengshi"),
-            class: "width2",
-            type: "select",
-            source: "country"
-        }, {
-            name: "suppliername",
-            label: _label("mingcheng"),
-            class: "width1"
-        }, {
-            name: "address",
-            label: _label("dizhi"),
-            class: "width1",
-            is_hide: true
-        }, {
-            name: "englishname",
-            label: _label("yingwenmingcheng"),
-            class: "width1",
-            is_hide: true
-        }, {
-            name: "website",
-            label: _label("wangzhi"),
-            class: "width2",
-            is_hide: true
-        }, {
-            name: "fax",
-            label: _label("chuanzhen"),
-            class: "width2",
-            is_hide: true
-        }, {
-            name: "legal",
-            label: _label("faren"),
-            class: "width2",
-            is_hide: true
-        }, {
-            name: "registeredcapital",
-            label: _label("zhuceziben"),
-            class: "width2",
-            is_hide: true
-        }, {
-            name: "businesslicense",
-            label: _label("yingyezhizhaohao"),
-            class: "width2",
-            is_hide: true
-        }, {
-            name: "heading",
-            label: _label("shuihao"),
-            class: "width2",
-            is_hide: true
-        }, {
-            name: "qq",
-            label: _label("qq"),
-            class: "width2",
-            is_hide: true
-        }, {
-            name: "weixin",
-            label: _label("weixin"),
-            class: "width2",
-            is_hide: true
-        }, {
-            name: "alipay",
-            label: _label("alipay"),
-            class: "width2",
-            is_hide: true
-        }, {
-            name: "phone",
-            label: _label("dianhua"),
-            class: "width2"
-        }, {
-            name: "memo",
-            label: _label("beizhu"),
-            class: "width1",
-            is_hide: true,
-            type: "textarea"
-        }],
+        columns: [
+            {name: "nickname",label: _label("nicheng"),class: "width2"},
+            {name: "suppliercode",label: _label("bianma"),class: "width2"},
+            {name: "suppliertype",label: _label("leixing"),class: "width2",type:"select",source:"suppliertype"},
+            {name: "countrycity",label: _label("guojiachengshi"),class: "width2",type: "select",source: "country"},
+            {name: "suppliername",label: _label("mingcheng"),class: "width1"},
+            {name: "address",label: _label("dizhi"),class: "width1",is_hide: true},
+            {name: "englishname",label: _label("yingwenmingcheng"),class: "width1",is_hide: true},
+            {name: "website",label: _label("wangzhi"),class: "width2",is_hide: true},
+            {name: "zipcode",label: _label("youbian"),class: "width2",is_hide: true},
+            {name: "phone",label: _label("dianhua"),class: "width2"},
+            {name: "fax",label: _label("chuanzhen"),class: "width2",is_hide: true},
+            {name: "linkman",label: _label("lianxiren"),class: "width2",is_hide: true},
+            {name: "mobile",label: _label("shoujihao"),class: "width2",is_hide: true},
+            {name: "email",label: 'Email',class: "width1",is_hide: true}
+        ],
         options: {
             dialogWidth: '700px',
             formSize: 'small',
@@ -438,8 +363,8 @@ const props = {
     "pricesetting":{
         columns: [
             { name: "priceid", label: _label("jiagemingcheng"), type:"select", source:"price"},
-            { name: "brandid", label: _label("pinpai"), type:"select", source:"brand"},
-            { name: "brandgroupid", label: _label("pinlei"), type:"select", source:"brandgroup", trigger:"brandgroupchildid"},
+            { name: "brandid", label: _label("pinpai"), type:"select", source:"brand", trigger:['seriesid']},
+            { name: "brandgroupid", label: _label("pinlei"), type:"select", source:"brandgroup", trigger:["brandgroupchildid"]},
             { name: "brandgroupchildid", label: _label("zipinlei"), type:"select", source:"brandgroupchild"},
             { name: "ageseasonid", label: _label("niandai"), type:"select", source:"ageseason"},
             { name: "seriesid", label: _label("xilie"), type:"select", source:"series"},
