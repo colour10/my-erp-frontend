@@ -47,6 +47,7 @@ import Authbutton from './component/authbutton.js'
 import Button from './component/button.js'
 import RadioGroup from './component/radio-group.vue'
 
+import ImagePreview from './component/image-preview.vue'
 import Creator from './component/develop/index.vue'
 import Home from './component/home/index.vue'
 import Order from './component/order/index.vue'
@@ -97,7 +98,8 @@ const components = [
     Checkbox,
     Button,
     Authbutton, 
-    RadioGroup
+    RadioGroup,
+    ImagePreview
 ]
 
 components.forEach(component => {

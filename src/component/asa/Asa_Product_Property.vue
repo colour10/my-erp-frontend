@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-table :data="sizecontents" border style="width:100%;">
-            <el-table-column :label="_label('shangpinmingcheng')" align="center">
+            <el-table-column :label="_label('chima')" align="center" width="80">
                 <template v-slot="scope">
                     {{scope.row.name}}
                 </template>
@@ -35,7 +35,8 @@ export default {
             product: {},
             properties: [],
             sizecontents: [],
-            data: {}
+            data: {},
+            loaded:false
         }
     },
     methods: {
@@ -56,11 +57,15 @@ export default {
                 //self._log(self.sizecontents)
             self.sizecontents = product.sizecontents.map(item => item.getObject());
 
-            self.load()
+            self.loaded =false;
+            self.data = {}
             return self
         },
         async load() {
             let self = this
+            if(self.loaded) {
+                return;
+            }
             let res = await self._fetch("/brandgroupchildproperty/page", { brandgroupchildid: self.product.childbrand })
             //console.log(res, "haha")
 
@@ -75,6 +80,7 @@ export default {
                 obj[item.sizecontentid+'_'+item.propertyid] = item.content;
             })
             self.data = obj
+            self.loaded = true;
             return self;
         }
     },

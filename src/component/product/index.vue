@@ -9,16 +9,18 @@
         </el-row>
         <el-row :gutter="20" class="product">
             <el-col :span="24">
-                <simple-admin-tablelist ref="tablelist" v-bind="props" :onclickupdate="showFormToEdit"></simple-admin-tablelist>
+                <simple-admin-tablelist ref="tablelist" v-bind="props" :onclickupdate="showFormToEdit" @preview="onPreview"></simple-admin-tablelist>
             </el-col>
         </el-row>
         <product ref="product" @change="onChange"></product>
+        <sp-image-preview></sp-image-preview>
     </div>
 </template>
 
 <script>
 import globals,{ASAP,_label} from '../globals.js'
 import Product from '../asa/Asa_Product.vue'
+import ImagePreview from '../image-preview.js'
 
 var props = {
     columns: [
@@ -56,6 +58,9 @@ export default {
         },
         showFormToCreate() {
             this.$refs.product.clearInfo().edit(true).show()
+        },
+        onPreview(url) {
+            ImagePreview.show({url})
         },
         onChange(rowdata, type) {
             let self = this

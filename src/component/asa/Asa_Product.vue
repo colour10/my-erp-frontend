@@ -138,8 +138,11 @@
                             <el-form-item :label="_label('beizhu')">
                                 <el-input v-model="form.memo"></el-input>
                             </el-form-item>
-                            <el-form-item :label="_label('jiandang')">
-                                <span>{{adduser}}({{datetime}})</span>
+                            <el-form-item :label="_label('jiandangren')">
+                                <sp-display-input :value="form.makestaff" source="user" disabled></sp-display-input>
+                            </el-form-item>
+                            <el-form-item :label="_label('jiandangshijian')">
+                                <el-input :value="form.maketime" disabled></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -219,6 +222,9 @@
             <el-tab-pane :label="_label('shangpintupian')" name="album" :disabled="form.id==''">
                 <sp-album :productid="form.id" ref="album"></sp-album>
             </el-tab-pane>
+            <el-tab-pane :label="_label('jiage')" name="pricetab" :disabled="form.id==''">
+                <pricetab :productid="form.id" ref="pricetab" @quit="onQuit" :option="option"></pricetab>
+            </el-tab-pane>
         </el-tabs>
     </el-dialog>
 </template>
@@ -234,6 +240,7 @@ import DataSource from '../DataSource.js'
 import Asa_Product_Search_Panel from './Asa_Product_Search_Panel.vue'
 import Asa_Product_Property from './Asa_Product_Property.vue'
 import Select_Dialog_Common from '../Select_Dialog_Common.vue'
+import Asa_Product_Price from './Asa_Product_Price.vue'
 
 const color_keys = ['id', 'brandcolor', 'wordcode_1', 'wordcode_2', 'wordcode_3', 'wordcode_4']
 
@@ -242,6 +249,7 @@ export default {
     components: {
         searchpanel: Asa_Product_Search_Panel,
         property: Asa_Product_Property,
+        pricetab:Asa_Product_Price,
         selectpanel: Select_Dialog_Common
     },
     data() {
@@ -270,10 +278,9 @@ export default {
                 ulnarinch: "",
                 factoryprice: "",
                 factorypricecurrency: "",
-                retailpricecurrency: "",
                 orderprice: "",
                 orderpricecurrency: "",
-                retailprice: "",
+                nationalpricecurrency:"",
                 nationalprice: "",
                 memo: "",
                 wordprice: "",
@@ -290,7 +297,9 @@ export default {
                 wordcode_1: "",
                 wordcode_2: "",
                 wordcode_3: "",
-                wordcode_4: ""
+                wordcode_4: "",
+                makestaff: "",
+                maketime: ''
             },
             rules: {
                 sizetopid: Rules.id({ required: true, message: _label("8000") }),
@@ -463,6 +472,16 @@ export default {
                     self.$refs.album.loadList()
                 }, 100)
             }
+            else if(tab.name=='property') {
+                setTimeout(function() {
+                    self.$refs.property.load()
+                }, 50)
+            }
+            else if(tab.name=='pricetab') {
+                setTimeout(function() {
+                    self.$refs.pricetab.load()
+                }, 50)
+            }
         },
         loadColorGroupList() {
             let self = this;
@@ -517,6 +536,7 @@ export default {
                             self.$refs.searchpanel.clear()
                         }
                         self.$refs.property.setProduct(info)
+                        self.$refs.pricetab.setProduct(info)
                         self.onSizetopidChange()
                     }, 100)
 

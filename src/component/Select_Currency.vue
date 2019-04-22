@@ -1,26 +1,25 @@
 <template>
-  <el-select v-model="currentValue" placeholder="" style="width:100" @change="handleChange" filterable :filter-method="filterCurrency" :disabled="disabled">
-    <el-option v-for="item in current_list" :key="item.getKeyValue()" :value="item.getKeyValue()" :label="item.getLabelValue()">
-      <span style="float: left">{{ item.getRow().code }}</span>
-    </el-option>
-    
-  </el-select>
+    <el-select v-model="currentValue" placeholder="" @change="handleChange" filterable :filter-method="filterCurrency" :disabled="disabled">
+        <el-option v-for="item in current_list" :key="item.getKeyValue()" :value="item.getValue()" :label="item.getLabel()">
+        </el-option>
+    </el-select>
 </template>
 
 <script>
 import DataSource from './DataSource.js'
+import {_label} from "./globals.js"
 
 export default {
     name: 'select-currency',
     props: {
-        select_value:{
+        select_value: {
             required: true,
-            default:''
+            default: ''
         },
-        lang:{
+        lang: {
             type: String
         },
-        disabled:{}
+        disabled: {}
     },
     model: {
         prop: 'select_value',
@@ -28,13 +27,13 @@ export default {
     },
     data() {
         var self = this
-        var dataSource = DataSource.getDataSource("currency", self.lang);
+        var dataSource = DataSource.getDataSource("currency", _label("lang"));
         return {
-            currentValue:self.select_value,
-            dataCopy:[],
-            currentInput:"",
-            dataSource:dataSource,
-            qingxuanze:self._label("qingxuanze")
+            currentValue: self.select_value,
+            dataCopy: [],
+            currentInput: "",
+            dataSource: dataSource,
+            qingxuanze: self._label("qingxuanze")
         }
     },
     methods: {
@@ -42,37 +41,35 @@ export default {
             this.currentInput = val
         },
         handleChange(newValue) {
-            this.$emit('change',newValue)
+            this.$emit('change', newValue)
         }
     },
-    watch:{
+    watch: {
         select_value(newValue) {
             this.currentValue = newValue
         }
     },
-    computed:{
+    computed: {
         current_list() {
             var self = this
             var val = self.currentInput;
-            if (val) { //val存在
+            if (val) {
                 return self.dataCopy.filter((item) => {
                     var row = item.getRow().code
                     if (!!~row.indexOf(val) || !!~row.toUpperCase().indexOf(val.toUpperCase())) {
                         return true
                     }
                 })
-            } 
-            else { //val为空时，还原数组
-                //self._log("self.dataCopy", self.dataCopy)
+            } else {
                 return self.dataCopy;
             }
         }
     },
-    mounted:function(){
+    mounted: function() {
         var self = this
-        self.dataSource.getData(function(data){
-            self.dataCopy = data      
-        }) 
+        self.dataSource.getData(function(data) {
+            self.dataCopy = data
+        })
     }
 }
 </script>

@@ -3,10 +3,12 @@
         <el-input :placeholder="placeholder" v-model="currentText" :readonly="true">
             <as-button slot="append" icon="el-icon-more" @click="dialogVisible = true"></as-button>
         </el-input>
-        <el-dialog class="user-form" :title="_label('qingxuanze')" :visible.sync="dialogVisible" :center="true" :width="componenToptions.dialogWidth||'40%'" :modal="false">
+        <el-dialog class="user-form" :title="_label('qingxuanze')" :visible.sync="dialogVisible" :center="true" :width="componenToptions.dialogWidth||'50%'" :modal="false">
+            <el-row>
             <el-checkbox-group v-model="checkList" @change="handleChange">
-                <el-checkbox :label="item.id" v-for="(item,key) in data" :key="item.id">{{item.name}}</el-checkbox>
+                <el-col :span="4" v-for="(item,key) in data" :key="item.id"><el-checkbox :label="item.id">{{item.name}}</el-checkbox></el-col>
             </el-checkbox-group>
+        </el-row>
             <div slot="footer" class="dialog-footer" v-if="!auto_model">
                 <as-button type="primary" @click="handleSelect">{{_label("ok")}}</as-button>
                 <as-button @click="handleCancel">{{_label("cancel")}}</as-button>

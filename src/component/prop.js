@@ -443,7 +443,8 @@ const props = {
             { name: "brandgroupchildid", label: _label("zipinlei"), type:"select", source:"brandgroupchild"},
             { name: "ageseasonid", label: _label("niandai"), type:"select", source:"ageseason"},
             { name: "seriesid", label: _label("xilie"), type:"select", source:"series"},
-            { name: "discount", label: _label("xishu") }
+            { name: "discount", label: _label("xishu") },
+            { name: "filter", label: _label("quzheng"), type:"select", source:"pricefilter"},
         ],
         controller: "pricesetting",
         auth: "pricesetting",
@@ -490,6 +491,13 @@ const props = {
             dialogWidth:"400px", 
             autoreload:true
         }
+    },
+    "productprice":{
+        columns: [
+            { name: "pricename", label: _label("jiage"), type: 'label'},
+            { name: "price", label: _label("jine") }
+        ],
+        controller: "productprice"
     },
 }
 

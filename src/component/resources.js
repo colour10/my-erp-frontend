@@ -85,7 +85,7 @@ options["userwarehouse"] = {url:'/warehouse/userlist',oplabel:'name', opvalue:'i
 
 options["gender"] = {hashtable:list.gender}
 options["gender2"] = {hashtable:list.gender2}
-options["currency"] = {url:'/l/currency',oplabel:'name', opvalue:'id'}
+options["currency"] = {url:'/l/currency',oplabel:'code', opvalue:'id'}
 options["season"] = {hashtable:list.season}
 options["orderproperty"] = {hashtable:list.orderproperty}
 options["bussinesstype"] = {hashlist:list.bussinesstype,oplabel:'name', opvalue:'id'}
@@ -135,6 +135,9 @@ options["paymenttype"] =  {hashtable:list.paymenttype}
 
 //价格类型
 options["pricetype"] =  {hashtable:list.pricetype}
+
+//价格取整规则
+options["pricefilter"] =  {hashtable:list.pricefilter}
 
 
 export default options

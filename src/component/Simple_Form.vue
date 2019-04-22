@@ -2,7 +2,7 @@
     <el-dialog class="user-form" :title="formTitle" :visible.sync="dialogVisible" :center="true" :width="options.dialogWidth||'40%'" :modal="false">
         <el-row>
             <el-col :span="24">
-                <el-form ref="form" :model="form" label-width="100px" :inline="options.inline||false" :size="options.formSize||'medium'">                    
+                <el-form ref="form" :model="form" label-width="100px" :inline="options.inline||false" :size="options.formSize||'medium'">
                     <el-form-item :label="item.label" v-if="!item.is_edit_hide" v-for="item in prop.columns" :key="item.name" :class="item.class?item.class:''">
                         <el-input :ref="item.name" @keyup.enter.native="onSubmit" :type="item.type?item.type:'text'" v-if="!item.type||item.type=='input'||item.type=='textarea'" v-model="form[item.name]" :disabled="isDisabled(item)"></el-input>
                         <el-switch :ref="item.name" v-if="item.type=='switch'" v-model="form[item.name]" active-value="1" inactive-value="0" :disabled="isDisabled(item)"></el-switch>
@@ -15,9 +15,7 @@
         </el-row>
         <el-row>
             <el-col :span="24" style="text-align:center;">
-                <auth :auth="authname">
-                    <as-button type="primary" @click="onSubmit" style="margin:auto;" v-if="isEditable(form)">{{setting.submitButtonText}}</as-button>
-                </auth>
+                <au-button :auth="authname" type="primary" @click="onSubmit" style="margin:auto;" v-if="isEditable && isEditable(form)">{{setting.submitButtonText}}</au-button>
                 <as-button type="primary" @click="onQuit">{{_label("tuichu")}}</as-button>
             </el-col>
         </el-row>
@@ -25,9 +23,9 @@
 </template>
 
 <script>
-import globals, { _label,extend } from './globals.js'
+import globals, { _label, extend } from './globals.js'
 import { getProp } from "./prop.js"
-import { initObject,isArray } from "./array.js"
+import { initObject, isArray } from "./array.js"
 
 export default {
     name: 'simple-form',
@@ -37,10 +35,11 @@ export default {
     },
     data() {
         let self = this
-        let form = {},disableds={}
+        let form = {},
+            disableds = {}
 
         let prop = getProp(self.name)
-        //self._log(self.name, prop)
+            //self._log(self.name, prop)
 
         for (let i = 0; i < prop.columns.length; i++) {
             let name = prop.columns[i].name
@@ -49,9 +48,9 @@ export default {
         }
 
         return {
-            setting:{
-                title:"",
-                submitButtonText:_label("baocun")
+            setting: {
+                title: "",
+                submitButtonText: _label("baocun")
             },
             dialogVisible: false,
             prop,
@@ -66,7 +65,7 @@ export default {
         },
         onSubmit() {
             var self = this;
-            self.$emit("submit", extend({},self.form))
+            self.$emit("submit", extend({}, self.form))
         },
         setInfo(info) {
             let self = this
@@ -81,7 +80,7 @@ export default {
                 let columns = self.prop.columns;
                 for (let i = 0; i < columns.length; i++) {
                     let column = columns[i]
-                    if(column.type=='label') {
+                    if (column.type == 'label') {
                         continue;
                     }
 
@@ -100,27 +99,26 @@ export default {
             let self = this
             let config = self.disableds
 
-            if(typeof(self.isEditable)=='function' && self.isEditable(self.form)==false) {
+            if (typeof(self.isEditable) == 'function' && self.isEditable(self.form) == false) {
                 return true
             }
             //this._log(config, column.name, config[column.name]===true, '=',config[column.name] && config[column.name]===true)
-            return config[column.name] ? config[column.name]===true : false;
+            return config[column.name] ? config[column.name] === true : false;
         },
         setDisabled(name, isDisabled) {
             let self = this
 
-            extend(self.disableds,initObject(name,isDisabled))
+            extend(self.disableds, initObject(name, isDisabled))
             return self
         }
     },
     watch: {},
     computed: {
-        formTitle(){
+        formTitle() {
             let self = this
-            if(self.setting.title.length>0) {
+            if (self.setting.title.length > 0) {
                 return self.setting.title
-            }
-            else {
+            } else {
                 return self.title ? self.title : ""
             }
         }

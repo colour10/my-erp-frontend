@@ -1,21 +1,22 @@
 <template>
-  <div>
-  <el-input :placeholder="placeholder" v-model="currentText" :readonly="true">    
-    <as-button slot="append" icon="el-icon-more" @click="showPanel"></as-button>
-  </el-input>
-  
-  <el-dialog class="user-form" :title="_label('qingxuanze')" :visible.sync="dialogVisible" :center="true" :width="componenToptions.dialogWidth||'40%'" :modal="false">
-    <el-checkbox-group v-model="checkList" @change="handleChange">
-      <el-checkbox :label="item.getKeyValue()" v-for="(item,key) in data" :key="item.getKeyValue()">{{item.getLabelValue()}}</el-checkbox>
-    </el-checkbox-group>
-    
-    <div slot="footer" class="dialog-footer" v-if="!auto_model">    
-      <as-button type="primary" @click="handleSelect">{{_label("ok")}}</as-button>
-      <as-button @click="handleCancel">{{_label("cancel")}}</as-button>
+    <div>
+        <el-input :placeholder="placeholder" v-model="currentText" :readonly="true">
+            <as-button slot="append" icon="el-icon-more" @click="showPanel"></as-button>
+        </el-input>
+        <el-dialog class="user-form" :title="_label('qingxuanze')" :visible.sync="dialogVisible" :center="true" :width="componenToptions.dialogWidth||'50%'" :modal="false">
+            <el-row>
+                <el-checkbox-group v-model="checkList" @change="handleChange">
+                    <el-col :span="4" v-for="(item,key) in data" :key="item.getKeyValue()">
+                        <el-checkbox :label="item.getKeyValue()">{{item.getLabelValue()}}</el-checkbox>
+                    </el-col>
+                </el-checkbox-group>
+            </el-row>
+            <div slot="footer" class="dialog-footer" v-if="!auto_model">
+                <as-button type="primary" @click="handleSelect">{{_label("ok")}}</as-button>
+                <as-button @click="handleCancel">{{_label("cancel")}}</as-button>
+            </div>
+        </el-dialog>
     </div>
-  </el-dialog>
-</div>
-  
 </template>
 
 <script>
@@ -25,29 +26,29 @@ import globals from './globals.js'
 export default {
     name: 'select-dialog',
     props: {
-        select_value:{
+        select_value: {
             required: true,
-            default:''
+            default: ''
         },
-        disabled:{
+        disabled: {
             type: Boolean,
-            default:false
+            default: false
         },
-        lang:{
+        lang: {
             type: String
         },
-        auto_model:{
+        auto_model: {
             type: Boolean,
-            default:false
+            default: false
         },
-        placeholder:{
+        placeholder: {
             type: String,
-            default:""
+            default: ""
         },
-        source:{
-            type:String,
-            required:true    
-        }        
+        source: {
+            type: String,
+            required: true
+        }
     },
     model: {
         prop: 'select_value',
@@ -55,71 +56,71 @@ export default {
     },
     data() {
         var self = this
-        
-        
+
+
         return {
-            currentText:"",
-            checkList:[],
-            data:[],
-            componenToptions:{},            
-            dialogVisible:false
+            currentText: "",
+            checkList: [],
+            data: [],
+            componenToptions: {},
+            dialogVisible: false
         }
     },
     methods: {
         handleSelect() {
             var self = this;
-            self.$emit('change',self.checkList.join(","))    
-            self.dialogVisible = false;  
+            self.$emit('change', self.checkList.join(","))
+            self.dialogVisible = false;
         },
         handleCancel() {
             var self = this;
             self.convertValue(self.select_value)
-            //self.checkList = self.select_value.split(",")
-            self.dialogVisible = false;  
+                //self.checkList = self.select_value.split(",")
+            self.dialogVisible = false;
         },
-        showPanel(){
+        showPanel() {
             var self = this;
 
-            self.getDataSource().getData(function(data){
+            self.getDataSource().getData(function(data) {
                 self.data = data
-                self.dialogVisible = true;        
-            })                 
+                self.dialogVisible = true;
+            })
         },
         handleChange(newValue) {
             var self = this;
-            
-            if(self.auto_model) {
+
+            if (self.auto_model) {
                 self.convertValue(newValue)
-                self.$emit('change',newValue.join(","))
+                self.$emit('change', newValue.join(","))
             }
         },
         convertValue(value) {
             var self = this;
             //self._log("convertValue", value)
             //
-            value = !value ? "":value
+            value = !value ? "" : value
 
-            self.getDataSource().getRowLabels(value, function(labels){
+            self.getDataSource().getRowLabels(value, function(labels) {
                 //self._log("convertValue", self.source, self.lang, labels)
                 self.checkList = value.split(",")
                 self.currentText = labels
-            })            
+            })
         },
         getDataSource() {
             var self = this;
             return DataSource.getDataSource(self.source, self.lang);
         }
     },
-    watch:{
+    watch: {
         select_value(newValue) {
             var self = this
-            //console.log("change", newValue)
+                //console.log("change", newValue)
             self.convertValue(newValue)
         }
     },
-    mounted:function(){
+    mounted: function() {
         var self = this;
-        var txt = self.select_value ||""
+        var txt = self.select_value || ""
         self.convertValue(txt)
     }
 }
