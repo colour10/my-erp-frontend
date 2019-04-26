@@ -19,7 +19,8 @@
                     <el-menu-item index="colortemplate">{{_label("menu-2-1-4")}}</el-menu-item>
                     <el-menu-item index="sizetop">{{_label("menu-2-1-5")}}</el-menu-item>
                     <el-menu-item index="productmemo">{{_label("shangpinmiaoshu")}}</el-menu-item>
-                    <el-menu-item index="material">{{_label("menu-2-1-6")}}</el-menu-item>
+                    <el-menu-item index="material">{{_label("caizhiguanli")}}</el-menu-item>
+                    <el-menu-item index="materialnote">{{_label("caizhibeizhu")}}</el-menu-item>
                     <el-menu-item index="currency">{{_label("huobiguanli")}}</el-menu-item>
                     <el-menu-item index="ulnarinch">{{_label("menu-2-1-7")}}</el-menu-item>
                     <el-menu-item index="warehouse">{{_label("menu-2-3-1")}}</el-menu-item>
@@ -128,7 +129,8 @@ const menus = {
     "colortemplate":_label("menu-2-1-4"),
     "sizetop":_label("menu-2-1-5"),
     "productmemo":_label("shangpinmiaoshu"),
-    "material":_label("menu-2-1-6"),
+    "material":_label("caizhiguanli"),
+    "materialnote":_label("caizhibeizhu"),
     "currency":_label("huobiguanli"),
     "ulnarinch":_label("menu-2-1-7"),
     "warehouse":_label("menu-2-3-1"),

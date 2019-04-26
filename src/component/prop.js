@@ -1,6 +1,9 @@
 import {getLabel, getAvailableHeight} from "./globals.js"
 const _label = getLabel
 
+const sort_method_digit = function(a,b){
+    return a-b
+}
 const props = {
     "ageseason": {
         columns: [{
@@ -21,12 +24,10 @@ const props = {
     },
 
     "ulnarinch": {
-        columns: [{
-            name: "name",
-            label: _label("chima"),
-            is_multiple: true,
-            is_focus: true
-        }],
+        columns: [
+            { name: "name", label: _label("mingcheng"), is_multiple: true, is_focus: true },
+            { name: "displayindex", label: _label("xianshixuhao"), sortMethod:sort_method_digit }
+        ],
         controller: "ulnarinch",
         key_column: "name"
     },
@@ -117,10 +118,6 @@ const props = {
             is_multiple: true,
             is_focus: true
         }, {
-            name: "name_en",
-            label: _label("guojiamingcheng")+'['+_label("en")+"]",
-            is_edit_hide:true
-        },{
             name: "code",
             label: _label("guojiadaima3")
         },
@@ -154,18 +151,26 @@ const props = {
     },
 
     "material": {
-        columns: [{
-            name: "code",
-            label: _label("caizhidaima"),
-            is_focus: true
-        }, {
-            name: "name",
-            label: _label("caizhimingcheng"),
-            is_multiple: true,
-            is_focus: true
-        }],
+        columns: [
+            { name: "name", label: _label("caizhimingcheng"), is_multiple: true, is_focus: true }
+        ],
         controller: "material",
-        key_column: "name"
+        key_column: "name",
+        options:{
+            dialogWidth:"400px"
+        }
+    },
+
+    "materialnote": {
+        columns: [
+            { name: "content", label: _label("mingcheng"), is_focus: true, is_multiple: true}, 
+            { name: "displayindex", label: _label("xianshixuhao"), sortMethod:sort_method_digit }
+        ],
+        controller: "materialnote",
+        key_column: "content",
+        options:{
+            dialogWidth:"400px"
+        }
     },
 
     "colortemplate": {
@@ -197,15 +202,15 @@ const props = {
     },
 
     "productmemo": {
-        columns: [{
-                name: "name",
-                label: _label("mingcheng"),
-                is_multiple: true,
-                is_focus: true
-            }
+        columns: [
+            { name: "name", label: _label("mingcheng"), is_multiple: true, is_focus: true },
+            { name: "displayindex", label: _label("xianshixuhao"), sortMethod:sort_method_digit }
         ],
         controller: "productmemo",
-        key_column: "name"
+        key_column: "name",
+        options:{
+            dialogWidth:"400px"
+        }
     },
 
     "supplier": {
@@ -362,14 +367,14 @@ const props = {
     },
     "pricesetting":{
         columns: [
-            { name: "priceid", label: _label("jiagemingcheng"), type:"select", source:"price"},
-            { name: "brandid", label: _label("pinpai"), type:"select", source:"brand", trigger:['seriesid']},
-            { name: "brandgroupid", label: _label("pinlei"), type:"select", source:"brandgroup", trigger:["brandgroupchildid"]},
-            { name: "brandgroupchildid", label: _label("zipinlei"), type:"select", source:"brandgroupchild"},
-            { name: "ageseasonid", label: _label("niandai"), type:"select", source:"ageseason"},
-            { name: "seriesid", label: _label("xilie"), type:"select", source:"series"},
-            { name: "discount", label: _label("xishu") },
-            { name: "filter", label: _label("quzheng"), type:"select", source:"pricefilter"},
+            { name: "priceid", label: _label("jiagemingcheng"), type:"select", source:"price", class:'width2'},
+            { name: "brandid", label: _label("pinpai"), type:"select", source:"brand", trigger:['seriesid'], class:'width2'},
+            { name: "brandgroupid", label: _label("pinlei"), type:"select", source:"brandgroup", trigger:["brandgroupchildid"], class:'width2'},
+            { name: "brandgroupchildid", label: _label("zipinlei"), type:"select", source:"brandgroupchild", class:'width2'},
+            { name: "ageseasonid", label: _label("niandai"), type:"select", source:"ageseason", class:'width2'},
+            { name: "seriesid", label: _label("xilie"), type:"select", source:"series", class:'width2'},
+            { name: "discount", label: _label("xishu"), class:'width2'},
+            { name: "filter", label: _label("quzheng"), type:"select", source:"pricefilter", class:'width2'},
         ],
         controller: "pricesetting",
         auth: "pricesetting",
@@ -380,6 +385,7 @@ const props = {
     },
     "price":{
         columns: [
+            { name: "name", label: _label("mingcheng") },
             { name: "countryid", label: _label("guojiadiqu"), type:"select", source:"country"},
             { name: "pricetype", label: _label("jiageleixing"), type:"select", source:"pricetype"},            
             { name: "currencyid", label: _label("bizhong"), type:"select", source:"currency"}

@@ -20,6 +20,14 @@
                             <simple-select v-model="form.finalsupplierid" source="supplier" :lang="lang">
                             </simple-select>
                         </el-form-item>
+                        <el-form-item :label="_label('bizhong')">
+                            <simple-select v-model="form.currency" source="supplier" :lang="lang">
+                            </simple-select>
+                        </el-form-item>
+                        
+                        
+                    </el-col>
+                    <el-col :span="6">
                         <el-form-item :label="_label('niandaijijie')" required prop="ageseason">
                             <simple-select v-model="form.ageseason" source="ageseason" :lang="lang"></simple-select>
                         </el-form-item>
@@ -27,77 +35,39 @@
                             <simple-select v-model="form.seasontype" source="seasontype" :lang="lang">
                             </simple-select>
                         </el-form-item>
-                        <el-form-item :label="_label('dingdanriqi')">
-                            <el-date-picker v-model="form.makedate" type="date" value-format="yyyy-MM-dd"></el-date-picker>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="6">
                         <el-form-item :label="_label('dingdanhao')">
                             <el-input v-model="form.orderno" :placeholder="_label('zidonghuoqu')" disabled></el-input>
-                        </el-form-item>
-                        <el-form-item :label="_label('haiwaidingdanhao')">
-                            <el-input v-model="form.worldordercode"></el-input>
                         </el-form-item>
                         <el-form-item :label="_label('fapiaohao')">
                             <el-input v-model="form.invoiceno"></el-input>
                         </el-form-item>
-                        <el-form-item :label="_label('zongjine')">
-                            <el-input placeholder="" :value="total_price" class="input-with-select" disabled>
-                                <template slot="prepend">
-                                    <select-currency v-model="form.currency">
-                                    </select-currency>
-                                </template>
-                            </el-input>
-                        </el-form-item>
                         <el-form-item :label="_label('huilv')">
                             <sp-float-input v-model="form.exchangerate"></sp-float-input>
                         </el-form-item>
+                    </el-col>
+                    <el-col :span="6">                        
                         <el-form-item :label="_label('zhekou')">
                             <sp-float-input v-model="form.discount"></sp-float-input>
                         </el-form-item>
-                        <el-form-item :label="_label('nannvkuan')">
-                            <simple-select v-model="form.formtype" source="formtype" :lang="lang">
-                            </simple-select>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="6">
-                        <el-form-item :label="_label('wofanglianxiren')">
-                            <simple-select v-model="form.ourcontactor" source="user" :lang="lang">
-                            </simple-select>
-                        </el-form-item>
-                        <el-form-item :label="_label('dinghuokehu')">
-                            <simple-select v-model="form.bookingid" source="supplier" :lang="lang">
-                            </simple-select>
-                        </el-form-item>
-                        <el-form-item :label="_label('dinghuokehulianxiren')">
-                            <el-input v-model="form.contactor"></el-input>
-                        </el-form-item>
-                        <el-form-item :label="_label('beizhu')">
-                            <el-input v-model="form.memo"></el-input>
-                        </el-form-item>
-                        <el-form-item :label="_label('shenheren')">
-                            <sp-display-input :value="form.auditstaff" source="user"></sp-display-input>
+                        <el-form-item :label="_label('dingdanriqi')">
+                            <el-date-picker v-model="form.makedate" type="date" value-format="yyyy-MM-dd"></el-date-picker>
                         </el-form-item>
                         <el-form-item :label="_label('zhidanren')">
-                            <sp-display-input :value="form.makestaff" source="user"></sp-display-input>
+                            <el-input v-model="form.makestaff" :placeholder="_label('zidonghuoqu')" disabled></el-input>
+                        </el-form-item>
+                        <el-form-item :label="_label('zhidanriqi')">
+                            <el-input v-model="form.maketime" :placeholder="_label('zidonghuoqu')" disabled></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-row type="flex" justify="start">
                             <au-button auth="order-submit" :type="canSubmit?'primary':'info'" @click="saveOrder(1)">{{_label("baocun")}}</au-button>
-                            <au-button auth="order-submit" :type="canSubmit?'primary':'info'" @click="saveOrder(2)">{{_label("tijiaoshenhe")}}</au-button>
                             <au-button auth="order-submit" :type="canDelete?'primary':'info'" @click="deleteOrder()">{{_label("shanchu")}}</au-button>
                         </el-row>
-                        <el-row type="flex" justify="start">
-                            <au-button auth="order-confirm" :type="canConfirm?'primary':'info'" @click="confirmOrder(1)">{{_label("tuihui")}}</au-button>
-                            <au-button auth="order-confirm" :type="canConfirm?'primary':'info'" @click="confirmOrder(3)">{{_label("shenhetongguo")}}</au-button>
-                            <au-button auth="order-confirm" :type="canCancel?'primary':'info'" @click="cancelConfirm()">{{_label("quxiaoshenhe")}}</au-button>
-                        </el-row>
-                        <el-row type="flex" justify="start">
-                            <au-button auth="order-finish" :type="canFinish?'primary':'info'" @click="finishOrder()">{{_label("dingdanwajie")}}</au-button>
-                        </el-row>
                         <el-row>
-                            <au-button auth="order-submit" :type="canSubmitPayment?'primary':'info'" @click="addPayment">{{_label("tianjiashoukuan")}}</au-button>
+                            <au-button auth="order-submit" :type="canSubmitPayment?'primary':'info'" @click="addPayment">{{_label("shengchengfahuodan")}}</au-button>
+                            <au-button auth="order-submit" :type="canSubmitPayment?'primary':'info'" @click="addPayment">{{_label("fujian")}}</au-button>
+                            <au-button auth="order-submit" :type="canSubmitPayment?'primary':'info'" @click="addPayment">{{_label("feiyong")}}</au-button>
                         </el-row>
                         <el-row type="flex" justify="start">
                             <as-button type="primary" @click="onQuit">{{_label("tuichu")}}</as-button>
@@ -218,6 +188,7 @@ export default {
                 discount: "",
                 property: "",
                 makestaff: "",
+                maketime:"",
                 auditstaff: "",
                 ourcontactor: "",
                 bookingid: "",

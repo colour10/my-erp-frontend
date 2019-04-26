@@ -28,7 +28,7 @@ export default {
         return {
             props: {
                 columns: [
-                    { name: "filename", label: "LOGO", is_edit_hide: true, is_image: true, image_width: 50, image_height: 50, width: 55, className:"picture"},
+                    { name: "filename", label: "LOGO", type:"avatar", is_image: true, image_width: 50, image_height: 50, width: 55, className:"picture"},
                     { name: "name", label: _label('pinpaimingcheng'), is_multiple: true, is_focus: true },
                     { name: "countryid", label: _label('guishuguojia'), type: "select", source: "country" },
                     //{ name: "brandgroupid", label: _label('pinpaifenlei'), type: "select", source: "brandgroup" },
@@ -47,7 +47,7 @@ export default {
                 }],
                 options: {
                     tableHeight:getAvailableHeight(),
-                    dialogWidth: '30%',
+                    dialogWidth: '400px',
                     formSize: 'small',
                     inline: false
                 },

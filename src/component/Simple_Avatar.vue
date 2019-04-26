@@ -1,7 +1,7 @@
 <template>
-    <el-upload class="avatar-uploader" :action="host+'/common/upload?category=product'" :show-file-list="false" :on-success="handleAvatarSuccess" :disabled="disabled">
-        <img v-if="imageurl" :src="_fileLink(imageurl)" class="avatar">
-        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+    <el-upload class="avatar-uploader" :action="host+'/common/upload?category=product'" :show-file-list="false" :on-success="handleAvatarSuccess" :disabled="disabled" style="uploadStyle()">
+        <img v-if="imageurl" :src="_fileLink(imageurl)" class="avatar" :style="imageStyle()">
+        <i v-else class="el-icon-plus avatar-uploader-icon" :style="imageStyle()"></i>
     </el-upload>
 </template>
 
@@ -23,6 +23,14 @@ export default {
         disabled: {
             type: Boolean,
             default: false
+        },
+        size:{
+            type:Number,
+            default:148
+        },
+        fontSize:{
+            type:String,
+            default:'28px'
         }
     },
     model: {
@@ -43,6 +51,22 @@ export default {
             //self.imageurl = file.name
             //console.log(file.name)
             this.$emit('change', filename)
+        },
+        uploadStyle() {
+            let self = this
+            return {
+                width:self.size+'px',
+                height:self.size+'px'
+            }
+        },
+        imageStyle() {
+            let self = this
+            return {
+                width:self.size+'px',
+                height:self.size+'px',
+                lineHeight:self.size+'px',
+                fontSize:self.fontSize
+            }
         }
     },
     watch: {

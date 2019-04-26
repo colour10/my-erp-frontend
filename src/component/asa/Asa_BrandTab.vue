@@ -1,10 +1,8 @@
 <template>
     <el-dialog class="user-form" :title="title" :visible="currentVisible" :center="true" @close="onClose" width="80%">
         <el-tabs type="border-card" @tab-click="onTabClick" v-model="activeName">
-            <el-tab-pane label="LOGO" name="logo">
-            </el-tab-pane>
-            <!--别名-->
-            <el-tab-pane :label="_label('bieming')">
+                        <!--别名-->
+            <el-tab-pane :label="_label('bieming')" name="aliases">
                 <asa-aliases :brandid="brandid"></asa-aliases>
             </el-tab-pane>
             <el-tab-pane :label="_label('xilie')">
@@ -31,7 +29,7 @@ export default {
     data() {
         var self = this;
         return {
-            activeName: "logo",
+            activeName: "aliases",
             currentVisible: self.visible
         }
     },

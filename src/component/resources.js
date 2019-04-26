@@ -18,8 +18,6 @@ options["test.datalist"] = {
     oplabel:"tname",
     opvalue:"tvalue" 
 }
-//币种
-//options["currency"] = {url:'http://erp.localhost.com/common/currency',oplabel:'name', opvalue:'code'}
 
 //品牌
 options["brand"] = {url:'/l/brand',oplabel:'name_en', opvalue:'id'}
@@ -54,6 +52,12 @@ options["ageseason"] = {url:'/l/ageseason',oplabel:'fullname', opvalue:'id'}
 //别名
 options["aliases"] = {url:'/l/aliases',oplabel:'name', opvalue:'id'}
 
+//材质
+options["material"] = {url:'/l/material',oplabel:'name', opvalue:'id'}
+
+//材质备注
+options["materialnote"] = {url:'/l/materialnote',oplabel:'content', opvalue:'id'}
+
 //尺码组
 options["sizetop"] = {url:'/l/sizetop',oplabel:'name', opvalue:'id'}
 
@@ -68,6 +72,7 @@ options["series"] = {url:'/l/series',oplabel:'name', opvalue:'id', parent:'brand
 
 //商品子系列
 options["series2"] = {url:'/l/series2',oplabel:'name', opvalue:'id'}
+
 //成员
 options["member"] = {url:'/l/member',oplabel:'name', opvalue:'id'}
 

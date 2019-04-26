@@ -12,7 +12,7 @@
                     <as-button type="text" @click="item.handler(scope.$index, scope.row, item)">{{item.label}}</as-button>
                 </template>
             </el-table-column>
-            <el-table-column :label="_label('caozuo')" :width="localOptions.action_width||150" align="center">
+            <el-table-column :label="_label('caozuo')" :width="localOptions.action_width" align="center">
                 <template v-slot="scope">
                     <as-button size="mini" @click="handleClickUpdate(scope.$index, scope.row)" v-if="isEditable(scope.row)">{{_label('bianji')}}</as-button>
                     <auth :auth="authname||controller">
@@ -43,11 +43,13 @@ export default {
     data() {
         let self = this
         let base = self.base || {}
-        let localOptions = self.options || {}
+        let localOptions = (({action_width=150,issubmit=true}={})=>{return {action_width,issubmit}})(self.options)
 
         if(self.tableModel && allModels[self.tableModel]) {
             model = allModels[self.tableModel]
         }
+
+        //self._log("data")
 
         return {
             rowIndex: "",
@@ -111,6 +113,12 @@ export default {
         getRow: function(rowIndex) {
             return this.tableData[rowIndex]
         },
+        getTableData() {
+            return this.tableData;
+        },
+        setTableData(data){
+            this.tableData = data;
+        },
         deleteRow: function(rowIndex) {
             let self = this
             return self.$delete(self.tableData, rowIndex)
@@ -119,8 +127,13 @@ export default {
             let self = this
             self.rowIndex = rowIndex;
 
-            let result = await self._remove("/" + self.controller + "/delete", { id: row.id })
-            if (result == true) {
+            if(self.localOptions.issubmit) {
+                let result = await self._remove("/" + self.controller + "/delete", { id: row.id })
+                if (result == true) {
+                    self.$delete(self.tableData, rowIndex)
+                }
+            }
+            else {
                 self.$delete(self.tableData, rowIndex)
             }
         },
@@ -215,16 +228,13 @@ export default {
                 }
             }
 
-            var asa = self.$asa;
-
             self._fetch("/" + self.controller + "/page", params).then(function(res) {
                 //self._log(res)
                 if(model) {
-                    //console.log(model)
-                    res.data.forEach(item => {
-                        model.load({data:Object.assign(item, obj) ,depth:1}).then(rowinfo=>{
-                            self.tableData.push(rowinfo)
-                        })
+                    let array = []
+                    res.data.forEach(async item => {
+                        let rowinfo = await model.load({data:Object.assign(item, obj) ,depth:1})
+                        self.tableData.push(rowinfo)
                     })
                 }
                 else {
@@ -233,7 +243,6 @@ export default {
 
                 //let pagination = res.pagination;
                 extend(self.pagination, res.pagination)
-
             });
         },
         isDeletable(row) {
@@ -267,8 +276,9 @@ export default {
     computed: {},
     mounted: function() {
         let self = this
-        //this._log(onClickUpdate)
-        this.loadList()
+        if(self.localOptions.issubmit) {
+            self.loadList()
+        }        
 
         self.columns.forEach(item=>{
             if(item.className) {

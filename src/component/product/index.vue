@@ -13,6 +13,7 @@
             </el-col>
         </el-row>
         <product ref="product" @change="onChange"></product>
+        <productadd ref="productadd" @change="onChange"></productadd>
         <sp-image-preview></sp-image-preview>
     </div>
 </template>
@@ -20,6 +21,7 @@
 <script>
 import globals, { ASAP, _label } from '../globals.js'
 import Asa_Product from '../asa/Asa_Product.vue'
+import Asa_Product_Add from '../asa/Asa_Product_Add.vue'
 import ImagePreview from '../image-preview.js'
 
 var props = {
@@ -53,7 +55,8 @@ var props = {
 export default {
     name: 'asapage-product',
     components: {
-        "product": Asa_Product
+        "product": Asa_Product,
+        "productadd":Asa_Product_Add
     },
     data() {
         return {
@@ -71,7 +74,7 @@ export default {
             this.$refs.product.setInfo(row).then(product => product.edit(true).show())
         },
         showFormToCreate() {
-            this.$refs.product.clearInfo().edit(true).show()
+            this.$refs.productadd.show()
         },
         onPreview(url) {
             ImagePreview.show({ url })
@@ -79,7 +82,8 @@ export default {
         onChange(rowdata, type) {
             let self = this
             let tablelist = self.$refs.tablelist
-
+            tablelist.loadList()
+/*
             //self._log(rowdata)
             if (type == 'create') {
                 tablelist.appendRow(rowdata)
@@ -90,7 +94,7 @@ export default {
                 } else {
                     tablelist.updateRow(index, rowdata)
                 }
-            }
+            }*/
         }
     }
 }

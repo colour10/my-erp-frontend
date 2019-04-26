@@ -4,14 +4,22 @@
             <slot name="create"></slot>
         </slot>
         
-        <sp-table :data="tableData" border style="width:100%;" v-loading.fullscreen.lock="loading" :height="componenToptions.tableHeight" @sort-change="onSortChange" :cell-class-name="getCellClassName">
-            <el-table-column :prop="item.name" :label="item.label" :width="item.width||150" v-if="!item.is_hide" v-for="item in columns" :key="item.name" :sortable="!item.is_image">
-                <template v-slot="scope">
-                    <img v-if="item.is_image" :src="getImageSrc(scope.row, item)" :style="getImageStyle(item)">
-                    <span v-if="!item.is_image && !item.html">{{item.convert?item.convert(scope.row,scope.rowIndex,item):convert(scope.row, item, scope.rowIndex)}}</span>
-                    <span v-if="item.html" v-html="item.html">{{item.html}}</span>
-                </template>
-            </el-table-column>
+        <sp-table :data="tableData" border style="width:100%;" v-loading.fullscreen.lock="loading" :height="componenToptions.tableHeight" @sort-change="onSortChange" :cell-class-name="getCellClassName">            
+            <template v-for="item in columns">                
+                <el-table-column :prop="item.name" :label="item.label" :width="item.width||150" v-if="!item.is_hide && !item.is_multiple" :sortable="!item.is_image" :sort-method="item.sortMethod">
+                    <template v-slot="scope">
+                        <img v-if="item.is_image" :src="getImageSrc(scope.row, item)" :style="getImageStyle(item)">
+                        <span v-if="!item.is_image && !item.html">{{item.convert?item.convert(scope.row,scope.rowIndex,item):convert(scope.row, item, scope.rowIndex)}}</span>
+                        <span v-if="item.html" v-html="item.html">{{item.html}}</span>
+                    </template>
+                </el-table-column>
+
+                <el-table-column :prop="item.name+'_'+language.code" :label="item.label+'('+_label(language.code)+')'" :width="item.width||150" v-if="!item.is_hide && item.is_multiple" :sortable="true" v-for="(language, key) in languages" :key="language.code">
+                    <template v-slot="scope">
+                        <span>{{item.convert?item.convert(scope.row, item, scope.rowIndex, language):convert(scope.row, item, scope.rowIndex, language)}}</span>
+                    </template>
+                </el-table-column>
+            </template>
             <el-table-column :label="item.label" align="center" :width="item.width||180" v-for="item in buttons" :key="item.label">
                 <template v-slot="scope">
                     <as-button type="text" @click="item.handler(scope.$index, scope.row, item)">{{item.label}}</as-button>
@@ -27,15 +35,7 @@
                     </auth>
                     <as-button size="mini" @click="handleAction(scope,item)" v-for="item in actions" :key="item.label" v-if="isShow(item)">{{item.label}}</as-button>
                 </template>
-            </el-table-column>
-            <el-table-column prop="lang_code" :label="_label('yuyan')" width="220" align="center">
-                <template v-slot="scope">
-                    <template v-for="(item, key) in languages">
-                        <as-button :type="isSettingLanguage(scope.row, item.code)?'primary':'info'" circle style="margin:0px">{{item.shortName}}</as-button>
-                    </template>
-                </template>
-            </el-table-column>
-            
+            </el-table-column>            
         </sp-table>
         <el-pagination v-if="tableData.length<pagination.total" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pagination.current*1" :page-sizes="pagination.pageSizes" :page-size="pagination.pageSize*1" layout="total, sizes, prev, pager, next, jumper" :total="pagination.total*1">
         </el-pagination>
@@ -116,7 +116,7 @@ export default {
             }
         },
         handleDelete(rowIndex, row) {
-            var self = this
+            let self = this
 
             self._remove("/" + self.controller + "/delete?id=" + row.id).then(function() {
                 self.$delete(self.tableData, rowIndex)
@@ -131,7 +131,7 @@ export default {
             return this._fileLink(picture)
         },
         getImageStyle(column) {
-            var styles = "";
+            let styles = "";
             if (column.image_width) {
                 styles += "width:" + column.image_width + 'px;'
             }
@@ -151,13 +151,14 @@ export default {
             }
         },
         isSettingLanguage(row, lang) {
-            var column_name = this.key_column + "_" + lang
+            let column_name = this.key_column + "_" + lang
             return row[column_name] && row[column_name] != ""
         },
-        convert(row, column, rowIndex) {
-            var self = this;
-            var column_name = column.is_multiple ? column.name + "_" + self.current_lang : column.name;
-            var value = row[column_name];
+        convert(row, column, rowIndex, language) {
+            let self = this;
+            //self._log(column,language)
+            let column_name = column.is_multiple ? column.name + "_" + language.code : column.name;
+            let value = row[column_name];
 
             if (column.type == 'switch') {
                 return value == '1' ? _label("yes") : _label("no");
@@ -181,7 +182,7 @@ export default {
             }
         },
         loadList() {
-            var self = this;
+            let self = this;
             self.tableData = []
 
             /*let params = {

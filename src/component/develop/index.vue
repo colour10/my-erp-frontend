@@ -10,6 +10,7 @@
             <el-form-item label="父类">
                 <el-radio v-model="form.parent" label="CadminController">CadminController</el-radio>
   <el-radio v-model="form.parent" label="ZadminController">ZadminController</el-radio>
+  <el-radio v-model="form.parent" label="AdminController">AdminController</el-radio>
             </el-form-item>
         </el-form>     
         <as-button type="primary" @click="onCreate">生成</as-button>

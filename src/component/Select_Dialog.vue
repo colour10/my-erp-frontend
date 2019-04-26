@@ -102,7 +102,7 @@ export default {
 
             self.getDataSource().getRowLabels(value, function(labels) {
                 //self._log("convertValue", self.source, self.lang, labels)
-                self.checkList = value.split(",")
+                self.checkList = value==""?[]:value.split(",")
                 self.currentText = labels
             })
         },

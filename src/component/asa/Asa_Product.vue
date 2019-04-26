@@ -11,9 +11,9 @@
                     </el-col>
                     <el-col :span="14">
                         <el-form ref="form" :model="form" label-width="80px" size="mini">
-                            <el-form-item :label="_label('shangpinmingcheng')">
+                            <!-- <el-form-item :label="_label('shangpinmingcheng')">
                                 <el-input v-model="form.productname"></el-input>
-                            </el-form-item>
+                            </el-form-item> -->
                             <el-form-item :label="_label('guojima')">
                                 <el-input v-model="form.wordcode_1" style="width:110px;"></el-input>
                                 <el-input v-model="form.wordcode_2" style="width:110px;"></el-input>
@@ -75,6 +75,10 @@
                                     </template>
                                 </simple-select>
                             </el-form-item>
+
+                            <el-form-item :label="_label('chandi')" prop="countries">
+                                <select-dialog v-model="form.countries" source="country" :lang="lang"></select-dialog>
+                            </el-form-item>
                         </el-col>
                         <el-col :span="8">
                             <el-form-item :label="_label('shangpinchicun')">
@@ -85,8 +89,11 @@
                                 <select-dialog v-model="form.productmemoids" source="productmemo" style="width:150" :lang="lang">
                                 </select-dialog>
                             </el-form-item>
+                            <el-form-item :label="_label('caizhi')">
+                                <productmaterial v-model="materials" style="width:150"></productmaterial>
+                            </el-form-item>
                             <el-form-item :label="_label('shangpinxilie')">
-                                <selectpanel v-model="form.series" ref="series" style="width:150" @change="onSeriesChange"> </selectpanel>
+                                <selectpanel v-model="form.series" ref="series" style="width:150"> </selectpanel>
                             </el-form-item>
                             <el-form-item :label="_label('chuchangjia')">
                                 <el-input placeholder="" v-model="form.factoryprice" class="input-with-select">
@@ -106,13 +113,16 @@
                                     </select-currency>
                                 </el-input>
                             </el-form-item>
-                            <el-form-item :label="_label('chandi')" prop="countries">
-                                <select-dialog v-model="form.countries" source="country" :lang="lang"></select-dialog>
+                            <el-form-item :label="_label('benguochuchangjia')">
+                                <el-input placeholder="" v-model="form.nationalfactoryprice" class="input-with-select">
+                                    <select-currency v-model="form.nationalfactorypricecurrency" slot="prepend">
+                                    </select-currency>
+                                </el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
                             <el-form-item :label="_label('xingbie')">
-                                <sp-radio-group v-model="form.gender" source="gender" :span="8" :lang="lang" class="supermini">
+                                <sp-radio-group v-model="form.gender" source="gender" :span="8" :lang="lang">
                                 </sp-radio-group>
                             </el-form-item>
                             <el-form-item :label="_label('jijie')">
@@ -245,6 +255,7 @@ import Asa_Product_Property from './Asa_Product_Property.vue'
 import Select_Dialog_Common from '../Select_Dialog_Common.vue'
 import Asa_Product_Price from './Asa_Product_Price.vue'
 import Asa_Product_ProductStock from './Asa_Product_ProductStock.vue'
+import Material from '../product/material.vue'
 
 const color_keys = ['id', 'brandcolor', 'wordcode_1', 'wordcode_2', 'wordcode_3', 'wordcode_4']
 
@@ -255,7 +266,8 @@ export default {
         property: Asa_Product_Property,
         pricetab:Asa_Product_Price,
         productstock:Asa_Product_ProductStock,
-        selectpanel: Select_Dialog_Common
+        selectpanel: Select_Dialog_Common,
+        productmaterial:Material
     },
     data() {
         return {
@@ -273,7 +285,6 @@ export default {
                 productsize: "",
                 countries: "",
                 brandcolor: "",
-                material: "",
                 productparst: "",
                 producttemplate: "",
                 picture: "",
@@ -287,6 +298,8 @@ export default {
                 orderpricecurrency: "",
                 nationalpricecurrency:"",
                 nationalprice: "",
+                nationalfactorypricecurrency:"",
+                nationalfactoryprice:"",
                 memo: "",
                 wordprice: "",
                 wordpricecurrency: "",
@@ -314,6 +327,7 @@ export default {
                 brandcolor: Rules.required({ message: _label("8000") }),
                 ageseason: Rules.required({ message: _label("8000") })
             },
+            materials:[],
             sizecontents: [],
             sizecontents_loaded: false,
             colors: [],
@@ -389,15 +403,6 @@ export default {
             series.filter({ brandid: self.form.brandid }, function(list) {
                 let data = list.map(item => item.getObject())
                 self.$refs['series'].setData(data)
-            })
-        },
-        onSeriesChange(newvalue) {
-            let self = this
-                //self._log(newvalue)
-            let source = DataSource.getDataSource("series2", self.lang)
-            source.filter({ seriesid: self.form.series }, function(list) {
-                let data = list.map(item => item.getObject())
-                self.$refs['series2'].setData(data)
             })
         },
         onSelectProduct(info) {

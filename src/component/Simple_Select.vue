@@ -1,5 +1,5 @@
 <template>
-    <el-select v-model="currentValue" :placeholder="placeholder" style="width:150" @change="handleChange" filterable :disabled="disabled" :clearable="clearable">
+    <el-select v-model="currentValue" :placeholder="placeholder" style="width:150" @change="handleChange" filterable :disabled="disabled" :clearable="clearable" size="mini">
         <el-option v-for="(item,key) in data" :key="item.getKeyValue()" :label="item.getLabelValue()" :value="item.getKeyValue()"><template><slot v-bind:row="item"></slot></template></el-option>
     </el-select>
 </template>

@@ -7,17 +7,15 @@
             <el-col :span="7" v-if="form.id>0">
                 <auth auth="department"><as-button type="primary" @click="showDepartCreate" style="margin-bottom:30px;">{{_label('depart-create')}}</as-button></auth>
                 <el-form ref="form" :model="form" label-width="80px">
-                    <el-form-item :label="_label('depart-name')">
+                    <el-form-item :label="_label('bumenmingcheng')">
                         <el-input v-model="form.name"></el-input>
                     </el-form-item>
                     <el-form-item :label="_label('description')">
                         <el-input type="textarea" v-model="form.remark"></el-input>
                     </el-form-item>
                     <el-form-item>
-                        <auth auth="department">
-                        <as-button type="primary" @click="onEdit" :disabled="is_save_disabled">{{_label('button-save')}}</as-button>
-                        <as-button type="danger" @click="deleteDepart" :disabled="is_save_disabled">{{_label('button-delete')}}</as-button>
-                    </auth>
+                        <au-button auth="department" type="primary" @click="onEdit" :disabled="is_save_disabled">{{_label('button-save')}}</au-button>
+                        <au-button auth="department" type="danger" @click="deleteDepart" :disabled="is_save_disabled">{{_label('button-delete')}}</au-button>
                     </el-form-item>
                 </el-form>
             </el-col>
@@ -28,7 +26,7 @@
         </el-row>
         <el-dialog ref="dialog" :title="_label('depart-create')" :visible.sync="dialogTableVisible" :center="true" width="35%">
             <el-form :model="form_create" label-width="80px">
-                <el-form-item :label="_label('depart-name')">
+                <el-form-item :label="_label('bumenmingcheng')">
                     <el-input ref="ddd" v-model="form_create.name"></el-input>
                 </el-form-item>
                 <el-form-item :label="_label('description')">

@@ -15,7 +15,8 @@ import Multiple_Admin_Page from '../Multiple_Admin_Page.vue'
 var props = {
     columns:[            
         {name:"name", label:_label('mingcheng'), is_multiple:true, is_focus:true, sortable:true},
-        {name:"code", label:_label('bianhao')}
+        {name:"code", label:_label('bianhao')},
+        {name:"displayindex", label:_label('xianshixuhao'), sortMethod:(a,b)=>a-b}
     ],
     buttons:[
         {name:"code", label:_label('chakanziji'), width:200, disable_change:true, handler:function(rowIndex, row){

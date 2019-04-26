@@ -23,18 +23,18 @@
                 </multiple-admin-tablelist>
             </el-col>
         </el-row>
-        <el-dialog class="user-form" :title="formTitle" :visible.sync="dialogVisible" :center="true" :width="componenToptions.dialogWidth||'40%'" :modal="false">
+        <el-dialog class="user-form" :title="formTitle" :visible.sync="dialogVisible" :center="true" :width="componenToptions.dialogWidth||'400px'" :modal="false">
             <el-row>
                 <el-col :span="24">
-                    <el-form ref="form" :model="form" label-width="100px" :inline="componenToptions.inline||false" :size="componenToptions.formSize||'medium'">
+                    <el-form ref="form" class="user-form" :model="form" label-width="100px" :inline="componenToptions.inline||false" :size="componenToptions.formSize||'mini'">
                         <template v-for="item in columns">
                             <template v-if="item.is_multiple">
-                                <el-form-item :label="item.label+'('+language.shortName+')'" v-if="!item.is_edit_hide" v-for="language in languages" :key="language.code" :class="item.class?item.class:''">
+                                <el-form-item :label="item.label+'('+language.shortName+')'" v-if="!item.is_edit_hide" v-for="language in languages" :key="language.code" :class="item.class?item.class:'width2'">
                                     <el-input :type="item.type?item.type:'text'" v-if="!item.type||item.type=='input'||item.type=='textarea'" v-model="form[getColumnName(item,language)]"></el-input>
                                 </el-form-item>
                             </template>
                             <template v-if="!item.is_multiple">
-                                <el-form-item :label="item.label" v-if="!item.is_edit_hide" :key="item.name" :class="item.class?item.class:''">
+                                <el-form-item :label="item.label" v-if="!item.is_edit_hide" :key="item.name" :class="item.class?item.class:'width2'">
                                     <el-input :ref="item.name" @keyup.enter.native="onSubmit" :type="item.type?item.type:'text'" v-if="!item.type||item.type=='input'||item.type=='textarea'" v-model="form[getColumnName(item)]"></el-input>
                                     <el-switch :ref="item.name" v-if="item.type=='switch'" v-model="form[item.name]" active-value="1" inactive-value="0"></el-switch>
                                     <simple-select :ref="item.name" v-if="item.type=='select'" v-model="form[item.name]" :source="item.source" :lang="lang">
@@ -42,6 +42,8 @@
                                     <el-upload :ref="item.name" :action="'/common/upload?category='+controller" v-if="item.type=='upload'" :multiple="item.multiple || false" :limit="item.limit || 1" :on-success="getUploadSuccessCallback(item)" :on-remove="getRemoveUploadFileCallback(item)">
                                         <as-button size="small" type="primary">{{_label("shangchuan")}}</as-button>
                                     </el-upload>
+
+                                    <simple-avatar :ref="item.name" v-model="form[item.name]" font-size="14px" :size="35" v-if="item.type=='avatar'"></simple-avatar>
                                 </el-form-item>
                             </template>
                         </template>
@@ -63,7 +65,20 @@ import globals, { _label } from './globals.js'
 
 export default {
     name: 'multiple-admin-page',
-    props: ['columns', "buttons", "options", "controller", "base", "key_column", "auto_hide", "actions"],
+    props: {
+        columns: {},
+        buttons: {},
+        options: {},
+        controller: {},
+        base: {},
+        key_column: {},
+        auto_hide: {},
+        actions: {},
+        autoload: {
+            type: Boolean,
+            default: true
+        }
+    },
     components: {
 
     },
@@ -112,7 +127,12 @@ export default {
             self.form.lang = self.lang;
             if (self.form.id == "") {
                 self._submit("/" + self.controller + "/add", self.form).then(function() {
-                    self.$refs.tablelist.appendRow(globals.clone(self.form))
+                    if(self.autoload) {
+                        self.$refs.tablelist.loadList()
+                    }
+                    else {
+                        self.$refs.tablelist.appendRow(globals.clone(self.form))
+                    }                    
 
                     if (self.auto_hide !== false) {
                         self.dialogVisible = false
@@ -120,8 +140,14 @@ export default {
                 })
             } else {
                 self._submit("/" + self.controller + "/edit", self.form).then(function() {
-                    var row = self.$refs.tablelist.getRow(self.rowIndex)
-                    globals.copyTo(self.form, row)
+                    if(self.autoload) {
+                        self.$refs.tablelist.loadList()
+                    }
+                    else {
+                        let row = self.$refs.tablelist.getRow(self.rowIndex)
+                        globals.copyTo(self.form, row)
+                    }
+                    
                     if (self.auto_hide !== false) {
                         self.dialogVisible = false
                     }
