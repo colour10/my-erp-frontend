@@ -36,6 +36,7 @@ var props = {
                 return [row.brand_label, row.gender_label, row.brandcolor_label, row.childbrand_label].join('/')
             }
         },
+        { name: "id", label: _label("niandai") },
         { name: "ageseason", label: _label("niandai"), type: "select", source: "ageseason" },
 
         { name: "nationalpricecurrency_label", label: _label("benguolingshoujia"), width: 100 },

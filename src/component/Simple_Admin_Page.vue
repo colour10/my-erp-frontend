@@ -6,7 +6,7 @@
                     <el-form class="searchform" ref="search-form" :model="form" label-width="80px" size="mini" :inline="true" @submit.native.prevent v-if="hideForm!==true">
                         <el-form-item class="searchitem">
                             <el-input v-model="searchform.keyword" width="250" style="width:250px;" @keyup.enter.native="onSearch" v-if="componenToptions.issubmit"></el-input>
-                            <as-button type="primary" @click="onSearch" size="mini" v-if="componenToptions.issubmit">{{_label("chaxun")}}</as-button>
+                            <as-button type="primary" @click="onSearch" size="mini" v-if="componenToptions.issubmit"icon="el-icon-search">{{_label("chaxun")}}</as-button>
                             <au-button :auth="authname" type="primary" @click="showFormToCreate()" v-if="hideCreate!==true">{{_label("xinjian")}}</au-button>
                         </el-form-item>
                     </el-form>

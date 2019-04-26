@@ -1,7 +1,7 @@
 <template>
     <div>
-        <el-input v-model="currentText" :readonly="true">
-            <as-button slot="append" icon="el-icon-more" @click="dialogVisible = true"></as-button>
+        <el-input v-model="currentText" :readonly="true" @click.native="onShow">
+            <as-button slot="append" icon="el-icon-more"></as-button>
         </el-input>
         <el-dialog class="user-form" :title="_label('caizhiguanli')" :visible.sync="dialogVisible" :center="true" :modal="false">
             <el-row>
@@ -27,6 +27,9 @@ export default {
         select_value: {
             required: true
         },
+        brandgroupchildid:{
+            default:""
+        },
         disabled: {
             type: Boolean,
             default: false
@@ -45,7 +48,7 @@ export default {
                 columns: [
                     { name: "materialid", label: _label('caizhi'), type: "select", source: "material" },
                     { name: "percent", label: _label('baifenbi'),convert:item=>item.percent+'%'},
-                    { name: "materialnoteid", label: _label('caizhibeizhu'), type: "select", source: "materialnote" },
+                    { name: "materialnoteid", label: _label('caizhibeizhu'), type: "select", source: "materialnote" }
                 ],
                 controller: "productmaterial",
                 options:{
@@ -63,7 +66,12 @@ export default {
         onShow() {
             let self = this
             self.dialogVisible = true;
-            self.$refs['page2'].setTableData(data)
+
+            setTimeout(function(){
+                self.$refs['page2'].setTableData(self.data)
+                //self._log("data", self.data)
+            },100)
+            
         },
         handleSelect() {
             var self = this;
@@ -83,7 +91,7 @@ export default {
 
             let promises = self.data.map(async (item) =>{
                 let dataSource = DataSource.getDataSource("material", self._label('lang'))
-                self._log(item,dataSource)
+                //self._log(item,dataSource)
                 let name = await dataSource.getRowLabel(item.materialid)
                 return name + item.percent + "%"
             })
@@ -96,7 +104,7 @@ export default {
         setData(data) {
             let self = this;
             self.data = data
-            self._log("setData", data)
+            //self._log("setData", data)
             self.convertText()
             return self;
         }
@@ -104,13 +112,13 @@ export default {
     watch: {
         select_value(newValue) {
             var self = this
-            self._log("change",newValue)
+            //self._log("change",newValue)
             self.setData(newValue)
         }
     },
     mounted: function() {
         var self = this;
-        self._log("mounted",self.select_value)
+        //self._log("mounted",self.select_value)
         self.setData(self.select_value)
         
     }

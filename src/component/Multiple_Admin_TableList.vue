@@ -25,13 +25,13 @@
                     <as-button type="text" @click="item.handler(scope.$index, scope.row, item)">{{item.label}}</as-button>
                 </template>
             </el-table-column>
-            <el-table-column :label="_label('caozuo')" :width="componenToptions.action_width||150" align="center">
+            <el-table-column :label="_label('caozuo')" :width="componenToptions.action_width||180" align="center">
                 <template v-slot="scope">
                     <auth :auth="controller">
-                        <as-button size="mini" @click="showFormToUpdate(scope.$index, scope.row)">{{_label("bianji")}}</as-button>
+                        <as-button size="mini" @click="showFormToUpdate(scope.$index, scope.row)" icon="el-icon-edit">{{_label("bianji")}}</as-button>
                     </auth>
                     <auth :auth="controller">
-                        <as-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">{{_label("shanchu")}}</as-button>
+                        <as-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)" icon="el-icon-delete">{{_label("shanchu")}}</as-button>
                     </auth>
                     <as-button size="mini" @click="handleAction(scope,item)" v-for="item in actions" :key="item.label" v-if="isShow(item)">{{item.label}}</as-button>
                 </template>
@@ -162,7 +162,7 @@ export default {
 
             if (column.type == 'switch') {
                 return value == '1' ? _label("yes") : _label("no");
-            } else if (column.type == 'select') {
+            } else if (column.source) {
                 //异步加载数据，然后重新渲染列表
                 if (!column.dataSource) {
                     column.dataSource = DataSource.getDataSource(column.source, self.current_lang);
@@ -204,7 +204,7 @@ export default {
             var obj = {}
             var columns = self.columns;
             for (var i = 0; i < columns.length; i++) {
-                if (columns[i].type == 'select') {
+                if (columns[i].source) {
                     obj[columns[i].name + "__loading"] = "";
                     obj[columns[i].name + "__label"] = "";
                     obj[columns[i].name + "__columncopy"] = "";

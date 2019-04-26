@@ -1,7 +1,7 @@
 <template>
     <div>
         <multiple-admin-page v-bind="props" ref="page"></multiple-admin-page>
-        <el-dialog :title="_label('zipinlei')" class="user-form" :visible.sync="dialogVisible" :center="true">
+        <el-dialog :title="_label('zipinlei')" class="user-form" :visible.sync="dialogVisible" :center="true" width="900px">
             <multiple-admin-page v-bind="props2" ref="page2"></multiple-admin-page>
         </el-dialog>
         <el-dialog :title="_label('pinleishuxing')" class="user-form" :visible.sync="dialogVisible2" :center="true">

@@ -1,7 +1,7 @@
 <template>
     <div>
-        <el-input :placeholder="placeholder" v-model="currentText" :readonly="true">
-            <as-button slot="append" icon="el-icon-more" @click="dialogVisible = true"></as-button>
+        <el-input :placeholder="placeholder" v-model="currentText" :readonly="true" @click.native="dialogVisible = true">
+            <as-button slot="append" icon="el-icon-more"></as-button>
         </el-input>
         <el-dialog class="user-form" :title="_label('qingxuanze')" :visible.sync="dialogVisible" :center="true" :width="componenToptions.dialogWidth||'50%'" :modal="false">
             <el-row>

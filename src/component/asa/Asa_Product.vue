@@ -44,56 +44,53 @@
                     <el-row :gutter="0">
                         <el-col :span="8">
                             <el-form-item :label="_label('niandai')" prop="ageseason">
-                                <select-dialog v-model="form.ageseason" source="ageseason" style="width:150" :lang="lang">
-                                </select-dialog>
+                                <simple-select v-model="form.ageseason" source="ageseason" :multiple="true"></simple-select>
                             </el-form-item>
                             <el-form-item :label="_label('pinpai')" prop="brandid">
-                                <simple-select v-model="form.brandid" source="brand" :lang="lang" @change="onBrandChange">
+                                <simple-select v-model="form.brandid" source="brand">
                                 </simple-select>
                             </el-form-item>
                             <el-form-item :label="_label('pinlei')" prop="brandgroupid">
-                                <simple-select v-model="form.brandgroupid" source="brandgroup" :lang="lang" @change="onBrandGroupChange">
+                                <simple-select v-model="form.brandgroupid" source="brandgroup">
                                 </simple-select>
                             </el-form-item>
                             <el-form-item :label="_label('zipinlei')" prop="childbrand">
-                                <simple-select ref="childbrand" v-model="form.childbrand" source="brandgroupchild" :lang="lang" :lazy="true">
+                                <simple-select ref="childbrand" v-model="form.childbrand" source="brandgroupchild" :parentid="form.brandgroupid">
                                 </simple-select>
                             </el-form-item>
                             <el-form-item :label="_label('chimazu')" prop="sizetopid">
-                                <simple-select v-model="form.sizetopid" source="sizetop" :lang="lang" @change="onSizetopidChange">
+                                <simple-select v-model="form.sizetopid" source="sizetop">
                                 </simple-select>
                             </el-form-item>
                             <el-form-item :label="_label('chimamingxi')" prop="sizetopid">
-                                <selectpanel v-model="form.sizecontentids" ref="sizecontentids"> </selectpanel>
+                                <simple-select v-model="form.sizecontentids" ref="sizecontentids" source="sizecontent" :parentid="form.sizetopid" :multiple="true"> </simple-select>
                             </el-form-item>
                             <el-form-item :label="_label('pinpaiseban')" prop="brandcolor">
-                                <simple-select v-model="form.brandcolor" source="colortemplate" :lang="lang">
+                                <simple-select v-model="form.brandcolor" source="colortemplate">
                                     <template v-slot="{row}">
                                         <div class="imgline">
-                                            <img :src="_fileLink(row.row.picture)" class="icon"> <span>{{row.getLabel()}}</span>
+                                            <img :src="_fileLink(row.row.picture)" class="icon"> <span>{{row.name}}</span>
                                         </div>
                                     </template>
                                 </simple-select>
                             </el-form-item>
 
                             <el-form-item :label="_label('chandi')" prop="countries">
-                                <select-dialog v-model="form.countries" source="country" :lang="lang"></select-dialog>
+                                <simple-select v-model="form.countries" source="country" :multiple="true"></simple-select>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
                             <el-form-item :label="_label('shangpinchicun')">
-                                <simple-select v-model="form.ulnarinch" source="ulnarinch" style="width:150" :lang="lang">
-                                </simple-select>
+                                <simple-select v-model="form.ulnarinch" source="ulnarinch" :parentid="form.childbrand"></simple-select>
                             </el-form-item>
                             <el-form-item :label="_label('shangpinmiaoshu')">
-                                <select-dialog v-model="form.productmemoids" source="productmemo" style="width:150" :lang="lang">
-                                </select-dialog>
+                                <simple-select v-model="form.productmemoids" source="productmemo" :multiple="true" :parentid="form.childbrand"></simple-select>
                             </el-form-item>
                             <el-form-item :label="_label('caizhi')">
                                 <productmaterial v-model="materials" style="width:150"></productmaterial>
                             </el-form-item>
                             <el-form-item :label="_label('shangpinxilie')">
-                                <selectpanel v-model="form.series" ref="series" style="width:150"> </selectpanel>
+                                <simple-select v-model="form.series" ref="series" source="series" :parentid="form.brandid"> </simple-select>
                             </el-form-item>
                             <el-form-item :label="_label('chuchangjia')">
                                 <el-input placeholder="" v-model="form.factoryprice" class="input-with-select">
@@ -252,7 +249,6 @@ import { Rules } from '../rules.js'
 import DataSource from '../DataSource.js'
 import Asa_Product_Search_Panel from './Asa_Product_Search_Panel.vue'
 import Asa_Product_Property from './Asa_Product_Property.vue'
-import Select_Dialog_Common from '../Select_Dialog_Common.vue'
 import Asa_Product_Price from './Asa_Product_Price.vue'
 import Asa_Product_ProductStock from './Asa_Product_ProductStock.vue'
 import Material from '../product/material.vue'
@@ -266,7 +262,6 @@ export default {
         property: Asa_Product_Property,
         pricetab:Asa_Product_Price,
         productstock:Asa_Product_ProductStock,
-        selectpanel: Select_Dialog_Common,
         productmaterial:Material
     },
     data() {
@@ -365,44 +360,21 @@ export default {
                     return false;
                 }
 
+                let params = {
+                    form : self.form,
+                    materials : self.materials
+                }
                 if (self.form.id == "") {
-                    self._submit("/product/add", self.form).then(function(res) {
+                    self._submit("/product/add", { params: JSON.stringify(params) }).then(function(res) {
                         self.$emit("change", Object.assign({}, self.form), "create")
                         self.setInfo(res.id)
                     })
                 } else {
-                    self._submit("/product/edit", self.form).then(function() {
+                    self._submit("/product/edit", { params: JSON.stringify(params) }).then(function() {
                         self.$emit("change", Object.assign({}, self.form), "update")
                         self.setInfo(self.form.id)
                     })
                 }
-            })
-        },
-        onSizetopidChange(newvalue) {
-            let self = this
-                //self._log(newvalue)
-            let source = DataSource.getDataSource("sizecontent", self.lang)
-            source.filter({ topid: self.form.sizetopid }, function(list) {
-                let data = list.map(item => item.getObject())
-                self.$refs['sizecontentids'].setData(data)
-                if (data.length == 1) {
-                    self.form.sizecontentids = data[0].id
-                }
-            })
-        },
-        onBrandChange(newvalue) {
-            let self = this
-                //self._log(newvalue)
-            let source = DataSource.getDataSource("aliases", self.lang)
-            source.filter({ brandid: self.form.brandid }, function(list) {
-                let data = list.map(item => item.getObject())
-                self.$refs['aliases'].setData(data)
-            })
-
-            let series = DataSource.getDataSource("series", self.lang)
-            series.filter({ brandid: self.form.brandid }, function(list) {
-                let data = list.map(item => item.getObject())
-                self.$refs['series'].setData(data)
             })
         },
         onSelectProduct(info) {
@@ -528,7 +500,7 @@ export default {
 
             return new Promise((resolve, reject) => {
                 ProductDetail.load({ data: row, depth: 1, isCache: false }).then(function(info) {
-                    //self._log(info)
+                    self._log(info)
                     //设置默认值
                     info = globals.extend({ sizecontentids: "" }, info);
                     //console.log(info,'----------')
@@ -545,13 +517,16 @@ export default {
                     self.form.wordprice = globals.round(self.form.wordprice, 2)
                     self.form.nationalprice = globals.round(self.form.nationalprice, 2)
 
+                    //
+                    info.getMaterialList().then((res)=>{
+                        //self._log("==", res)
+                        self.materials = res.data
+                    })
                     setTimeout(function() {
-                        self.$refs.childbrand.load(item => item.row.brandgroupid == self.form.brandgroupid)
                         if (self.$refs.searchpanel) {
                             self.$refs.searchpanel.clear()
                         }
                         self.$refs.property.setProduct(info)
-                        self.onSizetopidChange()
                     }, 100)
 
                     self.clearValidate(50)
@@ -582,12 +557,6 @@ export default {
 
             self.clearValidate(50)
             return self
-        },
-        onBrandGroupChange(value) {
-            let self = this
-
-            //self._log(value)
-            self.$refs.childbrand.load(value)
         }
     },
     watch: {

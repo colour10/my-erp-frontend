@@ -8,7 +8,7 @@
                             <el-col :span="24">
                                 <el-form-item>
                                     <el-input v-model="searchform.keyword" width="250" style="width:250px;" @keyup.enter.native="onSearch"></el-input>
-                                    <as-button type="primary" @click="onSearch" size="mini">{{_label("chaxun")}}</as-button>
+                                    <as-button type="primary" @click="onSearch" size="mini" icon="el-icon-search">{{_label("chaxun")}}</as-button>
                                     <au-button :auth="controller" type="primary" @click="showFormToCreate()">{{_label("xinjian")}}</au-button>
                                 </el-form-item>
                             </el-col>
@@ -44,6 +44,7 @@
                                     </el-upload>
 
                                     <simple-avatar :ref="item.name" v-model="form[item.name]" font-size="14px" :size="35" v-if="item.type=='avatar'"></simple-avatar>
+                                    <brandgroupchild :ref="item.name" v-model="form[item.name]" v-if="item.type=='brandgroupchild'"></brandgroupchild>
                                 </el-form-item>
                             </template>
                         </template>

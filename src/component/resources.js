@@ -44,7 +44,7 @@ options["department.single"] = {url:'/department/single',oplabel:'label', opvalu
 options["brandgroupchild"] = {url:'/l/brandgroupchild',oplabel:'name', opvalue:'id', parent:'brandgroupid'}
 
 //尺寸
-options["ulnarinch"] = {url:'/l/ulnarinch',oplabel:'name', opvalue:'id'}
+options["ulnarinch"] = {url:'/l/ulnarinch',oplabel:'name', opvalue:'id', parent:'brandgroupchildid'}
 
 //年代
 options["ageseason"] = {url:'/l/ageseason',oplabel:'fullname', opvalue:'id'}
@@ -56,16 +56,16 @@ options["aliases"] = {url:'/l/aliases',oplabel:'name', opvalue:'id'}
 options["material"] = {url:'/l/material',oplabel:'name', opvalue:'id'}
 
 //材质备注
-options["materialnote"] = {url:'/l/materialnote',oplabel:'content', opvalue:'id'}
+options["materialnote"] = {url:'/l/materialnote',oplabel:'content', opvalue:'id', parent:'brandgroupchildid'}
 
 //尺码组
 options["sizetop"] = {url:'/l/sizetop',oplabel:'name', opvalue:'id'}
 
 //尺码组明细
-options["sizecontent"] = {url:'/l/sizecontent',oplabel:'name', opvalue:'id'}
+options["sizecontent"] = {url:'/l/sizecontent',oplabel:'name', opvalue:'id', parent:'topid'}
 
 //商品描述
-options["productmemo"] = {url:'/l/productmemo',oplabel:'name', opvalue:'id'}
+options["productmemo"] = {url:'/l/productmemo',oplabel:'name', opvalue:'id', parent:'brandgroupchildid'}
 
 //商品系列
 options["series"] = {url:'/l/series',oplabel:'name', opvalue:'id', parent:'brandid'}

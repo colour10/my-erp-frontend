@@ -29,11 +29,11 @@
                         </simple-select>
                     </el-form-item>
                     <el-form-item :label="_label('chandi')" prop="countries">
-                        <select-dialog v-model="form.countries" source="country"></select-dialog>
+                        <simple-select v-model="form.countries" source="country" :multiple="true"></simple-select>
                     </el-form-item>
                     <el-form-item :label="_label('niandai')" prop="ageseason">
-                        <select-dialog v-model="form.ageseason" source="ageseason" style="width:150">
-                        </select-dialog>
+                        <simple-select v-model="form.ageseason" source="ageseason"  :multiple="true">
+                        </simple-select>
                     </el-form-item>
                 </el-col>
             </el-row>

@@ -1,7 +1,7 @@
 <template>
     <div>
-        <el-input :placeholder="placeholder" v-model="currentText" :readonly="true">
-            <as-button slot="append" icon="el-icon-more" @click="showPanel"></as-button>
+        <el-input :placeholder="placeholder" v-model="currentText" :readonly="true"  @click.native="showPanel">
+            <as-button slot="append" icon="el-icon-more"></as-button>
         </el-input>
         <el-dialog class="user-form" :title="_label('qingxuanze')" :visible.sync="dialogVisible" :center="true" :width="componenToptions.dialogWidth||'50%'" :modal="false">
             <el-row>
@@ -45,6 +45,9 @@ export default {
             type: String,
             default: ""
         },
+        parentid:{
+            default:false
+        },
         source: {
             type: String,
             required: true
@@ -81,10 +84,7 @@ export default {
         showPanel() {
             var self = this;
 
-            self.getDataSource().getData(function(data) {
-                self.data = data
-                self.dialogVisible = true;
-            })
+            self.dialogVisible = true;
         },
         handleChange(newValue) {
             var self = this;
@@ -109,6 +109,14 @@ export default {
         getDataSource() {
             var self = this;
             return DataSource.getDataSource(self.source, self.lang);
+        },
+        load(value) {
+            let self = this;
+            self.data = []
+            self.getDataSource().getRowsByParent(value).then(function(data) {
+                self._log("load",self.source, data)
+                self.data = data;
+            })
         }
     },
     watch: {
@@ -116,12 +124,27 @@ export default {
             var self = this
                 //console.log("change", newValue)
             self.convertValue(newValue)
+        },
+        parentid(newValue) {
+            this._log("watch parentid")
+            this.load(newValue)
         }
     },
     mounted: function() {
         var self = this;
         var txt = self.select_value || ""
         self.convertValue(txt)
+
+        if(self.parentid==false) {
+            self.getDataSource().getData(function(data) {
+                //self._log("load", data)
+                self.data = data
+            })
+        }
+        else {
+            self._log("mounted")
+            self.load(self.parentid)
+        }    
     }
 }
 </script>

@@ -25,6 +25,7 @@ const props = {
 
     "ulnarinch": {
         columns: [
+            { name: "brandgroupchildid", label: _label("zipinlei"), type: "brandgroupchild", source:"brandgroupchild" },
             { name: "name", label: _label("mingcheng"), is_multiple: true, is_focus: true },
             { name: "displayindex", label: _label("xianshixuhao"), sortMethod:sort_method_digit }
         ],
@@ -163,6 +164,7 @@ const props = {
 
     "materialnote": {
         columns: [
+            { name: "brandgroupchildid", label: _label("zipinlei"), type: "brandgroupchild", source:"brandgroupchild" },
             { name: "content", label: _label("mingcheng"), is_focus: true, is_multiple: true}, 
             { name: "displayindex", label: _label("xianshixuhao"), sortMethod:sort_method_digit }
         ],
@@ -203,6 +205,7 @@ const props = {
 
     "productmemo": {
         columns: [
+            { name: "brandgroupchildid", label: _label("zipinlei"), type: "brandgroupchild", source:"brandgroupchild" },
             { name: "name", label: _label("mingcheng"), is_multiple: true, is_focus: true },
             { name: "displayindex", label: _label("xianshixuhao"), sortMethod:sort_method_digit }
         ],

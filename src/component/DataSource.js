@@ -31,7 +31,7 @@ DataRow.prototype.getRow = function(key) {
 }
 
 DataRow.prototype.getObject = function() {
-    return {id:this.getValue(), name:this.getLabel()}
+    return {id:this.getValue(), name:this.getLabel(), row:this.row}
 }
 
 

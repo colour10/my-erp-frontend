@@ -19,8 +19,6 @@ import Multiple_Admin_Page from './component/Multiple_Admin_Page.vue'
 import Multiple_Admin_TableList from './component/Multiple_Admin_TableList.vue'
 import Simple_Admin_TableList from './component/Simple_Admin_TableList.vue'
 import Simple_Select from './component/Simple_Select.vue'
-import Select_Dialog from './component/Select_Dialog.vue'
-import Select_Dialog_Single from './component/Select_Dialog_Single.vue'
 import Select_Currency from './component/Select_Currency.vue'
 import Simple_Avatar from './component/Simple_Avatar.vue'
 import Simple_Album from './component/Simple_Album.vue'
@@ -37,6 +35,7 @@ import Asa_Order_Confirm_Dialog from './component/asa/Asa_Order_Confirm_Dialog.v
 import Asa_Select_Order_Detail_Dialog from './component/asa/Asa_Select_Order_Detail_Dialog.vue'
 import Asa_Warehousing_Dialog from './component/asa/Asa_Warehousing_Dialog.vue'
 import Asa_Product from './component/asa/Asa_Product.vue'
+import Asa_Brandgroupchild_Select from './component/asa/Asa_Brandgroupchild_Select.vue'
 import CheckboxGroup from './component/CheckboxGroup.vue'
 import Auth from './component/Auth.vue'
 import Orderpayment from './component/orderpayment/index.vue'
@@ -75,8 +74,6 @@ const components = [
     Multiple_Admin_TableList,
     Simple_Admin_TableList,
     Simple_Select,
-    Select_Dialog,
-    Select_Dialog_Single,
     Select_Currency,
     Simple_Avatar,
     Simple_Album,
@@ -92,6 +89,7 @@ const components = [
     Asa_Select_Order_Detail_Dialog,
     Asa_Warehousing_Dialog,
     Asa_Product,
+    Asa_Brandgroupchild_Select,
     Auth,
     CheckboxGroup,
     Table,

@@ -3,6 +3,7 @@ import List from './list.js'
 import {getFetcher,clear} from "./fetcher.js"
 import {getLabel} from "./globals.js"
 import {httpPost} from "./http.js"
+import {isPromise} from "./object.js"
 
 const getDataSource = function(name) {
     return DataSource.getDataSource(name, getLabel('lang'))
@@ -13,7 +14,15 @@ const promiseAll = function(data) {
         promises:[],
         names:[],
         push:function(promise, name){
-            this.promises.push(promise)
+            if(isPromise(promise)) {
+                this.promises.push(promise)
+            }
+            else {
+                this.promises.push(new Promise(resolve=>{
+                    resolve(promise)
+                }))
+            }
+            
             this.names.push(name)
         },
         all:async function(){
@@ -161,6 +170,9 @@ const ProductDetail = Object.assign(createModel("product"),{
             })
         }), 'colors')
 
+        runner.push(function(){
+            return httpPost("/productmaterial/page", {productid:row.id})
+        }, "getMaterialList");
 
         runner.all().then(callback)
     }

@@ -15,10 +15,10 @@
                     </el-table-column>
                     <el-table-column prop="brandcolor" :label="_label('sexi')" width="130" align="center">
                         <template v-slot="scope">
-                            <simple-select v-model="scope.row.brandcolor" source="colortemplate" :lang="lang" :disabled="scope.row.id>0">
+                            <simple-select v-model="scope.row.brandcolor" source="colortemplate" :disabled="scope.row.id>0">
                                 <template v-slot="{row}">
                                     <div class="imgline">
-                                        <img :src="_fileLink(row.row.picture)" class="icon"> <span>{{row.getLabel()}}</span>
+                                        <img :src="_fileLink(row.row.picture)" class="icon"> <span>{{row.name}}</span>
                                     </div>
                                 </template>
                             </simple-select>
@@ -67,40 +67,36 @@
             <el-row :gutter="0">
                 <el-col :span="8">
                     <el-form-item :label="_label('niandai')" prop="ageseason">
-                        <select-dialog v-model="form.ageseason" source="ageseason" style="width:150" :lang="lang">
-                        </select-dialog>
+                        <simple-select v-model="form.ageseason" source="ageseason" :multiple="true"></simple-select>
                     </el-form-item>
                     <el-form-item :label="_label('pinpai')" prop="brandid">
-                        <simple-select v-model="form.brandid" source="brand" :lang="lang" @change="onBrandChange">
-                        </simple-select>
+                        <simple-select v-model="form.brandid" source="brand"></simple-select>
                     </el-form-item>
                     <el-form-item :label="_label('pinlei')" prop="brandgroupid">
-                        <simple-select v-model="form.brandgroupid" source="brandgroup" :lang="lang" @change="onBrandGroupChange">
-                        </simple-select>
+                        <simple-select v-model="form.brandgroupid" source="brandgroup"></simple-select>
                     </el-form-item>
                     <el-form-item :label="_label('zipinlei')" prop="childbrand">
-                        <simple-select ref="childbrand" v-model="form.childbrand" source="brandgroupchild" :lang="lang" :lazy="true">
-                        </simple-select>
+                        <simple-select ref="childbrand" v-model="form.childbrand" source="brandgroupchild" :parentid="form.brandgroupid"></simple-select>
                     </el-form-item>
                     <el-form-item :label="_label('chimazu')" prop="sizetopid">
-                        <simple-select v-model="form.sizetopid" source="sizetop" :lang="lang" @change="onSizetopidChange">
-                        </simple-select>
+                        <simple-select v-model="form.sizetopid" source="sizetop"></simple-select>
                     </el-form-item>
                     <el-form-item :label="_label('chimamingxi')" prop="sizetopid">
-                        <selectpanel v-model="form.sizecontentids" ref="sizecontentids"> </selectpanel>
+                        <simple-select v-model="form.sizecontentids" source="sizecontent" :parentid="form.sizetopid" :multiple="true"> </simple-select>
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
                     <el-form-item :label="_label('shangpinchicun')">
-                        <simple-select v-model="form.ulnarinch" source="ulnarinch" style="width:150" :lang="lang">
-                        </simple-select>
+                        <simple-select v-model="form.ulnarinch" source="ulnarinch" :parentid="form.childbrand"></simple-select>
                     </el-form-item>
                     <el-form-item :label="_label('shangpinmiaoshu')">
-                        <select-dialog v-model="form.productmemoids" source="productmemo" style="width:150" :lang="lang">
-                        </select-dialog>
+                        <simple-select v-model="form.productmemoids" source="productmemo" :multiple="true" :parentid="form.childbrand"></simple-select>
+                    </el-form-item>
+                    <el-form-item :label="_label('caizhi')">
+                        <productmaterial v-model="materials"></productmaterial>
                     </el-form-item>
                     <el-form-item :label="_label('shangpinxilie')">
-                        <selectpanel v-model="form.series" ref="series" style="width:150"> </selectpanel>
+                        <simple-select v-model="form.series" ref="series" source="series" :parentid="form.brandid"> </simple-select>
                     </el-form-item>
                     <el-form-item :label="_label('chuchangjia')">
                         <el-input placeholder="" v-model="form.factoryprice" class="input-with-select">
@@ -123,7 +119,7 @@
                 </el-col>
                 <el-col :span="8">
                     <el-form-item :label="_label('chandi')" prop="countries">
-                        <select-dialog v-model="form.countries" source="country" :lang="lang"></select-dialog>
+                        <simple-select v-model="form.countries" source="country"></simple-select>
                     </el-form-item>
                     <el-form-item :label="_label('xingbie')">
                         <sp-radio-group v-model="form.gender" source="gender" :span="8" :lang="lang" class="supermini">
@@ -170,13 +166,13 @@ import { initObject } from "../array.js"
 import { extend } from "../object.js"
 import { Rules } from '../rules.js'
 import DataSource from '../DataSource.js'
-import Select_Dialog_Common from '../Select_Dialog_Common.vue'
 import watcher from "../watch.js"
+import Material from '../product/material.vue'
 
 export default {
     name: 'asa-product-add',
     components: {
-        selectpanel: Select_Dialog_Common
+        productmaterial:Material
     },
     data() {
         return {
@@ -219,6 +215,7 @@ export default {
                 brandcolor: Rules.required({ message: _label("8000") }),
                 ageseason: Rules.required({ message: _label("8000") })
             },
+            materials:[],
             colors: [],
             colors_loaded: false,
             siji: "" //控制四季全选
@@ -281,6 +278,7 @@ export default {
                 let params = {};
                 params.form = extend({}, self.form)
                 params.colors = self.colors
+                params.materials = self.materials
 
                 self._submit("/product/add", { params: JSON.stringify(params) }).then(function(res) {
                     //self.$emit("change", Object.assign({}, self.form), "create")
@@ -289,27 +287,6 @@ export default {
                     self.initColorList()
                     self.$emit("change")
                 })
-            })
-        },
-        onSizetopidChange(newvalue) {
-            let self = this
-                //self._log(newvalue)
-            let source = DataSource.getDataSource("sizecontent", self.lang)
-            source.filter({ topid: self.form.sizetopid }, function(list) {
-                let data = list.map(item => item.getObject())
-                self.$refs['sizecontentids'].setData(data)
-                if (data.length == 1) {
-                    self.form.sizecontentids = data[0].id
-                }
-            })
-        },
-        onBrandChange(newvalue) {
-            let self = this
-
-            let series = DataSource.getDataSource("series", self.lang)
-            series.filter({ brandid: self.form.brandid }, function(list) {
-                let data = list.map(item => item.getObject())
-                self.$refs['series'].setData(data)
             })
         },
         onAppendColor() {
@@ -343,10 +320,6 @@ export default {
         show() {
             var self = this;
             self.dialogVisible = true;
-        },
-        onBrandGroupChange(value) {
-            let self = this
-            self.$refs.childbrand.load(value)
         },
         initColorList() {
             let self = this

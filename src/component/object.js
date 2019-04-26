@@ -8,6 +8,11 @@ export {extract}
 const extend = Object.assign
 export {extend}
 
+const isPromise = function(obj) {
+    return !!obj && (typeof obj === 'object' || typeof obj === 'function') && typeof obj.then === 'function';
+}
+export {isPromise}
+
 export default {
     extract,
     extend
