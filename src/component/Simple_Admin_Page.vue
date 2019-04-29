@@ -20,16 +20,16 @@
                 <simple-admin-tablelist ref="tablelist" :controller="controller" :columns="columns" :actions="actions" :buttons="buttons" :options="options" :base="base" :authname="authname" :isedit="componenToptions.isedit" :isdelete="componenToptions.isdelete" :onclickupdate="showFormToEdit"></simple-admin-tablelist>
             </el-col>
         </el-row>
-        <el-dialog :title="formTitle" :visible.sync="dialogVisible" :center="true" :width="componenToptions.dialogWidth" :modal="false">
+        <el-dialog :title="title" :visible.sync="dialogVisible" :center="true" :width="componenToptions.dialogWidth" :modal="false">
             <el-row>
                 <el-col :span="24" class="user-form">
-                    <slot v-bind:form="form">
+                    <slot v-bind:form="form" v-bind:action="action" name="default">
                     <el-form class="user-form" ref="form" :model="form" label-width="100px" :inline="componenToptions.inline" :size="componenToptions.formSize">
-                        <el-form-item :label="item.label" v-if="!item.is_edit_hide" v-for="item in columns" :key="item.name" :class="item.class?item.class:'width2'">
-                            <el-input :ref="item.name" @keyup.enter.native="onSubmit" :type="item.type?item.type:'text'" v-if="!item.type||item.type=='input'||item.type=='textarea'" v-model="form[item.name]" size="mini"></el-input>
-                            <el-switch :ref="item.name" v-if="item.type=='switch'" v-model="form[item.name]" active-value="1" inactive-value="0"></el-switch>
-                            <simple-select :ref="item.name" v-if="item.type=='select'" v-model="form[item.name]" :source="item.source" :lang="lang" @change="onChange(item)"></simple-select>
-                            <el-date-picker :ref="item.name" v-if="item.type=='date'" v-model="form[item.name]" type="date" value-format="yyyy-MM-dd" placeholder=""></el-date-picker>
+                        <el-form-item :label="item.label" v-if="!item.is_edit_hide" v-for="item in columns" :key="item.name" :class="item.class?item.class:'width2'" :disabled="checkDisabled(item)">
+                            <el-input :ref="item.name" @keyup.enter.native="onSubmit" :type="item.type?item.type:'text'" v-if="!item.type||item.type=='input'||item.type=='textarea'" v-model="form[item.name]" size="mini" :disabled="checkDisabled(item)"></el-input>
+                            <el-switch :ref="item.name" v-if="item.type=='switch'" v-model="form[item.name]" active-value="1" inactive-value="0" :disabled="checkDisabled(item)"></el-switch>
+                            <simple-select :ref="item.name" v-if="item.type=='select'" v-model="form[item.name]" :source="item.source" :lang="lang" @change="onChange(item)" :disabled="checkDisabled(item)"></simple-select>
+                            <el-date-picker :ref="item.name" v-if="item.type=='date'" v-model="form[item.name]" type="date" value-format="yyyy-MM-dd" placeholder="" :disabled="checkDisabled(item)"></el-date-picker>
                         </el-form-item>
                     </el-form>
                     </slot>
@@ -51,7 +51,7 @@ import Bus from './bus.js'
 
 export default {
     name: 'simple-admin-page',
-    props: ['columns', 'buttons', "options", "controller", "base", "auth", "hideCreate", 'hideForm', 'actions'],
+    props: ['columns', 'buttons', "options", "controller", "base", "auth", "hideCreate", 'hideForm', 'actions', "formTitle", "isDisabled"],
     components: {
 
     },
@@ -76,7 +76,7 @@ export default {
             dialogVisible: false,
             form: form,
             rowIndex: "",
-            formTitle: "",
+            title: "",
             lang: _label("lang"),
             componenToptions,
             authname: authname,
@@ -101,7 +101,7 @@ export default {
                 let value = self.form[column.name]
 
                 column.trigger.forEach(name=>{
-                    self._log(self.$refs[name])
+                    //self._log(self.$refs[name])
                     self.$refs[name][0].load(value)
                 })                
             }
@@ -178,7 +178,8 @@ export default {
             }
 
             self.action = "add"
-            self.showDialog(_label("tianjiaxinxi"));
+
+            self.showDialog(self.getTitle(_label("tianjiaxinxi")));
         },
         showFormToEdit(rowIndex, row) {
             let self = this
@@ -186,18 +187,27 @@ export default {
             globals.copyTo(row, this.form)
             self.action = "edit"
 
-            self.showDialog(_label("xiugaixinxi"));
+            self.showDialog(self.getTitle(_label("xiugaixinxi"), row));
+        },
+        getTitle(defaultTitle, row) {
+            let self = this;
+            let title = "" 
+            if(typeof(self.formTitle)=='function') {
+                title = self.formTitle(row)
+            }
+
+            return title || defaultTitle;
         },
         showDialog(formTitle) {
             let self = this;
-            this.formTitle = formTitle;
+            self.title = formTitle;
             self.dialogVisible = true;
             setTimeout(function() {
                 //console.log(self.$refs)
                 let columns = self.columns;
                 for (let i = 0; i < columns.length; i++) {
                     let column = columns[i]
-                    if (column.is_edit_hide != true) {
+                    if (column.is_edit_hide != true && self.$refs[column.name]) {
                         let ele = self.$refs[column.name][0];
 
                         if (column.is_focus && !ele.disabled) {
@@ -214,6 +224,15 @@ export default {
         },
         setTableData(data){
             return this.$refs.tablelist.setTableData(data);
+        }, 
+        checkDisabled(column) {
+            let self = this
+            if(typeof(self.isDisabled)=='function') {
+                return self.isDisabled(column, self.action)
+            }
+            else {
+                return false;
+            }
         }
     },
     watch: {

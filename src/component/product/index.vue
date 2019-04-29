@@ -33,7 +33,7 @@ var props = {
             label: _label("shangpinmingcheng"),
             width: 300,
             convert: function(row, rowIndex, column) {
-                return [row.brand_label, row.gender_label, row.brandcolor_label, row.childbrand_label].join('/')
+                return row.getName()
             }
         },
         { name: "id", label: _label("niandai") },

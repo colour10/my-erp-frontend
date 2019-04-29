@@ -12,7 +12,7 @@
                     <as-button type="text" @click="item.handler(scope.$index, scope.row, item)">{{item.label}}</as-button>
                 </template>
             </el-table-column>
-            <el-table-column :label="_label('caozuo')" :width="localOptions.action_width" align="center">
+            <el-table-column :label="_label('caozuo')" :width="localOptions.action_width" align="center" v-if="localOptions.isaction">
                 <template v-slot="scope">
                     <as-button size="mini" @click="handleClickUpdate(scope.$index, scope.row)" v-if="isEditable(scope.row)"icon="el-icon-edit">{{_label('bianji')}}</as-button>
                     <auth :auth="authname||controller">
@@ -55,7 +55,7 @@ export default {
     data() {
         let self = this
         let base = self.base || {}
-        let localOptions = (({action_width=180,issubmit=true}={})=>{return {action_width,issubmit}})(self.options)
+        let localOptions = (({action_width=180, issubmit=true, isaction=true, actionNameOfLoad='page'}={})=>{return {action_width, issubmit, isaction, actionNameOfLoad}})(self.options)
 
         if(self.tableModel && allModels[self.tableModel]) {
             model = allModels[self.tableModel]
@@ -243,13 +243,28 @@ export default {
 
             let obj = getBaseObject(self.columns)
 
-            self._fetch("/" + self.controller + "/page", params).then(function(res) {
+            self._fetch("/" + self.controller + "/" + self.localOptions.actionNameOfLoad, params).then(function(res) {
                 //self._log(res)
                 if(model) {
+                    //记录自然的排序规则
+                    let keyindexes = {}
+                    res.data.forEach((item,index)=>{
+                        keyindexes[item.id] = index
+                    })
+
                     let array = []
-                    res.data.forEach(async item => {
-                        let rowinfo = await model.load({data:Object.assign(item, obj) ,depth:1})
-                        self.tableData.push(rowinfo)
+                    res.data.forEach(item => {
+                        model.load({data:Object.assign(item, obj) ,depth:1}).then(rowinfo=>{
+                            array.push(rowinfo)
+
+                            if(array.length==res.data.length) {
+                                array.sort(function(a,b){
+                                    return keyindexes[a.id]-keyindexes[b.id]
+                                })
+
+                                self.tableData = array
+                            }
+                        })                        
                     })
                 }
                 else {
@@ -283,8 +298,11 @@ export default {
     watch: {
         base: {
             handler: function(newValue, oldValue) {
+                let self = this
                 //this._log("change", newValue, oldValue)
-                this.loadList()
+                setTimeout(function(){
+                    self.loadList()
+                },10)                
             },
             deep: true
         }

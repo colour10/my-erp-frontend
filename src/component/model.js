@@ -142,6 +142,8 @@ const ProductDetail = Object.assign(createModel("product"),{
         runner.push(getDataSource("currency").getRowLabel(row.wordpricecurrency), 'wordpricecurrency_label')
         runner.push(getDataSource("currency").getRowLabel(row.factorypricecurrency), 'factorypricecurrency_label')
         runner.push(getDataSource("currency").getRowLabel(row.nationalpricecurrency), 'nationalpricecurrency_label')
+        runner.push(getDataSource("ulnarinch").getRowLabel(row.ulnarinch), 'ulnarinch_label')
+        runner.push(getDataSource("productmemo").getRowLabels(row.productmemoids), 'productmemo_label')
 
         //颜色分组
         runner.push(new Promise(function(resolve){
@@ -173,6 +175,16 @@ const ProductDetail = Object.assign(createModel("product"),{
         runner.push(function(){
             return httpPost("/productmaterial/page", {productid:row.id})
         }, "getMaterialList");
+
+        runner.push(function(){
+            let self = this
+            return [self.brand_label, self.gender_label, self.brandcolor_label, self.childbrand_label, self.ulnarinch_label, self.productmemo_label].join('')
+        }, "getName");
+
+        runner.push(function(){
+            let self = this
+            return [self.wordcode_1, self.wordcode_2, self.wordcode_3, self.wordcode_4].join(' ')
+        }, "getGoodsCode");
 
         runner.all().then(callback)
     }

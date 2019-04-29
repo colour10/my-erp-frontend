@@ -251,9 +251,18 @@ DataSource.prototype.getSourceByParent = function(parent) {
 DataSource.prototype.getRowLabels = function(keyValues, callback) {
     var self = this;
 
-    this.getRows(keyValues, function(list){
-        callback(list.map(item=>item.getLabel()).join(","))
-    })    
+    let promise = new Promise((resolve)=>{
+        self.getRows(keyValues, function(list){
+            resolve(list.map(item=>item.getLabel()).join(","))
+        }) 
+    });
+
+    if(typeof(callback)=='function') {
+        promise.then(callback)
+    }
+    else {
+        return promise;
+    }       
 }
 
 DataSource.prototype.getList = function() {

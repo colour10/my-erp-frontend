@@ -2,7 +2,7 @@
     <el-dialog :title="_label('chanpinguanli')" :visible.sync="dialogVisible" :center="true" width="1200px">
         <el-row class="product">
             <el-col :span="20">
-                <el-table :data="colors" border style="width:100%;" :header-cell-style="countHeaderStyle">
+                <el-table :data="colors" border style="width:100%;">
                     <el-table-column width="60" align="center">
                         <template v-slot="scope">
                             <simple-avatar v-model="scope.row.picture" font-size="14px" :size="35"></simple-avatar>
@@ -13,40 +13,42 @@
                             <simple-avatar v-model="scope.row.picture2" font-size="14px" :size="35"></simple-avatar>
                         </template>
                     </el-table-column>
+                    
+                    <el-table-column :label="_label('kuanshi')" width="110" align="center">
+                        <template v-slot="scope">
+                            <el-input v-model="scope.row.wordcode_1" size="mini" @focus="onFocus(1)" @blur="onBlur(1)"></el-input>
+                        </template>
+                    </el-table-column>
+                    <el-table-column :label="_label('caizhi')" width="110" align="center">
+                        <template v-slot="scope">
+                            <el-input v-model="scope.row.wordcode_2" size="mini" @focus="onFocus(2)" @blur="onBlur(2)"></el-input>
+                        </template>
+                    </el-table-column>
+                    <el-table-column :label="_label('yanse')" width="110" align="center">
+                        <template v-slot="scope">
+                            <!--<el-input v-model="scope.row.wordcode_3" size="mini" @keyup.native.down="onKeyDown(scope.$index)" @keyup.native.up="onKeyUp(scope.$index)" :ref="'word'+scope.$index"></el-input>-->
+                            <el-input v-model="scope.row.wordcode_3" size="mini"></el-input>
+                        </template>
+                    </el-table-column>
+                    <el-table-column :label="_label('yansemingcheng')" width="150" align="center">
+                        <template v-slot="scope">
+                            <el-input v-model="scope.row.colorname" size="mini"></el-input>
+                        </template>
+                    </el-table-column>
+
                     <el-table-column prop="brandcolor" :label="_label('sexi')" width="130" align="center">
                         <template v-slot="scope">
                             <colorselect v-model="scope.row.brandcolor" :disabled="scope.row.id>0"></colorselect>
                         </template>
                     </el-table-column>
-                    <el-table-column :label="_label('guojima')" align="center">
-                        <el-table-column prop="goods_code" width="110" align="center">
-                            <template v-slot="scope">
-                                <el-input v-model="scope.row.wordcode_1" size="mini" @focus="onFocus(1)" @blur="onBlur(1)"></el-input>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="goods_code" width="110" align="center">
-                            <template v-slot="scope">
-                                <el-input v-model="scope.row.wordcode_2" size="mini" @focus="onFocus(2)" @blur="onBlur(2)"></el-input>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="goods_code" width="110" align="center">
-                            <template v-slot="scope">
-                                <!--<el-input v-model="scope.row.wordcode_3" size="mini" @keyup.native.down="onKeyDown(scope.$index)" @keyup.native.up="onKeyUp(scope.$index)" :ref="'word'+scope.$index"></el-input>-->
-                                <el-input v-model="scope.row.wordcode_3" size="mini"></el-input>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="goods_code" width="110" align="center">
-                            <template v-slot="scope">
-                                <el-input v-model="scope.row.wordcode_4" size="mini"></el-input>
-                            </template>
-                        </el-table-column>
-                    </el-table-column>
-                    <el-table-column prop="goods_code" :label="_label('yansemingcheng')" width="150" align="center">
+
+                    <el-table-column :label="_label('fuzhuma')" width="110" align="center">
                         <template v-slot="scope">
-                            <el-input v-model="scope.row.colorname" size="mini"></el-input>
+                            <el-input v-model="scope.row.wordcode_4" size="mini"></el-input>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="goods_code" :label="_label('caozuo')" width="125" align="center">
+                    
+                    <el-table-column :label="_label('caozuo')" width="125" align="center">
                         <template v-slot="scope">
                             <as-button type="danger" @click="onDeleteColorGroup(scope, scope.row)" v-if="scope.$index>0">{{_label("shanchu")}}</as-button>
                         </template>
@@ -343,11 +345,6 @@ export default {
         onDeleteColorGroup({ $index, row }, rowIndex) {
             let self = this
             self.$delete(self.colors, $index)
-        },
-        countHeaderStyle({ row, column, rowIndex, columnIndex }) {
-            if (rowIndex == 1) {
-                return { display: 'none' }
-            }
         },
         show() {
             var self = this;

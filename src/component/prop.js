@@ -415,19 +415,6 @@ const props = {
         },
         key_column: "name"
     },
-    "exchangerate":{
-        columns: [
-            { name: "currency_from", label: _label("huichuhuobi"), type:"select", source:"currency"},
-            { name: "currency_to", label: _label("huiruhuobi"), type:"select", source:"currency"},
-            { name: "rate", label: _label("huilv")}
-        ],
-        controller: "exchangerate",
-        auth: "exchangerate",
-        options:{
-            dialogWidth:"400px", 
-            autoreload:true
-        }
-    },
     "productprice":{
         columns: [
             { name: "pricename", label: _label("jiage"), type: 'label'},
