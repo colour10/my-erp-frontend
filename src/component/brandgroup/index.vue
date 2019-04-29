@@ -16,7 +16,6 @@
 
 <script>
 import globals, { _label } from '../globals.js'
-import Multiple_Admin_Page from '../Multiple_Admin_Page.vue'
 
 const props = {
     columns: [
@@ -146,7 +145,6 @@ const options = {
 export default {
     name: 'asapage-brandgroup',
     components: {
-        'multiple-admin-page': Multiple_Admin_Page
     },
     props: {},
     data() {

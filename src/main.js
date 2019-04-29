@@ -15,17 +15,14 @@ if (typeof window !== 'undefined') {
 }
 
 import Simple_Admin_Page from './component/Simple_Admin_Page.vue'
-import Multiple_Admin_Page from './component/Multiple_Admin_Page.vue'
-import Multiple_Admin_TableList from './component/Multiple_Admin_TableList.vue'
+//import Multiple_Admin_Page from './component/Multiple_Admin_Page.vue'
 import Simple_Admin_TableList from './component/Simple_Admin_TableList.vue'
 import Simple_Select from './component/Simple_Select.vue'
 import Select_Currency from './component/Select_Currency.vue'
 import Simple_Avatar from './component/Simple_Avatar.vue'
 import Simple_Album from './component/Simple_Album.vue'
 import globals from './component/globals.js'
-import Asa_Aliases from './component/asa/Asa_Aliases.vue'
 import Asa_BrandTab from './component/asa/Asa_BrandTab.vue'
-import Asa_Series from './component/asa/Asa_Series.vue'
 import Asa_Order_Dialog from './component/asa/Asa_Order_Dialog.vue'
 import Asa_Select_Product_Dialog from './component/asa/Asa_Select_Product_Dialog.vue'
 import Asa_Sales_Dialog from './component/asa/Asa_Sales_Dialog.vue'
@@ -45,12 +42,12 @@ import Checkbox from './component/checkbox.js'
 import Authbutton from './component/authbutton.js'
 import Button from './component/button.js'
 import RadioGroup from './component/radio-group.vue'
+import Multiple_Admin_Page from './component/multiple_admin_page.js'
 
 import ImagePreview from './component/image-preview.vue'
 import Creator from './component/develop/index.vue'
 import Home from './component/home/index.vue'
 import Order from './component/order/index.vue'
-import Producttemplate from './component/producttemplate/index.vue'
 import User from './component/user/index.vue'
 import Group from './component/group/index.vue'
 import Department from './component/department/index.vue'
@@ -72,15 +69,12 @@ import Exchangerate from './component/exchangerate/index.vue'
 const components = [
     Simple_Admin_Page,
     Multiple_Admin_Page,
-    Multiple_Admin_TableList,
     Simple_Admin_TableList,
     Simple_Select,
     Select_Currency,
     Simple_Avatar,
     Simple_Album,
-    Asa_Aliases,
     Asa_BrandTab,
-    Asa_Series,
     Asa_Order_Dialog,
     Asa_Select_Product_Dialog,
     Asa_Sales_Dialog,
@@ -127,7 +121,6 @@ const routes = [
             {path: '/salesreceive', component: Salesreceive},   
             {path: '/system', component: System}, 
             {path: '/develop', component: Creator}, 
-            {path:'/producttemplate', component:Producttemplate},
 
             {path:'/ageseason', component:getComponentSimple("ageseason")},
             {path:'/ulnarinch', component:getComponent("ulnarinch")},

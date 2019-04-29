@@ -204,7 +204,6 @@ export default {
                 countries: "",
                 material: "",
                 productparst: "",
-                producttemplate: "",
                 laststoragedate: "",
                 series: "",
                 ulnarinch: "",

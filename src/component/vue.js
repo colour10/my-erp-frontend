@@ -20,6 +20,7 @@ const extendComponent = function(component, wrapInfo) {
             scopedSlots: this.$scopedSlots,
             attrs: this.$attrs
         }
+        //console.log("listeners", this)
         this.paramsPipe(params);
 
         return h(component, params, slots)

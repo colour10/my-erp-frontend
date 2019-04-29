@@ -282,7 +282,6 @@ export default {
                 countries: "",
                 brandcolor: "",
                 productparst: "",
-                producttemplate: "",
                 picture: "",
                 picture2: "",
                 laststoragedate: "",

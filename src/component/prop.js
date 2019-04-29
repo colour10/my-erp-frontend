@@ -191,10 +191,7 @@ const props = {
             {
                 name: "picture",
                 label: _label("yanseseban"),
-                type: "upload",
-                multiple: false,
-                limit: 1,
-                is_image: true,
+                type: "avatar",
                 image_width: 60,
                 image_height: 60
             }
@@ -437,6 +434,28 @@ const props = {
         },
         base:{
             brandid:""
+        }
+    },
+    aliases:{
+        columns:[
+            {name:"name", label:_label('biemingmingcheng'), is_multiple:true, is_focus:true},
+            {name:"code", label:_label('biemingbianma')}
+        ],
+        controller:"aliases",
+        key_column:"name",
+        base:{
+            brandid:""    
+        }
+    },
+    series:{
+        columns:[
+            {name:"name", label:_label('xiliemingcheng'), is_multiple:true, is_focus:true},
+            {name:"code", label:_label('xiliebianma')}
+        ],
+        controller:"series",
+        key_column:"name",
+        base:{
+            brandid:""    
         }
     }
 }

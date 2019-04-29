@@ -10,7 +10,6 @@
 
 <script>
 import {_label} from '../globals.js'
-import Multiple_Admin_Page from '../Multiple_Admin_Page.vue'
 
 var props = {
     columns:[            
@@ -82,11 +81,6 @@ const options = {
 
 export default {
     name: 'asapage-sizetop',
-    components:{
-        'multiple-admin-page':Multiple_Admin_Page
-    },
-    props: {
-    },
     data() {
         var self = this;
         

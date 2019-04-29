@@ -2,13 +2,13 @@
     <el-dialog class="user-form" :title="title" :visible="currentVisible" :center="true" @close="onClose" width="80%">
         <el-tabs type="border-card" v-model="activeName">
             <el-tab-pane :label="_label('bieming')" name="aliases">
-                <asa-aliases :brandid="brandid"></asa-aliases>
+                <multiple-admin-page v-bind="aliases"></multiple-admin-page>
             </el-tab-pane>
             <el-tab-pane :label="_label('xilie')">
-                <asa-series :brandid="brandid"></asa-series>
+                <simple-admin-page v-bind="series"></simple-admin-page>
             </el-tab-pane>
             <el-tab-pane :label="_label('beilv')">
-                <simple-admin-page v-bind="props" ref="page"></simple-admin-page>
+                <simple-admin-page v-bind="props"></simple-admin-page>
             </el-tab-pane>
         </el-tabs>
     </el-dialog>
@@ -31,8 +31,11 @@ export default {
     },
     data() {
         var self = this;
+
         return {
             props:getProp('brandrate'),
+            aliases:getProp('aliases'),
+            series:getProp('series'),
             activeName: "aliases",
             currentVisible: self.visible
         }
@@ -41,6 +44,8 @@ export default {
         onBrandChange() {
             let self = this;
             self.props.base.brandid = self.brandid
+            self.aliases.base.brandid = self.brandid
+            self.series.base.brandid = self.brandid
         },
         onClose() {
             this.currentVisible = false;
