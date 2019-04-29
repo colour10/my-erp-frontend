@@ -353,7 +353,7 @@ export default {
             if (!self.form.id) {
                 return
             }
-            self._remove("/confirmorder/delete?id=" + self.form.id).then(function(res) {
+            self._remove("/confirmorder/delete", {id:self.form.id}).then(function(res) {
                 self.$emit("change", self.form, "delete")
             });
         }

@@ -23,10 +23,10 @@
                 </multiple-admin-tablelist>
             </el-col>
         </el-row>
-        <el-dialog class="user-form" :title="formTitle" :visible.sync="dialogVisible" :center="true" :width="componenToptions.dialogWidth||'400px'" :modal="false">
+        <el-dialog class="user-form" :title="formTitle" :visible.sync="dialogVisible" :center="true" :width="option('dialogWidth')" :modal="false">
             <el-row>
                 <el-col :span="24">
-                    <el-form ref="form" class="user-form" :model="form" label-width="100px" :inline="componenToptions.inline||false" :size="componenToptions.formSize||'mini'">
+                    <el-form ref="form" class="user-form" :model="form" label-width="100px" :inline="option('inline')" :size="option('formSize')">
                         <template v-for="item in columns">
                             <template v-if="item.is_multiple">
                                 <el-form-item :label="item.label+'('+language.shortName+')'" v-if="!item.is_edit_hide" v-for="language in languages" :key="language.code" :class="item.class?item.class:'width2'">
@@ -73,37 +73,30 @@ export default {
         controller: {},
         base: {},
         key_column: {},
-        auto_hide: {},
-        actions: {},
-        autoload: {
-            type: Boolean,
-            default: true
-        }
-    },
-    components: {
-
+        actions: {}
     },
     data() {
-        var form = {
+        let form = {
             id: ""
         }
 
-        var options = this.options || {}
-        var base = this.base || {}
+        let componenToptions = (function({inline=false,dialogWidth='400px',formSize='mini',issubmit=true, isdelete, autoreload=true, autohide=false}={}){return {inline,isdelete,dialogWidth,issubmit,formSize,autoreload,autohide}})(self.options)
 
-        var columns = this.columns
-        var column;
+        let base = this.base || {}
 
-        var languages = _label("languages");
-        var keys = Object.keys(languages)
-        for (var i = 0; i < columns.length; i++) {
+        let columns = this.columns
+        let column;
+
+        let languages = _label("languages");
+        let keys = Object.keys(languages)
+        for (let i = 0; i < columns.length; i++) {
             column = columns[i]
             if (column.is_multiple) {
                 keys.forEach(function(code) {
-                    form[column.name + "_" + code] = ""
+                    form[column.name + "_" + code] = column.default || ""
                 });
             } else {
-                form[column.name] = ""
+                form[column.name] = column.default || ""
             }
         }
         //console.log(columns,form)
@@ -115,7 +108,7 @@ export default {
             rowIndex: "",
             formTitle: "",
             lang: _label("lang"),
-            componenToptions: options,
+            componenToptions,
             languages: languages,
         }
     },
@@ -123,25 +116,29 @@ export default {
         onQuit() {
             this.dialogVisible = false
         },
+
+        option(name){
+            return this.componenToptions[name]
+        },
         onSubmit() {
-            var self = this;
+            let self = this;
             self.form.lang = self.lang;
             if (self.form.id == "") {
                 self._submit("/" + self.controller + "/add", self.form).then(function() {
-                    if(self.autoload) {
+                    if(self.option('autoload')) {
                         self.$refs.tablelist.loadList()
                     }
                     else {
                         self.$refs.tablelist.appendRow(globals.clone(self.form))
                     }                    
 
-                    if (self.auto_hide !== false) {
+                    if (self.option('autohide') !== false) {
                         self.dialogVisible = false
                     }
                 })
             } else {
                 self._submit("/" + self.controller + "/edit", self.form).then(function() {
-                    if(self.autoload) {
+                    if(self.option('autoload')) {
                         self.$refs.tablelist.loadList()
                     }
                     else {
@@ -149,7 +146,7 @@ export default {
                         globals.copyTo(self.form, row)
                     }
                     
-                    if (self.auto_hide !== false) {
+                    if (self.option('autohide') !== false) {
                         self.dialogVisible = false
                     }
                 })
@@ -161,8 +158,23 @@ export default {
             self.$refs.tablelist.search(self.searchform)
         },
         showFormToCreate() {
-            var self = this;
+            let self = this;
             globals.empty(self.form)
+            //self._log('ddddddddddddd')
+
+            //设置初始化
+            let columns = self.columns
+            let keys = Object.keys(self.languages)
+            for (let i = 0; i < columns.length; i++) {
+                let column = columns[i]
+                if (column.is_multiple) {
+                    keys.forEach(function(code) {
+                        self.form[column.name + "_" + code] = column.default || ""
+                    });
+                } else {
+                    self.form[column.name] = column.default || ""
+                }
+            }
 
             if (self.base) {
                 Object.keys(self.base).forEach(function(key) {
@@ -173,7 +185,7 @@ export default {
             self.showDialog(_label("tianjiaxinxi"));
         },
         showFormToUpdate(rowIndex, row) {
-            var self = this
+            let self = this
             self.rowIndex = rowIndex;
             globals.copyTo(row, self.form);
 
@@ -184,9 +196,9 @@ export default {
             return column.is_multiple ? column.name + "_" + language.code : column.name;
         },
         getUploadSuccessCallback(column) {
-            var self = this;
+            let self = this;
             if (!column.success_callback) {
-                console.log(column, "44")
+                //console.log(column, "44")
 
                 column.success_callback = function(response, file, fileList) {
                     //console.log(response["files"], file, fileList)                
@@ -199,7 +211,7 @@ export default {
             return column.success_callback
         },
         getRemoveUploadFileCallback(column) {
-            var self = this;
+            let self = this;
             if (!column.remove_callback) {
                 column.remove_callback = function(file, fileList) {
                     console.log(self.form[column.name], file.name)
@@ -210,13 +222,13 @@ export default {
 
         },
         clearFiles() {
-            var self = this;
+            let self = this;
             setTimeout(function() {
                 //console.log(self.$refs) 
-                var columns = self.columns;
-                for (var i = 0; i < columns.length; i++) {
-                    var column = columns[i]
-                    var ele = self.$refs[column.name][0];
+                let columns = self.columns;
+                for (let i = 0; i < columns.length; i++) {
+                    let column = columns[i]
+                    let ele = self.$refs[column.name][0];
 
                     if (column.type == 'upload') {
                         ele.clearFiles();
@@ -225,19 +237,19 @@ export default {
             }, 50)
         },
         showDialog(title) {
-            var self = this;
+            let self = this;
             //console.log(title,"focus44")
             self.formTitle = title
             self.dialogVisible = true;
             setTimeout(function() {
                 //console.log(self.$refs) 
-                var is_focus_call = false;
-                var columns = self.columns;
-                for (var i = 0; i < columns.length; i++) {
-                    var column = columns[i]
-                    var refs = self.$refs[column.name];
+                let is_focus_call = false;
+                let columns = self.columns;
+                for (let i = 0; i < columns.length; i++) {
+                    let column = columns[i]
+                    let refs = self.$refs[column.name];
                     if (refs && refs.length > 0) {
-                        var ele = refs[0];
+                        let ele = refs[0];
 
                         if (!is_focus_call && column.is_focus && !ele.disabled) {
                             //console.log(ele,"focus")

@@ -256,7 +256,7 @@ export default {
                 return
             }
 
-            self._remove("/order/delete?id=" + self.form.id).then(function() {
+            self._remove("/order/delete", {id:self.form.id}).then(function() {
                 self.dialogVisible = false
                 self.form.id = ""
 

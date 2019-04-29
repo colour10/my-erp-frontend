@@ -31,9 +31,6 @@ export default {
             required: false,
             default: false
         },
-        lazy: {
-
-        },
         placeholder:{
             type:String,
             default:_label('qingxuanze')

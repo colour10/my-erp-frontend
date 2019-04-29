@@ -1,6 +1,8 @@
 import resources_options from './resources.js'
 import {httpGet} from './http.js'
 import {ASAP} from "./globals.js"
+import {extract} from "./object.js"
+
 
 function DataRow(row, dataSource) {
     var self = this;
@@ -36,7 +38,7 @@ DataRow.prototype.getObject = function() {
 
 
 function DataSource(options, lang) {
-    var self = this;
+    let self = this;
     self.lang = lang;
     self.data = [];
     self.hashtable = {};
@@ -50,8 +52,8 @@ function DataSource(options, lang) {
 }
 
 DataSource.prototype.init = function() {
-    var self = this;
-    var options = self.options;
+    let self = this;
+    let options = self.options;
 
 
     if(options.url) {
@@ -60,7 +62,7 @@ DataSource.prototype.init = function() {
     else if(options.hashlist) {
         //_log(options.hashlist)
         Object.keys(options.hashlist).forEach(function(key){
-            var row = new DataRow(options.hashlist[key], self)
+            let row = new DataRow(options.hashlist[key], self)
             self.data.push(row)
             self.hashtable[key] = row;
         });
@@ -68,7 +70,7 @@ DataSource.prototype.init = function() {
     }
     else if(options.hashtable) {
         Object.keys(options.hashtable).forEach(function(key){
-            var row = new DataRow({name:options.hashtable[key],value:key}, self);
+            let row = new DataRow({name:options.hashtable[key],value:key}, self);
             self.data.push(row)
             self.hashtable[key] = row;
         });
@@ -79,7 +81,7 @@ DataSource.prototype.init = function() {
     else if(options.datalist) {
         //_log(options.datalist.forEach,"options")
         options.datalist.forEach(function(item){
-            var row = new DataRow(item, self)
+            let row = new DataRow(item, self)
             
             self.hashtable[item[self.opvalue]] = row;    
             self.data.push(row)
@@ -93,12 +95,12 @@ DataSource.prototype.init = function() {
  * @return {[type]} [description]
  */
 DataSource.prototype.loadList = function() {
-    var self = this;
-    var options = self.options;
-    var params = options.params || {}
+    let self = this;
+    let options = self.options;
+    let params = options.params || {}
     httpGet(options.url).then( function({data=[]}={}){
         data.forEach(function(item){
-            var row = new DataRow(item, self)
+            let row = new DataRow(item, self)
             self.hashtable[item[self.opvalue]] = row; 
             self.data.push(row)   
         })
@@ -107,8 +109,8 @@ DataSource.prototype.loadList = function() {
 }
 
 DataSource.prototype.getData = function(callback) {
-    var self = this;
-    var func = function f(){
+    let self = this;
+    let func = function f(){
         if(self.is_loaded) {
             callback(self.data)
         }
@@ -225,7 +227,7 @@ DataSource.prototype.getRows = function(keyValues='', callback) {
     }
 }
 
-DataSource.prototype.getRowsByParent = function(parent) {
+DataSource.prototype.getSourceByParent = function(parent) {
     var self = this;
 
     return new Promise(resolve=>{
@@ -234,8 +236,14 @@ DataSource.prototype.getRowsByParent = function(parent) {
             let list = data.filter(function(value){
                 return value.row[self.parent] == parent
             })
+
+            let options = extract(self.options,['oplabel','opvalue','parent']);
+            options.datalist = list.map(item=>item.row)
+            let source = new DataSource(options,self.lang);
+            source.init();
+
             
-            resolve(list)
+            resolve(source)
         })
     })    
 }

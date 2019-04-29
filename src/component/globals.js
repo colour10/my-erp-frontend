@@ -1,4 +1,5 @@
 import {client} from "./browser.js"
+import math from "./math.js"
 
 const ASAP = window.ASAP || {
     caches:{}, //httpGet的缓存对象
@@ -64,15 +65,6 @@ const empty = function(target) {
     return target;
 }
 
-const round = function(num, length) {
-    if (num > 0) {
-        var l = Math.pow(10, length)
-        return Math.round(num * l) / l
-    } else {
-        return '';
-    }
-}
-
 const deleteObject = function(arr, obj) {
     for (var i = 0; i < arr.length; i++) {
         if (arr[i] == obj) {
@@ -94,6 +86,9 @@ const getAvailableHeight = function() {
 }
 
 const pageSizes = [10, 20, 30, 50, 100]
+const config = {
+    ouyuan: '9' //欧元货币的id
+}
 
 export {
     ASAP,
@@ -102,7 +97,9 @@ export {
     logger,
     extend,
     extract,
-    getAvailableHeight
+    getAvailableHeight,
+    config,
+    math
 }
 export default {
     getLabel,
@@ -110,10 +107,10 @@ export default {
     extend,
     clone,
     empty,
-    round,
     deleteObject,
     copyTo,
     extract,
     pageSizes,
-    getAvailableHeight
+    getAvailableHeight,
+    math
 }

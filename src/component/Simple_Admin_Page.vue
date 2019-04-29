@@ -23,6 +23,7 @@
         <el-dialog :title="formTitle" :visible.sync="dialogVisible" :center="true" :width="componenToptions.dialogWidth" :modal="false">
             <el-row>
                 <el-col :span="24" class="user-form">
+                    <slot v-bind:form="form">
                     <el-form class="user-form" ref="form" :model="form" label-width="100px" :inline="componenToptions.inline" :size="componenToptions.formSize">
                         <el-form-item :label="item.label" v-if="!item.is_edit_hide" v-for="item in columns" :key="item.name" :class="item.class?item.class:'width2'">
                             <el-input :ref="item.name" @keyup.enter.native="onSubmit" :type="item.type?item.type:'text'" v-if="!item.type||item.type=='input'||item.type=='textarea'" v-model="form[item.name]" size="mini"></el-input>
@@ -31,6 +32,7 @@
                             <el-date-picker :ref="item.name" v-if="item.type=='date'" v-model="form[item.name]" type="date" value-format="yyyy-MM-dd" placeholder=""></el-date-picker>
                         </el-form-item>
                     </el-form>
+                    </slot>
                 </el-col>
             </el-row>
             <el-row>
@@ -162,8 +164,12 @@ export default {
 
         },
         showFormToCreate() {
-            var self = this;
+            let self = this;
             globals.empty(self.form)
+
+            for (let i = 0; i < self.columns.length; i++) {
+                self.form[self.columns[i].name] = self.columns[i].default || ""
+            }
 
             if (self.base) {
                 Object.keys(self.base).forEach(function(key) {
@@ -175,7 +181,7 @@ export default {
             self.showDialog(_label("tianjiaxinxi"));
         },
         showFormToEdit(rowIndex, row) {
-            var self = this
+            let self = this
             self.rowIndex = rowIndex;
             globals.copyTo(row, this.form)
             self.action = "edit"
@@ -183,19 +189,19 @@ export default {
             self.showDialog(_label("xiugaixinxi"));
         },
         showDialog(formTitle) {
-            var self = this;
+            let self = this;
             this.formTitle = formTitle;
             self.dialogVisible = true;
             setTimeout(function() {
                 //console.log(self.$refs)
-                var columns = self.columns;
-                for (var i = 0; i < columns.length; i++) {
-                    var column = columns[i]
+                let columns = self.columns;
+                for (let i = 0; i < columns.length; i++) {
+                    let column = columns[i]
                     if (column.is_edit_hide != true) {
-                        var ele = self.$refs[column.name][0];
+                        let ele = self.$refs[column.name][0];
 
                         if (column.is_focus && !ele.disabled) {
-                            console.log(ele)
+                            //console.log(ele)
                             ele.focus();
                             break;
                         }

@@ -27,7 +27,7 @@ const props = {
         columns: [
             { name: "brandgroupchildid", label: _label("zipinlei"), type: "brandgroupchild", source:"brandgroupchild" },
             { name: "name", label: _label("mingcheng"), is_multiple: true, is_focus: true },
-            { name: "displayindex", label: _label("xianshixuhao"), sortMethod:sort_method_digit }
+            { name: "displayindex", label: _label("paixu"), sortMethod:sort_method_digit }
         ],
         controller: "ulnarinch",
         key_column: "name"
@@ -166,7 +166,7 @@ const props = {
         columns: [
             { name: "brandgroupchildid", label: _label("zipinlei"), type: "brandgroupchild", source:"brandgroupchild" },
             { name: "content", label: _label("mingcheng"), is_focus: true, is_multiple: true}, 
-            { name: "displayindex", label: _label("xianshixuhao"), sortMethod:sort_method_digit }
+            { name: "displayindex", label: _label("paixu"), sortMethod:sort_method_digit }
         ],
         controller: "materialnote",
         key_column: "content",
@@ -207,7 +207,7 @@ const props = {
         columns: [
             { name: "brandgroupchildid", label: _label("zipinlei"), type: "brandgroupchild", source:"brandgroupchild" },
             { name: "name", label: _label("mingcheng"), is_multiple: true, is_focus: true },
-            { name: "displayindex", label: _label("xianshixuhao"), sortMethod:sort_method_digit }
+            { name: "displayindex", label: _label("paixu"), sortMethod:sort_method_digit }
         ],
         controller: "productmemo",
         key_column: "name",
@@ -391,7 +391,8 @@ const props = {
             { name: "name", label: _label("mingcheng") },
             { name: "countryid", label: _label("guojiadiqu"), type:"select", source:"country"},
             { name: "pricetype", label: _label("jiageleixing"), type:"select", source:"pricetype"},            
-            { name: "currencyid", label: _label("bizhong"), type:"select", source:"currency"}
+            { name: "currencyid", label: _label("bizhong"), type:"select", source:"currency"},
+            { name: "displayindex", label: _label("paixu"), sortMethod:sort_method_digit }
         ],
         controller: "price",
         auth: "price",
@@ -403,7 +404,8 @@ const props = {
     "saletype":{
         columns: [
             { name: "name", label: _label("mingcheng"), is_multiple: true, is_focus:true},
-            { name: "color", label: _label("yanse")}
+            { name: "color", label: _label("yanse")},
+            { name: "displayindex", label: _label("paixu"), sortMethod:sort_method_digit }
         ],
         controller: "saletype",
         auth: "saletype",
@@ -433,6 +435,23 @@ const props = {
         ],
         controller: "productprice"
     },
+    "brandrate":{
+        columns: [
+            { name: "brandgroupid", label: _label("pinlei"), type:"select", source:"brandgroup"},
+            { name: "ageseasonid", label: _label("niandaijijie"), type:"select", source:"ageseason"},
+            { name: "rate", label: _label("beilv")}
+        ],
+        controller: "brandrate",
+        auth: "brand",
+        options:{
+            dialogWidth:"400px", 
+            autoreload:true,
+            autohide:true
+        },
+        base:{
+            brandid:""
+        }
+    }
 }
 
 const getComponent = function(name) {

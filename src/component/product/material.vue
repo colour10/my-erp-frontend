@@ -47,7 +47,7 @@ export default {
             props:{
                 columns: [
                     { name: "materialid", label: _label('caizhi'), type: "select", source: "material" },
-                    { name: "percent", label: _label('baifenbi'),convert:item=>item.percent+'%'},
+                    { name: "percent", label: _label('baifenbi'),convert:item=>item.percent+'%',default:'100'},
                     { name: "materialnoteid", label: _label('caizhibeizhu'), type: "select", source: "materialnote" }
                 ],
                 controller: "productmaterial",
@@ -65,13 +65,25 @@ export default {
     methods: {
         onShow() {
             let self = this
-            self.dialogVisible = true;
+            if(!self.brandgroupchildid) {
+                self.dialogVisible = true;
 
-            setTimeout(function(){
-                self.$refs['page2'].setTableData(self.data)
-                //self._log("data", self.data)
-            },100)
-            
+                setTimeout(function(){
+                    self.$refs['page2'].setTableData(self.data)
+                    //self._log("data", self.data)
+                },100)
+            }
+            else {
+                DataSource.getDataSource("materialnote", self._label('lang')).getSourceByParent(self.brandgroupchildid).then(source=>{
+                    self.props.columns[2].source = source
+                    self.dialogVisible = true;
+
+                    setTimeout(function(){
+                        self.$refs['page2'].setTableData(self.data)
+                        //self._log("data", self.data)
+                    },100)
+                })
+            }            
         },
         handleSelect() {
             var self = this;
@@ -85,9 +97,7 @@ export default {
             self.dialogVisible = false;
         },
         convertText() {
-            var self = this;
-
-            self.currentText
+            let self = this;
 
             let promises = self.data.map(async (item) =>{
                 let dataSource = DataSource.getDataSource("material", self._label('lang'))

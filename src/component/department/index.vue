@@ -104,7 +104,7 @@ export default {
         },
         deleteDepart() {
             var self = this
-            self._remove("/department/delete?id=" + self.form.id).then(function(res) {
+            self._remove("/department/delete", {id:self.form.id}).then(function(res) {
                 globals.deleteObject(self.node.parent.data.children, self.node.data)
                 self.$refs.tree.setCurrentKey(self.node.parent.data.id);
                 self.selectNode(self.node.parent)

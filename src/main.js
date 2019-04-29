@@ -67,6 +67,7 @@ import Requisition from './component/requisition/index.vue'
 import Productstock from './component/productstock/index.vue'
 import System from './component/system/index.vue'
 import Supplier from './component/supplier/index.vue'
+import Exchangerate from './component/exchangerate/index.vue'
 
 const components = [
     Simple_Admin_Page,
@@ -150,7 +151,7 @@ const routes = [
             {path:'/saleport', component:getComponentSimple("saleport")},
             {path:'/productmemo', component:getComponent("productmemo")},
             {path:'/saletype', component:getComponent("saletype")},
-            {path:'/exchangerate', component:getComponentSimple("exchangerate")},
+            {path:'/exchangerate', component:Exchangerate},
             {path:'/materialnote', component:getComponent("materialnote")}
         ]
     },

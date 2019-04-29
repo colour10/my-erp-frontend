@@ -52,7 +52,9 @@ const httpPost = function(url, params, callback) {
     }
 
     return new Promise((resolve, reject)=>{
-        $.post(host+url, params, resolve,"json")
+        $.post(host+url, params, resolve,"json").error(function(xhr,errorText,errorType){
+            reject()
+        })
     })
     
 }

@@ -60,6 +60,7 @@ export default {
 
         return {
             tableData: [],
+            isLoading:false,
             cellClasses:{},
             componenToptions: options,
             languages: _label("languages"),
@@ -118,8 +119,12 @@ export default {
         handleDelete(rowIndex, row) {
             let self = this
 
-            self._remove("/" + self.controller + "/delete?id=" + row.id).then(function() {
-                self.$delete(self.tableData, rowIndex)
+            //self._log("remove")
+            self._remove("/" + self.controller + "/delete", {id:row.id}).then(function(isOK) {
+                //self._log("remove OK")
+                if(isOK) {
+                    self.$delete(self.tableData, rowIndex)
+                }                
             })
         },
         getImageSrc(row, column) {
@@ -184,6 +189,11 @@ export default {
         loadList() {
             let self = this;
             self.tableData = []
+            if(self.isLoading) {
+                return ;
+            }
+            
+            self.isLoading = true;
 
             /*let params = {
                 page: self.pagination.current,
@@ -216,6 +226,7 @@ export default {
                 res.data.forEach(item => self.tableData.push(globals.extend(item, obj)))
 
                 extend(self.pagination, res.pagination)
+                self.isLoading = false
             });
         }
     },

@@ -1,12 +1,12 @@
 <template>
     <div>
         <el-table :data="sizecontents" border style="width:100%;">
-            <el-table-column :label="_label('chima')" align="center" width="80">
+            <el-table-column :label="_label('chima')" align="left" width="80">
                 <template v-slot="scope">
                     {{scope.row.name}}
                 </template>
             </el-table-column>
-            <el-table-column :label="item.name" align="center" v-for="item in properties" :key="item.id">
+            <el-table-column :label="item.name+'(CM)'" align="center" v-for="item in properties" :key="item.id">
                 <template v-slot="scope">
                     <el-input v-model="data[scope.row.id+'_'+item.id]"></el-input>
                 </template>

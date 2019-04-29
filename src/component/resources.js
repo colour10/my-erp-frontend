@@ -73,6 +73,9 @@ options["series"] = {url:'/l/series',oplabel:'name', opvalue:'id', parent:'brand
 //商品子系列
 options["series2"] = {url:'/l/series2',oplabel:'name', opvalue:'id'}
 
+//销售属性
+options["saletype"] = {url:'/l/saletype',oplabel:'name', opvalue:'id'}
+
 //成员
 options["member"] = {url:'/l/member',oplabel:'name', opvalue:'id'}
 

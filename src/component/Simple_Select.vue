@@ -1,6 +1,6 @@
 <template>
-    <el-select v-model="currentValue" :multiple="multiple" :placeholder="placeholder" style="width:150" @change="handleChange" filterable :disabled="disabled" :clearable="clearable" size="mini">
-        <el-option v-for="(item,key) in data" :key="item.id" :label="item.name" :value="item.id">
+    <el-select v-model="currentValue" :multiple="multiple" :placeholder="placeholder" style="width:150" @change="handleChange" filterable :disabled="disabled" :clearable="clearable" size="mini" :filter-method="onFilter">
+        <el-option v-for="(item,key) in filteredList" :key="item.id" :label="item.name" :value="item.id">
             <template>
                 <slot v-bind:row="item"></slot>
             </template>
@@ -42,6 +42,9 @@ export default {
         placeholder: {
             type: String,
             default: _label('qingxuanze')
+        },
+        filterMethod:{
+
         }
     },
     model: {
@@ -51,26 +54,40 @@ export default {
     data() {
         return {
             currentValue: "",
-            data: []
+            keyword:"",
+            data: [],
+            keyindexes:{} //记录元素的顺序，多选时排序用
         }
     },
     methods: {
+        onFilter(keyword){
+            this.keyword = keyword
+        },
         handleChange(newValue) {
             let self = this
+            if(self.multiple) {
+                self.currentValue = self.currentValue.sort(function(a,b){
+                    return self.keyindexes[a]-self.keyindexes[b]
+                })
+            }
             self.$emit("change", self.getValue())
         },
         load(value) {
             var self = this;
             self.data = []
-            self.getDataSource().getRowsByParent(value).then(function(data) {
+            self.keyindexes = {}
+            self.getDataSource().getSourceByParent(value).then(function(dataSource) {
                 //self._log("load", self.source, data)
                     //self.data = data;
-                data.forEach(item => self.data.push(item.getObject()))
+                dataSource.getData(data=>{
+                    data.forEach(item => self.push(item.getObject()))
+                })
             })
         },
         clear() {
-            this.$emit("change", "")
-            this.data = []
+            self.$emit("change", "")
+            self.data = []
+            self.keyindexes = {}
         },
         getDataSource() {
             let self = this
@@ -92,6 +109,11 @@ export default {
         getValue() {
             let self = this
             return self.multiple ? self.currentValue.join(",") : self.currentValue
+        },
+        push(item) {
+            let self = this
+            self.data.push(item)
+            self.keyindexes[item.id] = self.data.length-1
         }
     },
     watch: {
@@ -111,11 +133,22 @@ export default {
             self.getDataSource().getData(function(data) {
                 //self._log("load", data)
                 //self.data = data
-                data.forEach(item => self.data.push(item.getObject()))
+                data.forEach(item => self.push(item.getObject()))
             })
         } else {
             //self._log("mounted")
             self.load(self.parentid)
+        }
+    },
+    computed:{
+        filteredList() {
+            let self = this
+            if(self.filterMethod) {
+                return self.data.filter(item=>self.filterMethod(self.keyword, item))
+            }
+            else {
+                return self.data
+            }
         }
     }
 }

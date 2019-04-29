@@ -66,6 +66,7 @@ export default {
         return {
             rowIndex: "",
             tableData: [],
+            isLoading:false,
             pagination: {
                 pageSizes: globals.pageSizes,
                 pageSize: 20,
@@ -227,6 +228,12 @@ export default {
         },
         loadList() {
             var self = this;
+             if(self.isLoading) {
+                return ;
+            }
+            
+            self.isLoading = true;
+
             self.tableData = []
 
             let params = extend( {
@@ -251,6 +258,7 @@ export default {
 
                 //let pagination = res.pagination;
                 extend(self.pagination, res.pagination)
+                self.isLoading = false;
             });
         },
         isDeletable(row) {

@@ -15,13 +15,7 @@
                     </el-table-column>
                     <el-table-column prop="brandcolor" :label="_label('sexi')" width="130" align="center">
                         <template v-slot="scope">
-                            <simple-select v-model="scope.row.brandcolor" source="colortemplate" :disabled="scope.row.id>0">
-                                <template v-slot="{row}">
-                                    <div class="imgline">
-                                        <img :src="_fileLink(row.row.picture)" class="icon"> <span>{{row.name}}</span>
-                                    </div>
-                                </template>
-                            </simple-select>
+                            <colorselect v-model="scope.row.brandcolor" :disabled="scope.row.id>0"></colorselect>
                         </template>
                     </el-table-column>
                     <el-table-column :label="_label('guojima')" align="center">
@@ -58,6 +52,7 @@
                         </template>
                     </el-table-column>
                 </el-table>
+                <!--<div class="el-time-panel el-popper" style="width:900px;height:500px;">sdsd</div>-->
             </el-col>
             <el-col :span="4">
                 <au-button auth="product" type="primary" @click="onAppendColor">{{_label("zhuijia")}}</au-button>
@@ -67,13 +62,13 @@
             <el-row :gutter="0">
                 <el-col :span="8">
                     <el-form-item :label="_label('niandai')" prop="ageseason">
-                        <simple-select v-model="form.ageseason" source="ageseason" :multiple="true"></simple-select>
+                        <simple-select v-model="form.ageseason" source="ageseason" :multiple="true" @change="loadRate"></simple-select>
                     </el-form-item>
                     <el-form-item :label="_label('pinpai')" prop="brandid">
-                        <simple-select v-model="form.brandid" source="brand"></simple-select>
+                        <simple-select v-model="form.brandid" source="brand" @change="loadRate"></simple-select>
                     </el-form-item>
                     <el-form-item :label="_label('pinlei')" prop="brandgroupid">
-                        <simple-select v-model="form.brandgroupid" source="brandgroup"></simple-select>
+                        <simple-select v-model="form.brandgroupid" source="brandgroup" @change="loadRate"></simple-select>
                     </el-form-item>
                     <el-form-item :label="_label('zipinlei')" prop="childbrand">
                         <simple-select ref="childbrand" v-model="form.childbrand" source="brandgroupchild" :parentid="form.brandgroupid"></simple-select>
@@ -81,64 +76,77 @@
                     <el-form-item :label="_label('chimazu')" prop="sizetopid">
                         <simple-select v-model="form.sizetopid" source="sizetop"></simple-select>
                     </el-form-item>
-                    <el-form-item :label="_label('chimamingxi')" prop="sizetopid">
+                    <el-form-item :label="_label('chimamingxi')" prop="sizecontentids">
                         <simple-select v-model="form.sizecontentids" source="sizecontent" :parentid="form.sizetopid" :multiple="true"> </simple-select>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                    <el-form-item :label="_label('shangpinchicun')">
-                        <simple-select v-model="form.ulnarinch" source="ulnarinch" :parentid="form.childbrand"></simple-select>
-                    </el-form-item>
-                    <el-form-item :label="_label('shangpinmiaoshu')">
-                        <simple-select v-model="form.productmemoids" source="productmemo" :multiple="true" :parentid="form.childbrand"></simple-select>
                     </el-form-item>
                     <el-form-item :label="_label('caizhi')">
                         <productmaterial v-model="materials"></productmaterial>
+                    </el-form-item>
+                    <el-form-item :label="_label('shangpinchicun')">
+                        <simple-select v-model="form.ulnarinch" source="ulnarinch"></simple-select>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                    <el-form-item :label="_label('shangpinmiaoshu')">
+                        <simple-select v-model="form.productmemoids" source="productmemo" :multiple="true"></simple-select>
                     </el-form-item>
                     <el-form-item :label="_label('shangpinxilie')">
                         <simple-select v-model="form.series" ref="series" source="series" :parentid="form.brandid"> </simple-select>
                     </el-form-item>
                     <el-form-item :label="_label('chuchangjia')">
-                        <el-input placeholder="" v-model="form.factoryprice" class="input-with-select">
-                            <select-currency v-model="form.factorypricecurrency" slot="prepend">
+                        <el-input placeholder="" v-model="form.factoryprice" class="productcurrency" @focus="watcherprice.start()" @blur="watcherprice.stop()">
+                            <select-currency v-model="form.wordpricecurrency" slot="prepend">
                             </select-currency>
+                            <span slot="append">{{getRate}}</span>
                         </el-input>
                     </el-form-item>
                     <el-form-item :label="_label('guojilingshoujia')">
-                        <el-input placeholder="" v-model="form.wordprice" class="input-with-select">
+                        <el-input placeholder="" v-model="form.wordprice" class="productcurrency">
                             <select-currency v-model="form.wordpricecurrency" slot="prepend">
                             </select-currency>
+                            <span slot="append">{{getReciprocalRate}}</span>
+                        </el-input>
+                    </el-form-item>
+                    <el-form-item :label="_label('benguochuchangjia')">
+                        <el-input placeholder="" v-model="form.nationalfactoryprice" class="productcurrency">
+                            <select-currency v-model="form.nationalpricecurrency" slot="prepend">
+                            </select-currency>
+                            <span slot="append">{{getRateNational}}</span>
                         </el-input>
                     </el-form-item>
                     <el-form-item :label="_label('benguolingshoujia')">
-                        <el-input placeholder="" v-model="form.nationalprice" class="input-with-select">
+                        <el-input placeholder="" v-model="form.nationalprice" class="productcurrency">
                             <select-currency v-model="form.nationalpricecurrency" slot="prepend">
                             </select-currency>
+                            <span slot="append">{{getReciprocalRateNational}}</span>
                         </el-input>
                     </el-form-item>
-                </el-col>
-                <el-col :span="8">
                     <el-form-item :label="_label('chandi')" prop="countries">
                         <simple-select v-model="form.countries" source="country"></simple-select>
                     </el-form-item>
+                    <el-form-item :label="_label('xiaoshoushuxing')">
+                        <simple-select v-model="form.saletypeid" source="saletype"></simple-select>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="8">
                     <el-form-item :label="_label('xingbie')">
                         <sp-radio-group v-model="form.gender" source="gender" :span="8" :lang="lang" class="supermini">
                         </sp-radio-group>
                     </el-form-item>
                     <el-form-item :label="_label('jijie')">
-                        <template #label>
-                            <sp-checkbox class="siji" v-model="siji">{{_label("siji")}}</sp-checkbox>
-                        </template>
-                        <el-col :span="12">
+                        <el-col :span="8">
                             <sp-checkbox v-model="form.spring">{{_label("chun")}}</sp-checkbox>
                         </el-col>
-                        <el-col :span="12">
+                        <el-col :span="8">
                             <sp-checkbox v-model="form.summer">{{_label("xia")}}</sp-checkbox>
                         </el-col>
-                        <el-col :span="12">
+                        <el-col :span="8">
+                            <sp-checkbox v-model="siji">{{_label("siji")}}</sp-checkbox>
+                        </el-col>
+                        <el-col :span="8">
                             <sp-checkbox v-model="form.fall">{{_label("qiu")}}</sp-checkbox>
                         </el-col>
-                        <el-col :span="12">
+                        <el-col :span="8">
                             <sp-checkbox v-model="form.winter">{{_label("dong")}}</sp-checkbox>
                         </el-col>
                     </el-form-item>
@@ -147,6 +155,12 @@
                     </el-form-item>
                     <el-form-item :label="_label('beizhu')">
                         <el-input v-model="form.memo"></el-input>
+                    </el-form-item>
+                    <el-form-item :label="_label('jiandangren')">
+                        <el-input :disabled="true" :placeholder="_label('xitongmoren')"></el-input>
+                    </el-form-item>
+                    <el-form-item :label="_label('jiandangshijian')">
+                        <el-input :disabled="true" :placeholder="_label('dangqianshijian')"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -161,18 +175,20 @@
 </template>
 
 <script>
-import { extract, _label } from '../globals.js'
+import { extract, _label, config,math } from '../globals.js'
 import { initObject } from "../array.js"
 import { extend } from "../object.js"
 import { Rules } from '../rules.js'
 import DataSource from '../DataSource.js'
 import watcher from "../watch.js"
 import Material from '../product/material.vue'
+import Asa_Color_Select from './Asa_Color_Select.vue'
 
 export default {
     name: 'asa-product-add',
     components: {
-        productmaterial:Material
+        colorselect: Asa_Color_Select,
+        productmaterial: Material
     },
     data() {
         return {
@@ -191,12 +207,14 @@ export default {
                 series: "",
                 ulnarinch: "",
                 factoryprice: "",
-                factorypricecurrency: "",
-                nationalpricecurrency: "",
+                factorypricecurrency: config.ouyuan,
+                nationalpricecurrency: _label("_currencyid"),
                 nationalprice: "",
+                nationalfactorypricecurrency: _label("_currencyid"),
+                nationalfactoryprice: "",
                 memo: "",
                 wordprice: "",
-                wordpricecurrency: "",
+                wordpricecurrency: config.ouyuan,
                 gender: "",
                 spring: "",
                 summer: "",
@@ -213,11 +231,13 @@ export default {
                 childbrand: Rules.id({ required: true, message: _label("8000") }),
                 brandid: Rules.id({ required: true, message: _label("8000") }),
                 brandcolor: Rules.required({ message: _label("8000") }),
-                ageseason: Rules.required({ message: _label("8000") })
+                ageseason: Rules.required({ message: _label("8000") }),
+                sizecontentids: Rules.required({ message: _label("8000") })
             },
-            materials:[],
+            materials: [],
             colors: [],
             colors_loaded: false,
+            rate: "", //倍率
             siji: "" //控制四季全选
         }
     },
@@ -271,6 +291,18 @@ export default {
                 }
             })
         },
+        onPriceChange(newvalue, oldvalue) {
+            let self = this
+
+            if(self.rate=='') {
+                return
+            }
+
+            let oldprice = math.round(oldvalue*self.rate,2)
+            if (self.form.wordprice == '' || self.form.wordprice == oldprice) {
+                self.form.wordprice = math.round(newvalue*self.rate,2)
+            }
+        },
         onSubmit() {
             var self = this;
 
@@ -305,7 +337,7 @@ export default {
                 wordcode_4: "",
                 picture: "",
                 picture2: "",
-                colorname:""
+                colorname: ""
             })
         },
         onDeleteColorGroup({ $index, row }, rowIndex) {
@@ -333,6 +365,17 @@ export default {
 
             self.watcher1 = watcher(self.colors[0], "wordcode_1", self.onWord1Change)
             self.watcher2 = watcher(self.colors[0], "wordcode_2", self.onWord2Change)
+        },
+        loadRate() {
+            let self = this;
+
+            if(self.form.brandid=='' || self.form.ageseason=='' || self.form.brandgroupid=='') {
+                return 
+            }
+
+            self._fetch("/brandrate/getrate", extract(self.form, ['brandid', 'ageseason', 'brandgroupid'])).then(res=>{
+                self.rate = res.data;
+            })
         }
     },
     watch: {
@@ -341,8 +384,28 @@ export default {
             extend(self.form, initObject(['spring', 'summer', 'fall', 'winter'], newValue))
         }
     },
+    computed: {
+        getRate() {
+            return this.rate
+        },
+        getReciprocalRate() {
+            return this.rate > 0 ? math.round(1 / this.rate, 2) : ""
+        },
+        getRateNational() {
+            let form = this.form
+            return form.nationalprice > 0 && form.nationalfactoryprice > 0 ? math.round(form.nationalprice / form.nationalfactoryprice, 2) : "";
+        },
+        getReciprocalRateNational() {
+            let form = this.form
+            return form.nationalprice > 0 && form.nationalfactoryprice > 0 ? math.round(form.nationalfactoryprice / form.nationalprice, 2) : "";
+        }
+    },
     mounted: function() {
-        this.initColorList()
+        let self = this;
+        self.initColorList()
+
+        self.watcherprice = watcher(self.form, "factoryprice", self.onPriceChange)
+        self.clearValidate(1000)
     }
 }
 </script>

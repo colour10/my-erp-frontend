@@ -14,7 +14,7 @@ export default {
             const self = this
             return new Promise((resolve,reject)=>{
                 httpPost(path, form).then(function(result) {
-                    //console.log(result)
+                    //self._log(result)
                     if (result.messages.length > 0) {
                         //提示信息
                         if (options.showMessage == true) {
@@ -100,7 +100,7 @@ export default {
                 }
             }
             catch(e) {
-                //self._log(e)
+                self._log(e)
                 return false
             }
         },
