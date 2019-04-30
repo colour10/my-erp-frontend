@@ -6,8 +6,8 @@
         <el-dialog class="user-form" :title="_label('qingxuanze')" :visible.sync="dialogVisible" :center="true" :width="componenToptions.dialogWidth||'50%'" :modal="false">
             <el-row>
                 <el-checkbox-group v-model="checkList" @change="handleChange">
-                    <el-col :span="4" v-for="(item,key) in data" :key="item.getKeyValue()">
-                        <el-checkbox :label="item.getKeyValue()">{{item.getLabelValue()}}</el-checkbox>
+                    <el-col :span="4" v-for="(item,key) in data" :key="item.getValue()">
+                        <el-checkbox :label="item.getValue()">{{item.getLabel()}}</el-checkbox>
                     </el-col>
                 </el-checkbox-group>
             </el-row>

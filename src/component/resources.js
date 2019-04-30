@@ -1,4 +1,4 @@
-import {getLabel} from "./globals.js"
+import {getLabel,StringFunc} from "./globals.js"
 const _label = getLabel
 const list = _label("list")
 const options = {};
@@ -44,7 +44,10 @@ options["department.single"] = {url:'/department/single',oplabel:'label', opvalu
 options["brandgroupchild"] = {url:'/l/brandgroupchild',oplabel:'name', opvalue:'id', parent:'brandgroupid'}
 
 //尺寸
-options["ulnarinch"] = {url:'/l/ulnarinch',oplabel:'name', opvalue:'id', parent:'brandgroupchildid'}
+options["ulnarinch"] = {url:'/l/ulnarinch',oplabel:'name', opvalue:'id', parent:'brandgroupchildid', optionName:function(){
+    //console.log(this, typeof(this.row.name_en), this.row.name_en)
+    return this.name+' '+StringFunc.default(this.row.name_en)
+}};
 
 //年代
 options["ageseason"] = {url:'/l/ageseason',oplabel:'fullname', opvalue:'id'}
@@ -53,10 +56,13 @@ options["ageseason"] = {url:'/l/ageseason',oplabel:'fullname', opvalue:'id'}
 options["aliases"] = {url:'/l/aliases',oplabel:'name', opvalue:'id'}
 
 //材质
-options["material"] = {url:'/l/material',oplabel:'name', opvalue:'id'}
+options["material"] = {url:'/l/material',oplabel:'name', opvalue:'id', optionName:function(){
+    //console.log(this, typeof(this.row.name_en), this.row.name_en)
+    return this.name+' '+StringFunc.default(this.row.name_en)
+}}
 
 //材质备注
-options["materialnote"] = {url:'/l/materialnote',oplabel:'content', opvalue:'id', parent:'brandgroupchildid'}
+options["materialnote"] = {url:'/l/materialnote',oplabel:'content', opvalue:'id', parent:'brandgroupid'}
 
 //尺码组
 options["sizetop"] = {url:'/l/sizetop',oplabel:'name', opvalue:'id'}
@@ -65,7 +71,10 @@ options["sizetop"] = {url:'/l/sizetop',oplabel:'name', opvalue:'id'}
 options["sizecontent"] = {url:'/l/sizecontent',oplabel:'name', opvalue:'id', parent:'topid'}
 
 //商品描述
-options["productmemo"] = {url:'/l/productmemo',oplabel:'name', opvalue:'id', parent:'brandgroupchildid'}
+options["productmemo"] = {url:'/l/productmemo',oplabel:'name', opvalue:'id', parent:'brandgroupchildid', optionName:function(){
+    //console.log(this, typeof(this.row.name_en), this.row.name_en)
+    return this.name+' '+StringFunc.default(this.row.name_en)
+}}
 
 //商品系列
 options["series"] = {url:'/l/series',oplabel:'name', opvalue:'id', parent:'brandid'}
@@ -81,6 +90,9 @@ options["member"] = {url:'/l/member',oplabel:'name', opvalue:'id'}
 
 //价格定义
 options["price"] = {url:'/l/price',oplabel:'name', opvalue:'id'}
+
+//属性定义
+options["property"] = {url:'/l/property',oplabel:'name', opvalue:'id'}
 
 //仓库
 options["warehouse"] = {url:'/l/warehouse',oplabel:'name', opvalue:'id'}

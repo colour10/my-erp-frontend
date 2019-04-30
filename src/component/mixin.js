@@ -53,6 +53,7 @@ export default {
             const self = this
             options = options || {}
             options.showMessage = true
+            options.isReject = true
 
             return self._fetch(path, form, options)
         },

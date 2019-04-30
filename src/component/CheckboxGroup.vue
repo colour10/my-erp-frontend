@@ -1,6 +1,6 @@
 <template>
     <el-checkbox-group v-model="checkList" @change="handleChange" :disabled='disabled'>
-        <el-checkbox :label="item.getKeyValue()" v-for="(item,key) in data" :key="item.getKeyValue()">{{item.getLabelValue()}}</el-checkbox>
+        <el-checkbox :label="item.getValue()" v-for="(item,key) in data" :key="item.getValue()">{{item.getLabel()}}</el-checkbox>
     </el-checkbox-group>
 </template>
 

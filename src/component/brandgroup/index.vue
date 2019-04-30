@@ -75,9 +75,11 @@ const props2 = {
 
 const props3 = {
     columns: [
-        { name: "name", label: _label('pinleishuxing'), is_multiple: true, is_focus: true }
+        { name: "propertyid", label: _label('pinleishuxing'), type:"select", source:"property" },
+        { name: "name_cn", label: _label('jiumingzi') },
+        { name: "displayindex", label: _label('paixu'), width:100 }
     ],
-    actions: [{
+    /*actions: [{
         label: _label('dingbu'),
         handler: function(rowIndex, row, vm) {
             vm._fetch("/brandgroupchildproperty/top", { id: row.id }).then(function() {
@@ -117,14 +119,13 @@ const props3 = {
         isShow: function(vm) {
             return vm.$store.getters.allow('brandgroup')
         }
-    }],
+    }],*/
     controller: "brandgroupchildproperty",
-    key_column: "name",
     base: {
         brandgroupchildid: ""
     },
     options: {
-        action_width: 450
+        action_width: 300
     }
 }
 

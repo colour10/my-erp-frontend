@@ -1,6 +1,6 @@
 <template>
-    <el-select v-model="currentValue" :multiple="multiple" :placeholder="placeholder" style="width:150" @change="handleChange" filterable :disabled="disabled" :clearable="clearable" size="mini" :filter-method="onFilter">
-        <el-option v-for="(item,key) in filteredList" :key="item.id" :label="item.name" :value="item.id" @click.native="onClick(item)">
+    <el-select v-model="currentValue" :multiple="multiple" :placeholder="placeholder" style="width:150" @change="handleChange" filterable :disabled="disabled" :clearable="clearable" size="mini" :filter-method="onFilter" @visible-change="onVisibleChange">
+        <el-option v-for="(item,key) in filterData" :key="item.id" :label="item.optionName()" :value="item.id" @click.native="onClick(item)">
             <template>
                 <slot v-bind:row="item"></slot>
             </template>
@@ -60,13 +60,24 @@ export default {
             currentValue: "",
             keyword:"",
             data: [],
+            filterData:[], //查询过滤后的
             keyindexes:{}, //记录元素的顺序，多选时排序用
             start:-1 //批量选择的时候使用
         }
     },
     methods: {
         onFilter(keyword){
-            this.keyword = keyword
+            let self = this
+            self.keyword = keyword
+            //console.log(keyword)
+            self.filteredList();
+        },
+        onVisibleChange(isVisible) {
+            let self = this
+            //self._log("isVisible", isVisible)
+            if(!isVisible) {
+                self.onFilter("")
+            }            
         },
         handleChange(newValue) {
             let self = this
@@ -91,13 +102,15 @@ export default {
                 //self._log("load", self.source, data)
                     //self.data = data;
                 dataSource.getData(data=>{
-                    data.forEach(item => self.push(item.getObject()))
+                    data.forEach(item => self.push(item))
                 })
+                self.filteredList();
             })
         },
         clear() {
             self.$emit("change", "")
             self.data = []
+            self.filterData = []
             self.keyindexes = {}
         },
         getDataSource() {
@@ -135,7 +148,7 @@ export default {
 
             //查看是否选中
             let index = self.currentValue.findIndex(id=>item.id==id)
-            self._log("index=", index)
+            //self._log("index=", index)
             if(index>=0) {
                 if(self.start>=0) {
                     //已经选过开头，批量选中
@@ -158,6 +171,24 @@ export default {
         },
         isSelected(id) {
             return this.currentValue.find(item=>item==id) 
+        },
+        filteredList() {
+            let self = this
+            //self._log("重新计算",self.keyword)            
+            let keyword = this.keyword.toUpperCase()
+            if(keyword.length==0) {
+                self.filterData = self.data
+            }
+
+            if(self.filterMethod) {
+                self.filterData = self.data.filter(item=>self.filterMethod(keyword, item))
+            }
+            else {
+                self.filterData = self.data.filter(item=>{
+                    //self._log(item.name)
+                    return item.optionName().toUpperCase().indexOf(keyword)>=0// || name_en.toUpperCase().indexOf(k)>=0
+                })
+            }
         }
     },
     watch: {
@@ -177,7 +208,8 @@ export default {
             self.getDataSource().getData(function(data) {
                 //self._log("load", data)
                 //self.data = data
-                data.forEach(item => self.push(item.getObject()))
+                data.forEach(item => self.push(item))
+                self.filteredList()
             })
         } else {
             //self._log("mounted")
@@ -185,15 +217,7 @@ export default {
         }
     },
     computed:{
-        filteredList() {
-            let self = this
-            if(self.filterMethod) {
-                return self.data.filter(item=>self.filterMethod(self.keyword, item))
-            }
-            else {
-                return self.data
-            }
-        }
+
     }
 }
 </script>

@@ -1,12 +1,11 @@
 <template>
     <el-radio-group v-model="currentValue" @change="handleChange" :disabled="disabled">
-        <el-col :span="span" v-for="(item,key) in data" :key="item.getKeyValue()"><el-radio :label="item.getKeyValue()">{{item.getLabelValue()}}</el-radio></el-col>
+        <el-col :span="span" v-for="(item,key) in data" :key="item.getValue()"><el-radio :label="item.getValue()">{{item.getLabel()}}</el-radio></el-col>
     </el-radio-group>
 </template>
 
 <script>
 import DataSource from './DataSource.js'
-import globals from './globals.js'
 
 export default {
     name: 'sp-radio-group',
@@ -19,9 +18,6 @@ export default {
         disabled: {
             type: Boolean,
             default: false
-        },
-        lang: {
-            type: String
         },
         source: {
             type: String,
@@ -36,9 +32,9 @@ export default {
         event: 'change'
     },
     data() {
-        var self = this
+        let self = this
 
-        var dataSource = DataSource.getDataSource(self.source, self.lang);
+        let dataSource = DataSource.getDataSource(self.source, self._label("lang"));
 
         return {
             currentValue: "",
@@ -48,7 +44,7 @@ export default {
     },
     methods: {
         handleChange(newValue) {
-            var self = this;
+            let self = this;
 
             self.$emit('change', newValue)
         }
@@ -56,13 +52,10 @@ export default {
     watch: {
         select_value(newValue) {
             this.currentValue = newValue
-        },
-        lang(newValue) {
-            this.dataSource.setLang(newValue)
         }
     },
     mounted: function() {
-        var self = this;
+        let self = this;
         self.currentValue = self.select_value;
 
         self.dataSource.getData(function(data) {

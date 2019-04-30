@@ -1,30 +1,30 @@
 <template>
     <el-dialog :title="_label('chanpinguanli')" :visible.sync="dialogVisible" :center="true" width="1200px">
         <el-row class="product">
-            <el-col :span="20">
+            <el-col :span="24">
                 <el-table :data="colors" border style="width:100%;">
-                    <el-table-column width="60" align="center">
+                    <el-table-column width="80" align="center">
                         <template v-slot="scope">
                             <simple-avatar v-model="scope.row.picture" font-size="14px" :size="35"></simple-avatar>
                         </template>
                     </el-table-column>
-                    <el-table-column width="60" align="center">
+                    <el-table-column width="80" align="center">
                         <template v-slot="scope">
                             <simple-avatar v-model="scope.row.picture2" font-size="14px" :size="35"></simple-avatar>
                         </template>
                     </el-table-column>
                     
-                    <el-table-column :label="_label('kuanshi')" width="110" align="center">
+                    <el-table-column :label="_label('kuanshi')" width="140" align="center">
                         <template v-slot="scope">
                             <el-input v-model="scope.row.wordcode_1" size="mini" @focus="onFocus(1)" @blur="onBlur(1)"></el-input>
                         </template>
                     </el-table-column>
-                    <el-table-column :label="_label('caizhi')" width="110" align="center">
+                    <el-table-column :label="_label('caizhi')" width="140" align="center">
                         <template v-slot="scope">
                             <el-input v-model="scope.row.wordcode_2" size="mini" @focus="onFocus(2)" @blur="onBlur(2)"></el-input>
                         </template>
                     </el-table-column>
-                    <el-table-column :label="_label('yanse')" width="110" align="center">
+                    <el-table-column :label="_label('yanse')" width="140" align="center">
                         <template v-slot="scope">
                             <!--<el-input v-model="scope.row.wordcode_3" size="mini" @keyup.native.down="onKeyDown(scope.$index)" @keyup.native.up="onKeyUp(scope.$index)" :ref="'word'+scope.$index"></el-input>-->
                             <el-input v-model="scope.row.wordcode_3" size="mini"></el-input>
@@ -36,28 +36,26 @@
                         </template>
                     </el-table-column>
 
-                    <el-table-column prop="brandcolor" :label="_label('sexi')" width="130" align="center">
+                    <el-table-column prop="brandcolor" :label="_label('sexi')" width="140" align="center">
                         <template v-slot="scope">
                             <colorselect v-model="scope.row.brandcolor" :disabled="scope.row.id>0"></colorselect>
                         </template>
                     </el-table-column>
 
-                    <el-table-column :label="_label('fuzhuma')" width="110" align="center">
+                    <el-table-column :label="_label('fuzhuma')" width="130" align="center">
                         <template v-slot="scope">
                             <el-input v-model="scope.row.wordcode_4" size="mini"></el-input>
                         </template>
                     </el-table-column>
                     
-                    <el-table-column :label="_label('caozuo')" width="125" align="center">
+                    <el-table-column :label="_label('caozuo')" width="159" align="center">
                         <template v-slot="scope">
                             <as-button type="danger" @click="onDeleteColorGroup(scope, scope.row)" v-if="scope.$index>0">{{_label("shanchu")}}</as-button>
+                            <au-button auth="product" type="primary" @click="onAppendColor"v-if="scope.$index==0">{{_label("zhuijia")}}</au-button>
                         </template>
                     </el-table-column>
                 </el-table>
                 <!-- <div class="el-time-panel el-popper" style="width:900px;height:500px;">sdsd</div> -->
-            </el-col>
-            <el-col :span="4">
-                <au-button auth="product" type="primary" @click="onAppendColor">{{_label("zhuijia")}}</au-button>
             </el-col>
         </el-row>
         <el-form ref="order-form" class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;margin-top:5px;" size="mini" :rules="rules" :inline-message="true">
@@ -82,7 +80,7 @@
                         <simple-select v-model="form.sizecontentids" source="sizecontent" :parentid="form.sizetopid" :multiple="true" :isBatch="true"> </simple-select><as-button @click="onTrimSize" class="trimhalf">{{_label("qubanma")}}</as-button>
                     </el-form-item>
                     <el-form-item :label="_label('caizhi')">
-                        <productmaterial v-model="materials"></productmaterial>
+                        <productmaterial v-model="materials" :brandgroupid="form.brandgroupid"></productmaterial>
                     </el-form-item>
                     <el-form-item :label="_label('shangpinchicun')">
                         <simple-select v-model="form.ulnarinch" source="ulnarinch"></simple-select>
@@ -181,6 +179,7 @@ import { extract, _label, config,math } from '../globals.js'
 import { initObject } from "../array.js"
 import { extend } from "../object.js"
 import { Rules } from '../rules.js'
+import { loadSetting } from '../setting.js'
 import DataSource from '../DataSource.js'
 import watcher from "../watch.js"
 import Material from '../product/material.vue'
@@ -209,9 +208,9 @@ export default {
                 ulnarinch: "",
                 factoryprice: "",
                 factorypricecurrency: config.ouyuan,
-                nationalpricecurrency: _label("_currencyid"),
+                nationalpricecurrency: '',
                 nationalprice: "",
-                nationalfactorypricecurrency: _label("_currencyid"),
+                nationalfactorypricecurrency: "",
                 nationalfactoryprice: "",
                 memo: "",
                 wordprice: "",
@@ -308,7 +307,7 @@ export default {
             let self = this
             let source = DataSource.getDataSource("sizecontent", self._label("lang"))
             source.getRows(self.form.sizecontentids).then(results=>{
-                self.form.sizecontentids = results.filter(item=>item.getObject().name.indexOf('.')<0).map(item=>item.getObject().id).join(',')
+                self.form.sizecontentids = results.filter(item=>item.name.indexOf('.')<0).map(item=>item.id).join(',')
             })
         },
         onSubmit() {
@@ -409,6 +408,12 @@ export default {
 
         self.watcherprice = watcher(self.form, "factoryprice", self.onPriceChange)
         self.clearValidate(1000)
+
+        loadSetting().then(config=>{
+            self._log(config)
+            self.form.nationalpricecurrency = config._currencyid
+            self.form.nationalfactorypricecurrency = config._currencyid
+        })
     }
 }
 </script>

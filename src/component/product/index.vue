@@ -36,7 +36,6 @@ var props = {
                 return row.getName()
             }
         },
-        { name: "id", label: _label("niandai") },
         { name: "ageseason", label: _label("niandai"), type: "select", source: "ageseason" },
 
         { name: "nationalpricecurrency_label", label: _label("benguolingshoujia"), width: 100 },

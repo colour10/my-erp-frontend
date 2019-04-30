@@ -19,7 +19,24 @@
                         <simple-admin-page v-bind="series"></simple-admin-page>
                     </el-tab-pane>
                     <el-tab-pane :label="_label('beilv')" name="beilv" :disabled="id==0">
-                        <simple-admin-page v-bind="brandrate"></simple-admin-page>
+                        <simple-admin-page v-bind="brandrate">
+                            <template v-slot="scope">
+                                <el-form class="user-form" :model="scope.form" label-width="100px" :inline="false" size="mini">
+                                    <el-form-item :label="_label('pinlei')">
+                                        <simple-select v-show="scope.action=='add'" v-model="scope.form.brandgroupid" source="brandgroup" :multiple="true" class="width2"></simple-select>
+                                        <simple-select v-show="scope.action=='edit'" v-model="scope.form.brandgroupid" source="brandgroup" class="width2"></simple-select>
+                                    </el-form-item>
+
+                                    <el-form-item :label="_label('niandaijijie')">
+                                        <simple-select v-model="scope.form.ageseasonid" source="ageseason" class="width2"></simple-select>
+                                    </el-form-item>
+
+                                    <el-form-item :label="_label('beilv')">
+                                        <el-input @keyup.enter.native="onSubmit" v-model="scope.form.rate" size="mini" class="width2"></el-input>
+                                    </el-form-item>
+                                </el-form>
+                            </template>
+                        </simple-admin-page>
                     </el-tab-pane>
                 </el-tabs>
             </template>
@@ -60,32 +77,32 @@ export default {
                     dialogWidth: '1000px',
                     //formSize: 'small',
                     //inline: false,
-                    isShowSubmit:true
+                    isShowSubmit: true
                 },
                 controller: "brand",
                 key_column: "name",
                 base: {
                     brandid: ""
                 },
-                formTitle:function(row){
-                    if(row && row.id>0) {
+                formTitle: function(row) {
+                    if (row && row.id > 0) {
                         return row.name_en
                     }
                 }
             },
-            id:0
+            id: 0
         }
     },
     methods: {
         onBeforeEdit(row) {
             let self = this
-            //this._log("onBeforeEdit", row)
+                //this._log("onBeforeEdit", row)
             self.brandrate.base.brandid = row.id
             self.aliases.base.brandid = row.id
             self.series.base.brandid = row.id
             self.id = row.id
         },
-        onBeforeAdd(){
+        onBeforeAdd() {
             let self = this
             self.activeName = 'info'
             self.id = 0
@@ -93,7 +110,7 @@ export default {
         onTabClick(tab) {
             let self = this;
             self.activeName = tab.name;
-            self.props.options.isShowSubmit = tab.name=='info'
+            self.props.options.isShowSubmit = tab.name == 'info'
         }
     },
     mounted: function() {}

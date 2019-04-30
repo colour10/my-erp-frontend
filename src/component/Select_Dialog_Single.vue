@@ -6,7 +6,7 @@
   
   <el-dialog class="user-form" :title="_label('qingxuanze')" :visible.sync="dialogVisible" :center="true" :width="componenToptions.dialogWidth||'40%'" :modal="false">  
     <el-radio-group v-model="currentValue" @change="handleChange">
-      <el-radio :label="item.getKeyValue()" v-for="(item,key) in data" :key="item.getKeyValue()">{{item.getLabelValue()}}</el-radio>
+      <el-radio :label="item.getValue()" v-for="(item,key) in data" :key="item.getValue()">{{item.getLabel()}}</el-radio>
     </el-radio-group>
     
     <div slot="footer" class="dialog-footer" v-if="!auto_model">    
@@ -108,9 +108,6 @@ export default {
         select_value(newValue) {
             this.convertValue(newValue)
             this.currentValue = newValue
-        },
-        lang(newValue) {
-            this.dataSource.setLang(newValue)   
         }
     },
     mounted:function(){

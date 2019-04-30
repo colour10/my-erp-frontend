@@ -55,7 +55,7 @@ export default {
             let self = this;
             self.product = product
                 //self._log(self.sizecontents)
-            self.sizecontents = product.sizecontents.map(item => item.getObject());
+            self.sizecontents = product.sizecontents
 
             self.loaded =false;
             self.data = {}
@@ -68,20 +68,35 @@ export default {
             }
             let res = await self._fetch("/brandgroupchildproperty/page", { brandgroupchildid: self.product.childbrand })
             //console.log(res, "haha")
+            //
+            let source = DataSource.getDataSource("property", _label("lang"))
+            source.getData(async function(properties){
+                self._log("properties", properties)
+                let list = res.data.map(item=>{
+                    //self._log(item)
+                    let info = properties.find(row=>row.row.id==item.propertyid)
+                    if(typeof(info)=='object') {
+                        //self._log("info", info)
+                        return info;
+                    }
+                }).filter(item=>item)
 
-            self.properties = await DataSource.createSource(res.data, "name", "id", _label('lang')).getList()
+                self.properties = list
 
-            //加载数据
-            res = await self._fetch("/product/getproperties", {id:self.product.id})
-            //self._log(res)
+                //加载数据
+                res = await self._fetch("/product/getproperties", {id:self.product.id})
+                //self._log(res)
 
-            let obj = {}
-            res.data.forEach(item=>{
-                obj[item.sizecontentid+'_'+item.propertyid] = item.content;
-            })
-            self.data = obj
-            self.loaded = true;
-            return self;
+                let obj = {}
+                res.data.forEach(item=>{
+                    obj[item.sizecontentid+'_'+item.propertyid] = item.content;
+                })
+                self.data = obj
+                self.loaded = true;
+            });
+
+            
+            //return self;
         }
     },
     computed: {},

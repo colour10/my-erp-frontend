@@ -76,7 +76,8 @@ export default {
             opt,
             authname: authname,
             searchform: {},
-            action: ""
+            action: "",
+            isSubmiting:false
         }
     },
     methods: {
@@ -103,13 +104,20 @@ export default {
         },
         onSubmit() {
             let self = this;
+
+            //self._log("是否正在提交",self.isSubmiting)
+            if(self.isSubmiting==true) {
+                return 
+            }
+            self.isSubmiting = true;
+
             let issubmit = self.isSubmit;
             let autoreload = self.isAutoReload;
             let autohide = self.isAutohide;
             let tablelist = self.$refs.tablelist
 
             self.form.lang = self.lang;
-            if (self.action == "add") {
+            if (self.action == "add" && self.form.id=='') {
                 if (issubmit == false) {
                     tablelist.appendRow(globals.clone(self.form))
                     if (autohide) {
@@ -117,6 +125,7 @@ export default {
                     } else {
                         self.action = 'edit'
                     }
+                    self.isSubmiting = false;
                 } else {
                     self._submit("/" + self.controller + "/add", self.form).then(function() {
                         if (autoreload == true) {
@@ -128,6 +137,9 @@ export default {
                         if (autohide) {
                             self.dialogVisible = false
                         }
+                        self.isSubmiting = false;
+                    }).catch(()=>{
+                        self.isSubmiting = false;
                     })
                 }
             } else {
@@ -138,6 +150,7 @@ export default {
                     if (autohide) {
                         self.dialogVisible = false
                     }
+                    self.isSubmiting = false;
                 } else {
                     self._submit("/" + self.controller + "/edit", self.form).then(function() {
                         if (autoreload == true) {
@@ -150,10 +163,12 @@ export default {
                         if (autohide) {
                             self.dialogVisible = false
                         }
+                        self.isSubmiting = false;
+                    }).catch(()=>{
+                        self.isSubmiting = false;
                     })
                 }
             }
-
         },
         showFormToCreate() {
             let self = this;

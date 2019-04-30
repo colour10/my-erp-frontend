@@ -1,6 +1,6 @@
 <template>
     <el-select v-model="currentValue" placeholder="" @change="handleChange" filterable :filter-method="filterCurrency" :disabled="disabled">
-        <el-option v-for="item in current_list" :key="item.getKeyValue()" :value="item.getValue()" :label="item.getLabel()">
+        <el-option v-for="item in current_list" :key="item.getValue()" :value="item.getValue()" :label="item.getLabel()">
         </el-option>
     </el-select>
 </template>
@@ -26,8 +26,8 @@ export default {
         event: 'change'
     },
     data() {
-        var self = this
-        var dataSource = DataSource.getDataSource("currency", _label("lang"));
+        let self = this
+        let dataSource = DataSource.getDataSource("currency", _label("lang"));
         return {
             currentValue: self.select_value,
             dataCopy: [],
@@ -51,11 +51,11 @@ export default {
     },
     computed: {
         current_list() {
-            var self = this
-            var val = self.currentInput;
+            let self = this
+            let val = self.currentInput;
             if (val) {
                 return self.dataCopy.filter((item) => {
-                    var row = item.getRow().code
+                    let row = item.row.code
                     if (!!~row.indexOf(val) || !!~row.toUpperCase().indexOf(val.toUpperCase())) {
                         return true
                     }
@@ -66,7 +66,7 @@ export default {
         }
     },
     mounted: function() {
-        var self = this
+        let self = this
         self.dataSource.getData(function(data) {
             self.dataCopy = data
         })

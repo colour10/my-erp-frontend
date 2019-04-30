@@ -81,15 +81,14 @@ export default {
 
             let result = [];
             data.forEach(item=>{
-                let row = item.getObject()
-                row.children = []
-                result.push(row)
+                item.children = []
+                result.push(item)
             })
             let child = DataSource.getDataSource('brandgroupchild', self.lang).getData(childdata=>{
                 childdata.forEach(item=>{
                     let parent = result.find(row=>row.id==item.row.brandgroupid)
                     if(parent) {
-                        parent.children.push(item.getObject())
+                        parent.children.push(item)
                     }
                 })
 

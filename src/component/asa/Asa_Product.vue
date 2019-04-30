@@ -15,10 +15,11 @@
                                 <el-input v-model="form.productname"></el-input>
                             </el-form-item> -->
                             <el-form-item :label="_label('guojima')">
-                                <el-input v-model="form.wordcode_1" style="width:110px;"></el-input>
-                                <el-input v-model="form.wordcode_2" style="width:110px;"></el-input>
-                                <el-input v-model="form.wordcode_3" style="width:110px;"></el-input>
-                                <el-input v-model="form.wordcode_4" style="width:110px;"></el-input>
+                                <el-input v-model="form.wordcode_1" style="width:110px;" :placeholder="_label('kuanshi')"></el-input>
+                                <el-input v-model="form.wordcode_2" style="width:110px;" :placeholder="_label('caizhi')"></el-input>
+                                <el-input v-model="form.wordcode_3" style="width:110px;" :placeholder="_label('yanse')"></el-input>
+                                <el-input v-model="form.colorname" style="width:110px;" :placeholder="_label('yansemingcheng')"></el-input>
+                                <el-input v-model="form.wordcode_4" style="width:110px;" :placeholder="_label('fuzhuma')"></el-input>
                             </el-form-item>
                         </el-form>
                         <el-col :span="4" v-for="item in colors2" :key="item.colortemplateid">
@@ -69,7 +70,7 @@
                                 <colorselect v-model="form.brandcolor"></colorselect>
                             </el-form-item>
                             <el-form-item :label="_label('caizhi')">
-                                <productmaterial v-model="materials"></productmaterial>
+                                <productmaterial v-model="materials" :brandgroupid="form.brandgroupid"></productmaterial>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
@@ -311,6 +312,7 @@ export default {
                 wordcode_2: "",
                 wordcode_3: "",
                 wordcode_4: "",
+                colorname:"",
                 makestaff: "",
                 maketime: ''
             },
@@ -382,7 +384,7 @@ export default {
             let self = this
             let source = DataSource.getDataSource("sizecontent", self._label("lang"))
             source.getRows(self.form.sizecontentids).then(results=>{
-                self.form.sizecontentids = results.filter(item=>item.getObject().name.indexOf('.')<0).map(item=>item.getObject().id).join(',')
+                self.form.sizecontentids = results.filter(item=>item.name.indexOf('.')<0).map(item=>item.id).join(',')
             })
         },
         onSelectProduct(info) {
@@ -512,7 +514,7 @@ export default {
 
                     self.colors2 = info.colors
                     self.sizecontents = info.sizecontents.map(item => {
-                        return globals.extend({ goods_code: "" }, item.getObject())
+                        return globals.extend({ goods_code: "" }, item)
                     })
                     self.sizecontents_loaded = false;
                     //self._log(self.sizecontents)

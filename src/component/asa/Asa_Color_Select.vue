@@ -1,5 +1,5 @@
 <template>
-    <simple-select v-model="value" source="colortemplate" :lang="_label('lang')" :disabled="disabled" :filter-method="onFilterColor">
+    <simple-select v-model="value" source="colortemplate" :lang="_label('lang')" :disabled="disabled" :filter-method="onFilterColor" @change="onChange">
         <template v-slot="{row}">
             <div class="imgline">
                 <img :src="_fileLink(row.row.picture)" class="icon"> <span>{{row.name}}</span> <span>{{row.row.name_en}}</span>
@@ -36,6 +36,9 @@ export default {
             let k = keyword.toUpperCase()
             let name_en = row.row.name_en ||""
             return row.name.toUpperCase().indexOf(k)>=0 || name_en.toUpperCase().indexOf(k)>=0
+        },
+        onChange() {
+            this.$emit("change", this.value)
         }
     },
     watch: {

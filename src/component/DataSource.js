@@ -4,36 +4,38 @@ import {ASAP} from "./globals.js"
 import {extract} from "./object.js"
 
 
-function DataRow(row, dataSource) {
-    var self = this;
+function DataRow(row, id, name, option={}) {
+    let self = this;
     self.row = row
-    self.dataSource = dataSource;
-    self.keyName = dataSource.getLabelName()
-    self.lang = dataSource.getLang()
+    self.id = id;
+    self.name = name
+    self.option = option
 }
 
-DataRow.prototype.getKeyValue = function() {
-    var keyName = this.dataSource.getValueName();
-    //_log(this.row, keyName,"getKeyValue")
-    return this.row[keyName]
+DataRow.prototype.getValue = function() {
+    return this.id
 }
 
-DataRow.prototype.getLabelValue = function() {
-    var self = this;
-    var keyName = self.dataSource.getLabelName();
-    var lang = self.dataSource.getLang();
-    //_log(self.row, keyName,"keyName")
-    return self.row[keyName] || self.row[keyName+"_"+lang]
+DataRow.prototype.getLabel = function() {
+    return this.name
 }
 
-DataRow.prototype.getLabel = DataRow.prototype.getLabelValue
-DataRow.prototype.getValue = DataRow.prototype.getKeyValue
-DataRow.prototype.getRow = function(key) {
-    return key ? this.row[key] : this.row;
+DataRow.prototype.optionName = function() {
+    let self = this
+    if(typeof(self.option.optionName)=='function') {
+        let func = self.option.optionName
+        //console.log(func.call(self))
+        return func.call(self)
+    }
+    return self.name
 }
 
-DataRow.prototype.getObject = function() {
-    return {id:this.getValue(), name:this.getLabel(), row:this.row}
+DataRow.factory = function(row, dataSource){
+    let keyName = dataSource.getLabelName()
+    let lang = dataSource.getLang()
+    let id  = row[dataSource.getValueName()];
+    let name = row[keyName] || row[keyName+"_"+lang] || ""
+    return new DataRow(row, id, name, dataSource.options);
 }
 
 
@@ -62,7 +64,7 @@ DataSource.prototype.init = function() {
     else if(options.hashlist) {
         //_log(options.hashlist)
         Object.keys(options.hashlist).forEach(function(key){
-            let row = new DataRow(options.hashlist[key], self)
+            let row = DataRow.factory(options.hashlist[key], self)
             self.data.push(row)
             self.hashtable[key] = row;
         });
@@ -70,7 +72,7 @@ DataSource.prototype.init = function() {
     }
     else if(options.hashtable) {
         Object.keys(options.hashtable).forEach(function(key){
-            let row = new DataRow({name:options.hashtable[key],value:key}, self);
+            let row = DataRow.factory({name:options.hashtable[key],value:key}, self);
             self.data.push(row)
             self.hashtable[key] = row;
         });
@@ -81,7 +83,7 @@ DataSource.prototype.init = function() {
     else if(options.datalist) {
         //_log(options.datalist.forEach,"options")
         options.datalist.forEach(function(item){
-            let row = new DataRow(item, self)
+            let row = DataRow.factory(item, self)
             
             self.hashtable[item[self.opvalue]] = row;    
             self.data.push(row)
@@ -100,7 +102,7 @@ DataSource.prototype.loadList = function() {
     let params = options.params || {}
     httpGet(options.url).then( function({data=[]}={}){
         data.forEach(function(item){
-            let row = new DataRow(item, self)
+            let row = DataRow.factory(item, self)
             self.hashtable[item[self.opvalue]] = row; 
             self.data.push(row)   
         })
@@ -134,6 +136,15 @@ DataSource.prototype.filter = function(condition, callback) {
         callback(result)
     })
 }
+/*DataSource.prototype.filter = function(func) {
+    let self = this;
+
+    return new Promise(resolve=>{
+        self.getData(data=>{              
+            resolve(data.filter(func))
+        })
+    })    
+}*/
 
 DataSource.prototype.sub = function(condition, callback) {
     var self = this;
@@ -175,9 +186,20 @@ DataSource.prototype.setLabelName = function(name) {
 
 DataSource.prototype.getRow = function(keyValue, callback) {
     var self = this;
-    self.getData(()=>{
-        callback(self.hashtable[keyValue])
-    })
+    
+
+    let promise = new Promise((resolve)=>{
+        self.getData(()=>{
+            resolve(self.hashtable[keyValue])
+        })
+    });
+
+    if(typeof(callback)=='function') {
+        promise.then(callback)
+    }
+    else {
+        return promise;
+    }
 }
 
 DataSource.prototype.getRowLabel = function(keyValue, callback) {
@@ -186,7 +208,7 @@ DataSource.prototype.getRowLabel = function(keyValue, callback) {
     let promise = new Promise((resolve)=>{
         self.getRow(keyValue,function(row){
             if(row) {
-                resolve(row.getLabelValue())
+                resolve(row.getLabel())
             }
             else {
                 resolve("");   
@@ -270,7 +292,7 @@ DataSource.prototype.getList = function() {
 
     return new Promise((resolve)=>{
         self.getData(data=>{
-            resolve(data.map(item=>item.getObject()))
+            resolve(data)
         })
     })   
 }

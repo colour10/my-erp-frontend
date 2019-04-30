@@ -21,6 +21,7 @@
                     <el-menu-item index="productmemo">{{_label("shangpinmiaoshu")}}</el-menu-item>
                     <el-menu-item index="material">{{_label("caizhiguanli")}}</el-menu-item>
                     <el-menu-item index="materialnote">{{_label("caizhibeizhu")}}</el-menu-item>
+                    <el-menu-item index="property">{{_label("shuxingdingyi")}}</el-menu-item>
                     <el-menu-item index="currency">{{_label("huobiguanli")}}</el-menu-item>
                     <el-menu-item index="ulnarinch">{{_label("menu-2-1-7")}}</el-menu-item>
                     <el-menu-item index="warehouse">{{_label("menu-2-3-1")}}</el-menu-item>
@@ -152,6 +153,7 @@ const menus = {
     "login/logout":_label("menu-11-3"),
     "saletype":_label('xiaoshoushuxing'),
     "exchangerate":_label('huilvguanli'),
+    "property":_label("shuxingdingyi"),
     "develop":"生成器"
 }
 export default {

@@ -90,6 +90,17 @@ const config = {
     ouyuan: '9' //欧元货币的id
 }
 
+const StringFunc = {
+    default:function(str) {
+        if(str==undefined) {
+            return ""
+        }
+        else {
+            return str
+        }
+    }
+}
+
 export {
     ASAP,
     getLabel,
@@ -99,7 +110,8 @@ export {
     extract,
     getAvailableHeight,
     config,
-    math
+    math,
+    StringFunc
 }
 export default {
     getLabel,

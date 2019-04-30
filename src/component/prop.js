@@ -128,7 +128,7 @@ const props = {
 
     "materialnote": {
         columns: [
-            //{ name: "brandgroupchildid", label: _label("zipinlei"), type: "brandgroupchild", source:"brandgroupchild" },
+            { name: "brandgroupid", label: _label("pinlei"), type: "select", source:"brandgroup" },
             { name: "content", label: _label("mingcheng"), is_focus: true, is_multiple: true}, 
             { name: "displayindex", label: _label("paixu"), sortMethod:sort_method_digit }
         ],
@@ -385,9 +385,11 @@ const props = {
     },
     "brandrate":{
         columns: [
-            { name: "brandgroupid", label: _label("pinlei"), type:"select", source:"brandgroup"},
-            { name: "ageseasonid", label: _label("niandaijijie"), type:"select", source:"ageseason"},
-            { name: "rate", label: _label("beilv")}
+            { name: "brandgroupid", label: _label("pinlei"), type:"select", source:"brandgroup", width:120},
+            { name: "ageseasonid", label: _label("niandaijijie"), type:"select", source:"ageseason", width:120},
+            { name: "rate", label: _label("beilv"), width:120},
+            { name: "modifystaff", label: _label("gengxinren"), type:"select", source:"user", is_edit_hide:true},
+            { name: "modifytime", label: _label("gengxinshijian"), is_edit_hide:true}
         ],
         controller: "brandrate",
         auth: "brand",
@@ -421,6 +423,14 @@ const props = {
         base:{
             brandid:""    
         }
+    },
+    property:{
+        columns:[
+            {name:"name", label:_label('mingcheng'), is_multiple:true, is_focus:true},
+            { name: "displayindex", label: _label("paixu"), sortMethod:sort_method_digit }
+        ],
+        controller:"property",
+        key_column:"name"
     }
 }
 

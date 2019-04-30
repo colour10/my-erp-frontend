@@ -27,7 +27,7 @@ export default {
         select_value: {
             required: true
         },
-        brandgroupchildid:{
+        brandgroupid:{
             default:""
         },
         disabled: {
@@ -65,7 +65,7 @@ export default {
     methods: {
         onShow() {
             let self = this
-            if(!self.brandgroupchildid) {
+            if(!self.brandgroupid) {
                 self.dialogVisible = true;
 
                 setTimeout(function(){
@@ -74,7 +74,7 @@ export default {
                 },100)
             }
             else {
-                DataSource.getDataSource("materialnote", self._label('lang')).getSourceByParent(self.brandgroupchildid).then(source=>{
+                DataSource.getDataSource("materialnote", self._label('lang')).getSourceByParent(self.brandgroupid).then(source=>{
                     self.props.columns[2].source = source
                     self.dialogVisible = true;
 
