@@ -79,7 +79,7 @@ export default {
     methods: {
         onBeforeEdit(row) {
             let self = this
-            this._log("onBeforeEdit", row)
+            //this._log("onBeforeEdit", row)
             self.brandrate.base.brandid = row.id
             self.aliases.base.brandid = row.id
             self.series.base.brandid = row.id
@@ -89,9 +89,6 @@ export default {
             let self = this
             self.activeName = 'info'
             self.id = 0
-        },
-        checkDisabled() {
-            return false;
         },
         onTabClick(tab) {
             let self = this;

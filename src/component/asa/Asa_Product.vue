@@ -63,9 +63,9 @@
                                 </simple-select>
                             </el-form-item>
                             <el-form-item :label="_label('chimamingxi')" prop="sizetopid">
-                                <simple-select v-model="form.sizecontentids" ref="sizecontentids" source="sizecontent" :parentid="form.sizetopid" :multiple="true"> </simple-select>
+                                <simple-select v-model="form.sizecontentids" ref="sizecontentids" source="sizecontent" :parentid="form.sizetopid" :multiple="true" :isBatch="true"> </simple-select><as-button class="trimhalf" @click="onTrimSize">{{_label("qubanma")}}</as-button>
                             </el-form-item>
-                            <el-form-item :label="_label('pinpaiseban')" prop="brandcolor">
+                            <el-form-item :label="_label('sexi')" prop="brandcolor">
                                 <colorselect v-model="form.brandcolor"></colorselect>
                             </el-form-item>
                             <el-form-item :label="_label('caizhi')">
@@ -376,6 +376,13 @@ export default {
                         self.setInfo(self.form.id)
                     })
                 }
+            })
+        },
+        onTrimSize() {
+            let self = this
+            let source = DataSource.getDataSource("sizecontent", self._label("lang"))
+            source.getRows(self.form.sizecontentids).then(results=>{
+                self.form.sizecontentids = results.filter(item=>item.getObject().name.indexOf('.')<0).map(item=>item.getObject().id).join(',')
             })
         },
         onSelectProduct(info) {

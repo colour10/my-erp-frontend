@@ -22,7 +22,7 @@ import Select_Currency from './component/Select_Currency.vue'
 import Simple_Avatar from './component/Simple_Avatar.vue'
 import Simple_Album from './component/Simple_Album.vue'
 import globals from './component/globals.js'
-import Asa_BrandTab from './component/asa/Asa_BrandTab.vue'
+//import Asa_BrandTab from './component/asa/Asa_BrandTab.vue'
 import Asa_Order_Dialog from './component/asa/Asa_Order_Dialog.vue'
 import Asa_Select_Product_Dialog from './component/asa/Asa_Select_Product_Dialog.vue'
 import Asa_Sales_Dialog from './component/asa/Asa_Sales_Dialog.vue'
@@ -74,7 +74,7 @@ const components = [
     Select_Currency,
     Simple_Avatar,
     Simple_Album,
-    Asa_BrandTab,
+    //Asa_BrandTab,
     Asa_Order_Dialog,
     Asa_Select_Product_Dialog,
     Asa_Sales_Dialog,
@@ -124,15 +124,9 @@ const routes = [
 
             {path:'/ageseason', component:getComponentSimple("ageseason")},
             {path:'/ulnarinch', component:getComponent("ulnarinch")},
-            {path:'/winterproofing', component:getComponent("winterproofing")},
-            {path:'/washinginstructions', component:getComponent("washinginstructions")},
             {path:'/currency', component:getComponent("currency")},
-            {path:'/executioncategory', component:getComponent("executioncategory")},
             {path:'/pricesetting', component:getComponentSimple("pricesetting")},
             {path:'/price', component:getComponentSimple("price")},
-            {path:'/occasionsstyle', component:getComponent("occasionsstyle")},
-            {path:'/productparts', component:getComponent("productparts")},
-            {path:'/productinnards', component:getComponent("productinnards")},
             {path:'/warehouse', component:getComponentSimple("warehouse")},
             {path:'/country', component:getComponent("country")},
             {path:'/materialnote', component:getComponent("materialnote")},

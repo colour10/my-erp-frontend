@@ -54,7 +54,7 @@
                         </template>
                     </el-table-column>
                 </el-table>
-                <!--<div class="el-time-panel el-popper" style="width:900px;height:500px;">sdsd</div>-->
+                <!-- <div class="el-time-panel el-popper" style="width:900px;height:500px;">sdsd</div> -->
             </el-col>
             <el-col :span="4">
                 <au-button auth="product" type="primary" @click="onAppendColor">{{_label("zhuijia")}}</au-button>
@@ -79,7 +79,7 @@
                         <simple-select v-model="form.sizetopid" source="sizetop"></simple-select>
                     </el-form-item>
                     <el-form-item :label="_label('chimamingxi')" prop="sizecontentids">
-                        <simple-select v-model="form.sizecontentids" source="sizecontent" :parentid="form.sizetopid" :multiple="true"> </simple-select>
+                        <simple-select v-model="form.sizecontentids" source="sizecontent" :parentid="form.sizetopid" :multiple="true" :isBatch="true"> </simple-select><as-button @click="onTrimSize" class="trimhalf">{{_label("qubanma")}}</as-button>
                     </el-form-item>
                     <el-form-item :label="_label('caizhi')">
                         <productmaterial v-model="materials"></productmaterial>
@@ -303,6 +303,13 @@ export default {
             if (self.form.wordprice == '' || self.form.wordprice == oldprice) {
                 self.form.wordprice = math.round(newvalue*self.rate,2)
             }
+        },        
+        onTrimSize() {
+            let self = this
+            let source = DataSource.getDataSource("sizecontent", self._label("lang"))
+            source.getRows(self.form.sizecontentids).then(results=>{
+                self.form.sizecontentids = results.filter(item=>item.getObject().name.indexOf('.')<0).map(item=>item.getObject().id).join(',')
+            })
         },
         onSubmit() {
             var self = this;

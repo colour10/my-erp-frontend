@@ -41,12 +41,12 @@ const props = {
 const props2 = {
     columns: [
         { name: "name", label: _label('zileimingcheng'), is_multiple: true, is_focus: true },
-        { name: "displayindex", label: _label('xuhao'), sortMethod:(a,b)=>a-b }
+        { name: "displayindex", label: _label('xuhao'), width:100, sortMethod:(a,b)=>a-b }
     ],
     buttons: [{
         name: "code",
         label: _label('pinleishuxing'),
-        width: 150,
+        width: 100,
         disable_change: true,
         handler: function(rowIndex, row) {
             props3.base.brandgroupchildid = row.id;

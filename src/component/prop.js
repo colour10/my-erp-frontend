@@ -6,59 +6,23 @@ const sort_method_digit = function(a,b){
 }
 const props = {
     "ageseason": {
-        columns: [{
-            name: "sessionmark",
-            label: _label("fabuji"),
-            is_hide: true,
-            type: 'select',
-            source: "sessionmark"
-        }, {
-            name: "name",
-            label: _label("nianfen"),
-            is_focus: true,
-            convert: function(row, rowIndex, column) {
-                return row.sessionmark + row.name
+        columns: [
+            { name: "sessionmark", label: _label("fabuji"), is_hide: true, type: 'select', source: "sessionmark" }, 
+            { name: "name", label: _label("nianfen"), is_focus: true, convert: function(row, rowIndex, column) {
+                    return row.sessionmark + row.name
+                }
             }
-        }],
+        ],
         controller: "ageseason"
     },
 
     "ulnarinch": {
         columns: [
-            { name: "brandgroupchildid", label: _label("zipinlei"), type: "brandgroupchild", source:"brandgroupchild" },
+            //{ name: "brandgroupchildid", label: _label("zipinlei"), type: "brandgroupchild", source:"brandgroupchild" },
             { name: "name", label: _label("mingcheng"), is_multiple: true, is_focus: true },
             { name: "displayindex", label: _label("paixu"), sortMethod:sort_method_digit }
         ],
         controller: "ulnarinch",
-        key_column: "name"
-    },
-
-    "productparts": {
-        columns: [{
-            name: "name",
-            label: _label("peijianmingcheng"),
-            is_multiple: true,
-            is_focus: true
-        }, {
-            name: "partscode",
-            label: _label("peijiandaima")
-        }, {
-            name: "packflag",
-            label: _label("shifoubaozhuang"),
-            type: "switch"
-        }],
-        controller: "productparts",
-        key_column: "name"
-    },
-
-    "productinnards": {
-        columns: [{
-            name: "name",
-            label: _label("jiegoumingcheng"),
-            is_multiple: true,
-            is_focus: true
-        }],
-        controller: "productinnards",
         key_column: "name"
     },
 
@@ -164,7 +128,7 @@ const props = {
 
     "materialnote": {
         columns: [
-            { name: "brandgroupchildid", label: _label("zipinlei"), type: "brandgroupchild", source:"brandgroupchild" },
+            //{ name: "brandgroupchildid", label: _label("zipinlei"), type: "brandgroupchild", source:"brandgroupchild" },
             { name: "content", label: _label("mingcheng"), is_focus: true, is_multiple: true}, 
             { name: "displayindex", label: _label("paixu"), sortMethod:sort_method_digit }
         ],
@@ -202,7 +166,7 @@ const props = {
 
     "productmemo": {
         columns: [
-            { name: "brandgroupchildid", label: _label("zipinlei"), type: "brandgroupchild", source:"brandgroupchild" },
+            //{ name: "brandgroupchildid", label: _label("zipinlei"), type: "brandgroupchild", source:"brandgroupchild" },
             { name: "name", label: _label("mingcheng"), is_multiple: true, is_focus: true },
             { name: "displayindex", label: _label("paixu"), sortMethod:sort_method_digit }
         ],
