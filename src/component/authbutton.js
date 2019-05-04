@@ -9,10 +9,11 @@ export default extendComponent(Button, {
         }
     },
     render(h) {
-        let self = this;
+        /*let self = this;
         let auth = self.$attrs['auth']
         if (auth && self.$store.getters.allow(self.auth)) {
             return self.doRender(h)
-        }
+        }*/
+        return h("span", "Test")
     }
 })

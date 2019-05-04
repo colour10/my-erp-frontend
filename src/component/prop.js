@@ -349,11 +349,11 @@ const props = {
     },
     "price":{
         columns: [
-            { name: "name", label: _label("mingcheng") },
-            { name: "countryid", label: _label("guojiadiqu"), type:"select", source:"country"},
+            { name: "name", label: _label("mingcheng"), type:"el-input" },
+            /*{ name: "countryid", label: _label("guojiadiqu"), type:"select", source:"country"},
             { name: "pricetype", label: _label("jiageleixing"), type:"select", source:"pricetype"},            
             { name: "currencyid", label: _label("bizhong"), type:"select", source:"currency"},
-            { name: "displayindex", label: _label("paixu"), sortMethod:sort_method_digit }
+            { name: "displayindex", label: _label("paixu"), sortMethod:sort_method_digit }*/
         ],
         controller: "price",
         auth: "price",

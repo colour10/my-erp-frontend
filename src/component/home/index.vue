@@ -165,10 +165,6 @@ export default {
     methods: {
         checkLogin() {
             const self = this
-                //self._log(this.$route.path)
-            if (!self.$store.getters.is_login) {
-                self.$router.push({ path: "/login/login", query: { back: this.$route.path } })
-            }
         },
         onSelect(index, indexPath) {
             //this._log(index, indexPath)
