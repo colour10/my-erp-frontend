@@ -29,6 +29,7 @@
                         <el-date-picker :ref="item.name" v-if="item.type=='date'" v-model="form[item.name]" type="date" value-format="yyyy-MM-dd" placeholder="" :disabled="checkDisabled(item)"></el-date-picker>
                         <brandgroupchild :ref="item.name" v-model="form[item.name]" v-if="item.type=='brandgroupchild'"></brandgroupchild>
                         <simple-avatar :ref="item.name" v-model="form[item.name]" v-if="item.type=='avatar'" font-size="14px" :size="35"></simple-avatar>
+                        <colorselect :ref="item.name" v-model="form[item.name]" v-if="item.type=='colorselect'"></colorselect>
                     </el-form-item>
                 </el-form>
             </slot>
@@ -60,6 +61,9 @@ export default {
         let base = self.base || {}
 
         let opt = self.options || {};
+        self._log(opt,"opt")
+        //opt.isAutohide = typeof(opt.isAutohide)=='undefined' ? true : opt.isAutohide;
+        //opt.autoreload =
 
         for (let i = 0; i < self.columns.length; i++) {
             form[self.columns[i].name] = ""
@@ -111,9 +115,10 @@ export default {
             }
             self.isSubmiting = true;
 
-            let issubmit = self.isSubmit;
-            let autoreload = self.isAutoReload;
-            let autohide = self.isAutohide;
+            let opt = self.opt
+            let issubmit = opt.isSubmit;
+            let autoreload = opt.isAutoReload;
+            let autohide = opt.isAutohide;
             let tablelist = self.$refs.tablelist
 
             self.form.lang = self.lang;

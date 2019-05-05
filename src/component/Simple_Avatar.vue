@@ -13,8 +13,6 @@ export default {
     name: 'simple-avatar',
     props: {
         select_value: {
-            type: [String, Number],
-            required: true,
             default: ''
         },
         lang: {

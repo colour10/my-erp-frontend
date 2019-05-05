@@ -38,11 +38,15 @@ var props = {
         },
         { name: "ageseason", label: _label("niandai"), type: "select", source: "ageseason" },
 
-        { name: "nationalpricecurrency_label", label: _label("benguolingshoujia"), width: 100 },
-        { name: "nationalprice", label: _label("benguolingshoujia"), width: 100 },
+        { name: "laststoragedate", label: _label("zuihouruku") },
 
         { name: "factorypricecurrency_label", label: _label("chuchangjia"), width: 100 },
         { name: "factoryprice", label: _label("chuchangjia"), width: 100 },
+
+        { name: "nationalpricecurrency_label", label: _label("benguolingshoujia"), width: 100 },
+        { name: "nationalprice", label: _label("benguolingshoujia"), width: 100 },
+
+        
 
         { name: "wordpricecurrency_label", label: _label("guojilingshoujia"), width: 100 },
         { name: "wordprice", label: _label("guojilingshoujia"), width: 100 },

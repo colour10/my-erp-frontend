@@ -13,6 +13,7 @@ import DataSource from '../DataSource.js'
 import globals, { _label } from '../globals.js'
 
 export default {
+    name:"colorselect",
     props: {
         mvalue: {
             required: true

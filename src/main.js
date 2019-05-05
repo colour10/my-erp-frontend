@@ -43,6 +43,7 @@ import Authbutton from './component/authbutton.js'
 import Button from './component/button.js'
 import RadioGroup from './component/radio-group.vue'
 import Multiple_Admin_Page from './component/multiple_admin_page.js'
+import Asa_Color_Select from './component/asa/Asa_Color_Select.vue'
 
 import ImagePreview from './component/image-preview.vue'
 import Creator from './component/develop/index.vue'
@@ -74,7 +75,7 @@ const components = [
     Select_Currency,
     Simple_Avatar,
     Simple_Album,
-    //Asa_BrandTab,
+    Asa_Color_Select,
     Asa_Order_Dialog,
     Asa_Select_Product_Dialog,
     Asa_Sales_Dialog,

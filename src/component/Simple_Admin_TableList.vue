@@ -37,7 +37,7 @@ let model
 let getBaseObject = function(columns) {
     let obj = {}
     for (let i = 0; i < columns.length; i++) {
-        if (columns[i].type == 'select' || columns[i].type == 'select-dialog') {
+        if (columns[i].type == 'select' || columns[i].type == 'select-dialog' || columns[i].type=='colorselect') {
             obj[columns[i].name + "__loading"] = "";
             obj[columns[i].name + "__label"] = "";
             obj[columns[i].name + "__columncopy"] = "";
@@ -187,7 +187,7 @@ export default {
             let value = row[column.name]
             if (column.type == 'switch') {
                 return value == '1' ? _label("yes") : _label("no");
-            } else if (column.type == 'select') {
+            } else if (column.type == 'select' || column.type=='colorselect') {
                 //
                 let dataSource = DataSource.getDataSource(column.source, _label("lang"));
                 //self._log("init, dataSource", column.source)

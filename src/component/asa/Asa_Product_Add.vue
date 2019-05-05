@@ -77,22 +77,27 @@
                         <simple-select v-model="form.sizetopid" source="sizetop"></simple-select>
                     </el-form-item>
                     <el-form-item :label="_label('chimamingxi')" prop="sizecontentids">
-                        <simple-select v-model="form.sizecontentids" source="sizecontent" :parentid="form.sizetopid" :multiple="true" :isBatch="true"> </simple-select><as-button @click="onTrimSize" class="trimhalf">{{_label("qubanma")}}</as-button>
+                        <simple-select v-model="form.sizecontentids" source="sizecontent" :parentid="form.sizetopid" :multiple="true" :isBatch="true" @option-change="onOptionChange"> </simple-select><as-button @click="onTrimSize" class="trimhalf">{{_label("qubanma")}}</as-button>
                     </el-form-item>
+                    
+                </el-col>
+                <el-col :span="8">
                     <el-form-item :label="_label('caizhi')">
                         <productmaterial v-model="materials" :brandgroupid="form.brandgroupid"></productmaterial>
                     </el-form-item>
+
+                    <el-form-item :label="_label('chandi')" prop="countries">
+                        <simple-select v-model="form.countries" source="country"></simple-select>
+                    </el-form-item>
+
                     <el-form-item :label="_label('shangpinchicun')">
                         <simple-select v-model="form.ulnarinch" source="ulnarinch"></simple-select>
                     </el-form-item>
-                </el-col>
-                <el-col :span="8">
+
                     <el-form-item :label="_label('shangpinmiaoshu')">
                         <simple-select v-model="form.productmemoids" source="productmemo" :multiple="true"></simple-select>
                     </el-form-item>
-                    <el-form-item :label="_label('shangpinxilie')">
-                        <simple-select v-model="form.series" ref="series" source="series" :parentid="form.brandid"> </simple-select>
-                    </el-form-item>
+                    
                     <el-form-item :label="_label('chuchangjia')">
                         <el-input placeholder="" v-model="form.factoryprice" class="productcurrency" @focus="watcherprice.start()" @blur="watcherprice.stop()">
                             <select-currency v-model="form.wordpricecurrency" slot="prepend">
@@ -121,14 +126,16 @@
                             <span slot="append">{{getReciprocalRateNational}}</span>
                         </el-input>
                     </el-form-item>
-                    <el-form-item :label="_label('chandi')" prop="countries">
-                        <simple-select v-model="form.countries" source="country"></simple-select>
+                </el-col>
+                <el-col :span="8">
+                    <el-form-item :label="_label('shangpinxilie')">
+                        <simple-select v-model="form.series" ref="series" source="series" :parentid="form.brandid"> </simple-select>
                     </el-form-item>
+
                     <el-form-item :label="_label('xiaoshoushuxing')">
                         <simple-select v-model="form.saletypeid" source="saletype"></simple-select>
                     </el-form-item>
-                </el-col>
-                <el-col :span="8">
+
                     <el-form-item :label="_label('xingbie')">
                         <sp-radio-group v-model="form.gender" source="gender" :span="8" :lang="lang" class="supermini">
                         </sp-radio-group>
@@ -150,17 +157,9 @@
                             <sp-checkbox v-model="form.winter">{{_label("dong")}}</sp-checkbox>
                         </el-col>
                     </el-form-item>
-                    <el-form-item :label="_label('zuihouruku')">
-                        <el-input v-model="form.password"></el-input>
-                    </el-form-item>
+                    
                     <el-form-item :label="_label('beizhu')">
                         <el-input v-model="form.memo"></el-input>
-                    </el-form-item>
-                    <el-form-item :label="_label('jiandangren')">
-                        <el-input :disabled="true" :placeholder="_label('xitongmoren')"></el-input>
-                    </el-form-item>
-                    <el-form-item :label="_label('jiandangshijian')">
-                        <el-input :disabled="true" :placeholder="_label('dangqianshijian')"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -183,12 +182,11 @@ import { loadSetting } from '../setting.js'
 import DataSource from '../DataSource.js'
 import watcher from "../watch.js"
 import Material from '../product/material.vue'
-import Asa_Color_Select from './Asa_Color_Select.vue'
+
 
 export default {
     name: 'asa-product-add',
     components: {
-        colorselect: Asa_Color_Select,
         productmaterial: Material
     },
     data() {
@@ -244,6 +242,12 @@ export default {
     methods: {
         onQuit() {
             this.dialogVisible = false
+        },
+        onOptionChange(options) {
+            let self = this
+            if(options.length==1) {
+                self.form.sizecontentids = options[0].id
+            }
         },
         onKeyDown(index) {
             //this._log(refname,index,this.$refs[refname])

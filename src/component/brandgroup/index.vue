@@ -125,7 +125,9 @@ const props3 = {
         brandgroupchildid: ""
     },
     options: {
-        action_width: 300
+        action_width: 300,
+        isAutoReload:true,
+        isAutohide:true
     }
 }
 

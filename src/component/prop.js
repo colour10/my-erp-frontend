@@ -365,7 +365,7 @@ const props = {
     "saletype":{
         columns: [
             { name: "name", label: _label("mingcheng"), is_multiple: true, is_focus:true},
-            { name: "color", label: _label("yanse")},
+            { name: "color", label: _label("yanse"), type:"colorselect", source:"colortemplate"},
             { name: "displayindex", label: _label("paixu"), sortMethod:sort_method_digit }
         ],
         controller: "saletype",

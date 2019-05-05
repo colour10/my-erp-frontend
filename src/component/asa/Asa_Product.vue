@@ -64,25 +64,29 @@
                                 </simple-select>
                             </el-form-item>
                             <el-form-item :label="_label('chimamingxi')" prop="sizetopid">
-                                <simple-select v-model="form.sizecontentids" ref="sizecontentids" source="sizecontent" :parentid="form.sizetopid" :multiple="true" :isBatch="true"> </simple-select><as-button class="trimhalf" @click="onTrimSize">{{_label("qubanma")}}</as-button>
+                                <simple-select v-model="form.sizecontentids" ref="sizecontentids" source="sizecontent" :parentid="form.sizetopid" :multiple="true" :isBatch="true" @option-change="onOptionChange"> </simple-select><as-button class="trimhalf" @click="onTrimSize">{{_label("qubanma")}}</as-button>
                             </el-form-item>
                             <el-form-item :label="_label('sexi')" prop="brandcolor">
                                 <colorselect v-model="form.brandcolor"></colorselect>
                             </el-form-item>
+                            
+                        </el-col>
+                        <el-col :span="8">
                             <el-form-item :label="_label('caizhi')">
                                 <productmaterial v-model="materials" :brandgroupid="form.brandgroupid"></productmaterial>
                             </el-form-item>
-                        </el-col>
-                        <el-col :span="8">
+
+                            <el-form-item :label="_label('chandi')" prop="countries">
+                                <simple-select v-model="form.countries" source="country" :multiple="true"></simple-select>
+                            </el-form-item>
+
                             <el-form-item :label="_label('shangpinchicun')">
                                 <simple-select v-model="form.ulnarinch" source="ulnarinch"></simple-select>
                             </el-form-item>
                             <el-form-item :label="_label('shangpinmiaoshu')">
                                 <simple-select v-model="form.productmemoids" source="productmemo" :multiple="true"></simple-select>
                             </el-form-item>
-                            <el-form-item :label="_label('shangpinxilie')">
-                                <simple-select v-model="form.series" ref="series" source="series" :parentid="form.brandid"> </simple-select>
-                            </el-form-item>
+                            
                             <el-form-item :label="_label('chuchangjia')">
                                 <el-input placeholder="" v-model="form.factoryprice" class="productcurrency">
                                     <select-currency v-model="form.wordpricecurrency" slot="prepend">
@@ -111,11 +115,13 @@
                                     <span slot="append">{{getReciprocalRateNational}}</span>
                                 </el-input>
                             </el-form-item>
-                            <el-form-item :label="_label('chandi')" prop="countries">
-                                <simple-select v-model="form.countries" source="country" :multiple="true"></simple-select>
-                            </el-form-item>
+                            
                         </el-col>
                         <el-col :span="8">
+                            <el-form-item :label="_label('shangpinxilie')">
+                                <simple-select v-model="form.series" ref="series" source="series" :parentid="form.brandid"> </simple-select>
+                            </el-form-item>
+
                             <el-form-item :label="_label('xiaoshoushuxing')">
                                 <simple-select v-model="form.saletypeid" source="saletype"></simple-select>
                             </el-form-item>
@@ -140,12 +146,15 @@
                                     <sp-checkbox v-model="form.winter">{{_label("dong")}}</sp-checkbox>
                                 </el-col>
                             </el-form-item>
-                            <el-form-item :label="_label('zuihouruku')">
-                                <el-input v-model="form.password"></el-input>
-                            </el-form-item>
+                            
                             <el-form-item :label="_label('beizhu')">
                                 <el-input v-model="form.memo"></el-input>
                             </el-form-item>
+
+                            <el-form-item :label="_label('zuihouruku')">
+                                <el-input v-model="form.laststoragedate"></el-input>
+                            </el-form-item>
+
                             <el-form-item :label="_label('jiandangren')">
                                 <sp-display-input :value="form.makestaff" source="user" disabled></sp-display-input>
                             </el-form-item>
@@ -184,39 +193,57 @@
                 <auth auth="product">
                     <searchpanel ref="searchpanel" @select="onSelectProduct" :filter="searchProductFilter"></searchpanel>
                 </auth>
-                <el-table :data="colors" border style="width:100%;" :header-cell-style="countHeaderStyle">
-                    <el-table-column prop="brandcolor" :label="_label('sexi')" width="240" align="center">
+
+                <el-table :data="colors" border style="width:100%;">
+                    <el-table-column width="80" align="center">
+                        <template v-slot="scope">
+                            <simple-avatar v-model="scope.row.picture" font-size="14px" :size="35"></simple-avatar>
+                        </template>
+                    </el-table-column>
+                    <el-table-column width="80" align="center">
+                        <template v-slot="scope">
+                            <simple-avatar v-model="scope.row.picture2" font-size="14px" :size="35"></simple-avatar>
+                        </template>
+                    </el-table-column>
+                    
+                    <el-table-column :label="_label('kuanshi')" width="140" align="center">
+                        <template v-slot="scope">
+                            <el-input v-model="scope.row.wordcode_1" size="mini" @focus="onFocus(1)" @blur="onBlur(1)"></el-input>
+                        </template>
+                    </el-table-column>
+                    <el-table-column :label="_label('caizhi')" width="140" align="center">
+                        <template v-slot="scope">
+                            <el-input v-model="scope.row.wordcode_2" size="mini" @focus="onFocus(2)" @blur="onBlur(2)"></el-input>
+                        </template>
+                    </el-table-column>
+                    <el-table-column :label="_label('yanse')" width="140" align="center">
+                        <template v-slot="scope">
+                            <!--<el-input v-model="scope.row.wordcode_3" size="mini" @keyup.native.down="onKeyDown(scope.$index)" @keyup.native.up="onKeyUp(scope.$index)" :ref="'word'+scope.$index"></el-input>-->
+                            <el-input v-model="scope.row.wordcode_3" size="mini"></el-input>
+                        </template>
+                    </el-table-column>
+                    <el-table-column :label="_label('yansemingcheng')" width="150" align="center">
+                        <template v-slot="scope">
+                            <el-input v-model="scope.row.colorname" size="mini"></el-input>
+                        </template>
+                    </el-table-column>
+
+                    <el-table-column prop="brandcolor" :label="_label('sexi')" width="140" align="center">
                         <template v-slot="scope">
                             <colorselect v-model="scope.row.brandcolor"></colorselect>
                         </template>
                     </el-table-column>
-                    <el-table-column :label="_label('guojima')" align="center">
-                        <el-table-column prop="goods_code" width="130" align="center">
-                            <template v-slot="scope">
-                                <el-input v-model="scope.row.wordcode_1" :disabled="scope.row.id>0"></el-input>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="goods_code" width="130" align="center">
-                            <template v-slot="scope">
-                                <el-input v-model="scope.row.wordcode_2" :disabled="scope.row.id>0"></el-input>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="goods_code" width="130" align="center">
-                            <template v-slot="scope">
-                                <el-input v-model="scope.row.wordcode_3" :disabled="scope.row.id>0"></el-input>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="goods_code" width="130" align="center">
-                            <template v-slot="scope">
-                                <el-input v-model="scope.row.wordcode_4" :disabled="scope.row.id>0"></el-input>
-                            </template>
-                        </el-table-column>
-                    </el-table-column>
-                    <el-table-column prop="goods_code" :label="_label('caozuo')" width="150" align="center">
+
+                    <el-table-column :label="_label('fuzhuma')" width="120" align="center">
                         <template v-slot="scope">
-                            <auth auth="product">
-                                <as-button type="danger" @click="onDeleteColorGroup(scope, scope.row)" v-if="option.isedit && form.id!=scope.row.id">{{_label("shanchu")}}</as-button>
-                            </auth>
+                            <el-input v-model="scope.row.wordcode_4" size="mini"></el-input>
+                        </template>
+                    </el-table-column>
+                    
+                    <el-table-column :label="_label('caozuo')" width="130" align="center">
+                        <template v-slot="scope">
+                            <as-button type="danger" @click="onDeleteColorGroup(scope, scope.row)" v-if="option.isedit && form.id!=scope.row.id">{{_label("shanchu")}}</as-button>
+                            <!-- <au-button auth="product" type="primary" @click="onAppendColor"v-if="!(option.isedit && form.id!=scope.row.id)">{{_label("zhuijia")}}</au-button> -->
                         </template>
                     </el-table-column>
                 </el-table>
@@ -251,10 +278,9 @@ import Asa_Product_Search_Panel from './Asa_Product_Search_Panel.vue'
 import Asa_Product_Property from './Asa_Product_Property.vue'
 import Asa_Product_Price from './Asa_Product_Price.vue'
 import Asa_Product_ProductStock from './Asa_Product_ProductStock.vue'
-import Asa_Color_Select from './Asa_Color_Select.vue'
 import Material from '../product/material.vue'
 
-const color_keys = ['id', 'brandcolor', 'wordcode_1', 'wordcode_2', 'wordcode_3', 'wordcode_4']
+const color_keys = ['id', 'brandcolor', 'wordcode_1', 'wordcode_2', 'wordcode_3', 'wordcode_4', 'colorname', 'picture', 'picture2']
 
 export default {
     name: 'asa-product',
@@ -263,7 +289,6 @@ export default {
         property: Asa_Product_Property,
         pricetab: Asa_Product_Price,
         productstock: Asa_Product_ProductStock,
-        colorselect: Asa_Color_Select,
         productmaterial: Material
     },
     data() {
@@ -344,6 +369,12 @@ export default {
         onQuit() {
             this.dialogVisible = false
         },
+        onOptionChange(options) {
+            let self = this
+            if(options.length==1) {
+                self.form.sizecontentids = options[0].id
+            }
+        },
         getColorStyle(item) {
             return {
                 width: '36px',
@@ -412,20 +443,24 @@ export default {
             params.list = self.colors.map(item => extract(item, color_keys))
                 //self._log(params)
             self._submit("/product/savecolorgroup", { params: JSON.stringify(params) }).then(function(res) {
-                self.setInfo(self.form.id)
-                res.data.list.forEach(function(item) {
-                    self.colors.push(extract(item, color_keys))
-                    self._log(item)
-                })
-                self.colors_loaded = true
+                self.setInfo(self.form.id).then(()=>{
+                    res.data.list.forEach(function(item) {
+                        self.colors.push(extract(item, color_keys))
+                        self._log(item)
+                    })
+                    self.colors_loaded = true
 
-                self.$emit("change", Object.assign({}, self.form), "update")
-                self.currentTab = "colorgroup"
+                    self.$emit("change", Object.assign({}, self.form), "update")
+                    self.currentTab = "colorgroup"
+                })                
             });
         },
         onAppendColor() {
             let self = this
             self.colors.push({
+                picture: "",
+                picture2: "",
+                colorname: "",
                 brandcolor: "",
                 wordcode_1: self.form.wordcode_1,
                 wordcode_2: self.form.wordcode_2,
@@ -485,7 +520,7 @@ export default {
             self._fetch("/product/getcolorgrouplist", { id: self.form.id }).then(function(res) {
                 //console.log(res)
                 res.data.forEach(function(item) {
-                    self.colors.push(extract(item, ['brandcolor', 'id', 'wordcode_1', 'wordcode_2', 'wordcode_3', 'wordcode_4']))
+                    self.colors.push(extract(item, color_keys))
                         ///self._log(item)
                 })
                 self.colors_loaded = true;
@@ -591,7 +626,8 @@ export default {
             return this.rate
         },
         getReciprocalRate() {
-            return this.rate > 0 ? math.round(1 / this.rate, 2) : ""
+            let form = this.form
+            return form.wordprice > 0 && form.factoryprice > 0 ? math.round(form.wordprice / form.factoryprice, 2) : "";
         },
         getRateNational() {
             let form = this.form

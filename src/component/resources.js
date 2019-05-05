@@ -23,7 +23,9 @@ options["test.datalist"] = {
 options["brand"] = {url:'/l/brand',oplabel:'name_en', opvalue:'id'}
 
 //国家及地区
-options["country"] = {url:'/l/country',oplabel:'name', opvalue:'id', model:'country'}
+options["country"] = {url:'/l/country',oplabel:'name', opvalue:'id', model:'country', optionName:function(){
+    return this.name+' '+StringFunc.default(this.row.name_en)
+}}
 
 //颜色模板
 options["colortemplate"] = {url:'/l/colortemplate',oplabel:'name', opvalue:'id'}

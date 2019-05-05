@@ -183,7 +183,7 @@ const ProductDetail = Object.assign(createModel("product"),{
 
         runner.push(function(){
             let self = this
-            return [self.brand_label, self.gender_label, self.brandcolor_label, self.childbrand_label, self.ulnarinch_label, self.productmemo_label].join('')
+            return [self.brand_label, self.gender_label, self.brandcolor_label, self.ulnarinch_label, self.productmemo_label, self.childbrand_label].join('')
         }, "getName");
 
         runner.push(function(){

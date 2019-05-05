@@ -3,13 +3,13 @@
         <el-form ref="search-form" class="order-form" :model="form" label-width="80px" size="mini" :inline="true">
             <el-row :gutter="0">
                 <el-col :span="24">
-                    <el-form-item :label="_label('guojima')" class="wordcode">
-                        <el-input v-model="form.wordcode_1" class="wordcode"></el-input>
-                        <el-input v-model="form.wordcode_2" class="wordcode"></el-input>
-                        <el-input v-model="form.wordcode_3" style="width:110px;"></el-input>
-                        <el-input v-model="form.wordcode_4" style="width:110px;"></el-input>
+                    <el-form-item :label="_label('chaxun')" class="wordcode">
+                        <el-input v-model="form.wordcode_1" class="wordcode" :placeholder="_label('kuanshi')"></el-input>
+                        <el-input v-model="form.wordcode_2" class="wordcode" :placeholder="_label('caizhi')"></el-input>
+                        <el-input v-model="form.wordcode_3" style="width:110px;" :placeholder="_label('yanse')"></el-input>
+                        <el-input v-model="form.wordcode_4" style="width:110px;" :placeholder="_label('fuzhuma')"></el-input>
                     </el-form-item>
-                    <as-button type="primary" @click="search" v-if="option.isedit" size="mini">{{_label("tijiao")}}</as-button>
+                    <as-button type="primary" @click="search" v-if="option.isedit" size="mini">{{_label("chaxun")}}</as-button>
                     <as-button type="primary" @click="clear" v-if="option.isedit" size="mini">{{_label("qingkong")}}</as-button>
                     <el-checkbox v-model="is_show">{{_label("as-button")}}</el-checkbox>
                 </el-col>
@@ -38,7 +38,7 @@
                 </el-col>
             </el-row>
         </el-form>
-        <el-collapse v-model="is_collapse">
+        <el-collapse v-model="is_collapse" v-show="searchresult.length>0">
             <el-collapse-item :title="_label('chaxunjieguo')" name="1">
                 <el-table :data="searchresult" stripe border style="width:100%;">
                     <el-table-column prop="brandcolor_label" :label="_label('chima')" width="100" align="center"> </el-table-column>

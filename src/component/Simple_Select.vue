@@ -112,6 +112,7 @@ export default {
             self.data = []
             self.filterData = []
             self.keyindexes = {}
+            self.$emit("option-change", self.filterData)
         },
         getDataSource() {
             let self = this
@@ -189,6 +190,7 @@ export default {
                     return item.optionName().toUpperCase().indexOf(keyword)>=0// || name_en.toUpperCase().indexOf(k)>=0
                 })
             }
+            self.$emit("option-change", self.filterData)
         }
     },
     watch: {
