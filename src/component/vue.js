@@ -2,6 +2,8 @@ import { extend } from './object.js'
 
 const extendComponent = function(component, wrapInfo) {
     wrapInfo.props = component.props;
+    //extend(wrapInfo.props, component.props)
+
     wrapInfo.methods = wrapInfo.methods || {}
     wrapInfo.methods.paramsPipe = wrapInfo.methods.paramsPipe || function(p){}
     wrapInfo.methods.doRender = function(h) {

@@ -29,6 +29,7 @@
                         <el-date-picker :ref="item.name" v-if="item.type=='date'" v-model="form[item.name]" type="date" value-format="yyyy-MM-dd" placeholder="" :disabled="checkDisabled(item)"></el-date-picker>
                         <brandgroupchild :ref="item.name" v-model="form[item.name]" v-if="item.type=='brandgroupchild'"></brandgroupchild>
                         <simple-avatar :ref="item.name" v-model="form[item.name]" v-if="item.type=='avatar'" font-size="14px" :size="35"></simple-avatar>
+                        <sp-item-transform :ref="item.name" v-model="form[item.name]"  :column="item" :record="form" :option="opt"></sp-item-transform>
                     </el-form-item>
                 </el-form>
             </slot>

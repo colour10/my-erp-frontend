@@ -30,6 +30,8 @@ import Button from './component/button.js'
 import RadioGroup from './component/radio-group.vue'
 import Multiple_Admin_Page from './component/multiple_admin_page.js'
 import Transform from './component/transform.js'
+import ItemTransform from './component/itemTransform.js'
+import Input from './component/item/input.js'
 
 import ImagePreview from './component/image-preview.vue'
 import Home from './component/home/index.vue'
@@ -47,6 +49,8 @@ const components = [
     Authbutton, 
     RadioGroup,
     Transform,
+    ItemTransform,
+    Input,
     ImagePreview
 ]
 

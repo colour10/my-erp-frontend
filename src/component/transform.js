@@ -1,9 +1,10 @@
 export default {
-    name: 'transform',
+    name: 'sp-transform',
     render(h) {
         let self = this
-        return h(column.type, {
-            domProps:self.props
+        console.log(self.$props)
+        return h(self.column.type, {
+            attrs:self.$props
         })
     },
     props: {
