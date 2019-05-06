@@ -9,7 +9,7 @@ const props = {
         columns: [
             { name: "name", label: _label("mingcheng"), type:"sp-input", listType:'sp-text' },
             { name: "countryid", label: _label("guojiadiqu"), type:"sp-select", source:"country", listType:"sp-select-text"},
-            { name: "pricetype", label: _label("jiageleixing"), type:"sp-select", source:"pricetype", listType:"sp-select-text"},            
+            //{ name: "pricetype", label: _label("jiageleixing"), type:"sp-select", source:"pricetype", listType:"sp-select-text"},            
             { name: "currencyid", label: _label("bizhong"), type:"sp-select", source:"currency", listType:"sp-select-text"},
             { name: "displayindex", label: _label("paixu"), type:"sp-input", sortMethod:sort_method_digit }
         ],
@@ -110,7 +110,7 @@ const getComponentSimple = function(name) {
                 props: props[name]
             }
         },
-        template: '<simple-admin-page v-bind="props" ref="page"></simple-admin-page>'
+        template: '<sp-page v-bind="props" ref="page"></sp-page>'
     }
 }
 

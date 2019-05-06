@@ -10,7 +10,7 @@ module.exports = {
   },*/
   entry: {
     //asa:'./src/index.js',
-    shop:'./src/shop.js',
+    lib:'./src/lib.js',
     asa:'./src/main.js'
   },
   output: {

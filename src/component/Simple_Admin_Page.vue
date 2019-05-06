@@ -16,19 +16,13 @@
         </el-row>
         <el-row :gutter="20">
             <el-col :span="24">
-                <simple-admin-tablelist ref="tablelist" :controller="controller" :columns="columns" :actions="actions" :buttons="buttons" :options="options" :base="base" :authname="authname" :isedit="opt.isedit" :isdelete="opt.isdelete" :onclickupdate="showFormToEdit"></simple-admin-tablelist>
+                <sp-tablelist ref="tablelist" :controller="controller" :columns="columns" :actions="actions" :buttons="buttons" :options="options" :base="base" :authname="authname" :isedit="opt.isedit" :isdelete="opt.isdelete" :onclickupdate="showFormToEdit"></sp-tablelist>
             </el-col>
         </el-row>
         <el-dialog :title="title" :visible.sync="dialogVisible" :center="true" :width="opt.dialogWidth||'450px'" :modal="false">
             <slot v-bind:form="form" v-bind:action="action" v-bind:columns="columns" name="default">
                 <el-form class="user-form" ref="form" :model="form" label-width="100px" :inline="opt.inline===true" :size="opt.formSize||'mini'">
-                    <el-form-item :label="item.label" v-if="!item.is_edit_hide" v-for="item in columns" :key="item.name" :class="item.class?item.class:'width2'" :disabled="checkDisabled(item)">
-                        <el-input :ref="item.name" @keyup.enter.native="onSubmit" :type="item.type?item.type:'text'" v-if="!item.type||item.type=='input'||item.type=='textarea'" v-model="form[item.name]" size="mini" :disabled="checkDisabled(item)"></el-input>
-                        <el-switch :ref="item.name" v-if="item.type=='switch'" v-model="form[item.name]" active-value="1" inactive-value="0" :disabled="checkDisabled(item)"></el-switch>
-                        <simple-select :ref="item.name" v-if="item.type=='select'" v-model="form[item.name]" :source="item.source" :lang="lang" @change="onChange(item)" :disabled="checkDisabled(item)"></simple-select>
-                        <el-date-picker :ref="item.name" v-if="item.type=='date'" v-model="form[item.name]" type="date" value-format="yyyy-MM-dd" placeholder="" :disabled="checkDisabled(item)"></el-date-picker>
-                        <brandgroupchild :ref="item.name" v-model="form[item.name]" v-if="item.type=='brandgroupchild'"></brandgroupchild>
-                        <simple-avatar :ref="item.name" v-model="form[item.name]" v-if="item.type=='avatar'" font-size="14px" :size="35"></simple-avatar>
+                    <el-form-item :label="item.label" v-if="!item.is_edit_hide" v-for="item in columns" :key="item.name" :class="item.class?item.class:'width2'" :disabled="checkDisabled(item)">                        
                         <sp-item-transform :ref="item.name" v-model="form[item.name]"  :column="item" :record="form" :option="opt"></sp-item-transform>
                     </el-form-item>
                 </el-form>
@@ -45,12 +39,13 @@
 
 <script>
 import globals, { _label } from './globals.js'
+import ItemTransform from './itemTransform.js'
 
 export default {
-    name: 'simple-admin-page',
+    name: 'sp-page',
     props: ['columns', 'buttons', "options", "controller", "base", "auth", "hideCreate", 'hideForm', 'actions', "formTitle", "isDisabled"],
     components: {
-
+        "sp-item-transform":ItemTransform
     },
     data() {
         let self = this

@@ -23,22 +23,18 @@ import Text from './component/label/text.js'
 import SelectText from './component/label/select-text.js'
 
 import globals from './component/globals.js'
-import Simple_Display_Input from './component/Simple_Display_Input.vue'
-import Simple_Float_Input from './component/Simple_Float_Input.vue'
-import CheckboxGroup from './component/CheckboxGroup.vue'
 import Auth from './component/Auth.vue'
 import Table from './component/table.js'
 import Checkbox from './component/checkbox.js'
 import Authbutton from './component/authbutton.js'
 import Button from './component/button.js'
-import RadioGroup from './component/radio-group.vue'
 import Multiple_Admin_Page from './component/multiple_admin_page.js'
-import Transform from './component/transform.js'
-import ItemTransform from './component/itemTransform.js'
+
 import Input from './component/item/input.js'
 
-import ImagePreview from './component/image-preview.vue'
 import Home from './component/home/index.vue'
+
+import DataSource from './component/DataSource.js'
 
 const components = [
     Simple_Admin_Page,
@@ -48,21 +44,21 @@ const components = [
     Text,
     SelectText,
     Auth,
-    CheckboxGroup,
     Table,
     Checkbox,
     Button,
     Authbutton, 
-    RadioGroup,
-    Transform,
-    ItemTransform,
-    Input,
-    ImagePreview
+    Input
 ]
 
 components.forEach(component => {
     Vue.component(component.name, component);
 });
+
+DataSource.register("country", {url:'/l/country',oplabel:'name', opvalue:'id', model:'country'});
+DataSource.register("currency", {url:'/l/currency',oplabel:'code', opvalue:'id'});
+//DataSource.register("pricetype", {hashtable:list.pricetype})
+
 
 const routes = [
     {

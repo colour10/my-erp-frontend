@@ -1,5 +1,5 @@
 <template>
-    <el-select v-model="currentValue" :multiple="multiple" :placeholder="placeholder" style="width:150" @change="handleChange" filterable :disabled="disabled" :clearable="clearable" size="mini" :filter-method="onFilter" @visible-change="onVisibleChange">
+    <el-select v-model="currentValue" :multiple="column.multiple" :placeholder="column.placeholder" style="width:150" @change="handleChange" filterable :disabled="column.disabled" :clearable="column.clearable" size="mini" :filter-method="onFilter" @visible-change="onVisibleChange">
         <el-option v-for="(item,key) in filterData" :key="item.id" :label="item.optionName()" :value="item.id" @click.native="onClick(item)">
             <template>
                 <slot v-bind:row="item"></slot>
@@ -18,34 +18,12 @@ export default {
         value: {
             default: ''
         },
-        disabled: {
-            type: Boolean,
-            default: false
-        },
-        clearable: {
-            type: [Boolean],
-            required: false,
-            default: false
-        },
-        multiple: {
-            type: [Boolean],
-            default: false
-        },
         parentid: {
-            default: false
         },
-        placeholder: {
-            type: String,
-            default: _label('qingxuanze')
+        column: {
+            type:Object,
+            required:true
         },
-        filterMethod:{
-
-        },
-        isBatch:{
-            type:Boolean,
-            default:false
-        },
-        column: Object,
         option:{
             type:Object
         },
@@ -77,14 +55,14 @@ export default {
         },
         handleChange(newValue) {
             let self = this
-            if(self.multiple) {
+            if(self.column.multiple) {
                 self.sort()
             }
             self.$emit("input", self.getValue())
         },
         sort() {
             let self = this
-            if(self.multiple) {
+            if(self.column.multiple) {
                 self.currentValue = self.currentValue.sort(function(a,b){
                     return self.keyindexes[a]-self.keyindexes[b]
                 })
@@ -115,7 +93,7 @@ export default {
         },
         setValue(value) {
             let self = this;
-            let multiple = self.multiple
+            let multiple = self.column.multiple
             if (multiple) {
                 if (!value || value == '') {
                     self.currentValue = []
@@ -128,7 +106,7 @@ export default {
         },
         getValue() {
             let self = this
-            return self.multiple ? self.currentValue.filter(id=>self.keyindexes[id]>=0).join(",") : self.currentValue
+            return self.column.multiple ? self.currentValue.filter(id=>self.keyindexes[id]>=0).join(",") : self.currentValue
         },
         push(item) {
             let self = this
@@ -138,7 +116,7 @@ export default {
         onClick(item) {
             let self = this
             //this._log(item)
-            if(!self.isBatch || !self.multiple) {
+            if(!self.column.isBatch || !self.column.multiple) {
                 return false;
             }
 
@@ -176,8 +154,8 @@ export default {
                 self.filterData = self.data
             }
 
-            if(self.filterMethod) {
-                self.filterData = self.data.filter(item=>self.filterMethod(keyword, item))
+            if(self.column.filterMethod) {
+                self.filterData = self.data.filter(item=>self.column.filterMethod(keyword, item))
             }
             else {
                 self.filterData = self.data.filter(item=>{
@@ -200,7 +178,7 @@ export default {
         var self = this;
         self.setValue(self.value)
 
-        if (self.parentid == false) {
+        if (!self.parentid) {
             self.getDataSource().getData(function(data) {
                 //self._log("load", data)
                 //self.data = data

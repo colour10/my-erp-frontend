@@ -1,8 +1,9 @@
-import resources_options from './resources.js'
+//import resources_options from './resources.js'
 import {httpGet} from './http.js'
 import {ASAP} from "./globals.js"
 import {extract} from "./object.js"
 
+const resource = {}
 
 function DataRow(row, id, name, option={}) {
     let self = this;
@@ -310,17 +311,17 @@ DataSource.getDataSource = function(resourceName) {
     else {
         var create = function() {
             
-            if(!resources_options[resourceName]) {
+            if(!resource[resourceName]) {
                 //_log(resourceName,"未定义")
                 throw "资源未定义:"+resourceName
             }
-            resources[resourceName] = new DataSource(resources_options[resourceName])
+            resources[resourceName] = new DataSource(resource[resourceName])
             resources[resourceName].init()
             return resources[resourceName]
         }
 
         var tmp_create = function() {
-            return new DataSource(resources_options[resourceName])
+            return new DataSource(resource[resourceName])
         }
         
         return typeof(resourceName)=="string" ? create(): tmp_create();
@@ -331,6 +332,10 @@ DataSource.createSource = function(datalist, oplabel, opvalue) {
     let source = new DataSource({datalist, oplabel, opvalue})
     source.init()
     return source;
+}
+
+DataSource.register = function(name, option) {
+    resource[name] = option
 }
 
 export default DataSource

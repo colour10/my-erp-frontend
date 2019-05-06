@@ -29,25 +29,15 @@ import DataSource from './DataSource.js'
 import globals, { extend, _label } from './globals.js'
 import { host } from './http.js'
 import allModels from "./model.js"
+import Transform from './transform.js'
 
 let model
-let getBaseObject = function(columns) {
-    let obj = {}
-    for (let i = 0; i < columns.length; i++) {
-        if (columns[i].type == 'select' || columns[i].type == 'select-dialog') {
-            obj[columns[i].name + "__loading"] = "";
-            obj[columns[i].name + "__label"] = "";
-            obj[columns[i].name + "__columncopy"] = "";
-        }
-    }
-    return obj;
-}
 
 export default {
-    name: 'simple-admin-tablelist',
+    name: 'sp-tablelist',
     props: ['columns', "buttons", "controller", "base", "onclickupdate", 'isedit', 'isdelete', "options", "authname", "tableHeight", 'actions', 'tableModel'],
     components: {
-
+        "sp-transform":Transform
     },
     data() {
         let self = this
@@ -128,11 +118,10 @@ export default {
         },
         setTableData(data){
             let self = this
-            let obj = getBaseObject(self.columns)
 
             self.tableData = []
             data.forEach(row=>{
-                self.tableData.push(extend({}, obj, row))
+                self.tableData.push(row)
             })
         },
         deleteRow: function(rowIndex) {
@@ -179,43 +168,6 @@ export default {
             }
             return styles;
         },
-        convert(row, column, rowIndex) {
-            let self = this
-            let value = row[column.name]
-            if (column.type == 'switch') {
-                return value == '1' ? _label("yes") : _label("no");
-            } else if (column.type == 'select') {
-                //
-                let dataSource = DataSource.getDataSource(column.source, _label("lang"));
-                //self._log("init, dataSource", column.source)
-
-                if (row[column.name + "__columncopy"] != value && value) {
-                    dataSource.getRowLabels(value, function(rowInfo) {
-                        
-                        row[column.name + "__label"] = rowInfo;
-                        row[column.name + "__columncopy"] = value;
-                        //row[column.name + "__style"] = rowInfo.getRow('style');
-                    });
-                    //self._log('==================', value)
-                }
-                return row[column.name + "__label"]
-            } else if (column.type == 'select-dialog') {
-                //
-                let dataSource = DataSource.getDataSource(column.source, _label("lang"));
-
-                if (row[column.name + "__columncopy"] != value && row[column.name + "__loading"] != "1") {
-                    row[column.name + "__loading"] = 1;
-                    dataSource.getRowLabels(value, function(label) {
-                        row[column.name + "__label"] = label;
-                        row[column.name + "__columncopy"] = value;
-                    });
-                    //self._log('==================',column.name, value)
-                }
-                return row[column.name + "__label"]
-            } else {
-                return value;
-            }
-        },
         getStyle(item, row) {
             if (row[item.name + '__style']) {
                 return row[item.name + '__style']
@@ -238,8 +190,6 @@ export default {
                 pageSize: self.pagination.pageSize
             }, self.searchform, self.base)
 
-            let obj = getBaseObject(self.columns)
-
             self._fetch("/" + self.controller + "/" + self.localOptions.actionNameOfLoad, params).then(function(res) {
                 //self._log(res)
                 if(model) {
@@ -251,7 +201,7 @@ export default {
 
                     let array = []
                     res.data.forEach(item => {
-                        model.load({data:Object.assign(item, obj) ,depth:1}).then(rowinfo=>{
+                        model.load({data:item ,depth:1}).then(rowinfo=>{
                             array.push(rowinfo)
 
                             if(array.length==res.data.length) {
@@ -265,7 +215,7 @@ export default {
                     })
                 }
                 else {
-                    res.data.forEach(item => self.tableData.push(Object.assign(item, obj)))
+                    res.data.forEach(item => self.tableData.push(item))
                 }
 
                 //let pagination = res.pagination;

@@ -6,6 +6,7 @@ export default extend({
     render(h) {
         let self = this
         self._log("hello")
-        return h("span", self.getValue())
+        let text = typeof(self.column.convert)=='function' ? self.column.convert(self.column, self.record) : self.getValue() 
+        return h("span", text)
     }
 }, Base)
