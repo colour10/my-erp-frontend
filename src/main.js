@@ -28,7 +28,6 @@ import Table from './component/table.js'
 import Checkbox from './component/checkbox.js'
 import Authbutton from './component/authbutton.js'
 import Button from './component/button.js'
-import Multiple_Admin_Page from './component/multiple_admin_page.js'
 
 import Input from './component/item/input.js'
 
@@ -38,7 +37,6 @@ import DataSource from './component/DataSource.js'
 
 const components = [
     Simple_Admin_Page,
-    Multiple_Admin_Page,
     Simple_Admin_TableList,
     Select,
     Text,
