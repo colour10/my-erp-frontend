@@ -7,11 +7,11 @@ const sort_method_digit = function(a,b){
 const props = {
     "price":{
         columns: [
-            { name: "name", label: _label("mingcheng"), type:"sp-input" },
-            /*{ name: "countryid", label: _label("guojiadiqu"), type:"select", source:"country"},
-            { name: "pricetype", label: _label("jiageleixing"), type:"select", source:"pricetype"},            
-            { name: "currencyid", label: _label("bizhong"), type:"select", source:"currency"},
-            { name: "displayindex", label: _label("paixu"), sortMethod:sort_method_digit }*/
+            { name: "name", label: _label("mingcheng"), type:"sp-input", listType:'sp-text' },
+            { name: "countryid", label: _label("guojiadiqu"), type:"sp-select", source:"country", listType:"sp-select-text"},
+            { name: "pricetype", label: _label("jiageleixing"), type:"sp-select", source:"pricetype", listType:"sp-select-text"},            
+            { name: "currencyid", label: _label("bizhong"), type:"sp-select", source:"currency", listType:"sp-select-text"},
+            { name: "displayindex", label: _label("paixu"), type:"sp-input", sortMethod:sort_method_digit }
         ],
         controller: "price",
         auth: "price",

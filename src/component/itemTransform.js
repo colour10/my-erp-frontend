@@ -5,12 +5,15 @@ export default {
         console.log(self.$props)
         return createElement(self.column.type, {
             props: {
-                value: self.value
+                value: self.value,
+                column:self.column,
+                record:self.record,
+                option:self.option
             },
             on: {
                 input: function(event) {
-                    console.log(event)
-                    self.$emit('input', event.target.value)
+                    console.log(this,event)
+                    self.$emit('input', event)
                 }
             }
         })

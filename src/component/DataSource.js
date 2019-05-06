@@ -39,9 +39,9 @@ DataRow.factory = function(row, dataSource){
 }
 
 
-function DataSource(options, lang) {
+function DataSource(options) {
     let self = this;
-    self.lang = lang;
+    self.lang = 'cn';
     self.data = [];
     self.hashtable = {};
     self.options = options;
@@ -297,7 +297,7 @@ DataSource.prototype.getList = function() {
     })   
 }
 
-DataSource.getDataSource = function(resourceName, lang) {
+DataSource.getDataSource = function(resourceName) {
     if(resourceName.constructor==DataSource) {
         return resourceName;
     }
@@ -305,7 +305,6 @@ DataSource.getDataSource = function(resourceName, lang) {
     let resources = ASAP.resources
 
     if(resources[resourceName]) {
-        resources[resourceName].setLang(lang)
         return resources[resourceName]   
     }
     else {
@@ -315,21 +314,21 @@ DataSource.getDataSource = function(resourceName, lang) {
                 //_log(resourceName,"未定义")
                 throw "资源未定义:"+resourceName
             }
-            resources[resourceName] = new DataSource(resources_options[resourceName], lang)
+            resources[resourceName] = new DataSource(resources_options[resourceName])
             resources[resourceName].init()
             return resources[resourceName]
         }
 
         var tmp_create = function() {
-            return new DataSource(resources_options[resourceName], lang)
+            return new DataSource(resources_options[resourceName])
         }
         
         return typeof(resourceName)=="string" ? create(): tmp_create();
     }
 }
 
-DataSource.createSource = function(datalist, oplabel, opvalue, lang) {
-    let source = new DataSource({datalist, oplabel, opvalue}, lang)
+DataSource.createSource = function(datalist, oplabel, opvalue) {
+    let source = new DataSource({datalist, oplabel, opvalue})
     source.init()
     return source;
 }

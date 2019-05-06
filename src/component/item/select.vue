@@ -9,23 +9,18 @@
 </template>
 
 <script>
-import DataSource from './DataSource.js'
-import globals, { _label } from './globals.js'
+import DataSource from '../DataSource.js'
+import globals, { _label } from '../globals.js'
 
 export default {
-    name: 'simple-select',
+    name: 'sp-select',
     props: {
-        select_value: {
-            required: true,
+        value: {
             default: ''
         },
         disabled: {
             type: Boolean,
             default: false
-        },
-        source: {
-            type: [String, Object],
-            required: true
         },
         clearable: {
             type: [Boolean],
@@ -49,11 +44,12 @@ export default {
         isBatch:{
             type:Boolean,
             default:false
-        }
-    },
-    model: {
-        prop: 'select_value',
-        event: 'change'
+        },
+        column: Object,
+        option:{
+            type:Object
+        },
+        record:Object
     },
     data() {
         return {
@@ -84,7 +80,7 @@ export default {
             if(self.multiple) {
                 self.sort()
             }
-            self.$emit("change", self.getValue())
+            self.$emit("input", self.getValue())
         },
         sort() {
             let self = this
@@ -108,14 +104,14 @@ export default {
             })
         },
         clear() {
-            self.$emit("change", "")
+            self.$emit("input", "")
             self.data = []
             self.filterData = []
             self.keyindexes = {}
         },
         getDataSource() {
             let self = this
-            return DataSource.getDataSource(self.source, self._label("lang"))
+            return DataSource.getDataSource(self.column.source)
         },
         setValue(value) {
             let self = this;
@@ -162,7 +158,7 @@ export default {
                     }
                     self.start = -1
                     self.sort()
-                    self.$emit("change", self.getValue())
+                    self.$emit("input", self.getValue())
                 }
                 else {
                     self.start = self.keyindexes[item.id]
@@ -192,7 +188,7 @@ export default {
         }
     },
     watch: {
-        select_value(newValue) {
+        value(newValue) {
             this.setValue(newValue)
         },
         parentid(newValue) {
@@ -202,7 +198,7 @@ export default {
     },
     mounted: function() {
         var self = this;
-        self.setValue(self.select_value)
+        self.setValue(self.value)
 
         if (self.parentid == false) {
             self.getDataSource().getData(function(data) {
@@ -218,6 +214,18 @@ export default {
     },
     computed:{
 
+    },
+    render(h) {
+        let self = this;
+        let {column, record, option} = self.$attrs
+
+        //console.log(column,record, option, self)
+        if(typeof(column)!='undefined' && typeof(record)!='undefined') {
+            return h("span", record[column.name])
+        }
+        else {
+            //return self.doRender(h)
+        }        
     }
 }
 </script>

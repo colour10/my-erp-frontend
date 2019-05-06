@@ -1,9 +1,9 @@
 <template>
     <div>
         <sp-table :data="tableData" border style="width: 100%;" :height="tableHeight" :cell-class-name="getCellClassName">
-            <el-table-column :prop="item.name" :label="item.label" :width="item.width||180" v-if="!item.is_hide" v-for="item in columns" :key="item.name" :sortable="!item.is_image">
+            <el-table-column :prop="item.name" :label="item.label" :width="item.width||180" v-for="item in columns" :key="item.name" :sortable="!item.is_image" v-if="item.listType">
                 <template v-slot="scope">
-                    <sp-transform :column="item" :record="scope.row" :option="localOptions"></sp-transform>
+                    <sp-transform v-bind="item" :column="item" :record="scope.row" :option="localOptions"></sp-transform>
                 </template>
             </el-table-column>
             <el-table-column :label="item.label" align="center" :width="item.width||180" v-for="item in buttons" :key="item.label">

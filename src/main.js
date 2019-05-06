@@ -17,7 +17,11 @@ if (typeof window !== 'undefined') {
 import Simple_Admin_Page from './component/Simple_Admin_Page.vue'
 //import Multiple_Admin_Page from './component/Multiple_Admin_Page.vue'
 import Simple_Admin_TableList from './component/Simple_Admin_TableList.vue'
-import Simple_Select from './component/Simple_Select.vue'
+import Select from './component/item/Select.vue'
+
+import Text from './component/label/text.js'
+import SelectText from './component/label/select-text.js'
+
 import globals from './component/globals.js'
 import Simple_Display_Input from './component/Simple_Display_Input.vue'
 import Simple_Float_Input from './component/Simple_Float_Input.vue'
@@ -40,7 +44,9 @@ const components = [
     Simple_Admin_Page,
     Multiple_Admin_Page,
     Simple_Admin_TableList,
-    Simple_Select,
+    Select,
+    Text,
+    SelectText,
     Auth,
     CheckboxGroup,
     Table,
