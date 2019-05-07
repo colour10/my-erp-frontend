@@ -24,38 +24,6 @@ import Asa_Product from '../asa/Asa_Product.vue'
 import Asa_Product_Add from '../asa/Asa_Product_Add.vue'
 import ImagePreview from '../image-preview.js'
 
-var props = {
-    columns: [
-        { name: "picture", label: _label("zhutu"), is_image: true, image_width: 50, image_height: 50, width: 60, className: 'picture' },
-        { name: "picture2", label: _label("futu"), is_image: true, image_width: 50, image_height: 50, width: 60, className: 'picture' }, 
-        {
-            name: "productname",
-            label: _label("shangpinmingcheng"),
-            width: 300,
-            convert: function(row, rowIndex, column) {
-                return row.getName()
-            }
-        },
-        { name: "ageseason", label: _label("niandai"), type: "select", source: "ageseason" },
-
-        { name: "laststoragedate", label: _label("zuihouruku") },
-
-        { name: "factorypricecurrency_label", label: _label("chuchangjia"), width: 100 },
-        { name: "factoryprice", label: _label("chuchangjia"), width: 100 },
-
-        { name: "nationalpricecurrency_label", label: _label("benguolingshoujia"), width: 100 },
-        { name: "nationalprice", label: _label("benguolingshoujia"), width: 100 },
-
-        
-
-        { name: "wordpricecurrency_label", label: _label("guojilingshoujia"), width: 100 },
-        { name: "wordprice", label: _label("guojilingshoujia"), width: 100 },
-    ],
-    controller: "product",
-    tableModel: 'ProductDetail',
-    authname: "product"
-}
-
 export default {
     name: 'asapage-product',
     components: {
@@ -64,7 +32,55 @@ export default {
     },
     data() {
         return {
-            props: props,
+            props: {
+                columns: [
+                    { name: "picture", label: _label("zhutu"), is_image: true, image_width: 50, image_height: 50, width: 60, className: 'picture' },
+                    { name: "picture2", label: _label("futu"), is_image: true, image_width: 50, image_height: 50, width: 60, className: 'picture' }, 
+                    {
+                        name: "productname",
+                        label: _label("shangpinmingcheng"),
+                        width: 300,
+                        convert: function(row, rowIndex, column) {
+                            return row.getName()
+                        }
+                    },
+                    { name: "ageseason", label: _label("niandai"), type: "select", source: "ageseason", width:120 },
+
+                    { name: "wordcode_1", label: _label("guojima"), width: 150, convert:function(row, rowIndex, column){
+                        return [row.wordcode_1, row.wordcode_2, row.wordcode_3].join(' ')
+                    }, style:"font-weight:bold" },
+
+                    //{ name: "factorypricecurrency_label", label: _label("chuchangjia"), width: 100 },
+                    { name: "factoryprice", label: _label("chuchangjia"), width: 130,convert:function(row){
+                        return [row.factorypricecurrency_label, row.factoryprice].join(" ")
+                    } },
+
+                    //{ name: "wordpricecurrency_label", label: _label("guojilingshoujia"), width: 100 },
+                    { name: "wordprice", label: _label("guojilingshoujia"), width: 130, convert:function(row){
+                        return [row.wordpricecurrency_label, row.wordprice].join(" ")
+                    } },
+
+                    { name: "nationalprice", label: _label("benguolingshoujia"), width: 130, convert:function(row){
+                        return [row.nationalpricecurrency_label, row.nationalprice].join(" ")
+                    } },
+
+                    
+                    { name: "laststoragedate", label: _label("zuihouruku"), width:120 },
+                    
+                ],
+                controller: "product",
+                tableModel: 'ProductDetail',
+                authname: "product",
+                options:{
+                    rowStyle:function({row, rowIndex}){
+                        if(row && row.saletype && row.saletype.colortemplate){
+                            return {
+                                color:row.saletype.colortemplate.row.name_en
+                            }
+                        }            
+                    }
+                }
+            }
         }
     },
     beforeCreate() {

@@ -82,40 +82,6 @@ import globals,{_label} from '../globals.js'
 import Simple_Admin_TableList from '../Simple_Admin_TableList.vue'
 import { Rules } from '../rules.js'
 
-const base = {
-    userid: ""
-}
-
-var props = {
-    columns: [{
-        name: "login_name",
-        label: _label("dengluming"),
-        is_create: true,
-        is_update: true,
-        is_show: true,
-        is_focus: true,
-        width: 200
-    }, {
-        name: "real_name",
-        label: _label("xingming"),
-        is_create: true,
-        is_update: true,
-        is_show: true,
-        width: 200,
-        is_focus: true
-    }],
-    controller: "user"
-}
-
-const props2 = {
-    columns: [
-        { name: "warehouseid", label: _label("cangku"), type: 'select', source: "warehouse" },
-        { name: "warehouseroleid", label: _label("juese"), type: 'select', source: "warehouserole" }
-    ],
-    controller: "warehouseuser",
-    base: base
-}
-
 export default {
     name: 'asapage-user',
     components: {
@@ -151,13 +117,41 @@ export default {
             },
             saleport: [],
             warehouse: [],
-            props: props,
-            props2: props2,
             currentTab: "user",
             saleport_list: [], //销售端口信息
             saleport_loaded: false,
             warehouse_list: [], //仓库信息
-            warehouse_loaded: false
+            warehouse_loaded: false,
+            props:{
+                columns: [{
+                    name: "login_name",
+                    label: _label("dengluming"),
+                    is_create: true,
+                    is_update: true,
+                    is_show: true,
+                    is_focus: true,
+                    width: 200
+                }, {
+                    name: "real_name",
+                    label: _label("xingming"),
+                    is_create: true,
+                    is_update: true,
+                    is_show: true,
+                    width: 200,
+                    is_focus: true
+                }],
+                controller: "user"
+            },
+            props2:{
+                columns: [
+                    { name: "warehouseid", label: _label("cangku"), type: 'select', source: "warehouse" },
+                    { name: "warehouseroleid", label: _label("juese"), type: 'select', source: "warehouserole" }
+                ],
+                controller: "warehouseuser",
+                base: {
+                    userid: ""
+                }
+            }
         }
     },
     methods: {
@@ -204,7 +198,7 @@ export default {
             self.row = row;
             globals.copyTo(row, this.form)
             self.saleport = row.saleportids ? row.saleportids.split(",") : []
-            base.userid = row.id;
+            self.props2.base.userid = row.id;
 
             self.showDialog();
         },

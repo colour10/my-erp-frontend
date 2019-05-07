@@ -146,22 +146,19 @@ DataSource.prototype.filter = function(condition, callback) {
     })    
 }*/
 
-DataSource.prototype.sub = function(condition, callback) {
-    var self = this;
-    self.getData(data=>{
-        var keys = Object.keys(condition)
-        
-        var result = data.filter(row=>{
-            //_log("DataSource.filter", row, keys.every(key=>condition[key]==row.getRow(key)))
-            return keys.every(key=>condition[key]==row.getRow(key))    
-        })
+DataSource.prototype.subSource = function(callback) {
+    let self = this;
 
-        var result = result.map(item=>item.getRow())
-        //_log(result,"999")
-        var sub = new DataSource({datalist:result, oplabel:self.oplabel, opvalue:self.opvalue},self.lang)
-        sub.init()
-        callback(sub)
-    })
+    return new Promise(resolve=>{
+        self.getData(data=>{ 
+            let options = extract(self.options,['oplabel','opvalue','parent']);
+            options.datalist = data.filter(callback).map(item=>item.row)
+            let source = new DataSource(options,self.lang);
+            source.init();
+            
+            resolve(source)
+        })
+    })    
 }
 
 DataSource.prototype.getLabelName = function(name) {

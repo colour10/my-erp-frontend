@@ -1,11 +1,16 @@
 <template>
     <el-form v-if="isShowForm" :model="ruleForm2" :rules="rules2" ref="ruleForm2" label-position="left" label-width="0px" class="demo-ruleForm login-container" native-type="submit">
         <h3 class="title">{{_label("xitongdenglu")}}</h3>
-        <el-form-item prop="account">
-            <el-input type="text" v-model="ruleForm2.account" auto-complete="off" :placeholder="_label('yonghuming')" @keyup.enter.native="handleSubmit2" :autofocus="true"></el-input>
+        <el-form-item prop="username">
+            <el-input type="text" v-model="ruleForm2.username" auto-complete="off" :placeholder="_label('yonghuming')" @keyup.enter.native="handleSubmit2" :autofocus="true"></el-input>
         </el-form-item>
-        <el-form-item prop="checkPass">
-            <el-input type="password" v-model="ruleForm2.checkPass" auto-complete="off" :placeholder="_label('mima')" @keyup.enter.native="handleSubmit2"></el-input>
+        <el-form-item prop="password">
+            <el-input type="password" v-model="ruleForm2.password" auto-complete="off" :placeholder="_label('mima')" @keyup.enter.native="handleSubmit2"></el-input>
+        </el-form-item>
+        <el-form-item>
+            <el-select v-model="ruleForm2.language" @change="onChange">
+                <el-option v-for="(item,key) in languages" :key="key" :label="item.name" :value="item.code"></el-option>
+            </el-select>
         </el-form-item>
         <!--<el-checkbox v-model="checked" checked class="remember">记住密码</el-checkbox>-->
         <el-form-item style="width:100%;">
@@ -16,7 +21,8 @@
 </template>
 
 <script>
-import { _label, ASAP } from '../globals.js'
+import { _label, ASAP, setLabel } from '../globals.js'
+import {extend} from "../object.js"
 
 export default {
     name: "asapage-login",
@@ -24,15 +30,16 @@ export default {
         return {
             logining: false,
             ruleForm2: {
-                account: 'admin',
-                checkPass: '123456'
+                username: 'admin',
+                password: '123456',
+                language: window.localStorage.language
             },
             rules2: {
-                account: [
+                username: [
                     { required: true, message: '', trigger: 'blur' },
                     //{ validator: validaePass }
                 ],
-                checkPass: [
+                password: [
                     { required: true, message: '', trigger: 'blur' },
                     //{ validator: validaePass2 }
                 ]
@@ -46,30 +53,28 @@ export default {
     methods: {
         handleSubmit2(ev) {
             let self = this;
+            if(self.logining==true) {
+                return 
+            }
+
             self.$refs.ruleForm2.validate((valid) => {
                 if (valid) {
-                    //_this.$router.replace('/table');
                     self.logining = true;
                     //NProgress.start();
-                    let loginParams = { username: self.ruleForm2.account, password: self.ruleForm2.checkPass };
+                    let loginParams = extend({}, self.ruleForm2);
                     let options = {
                         successTip: "dengluchenggong",
-                        isReject:true
+                        isReject: true
                     }
                     self._submit("/login/login", loginParams, options).then(function(res) {
-                        //self._log("login success", res)
-                        self.logining = false;
-
                         self.$store.commit({
                             type: "login",
                             auth: res.auth
                         })
 
-
                         ASAP.$session_id = res.session_id;
-                        //console.log(window.ASAP)
-
                         self.goToPage()
+                        self.logining = false;                        
                     }).catch(() => {
                         self.logining = false
                     })
@@ -115,8 +120,11 @@ export default {
                 url = self.back
             }
             self.$router.push(url)
+        },
+        onChange() {
+            window.localStorage.setItem("language", this.ruleForm2.language)
+            window.location.reload();
         }
-
     },
     computed: {
         isShow() {
@@ -133,7 +141,7 @@ export default {
     },
     mounted: function() {
         var self = this
-        //self._log("mounted", self.$route.params)
+            //self._log("mounted", self.$route.params)
         self.doAction(self.$route.params.action)
     }
 }

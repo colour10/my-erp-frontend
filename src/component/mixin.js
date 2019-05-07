@@ -153,12 +153,13 @@ export default {
             }
             return self
         },
-        _fileLink(file) {
+        _fileLink(file, size=40) {
             if(file=='') {
                 return host+'/imgs/none.png';
             }
+            let arr = file.split('.')
 
-            return _label('_image_url_prex') + file
+            return _label('_image_url_prex') + file //+'_'+ size +'x' + size + '.' + arr[arr.length-1]
         }
     }
 }

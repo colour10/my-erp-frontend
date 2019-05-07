@@ -1,6 +1,6 @@
 <template>
     <el-select v-model="currentValue" :multiple="multiple" :placeholder="placeholder" style="width:150" @change="handleChange" filterable :disabled="disabled" :clearable="clearable" size="mini" :filter-method="onFilter" @visible-change="onVisibleChange">
-        <el-option v-for="(item,key) in filterData" :key="item.id" :label="item.optionName()" :value="item.id" @click.native="onClick(item)">
+        <el-option v-for="(item,key) in filterData" :key="item.id+item.name" :label="item.optionName()" :value="item.id" @click.native="onClick(item)">
             <template>
                 <slot v-bind:row="item"></slot>
             </template>
@@ -93,6 +93,17 @@ export default {
                     return self.keyindexes[a]-self.keyindexes[b]
                 })
             }
+        },
+        filterx(callback){
+            let self = this;
+            self.data = []
+            self.keyindexes = {}
+
+            //console.log("++++++++++++++++++++++")
+            self.getDataSource().getData(data=>{ 
+                data.filter(callback).forEach(item=>self.push(item))
+                self.filteredList();
+            })
         },
         load(value) {
             var self = this;
@@ -203,7 +214,7 @@ export default {
         }
     },
     mounted: function() {
-        var self = this;
+        let self = this;
         self.setValue(self.select_value)
 
         if (self.parentid == false) {

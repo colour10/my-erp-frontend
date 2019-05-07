@@ -6,9 +6,9 @@
                     {{scope.row.name}}
                 </template>
             </el-table-column>
-            <el-table-column :label="item.name+'(CM)'" align="center" v-for="item in properties" :key="item.id">
+            <el-table-column :label="item.name+'(CM)'" align="center" v-for="(item,index) in properties" :key="item.id" width="200">
                 <template v-slot="scope">
-                    <el-input v-model="data[scope.row.id+'_'+item.id]"></el-input>
+                    <el-input :ref="index+'.'+scope.$index" v-model="data[scope.row.id+'_'+item.id]" size="mini" @keyup.native.down="focusNext(index, scope.$index+1)" @keyup.native.up="focusNext(index, scope.$index-1)" @keyup.native.left="focusNext(index-1, scope.$index)" @keyup.native.right="focusNext(index+1, scope.$index)"></el-input>
                 </template>
             </el-table-column>
         </el-table>
@@ -42,6 +42,16 @@ export default {
     methods: {
         onQuit(){
             this.$emit('quit')
+        },
+        focusNext(x,y) {
+            if(x<0 || y<0) {
+                return 
+            }
+
+            let target = this.$refs[x+'.'+y]
+            if(target && target.length && target.length>0) {
+                target[0].focus()
+            }
         },
         async onSave(){
             let self = this;

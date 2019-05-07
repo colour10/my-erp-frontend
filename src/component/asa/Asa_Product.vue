@@ -1,28 +1,28 @@
 <template>
-    <el-dialog :title="_label('chanpinguanli')" :visible.sync="dialogVisible" :center="true" width="1200px">
+    <el-dialog :title="title" :visible.sync="dialogVisible" :center="true" width="1200px" class="product">
         <el-tabs type="border-card" @tab-click="onTabClick" v-model="currentTab">
             <el-tab-pane :label="_label('jibenziliao')" name="product">
                 <el-row>
-                    <el-col :span="5">
+                    <el-col :span="4">
                         <simple-avatar v-model="form.picture" :disabled="!$store.getters.allow('product')"></simple-avatar>
                     </el-col>
-                    <el-col :span="5">
+                    <el-col :span="4">
                         <simple-avatar v-model="form.picture2" :disabled="!$store.getters.allow('product')"></simple-avatar>
                     </el-col>
-                    <el-col :span="14">
+                    <el-col :span="16">
                         <el-form ref="form" :model="form" label-width="80px" size="mini">
                             <!-- <el-form-item :label="_label('shangpinmingcheng')">
                                 <el-input v-model="form.productname"></el-input>
                             </el-form-item> -->
                             <el-form-item :label="_label('guojima')">
-                                <el-input v-model="form.wordcode_1" style="width:110px;" :placeholder="_label('kuanshi')"></el-input>
-                                <el-input v-model="form.wordcode_2" style="width:110px;" :placeholder="_label('caizhi')"></el-input>
-                                <el-input v-model="form.wordcode_3" style="width:110px;" :placeholder="_label('yanse')"></el-input>
+                                <el-input v-model="form.wordcode_1" style="width:110px;" :placeholder="_label('kuanshi')" @keyup.native="onKeyInput(form, 'wordcode_1')"></el-input>
+                                <el-input v-model="form.wordcode_2" style="width:110px;" :placeholder="_label('caizhi')" @keyup.native="onKeyInput(form, 'wordcode_2')"></el-input>
+                                <el-input v-model="form.wordcode_3" style="width:110px;" :placeholder="_label('yanse')" @keyup.native="onKeyInput(form, 'wordcode_3')"></el-input>
                                 <el-input v-model="form.colorname" style="width:110px;" :placeholder="_label('yansemingcheng')"></el-input>
                                 <el-input v-model="form.wordcode_4" style="width:110px;" :placeholder="_label('fuzhuma')"></el-input>
                             </el-form-item>
                         </el-form>
-                        <el-col :span="4" v-for="item in colors2" :key="item.colortemplateid">
+                        <el-col :span="3" v-for="item in colors2" :key="item.colortemplateid">
                             <el-tooltip class="item" effect="dark" :content="item.colorlabel" placement="top-start">
                                 <div class="color-group" @click="onClickColor(item.id)">
                                     <div class="box" :style="getColorStyle(item)">
@@ -86,6 +86,10 @@
                             <el-form-item :label="_label('shangpinmiaoshu')">
                                 <simple-select v-model="form.productmemoids" source="productmemo" :multiple="true"></simple-select>
                             </el-form-item>
+
+                            <el-form-item :label="_label('cankaobeilv')">
+                                {{rate}}
+                            </el-form-item>
                             
                             <el-form-item :label="_label('chuchangjia')">
                                 <el-input placeholder="" v-model="form.factoryprice" class="productcurrency">
@@ -115,7 +119,9 @@
                                     <span slot="append">{{getReciprocalRateNational}}</span>
                                 </el-input>
                             </el-form-item>
-                            
+                            <el-form-item :label="_label('lingshoubi')">
+                                {{getPriceRate}}
+                            </el-form-item>
                         </el-col>
                         <el-col :span="8">
                             <el-form-item :label="_label('shangpinxilie')">
@@ -123,7 +129,7 @@
                             </el-form-item>
 
                             <el-form-item :label="_label('xiaoshoushuxing')">
-                                <simple-select v-model="form.saletypeid" source="saletype"></simple-select>
+                                <simple-select v-model="form.saletypeid" source="saletype" style="color:red"></simple-select>
                             </el-form-item>
                             <el-form-item :label="_label('xingbie')">
                                 <sp-radio-group v-model="form.gender" source="gender" :span="8" :lang="lang">
@@ -180,7 +186,7 @@
                     </el-table-column>
                     <el-table-column prop="goods_code" :label="_label('shangpintiaoma')" width="350" align="left">
                         <template v-slot="scope">
-                            <el-input v-model="scope.row.goods_code"></el-input>
+                            <el-input v-model="scope.row.goods_code" size="mini"></el-input>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -208,18 +214,18 @@
                     
                     <el-table-column :label="_label('kuanshi')" width="140" align="center">
                         <template v-slot="scope">
-                            <el-input v-model="scope.row.wordcode_1" size="mini" @focus="onFocus(1)" @blur="onBlur(1)"></el-input>
+                            <el-input v-model="scope.row.wordcode_1" size="mini" @focus="onFocus(1)" @blur="onBlur(1)" @keyup.native="onKeyInput(scope.row, 'wordcode_1')"></el-input>
                         </template>
                     </el-table-column>
                     <el-table-column :label="_label('caizhi')" width="140" align="center">
                         <template v-slot="scope">
-                            <el-input v-model="scope.row.wordcode_2" size="mini" @focus="onFocus(2)" @blur="onBlur(2)"></el-input>
+                            <el-input v-model="scope.row.wordcode_2" size="mini" @focus="onFocus(2)" @blur="onBlur(2)" @keyup.native="onKeyInput(scope.row, 'wordcode_2')"></el-input>
                         </template>
                     </el-table-column>
                     <el-table-column :label="_label('yanse')" width="140" align="center">
                         <template v-slot="scope">
                             <!--<el-input v-model="scope.row.wordcode_3" size="mini" @keyup.native.down="onKeyDown(scope.$index)" @keyup.native.up="onKeyUp(scope.$index)" :ref="'word'+scope.$index"></el-input>-->
-                            <el-input v-model="scope.row.wordcode_3" size="mini"></el-input>
+                            <el-input v-model="scope.row.wordcode_3" size="mini" @keyup.native="onKeyInput(scope.row, 'wordcode_3')"></el-input>
                         </template>
                     </el-table-column>
                     <el-table-column :label="_label('yansemingcheng')" width="150" align="center">
@@ -339,7 +345,8 @@ export default {
                 wordcode_4: "",
                 colorname:"",
                 makestaff: "",
-                maketime: ''
+                maketime: '',
+                saletypeid:""
             },
             rules: {
                 sizetopid: Rules.id({ required: true, message: _label("8000") }),
@@ -361,13 +368,22 @@ export default {
                 isedit: false
             },
             currentTab: "product",
-            rate: "",
-            siji: "" //控制四季全选
+            rate: "", //参考倍率
+            exchange:{
+                currency_to:"",
+                currency_from:"",
+                rate:""
+            }, //当前的汇率信息；零售比=本国零售价/国际零售价
+            siji: "", //控制四季全选
+            title:""
         }
     },
     methods: {
         onQuit() {
             this.dialogVisible = false
+        },
+        onKeyInput(target, columnName){
+            target[columnName] = target[columnName].toUpperCase()
         },
         onOptionChange(options) {
             let self = this
@@ -575,9 +591,11 @@ export default {
                     self.clearValidate(50)
 
                     self.loadRate()
+                    self.loadExchangeRate()
 
 
                     self.currentTab = 'product'
+                    self.title = info.getName() + ' ' +info.getGoodsCode()
 
                     resolve(self)
                 })
@@ -613,21 +631,61 @@ export default {
             self._fetch("/brandrate/getrate", extract(self.form, ['brandid', 'ageseason', 'brandgroupid'])).then(res=>{
                 self.rate = res.data;
             })
+        },
+        loadExchangeRate() {
+            //加载汇率信息
+            let self = this;
+
+            if(self.form.nationalpricecurrency=='' || self.form.wordpricecurrency=='') {
+                globals.empty(self.exchange)
+                return 
+            }
+            else if(self.form.nationalpricecurrency!=self.exchange.currency_to || self.form.wordpricecurrency!=self.exchange.currency_from) {
+                globals.empty(self.exchange)
+            }
+
+            if(self.form.nationalpricecurrency==self.form.wordpricecurrency) {
+                self.exchange.currency_from = self.form.wordpricecurrency
+                self.exchange.currency_to = self.form.wordpricecurrency
+                self.exchange.rate = 1
+                return 
+            }
+
+            let params = {
+                currency_from : self.form.wordpricecurrency,
+                currency_to : self.form.nationalpricecurrency
+            }
+            self._fetch("/exchangerate/getrate", params).then(res=>{
+                //self.priceRate = math.round(res.data * self.form.wordprice/ self.form.nationalprice, 2);
+                if(res.data>0) {
+                    params.rate = res.data
+                    extend(self.exchange, params);
+                }                
+            })
         }
     },
     watch: {
         siji: function(newValue) {
             let self = this
             extend(self.form, initObject(['spring', 'summer', 'fall', 'winter'], newValue))
+        },
+        'form.wordpricecurrency':function(){
+            this.loadExchangeRate()
         }
     },
     computed: {
+        getPriceRate(){
+            let form = this.form
+            this._log(form.wordprice, form.nationalprice, this.exchange, this.exchange.rate)
+            return form.wordprice > 0 && form.nationalprice > 0 && this.exchange && this.exchange.rate ? math.round(form.nationalprice/this.exchange.rate / form.wordprice, 2) : "";
+        },
         getRate() {
-            return this.rate
+           let form = this.form
+            return form.wordprice > 0 && form.factoryprice > 0 ? math.round(form.wordprice / form.factoryprice, 2) : "";
         },
         getReciprocalRate() {
             let form = this.form
-            return form.wordprice > 0 && form.factoryprice > 0 ? math.round(form.wordprice / form.factoryprice, 2) : "";
+            return form.wordprice > 0 && form.factoryprice > 0 ? math.round(form.factoryprice / form.wordprice, 2) : "";
         },
         getRateNational() {
             let form = this.form

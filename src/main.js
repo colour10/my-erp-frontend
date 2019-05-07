@@ -141,7 +141,8 @@ const routes = [
             {path:'/productmemo', component:getComponent("productmemo")},
             {path:'/saletype', component:getComponent("saletype")},
             {path:'/exchangerate', component:Exchangerate},
-            {path:'/materialnote', component:getComponent("materialnote")}
+            {path:'/materialnote', component:getComponent("materialnote")},
+            {path:'/language', component:getComponent("language")}
         ]
     },
     {path: '/login/:action', component: Login},

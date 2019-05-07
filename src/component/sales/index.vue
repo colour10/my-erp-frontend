@@ -21,24 +21,6 @@ import globals,{_label} from '../globals.js'
 import Asa_Sales_Dialog from '../asa/Asa_Sales_Dialog.vue'
 import Simple_Admin_TableList from '../Simple_Admin_TableList.vue'
 
-var props = {
-    columns: [
-        { name: "orderno", label: _label('xiaoshoudanhao'), width: 300 },
-        { name: "salesstaff", label: _label('xiaoshouren'), type: 'select', source: "user" },
-        { name: "warehouseid", label: _label('xiaoshoucangku'), type: 'select', source: "warehouse" },
-        { name: "status", label: _label('zhuangtai'), type: "select", source: "salestatus" },
-        //{name:"zipcode", label:"<?=$system_language['youbian']?>"}, 
-
-        //{name:"contact", label:"<?=$system_language['lianxiren']?>"}, 
-        //{name:"mobile", label:"<?=$system_language['yidongdianhua']?>"},
-        // {name:"fax", label:"<?=$system_language['chuanzhen']?>"},
-        //{name:"code", label:"<?=$system_language['bianhao']?>"},
-        //{name:"othercontact", label:"<?=$system_language['qitalianxifangshi']?>"},
-        //{name:"is_real", label:"<?=$system_language['shifoukeyong']?>", type:"switch"}
-    ],
-    controller: "sales"
-}
-
 export default {
     name: 'asapage-sales',
     components: {
@@ -50,7 +32,15 @@ export default {
         var self = this;
 
         return {
-            props: props,
+            props: {
+                columns: [
+                    { name: "orderno", label: _label('xiaoshoudanhao'), width: 300 },
+                    { name: "salesstaff", label: _label('xiaoshouren'), type: 'select', source: "user" },
+                    { name: "warehouseid", label: _label('xiaoshoucangku'), type: 'select', source: "warehouse" },
+                    { name: "status", label: _label('zhuangtai'), type: "select", source: "salestatus" }
+                ],
+                controller: "sales"
+            },
             visibleDialog: false,
             pro: false,
             info: {},

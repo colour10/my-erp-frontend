@@ -23,6 +23,7 @@ var props = {
             //console.log(rowIndex, row)   
             props2.base.topid = row.id;
             options.dialogVisible = true; 
+            options.title = row.name_cn
         }}
     ],
     controller:"sizetop",

@@ -110,7 +110,7 @@ options["gender2"] = {hashtable:list.gender2}
 options["currency"] = {url:'/l/currency',oplabel:'code', opvalue:'id'}
 options["season"] = {hashtable:list.season}
 options["orderproperty"] = {hashtable:list.orderproperty}
-options["bussinesstype"] = {hashlist:list.bussinesstype,oplabel:'name', opvalue:'id'}
+options["bussinesstype"] = {hashtable:list.bussinesstype}
 options["sessionmark"] = {hashtable:{"SS":"SS","FW":"FW","XX":"XX"}}
 options["seasontype"] = {hashtable:{"0":"Pre","1":"Main","2":"Fashion"}}
 
@@ -164,5 +164,7 @@ options["pricefilter"] =  {hashtable:list.pricefilter}
 //残次品等级
 options["defectivelevel"] =  {hashtable:list.defectivelevel}
 
+//客户类型
+options["customtype"] =  {hashtable:list.customtype}
 
 export default options

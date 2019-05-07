@@ -122,6 +122,21 @@ const Product = Object.assign(createModel("product"),{
     }
 })
 
+const SaleType = Object.assign(createModel("saletype"),{
+    init:function(depth, row, callback) {
+        let self = this
+        //console.log(row, "+_+=")
+        if(row) {
+            let runner = promiseAll(row)
+            runner.push(getDataSource("colortemplate").getRow(row.colortemplateid), 'colortemplate')
+            runner.all().then(callback)
+        }
+        else {
+            callback(row)
+        }        
+    }
+})
+
 //附带所有关联信息的详情
 const ProductDetail = Object.assign(createModel("product"),{
     init:function(depth, row, callback) {
@@ -144,6 +159,10 @@ const ProductDetail = Object.assign(createModel("product"),{
         runner.push(getDataSource("currency").getRowLabel(row.nationalpricecurrency), 'nationalpricecurrency_label')
         runner.push(getDataSource("ulnarinch").getRowLabel(row.ulnarinch), 'ulnarinch_label')
         runner.push(getDataSource("productmemo").getRowLabels(row.productmemoids), 'productmemo_label')
+        if(row.saletypeid>0) {
+            runner.push(SaleType.load({data:row.saletypeid, depth:1}), 'saletype')
+        }
+        //
 
         //颜色分组
         runner.push(new Promise(function(resolve){
@@ -183,7 +202,7 @@ const ProductDetail = Object.assign(createModel("product"),{
 
         runner.push(function(){
             let self = this
-            return [self.brand_label, self.gender_label, self.brandcolor_label, self.ulnarinch_label, self.productmemo_label, self.childbrand_label].join('')
+            return [self.brand_label, self.gender_label, self.brandcolor_label, self.ulnarinch_label, self.productmemo_label.replace(/,/g, ''), self.childbrand_label].join('')
         }, "getName");
 
         runner.push(function(){

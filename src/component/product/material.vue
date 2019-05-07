@@ -1,12 +1,21 @@
 <template>
     <div>
-        <el-input v-model="currentText" :readonly="true" @click.native="onShow">
+        <el-input v-model="currentText" :readonly="true" @click.native="onShowDialog">
             <as-button slot="append" icon="el-icon-more"></as-button>
         </el-input>
         <el-dialog class="user-form" :title="_label('caizhiguanli')" :visible.sync="dialogVisible" :center="true" :modal="false">
             <el-row>
                 <el-col :span="24">
-                    <simple-admin-page v-bind="props" ref="page2"></simple-admin-page>
+                    <simple-admin-page v-bind="props" ref="page2" @before-add="onShowForm" @before-edit="onShowForm">
+                        <template v-slot="{form,columns}">
+                            <el-form class="user-form" ref="form" :model="form" label-width="100px" :inline="false" size="mini">
+                            <el-form-item :label="item.label" v-if="!item.is_edit_hide" v-for="item in columns" :key="item.name" :class="item.class?item.class:'width2'">
+                                <el-input :ref="item.name" @keyup.enter.native="onSubmit" :type="item.type?item.type:'text'" v-if="!item.type||item.type=='input'||item.type=='textarea'" v-model="form[item.name]" size="mini"></el-input>
+                                <simple-select :ref="item.name" v-if="item.type=='select'" v-model="form[item.name]" :source="item.source"></simple-select>
+                            </el-form-item>
+                        </el-form>
+                        </template>
+                    </simple-admin-page>
                 </el-col>
             </el-row>
             <div slot="footer" class="dialog-footer" v-if="!auto_model">
@@ -19,7 +28,7 @@
 
 <script>
 import DataSource from '../DataSource.js'
-import { _label } from '../globals.js'
+import { _label,StringFunc } from '../globals.js'
 
 export default {
     name: 'product-material',
@@ -53,7 +62,7 @@ export default {
                 controller: "productmaterial",
                 options:{
                     inline:true,
-                    issubmit:false,
+                    isSubmit:false,
                     autohide:true
                 }
             },
@@ -63,27 +72,27 @@ export default {
         }
     },
     methods: {
-        onShow() {
+        onShowForm() {
             let self = this
-            if(!self.brandgroupid) {
-                self.dialogVisible = true;
-
-                setTimeout(function(){
-                    self.$refs['page2'].setTableData(self.data)
-                    //self._log("data", self.data)
-                },100)
+            let callback = row=>{
+                //self._log("xxx",row)
+                //self._log(row.row.content_cn,row.row.brandgroupids, self.brandgroupid, (','+row.row.brandgroupids + ',').indexOf(','+self.brandgroupid+','))
+                return StringFunc.include(row.row.brandgroupids, self.brandgroupid)
             }
-            else {
-                DataSource.getDataSource("materialnote", self._label('lang')).getSourceByParent(self.brandgroupid).then(source=>{
-                    self.props.columns[2].source = source
-                    self.dialogVisible = true;
+            //self.dialogVisible = true;
 
-                    setTimeout(function(){
-                        self.$refs['page2'].setTableData(self.data)
-                        //self._log("data", self.data)
-                    },100)
-                })
-            }            
+            setTimeout(function(){
+                self.$refs['materialnoteid'][0].filterx(callback)
+                //self._log("data", self.data)
+            },100)
+        },
+        onShowDialog() {
+            let self = this
+            self.dialogVisible = true
+            setTimeout(function(){
+                self.$refs['page2'].setTableData(self.data)
+                
+            },100)
         },
         handleSelect() {
             var self = this;

@@ -28,14 +28,7 @@
 
 <script>
 import { _label } from '../globals.js'
-import { getProp } from '../prop.js'
 
-const columns = [
-    { name: "currency_from", label: _label("huichuhuobi"), type:"select", source:"currency"},
-    { name: "currency_to", label: _label("huiruhuobi"), type:"select", source:"currency", default:_label("_currencyid")},
-    { name: "rate", label: _label("huilv")},
-    { name: "begin_time", label: _label("shengxiaoshijian")},
-]
 export default {
     name: 'exchangerate',
     props: {},
@@ -43,7 +36,12 @@ export default {
         let self = this
         return {
             props: {
-                columns: columns,
+                columns: [
+                    { name: "currency_from", label: _label("huichuhuobi"), type:"select", source:"currency"},
+                    { name: "currency_to", label: _label("huiruhuobi"), type:"select", source:"currency", default:_label("_currencyid")},
+                    { name: "rate", label: _label("huilv")},
+                    { name: "begin_time", label: _label("shengxiaoshijian")},
+                ],
                 buttons:[{
                     name: "rate",
                     label: _label('lishihuilv'),

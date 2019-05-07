@@ -1,6 +1,6 @@
 <template>
     <div>
-        <sp-table :data="tableData" border style="width: 100%;" :height="tableHeight" :cell-class-name="getCellClassName">
+        <sp-table :data="tableData" border style="width: 100%;" :height="tableHeight" :cell-class-name="getCellClassName" :cell-style="getCellStyle" :row-style="getRowStyle">
             <el-table-column :prop="item.name" :label="item.label" :width="item.width||180" v-if="!item.is_hide" v-for="item in columns" :key="item.name" :sortable="!item.is_image">
                 <template v-slot="scope">
                     <img v-if="item.type=='avatar'||item.is_image" :src="getImageSrc(scope.row, item)" :style="getImageStyle(item)" @click="onClickImage(scope.row, item)">
@@ -29,7 +29,7 @@
 
 <script>
 import DataSource from './DataSource.js'
-import globals, { extend, _label } from './globals.js'
+import globals, { Mix,extend, _label } from './globals.js'
 import { host } from './http.js'
 import allModels from "./model.js"
 
@@ -55,7 +55,12 @@ export default {
     data() {
         let self = this
         let base = self.base || {}
-        let localOptions = (({action_width=180, issubmit=true, isaction=true, actionNameOfLoad='page'}={})=>{return {action_width, issubmit, isaction, actionNameOfLoad}})(self.options)
+        let localOptions = self.options || {}
+        Mix.default(localOptions, 'action_width', 180)
+        Mix.default(localOptions, 'issubmit', true)
+        Mix.default(localOptions, 'isaction', true)
+        Mix.default(localOptions, 'actionNameOfLoad', 'page')
+        Mix.default(localOptions, 'isSubmit', true)
 
         if(self.tableModel && allModels[self.tableModel]) {
             model = allModels[self.tableModel]
@@ -69,7 +74,7 @@ export default {
             isLoading:false,
             pagination: {
                 pageSizes: globals.pageSizes,
-                pageSize: 20,
+                pageSize: 1000,
                 total: 0,
                 current: 1
             },
@@ -90,6 +95,19 @@ export default {
                 if(self.cellClasses[column.property]) {
                     return self.cellClasses[column.property]
                 }
+            }
+        },
+        getCellStyle({row, column, rowIndex, columnIndex}) {
+            //if()
+            return {
+                //fontWeight:"bolder"
+            }
+
+        },
+        getRowStyle(info){
+            let self = this
+            if(typeof(self.localOptions.rowStyle)=='function') {
+                return self.localOptions.rowStyle(info)
             }
         },
         onClickImage(row, column) {
@@ -117,25 +135,27 @@ export default {
             return this.tableData.findIndex(callback)
         },
         appendRow: function(row) {
-            this.tableData.push(row)
+            let self = this
+            let obj = getBaseObject(self.columns)
+            this.tableData.push(extend({}, obj, row))
             return this.tableData.length - 1;
         },
         updateRow: function(rowIndex, row) {
             Object.assign(this.tableData[rowIndex], row)
         },
-        getRow: function(rowIndex) {
-            return this.tableData[rowIndex]
+        getRow: function(id) {
+            return this.tableData.find(item=>item.id==id)
         },
         getTableData() {
             return this.tableData;
         },
         setTableData(data){
             let self = this
-            let obj = getBaseObject(self.columns)
+            //let obj = getBaseObject(self.columns)
 
             self.tableData = []
             data.forEach(row=>{
-                self.tableData.push(extend({}, obj, row))
+                self.appendRow(row)
             })
         },
         deleteRow: function(rowIndex) {
@@ -220,10 +240,11 @@ export default {
             }
         },
         getStyle(item, row) {
-            if (row[item.name + '__style']) {
-                return row[item.name + '__style']
-            } else {
-                return item.style || ""
+            if(typeof(item.style)=='function') {
+                return item.style(item, row)
+            }
+            else if(typeof(item.style)=='string') {
+                return item.style
             }
         },
         loadList() {
@@ -310,7 +331,7 @@ export default {
     computed: {},
     mounted: function() {
         let self = this
-        if(self.localOptions.issubmit) {
+        if(self.localOptions.isSubmit) {
             self.loadList()
         }        
 

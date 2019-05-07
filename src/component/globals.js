@@ -21,9 +21,19 @@ else {
     ASAP.host = ''
 }
 
+const setLabel = function(labels) {
+    Object.assign($ASAL,labels)
+}
+
 const getLabel = function(name) {
     if (typeof($ASAL) != 'undefined' && $ASAL[name]) {
-        return $ASAL[name]
+        if($ASAL['lang']=='en') {
+            return typeof($ASAL[name])=='string' ? StringFunc.ucfirst($ASAL[name]) : $ASAL[name]
+        }
+        else {
+            return $ASAL[name]
+        }
+        
     } else {
         return "";
     }
@@ -91,18 +101,33 @@ const config = {
 }
 
 const StringFunc = {
-    default:function(str) {
+    default(str) {
         if(str==undefined) {
             return ""
         }
         else {
             return str
         }
+    },
+    include(parent, id){
+        return (','+parent + ',').indexOf(','+id+',')>=0
+    },
+    ucfirst(str){
+        return str.toLowerCase().replace(/ +/g, ' ').split(' ').map(item=>item.substring(0,1).toUpperCase()+item.substring(1)).join(' ');
+    }
+}
+
+const Mix = {
+    default(target, name, value) {
+        if(typeof(target[name])=='undefined') {
+            target[name] = value
+        }
     }
 }
 
 export {
     ASAP,
+    setLabel,
     getLabel,
     getLabel as _label,
     logger,
@@ -111,7 +136,8 @@ export {
     getAvailableHeight,
     config,
     math,
-    StringFunc
+    StringFunc,
+    Mix
 }
 export default {
     getLabel,

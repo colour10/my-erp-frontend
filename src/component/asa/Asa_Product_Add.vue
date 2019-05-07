@@ -16,18 +16,18 @@
                     
                     <el-table-column :label="_label('kuanshi')" width="140" align="center">
                         <template v-slot="scope">
-                            <el-input v-model="scope.row.wordcode_1" size="mini" @focus="onFocus(1)" @blur="onBlur(1)"></el-input>
+                            <el-input v-model="scope.row.wordcode_1" size="mini" @focus="onFocus(1)" @blur="onBlur(1)" @keyup.native="onKeyInput(scope.row,'wordcode_1')"></el-input>
                         </template>
                     </el-table-column>
                     <el-table-column :label="_label('caizhi')" width="140" align="center">
                         <template v-slot="scope">
-                            <el-input v-model="scope.row.wordcode_2" size="mini" @focus="onFocus(2)" @blur="onBlur(2)"></el-input>
+                            <el-input v-model="scope.row.wordcode_2" size="mini" @focus="onFocus(2)" @blur="onBlur(2)" @keyup.native="onKeyInput(scope.row,'wordcode_2')"></el-input>
                         </template>
                     </el-table-column>
                     <el-table-column :label="_label('yanse')" width="140" align="center">
                         <template v-slot="scope">
                             <!--<el-input v-model="scope.row.wordcode_3" size="mini" @keyup.native.down="onKeyDown(scope.$index)" @keyup.native.up="onKeyUp(scope.$index)" :ref="'word'+scope.$index"></el-input>-->
-                            <el-input v-model="scope.row.wordcode_3" size="mini"></el-input>
+                            <el-input v-model="scope.row.wordcode_3" size="mini" @keyup.native="onKeyInput(scope.row,'wordcode_3')"></el-input>
                         </template>
                     </el-table-column>
                     <el-table-column :label="_label('yansemingcheng')" width="150" align="center">
@@ -221,6 +221,7 @@ export default {
                 ageseason: "",
                 sizetopid: "",
                 sizecontentids: "",
+                saletypeid:"",
                 productmemoids: "" //商品描述
             },
             rules: {
@@ -242,6 +243,9 @@ export default {
     methods: {
         onQuit() {
             this.dialogVisible = false
+        },
+        onKeyInput(target, columnName){
+            target[columnName] = target[columnName].toUpperCase()
         },
         onOptionChange(options) {
             let self = this

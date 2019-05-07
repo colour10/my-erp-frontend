@@ -1,10 +1,10 @@
 <template>
     <div>
         <multiple-admin-page v-bind="props" ref="page"></multiple-admin-page>
-        <el-dialog :title="_label('zipinlei')" class="user-form" :visible.sync="dialogVisible" :center="true" width="900px">
+        <el-dialog :title="dialogTitle" class="user-form" :visible.sync="dialogVisible" :center="true" width="900px">
             <multiple-admin-page v-bind="props2" ref="page2"></multiple-admin-page>
         </el-dialog>
-        <el-dialog :title="_label('pinleishuxing')" class="user-form" :visible.sync="dialogVisible2" :center="true">
+        <el-dialog :title="dialogTitle2" class="user-form" :visible.sync="dialogVisible2" :center="true">
             <multiple-admin-page v-bind="props3" ref="page3"></multiple-admin-page>
         </el-dialog>
         <el-dialog :title="_label('fuzhishuxing')" class="user-form" :visible.sync="dialogVisible3" :center="true" width="400px">
@@ -17,134 +17,6 @@
 <script>
 import globals, { _label } from '../globals.js'
 
-const props = {
-    columns: [
-        { name: "name", label: _label('pinleimingcheng'), is_multiple: true, is_focus: true },
-        { name: "displayindex", label: _label('xuhao'), sortMethod:(a,b)=>a-b }
-    ],
-    buttons: [{
-        name: "code",
-        label: _label('zipinlei'),
-        width: 150,
-        disable_change: true,
-        handler: function(rowIndex, row) {
-            //console.log(rowIndex, row)   
-            props2.base.brandgroupid = row.id;
-            options.dialogVisible = true;
-            //options.title = row.brandgroupname
-        }
-    }],
-    controller: "brandgroup",
-    key_column: "name"
-}
-
-const props2 = {
-    columns: [
-        { name: "name", label: _label('zileimingcheng'), is_multiple: true, is_focus: true },
-        { name: "displayindex", label: _label('xuhao'), width:100, sortMethod:(a,b)=>a-b }
-    ],
-    buttons: [{
-        name: "code",
-        label: _label('pinleishuxing'),
-        width: 100,
-        disable_change: true,
-        handler: function(rowIndex, row) {
-            props3.base.brandgroupchildid = row.id;
-            options.dialogVisible2 = true;
-        }
-    }],
-    actions: [{
-        name: "code",
-        label: _label('fuzhidao'),
-        width: 150,
-        disable_change: true,
-        handler: function(rowIndex, row) {
-            options.dialogVisible3 = true;
-            options.brandgroupchildid = row.id
-        }
-    }],
-    controller: "brandgroupchild",
-    key_column: "name",
-    base: {
-        brandgroupid: ""
-    },
-    options: {
-        action_width: 250
-    }
-}
-
-const props3 = {
-    columns: [
-        { name: "propertyid", label: _label('pinleishuxing'), type:"select", source:"property" },
-        { name: "name_cn", label: _label('jiumingzi') },
-        { name: "displayindex", label: _label('paixu'), width:100 }
-    ],
-    /*actions: [{
-        label: _label('dingbu'),
-        handler: function(rowIndex, row, vm) {
-            vm._fetch("/brandgroupchildproperty/top", { id: row.id }).then(function() {
-                vm.loadList(i => i)
-            })
-        },
-        isShow: function(vm) {
-            return vm.$store.getters.allow('brandgroup')
-        }
-    }, {
-        label: _label('xiangshang'),
-        handler: function(rowIndex, row, vm) {
-            vm._fetch("/brandgroupchildproperty/up", { id: row.id }).then(function() {
-                vm.loadList(i => i)
-            })
-        },
-        isShow: function(vm) {
-            return vm.$store.getters.allow('brandgroup')
-        }
-    }, {
-        label: _label('xiangxia'),
-        handler: function(rowIndex, row, vm) {
-            vm._fetch("/brandgroupchildproperty/down", { id: row.id }).then(function() {
-                vm.loadList(i => i)
-            })
-        },
-        isShow: function(vm) {
-            return vm.$store.getters.allow('brandgroup')
-        }
-    }, {
-        label: _label('dibu'),
-        handler: function(rowIndex, row, vm) {
-            vm._fetch("/brandgroupchildproperty/bottom", { id: row.id }).then(function() {
-                vm.loadList(i => i)
-            })
-        },
-        isShow: function(vm) {
-            return vm.$store.getters.allow('brandgroup')
-        }
-    }],*/
-    controller: "brandgroupchildproperty",
-    base: {
-        brandgroupchildid: ""
-    },
-    options: {
-        action_width: 300,
-        isAutoReload:true,
-        isAutohide:true
-    }
-}
-
-const options = {
-    props: props,
-    props2: props2,
-    props3: props3,
-    dialogVisible: false,
-    dialogVisible2: false,
-    dialogVisible3: false,
-    treeprops: {
-        label: 'name',
-        children: 'zones'
-    },
-    brandgroupchildid:""
-}
-
 export default {
     name: 'asapage-brandgroup',
     components: {
@@ -153,7 +25,93 @@ export default {
     data() {
         var self = this;
 
-        return options
+        return {
+            props: {
+                columns: [
+                    { name: "name", label: _label('pinleimingcheng'), is_multiple: true, is_focus: true },
+                    { name: "displayindex", label: _label('xuhao'), sortMethod:(a,b)=>a-b }
+                ],
+                buttons: [{
+                    name: "code",
+                    label: _label('zipinlei'),
+                    width: 150,
+                    disable_change: true,
+                    handler: function(rowIndex, row) {
+                        //console.log(rowIndex, row)   
+                        self.props2.base.brandgroupid = row.id;
+                        self.dialogVisible = true;
+                        self.dialogTitle = row.name_cn;
+                    }
+                }],
+                controller: "brandgroup",
+                key_column: "name"
+            },
+            props2: {
+                columns: [
+                    { name: "name", label: _label('zileimingcheng'), is_multiple: true, is_focus: true },
+                    { name: "displayindex", label: _label('xuhao'), width:100, sortMethod:(a,b)=>a-b }
+                ],
+                buttons: [{
+                    name: "code",
+                    label: _label('pinleishuxing'),
+                    width: 100,
+                    disable_change: true,
+                    handler: function(rowIndex, row) {
+                        self.props3.base.brandgroupchildid = row.id;
+                        self.dialogVisible2 = true;
+                        self.dialogTitle2 = row.name_cn
+                    }
+                }],
+                actions: [{
+                    name: "code",
+                    label: _label('fuzhidao'),
+                    width: 150,
+                    disable_change: true,
+                    handler: function(rowIndex, row) {
+                        self.dialogVisible3 = true;
+                        self.brandgroupchildid = row.id
+                    }
+                }],
+                controller: "brandgroupchild",
+                key_column: "name",
+                base: {
+                    brandgroupid: ""
+                },
+                options: {
+                    action_width: 250
+                },
+                formTitle: function(row) {
+                    if (row && row.id > 0) {
+                        return row.name_en
+                    }
+                }
+            },
+            props3: {
+                columns: [
+                    { name: "propertyid", label: _label('pinleishuxing'), type:"select", source:"property" },
+                    { name: "displayindex", label: _label('paixu'), width:100 }
+                ],
+                controller: "brandgroupchildproperty",
+                base: {
+                    brandgroupchildid: ""
+                },
+                options: {
+                    action_width: 300,
+                    isAutoReload:true,
+                    isAutohide:true
+                }
+            },
+            dialogVisible: false,
+            dialogVisible2: false,
+            dialogVisible3: false,
+            dialogTitle:"",
+            dialogTitle2:"",
+            treeprops: {
+                label: 'name',
+                children: 'zones'
+            },
+            brandgroupchildid:""
+        }
     },
     methods: {
         async loadNode(node, resolve) {

@@ -14,6 +14,7 @@
                 <el-submenu index="2">
                     <template #title>{{_label("menu-2")}}</template>
                     <el-menu-item index="brand">{{_label("menu-2-1-1")}}</el-menu-item>
+                    <el-menu-item index="pricesetting">{{_label("jiageshezhi")}}</el-menu-item>
                     <el-menu-item index="brandgroup">{{_label("menu-2-1-2")}}</el-menu-item>
                     <el-menu-item index="ageseason">{{_label("menu-2-1-3")}}</el-menu-item>
                     <el-menu-item index="colortemplate">{{_label("menu-2-1-4")}}</el-menu-item>
@@ -28,9 +29,10 @@
                     <el-menu-item index="country">{{_label("menu-2-3-3")}}</el-menu-item>
                     <el-menu-item index="saleport">{{_label("menu-2-4")}}</el-menu-item>
                     <el-menu-item index="price">{{_label("jiagedingyi")}}</el-menu-item>
-                    <el-menu-item index="pricesetting">{{_label("jiageshezhi")}}</el-menu-item>
+                    
                     <el-menu-item index="saletype">{{_label("xiaoshoushuxing")}}</el-menu-item>
                     <el-menu-item index="exchangerate">{{_label("huilvguanli")}}</el-menu-item>
+                    <el-menu-item index="language">{{_label("duoguoyuyanguanli")}}</el-menu-item>
                 </el-submenu>
                 <el-menu-item index="product">{{_label("menu-3-1")}}</el-menu-item>
                 <el-menu-item index="supplier">{{_label("menu-4")}}</el-menu-item>
@@ -42,9 +44,9 @@
               </el-submenu>-->
                 <el-submenu index="5">
                     <template #title>{{_label("menu-5")}}</template>
-                    <el-menu-item index="order">{{_label("menu-5-1-1")}}</el-menu-item>
+                    <el-menu-item index="order">{{_label("dingdanguanli")}}</el-menu-item>
                     <el-menu-item index="confirmorder">{{_label("menu-5-2")}}</el-menu-item>
-                    <el-menu-item index="warehousing">{{_label("menu-5-3-1")}}</el-menu-item>
+                    <el-menu-item index="warehousing">{{_label("rukudanguanli")}}</el-menu-item>
                 </el-submenu>
                 <el-submenu index="6">
                     <template #title>{{_label("menu-6")}}</template>
@@ -119,47 +121,48 @@
 <script>
 import {_label} from '../globals.js'
 
-const menus = {
-    "user":_label("menu-1-1"),
-    "group":_label("menu-1-2"),
-    "department":_label("menu-1-4"),
-    "system":_label("xitongshezhi"),
-    "brand":_label("menu-2-1-1"),
-    "brandgroup":_label("menu-2-1-2"),
-    "ageseason":_label("menu-2-1-3"),
-    "colortemplate":_label("menu-2-1-4"),
-    "sizetop":_label("menu-2-1-5"),
-    "productmemo":_label("shangpinmiaoshu"),
-    "material":_label("caizhiguanli"),
-    "materialnote":_label("caizhibeizhu"),
-    "currency":_label("huobiguanli"),
-    "ulnarinch":_label("menu-2-1-7"),
-    "warehouse":_label("menu-2-3-1"),
-    "country":_label("menu-2-3-3"),
-    "saleport":_label("menu-2-4"),
-    "price":_label("jiagedingyi"),
-    "pricesetting":_label("jiageshezhi"),
-    "product":_label("menu-3-1"),
-    "supplier":_label("menu-4"),
-    "order":_label("menu-5-1-1"),
-    "confirmorder":_label("menu-5-2"),
-    "warehousing":_label("menu-5-3-1"),
-    "requisition":_label("menu-6-1"),
-    "productstock":_label("menu-6-4"),
-    "sales":_label("menu-7-1"),
-    "orderpayment":_label("dingdanjiesuan"),
-    "salesreceive":_label("xiaoshoujiesuan"),
-    "user/modifypassword":_label("menu-11-2"),
-    "login/logout":_label("menu-11-3"),
-    "saletype":_label('xiaoshoushuxing'),
-    "exchangerate":_label('huilvguanli'),
-    "property":_label("shuxingdingyi"),
-    "develop":"生成器"
-}
 export default {
     name: 'asapage-home',
     data() {
         return {
+            menus:{
+                user:_label("menu-1-1"),
+                "group":_label("menu-1-2"),
+                "department":_label("menu-1-4"),
+                "system":_label("xitongshezhi"),
+                "brand":_label("menu-2-1-1"),
+                "brandgroup":_label("menu-2-1-2"),
+                "ageseason":_label("menu-2-1-3"),
+                "colortemplate":_label("menu-2-1-4"),
+                "sizetop":_label("menu-2-1-5"),
+                "productmemo":_label("shangpinmiaoshu"),
+                "material":_label("caizhiguanli"),
+                "materialnote":_label("caizhibeizhu"),
+                "currency":_label("huobiguanli"),
+                "ulnarinch":_label("menu-2-1-7"),
+                "warehouse":_label("menu-2-3-1"),
+                "country":_label("menu-2-3-3"),
+                "saleport":_label("menu-2-4"),
+                "price":_label("jiagedingyi"),
+                "pricesetting":_label("jiageshezhi"),
+                "product":_label("menu-3-1"),
+                "supplier":_label("menu-4"),
+                "order":_label("dingdanguanli"),
+                "confirmorder":_label("menu-5-2"),
+                "warehousing":_label("rukudanguanli"),
+                "requisition":_label("menu-6-1"),
+                "productstock":_label("menu-6-4"),
+                "sales":_label("menu-7-1"),
+                "orderpayment":_label("dingdanjiesuan"),
+                "salesreceive":_label("xiaoshoujiesuan"),
+                "user/modifypassword":_label("menu-11-2"),
+                "login/logout":_label("menu-11-3"),
+                "saletype":_label('xiaoshoushuxing'),
+                "exchangerate":_label('huilvguanli'),
+                "property":_label("shuxingdingyi"),
+                "language":_label("duoguoyuyanguanli"),
+                "develop":"生成器"
+            }
         }
     },
     methods: {
@@ -184,7 +187,7 @@ export default {
     },
     computed:{
         moduleName() {
-            return menus[this.$route.path.substr(1)]
+            return this.menus[this.$route.path.substr(1)]
         }
     },
     mounted: function() {

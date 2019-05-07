@@ -25,7 +25,7 @@
                     <el-form-item :label="item.label" v-if="!item.is_edit_hide" v-for="item in columns" :key="item.name" :class="item.class?item.class:'width2'" :disabled="checkDisabled(item)">
                         <el-input :ref="item.name" @keyup.enter.native="onSubmit" :type="item.type?item.type:'text'" v-if="!item.type||item.type=='input'||item.type=='textarea'" v-model="form[item.name]" size="mini" :disabled="checkDisabled(item)"></el-input>
                         <el-switch :ref="item.name" v-if="item.type=='switch'" v-model="form[item.name]" active-value="1" inactive-value="0" :disabled="checkDisabled(item)"></el-switch>
-                        <simple-select :ref="item.name" v-if="item.type=='select'" v-model="form[item.name]" :source="item.source" :lang="lang" @change="onChange(item)" :disabled="checkDisabled(item)"></simple-select>
+                        <simple-select :ref="item.name" v-if="item.type=='select'" v-model="form[item.name]" :source="item.source" :lang="lang" @change="onChange(item)" :disabled="checkDisabled(item)" :multiple="item.multiple||false"></simple-select>
                         <el-date-picker :ref="item.name" v-if="item.type=='date'" v-model="form[item.name]" type="date" value-format="yyyy-MM-dd" placeholder="" :disabled="checkDisabled(item)"></el-date-picker>
                         <brandgroupchild :ref="item.name" v-model="form[item.name]" v-if="item.type=='brandgroupchild'"></brandgroupchild>
                         <simple-avatar :ref="item.name" v-model="form[item.name]" v-if="item.type=='avatar'" font-size="14px" :size="35"></simple-avatar>
@@ -62,8 +62,8 @@ export default {
 
         let opt = self.options || {};
         self._log(opt,"opt")
-        //opt.isAutohide = typeof(opt.isAutohide)=='undefined' ? true : opt.isAutohide;
-        //opt.autoreload =
+        opt.isAutohide = typeof(opt.isAutohide)=='undefined' ? true : opt.isAutohide;
+        opt.isAutoReload = typeof(opt.isAutoReload)=='undefined' ? false : opt.isAutoReload;
 
         for (let i = 0; i < self.columns.length; i++) {
             form[self.columns[i].name] = ""
@@ -116,16 +116,16 @@ export default {
             self.isSubmiting = true;
 
             let opt = self.opt
-            let issubmit = opt.isSubmit;
-            let autoreload = opt.isAutoReload;
-            let autohide = opt.isAutohide;
+            let isSubmit = opt.isSubmit;
+            let isAutoReload = opt.isAutoReload;
+            let isAutohide = opt.isAutohide;
             let tablelist = self.$refs.tablelist
 
             self.form.lang = self.lang;
             if (self.action == "add" && self.form.id=='') {
-                if (issubmit == false) {
+                if (isSubmit == false) {
                     tablelist.appendRow(globals.clone(self.form))
-                    if (autohide) {
+                    if (isAutohide) {
                         self.dialogVisible = false
                     } else {
                         self.action = 'edit'
@@ -133,13 +133,13 @@ export default {
                     self.isSubmiting = false;
                 } else {
                     self._submit("/" + self.controller + "/add", self.form).then(function() {
-                        if (autoreload == true) {
+                        if (isAutoReload == true) {
                             tablelist.loadList()
                         } else {
                             tablelist.appendRow(globals.clone(self.form))
                         }
 
-                        if (autohide) {
+                        if (isAutohide) {
                             self.dialogVisible = false
                         }
                         self.isSubmiting = false;
@@ -148,24 +148,24 @@ export default {
                     })
                 }
             } else {
-                if (issubmit == false) {
+                if (isSubmit == false) {
                     let row = tablelist.getRow(self.rowIndex)
                     globals.copyTo(self.form, row)
 
-                    if (autohide) {
+                    if (isAutohide) {
                         self.dialogVisible = false
                     }
                     self.isSubmiting = false;
                 } else {
                     self._submit("/" + self.controller + "/edit", self.form).then(function() {
-                        if (autoreload == true) {
+                        if (isAutoReload == true) {
                             tablelist.loadList()
                         } else {
                             let row = tablelist.getRow(self.rowIndex)
                             globals.copyTo(self.form, row)
                         }
 
-                        if (autohide) {
+                        if (isAutohide) {
                             self.dialogVisible = false
                         }
                         self.isSubmiting = false;
@@ -196,7 +196,7 @@ export default {
         },
         showFormToEdit(rowIndex, row) {
             let self = this
-            self.rowIndex = rowIndex;
+            self.rowIndex = row.id;
             globals.copyTo(row, this.form)
             self.action = "edit"
             self.$emit("before-edit", row)
