@@ -1,16 +1,8 @@
-import {extend} from './util/object.js'
-import {httpPost,httpGet, host} from './http.js'
-import {isArray, initObject} from './array.js'
-import {label} from "./application.js"
+import {httpPost,httpGet, host} from '../http.js'
+import {label} from "../application.js"
 
 export default {
     methods: {
-        _log() {
-            var arr = Array.prototype.slice.call(arguments)
-            arr.unshift("<" + this.$options.name + ">")
-            console.log.apply(console, arr);
-        },
-        _label:label,
         _fetch(path, form, options={}) {
             const self = this
             return new Promise((resolve,reject)=>{
@@ -58,15 +50,12 @@ export default {
 
             return self._fetch(path, form, options)
         },
-        _confirm(message, callback) {
-            var self = this;
-            self.$confirm(message, label('tip'), {
+        _confirm(message) {
+            return this.$confirm(message, label('tip'), {
                 confirmButtonText: label('ok'),
                 cancelButtonText: label('cancel'),
                 type: 'warning'
-            }).then(() => {
-                callback()
-            }).catch(() => {});
+            })
         },
         async _remove(path, form, options) {
             var self = this;
@@ -102,64 +91,8 @@ export default {
                 }
             }
             catch(e) {
-                self._log(e)
                 return false
             }
-        },
-        _info(message) {
-            let self = this
-            self.$notify({
-                type: 'warning',
-                title: self.label("tishi"),
-                message: message
-            });
-        },
-        clearValidate(delay) {
-            let form = this.$refs['order-form']
-            //console.log(form)
-
-            if(form) {
-                if(delay && delay>0) {
-                    setTimeout(function(){
-                        //console.log("clearValidate")
-                        form.clearValidate()
-                    },delay)
-                }
-                else {
-                    form.clearValidate()
-                }
-            }
-        },
-        validate() {
-            let self = this
-            return new Promise((resolve,reject)=>{
-                self.$refs["order-form"].validate(function(valid) {
-                    if(valid) {
-                        resolve()
-                    }
-                })
-            })
-            
-        },
-        _setting(name, value) {
-            let self = this;
-            if(isArray(name)) {
-                extend(self.setting, initObject(name,value))
-            }
-            else if(typeof(name)=='object') {
-                extend(self.setting, name)
-            }
-            else {
-                self.setting[name] = value;
-            }
-            return self
-        },
-        _fileLink(file) {
-            if(file=='') {
-                return host+'/imgs/none.png';
-            }
-
-            return label('_image_url_prex') + file
         }
     }
 }

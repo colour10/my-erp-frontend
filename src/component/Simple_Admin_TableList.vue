@@ -31,7 +31,7 @@ import { extend } from './util/object.js'
 import { host } from './http.js'
 import allModels from "./model.js"
 import Transform from './transform.js'
-import mixin from './mixin.js'
+import {log,ajax,label} from './mixin/'
 
 let model
 
@@ -41,7 +41,7 @@ export default {
     components: {
         "sp-transform":Transform
     },
-    mixins:[mixin],
+    mixins:[log,ajax,label],
     data() {
         let self = this
         let base = self.base || {}

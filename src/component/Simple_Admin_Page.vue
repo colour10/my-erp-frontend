@@ -39,9 +39,8 @@
 
 <script>
 import globals from './util/object.js'
-import {label} from './application.js'
 import ItemTransform from './itemTransform.js'
-import mixin from './mixin.js'
+import {log,ajax,label} from './mixin/'
 
 export default {
     name: 'sp-page',
@@ -49,7 +48,7 @@ export default {
     components: {
         "sp-item-transform":ItemTransform
     },
-    mixins:[mixin],
+    mixins:[log,ajax,label],
     data() {
         let self = this
         let form = {
@@ -184,7 +183,7 @@ export default {
             self.action = "add"
             self.$emit("before-add")
 
-            self.showDialog(self.getTitle(label("tianjiaxinxi")));
+            self.showDialog(self.getTitle(self._label("tianjiaxinxi")));
         },
         showFormToEdit(rowIndex, row) {
             let self = this
@@ -194,7 +193,7 @@ export default {
             self.$emit("before-edit", row)
             //self._log("beforeedit")
 
-            self.showDialog(self.getTitle(label("xiugaixinxi"), row));
+            self.showDialog(self.getTitle(self._label("xiugaixinxi"), row));
         },
         getTitle(defaultTitle, row) {
             let self = this;
