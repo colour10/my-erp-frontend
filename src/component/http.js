@@ -1,6 +1,6 @@
 import $ from 'jquery'
 
-import {ASAP} from "./globals.js"
+import {ASAP} from "./util.js"
 
 
 const host = ASAP.host;

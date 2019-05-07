@@ -1,7 +1,7 @@
 //import resources_options from './resources.js'
 import {httpGet} from './http.js'
-import {ASAP} from "./globals.js"
-import {extract} from "./object.js"
+//import {ASAP} from "./globals.js"
+import {extract} from "./util/object.js"
 
 const resource = {}
 
@@ -298,12 +298,14 @@ DataSource.prototype.getList = function() {
     })   
 }
 
+const resources ={}
+console.log("init =====================")
 DataSource.getDataSource = function(resourceName) {
     if(resourceName.constructor==DataSource) {
         return resourceName;
     }
 
-    let resources = ASAP.resources
+    //let resources = ASAP.resources
 
     if(resources[resourceName]) {
         return resources[resourceName]   

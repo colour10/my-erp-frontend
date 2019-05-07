@@ -26,10 +26,12 @@
 
 <script>
 import DataSource from './DataSource.js'
-import globals, { extend, _label } from './globals.js'
+import globals,{ _label } from './util.js'
+import { extend } from './util/object.js'
 import { host } from './http.js'
 import allModels from "./model.js"
 import Transform from './transform.js'
+import mixin from './mixin.js'
 
 let model
 
@@ -39,6 +41,7 @@ export default {
     components: {
         "sp-transform":Transform
     },
+    mixins:[mixin],
     data() {
         let self = this
         let base = self.base || {}

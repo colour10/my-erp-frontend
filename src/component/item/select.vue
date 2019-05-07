@@ -10,7 +10,6 @@
 
 <script>
 import DataSource from '../DataSource.js'
-import globals, { _label } from '../globals.js'
 
 export default {
     name: 'sp-select',

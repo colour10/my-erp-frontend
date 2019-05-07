@@ -1,5 +1,5 @@
 import Base from "./base.js"
-import {extend} from "../object.js"
+import {extend} from "../util/object.js"
 import DataSource from '../DataSource.js'
 
 export default extend({

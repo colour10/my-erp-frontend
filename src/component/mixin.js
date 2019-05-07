@@ -1,6 +1,7 @@
-import {_label,extend} from './globals.js'
+import {extend} from './util/object.js'
 import {httpPost,httpGet, host} from './http.js'
 import {isArray, initObject} from './array.js'
+import {label} from "./application.js"
 
 export default {
     methods: {
@@ -9,7 +10,7 @@ export default {
             arr.unshift("<" + this.$options.name + ">")
             console.log.apply(console, arr);
         },
-        _label,
+        _label:label,
         _fetch(path, form, options={}) {
             const self = this
             return new Promise((resolve,reject)=>{
@@ -23,8 +24,8 @@ export default {
                                 return h("li", null, v)
                             }))
 
-                            self.$alert(message, _label("error_tip"), {
-                                confirmButtonText: _label("ok")
+                            self.$alert(message, label("error_tip"), {
+                                confirmButtonText: label("ok")
                             });
 
                             if(options.isReject) {
@@ -35,7 +36,7 @@ export default {
                         if (options.showMessage == true) {
                             let tip = options && options.successTip ? options.successTip : 'success'
                             self.$message({
-                                message: _label(tip),
+                                message: label(tip),
                                 type: 'success'
                             });
                         }
@@ -59,9 +60,9 @@ export default {
         },
         _confirm(message, callback) {
             var self = this;
-            self.$confirm(message, _label('tip'), {
-                confirmButtonText: _label('ok'),
-                cancelButtonText: _label('cancel'),
+            self.$confirm(message, label('tip'), {
+                confirmButtonText: label('ok'),
+                cancelButtonText: label('cancel'),
                 type: 'warning'
             }).then(() => {
                 callback()
@@ -71,9 +72,9 @@ export default {
             var self = this;
             
             try {
-                await self.$confirm(_label('delete_warning'), _label('tip'), {
-                    confirmButtonText: _label('ok'),
-                    cancelButtonText: _label('cancel'),
+                await self.$confirm(label('delete_warning'), label('tip'), {
+                    confirmButtonText: label('ok'),
+                    cancelButtonText: label('cancel'),
                     type: 'warning'
                 })
 
@@ -85,15 +86,15 @@ export default {
                         return h("li", null, v)
                     }))
 
-                    self.$alert(message, _label("error_tip"), {
-                        confirmButtonText: _label("ok")
+                    self.$alert(message, label("error_tip"), {
+                        confirmButtonText: label("ok")
                     });
 
                     return false;
                 } 
                 else {
                     self.$message({
-                        message: _label('delete_success'),
+                        message: label('delete_success'),
                         type: 'success'
                     });
 
@@ -109,7 +110,7 @@ export default {
             let self = this
             self.$notify({
                 type: 'warning',
-                title: self._label("tishi"),
+                title: self.label("tishi"),
                 message: message
             });
         },
@@ -158,7 +159,7 @@ export default {
                 return host+'/imgs/none.png';
             }
 
-            return _label('_image_url_prex') + file
+            return label('_image_url_prex') + file
         }
     }
 }

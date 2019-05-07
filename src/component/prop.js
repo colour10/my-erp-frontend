@@ -1,5 +1,6 @@
-import {getLabel, getAvailableHeight} from "./globals.js"
-const _label = getLabel
+import {getLabel, getAvailableHeight} from "./util.js"
+import {label} from "./application.js"
+const _label = label
 
 const sort_method_digit = function(a,b){
     return a-b

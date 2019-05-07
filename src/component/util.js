@@ -1,5 +1,6 @@
 import {client} from "./browser.js"
 import math from "./math.js"
+import ObjectFamily from "./util/object.js"
 
 const ASAP = window.ASAP || {
     caches:{}, //httpGet的缓存对象
@@ -39,32 +40,6 @@ const logger = function(name) {
     }
 }
 
-const clone = function(target) {
-    var obj = {}
-    Object.keys(target).forEach(function(key) {
-        obj[key] = target[key]
-
-    });
-    return obj;
-}
-
-const copyTo = function(fromObj, target) {
-    Object.keys(target).forEach(function(key) {
-        if (typeof(fromObj[key]) != "undefined") {
-            target[key] = fromObj[key]
-            //console.log("copy property",key, target[key])
-        }
-    });
-}
-
-const empty = function(target) {
-    Object.keys(target).forEach(function(key) {
-        target[key] = ""
-    });
-
-    return target;
-}
-
 const deleteObject = function(arr, obj) {
     for (var i = 0; i < arr.length; i++) {
         if (arr[i] == obj) {
@@ -73,12 +48,6 @@ const deleteObject = function(arr, obj) {
         }
     }
     return arr
-}
-
-const extract = function(object, keys){
-    let obj = {}
-    keys.forEach(key=>obj[key] = object[key])
-    return obj
 }
 
 const getAvailableHeight = function() {
@@ -103,25 +72,16 @@ const StringFunc = {
 
 export {
     ASAP,
-    getLabel,
-    getLabel as _label,
     logger,
-    extend,
-    extract,
     getAvailableHeight,
     config,
     math,
-    StringFunc
+    StringFamily,
+    ObjectFamily
 }
 export default {
-    getLabel,
     logger,
-    extend,
-    clone,
-    empty,
     deleteObject,
-    copyTo,
-    extract,
     pageSizes,
     getAvailableHeight,
     math

@@ -38,8 +38,10 @@
 </template>
 
 <script>
-import globals, { _label } from './globals.js'
+import globals from './util/object.js'
+import {label} from './application.js'
 import ItemTransform from './itemTransform.js'
+import mixin from './mixin.js'
 
 export default {
     name: 'sp-page',
@@ -47,6 +49,7 @@ export default {
     components: {
         "sp-item-transform":ItemTransform
     },
+    mixins:[mixin],
     data() {
         let self = this
         let form = {
@@ -68,7 +71,6 @@ export default {
             form: form,
             rowIndex: "",
             title: "",
-            lang: _label("lang"),
             opt,
             authname: authname,
             searchform: {},
@@ -112,7 +114,6 @@ export default {
             let autohide = self.isAutohide;
             let tablelist = self.$refs.tablelist
 
-            self.form.lang = self.lang;
             if (self.action == "add" && self.form.id=='') {
                 if (issubmit == false) {
                     tablelist.appendRow(globals.clone(self.form))
@@ -183,7 +184,7 @@ export default {
             self.action = "add"
             self.$emit("before-add")
 
-            self.showDialog(self.getTitle(_label("tianjiaxinxi")));
+            self.showDialog(self.getTitle(label("tianjiaxinxi")));
         },
         showFormToEdit(rowIndex, row) {
             let self = this
@@ -193,7 +194,7 @@ export default {
             self.$emit("before-edit", row)
             //self._log("beforeedit")
 
-            self.showDialog(self.getTitle(_label("xiugaixinxi"), row));
+            self.showDialog(self.getTitle(label("xiugaixinxi"), row));
         },
         getTitle(defaultTitle, row) {
             let self = this;

@@ -1,4 +1,4 @@
-import {extend} from './object.js'
+import {extend} from './util/object.js'
 
 export default {
     name: 'sp-item-transform',
@@ -15,7 +15,7 @@ export default {
             props: props,
             on: {
                 input: function(event) {
-                    console.log(this,event)
+                    //console.log(this,event)
                     self.$emit('input', event)
                 }
             }

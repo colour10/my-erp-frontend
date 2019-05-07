@@ -1,4 +1,4 @@
-import { extend } from './object.js'
+import { extend } from './util/object.js'
 
 const extendComponent = function(component, wrapInfo) {
     wrapInfo.props = component.props;
