@@ -1,4 +1,4 @@
-import DataSource from './component/DataSource.js'
+import DataSource from './component/util/DataSource.js'
 import Simple_Admin_Page from './component/Simple_Admin_Page.vue'
 import Simple_Admin_TableList from './component/Simple_Admin_TableList.vue'
 import Select from './component/item/Select.vue'

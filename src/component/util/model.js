@@ -1,6 +1,6 @@
 import {getFetcher,clear} from "./fetcher.js"
-import {label} from "./application.js"
-import {isPromise} from "./util/object.js"
+import {label} from "../application.js"
+import {isPromise} from "./object.js"
 
 const promiseAll = function(data) {
     return {

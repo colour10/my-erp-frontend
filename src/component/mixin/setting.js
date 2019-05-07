@@ -1,5 +1,5 @@
 import {extend} from '../util/object.js'
-import {isArray, initObject} from '../array.js'
+import {isArray, initObject} from '../util/array.js'
 
 export default {
     methods: {

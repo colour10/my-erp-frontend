@@ -1,4 +1,4 @@
-import {httpPost,httpGet, host} from '../http.js'
+import {httpPost,httpGet, host} from '../util/http.js'
 import {label} from "../application.js"
 
 export default {

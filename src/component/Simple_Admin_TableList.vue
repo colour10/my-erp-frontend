@@ -25,11 +25,9 @@
 </template>
 
 <script>
-import DataSource from './DataSource.js'
-import globals,{ _label } from './util.js'
+import { config } from './application.js'
 import { extend } from './util/object.js'
-import { host } from './http.js'
-import allModels from "./model.js"
+import allModels from "./util/model.js"
 import Transform from './transform.js'
 import {log,ajax,label} from './mixin/'
 
@@ -58,8 +56,8 @@ export default {
             tableData: [],
             isLoading:false,
             pagination: {
-                pageSizes: globals.pageSizes,
-                pageSize: 20,
+                pageSizes: config('pagination').pageSizes,
+                pageSize: config('pagination').pageSize,
                 total: 0,
                 current: 1
             },

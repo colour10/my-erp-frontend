@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import globals from './util/object.js'
+import {clone,copyTo,empty} from './util/object.js'
 import ItemTransform from './itemTransform.js'
 import {log,ajax,label} from './mixin/'
 
@@ -115,7 +115,7 @@ export default {
 
             if (self.action == "add" && self.form.id=='') {
                 if (issubmit == false) {
-                    tablelist.appendRow(globals.clone(self.form))
+                    tablelist.appendRow(clone(self.form))
                     if (autohide) {
                         self.dialogVisible = false
                     } else {
@@ -127,7 +127,7 @@ export default {
                         if (autoreload == true) {
                             tablelist.loadList()
                         } else {
-                            tablelist.appendRow(globals.clone(self.form))
+                            tablelist.appendRow(clone(self.form))
                         }
 
                         if (autohide) {
@@ -141,7 +141,7 @@ export default {
             } else {
                 if (issubmit == false) {
                     let row = tablelist.getRow(self.rowIndex)
-                    globals.copyTo(self.form, row)
+                    copyTo(self.form, row)
 
                     if (autohide) {
                         self.dialogVisible = false
@@ -153,7 +153,7 @@ export default {
                             tablelist.loadList()
                         } else {
                             let row = tablelist.getRow(self.rowIndex)
-                            globals.copyTo(self.form, row)
+                            copyTo(self.form, row)
                         }
 
                         if (autohide) {
@@ -168,7 +168,7 @@ export default {
         },
         showFormToCreate() {
             let self = this;
-            globals.empty(self.form)
+            empty(self.form)
 
             for (let i = 0; i < self.columns.length; i++) {
                 self.form[self.columns[i].name] = self.columns[i].default || ""
@@ -188,7 +188,7 @@ export default {
         showFormToEdit(rowIndex, row) {
             let self = this
             self.rowIndex = rowIndex;
-            globals.copyTo(row, this.form)
+            copyTo(row, this.form)
             self.action = "edit"
             self.$emit("before-edit", row)
             //self._log("beforeedit")

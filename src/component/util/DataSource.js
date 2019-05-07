@@ -1,7 +1,5 @@
-//import resources_options from './resources.js'
 import {httpGet} from './http.js'
-//import {ASAP} from "./globals.js"
-import {extract} from "./util/object.js"
+import {extract} from "./object.js"
 
 const resource = {}
 
@@ -298,28 +296,25 @@ DataSource.prototype.getList = function() {
     })   
 }
 
-const resources ={}
+const instances ={}
 console.log("init =====================")
 DataSource.getDataSource = function(resourceName) {
     if(resourceName.constructor==DataSource) {
         return resourceName;
     }
 
-    //let resources = ASAP.resources
-
-    if(resources[resourceName]) {
-        return resources[resourceName]   
+    if(instances[resourceName]) {
+        return instances[resourceName]   
     }
     else {
         var create = function() {
             
             if(!resource[resourceName]) {
-                //_log(resourceName,"未定义")
                 throw "资源未定义:"+resourceName
             }
-            resources[resourceName] = new DataSource(resource[resourceName])
-            resources[resourceName].init()
-            return resources[resourceName]
+            instances[resourceName] = new DataSource(resource[resourceName])
+            instances[resourceName].init()
+            return instances[resourceName]
         }
 
         var tmp_create = function() {

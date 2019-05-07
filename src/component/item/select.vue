@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import DataSource from '../DataSource.js'
+import DataSource from '../util/DataSource.js'
 
 export default {
     name: 'sp-select',

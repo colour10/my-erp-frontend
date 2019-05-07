@@ -1,30 +1,24 @@
 const Vue = require('vue')
+import {config} from "./component/application.js"
+config("host", "http://erp.localhost.com")
+console.log(config('host'))
 
 import {getComponentSimple} from './component/prop.js'
-
-if (typeof window !== 'undefined') {
-    //console.log("hello")
-    if(typeof(window.ASAP)=='undefined') {
-        window.ASAP = {}
-    }
-}
-
 import Simple_Admin_Page from './component/Simple_Admin_Page.vue'
-//import Multiple_Admin_Page from './component/Multiple_Admin_Page.vue'
 import Simple_Admin_TableList from './component/Simple_Admin_TableList.vue'
+
 import Select from './component/item/Select.vue'
+import Checkbox from './component/item/checkbox.js'
 
 import Text from './component/label/text.js'
 import SelectText from './component/label/select-text.js'
 
 import Auth from './component/Auth.vue'
 import Table from './component/table.js'
-import Checkbox from './component/checkbox.js'
 import Authbutton from './component/authbutton.js'
 import Button from './component/button.js'
-
 import Input from './component/item/input.js'
-import DataSource from './component/DataSource.js'
+import DataSource from './component/util/DataSource.js'
 
 const components = [
     Simple_Admin_Page,

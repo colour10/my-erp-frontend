@@ -1,7 +1,6 @@
 import {httpPost} from "./http.js"
-import {ASAP} from "./util.js"
 
-const store = ASAP.$store
+const store = {}
 
 const clear = function(name, id) {
     //console.log("clear",name,id)

@@ -1,19 +1,8 @@
 import $ from 'jquery'
-
-import {ASAP} from "./util.js"
-
-
-const host = ASAP.host;
+import {config} from "../application.js"
+const caches = {}
 
 const httpGet = function(url, {enableCache=true}={}) {
-    //console.log(window.ASAP)
-    if(ASAP.$session_id && ASAP.dev==true) {
-        let session_id = ASAP.$session_id
-        url = url.indexOf('?')>=0 ? url+'&_session_id='+session_id : url + '?_session_id='+session_id
-    }
-
-    //console.log(url, enableCache)
-    const caches = ASAP.caches 
     return new Promise((resolve, reject)=>{
         if (caches[url]) {
             if (caches[url].loaded == false) {
@@ -37,7 +26,7 @@ const httpGet = function(url, {enableCache=true}={}) {
             }
 
             //console.log("httpGet", url);
-            $.get(host+url, function(res) {
+            $.get(config("host")+url, function(res) {
                 caches[url].loaded = true;
                 caches[url].data = res;
                 resolve(res, false)
@@ -47,17 +36,13 @@ const httpGet = function(url, {enableCache=true}={}) {
 }
 
 const httpPost = function(url, params, callback) {
-    if(ASAP.$session_id && ASAP.dev==true) {
-        params._session_id = ASAP.$session_id
-    }
-
     return new Promise((resolve, reject)=>{
-        $.post(host+url, params, resolve,"json").error(function(xhr,errorText,errorType){
+        $.post(config("host")+url, params, resolve,"json").error(function(xhr,errorText,errorType){
             reject()
         })
     })
     
 }
 
-export { httpGet, httpPost, host}
+export { httpGet, httpPost}
 export default {};

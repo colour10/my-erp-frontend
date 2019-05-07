@@ -4,6 +4,10 @@
 		"selected_items":
 		[
 			[
+				"pa",
+				"pagination"
+			],
+			[
 				"Se",
 				"SelectText\talias"
 			],
@@ -432,10 +436,6 @@
 				"loadList"
 			],
 			[
-				"pa",
-				"params"
-			],
-			[
 				"sea",
 				"searchform"
 			],
@@ -520,54 +520,19 @@
 	"buffers":
 	[
 		{
-			"file": "src/component/itemTransform.js",
+			"file": "src/component/mixin/ajax.js",
 			"settings":
 			{
-				"buffer_size": 772,
+				"buffer_size": 3355,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "src/component/function.js",
+			"file": "src/component/application.js",
 			"settings":
 			{
-				"buffer_size": 113,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "src/component/prop.js",
-			"settings":
-			{
-				"buffer_size": 3953,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "src/component/transform.js",
-			"settings":
-			{
-				"buffer_size": 326,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "src/component/label/text.js",
-			"settings":
-			{
-				"buffer_size": 350,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "src/component/label/select-text.js",
-			"settings":
-			{
-				"buffer_size": 520,
+				"buffer_size": 693,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -582,50 +547,6 @@
 			}
 		},
 		{
-			"file": "src/component/DataSource.js",
-			"settings":
-			{
-				"buffer_size": 8672,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "src/component/item/select.vue",
-			"settings":
-			{
-				"buffer_size": 6457,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "src/component/Simple_Admin_TableList.vue",
-			"settings":
-			{
-				"buffer_size": 9636,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "src/component/Simple_Admin_Page.vue",
-			"settings":
-			{
-				"buffer_size": 9844,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "src/component/item/input.js",
-			"settings":
-			{
-				"buffer_size": 589,
-				"line_ending": "Windows"
-			}
-		},
-		{
 			"file": "src/component/item/base.js",
 			"settings":
 			{
@@ -634,21 +555,55 @@
 			}
 		},
 		{
-			"file": "src/main.js",
+			"contents": "//import resources_options from './resources.js'\nimport {httpGet} from './http.js'\n//import {ASAP} from \"./globals.js\"\nimport {extract} from \"./util/object.js\"\n\nconst resource = {}\n\nfunction DataRow(row, id, name, option={}) {\n    let self = this;\n    self.row = row\n    self.id = id;\n    self.name = name\n    self.option = option\n}\n\nDataRow.prototype.getValue = function() {\n    return this.id\n}\n\nDataRow.prototype.getLabel = function() {\n    return this.name\n}\n\nDataRow.prototype.optionName = function() {\n    let self = this\n    if(typeof(self.option.optionName)=='function') {\n        let func = self.option.optionName\n        //console.log(func.call(self))\n        return func.call(self)\n    }\n    return self.name\n}\n\nDataRow.factory = function(row, dataSource){\n    let keyName = dataSource.getLabelName()\n    let lang = dataSource.getLang()\n    let id  = row[dataSource.getValueName()];\n    let name = row[keyName] || row[keyName+\"_\"+lang] || \"\"\n    return new DataRow(row, id, name, dataSource.options);\n}\n\n\nfunction DataSource(options) {\n    let self = this;\n    self.lang = 'cn';\n    self.data = [];\n    self.hashtable = {};\n    self.options = options;\n    self.oplabel = options.oplabel || 'name'\n    self.opvalue = options.opvalue || 'value'\n    self.parent = options.parent;\n    self.is_loaded = false;\n            \n    //_log(data_source.hashtable, data_source.datalist, data_source.url)    \n}\n\nDataSource.prototype.init = function() {\n    let self = this;\n    let options = self.options;\n\n\n    if(options.url) {\n        self.loadList()\n    }\n    else if(options.hashlist) {\n        //_log(options.hashlist)\n        Object.keys(options.hashlist).forEach(function(key){\n            let row = DataRow.factory(options.hashlist[key], self)\n            self.data.push(row)\n            self.hashtable[key] = row;\n        });\n        self.is_loaded = true;\n    }\n    else if(options.hashtable) {\n        Object.keys(options.hashtable).forEach(function(key){\n            let row = DataRow.factory({name:options.hashtable[key],value:key}, self);\n            self.data.push(row)\n            self.hashtable[key] = row;\n        });\n        self.oplabel = \"name\"\n        self.opvalue = \"value\"\n        self.is_loaded = true;\n    }\n    else if(options.datalist) {\n        //_log(options.datalist.forEach,\"options\")\n        options.datalist.forEach(function(item){\n            let row = DataRow.factory(item, self)\n            \n            self.hashtable[item[self.opvalue]] = row;    \n            self.data.push(row)\n        })\n        self.is_loaded = true;\n    }\n}\n\n/**\n * [loadList description]\n * @return {[type]} [description]\n */\nDataSource.prototype.loadList = function() {\n    let self = this;\n    let options = self.options;\n    let params = options.params || {}\n    httpGet(options.url).then( function({data=[]}={}){\n        data.forEach(function(item){\n            let row = DataRow.factory(item, self)\n            self.hashtable[item[self.opvalue]] = row; \n            self.data.push(row)   \n        })\n        self.is_loaded = true;\n    });\n}\n\nDataSource.prototype.getData = function(callback) {\n    let self = this;\n    let func = function f(){\n        if(self.is_loaded) {\n            callback(self.data)\n        }\n        else {    \n            setTimeout(f, 50)\n        }\n    }\n\n    func();\n}\n\nDataSource.prototype.filter = function(condition, callback) {\n    var self = this;\n    self.getData(data=>{       \n        var keys = Object.keys(condition)\n        \n        var result = data.filter(row=>{\n            //console.log(\"DataSource.filter\", row, keys.every(key=>condition[key]==row.getRow(key)))\n            return keys.every(key=>condition[key]==row.getRow(key))    \n        })\n        callback(result)\n    })\n}\n/*DataSource.prototype.filter = function(func) {\n    let self = this;\n\n    return new Promise(resolve=>{\n        self.getData(data=>{              \n            resolve(data.filter(func))\n        })\n    })    \n}*/\n\nDataSource.prototype.sub = function(condition, callback) {\n    var self = this;\n    self.getData(data=>{\n        var keys = Object.keys(condition)\n        \n        var result = data.filter(row=>{\n            //_log(\"DataSource.filter\", row, keys.every(key=>condition[key]==row.getRow(key)))\n            return keys.every(key=>condition[key]==row.getRow(key))    \n        })\n\n        var result = result.map(item=>item.getRow())\n        //_log(result,\"999\")\n        var sub = new DataSource({datalist:result, oplabel:self.oplabel, opvalue:self.opvalue},self.lang)\n        sub.init()\n        callback(sub)\n    })\n}\n\nDataSource.prototype.getLabelName = function(name) {\n    return this.oplabel\n}\n\nDataSource.prototype.getValueName = function(name) {\n    return this.opvalue\n}\n\nDataSource.prototype.setLang = function(lang) {\n    this.lang = lang\n}\n\nDataSource.prototype.getLang = function() {\n    return this.lang\n}\n\nDataSource.prototype.setLabelName = function(name) {\n    this.oplabel = name\n}\n\nDataSource.prototype.getRow = function(keyValue, callback) {\n    var self = this;\n    \n\n    let promise = new Promise((resolve)=>{\n        self.getData(()=>{\n            resolve(self.hashtable[keyValue])\n        })\n    });\n\n    if(typeof(callback)=='function') {\n        promise.then(callback)\n    }\n    else {\n        return promise;\n    }\n}\n\nDataSource.prototype.getRowLabel = function(keyValue, callback) {\n    let self = this;\n    \n    let promise = new Promise((resolve)=>{\n        self.getRow(keyValue,function(row){\n            if(row) {\n                resolve(row.getLabel())\n            }\n            else {\n                resolve(\"\");   \n            }    \n        });\n    });\n\n    if(typeof(callback)=='function') {\n        promise.then(callback)\n    }\n    else {\n        return promise;\n    }\n}\n\nDataSource.prototype.getRows = function(keyValues='', callback) {\n    var self = this;\n    keyValues = keyValues || \"\"\n\n    keyValues = typeof(keyValues)=='string' ? keyValues.split(\",\") : keyValues;\n\n    let promise = new Promise(resolve=>{\n        self.getData( data => {\n            //_log(valueList, data, '+++++++') \n            let list = keyValues.map(function(value){\n                return data.find(item=>value==item.getValue())\n            }).filter(item=>item)\n            \n            resolve(list)\n        })\n    });\n    \n    if(typeof(callback)=='function') {\n        promise.then(callback)\n    }\n    else {\n        return promise;\n    }\n}\n\nDataSource.prototype.getSourceByParent = function(parent) {\n    var self = this;\n\n    return new Promise(resolve=>{\n        self.getData( data => {\n            //console.log(data, parent)\n            let list = data.filter(function(value){\n                return value.row[self.parent] == parent\n            })\n\n            let options = extract(self.options,['oplabel','opvalue','parent']);\n            options.datalist = list.map(item=>item.row)\n            let source = new DataSource(options,self.lang);\n            source.init();\n\n            \n            resolve(source)\n        })\n    })    \n}\n\nDataSource.prototype.getRowLabels = function(keyValues, callback) {\n    var self = this;\n\n    let promise = new Promise((resolve)=>{\n        self.getRows(keyValues, function(list){\n            resolve(list.map(item=>item.getLabel()).join(\",\"))\n        }) \n    });\n\n    if(typeof(callback)=='function') {\n        promise.then(callback)\n    }\n    else {\n        return promise;\n    }       \n}\n\nDataSource.prototype.getList = function() {\n    var self = this;\n\n    return new Promise((resolve)=>{\n        self.getData(data=>{\n            resolve(data)\n        })\n    })   \n}\n\nconst instances ={}\nconsole.log(\"init =====================\")\nDataSource.getDataSource = function(resourceName) {\n    if(resourceName.constructor==DataSource) {\n        return resourceName;\n    }\n\n    if(instances[resourceName]) {\n        return instances[resourceName]   \n    }\n    else {\n        var create = function() {\n            \n            if(!resource[resourceName]) {\n                throw \"资源未定义:\"+resourceName\n            }\n            instances[resourceName] = new DataSource(resource[resourceName])\n            instances[resourceName].init()\n            return instances[resourceName]\n        }\n\n        var tmp_create = function() {\n            return new DataSource(resource[resourceName])\n        }\n        \n        return typeof(resourceName)==\"string\" ? create(): tmp_create();\n    }\n}\n\nDataSource.createSource = function(datalist, oplabel, opvalue) {\n    let source = new DataSource({datalist, oplabel, opvalue})\n    source.init()\n    return source;\n}\n\nDataSource.register = function(name, option) {\n    resource[name] = option\n}\n\nexport default DataSource\n",
+			"file": "src/component/DataSource.js",
+			"file_size": 9012,
+			"file_write_time": 132016706095712392,
 			"settings":
 			{
-				"buffer_size": 2841,
+				"buffer_size": 8662,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "/Z/erp/app/home/controllers/LanguageController.php",
+			"file": "src/component/util/fetcher.js",
 			"settings":
 			{
-				"buffer_size": 312,
+				"buffer_size": 2875,
 				"encoding": "UTF-8",
-				"line_ending": "Unix"
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/component/util/index.js",
+			"settings":
+			{
+				"buffer_size": 306,
+				"encoding": "UTF-8",
+				"line_ending": "Windows",
+				"name": "import object from './object.js'"
+			}
+		},
+		{
+			"contents": "import $ from 'jquery'\nimport {config} from \"./application.js\"\nconst caches = {}\n\nconst httpGet = function(url, {enableCache=true}={}) {\n    return new Promise((resolve, reject)=>{\n        if (caches[url]) {\n            if (caches[url].loaded == false) {\n                var func = (function f() {\n                    if (caches[url] && caches[url].loaded == true) {\n                        //50毫秒的差别，忽略不计，不认为是缓存数据\n                        resolve(caches[url].data, false)\n                    } else {\n                        setTimeout(f, 50)\n                    }\n                })\n\n                func();\n            } else {\n                //console.log(\"httpGet\", \"from cache\", url);\n                resolve(caches[url].data, true)\n            }\n        } else {\n            caches[url] = {\n                loaded: false\n            }\n\n            //console.log(\"httpGet\", url);\n            $.get(config(\"host\")+url, function(res) {\n                caches[url].loaded = true;\n                caches[url].data = res;\n                resolve(res, false)\n            }, \"json\")\n        }\n    })    \n}\n\nconst httpPost = function(url, params, callback) {\n    return new Promise((resolve, reject)=>{\n        $.post(config(\"host\")+url, params, resolve,\"json\").error(function(xhr,errorText,errorType){\n            reject()\n        })\n    })\n    \n}\n\nexport { httpGet, httpPost}\nexport default {};",
+			"file": "src/component/http.js",
+			"file_size": 1479,
+			"file_write_time": 132016723833884270,
+			"settings":
+			{
+				"buffer_size": 1394,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/component/mixin/index.js",
+			"settings":
+			{
+				"buffer_size": 261,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
 			}
 		},
 		{
@@ -660,10 +615,27 @@
 			}
 		},
 		{
-			"file": "webpack.config.js",
+			"file": "src/component/item/input.js",
 			"settings":
 			{
-				"buffer_size": 2111,
+				"buffer_size": 589,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/component/itemTransform.js",
+			"settings":
+			{
+				"buffer_size": 779,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/component/mixin/label.js",
+			"settings":
+			{
+				"buffer_size": 101,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -672,7 +644,150 @@
 			"file": "src/lib.js",
 			"settings":
 			{
-				"buffer_size": 914,
+				"buffer_size": 922,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/main.js",
+			"settings":
+			{
+				"buffer_size": 1403,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"contents": "import {getFetcher,clear} from \"./fetcher.js\"\nimport {label} from \"./application.js\"\nimport {isPromise} from \"./util/object.js\"\n\nconst promiseAll = function(data) {\n    return {\n        promises:[],\n        names:[],\n        push:function(promise, name){\n            if(isPromise(promise)) {\n                this.promises.push(promise)\n            }\n            else {\n                this.promises.push(new Promise(resolve=>{\n                    resolve(promise)\n                }))\n            }\n            \n            this.names.push(name)\n        },\n        all:async function(){\n            let self = this;\n            let results = await Promise.all(self.promises)\n            results.forEach((item,index)=>{\n                let key = self.names[index]\n                data[key] = item\n            })\n\n            return data;\n        }\n    }\n}\n\nconst switchData = function(value) {\n    return new Promise((resolve)=>{\n        resolve(value==1 || value=='1' ? label('yes') : label(\"no\"))\n    })\n}\n\nconst createModel = function(tablename) {\n    return {\n        get:function(data, callback, depth=0) {\n            let self = this;\n\n            if(typeof(data)=='object') {\n                if(depth<=0) {\n                    callback(data)\n                }\n                else {\n                    self.init(depth, data, callback)\n                }\n            }\n            else {\n                self.fetch(depth, data, callback)\n            }\n        },\n        load:function({data, depth=0, isCache=true}){\n            let self = this;\n\n            //清空缓存\n            if(!isCache) {\n                clear(tablename)\n            }\n            \n            return new Promise((resolve, reject)=>{\n                if(typeof(data)=='object') {\n                    if(depth<=0) {\n                        resolve(data)\n                    }\n                    else {\n                        self.init(depth, data, resolve)\n                    }\n                }\n                else {\n                    self.fetch(depth, data, resolve)\n                }\n            });\n        },\n        fetch:function(depth, id, callback) {\n            let self = this;\n            let fetcher = getFetcher(tablename)\n            fetcher(id, function(info){\n                if(depth<=0) {\n                    callback(info)\n                }\n                else {\n                    self.init(depth, info, callback)\n                }\n            })\n        },\n        init:function(depth, row, callback) {\n            let self = this\n            callback(row)        \n        }\n    }\n}\n\nexport {createModel, promiseAll}\nexport default {\n    createModel,\n    promiseAll\n}",
+			"file": "src/component/model.js",
+			"file_size": 2779,
+			"file_write_time": 132016663405077703,
+			"settings":
+			{
+				"buffer_size": 2670,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/component/util/object.js",
+			"settings":
+			{
+				"buffer_size": 983,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/component/prop.js",
+			"settings":
+			{
+				"buffer_size": 1557,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/component/label/select-text.js",
+			"settings":
+			{
+				"buffer_size": 525,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/component/item/select.vue",
+			"settings":
+			{
+				"buffer_size": 6409,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/component/mixin/setting.js",
+			"settings":
+			{
+				"buffer_size": 516,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/component/Simple_Admin_Page.vue",
+			"settings":
+			{
+				"buffer_size": 9806,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/component/Simple_Admin_TableList.vue",
+			"settings":
+			{
+				"buffer_size": 9741,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/component/label/text.js",
+			"settings":
+			{
+				"buffer_size": 328,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/component/transform.js",
+			"settings":
+			{
+				"buffer_size": 326,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/component/mixin/validate.js",
+			"settings":
+			{
+				"buffer_size": 853,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"contents": "import { extend } from './util/object.js'\n\nconst extendComponent = function(component, wrapInfo) {\n    wrapInfo.props = component.props;\n    //extend(wrapInfo.props, component.props)\n\n    wrapInfo.methods = wrapInfo.methods || {}\n    wrapInfo.methods.paramsPipe = wrapInfo.methods.paramsPipe || function(p){}\n    wrapInfo.methods.doRender = function(h) {\n        const slots = Object.keys(this.$slots)\n            .reduce((arr, key) => arr.concat(this.$slots[key]), [])\n            .map(vnode => {\n                vnode.context = this._self\n                return vnode\n            })\n\n\n        let params = {\n            on: this.$listeners,\n            props: extend({}, this.$props),\n            // 透传 scopedSlots\n            scopedSlots: this.$scopedSlots,\n            attrs: this.$attrs\n        }\n        //console.log(\"listeners\", this)\n        this.paramsPipe(params);\n\n        return h(component, params, slots)\n    }\n\n    wrapInfo.render = wrapInfo.render || function(h) {\n        //console.log(this)\n        return this.doRender(h)\n    }\n\n    return wrapInfo\n}\n\nexport {extendComponent}\n\nexport default {}",
+			"file": "src/component/vue.js",
+			"file_size": 1159,
+			"file_write_time": 132016662688414426,
+			"settings":
+			{
+				"buffer_size": 1115,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"contents": "const Rules = {}\nconst trigger = {trigger:'blur'}\n\nRules.id = function(obj) {\n    return Object.assign({pattern: /^[1-9]\\d*$/}, obj)\n}\n\nRules.english = function(min, max, obj) {\n    return Object.assign({pattern: new RegExp(\"^[a-z]{\"+min+\",\"+max+\"}$\")}, trigger, obj)\n}\n\nRules.number = function(min, max, obj) {\n    return Object.assign({pattern: new RegExp(\"^[a-z]{\"+min+\",\"+max+\"}$\")}, trigger, obj)\n}\n\nRules.required = function(obj) {\n    return Object.assign({ required: true }, trigger, obj)\n}\n\nRules.username = function(obj) {\n    return Object.assign({pattern: new RegExp(\"^[a-z0-9]{3,50}$\"),required: true}, trigger, obj)\n}\n\nexport {Rules}\nexport default Rules",
+			"file": "src/component/rules.js",
+			"file_size": 692,
+			"file_write_time": 132015127816125258,
+			"settings":
+			{
+				"buffer_size": 668,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "webpack.config.js",
+			"settings":
+			{
+				"buffer_size": 2111,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -772,10 +887,14 @@
 	[
 		"/D/code/vue/tableAdmin",
 		"/D/code/vue/tableAdmin/src",
-		"/D/code/vue/tableAdmin/src/component"
+		"/D/code/vue/tableAdmin/src/component",
+		"/D/code/vue/tableAdmin/src/component/util"
 	],
 	"file_history":
 	[
+		"/D/code/vue/tableAdmin/src/component/util.js",
+		"/D/code/vue/tableAdmin/src/component/mixin.js",
+		"/Z/erp/app/home/controllers/LanguageController.php",
 		"/D/code/vue/tableAdmin/dist/lib.js",
 		"/D/code/vue/table-admin/src/main.ts",
 		"/D/code/vue/asa-plugin/src/component/asa/Asa_Product.vue",
@@ -900,10 +1019,7 @@
 		"/Z/erp/app/models/erp/TbPicture.php",
 		"/Z/erp/app/models/erp/StaticReader.php",
 		"/D/code/vue/myproject2/package.json",
-		"/D/code/vue/myproject/package.json",
-		"/D/code/vue/myproject/src/components/HelloWorld.vue",
-		"/D/code/vue/myproject/src/main.ts",
-		"/D/code/vue/myproject3/package.json"
+		"/D/code/vue/myproject/package.json"
 	],
 	"find":
 	{
@@ -921,6 +1037,21 @@
 		"case_sensitive": true,
 		"find_history":
 		[
+			"resource",
+			"_label",
+			"getLabel",
+			"getAvailableHeight",
+			"_label",
+			"host",
+			"globals",
+			"_label",
+			"globals",
+			"lang",
+			"_label",
+			"globals",
+			"getLabel",
+			"ASAP",
+			"globals",
 			"getBaseObject",
 			"__label",
 			"getBaseObject",
@@ -1033,22 +1164,7 @@
 			"interval_handler",
 			"color_keys",
 			"onSaveColorGroup",
-			"color_keys",
-			"XD190424001918",
-			"brandcolor",
-			"invalid",
-			"guishuguojia",
-			"department",
-			"bumen",
-			"chimazu",
-			"brandgroup",
-			"sexi",
-			"chuchangjia",
-			"getLanguageColumns",
-			"allow",
-			"exchange",
-			"mat",
-			"productmemo"
+			"color_keys"
 		],
 		"highlight": false,
 		"in_selection": false,
@@ -1056,6 +1172,7 @@
 		"regex": true,
 		"replace_history":
 		[
+			"label",
 			"insert into tb_property set name_cn='\\1', name_en='\\2';",
 			"insert into tb_property set name_cn='\\1', name_en='\\2'",
 			" ",
@@ -1176,217 +1293,29 @@
 	"groups":
 	[
 		{
-			"selected": 14,
+			"selected": 5,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "src/component/itemTransform.js",
+					"file": "src/component/mixin/ajax.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 772,
+						"buffer_size": 3355,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								208,
-								208
+								40,
+								40
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1557114102.0,
-							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true,
-							"typescript_plugin_format_options":
-							{
-								"convertTabsToSpaces": true,
-								"indentSize": 4,
-								"tabSize": 4
-							},
-							"use_tab_stops": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 3,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "src/component/function.js",
-					"semi_transient": true,
-					"settings":
-					{
-						"buffer_size": 113,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								113,
-								113
-							]
-						],
-						"settings":
-						{
-							"sorttabs_lastactivated": 1557114231.61,
-							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
-							"typescript_plugin_format_options":
-							{
-								"convertTabsToSpaces": true,
-								"indentSize": 4,
-								"tabSize": 4
-							},
-							"use_tab_stops": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "src/component/prop.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 3953,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								3779,
-								3779
-							]
-						],
-						"settings":
-						{
-							"sorttabs_lastactivated": 1557112466.46,
-							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true,
-							"typescript_plugin_format_options":
-							{
-								"convertTabsToSpaces": true,
-								"indentSize": 4,
-								"tabSize": 4
-							},
-							"use_tab_stops": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 720.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 10,
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "src/component/transform.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 326,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								155,
-								155
-							]
-						],
-						"settings":
-						{
-							"sorttabs_lastactivated": 1557107051.84,
-							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true,
-							"typescript_plugin_format_options":
-							{
-								"convertTabsToSpaces": true,
-								"indentSize": 4,
-								"tabSize": 4
-							},
-							"use_tab_stops": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 17,
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "src/component/label/text.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 350,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								333,
-								333
-							]
-						],
-						"settings":
-						{
-							"sorttabs_lastactivated": 1557110385.15,
-							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true,
-							"typescript_plugin_format_options":
-							{
-								"convertTabsToSpaces": true,
-								"indentSize": 4,
-								"tabSize": 4
-							},
-							"use_tab_stops": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 11,
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "src/component/label/select-text.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 520,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								278,
-								278
-							]
-						],
-						"settings":
-						{
-							"sorttabs_lastactivated": 1557107327.65,
+							"sorttabs_lastactivated": 1557195882.0,
 							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true,
@@ -1406,7 +1335,44 @@
 					"type": "text"
 				},
 				{
-					"buffer": 6,
+					"buffer": 1,
+					"file": "src/component/application.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 693,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								436,
+								436
+							]
+						],
+						"settings":
+						{
+							"open_with_edit": true,
+							"sorttabs_lastactivated": 1557198855.42,
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"typescript_plugin_format_options":
+							{
+								"convertTabsToSpaces": true,
+								"indentSize": 4,
+								"tabSize": 4
+							},
+							"use_tab_stops": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
 					"file": "src/component/label/base.js",
 					"semi_transient": false,
 					"settings":
@@ -1441,29 +1407,59 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 15,
+					"stack_index": 28,
 					"type": "text"
 				},
 				{
-					"buffer": 7,
-					"file": "src/component/DataSource.js",
+					"buffer": 3,
+					"file": "src/component/item/base.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 8672,
+						"buffer_size": 0,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								8300,
-								8300
+								0,
+								0
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1557113803.07,
+							"open_with_edit": true,
+							"sorttabs_lastactivated": 1557108074.03,
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 27,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "src/component/DataSource.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 8662,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								7963,
+								7963
+							]
+						],
+						"settings":
+						{
+							"sorttabs_lastactivated": 1557197084.81,
 							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true,
@@ -1476,64 +1472,33 @@
 							"use_tab_stops": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 4230.0,
+						"translation.y": 2976.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 10,
 					"type": "text"
 				},
 				{
-					"buffer": 8,
-					"file": "src/component/item/select.vue",
+					"buffer": 5,
+					"file": "src/component/util/fetcher.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 6457,
+						"buffer_size": 2875,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								632,
-								591
+								2875,
+								2875
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1557109586.01,
-							"syntax": "Packages/Vue/vue.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 12,
-					"type": "text"
-				},
-				{
-					"buffer": 9,
-					"file": "src/component/Simple_Admin_TableList.vue",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 9636,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								3210,
-								3210
-							]
-						],
-						"settings":
-						{
-							"sorttabs_lastactivated": 1557113748.26,
-							"syntax": "Packages/Vue/vue.tmLanguage",
+							"sorttabs_lastactivated": 1557199991.62,
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true,
 							"typescript_plugin_format_options":
@@ -1541,48 +1506,168 @@
 								"convertTabsToSpaces": true,
 								"indentSize": 4,
 								"tabSize": 4
-							}
+							},
+							"use_tab_stops": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 49.6666666667,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
+					"stack_index": 0,
 					"type": "text"
 				},
 				{
-					"buffer": 10,
-					"file": "src/component/Simple_Admin_Page.vue",
+					"buffer": 6,
+					"file": "src/component/util/index.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 9844,
+						"buffer_size": 306,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2842,
-								2842
+								304,
+								304
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1557113841.62,
-							"syntax": "Packages/Vue/vue.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
+							"auto_name": "import object from './object.js'",
+							"sorttabs_lastactivated": 1557199782.72,
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"typescript_plugin_format_options":
+							{
+								"convertTabsToSpaces": true,
+								"indentSize": 4,
+								"tabSize": 4
+							},
+							"use_tab_stops": false
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
-					"buffer": 11,
+					"buffer": 7,
+					"file": "src/component/http.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1394,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								81,
+								81
+							]
+						],
+						"settings":
+						{
+							"sorttabs_lastactivated": 1557199926.12,
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true,
+							"typescript_plugin_format_options":
+							{
+								"convertTabsToSpaces": true,
+								"indentSize": 4,
+								"tabSize": 4
+							},
+							"use_tab_stops": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "src/component/mixin/index.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 261,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								254,
+								254
+							]
+						],
+						"settings":
+						{
+							"open_with_edit": true,
+							"sorttabs_lastactivated": 1557195884.43,
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"typescript_plugin_format_options":
+							{
+								"convertTabsToSpaces": true,
+								"indentSize": 4,
+								"tabSize": 4
+							},
+							"use_tab_stops": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 15,
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "/D/code/element-dev/src/index.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 6519,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								5647,
+								5654
+							]
+						],
+						"settings":
+						{
+							"sorttabs_lastactivated": 1557197826.95,
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true,
+							"typescript_plugin_format_options":
+							{
+								"convertTabsToSpaces": true,
+								"indentSize": 2,
+								"tabSize": 2
+							},
+							"use_tab_stops": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 2160.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 9,
+					"type": "text"
+				},
+				{
+					"buffer": 10,
 					"file": "src/component/item/input.js",
 					"semi_transient": false,
 					"settings":
@@ -1616,59 +1701,143 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 13,
+					"stack_index": 26,
 					"type": "text"
 				},
 				{
-					"buffer": 12,
-					"file": "src/component/item/base.js",
+					"buffer": 11,
+					"file": "src/component/itemTransform.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 0,
+						"buffer_size": 779,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								28,
+								28
 							]
 						],
 						"settings":
 						{
-							"open_with_edit": true,
-							"sorttabs_lastactivated": 1557108074.03,
-							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax"
+							"sorttabs_lastactivated": 1557192715.27,
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true,
+							"typescript_plugin_format_options":
+							{
+								"convertTabsToSpaces": true,
+								"indentSize": 4,
+								"tabSize": 4
+							},
+							"use_tab_stops": false
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 14,
+					"stack_index": 22,
 					"type": "text"
 				},
 				{
-					"buffer": 13,
-					"file": "src/main.js",
+					"buffer": 12,
+					"file": "src/component/mixin/label.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2841,
+						"buffer_size": 101,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1192,
-								1192
+								93,
+								93
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1557114912.82,
+							"sorttabs_lastactivated": 1557196575.13,
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true,
+							"typescript_plugin_format_options":
+							{
+								"convertTabsToSpaces": true,
+								"indentSize": 4,
+								"tabSize": 4
+							},
+							"use_tab_stops": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 12,
+					"type": "text"
+				},
+				{
+					"buffer": 13,
+					"file": "src/lib.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 922,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								666,
+								666
+							]
+						],
+						"settings":
+						{
+							"sorttabs_lastactivated": 1557191855.97,
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true,
+							"typescript_plugin_format_options":
+							{
+								"convertTabsToSpaces": true,
+								"indentSize": 4,
+								"tabSize": 4
+							},
+							"use_tab_stops": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 24,
+					"type": "text"
+				},
+				{
+					"buffer": 14,
+					"file": "src/main.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1403,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								77,
+								119
+							]
+						],
+						"settings":
+						{
+							"sorttabs_lastactivated": 1557198334.48,
 							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true,
@@ -1681,33 +1850,285 @@
 							"use_tab_stops": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 810.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 8,
 					"type": "text"
 				},
 				{
-					"buffer": 14,
-					"file": "/Z/erp/app/home/controllers/LanguageController.php",
+					"buffer": 15,
+					"file": "src/component/model.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 312,
+						"buffer_size": 2670,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								153,
-								153
+								117,
+								117
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1557114912.83,
-							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"sorttabs_lastactivated": 1557195557.25,
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true,
+							"typescript_plugin_format_options":
+							{
+								"convertTabsToSpaces": true,
+								"indentSize": 4,
+								"tabSize": 4
+							},
+							"use_tab_stops": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 18,
+					"type": "text"
+				},
+				{
+					"buffer": 16,
+					"file": "src/component/util/object.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 983,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								911,
+								911
+							]
+						],
+						"settings":
+						{
+							"sorttabs_lastactivated": 1557192926.81,
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"typescript_plugin_format_options":
+							{
+								"convertTabsToSpaces": true,
+								"indentSize": 4,
+								"tabSize": 4
+							},
+							"use_tab_stops": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 21,
+					"type": "text"
+				},
+				{
+					"buffer": 17,
+					"file": "src/component/prop.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1557,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								892,
+								892
+							]
+						],
+						"settings":
+						{
+							"sorttabs_lastactivated": 1557196679.25,
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true,
+							"typescript_plugin_format_options":
+							{
+								"convertTabsToSpaces": true,
+								"indentSize": 4,
+								"tabSize": 4
+							},
+							"use_tab_stops": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 11,
+					"type": "text"
+				},
+				{
+					"buffer": 18,
+					"file": "src/component/label/select-text.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 525,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								59,
+								59
+							]
+						],
+						"settings":
+						{
+							"sorttabs_lastactivated": 1557193168.81,
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true,
+							"typescript_plugin_format_options":
+							{
+								"convertTabsToSpaces": true,
+								"indentSize": 4,
+								"tabSize": 4
+							},
+							"use_tab_stops": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 19,
+					"type": "text"
+				},
+				{
+					"buffer": 19,
+					"file": "src/component/item/select.vue",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 6409,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								633,
+								633
+							]
+						],
+						"settings":
+						{
+							"sorttabs_lastactivated": 1557192542.52,
+							"syntax": "Packages/Vue/vue.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 23,
+					"type": "text"
+				},
+				{
+					"buffer": 20,
+					"file": "src/component/mixin/setting.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 516,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								83,
+								83
+							]
+						],
+						"settings":
+						{
+							"sorttabs_lastactivated": 1557199870.05,
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true,
+							"typescript_plugin_format_options":
+							{
+								"convertTabsToSpaces": true,
+								"indentSize": 4,
+								"tabSize": 4
+							},
+							"use_tab_stops": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 21,
+					"file": "src/component/Simple_Admin_Page.vue",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 9806,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								7575,
+								7575
+							]
+						],
+						"settings":
+						{
+							"sorttabs_lastactivated": 1557196497.71,
+							"syntax": "Packages/Vue/vue.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1926.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 14,
+					"type": "text"
+				},
+				{
+					"buffer": 22,
+					"file": "src/component/Simple_Admin_TableList.vue",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 9741,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3232,
+								3232
+							]
+						],
+						"settings":
+						{
+							"sorttabs_lastactivated": 1557196564.4,
+							"syntax": "Packages/Vue/vue.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true,
 							"typescript_plugin_format_options":
 							{
 								"convertTabsToSpaces": true,
@@ -1719,49 +2140,199 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 13,
 					"type": "text"
 				},
 				{
-					"buffer": 15,
-					"file": "/D/code/element-dev/src/index.js",
+					"buffer": 23,
+					"file": "src/component/label/text.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 6519,
+						"buffer_size": 328,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								5647,
-								5654
+								156,
+								156
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1557113227.33,
+							"sorttabs_lastactivated": 1557193125.89,
 							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
-							"tab_size": 2,
+							"tab_size": 4,
 							"translate_tabs_to_spaces": true,
 							"typescript_plugin_format_options":
 							{
 								"convertTabsToSpaces": true,
-								"indentSize": 2,
-								"tabSize": 2
+								"indentSize": 4,
+								"tabSize": 4
 							},
 							"use_tab_stops": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 2160.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 9,
+					"stack_index": 20,
 					"type": "text"
 				},
 				{
-					"buffer": 16,
+					"buffer": 24,
+					"file": "src/component/transform.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 326,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								155,
+								155
+							]
+						],
+						"settings":
+						{
+							"sorttabs_lastactivated": 1557198989.72,
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true,
+							"typescript_plugin_format_options":
+							{
+								"convertTabsToSpaces": true,
+								"indentSize": 4,
+								"tabSize": 4
+							},
+							"use_tab_stops": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 25,
+					"file": "src/component/mixin/validate.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 853,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								557,
+								557
+							]
+						],
+						"settings":
+						{
+							"sorttabs_lastactivated": 1557195699.34,
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true,
+							"typescript_plugin_format_options":
+							{
+								"convertTabsToSpaces": true,
+								"indentSize": 4,
+								"tabSize": 4
+							},
+							"use_tab_stops": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 17,
+					"type": "text"
+				},
+				{
+					"buffer": 26,
+					"file": "src/component/vue.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1115,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								31,
+								31
+							]
+						],
+						"settings":
+						{
+							"sorttabs_lastactivated": 1557199873.41,
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true,
+							"typescript_plugin_format_options":
+							{
+								"convertTabsToSpaces": true,
+								"indentSize": 4,
+								"tabSize": 4
+							},
+							"use_tab_stops": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 27,
+					"file": "src/component/rules.js",
+					"semi_transient": true,
+					"settings":
+					{
+						"buffer_size": 668,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								668,
+								668
+							]
+						],
+						"settings":
+						{
+							"sorttabs_lastactivated": 1557199881.24,
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"typescript_plugin_format_options":
+							{
+								"convertTabsToSpaces": true,
+								"indentSize": 4,
+								"tabSize": 4
+							},
+							"use_tab_stops": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 28,
 					"file": "webpack.config.js",
 					"semi_transient": false,
 					"settings":
@@ -1795,45 +2366,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 7,
-					"type": "text"
-				},
-				{
-					"buffer": 17,
-					"file": "src/lib.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 914,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								286,
-								286
-							]
-						],
-						"settings":
-						{
-							"sorttabs_lastactivated": 1557113406.4,
-							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true,
-							"typescript_plugin_format_options":
-							{
-								"convertTabsToSpaces": true,
-								"indentSize": 4,
-								"tabSize": 4
-							},
-							"use_tab_stops": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 8,
+					"stack_index": 25,
 					"type": "text"
 				}
 			]

@@ -1,5 +1,5 @@
 import { Input } from 'element-ui';
-import { extendComponent } from '../vue.js'
+import { extendComponent } from '../util/vue.js'
 
 export default extendComponent(Input, {
     name:"sp-input",

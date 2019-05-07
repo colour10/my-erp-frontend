@@ -1,5 +1,5 @@
 import { Table } from 'element-ui';
-import { extendComponent } from './vue.js'
+import { extendComponent } from './util/vue.js'
 
 export default extendComponent(Table, {
     name:"sp-table",
