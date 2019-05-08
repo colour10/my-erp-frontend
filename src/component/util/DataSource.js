@@ -3,332 +3,171 @@ import {extract} from "./object.js"
 
 const resource = {}
 
-function DataRow(row, id, name, option={}) {
+function DataRow(row, option={}) {
     let self = this;
     self.row = row
-    self.id = id;
-    self.name = name
     self.option = option
 }
 
 DataRow.prototype.getValue = function() {
-    return this.id
+    return this.row[this.option.valueName]
 }
 
 DataRow.prototype.getLabel = function() {
-    return this.name
+    return this.row[this.option.labelName] || ""
 }
 
-DataRow.prototype.optionName = function() {
+DataRow.prototype.getParent = function() {
+    return this.row[this.option.parentName]
+}
+
+DataRow.prototype.convert = function() {
     let self = this
-    if(typeof(self.option.optionName)=='function') {
-        let func = self.option.optionName
-        //console.log(func.call(self))
+    if(typeof(self.option.convert)=='function') {
+        let func = self.option.convert
         return func.call(self)
     }
-    return self.name
+    return self.getLabel()
 }
 
-DataRow.factory = function(row, dataSource){
-    let keyName = dataSource.getLabelName()
-    let lang = dataSource.getLang()
-    let id  = row[dataSource.getValueName()];
-    let name = row[keyName] || row[keyName+"_"+lang] || ""
-    return new DataRow(row, id, name, dataSource.options);
-}
-
-
-function DataSource(options) {
-    let self = this;
-    self.lang = 'cn';
-    self.data = [];
-    self.hashtable = {};
-    self.options = options;
-    self.oplabel = options.oplabel || 'name'
-    self.opvalue = options.opvalue || 'value'
-    self.parent = options.parent;
-    self.is_loaded = false;
-            
-    //_log(data_source.hashtable, data_source.datalist, data_source.url)    
-}
-
-DataSource.prototype.init = function() {
-    let self = this;
-    let options = self.options;
-
-
-    if(options.url) {
-        self.loadList()
-    }
-    else if(options.hashlist) {
-        //_log(options.hashlist)
-        Object.keys(options.hashlist).forEach(function(key){
-            let row = DataRow.factory(options.hashlist[key], self)
-            self.data.push(row)
-            self.hashtable[key] = row;
-        });
-        self.is_loaded = true;
-    }
-    else if(options.hashtable) {
-        Object.keys(options.hashtable).forEach(function(key){
-            let row = DataRow.factory({name:options.hashtable[key],value:key}, self);
-            self.data.push(row)
-            self.hashtable[key] = row;
-        });
-        self.oplabel = "name"
-        self.opvalue = "value"
-        self.is_loaded = true;
-    }
-    else if(options.datalist) {
-        //_log(options.datalist.forEach,"options")
-        options.datalist.forEach(function(item){
-            let row = DataRow.factory(item, self)
-            
-            self.hashtable[item[self.opvalue]] = row;    
-            self.data.push(row)
-        })
-        self.is_loaded = true;
-    }
-}
-
-/**
- * [loadList description]
- * @return {[type]} [description]
- */
-DataSource.prototype.loadList = function() {
-    let self = this;
-    let options = self.options;
-    let params = options.params || {}
-    httpGet(options.url).then( function({data=[]}={}){
-        data.forEach(function(item){
-            let row = DataRow.factory(item, self)
-            self.hashtable[item[self.opvalue]] = row; 
-            self.data.push(row)   
-        })
-        self.is_loaded = true;
-    });
-}
-
-DataSource.prototype.getData = function(callback) {
-    let self = this;
-    let func = function f(){
-        if(self.is_loaded) {
-            callback(self.data)
-        }
-        else {    
-            setTimeout(f, 50)
-        }
-    }
-
-    func();
-}
-
-DataSource.prototype.filter = function(condition, callback) {
-    var self = this;
-    self.getData(data=>{       
-        var keys = Object.keys(condition)
-        
-        var result = data.filter(row=>{
-            //console.log("DataSource.filter", row, keys.every(key=>condition[key]==row.getRow(key)))
-            return keys.every(key=>condition[key]==row.getRow(key))    
-        })
-        callback(result)
-    })
-}
-/*DataSource.prototype.filter = function(func) {
+function DataSource({labelName='name', valueName='value', parentName, url, hashlist, hashtable, datalist, convert}) {
     let self = this;
 
+    let data = [];
+    let mapData = {};    
+
+    let status = 0;
+
+    function _append(key, row) {
+        let dataRow = new DataRow(row, self.getOption())
+        data.push(dataRow)
+        mapData[key] = dataRow;
+    }
+
+    function _init() {
+        return new Promise(resolve=>{
+            let option = self.getOption();
+            if(url) {
+                httpGet(url).then( function({data=[]}={}){
+                    data.forEach(function(item){
+                        _append(item[valueName], item)
+                    })
+                    resolve()
+                });
+            }
+            else if(hashlist) {
+                Object.keys(hashlist).forEach(function(key){
+                    _append(key, hashlist[key])
+                });
+                resolve()
+            }
+            else if(hashtable) {
+                Object.keys(hashtable).forEach(function(key){
+                    _append(key, {name:hashtable[key],value:key})
+                });
+                labelName = "name"
+                valueName = "value"
+                resolve()
+            }
+            else if(datalist) {
+                datalist.forEach(function(item){
+                    _append(item[valueName], item)
+                })
+                resolve()
+            }
+        })    
+    }
+
+    self.getOption = function() {
+        return  {labelName, valueName, parentName, convert};
+    } 
+
+    self.getData = function() {
+        return new Promise(resolve => {
+            function f(){
+                if(status==0) {
+                    status = 1
+                    _init().then(()=>{
+                        status = 2
+                        //console.log(data, mapData)
+                        resolve({data, mapData})
+                    })
+                }
+                else if(status==2) {
+                    //console.log(data, mapData)
+                    resolve({data, mapData})
+                }
+                else {
+                    setTimeout(f, 50)
+                }
+            }
+
+            f();
+        })        
+    }
+}
+
+DataSource.prototype.filter = function(callback) {
+    let self = this;
     return new Promise(resolve=>{
-        self.getData(data=>{              
-            resolve(data.filter(func))
+        self.getData().then(({data})=>{
+            let options = self.getOption();
+            options.datalist = data.filter(callback).map(item=>item.row)
+            resolve(new DataSource(options))
         })
     })    
-}*/
+}
 
-DataSource.prototype.sub = function(condition, callback) {
+DataSource.prototype.getRow = function(keyValues='') {
     var self = this;
-    self.getData(data=>{
-        var keys = Object.keys(condition)
-        
-        var result = data.filter(row=>{
-            //_log("DataSource.filter", row, keys.every(key=>condition[key]==row.getRow(key)))
-            return keys.every(key=>condition[key]==row.getRow(key))    
-        })
-
-        var result = result.map(item=>item.getRow())
-        //_log(result,"999")
-        var sub = new DataSource({datalist:result, oplabel:self.oplabel, opvalue:self.opvalue},self.lang)
-        sub.init()
-        callback(sub)
-    })
-}
-
-DataSource.prototype.getLabelName = function(name) {
-    return this.oplabel
-}
-
-DataSource.prototype.getValueName = function(name) {
-    return this.opvalue
-}
-
-DataSource.prototype.setLang = function(lang) {
-    this.lang = lang
-}
-
-DataSource.prototype.getLang = function() {
-    return this.lang
-}
-
-DataSource.prototype.setLabelName = function(name) {
-    this.oplabel = name
-}
-
-DataSource.prototype.getRow = function(keyValue, callback) {
-    var self = this;
-    
-
-    let promise = new Promise((resolve)=>{
-        self.getData(()=>{
-            resolve(self.hashtable[keyValue])
-        })
-    });
-
-    if(typeof(callback)=='function') {
-        promise.then(callback)
-    }
-    else {
-        return promise;
-    }
-}
-
-DataSource.prototype.getRowLabel = function(keyValue, callback) {
-    let self = this;
-    
-    let promise = new Promise((resolve)=>{
-        self.getRow(keyValue,function(row){
-            if(row) {
-                resolve(row.getLabel())
-            }
-            else {
-                resolve("");   
-            }    
-        });
-    });
-
-    if(typeof(callback)=='function') {
-        promise.then(callback)
-    }
-    else {
-        return promise;
-    }
-}
-
-DataSource.prototype.getRows = function(keyValues='', callback) {
-    var self = this;
-    keyValues = keyValues || ""
-
     keyValues = typeof(keyValues)=='string' ? keyValues.split(",") : keyValues;
 
-    let promise = new Promise(resolve=>{
-        self.getData( data => {
-            //_log(valueList, data, '+++++++') 
+    return new Promise(resolve=>{
+        self.getData().then( ({mapData}) => {
             let list = keyValues.map(function(value){
-                return data.find(item=>value==item.getValue())
+                return mapData[value]
             }).filter(item=>item)
             
             resolve(list)
         })
-    });
-    
-    if(typeof(callback)=='function') {
-        promise.then(callback)
-    }
-    else {
-        return promise;
-    }
-}
-
-DataSource.prototype.getSourceByParent = function(parent) {
-    var self = this;
-
-    return new Promise(resolve=>{
-        self.getData( data => {
-            //console.log(data, parent)
-            let list = data.filter(function(value){
-                return value.row[self.parent] == parent
-            })
-
-            let options = extract(self.options,['oplabel','opvalue','parent']);
-            options.datalist = list.map(item=>item.row)
-            let source = new DataSource(options,self.lang);
-            source.init();
-
-            
-            resolve(source)
-        })
     })    
 }
 
-DataSource.prototype.getRowLabels = function(keyValues, callback) {
-    var self = this;
-
-    let promise = new Promise((resolve)=>{
-        self.getRows(keyValues, function(list){
-            resolve(list.map(item=>item.getLabel()).join(","))
-        }) 
-    });
-
-    if(typeof(callback)=='function') {
-        promise.then(callback)
-    }
-    else {
-        return promise;
-    }       
+DataSource.prototype.getSourceByParent = function(parent) {
+    return this.filter(rowData=>rowData.getParent()==parent)
 }
 
-DataSource.prototype.getList = function() {
+DataSource.prototype.getLabel = function(keyValues) {
     var self = this;
 
     return new Promise((resolve)=>{
-        self.getData(data=>{
-            resolve(data)
-        })
-    })   
+        self.getRow(keyValues).then(list=>{
+            resolve(list.map(item=>item.getLabel()).filter(item=>item.length>0).join(","))
+        }) 
+    });    
 }
 
 const instances ={}
-console.log("init =====================")
 DataSource.getDataSource = function(resourceName) {
-    if(resourceName.constructor==DataSource) {
-        return resourceName;
-    }
-
-    if(instances[resourceName]) {
-        return instances[resourceName]   
-    }
-    else {
-        var create = function() {
-            
-            if(!resource[resourceName]) {
-                throw "资源未定义:"+resourceName
-            }
-            instances[resourceName] = new DataSource(resource[resourceName])
-            instances[resourceName].init()
+    if(typeof(resourceName)=="string") {
+        if(instances[resourceName]) {
             return instances[resourceName]
         }
-
-        var tmp_create = function() {
-            return new DataSource(resource[resourceName])
+        else if(!resource[resourceName]) {
+            throw "资源未定义:"+resourceName
         }
-        
-        return typeof(resourceName)=="string" ? create(): tmp_create();
-    }
-}
 
-DataSource.createSource = function(datalist, oplabel, opvalue) {
-    let source = new DataSource({datalist, oplabel, opvalue})
-    source.init()
-    return source;
+        instances[resourceName] = new DataSource(resource[resourceName])
+        return instances[resourceName]
+    } 
+    else {
+        if(resourceName.constructor==DataSource) {
+            return resourceName;
+        }
+        else {
+            return new DataSource(resourceName)
+        }        
+    }
 }
 
 DataSource.register = function(name, option) {

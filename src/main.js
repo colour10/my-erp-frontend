@@ -34,8 +34,8 @@ components.forEach(component => {
     Vue.component(component.name, component);
 });
 
-DataSource.register("country", {url:'/l/country',oplabel:'name', opvalue:'id', model:'country'});
-DataSource.register("currency", {url:'/l/currency',oplabel:'code', opvalue:'id'});
+DataSource.register("country", {url:'/l/country',labelName:'name_cn', valueName:'id', model:'country'});
+DataSource.register("currency", {url:'/l/currency',labelName:'code', valueName:'id'});
 //DataSource.register("pricetype", {hashtable:list.pricetype})
 label('bianji', "编辑")
 label('shanchu', "删除")

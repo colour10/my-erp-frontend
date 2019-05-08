@@ -1,6 +1,6 @@
 <template>
     <el-select v-model="currentValue" :multiple="column.multiple" :placeholder="column.placeholder" style="width:150" @change="handleChange" filterable :disabled="column.disabled" :clearable="column.clearable" size="mini" :filter-method="onFilter" @visible-change="onVisibleChange">
-        <el-option v-for="(item,key) in filterData" :key="item.id" :label="item.optionName()" :value="item.id" @click.native="onClick(item)">
+        <el-option v-for="(item,key) in filterData" :key="item.getValue()" :label="item.convert()" :value="item.getValue()" @click.native="onClick(item)">
             <template>
                 <slot v-bind:row="item"></slot>
             </template>
@@ -88,6 +88,7 @@ export default {
         },
         getDataSource() {
             let self = this
+            //console.log(self.column.source , DataSource.getDataSource(self.column.source))
             return DataSource.getDataSource(self.column.source)
         },
         setValue(value) {
@@ -110,7 +111,7 @@ export default {
         push(item) {
             let self = this
             self.data.push(item)
-            self.keyindexes[item.id] = self.data.length-1
+            self.keyindexes[item.getValue()] = self.data.length-1
         },
         onClick(item) {
             let self = this
@@ -158,8 +159,7 @@ export default {
             }
             else {
                 self.filterData = self.data.filter(item=>{
-                    //self._log(item.name)
-                    return item.optionName().toUpperCase().indexOf(keyword)>=0// || name_en.toUpperCase().indexOf(k)>=0
+                    return item.convert().toUpperCase().indexOf(keyword)>=0// || name_en.toUpperCase().indexOf(k)>=0
                 })
             }
         }
@@ -178,9 +178,8 @@ export default {
         self.setValue(self.value)
 
         if (!self.parentid) {
-            self.getDataSource().getData(function(data) {
-                //self._log("load", data)
-                //self.data = data
+            //console.log('++++++++++++++++++++++')
+            self.getDataSource().getData().then(({data})=>{
                 data.forEach(item => self.push(item))
                 self.filteredList()
             })
@@ -188,21 +187,6 @@ export default {
             //self._log("mounted")
             self.load(self.parentid)
         }
-    },
-    computed:{
-
-    },
-    render(h) {
-        let self = this;
-        let {column, record, option} = self.$attrs
-
-        //console.log(column,record, option, self)
-        if(typeof(column)!='undefined' && typeof(record)!='undefined') {
-            return h("span", record[column.name])
-        }
-        else {
-            //return self.doRender(h)
-        }        
     }
 }
 </script>

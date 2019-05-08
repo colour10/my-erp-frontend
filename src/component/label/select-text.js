@@ -13,7 +13,8 @@ export default extend({
         let self = this
         //self._log("hello")
         let dataSource = DataSource.getDataSource(self.column.source)
-        dataSource.getRowLabel(self.getValue()).then(text=>{
+        dataSource.getLabel(self.getValue()).then(text=>{
+            //console.log(text,"==")
             self.text = text
         })
 

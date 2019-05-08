@@ -4,7 +4,7 @@ export default {
     name: 'sp-item-transform',
     render(createElement) {
         let self = this
-        console.log(self.$props)
+        //console.log(self.$props)
         let props = extend(self.column.props || {}, {
             value: self.value,
             column:self.column,
