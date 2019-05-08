@@ -8,14 +8,14 @@
             </el-table-column>
             <el-table-column :label="item.label" align="center" :width="item.width||180" v-for="item in buttons" :key="item.label">
                 <template v-slot="scope">
-                    <as-button type="text" @click="item.handler(scope.$index, scope.row, item)">{{item.label}}</as-button>
+                    <el-button type="text" @click="item.handler(scope.$index, scope.row, item)">{{item.label}}</el-button>
                 </template>
             </el-table-column>
             <el-table-column :label="_label('caozuo')" :width="localOptions.action_width" align="center" v-if="localOptions.isaction">
                 <template v-slot="scope">
-                    <as-button size="mini" @click="handleClickUpdate(scope.$index, scope.row)" v-if="isEditable(scope.row)"icon="el-icon-edit">{{_label('bianji')}}</as-button>
-                    <au-button :auth="authname||controller" size="mini" type="danger" @click="onClickDelete(scope.$index, scope.row)" v-if="isDeletable(scope.row)" icon="el-icon-delete" dds>{{_label('shanchu')}}</au-button>
-                    <as-button size="mini" @click="handleAction(scope,item)" v-for="item in actions" :key="item.label" v-if="isShow(item)">{{item.label}}</as-button>
+                    <el-button size="mini" @click="handleClickUpdate(scope.$index, scope.row)" v-if="isEditable(scope.row)"icon="el-icon-edit">{{_label('bianji')}}</el-button>
+                    <au-button :auth="authname||controller" size="mini" type="danger" @click="onClickDelete(scope.$index, scope.row)" v-if="isDeletable(scope.row)" icon="el-icon-delete">{{_label('shanchu')}}</au-button>
+                    <el-button size="mini" @click="handleAction(scope,item)" v-for="item in actions" :key="item.label" v-if="isShow(item)">{{item.label}}</el-button>
                 </template>
             </el-table-column>
         </sp-table>
@@ -79,9 +79,6 @@ export default {
                     return self.cellClasses[column.property]
                 }
             }
-        },
-        onClickImage(row, column) {
-            this.$emit("preview", this.getImageSrc(row, column), row, column)
         },
         handleSizeChange(pageSize) {
             this.pagination.pageSize = pageSize
@@ -148,32 +145,6 @@ export default {
             if (self.onclickupdate) {
                 self.onclickupdate(rowIndex, row)
                     //self._log("click edit")
-            }
-        },
-        getImageSrc(row, column) {
-            let picture = ""
-            if (row[column.name] && row[column.name].length > 0) {
-                picture = row[column.name]
-            }
-
-            return this._fileLink(picture)
-        },
-        getImageStyle(column) {
-            let styles = "";
-            if (column.image_width) {
-                styles += "width:" + column.image_width + 'px;'
-            }
-
-            if (column.image_height) {
-                styles += "height:" + column.image_height + 'px;'
-            }
-            return styles;
-        },
-        getStyle(item, row) {
-            if (row[item.name + '__style']) {
-                return row[item.name + '__style']
-            } else {
-                return item.style || ""
             }
         },
         loadList() {

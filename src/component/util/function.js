@@ -1,6 +1,15 @@
-const fnone = function(){}
-export {fnone}
+export function sortDigit(a,b){
+    return a-b
+}
 
-const fture = ()=>true
-const ffalse = ()=>false
-export {ffalse, fture}
+export function noop() {}
+
+export function beTrue() {
+    return true
+}
+
+export function beFalse() {
+    return false
+}
+
+export default { sortDigit }

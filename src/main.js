@@ -1,9 +1,8 @@
 const Vue = require('vue')
-import {config} from "./component/application.js"
+import {config,label} from "./component/application.js"
 config("host", "http://erp.localhost.com")
-console.log(config('host'))
+//console.log(config('host'))
 
-import {getComponentSimple} from './component/prop.js'
 import Simple_Admin_Page from './component/Simple_Admin_Page.vue'
 import Simple_Admin_TableList from './component/Simple_Admin_TableList.vue'
 
@@ -13,12 +12,11 @@ import Checkbox from './component/item/checkbox.js'
 import Text from './component/label/text.js'
 import SelectText from './component/label/select-text.js'
 
-import Auth from './component/Auth.vue'
 import Table from './component/table.js'
 import Authbutton from './component/authbutton.js'
-import Button from './component/button.js'
 import Input from './component/item/input.js'
-import DataSource from './component/util/DataSource.js'
+import { DataSource, vue, func } from './component/util/'
+
 
 const components = [
     Simple_Admin_Page,
@@ -26,10 +24,8 @@ const components = [
     Select,
     Text,
     SelectText,
-    Auth,
     Table,
     Checkbox,
-    Button,
     Authbutton, 
     Input
 ]
@@ -41,7 +37,24 @@ components.forEach(component => {
 DataSource.register("country", {url:'/l/country',oplabel:'name', opvalue:'id', model:'country'});
 DataSource.register("currency", {url:'/l/currency',oplabel:'code', opvalue:'id'});
 //DataSource.register("pricetype", {hashtable:list.pricetype})
+label('bianji', "编辑")
+label('shanchu', "删除")
 
 
+const props = {
+    columns: [
+        { name: "name", label: label("mingcheng"), type:"sp-input", listType:'sp-text' },
+        { name: "countryid", label: label("guojiadiqu"), type:"sp-select", source:"country", listType:"sp-select-text"},
+        //{ name: "pricetype", label: label("jiageleixing"), type:"sp-select", source:"pricetype", listType:"sp-select-text"},            
+        { name: "currencyid", label: label("bizhong"), type:"sp-select", source:"currency", listType:"sp-select-text"},
+        { name: "displayindex", label: label("paixu"), type:"sp-input", sortMethod:func.sortDigit }
+    ],
+    controller: "price",
+    auth: "price",
+    options:{
+        dialogWidth:"400px", 
+        autoreload:true
+    }
+}
 
-const app = new Vue(getComponentSimple("price")).$mount('#app')
+const app = new Vue(vue.getComponent(props)).$mount('#app')

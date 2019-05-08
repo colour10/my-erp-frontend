@@ -36,6 +36,17 @@ const extendComponent = function(component, wrapInfo) {
     return wrapInfo
 }
 
-export {extendComponent}
+const getComponent = function(props) {
+    return {
+        data: function() {
+            return {
+                props
+            }
+        },
+        template: '<sp-page v-bind="props" ref="page"></sp-page>'
+    }
+}
 
-export default {}
+export { extendComponent, getComponent }
+
+export default { extendComponent, getComponent }

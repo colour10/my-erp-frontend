@@ -1,4 +1,4 @@
-const watcher = function(target, property, callback){
+export default function(target, property, callback){
     let handler
     let oldvalue = target[property];
     return {
@@ -19,5 +19,3 @@ const watcher = function(target, property, callback){
         }
     }
 }
-
-export default watcher;

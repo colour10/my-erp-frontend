@@ -1,12 +1,5 @@
-const label = function(name) {
-    if (typeof($ASAL) != 'undefined' && $ASAL[name]) {
-        return $ASAL[name]
-    } else {
-        return "";
-    }
-}
-
-const config = (function() {
+const {config, label} = (function() {
+    //配置信息文件
     const applicationConfig = {
         pagination:{
             pageSizes : [10, 20, 30, 50, 100],
@@ -15,9 +8,7 @@ const config = (function() {
         host: ""
     }
 
-
-    return function(name, value) {
-
+    let config = function(name, value) {
         if(typeof(value)=='undefined') {
             //console.log("applicatin config")
             return applicationConfig[name]
@@ -27,6 +18,20 @@ const config = (function() {
             return this;
         }
     }
+
+    const languages = {
+
+    }
+    let label = function(name, value) {
+        if (typeof(value) == 'undefined') {
+            return languages[name] || name
+        } else {
+            languages[name] = value
+            return this;
+        }
+    }
+
+    return {config, label}
 })()
 
 export {

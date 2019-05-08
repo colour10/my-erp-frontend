@@ -6,7 +6,7 @@
                     <el-form class="searchform" ref="search-form" :model="form" label-width="80px" size="mini" :inline="true" @submit.native.prevent v-if="hideForm!==true">
                         <el-form-item class="searchitem">
                             <el-input v-model="searchform.keyword" width="250" style="width:250px;" @keyup.enter.native="onSearch" v-if="isSubmit"></el-input>
-                            <as-button type="primary" @click="onSearch" size="mini" v-if="isSubmit" icon="el-icon-search">{{_label("chaxun")}}</as-button>
+                            <el-button type="primary" @click="onSearch" size="mini" v-if="isSubmit" icon="el-icon-search">{{_label("chaxun")}}</el-button>
                             <au-button :auth="authname" type="primary" @click="showFormToCreate()" v-if="hideCreate!==true">{{_label("xinjian")}}</au-button>
                         </el-form-item>
                     </el-form>
@@ -30,7 +30,7 @@
             <el-row>
                 <el-col :span="24" style="text-align:center;">
                     <au-button :auth="authname" type="primary" @click="onSubmit" style="margin:auto;" v-if="opt.isShowSubmit!==false">{{_label("baocun")}}</au-button>
-                    <as-button type="primary" @click="onQuit">{{_label("tuichu")}}</as-button>
+                    <el-button type="primary" size="mini" @click="onQuit">{{_label("tuichu")}}</el-button>
                 </el-col>
             </el-row>
         </el-dialog>
@@ -183,7 +183,7 @@ export default {
             self.action = "add"
             self.$emit("before-add")
 
-            self.showDialog(self.getTitle(self._label("tianjiaxinxi")));
+            self.showDialog(self.getTitle(self._label("xinjian")));
         },
         showFormToEdit(rowIndex, row) {
             let self = this
@@ -193,7 +193,7 @@ export default {
             self.$emit("before-edit", row)
             //self._log("beforeedit")
 
-            self.showDialog(self.getTitle(self._label("xiugaixinxi"), row));
+            self.showDialog(self.getTitle(self._label("bianji"), row));
         },
         getTitle(defaultTitle, row) {
             let self = this;
