@@ -3,34 +3,34 @@
         <el-row>
             <el-col :span="24">
                 <slot name="form">
-                    <el-form class="searchform" ref="search-form" :model="form" label-width="80px" size="mini" :inline="true" @submit.native.prevent v-if="hideForm!==true">
+                    <el-form class="searchform" ref="search-form" :model="form" label-width="80px" size="mini" :inline="true" @submit.native.prevent v-if="isButtonShow({action:'search'})">
                         <el-form-item class="searchitem">
-                            <el-input v-model="searchform.keyword" width="250" style="width:250px;" @keyup.enter.native="onSearch" v-if="isSubmit"></el-input>
-                            <el-button type="primary" @click="onSearch" size="mini" v-if="isSubmit" icon="el-icon-search">{{_label("chaxun")}}</el-button>
-                            <au-button :auth="authname" type="primary" @click="showFormToCreate()" v-if="hideCreate!==true">{{_label("xinjian")}}</au-button>
+                            <el-input v-model="searchform.keyword" width="250" style="width:250px;" @keyup.enter.native="onSearch"></el-input>
+                            <el-button type="primary" @click="onSearch" size="mini" v-if="isButtonShow({action:'search'})" icon="el-icon-search">{{_label("chaxun")}}</el-button>
+                            <au-button :auth="authname" type="primary" @click="showFormToCreate()" v-if="isButtonShow({action:'add'})">{{_label("xinjian")}}</au-button>
                         </el-form-item>
                     </el-form>
-                    <au-button :auth="authname" type="primary" @click="showFormToCreate()" v-if="hideCreate!==true && hideForm===true">{{_label("xinjian")}}</au-button>
+                    <au-button :auth="authname" type="primary" @click="showFormToCreate()" v-if="isButtonShow({action:'add'})">{{_label("xinjian")}}</au-button>
                 </slot>
             </el-col>
         </el-row>
         <el-row :gutter="20">
             <el-col :span="24">
-                <sp-tablelist ref="tablelist" :controller="controller" :columns="columns" :actions="actions" :buttons="buttons" :options="options" :base="base" :authname="authname" :isedit="opt.isedit" :isdelete="opt.isdelete" :onclickupdate="showFormToEdit"></sp-tablelist>
+                <sp-tablelist ref="tablelist" v-bind="$props" @before-edit="showFormToEdit"></sp-tablelist>
             </el-col>
         </el-row>
-        <el-dialog :title="title" :visible.sync="dialogVisible" :center="true" :width="opt.dialogWidth||'450px'" :modal="false">
+        <el-dialog :title="title" :visible.sync="dialogVisible" :center="true" :width="dialogWidth" :modal="false">
             <slot v-bind:form="form" v-bind:action="action" v-bind:columns="columns" name="default">
-                <el-form class="user-form" ref="form" :model="form" label-width="100px" :inline="opt.inline===true" :size="opt.formSize||'mini'">
+                <el-form class="user-form" ref="form" :model="form" label-width="100px" :inline="inline" :size="formSize">
                     <el-form-item :label="item.label" v-if="!item.is_edit_hide" v-for="item in columns" :key="item.name" :class="item.class?item.class:'width2'" :disabled="checkDisabled(item)">                        
-                        <sp-item-transform :ref="item.name" v-model="form[item.name]"  :column="item" :record="form" :option="opt"></sp-item-transform>
+                        <sp-item-transform :ref="item.name" v-model="form[item.name]"  :column="item" :record="form" :option="option"></sp-item-transform>
                     </el-form-item>
                 </el-form>
             </slot>
             <el-row>
                 <el-col :span="24" style="text-align:center;">
-                    <au-button :auth="authname" type="primary" @click="onSubmit" style="margin:auto;" v-if="opt.isShowSubmit!==false">{{_label("baocun")}}</au-button>
-                    <el-button type="primary" size="mini" @click="onQuit">{{_label("tuichu")}}</el-button>
+                    <au-button :auth="authname" type="primary" @click="onSubmit" style="margin:auto;" v-if="isButtonShow({action:'edit'})">{{_label("baocun")}}</au-button>
+                    <el-button type="primary" size="mini" @click="onQuit" v-if="isButtonShow({action:'quit'})">{{_label("tuichu")}}</el-button>
                 </el-col>
             </el-row>
         </el-dialog>
@@ -44,7 +44,64 @@ import {log,ajax,label} from './mixin/'
 
 export default {
     name: 'sp-page',
-    props: ['columns', 'buttons', "options", "controller", "base", "auth", "hideCreate", 'hideForm', 'actions', "formTitle", "isDisabled"],
+    //props: [ "formTitle", "isDisabled"],
+    props:{
+        columns:Array, 
+        buttons:Array, 
+        controller:String, 
+        base:{
+            type:[Object], 
+            default:function(){
+                return {}
+            }
+        }, 
+        option:{
+            type:Object,
+            default:function(){
+                return {}
+            }
+        }, 
+        actions:Array, 
+        model:String,
+        isSubmit:{
+            type:Boolean,
+            default:true
+        },
+        isAction:{
+            type:Boolean,
+            default:true
+        },
+        actionWidth:{
+            type:Number,
+            default:180
+        },
+        actionName:{
+            type:String,
+            default:"page"
+        },
+        isShow:Function,
+        height:Number,
+        authname:String,
+        inline:Boolean,
+        formSize:{
+            type:String,
+            default:'mini'
+        },
+        dialogWidth:{
+            type:String,
+            default:'450px'
+        },
+        isAutoHide:{
+            type:Boolean,
+            default:true
+        },
+        isAutoReload:{
+            type:Boolean,
+            default:false
+        },
+        formTitle:Function,
+        isDisable:Function
+    },
     components: {
         "sp-item-transform":ItemTransform
     },
@@ -54,24 +111,13 @@ export default {
         let form = {
             id: ""
         }
-
-        let base = self.base || {}
-
-        let opt = self.options || {};
-
-        for (let i = 0; i < self.columns.length; i++) {
-            form[self.columns[i].name] = ""
-        }
-
-        let authname = self.auth ? self.auth : self.controller
+        self.columns.forEach(column=>form[column.name]='')
 
         return {
             dialogVisible: false,
             form: form,
             rowIndex: "",
             title: "",
-            opt,
-            authname: authname,
             searchform: {},
             action: "",
             isSubmiting:false
@@ -80,6 +126,13 @@ export default {
     methods: {
         onQuit() {
             this.dialogVisible = false
+        },
+        isButtonShow(scope) {
+            if (typeof(this.isShow)=='function') {
+                return this.isShow(scope)
+            } else {
+                return true;
+            }
         },
         onSearch() {
             let self = this
@@ -110,7 +163,7 @@ export default {
 
             let issubmit = self.isSubmit;
             let autoreload = self.isAutoReload;
-            let autohide = self.isAutohide;
+            let autohide = self.isAutoHide;
             let tablelist = self.$refs.tablelist
 
             if (self.action == "add" && self.form.id=='') {
@@ -185,7 +238,7 @@ export default {
 
             self.showDialog(self.getTitle(self._label("xinjian")));
         },
-        showFormToEdit(rowIndex, row) {
+        showFormToEdit({rowIndex, row}) {
             let self = this
             self.rowIndex = rowIndex;
             copyTo(row, this.form)
@@ -233,8 +286,8 @@ export default {
         },
         checkDisabled(column) {
             let self = this
-            if (typeof(self.isDisabled) == 'function') {
-                return self.isDisabled(column, self.action)
+            if (typeof(self.isDisable) == 'function') {
+                return self.isDisable(column, self.action)
             } else {
                 return false;
             }
@@ -247,18 +300,6 @@ export default {
             },
             deep: true
         }
-    },
-    computed: {        
-        isSubmit() {
-            return this.opt.issubmit || true
-        },
-        isAutohide() {
-            return this.opt.autohide || false
-        },
-        isAutoReload() {
-            return this.opt.autoreload || true
-        }
-    },
-    mounted: function() {}
+    }
 }
 </script>

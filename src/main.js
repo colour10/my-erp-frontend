@@ -54,6 +54,12 @@ const props = {
     options:{
         dialogWidth:"400px", 
         autoreload:true
+    },
+    isShow:function({action, row}){
+        if(action=='search') {
+            return false;
+        }
+        return true
     }
 }
 

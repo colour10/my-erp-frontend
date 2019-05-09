@@ -1,9 +1,9 @@
 <template>
     <div>
-        <sp-table :data="tableData" border style="width: 100%;" :height="tableHeight" :cell-class-name="getCellClassName">
-            <el-table-column :prop="item.name" :label="item.label" :width="item.width||180" v-for="item in columns" :key="item.name" :sortable="!item.is_image" v-if="item.listType">
+        <sp-table :data="tableData" border style="width: 100%;" :height="height" :cell-class-name="getCellClassName">
+            <el-table-column :prop="item.name" :label="item.label" :width="item.width||180" v-for="item in columns" :key="item.name" :sortable="item.sortable==undefined || item.sortable" v-if="item.listType">
                 <template v-slot="scope">
-                    <sp-transform v-bind="item" :column="item" :record="scope.row" :option="localOptions"></sp-transform>
+                    <sp-transform v-bind="item" :column="item" :record="scope.row" :option="option"></sp-transform>
                 </template>
             </el-table-column>
             <el-table-column :label="item.label" align="center" :width="item.width||180" v-for="item in buttons" :key="item.label">
@@ -11,11 +11,11 @@
                     <el-button type="text" @click="item.handler(scope.$index, scope.row, item)">{{item.label}}</el-button>
                 </template>
             </el-table-column>
-            <el-table-column :label="_label('caozuo')" :width="localOptions.action_width" align="center" v-if="localOptions.isaction">
+            <el-table-column :label="_label('caozuo')" :width="actionWidth" align="center" v-if="isAction">
                 <template v-slot="scope">
-                    <el-button size="mini" @click="handleClickUpdate(scope.$index, scope.row)" v-if="isEditable(scope.row)"icon="el-icon-edit">{{_label('bianji')}}</el-button>
-                    <au-button :auth="authname||controller" size="mini" type="danger" @click="onClickDelete(scope.$index, scope.row)" v-if="isDeletable(scope.row)" icon="el-icon-delete">{{_label('shanchu')}}</au-button>
-                    <el-button size="mini" @click="handleAction(scope,item)" v-for="item in actions" :key="item.label" v-if="isShow(item)">{{item.label}}</el-button>
+                    <el-button size="mini" @click="handleClickUpdate(scope.$index, scope.row)" v-if="isButtonShow({action:'view', row:scope.row})" icon="el-icon-edit">{{_label('bianji')}}</el-button>
+                    <au-button :auth="authname||controller" size="mini" type="danger" @click="onClickDelete(scope.$index, scope.row)" v-if="isButtonShow({action:'delete', row:scope.row})" icon="el-icon-delete">{{_label('shanchu')}}</au-button>
+                    <el-button size="mini" @click="handleAction(scope,item)" v-for="item in actions" :key="item.label" v-if="isButtonShow({action:item.name, row:scope.row})">{{item.label}}</el-button>
                 </template>
             </el-table-column>
         </sp-table>
@@ -27,29 +27,55 @@
 <script>
 import { config } from './application.js'
 import { extend } from './util/object.js'
-import allModels from "./util/model.js"
 import Transform from './transform.js'
 import {log,ajax,label} from './mixin/'
 
-let model
-
 export default {
     name: 'sp-tablelist',
-    props: ['columns', "buttons", "controller", "base", "onclickupdate", 'isedit', 'isdelete', "options", "authname", "tableHeight", 'actions', 'tableModel'],
+    props: {
+        columns:Array, 
+        buttons:Array, 
+        controller:String, 
+        base:{
+            type:[Object], 
+            default:function(){
+                return {}
+            }
+        }, 
+        option:{
+            type:Object,
+            default:function(){
+                return {}
+            }
+        }, 
+        actions:Array, 
+        model:String,
+        isSubmit:{
+            type:Boolean,
+            default:true
+        },
+        isAction:{
+            type:Boolean,
+            default:true
+        },
+        actionWidth:{
+            type:Number,
+            default:180
+        },
+        actionName:{
+            type:String,
+            default:"page"
+        },
+        isShow:Function,
+        height:Number,
+        authname:String
+    },
     components: {
         "sp-transform":Transform
     },
     mixins:[log,ajax,label],
     data() {
         let self = this
-        let base = self.base || {}
-        let localOptions = (({action_width=180, issubmit=true, isaction=true, actionNameOfLoad='page'}={})=>{return {action_width, issubmit, isaction, actionNameOfLoad}})(self.options)
-
-        if(self.tableModel && allModels[self.tableModel]) {
-            model = allModels[self.tableModel]
-        }
-
-        //self._log("data")
 
         return {
             rowIndex: "",
@@ -61,7 +87,6 @@ export default {
                 total: 0,
                 current: 1
             },
-            localOptions,
             cellClasses:{},
             searchform:{}
         }
@@ -88,9 +113,9 @@ export default {
             this.pagination.current = current
             this.loadList()
         },
-        isShow(item) {
-            if (item.isShow) {
-                return item.isShow(this)
+        isButtonShow(scope) {
+            if (typeof(this.isShow)=='function') {
+                return this.isShow(scope)
             } else {
                 return true;
             }
@@ -130,7 +155,7 @@ export default {
             let self = this
             self.rowIndex = rowIndex;
 
-            if(self.localOptions.issubmit) {
+            if(self.isSubmit) {
                 let result = await self._remove("/" + self.controller + "/delete", { id: row.id })
                 if (result == true) {
                     self.$delete(self.tableData, rowIndex)
@@ -141,11 +166,7 @@ export default {
             }
         },
         handleClickUpdate(rowIndex, row) {
-            let self = this
-            if (self.onclickupdate) {
-                self.onclickupdate(rowIndex, row)
-                    //self._log("click edit")
-            }
+            this.$emit("before-edit", {row, rowIndex})
         },
         loadList() {
             var self = this;
@@ -162,9 +183,9 @@ export default {
                 pageSize: self.pagination.pageSize
             }, self.searchform, self.base)
 
-            self._fetch("/" + self.controller + "/" + self.localOptions.actionNameOfLoad, params).then(function(res) {
+            self._fetch("/" + self.controller + "/" + self.actionName, params).then(function(res) {
                 //self._log(res)
-                if(model) {
+                if(self.model) {
                     //记录自然的排序规则
                     let keyindexes = {}
                     res.data.forEach((item,index)=>{
@@ -173,7 +194,7 @@ export default {
 
                     let array = []
                     res.data.forEach(item => {
-                        model.load({data:item ,depth:1}).then(rowinfo=>{
+                        self.model.load({data:item ,depth:1}).then(rowinfo=>{
                             array.push(rowinfo)
 
                             if(array.length==res.data.length) {
@@ -194,24 +215,6 @@ export default {
                 extend(self.pagination, res.pagination)
                 self.isLoading = false;
             });
-        },
-        isDeletable(row) {
-            let self = this
-            if (typeof(self.isdelete) == 'function') {
-                return self.isdelete(row)
-            } else if (typeof(self.isdelete) == 'boolean') {
-                return self.isdelete
-            }
-
-            return true
-        },
-        isEditable(row) {
-            let self = this
-            if (typeof(self.isedit) == 'function') {
-                return self.isedit(row)
-            }
-
-            return true
         }
     },
     watch: {
@@ -229,7 +232,7 @@ export default {
     computed: {},
     mounted: function() {
         let self = this
-        if(self.localOptions.issubmit) {
+        if(self.isSubmit) {
             self.loadList()
         }        
 
