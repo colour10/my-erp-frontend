@@ -18,7 +18,7 @@
 import globals, { _label } from '../globals.js'
 
 export default {
-    name: 'asapage-brandgroup',
+    name: 'sp-brandgroup',
     components: {
     },
     props: {},

@@ -81,7 +81,7 @@ const options = {
 }
 
 export default {
-    name: 'asapage-sizetop',
+    name: 'sp-sizetop',
     data() {
         var self = this;
         

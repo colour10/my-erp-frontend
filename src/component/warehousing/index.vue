@@ -15,7 +15,7 @@ import Asa_Warehousing_Dialog from '../asa/Asa_Warehousing_Dialog.vue'
 import Simple_Admin_TableList from '../Simple_Admin_TableList.vue'
 
 export default {
-    name: 'asapage-warehousing',
+    name: 'sp-warehousing',
     components: {
         'asa-warehousing-dialog': Asa_Warehousing_Dialog,
         'simple-admin-tablelist': Simple_Admin_TableList

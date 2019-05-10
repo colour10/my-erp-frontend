@@ -1,7 +1,8 @@
 <template>
     <el-upload class="avatar-uploader" :action="host+'/common/upload?category=product'" :show-file-list="false" :on-success="handleAvatarSuccess" :disabled="disabled" style="uploadStyle()">
         <img v-if="imageurl" :src="_fileLink(imageurl)" class="avatar" :style="imageStyle()">
-        <i v-else class="el-icon-plus avatar-uploader-icon" :style="imageStyle()"></i>
+        <as-button v-if="imageurl" style="position:absolute;bottom:0px;right:0px" @click.stop="onDelete">{{_label("shanchu")}}</as-button>
+        <i v-if="!imageurl" class="el-icon-plus avatar-uploader-icon" :style="imageStyle()"></i>
     </el-upload>
 </template>
 
@@ -42,19 +43,20 @@ export default {
         }
     },
     methods: {
+        onDelete(){
+            this.$emit("change", '')
+        },
         handleAvatarSuccess(response, file, fileList) {
             var filename = file.name
             filename = response["files"][filename]
-
-            //self.imageurl = file.name
-            //console.log(file.name)
             this.$emit('change', filename)
         },
         uploadStyle() {
             let self = this
             return {
                 width:self.size+'px',
-                height:self.size+'px'
+                height:self.size+'px',
+                position:'relative'
             }
         },
         imageStyle() {

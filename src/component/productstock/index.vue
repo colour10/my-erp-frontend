@@ -36,7 +36,7 @@ import { Productstock } from "../model.js"
 import Product from '../asa/Asa_Product.vue'
 
 export default {
-    name: 'asapage-productstock',
+    name: 'sp-productstock',
     components: {
         "product": Product
     },

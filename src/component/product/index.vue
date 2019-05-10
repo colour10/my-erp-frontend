@@ -25,7 +25,7 @@ import Asa_Product_Add from '../asa/Asa_Product_Add.vue'
 import ImagePreview from '../image-preview.js'
 
 export default {
-    name: 'asapage-product',
+    name: 'sp-product',
     components: {
         "product": Asa_Product,
         "productadd":Asa_Product_Add

@@ -83,7 +83,7 @@ import Simple_Admin_TableList from '../Simple_Admin_TableList.vue'
 import { Rules } from '../rules.js'
 
 export default {
-    name: 'asapage-user',
+    name: 'sp-user',
     components: {
         'simple-admin-tablelist': Simple_Admin_TableList
     },

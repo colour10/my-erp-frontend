@@ -21,7 +21,7 @@ import { getProp } from "../prop.js"
 const props = getProp('companyinvoice');
 
 export default {
-    name: 'page-company',
+    name: 'sp-system',
     components: {
         "myform": form
     },

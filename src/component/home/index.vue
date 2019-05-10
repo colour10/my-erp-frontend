@@ -27,7 +27,7 @@
                     <el-menu-item index="ulnarinch">{{_label("menu-2-1-7")}}</el-menu-item>
                     <el-menu-item index="warehouse">{{_label("menu-2-3-1")}}</el-menu-item>
                     <el-menu-item index="country">{{_label("menu-2-3-3")}}</el-menu-item>
-                    <el-menu-item index="saleport">{{_label("menu-2-4")}}</el-menu-item>
+                    <el-menu-item index="saleport">{{_label("xiaoshouduankou")}}</el-menu-item>
                     <el-menu-item index="price">{{_label("jiagedingyi")}}</el-menu-item>
                     
                     <el-menu-item index="saletype">{{_label("xiaoshoushuxing")}}</el-menu-item>
@@ -105,12 +105,19 @@
                 </el-submenu>
             </el-menu>
         </div>
-        <el-breadcrumb separator="/" style="padding-top:55px;">
+        <!-- <el-breadcrumb separator="/" style="padding-top:55px;">
             <el-breadcrumb-item :to="{ path: '/' }">{{_label("shouye")}}</el-breadcrumb-item>
             <el-breadcrumb-item><a href="/">{{moduleName}}</a></el-breadcrumb-item>
-        </el-breadcrumb>
+        </el-breadcrumb> -->
+        <el-row style="padding-top:55px;">
+            <el-tag v-for="(tag,index) in tags" :key="index" :closable="tags.length>1" style="margin-right:5px;cursor:pointer" @close="onCloseTag(tag)" @click="onClickTag(tag)" :type="getType(tag.key)">{{tag.label}}</el-tag>
+        </el-row>
         <section class="el-container">
-            <router-view></router-view>
+            <transition name="el-fade-in" mode="out-in">
+            <keep-alive :include="includes">
+                <router-view :key="module"></router-view>
+            </keep-alive>
+        </transition>
         </section>
         <div id="footer">
             <!--<el-footer class="el-footer"></el-footer>-->
@@ -119,51 +126,12 @@
 </template>
 
 <script>
-import {_label} from '../globals.js'
+import {config} from '../globals.js'
 
 export default {
     name: 'asapage-home',
     data() {
-        return {
-            menus:{
-                user:_label("menu-1-1"),
-                "group":_label("menu-1-2"),
-                "department":_label("menu-1-4"),
-                "system":_label("xitongshezhi"),
-                "brand":_label("menu-2-1-1"),
-                "brandgroup":_label("menu-2-1-2"),
-                "ageseason":_label("menu-2-1-3"),
-                "colortemplate":_label("menu-2-1-4"),
-                "sizetop":_label("menu-2-1-5"),
-                "productmemo":_label("shangpinmiaoshu"),
-                "material":_label("caizhiguanli"),
-                "materialnote":_label("caizhibeizhu"),
-                "currency":_label("huobiguanli"),
-                "ulnarinch":_label("menu-2-1-7"),
-                "warehouse":_label("menu-2-3-1"),
-                "country":_label("menu-2-3-3"),
-                "saleport":_label("menu-2-4"),
-                "price":_label("jiagedingyi"),
-                "pricesetting":_label("jiageshezhi"),
-                "product":_label("menu-3-1"),
-                "supplier":_label("menu-4"),
-                "order":_label("dingdanguanli"),
-                "confirmorder":_label("menu-5-2"),
-                "warehousing":_label("rukudanguanli"),
-                "requisition":_label("menu-6-1"),
-                "productstock":_label("menu-6-4"),
-                "sales":_label("menu-7-1"),
-                "orderpayment":_label("dingdanjiesuan"),
-                "salesreceive":_label("xiaoshoujiesuan"),
-                "user/modifypassword":_label("menu-11-2"),
-                "login/logout":_label("menu-11-3"),
-                "saletype":_label('xiaoshoushuxing'),
-                "exchangerate":_label('huilvguanli'),
-                "property":_label("shuxingdingyi"),
-                "language":_label("duoguoyuyanguanli"),
-                "develop":"生成器"
-            }
-        }
+        return {}
     },
     methods: {
         checkLogin() {
@@ -176,6 +144,17 @@ export default {
         onSelect(index, indexPath) {
             //this._log(index, indexPath)
             this.$router.push('/'+index)
+        },
+        onCloseTag(tag) {
+            this.$store.commit("closeTag", {
+                tag
+            })
+        },
+        onClickTag(tag) {
+            this.$router.push(tag.path)
+        },
+        getType(key) {
+            return key==this.current.key? 'success' : ''
         }
     },
     watch: {
@@ -187,11 +166,25 @@ export default {
     },
     computed:{
         moduleName() {
-            return this.menus[this.$route.path.substr(1)]
+            return config.menus[this.$route.path.substr(1)]
+        },
+        module() {
+            return this.$route.path.replace(/\//g, "")
+        },
+        tags(){
+            //this._log(this.$store.getters.getTags)
+            return this.$store.getters.getTags.tags
+        },
+        current(){
+            //this._log(this.$store.getters.getTags)
+            return this.$store.getters.getTags.current
+        },
+        includes() {
+            return this.$store.getters.getTags.tags.filter(item=>item.name).map(item=>"sp-"+item.name).join(',')
         }
     },
     mounted: function() {
-        this.checkLogin()        
+        this.checkLogin()    
     }
 }
 </script>

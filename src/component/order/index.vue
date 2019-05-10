@@ -12,19 +12,16 @@
                 <simple-admin-tablelist ref="tablelist" v-bind="props" :onclickupdate="showFormToEdit" :isdelete="false"></simple-admin-tablelist>
             </el-col>
         </el-row>
-        <asa-order-dialog :visible.sync="visibleDialog" :data="info" @change="onChange"></asa-order-dialog>
     </div>
 </template>
 
 <script>
 import globals,{_label} from '../globals.js'
-import Asa_Order_Dialog from '../asa/Asa_Order_Dialog.vue'
 import Simple_Admin_TableList from '../Simple_Admin_TableList.vue'
 
 export default {
-    name: 'asapage-order',
+    name: 'sp-order',
     components: {
-        'asa-order-dialog': Asa_Order_Dialog,
         'simple-admin-tablelist': Simple_Admin_TableList
     },
     props: {},
@@ -43,26 +40,21 @@ export default {
                 ],
                 controller: "order"
             },
-            visibleDialog: false,
             pro: false,
             info: {},
             rowIndex: -1
         }
     },
     methods: {
-        showForm() {
-            this.visibleDialog = true;
-        },
         showFormToCreate() {
             this.info = {}
             this.rowIndex = -1
-            this.showForm()
+            this.$router.push('/order/0')
         },
         showFormToEdit(rowIndex, row) {
             this.info = row;
             this.rowIndex = rowIndex
-            //console.log(row)
-            this.showForm()
+            this.$router.push('/order/' + row.id)
         },
         onChange(form, isdelete) {
             let self = this

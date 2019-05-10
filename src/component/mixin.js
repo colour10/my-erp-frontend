@@ -1,4 +1,4 @@
-import {_label,extend} from './globals.js'
+import {_label,extend,config} from './globals.js'
 import {httpPost,httpGet, host} from './http.js'
 import {isArray, initObject} from './array.js'
 
@@ -160,6 +160,14 @@ export default {
             let arr = file.split('.')
 
             return _label('_image_url_prex') + file //+'_'+ size +'x' + size + '.' + arr[arr.length-1]
+        },
+        _setTitle(title) {
+            let self = this;
+        
+            self.$store.commit("setTagLabel", {
+                label: title,
+                path: self.$route.path
+            })
         }
     }
 }

@@ -21,7 +21,7 @@ import Simple_Select from './component/Simple_Select.vue'
 import Select_Currency from './component/Select_Currency.vue'
 import Simple_Avatar from './component/Simple_Avatar.vue'
 import Simple_Album from './component/Simple_Album.vue'
-import globals from './component/globals.js'
+import globals,{config} from './component/globals.js'
 //import Asa_BrandTab from './component/asa/Asa_BrandTab.vue'
 import Asa_Order_Dialog from './component/asa/Asa_Order_Dialog.vue'
 import Asa_Select_Product_Dialog from './component/asa/Asa_Select_Product_Dialog.vue'
@@ -102,26 +102,30 @@ components.forEach(component => {
 
 const routes = [
     {
-        path: '/', component: Home,
+        path: '/', name:"index", component: Home,
         children:[
-            {path: '/order', component: Order},
-            {path: '/confirmorder', component: Confirmorder},
-            {path:'/warehousing', component:Warehousing},
-            {path: '/sales', component: Sales},
-            {path: '/user', component: User},
-            {path: '/group', component: Group},
-            {path: '/department', component: Department},
-            {path: '/productstock', component: Productstock},
-            {path: '/brand', component: Brand},
-            {path: '/brandgroup', component: Brandgroup},
-            {path: '/sizetop', component: Sizetop},
-            {path: '/product', component: Product},   
-            {path: '/requisition', component: Requisition},     
-            {path: '/user/modifypassword', component: ModifyPassword},    
-            {path: '/orderpayment', component: Orderpayment},    
-            {path: '/salesreceive', component: Salesreceive},   
-            {path: '/system', component: System}, 
-            {path: '/develop', component: Creator}, 
+            {path: '/order', name:"order", component: Order},
+            {path: '/confirmorder', name:"confirmorder", component: Confirmorder},
+            {path: '/warehousing', name:"warehousing", component:Warehousing},
+            {path: '/sales', name:"sales", component: Sales},
+            {path: '/user', name:"user", component: User},
+            {path: '/group', name:"group", component: Group},
+            {path: '/department', name:"department", component: Department},
+            {path: '/productstock', name:"productstock", component: Productstock},
+            {path: '/brand', name:"brand", component: Brand},
+            {path: '/brandgroup', name:"brandgroup", component: Brandgroup},
+            {path: '/sizetop', name:"sizetop", component: Sizetop},
+            {path: '/product', name:"product", component: Product},   
+            {path: '/requisition', name:"requisition", component: Requisition},     
+            {path: '/user/modifypassword', name:"modifypassword", component: ModifyPassword},    
+            {path: '/orderpayment', name:"orderpayment", component: Orderpayment},    
+            {path: '/salesreceive', name:"salesreceive", component: Salesreceive},   
+            {path: '/system', name:"system", component: System}, 
+            {path: '/develop', name:"develop", component: Creator}, 
+            {path: '/supplier', name:"supplier", component:Supplier},
+            {path:'/exchangerate', name:"exchangerate", component:Exchangerate},
+            //{path: '/order/add', component: Asa_Order_Dialog},
+            {path: '/order/:id', name:"orderform", component: Asa_Order_Dialog},
 
             {path:'/ageseason', component:getComponentSimple("ageseason")},
             {path:'/ulnarinch', component:getComponent("ulnarinch")},
@@ -136,16 +140,16 @@ const routes = [
             {path:'/property', component:getComponent("property")},           
             {path:'/member', component:getComponentSimple("member")},
             {path:'/colortemplate', component:getComponent("colortemplate")},
-            {path:'/supplier', component:Supplier},
+            
             {path:'/saleport', component:getComponentSimple("saleport")},
             {path:'/productmemo', component:getComponent("productmemo")},
             {path:'/saletype', component:getComponent("saletype")},
-            {path:'/exchangerate', component:Exchangerate},
+            
             {path:'/materialnote', component:getComponent("materialnote")},
             {path:'/language', component:getComponent("language")}
         ]
     },
-    {path: '/login/:action', component: Login},
+    {path: '/login/:action', name:"login", component: Login},
     {path: '/login', redirect: { path: '/login/login' }}
 ]
 
@@ -154,9 +158,31 @@ const router = new VueRouter({
     routes // (缩写) 相当于 routes: routes
 })
 
+router.beforeEach((to, from, next) => {
+    console.log(to, from, next)
+    //console.log(store)
+
+    if(to.name=='login') {
+        store.commit("clearTags", {})
+        console.log("=====clear")
+    }
+    else {
+        store.commit("addTag", {
+            path:to.path,
+            label:config.menus[to.name],
+            key:to.path,
+            name:to.name
+      })
+    }
+    
+    next()
+})
+
 const store = new Vuex.Store({
   state: {
-      auth:{}
+      auth:{},
+      tags:[],
+      currentTag:""
   },
   getters: {
       is_login(state) {
@@ -173,6 +199,9 @@ const store = new Vuex.Store({
               return true;
               //return state.auth && state.auth.permissions && state.auth.permissions.findIndex(item=>item.name==permission)>=0
           }
+      },
+      getTags(state) {
+          return {tags:state.tags, current:state.currentTag}
       }
   },
   mutations:{
@@ -181,16 +210,61 @@ const store = new Vuex.Store({
       },
       logout(state,payload) {
           state.auth = {}
+      },
+      addTag(state, payload) {
+          let tag = state.tags.find(item=>item.key==payload.key)
+          if(tag) {
+              state.currentTag = tag
+          }
+          else { 
+              state.currentTag = {
+                  key:payload.key,
+                  label:payload.label,
+                  path:payload.path,
+                  name:payload.name
+              }
+              state.tags.push(state.currentTag)
+          }            
+      },
+      clearTags(state, payload){
+          state.tags = []
+          state.currentTag = undefined
+      },
+      setTagLabel(state, payload){
+          let tag = state.currentTag
+          if(tag && tag.path==payload.path) {
+              tag.label = payload.label
+          }
+      },
+      closeTag(state, payload) {
+          let tags = state.tags;
+          let index = tags.indexOf(payload.tag)
+          let length = tags.length;
+          
+          //最后一个窗口不允许关闭
+          if(length==1) {
+              return 
+          }
+          console.log(index)
+
+          tags.splice(index, 1)
+          if(index>0) {
+              router.push(tags[index-1].path)
+          }
+          else if(index<length-1) {
+              router.push(tags[index].path)
+          }  
       }
   }
 })
 
 //console.log(VueRouter)
 //console.log("+++++++++++++", VueRouter, router, router.resolve)
-const app = new Vue({
-    router,
-    store,
-    mounted:function(){
-      //console.log(this.$options.components)
-    }
-}).$mount('#app')
+setTimeout(function(){
+    const app = new Vue({
+        router,
+        store,
+        mounted:function(){
+        }
+    }).$mount('#app')
+}, 1000)

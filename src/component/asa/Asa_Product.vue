@@ -260,7 +260,7 @@
                 </el-col>
             </el-tab-pane>
             <el-tab-pane :label="_label('shangpintupian')" name="album" :disabled="form.id==''">
-                <sp-album :productid="form.id" ref="album"></sp-album>
+                <sp-album :productid="form.id" ref="album" @quit="onQuit"></sp-album>
             </el-tab-pane>
             <el-tab-pane :label="_label('jiage')" name="pricetab" :disabled="form.id==''">
                 <pricetab :productid="form.id" ref="pricetab" @quit="onQuit" :option="option"></pricetab>

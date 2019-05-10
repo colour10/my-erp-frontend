@@ -65,9 +65,9 @@ export default {
         opt.isAutohide = typeof(opt.isAutohide)=='undefined' ? true : opt.isAutohide;
         opt.isAutoReload = typeof(opt.isAutoReload)=='undefined' ? false : opt.isAutoReload;
 
-        for (let i = 0; i < self.columns.length; i++) {
-            form[self.columns[i].name] = ""
-        }
+        self.columns.forEach(column=>{
+            form[column.name] = ""
+        })
 
         let authname = self.auth ? self.auth : self.controller
 

@@ -22,7 +22,7 @@ import Asa_Sales_Dialog from '../asa/Asa_Sales_Dialog.vue'
 import Simple_Admin_TableList from '../Simple_Admin_TableList.vue'
 
 export default {
-    name: 'asapage-sales',
+    name: 'sp-sales',
     components: {
         'asa-sales-dialog': Asa_Sales_Dialog,
         'simple-admin-tablelist': Simple_Admin_TableList

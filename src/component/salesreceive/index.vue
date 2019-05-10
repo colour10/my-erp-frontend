@@ -44,7 +44,7 @@ import Simple_Form from "../Simple_Form.vue"
 
 
 export default {
-    name: 'asapage-salesreceive',
+    name: 'sp-salesreceive',
     components: {
         "simpleform": Simple_Form
     },

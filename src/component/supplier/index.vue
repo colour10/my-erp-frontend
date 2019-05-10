@@ -17,6 +17,9 @@
                     <el-tab-pane :label="_label('kaihuhang')" name="bank" :disabled="id==0">
                         <simple-admin-page v-bind="supplierbank"></simple-admin-page>
                     </el-tab-pane>
+                    <el-tab-pane :label="_label('shouhuodizhi')" name="supplieraddress" :disabled="id==0">
+                        <simple-admin-page v-bind="supplieraddress"></simple-admin-page>
+                    </el-tab-pane>
                 </el-tabs>
             </template>
         </simple-admin-page>
@@ -27,7 +30,7 @@
 import { _label } from '../globals.js'
 
 export default {
-    name: 'asapage-supplier',
+    name: 'sp-supplier',
     components: {},
     props: {},
     data() {
@@ -58,15 +61,22 @@ export default {
                     formSize: 'small',
                     inline: true
                 },
-                controller: "supplier"
+                controller: "supplier",
+                formTitle:function(row) {
+                    if(row) {
+                        return row.nickname+ ' ' +row.suppliername;
+                    }
+                }
             },
             "supplierinvoice": {
                 columns: [
                     { name: "name", label: _label("mingcheng"), class: "width1" },
-                    { name: "telephone", label: _label("dianhua"), class: "width1" },
                     { name: "address", label: _label("dizhi"), class: "width1", is_hide: true },
-                    { name: "bank", label: _label("kaihuhang"), class: "width1" },
-                    { name: "bank_account", label: _label("yinhangzhanghao"), class: "width1" }
+                    { name: "tax_number", label: _label("shuihao"), class: "width2" },
+                    { name: "telephone", label: _label("dianhua"), class: "width2" },
+                    
+                    { name: "bank", label: _label("kaihuhang"), class: "width2", is_hide: true },
+                    { name: "bank_account", label: _label("yinhangzhanghao"), class: "width2", is_hide: true }
                 ],
                 controller: "supplierinvoice",
                 auth: "supplier",
@@ -74,21 +84,44 @@ export default {
                     supplierid: ''
                 },
                 options: {
-                    dialogWidth: '800px'
+                    dialogWidth: '800px',
+                    inline: true
+                },
+                formTitle:function(row) {
+                    return self._label("kaipiaoxinxi")
+                },
+                initialization:{
+                    name:""
                 }
             },
             "supplierbank": {
                 columns: [
-                    { name: "name", label: _label("mingcheng"), class: "width2" },
-                    { name: "currency", label: _label("bizhong"), class: "width2", type: "select", source: "currency" },
+                    { name: "name", label: _label("qiye"), class: "width2" },
+                    { name: "currency", label: _label("bizhong"), class: "width2", type: "select", source: "currency",width:90 },
                     { name: "address", label: _label("dizhi"), class: "width1", is_hide: true },
                     { name: "bank_name", label: _label("yinhangmingcheng"), class: "width1" },
                     { name: "bank_depart", label: _label("fenhangmingcheng"), class: "width1", is_hide: true },
                     { name: "bank_address", label: _label("yinhangdizhi"), class: "width1", is_hide: true },
                     { name: "account", label: _label("yinhangzhanghao"), class: "width2" },
-                    { name: "bank_code", label: _label("guojima"), class: "width2" },
+                    { name: "bank_code", label: _label("guojima"), class: "width2", is_hide: true },
                 ],
                 controller: "supplierbank",
+                auth: "supplier",
+                base: {
+                    supplierid: ''
+                },
+                options: {
+                    dialogWidth: '800px',
+                    inline: true
+                }
+            },
+            supplieraddress:{
+                columns: [
+                    { name: "name", label: _label("shouhuoren"), class: "width2" },
+                    { name: "phone", label: _label("dianhua"), class: "width2" },
+                    { name: "address", label: _label("shouhuodizhi"), class: "width1", is_hide: true }
+                ],
+                controller: "supplieraddress",
                 auth: "supplier",
                 base: {
                     supplierid: ''
@@ -110,7 +143,13 @@ export default {
         onBeforeEdit(row) {
             let self = this
             self.supplierinvoice.base.supplierid = row.id
+            self.supplierinvoice.columns[0].default = row.suppliername
+
             self.supplierbank.base.supplierid = row.id
+            self.supplierbank.columns[0].default = row.suppliername
+
+            self.supplieraddress.base.supplierid = row.id
+            //self.supplieraddress.columns[0].default = row.suppliername
             self.id = row.id
         },
         onBeforeAdd() {

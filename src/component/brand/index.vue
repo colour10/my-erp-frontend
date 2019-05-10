@@ -55,7 +55,7 @@ const base = {
 }
 
 export default {
-    name: 'asapage-brand',
+    name: 'sp-brand',
     data() {
         let self = this;
 

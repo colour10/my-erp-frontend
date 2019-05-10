@@ -97,7 +97,46 @@ const getAvailableHeight = function() {
 
 const pageSizes = [10, 20, 30, 50, 100]
 const config = {
-    ouyuan: '9' //欧元货币的id
+    ouyuan: '9', //欧元货币的id
+    menus:{
+        "index":getLabel("shouye"),
+        user:getLabel("menu-1-1"),
+        "group":getLabel("menu-1-2"),
+        "department":getLabel("menu-1-4"),
+        "system":getLabel("xitongshezhi"),
+        "brand":getLabel("menu-2-1-1"),
+        "brandgroup":getLabel("menu-2-1-2"),
+        "ageseason":getLabel("menu-2-1-3"),
+        "colortemplate":getLabel("menu-2-1-4"),
+        "sizetop":getLabel("menu-2-1-5"),
+        "productmemo":getLabel("shangpinmiaoshu"),
+        "material":getLabel("caizhiguanli"),
+        "materialnote":getLabel("caizhibeizhu"),
+        "currency":getLabel("huobiguanli"),
+        "ulnarinch":getLabel("menu-2-1-7"),
+        "warehouse":getLabel("menu-2-3-1"),
+        "country":getLabel("menu-2-3-3"),
+        "saleport":getLabel("xiaoshouduankou"),
+        "price":getLabel("jiagedingyi"),
+        "pricesetting":getLabel("jiageshezhi"),
+        "product":getLabel("menu-3-1"),
+        "supplier":getLabel("menu-4"),
+        "order":getLabel("dingdanguanli"),
+        "confirmorder":getLabel("menu-5-2"),
+        "warehousing":getLabel("rukudanguanli"),
+        "requisition":getLabel("menu-6-1"),
+        "productstock":getLabel("menu-6-4"),
+        "sales":getLabel("menu-7-1"),
+        "orderpayment":getLabel("dingdanjiesuan"),
+        "salesreceive":getLabel("xiaoshoujiesuan"),
+        "user/modifypassword":getLabel("menu-11-2"),
+        "login/logout":getLabel("menu-11-3"),
+        "saletype":getLabel('xiaoshoushuxing'),
+        "exchangerate":getLabel('huilvguanli'),
+        "property":getLabel("shuxingdingyi"),
+        "language":getLabel("duoguoyuyanguanli"),
+        "develop":"生成器"
+    }
 }
 
 const StringFunc = {

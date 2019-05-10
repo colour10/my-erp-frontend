@@ -30,7 +30,7 @@
 import { _label } from '../globals.js'
 
 export default {
-    name: 'exchangerate',
+    name: 'sp-exchangerate',
     props: {},
     data() {
         let self = this

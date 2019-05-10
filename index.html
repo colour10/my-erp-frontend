@@ -308,24 +308,65 @@ body .el-select-dropdown__wrap {max-height:500px;}
 
 #app button.trimhalf {padding:7px 10px;}
 
+.fade-transform-leave-active,
+.fade-transform-enter-active {
+  transition: all .5s;
+}
+
+.fade-transform-enter {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+
+.fade-transform-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}
 </style>
   </head>
   <body>
     <div id="app">
         <router-view></router-view>
     </div>
+    <div id="load" style="position:relative;margin:auto;text-align:center;top:200px;">
+      <el-progress type="circle" :percentage="pencent" v-show="isShow"></el-progress>
+    </div>
 
-    <script type="text/javascript">
-      
+    <script type="text/javascript">      
       $(document).ready(function(){
         console.log(localStorage)
         let language = ""
         if(localStorage && localStorage.language) {
           language = localStorage.language
         }
-        $.getScript("http://erp.localhost.com/common/systemlanguage?language="+language, function(){
-          $.getScript("/dist/asa.js");
-        })
+
+        let o = new Vue({
+          data:function(){
+            return {
+              isShow:true,
+              pencent:0
+            }
+          },
+          mounted:function(){
+            let self = this
+            let handler = setInterval(function(){
+              if(self.pencent<=95) {                
+                self.pencent = self.pencent + Math.floor(Math.random()*10)%2+1
+              }
+            }, 330)
+
+            $.getScript("http://erp.localhost.com/common/systemlanguage?language="+language, function(){
+                $.getScript("/dist/asa.js", function(){
+                  self.pencent = 100;
+                  clearInterval(handler)
+                  setTimeout(function(){
+                    self.isShow = false;
+                  }, 500)                  
+                });
+              })
+          }
+        }).$mount("#load")
+        
       })
     </script>
   </body>

@@ -45,7 +45,7 @@ import Simple_Form from "../Simple_Form.vue"
 
 
 export default {
-    name: 'asapage-orderpayment',
+    name: 'sp-orderpayment',
     components: {
         "simpleform": Simple_Form
     },

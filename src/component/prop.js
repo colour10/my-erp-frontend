@@ -386,6 +386,7 @@ const props = function(){
 
 const getComponent = function(name) {
     return {
+        name:"sp-" +name,
         data: function() {
             return {
                 props: props()[name]
@@ -397,6 +398,7 @@ const getComponent = function(name) {
 
 const getComponentSimple = function(name) {
     return {
+        name:"sp-" +name,
         data: function() {
             return {
                 props: props()[name]

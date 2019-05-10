@@ -51,7 +51,7 @@ import globals from '../globals.js'
 const _log = globals.logger("asapage-department");
 
 export default {
-    name: 'asapage-department',
+    name: 'sp-department',
     components: {
         // 'simple-admin-tablelist':Simple_Admin_TableList
     },

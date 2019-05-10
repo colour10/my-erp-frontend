@@ -72,7 +72,7 @@ const props = {
 }
 
 export default {
-    name: 'asapage-group',
+    name: 'sp-group',
     components: {
         'simple-admin-tablelist': Simple_Admin_TableList
     },

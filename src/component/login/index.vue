@@ -123,7 +123,7 @@ export default {
         },
         onChange() {
             window.localStorage.setItem("language", this.ruleForm2.language)
-            window.location.reload();
+            window.location.href = "/";
         }
     },
     computed: {
