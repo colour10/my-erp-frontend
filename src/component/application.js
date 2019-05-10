@@ -1,4 +1,16 @@
 const {config, label} = (function() {
+    let _func = function(app, isDefault=false) {
+        return function(name, value) {
+            if(typeof(value)=='undefined') {
+                return isDefault ? app[name] || name : app[name]
+            }
+            else {
+                app[name] = value
+                return this;
+            }
+        }
+    }
+
     //配置信息文件
     const applicationConfig = {
         pagination:{
@@ -7,29 +19,10 @@ const {config, label} = (function() {
         },
         host: ""
     }
+    let config = _func(applicationConfig)
 
-    let config = function(name, value) {
-        if(typeof(value)=='undefined') {
-            //console.log("applicatin config")
-            return applicationConfig[name]
-        }
-        else {
-            applicationConfig[name] = value
-            return this;
-        }
-    }
-
-    const languages = {
-
-    }
-    let label = function(name, value) {
-        if (typeof(value) == 'undefined') {
-            return languages[name] || name
-        } else {
-            languages[name] = value
-            return this;
-        }
-    }
+    const languages = {}
+    let label = _func(languages, true)
 
     return {config, label}
 })()

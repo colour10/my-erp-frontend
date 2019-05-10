@@ -49,6 +49,11 @@ const props = {
         { name: "currencyid", label: label("bizhong"), type:"sp-select", source:"currency", listType:"sp-select-text"},
         { name: "displayindex", label: label("paixu"), type:"sp-input", sortMethod:func.sortDigit }
     ],
+    buttons:[
+        { name:"delall", label:"批量删除",click:function(context){
+            console.log(context)
+        }}
+    ],
     controller: "price",
     auth: "price",
     options:{

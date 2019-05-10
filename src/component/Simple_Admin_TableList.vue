@@ -1,24 +1,22 @@
 <template>
     <div>
-        <sp-table :data="tableData" border style="width: 100%;" :height="height" :cell-class-name="getCellClassName">
+        <sp-table :data="tableData" border style="width: 100%;" :height="height" :cell-class-name="getCellClassName" @selection-change="onSelectionChange">
+            <el-table-column type="selection" :width="60" v-if="isCheckbox==true">
+            </el-table-column>
             <el-table-column :prop="item.name" :label="item.label" :width="item.width||180" v-for="item in columns" :key="item.name" :sortable="item.sortable==undefined || item.sortable" v-if="item.listType">
                 <template v-slot="scope">
                     <sp-transform v-bind="item" :column="item" :record="scope.row" :option="option"></sp-transform>
                 </template>
-            </el-table-column>
-            <el-table-column :label="item.label" align="center" :width="item.width||180" v-for="item in buttons" :key="item.label">
-                <template v-slot="scope">
-                    <el-button type="text" @click="item.handler(scope.$index, scope.row, item)">{{item.label}}</el-button>
-                </template>
-            </el-table-column>
+            </el-table-column>            
             <el-table-column :label="_label('caozuo')" :width="actionWidth" align="center" v-if="isAction">
                 <template v-slot="scope">
                     <el-button size="mini" @click="handleClickUpdate(scope.$index, scope.row)" v-if="isButtonShow({action:'view', row:scope.row})" icon="el-icon-edit">{{_label('bianji')}}</el-button>
-                    <au-button :auth="authname||controller" size="mini" type="danger" @click="onClickDelete(scope.$index, scope.row)" v-if="isButtonShow({action:'delete', row:scope.row})" icon="el-icon-delete">{{_label('shanchu')}}</au-button>
+                    <el-button size="mini" type="danger" @click="onClickDelete(scope.$index, scope.row)" v-if="isButtonShow({action:'delete', row:scope.row})" icon="el-icon-delete">{{_label('shanchu')}}</el-button>
                     <el-button size="mini" @click="handleAction(scope,item)" v-for="item in actions" :key="item.label" v-if="isButtonShow({action:item.name, row:scope.row})">{{item.label}}</el-button>
                 </template>
             </el-table-column>
         </sp-table>
+
         <el-pagination v-if="tableData.length<pagination.total" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pagination.current*1" :page-sizes="pagination.pageSizes" :page-size="pagination.pageSize*1" layout="total, sizes, prev, pager, next, jumper" :total="pagination.total*1">
         </el-pagination>
     </div>
@@ -34,7 +32,6 @@ export default {
     name: 'sp-tablelist',
     props: {
         columns:Array, 
-        buttons:Array, 
         controller:String, 
         base:{
             type:[Object], 
@@ -47,7 +44,7 @@ export default {
             default:function(){
                 return {}
             }
-        }, 
+        },
         actions:Array, 
         model:String,
         isSubmit:{
@@ -68,7 +65,10 @@ export default {
         },
         isShow:Function,
         height:Number,
-        authname:String
+        isCheckbox:{
+            type:Boolean,
+            default:true
+        }
     },
     components: {
         "sp-transform":Transform
@@ -80,6 +80,7 @@ export default {
         return {
             rowIndex: "",
             tableData: [],
+            selected:[],
             isLoading:false,
             pagination: {
                 pageSizes: config('pagination').pageSizes,
@@ -104,6 +105,12 @@ export default {
                     return self.cellClasses[column.property]
                 }
             }
+        },
+        onSelectionChange(vals) {
+            this.selected = vals
+        },
+        getSelectValues() {
+            return this.selected.map(item=>item.id)
         },
         handleSizeChange(pageSize) {
             this.pagination.pageSize = pageSize

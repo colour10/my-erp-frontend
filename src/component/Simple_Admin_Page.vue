@@ -7,10 +7,11 @@
                         <el-form-item class="searchitem">
                             <el-input v-model="searchform.keyword" width="250" style="width:250px;" @keyup.enter.native="onSearch"></el-input>
                             <el-button type="primary" @click="onSearch" size="mini" v-if="isButtonShow({action:'search'})" icon="el-icon-search">{{_label("chaxun")}}</el-button>
-                            <au-button :auth="authname" type="primary" @click="showFormToCreate()" v-if="isButtonShow({action:'add'})">{{_label("xinjian")}}</au-button>
+                            <el-button type="primary" @click="showFormToCreate()" v-if="isButtonShow({action:'add'})">{{_label("xinjian")}}</el-button>
                         </el-form-item>
                     </el-form>
-                    <au-button :auth="authname" type="primary" @click="showFormToCreate()" v-if="isButtonShow({action:'add'})">{{_label("xinjian")}}</au-button>
+                    <el-button type="primary" size="mini" @click="showFormToCreate()" v-if="!isButtonShow({action:'search'}) && isButtonShow({action:'add'})">{{_label("xinjian")}}</el-button>
+                    <el-button :type="item.type || 'primary'" @click="onClickButton(item)" size="mini" v-for="item in buttons" :key="item.label" v-if="isButtonShow({action:item.name})">{{item.label}}</el-button>
                 </slot>
             </el-col>
         </el-row>
@@ -29,13 +30,15 @@
             </slot>
             <el-row>
                 <el-col :span="24" style="text-align:center;">
-                    <au-button :auth="authname" type="primary" @click="onSubmit" style="margin:auto;" v-if="isButtonShow({action:'edit'})">{{_label("baocun")}}</au-button>
+                    <el-button type="primary" size="mini" @click="onSubmit" style="margin:auto;" v-if="isButtonShow({action:'edit'})">{{_label("baocun")}}</el-button>
                     <el-button type="primary" size="mini" @click="onQuit" v-if="isButtonShow({action:'quit'})">{{_label("tuichu")}}</el-button>
                 </el-col>
             </el-row>
         </el-dialog>
     </div>
 </template>
+
+
 
 <script>
 import {clone,copyTo,empty} from './util/object.js'
@@ -81,7 +84,6 @@ export default {
         },
         isShow:Function,
         height:Number,
-        authname:String,
         inline:Boolean,
         formSize:{
             type:String,
@@ -100,7 +102,11 @@ export default {
             default:false
         },
         formTitle:Function,
-        isDisable:Function
+        isDisable:Function,
+        isCheckbox:{
+            type:Boolean,
+            default:true
+        }
     },
     components: {
         "sp-item-transform":ItemTransform
@@ -141,7 +147,7 @@ export default {
         },
         onChange(column) {
             let self = this;
-            self._log(column)
+            //self._log(column)
 
             if (column.trigger) {
                 let value = self.form[column.name]
@@ -151,6 +157,11 @@ export default {
                     self.$refs[name][0].load(value)
                 })
             }
+        },
+        onClickButton(buttion) {
+            let self = this
+
+            buttion.click({vm:self, selected:self.$refs.tablelist.getSelectValues()})
         },
         onSubmit() {
             let self = this;
