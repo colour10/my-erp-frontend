@@ -23,6 +23,7 @@ import globals, { ASAP, _label } from '../globals.js'
 import Asa_Product from '../asa/Asa_Product.vue'
 import Asa_Product_Add from '../asa/Asa_Product_Add.vue'
 import ImagePreview from '../image-preview.js'
+import {ProductDetail} from "../model.js"
 
 export default {
     name: 'sp-product',
@@ -69,7 +70,7 @@ export default {
                     
                 ],
                 controller: "product",
-                tableModel: 'ProductDetail',
+                model: ProductDetail,
                 authname: "product",
                 options:{
                     rowStyle:function({row, rowIndex}){

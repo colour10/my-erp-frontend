@@ -205,14 +205,14 @@ export default {
                 series: "",
                 ulnarinch: "",
                 factoryprice: "",
-                factorypricecurrency: config.ouyuan,
+                factorypricecurrency: config().ouyuan,
                 nationalpricecurrency: '',
                 nationalprice: "",
                 nationalfactorypricecurrency: "",
                 nationalfactoryprice: "",
                 memo: "",
                 wordprice: "",
-                wordpricecurrency: config.ouyuan,
+                wordpricecurrency: config().ouyuan,
                 gender: "",
                 spring: "",
                 summer: "",
@@ -329,7 +329,7 @@ export default {
 
                 self._submit("/product/add", { params: JSON.stringify(params) }).then(function(res) {
                     //self.$emit("change", Object.assign({}, self.form), "create")
-                    self._log(res)
+                    //self._log(res)
                         //self.colors = []
                     self.initColorList()
                     self.$emit("change")
@@ -418,7 +418,7 @@ export default {
         self.clearValidate(1000)
 
         loadSetting().then(config=>{
-            self._log(config)
+            //self._log(config)
             self.form.nationalpricecurrency = config._currencyid
             self.form.nationalfactorypricecurrency = config._currencyid
         })

@@ -5,7 +5,7 @@ import {isArray, initObject} from './array.js'
 export default {
     methods: {
         _log() {
-            var arr = Array.prototype.slice.call(arguments)
+            let arr = Array.prototype.slice.call(arguments)
             arr.unshift("<" + this.$options.name + ">")
             console.log.apply(console, arr);
         },
@@ -101,7 +101,7 @@ export default {
                 }
             }
             catch(e) {
-                self._log(e)
+                self._log("remove Exception", e)
                 return false
             }
         },

@@ -127,26 +127,25 @@ const routes = [
             //{path: '/order/add', component: Asa_Order_Dialog},
             {path: '/order/:id', name:"orderform", component: Asa_Order_Dialog},
 
-            {path:'/ageseason', component:getComponentSimple("ageseason")},
-            {path:'/ulnarinch', component:getComponent("ulnarinch")},
-            {path:'/currency', component:getComponent("currency")},
-            {path:'/pricesetting', component:getComponentSimple("pricesetting")},
-            {path:'/price', component:getComponentSimple("price")},
-            {path:'/warehouse', component:getComponentSimple("warehouse")},
-            {path:'/country', component:getComponent("country")},
-            {path:'/materialnote', component:getComponent("materialnote")},
-            {path:'/materialstatus', component:getComponent("materialstatus")},
-            {path:'/material', component:getComponent("material")},   
-            {path:'/property', component:getComponent("property")},           
-            {path:'/member', component:getComponentSimple("member")},
-            {path:'/colortemplate', component:getComponent("colortemplate")},
+            {path:'/ageseason', name:"ageseason", component:getComponentSimple("ageseason")},
+            {path:'/ulnarinch', name:"ulnarinch", component:getComponent("ulnarinch")},
+            {path:'/currency', name:"currency", component:getComponent("currency")},
+            {path:'/pricesetting', name:"pricesetting", component:getComponentSimple("pricesetting")},
+            {path:'/price', name:"price", component:getComponentSimple("price")},
+            {path:'/warehouse', name:"warehouse", component:getComponentSimple("warehouse")},
+            {path:'/country', name:"country", component:getComponent("country")},
+            {path:'/materialnote', name:"materialnote", component:getComponent("materialnote")},
+            {path:'/materialstatus', name:"materialstatus", component:getComponent("materialstatus")},
+            {path:'/material', name:"material", component:getComponent("material")},   
+            {path:'/property', name:"property", component:getComponent("property")},           
+            {path:'/member', name:"member", component:getComponentSimple("member")},
+            {path:'/colortemplate', name:"colortemplate", component:getComponent("colortemplate")},
             
-            {path:'/saleport', component:getComponentSimple("saleport")},
-            {path:'/productmemo', component:getComponent("productmemo")},
-            {path:'/saletype', component:getComponent("saletype")},
+            {path:'/saleport', name:"saleport", component:getComponentSimple("saleport")},
+            {path:'/productmemo', name:"productmemo", component:getComponent("productmemo")},
+            {path:'/saletype', name:"saletype", component:getComponent("saletype")},
             
-            {path:'/materialnote', component:getComponent("materialnote")},
-            {path:'/language', component:getComponent("language")}
+            {path:'/language', name:"language", component:getComponent("language")}
         ]
     },
     {path: '/login/:action', name:"login", component: Login},
@@ -159,17 +158,17 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-    console.log(to, from, next)
+    //console.log(to, from, next)
     //console.log(store)
 
     if(to.name=='login') {
         store.commit("clearTags", {})
-        console.log("=====clear")
+        //console.log("=====clear")
     }
     else {
         store.commit("addTag", {
             path:to.path,
-            label:config.menus[to.name],
+            label:config().menus[to.name],
             key:to.path,
             name:to.name
       })
@@ -245,7 +244,7 @@ const store = new Vuex.Store({
           if(length==1) {
               return 
           }
-          console.log(index)
+          //console.log(index)
 
           tags.splice(index, 1)
           if(index>0) {

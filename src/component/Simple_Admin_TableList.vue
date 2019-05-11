@@ -33,7 +33,6 @@ import globals, { Mix,extend, _label } from './globals.js'
 import { host } from './http.js'
 import allModels from "./model.js"
 
-let model
 let getBaseObject = function(columns) {
     let obj = {}
     for (let i = 0; i < columns.length; i++) {
@@ -48,7 +47,7 @@ let getBaseObject = function(columns) {
 
 export default {
     name: 'simple-admin-tablelist',
-    props: ['columns', "buttons", "controller", "base", "onclickupdate", 'isedit', 'isdelete', "options", "authname", "tableHeight", 'actions', 'tableModel'],
+    props: ['columns', "buttons", "controller", "base", "onclickupdate", 'isedit', 'isdelete', "options", "authname", "tableHeight", 'actions', 'model'],
     components: {
 
     },
@@ -61,10 +60,6 @@ export default {
         Mix.default(localOptions, 'isaction', true)
         Mix.default(localOptions, 'actionNameOfLoad', 'page')
         Mix.default(localOptions, 'isSubmit', true)
-
-        if(self.tableModel && allModels[self.tableModel]) {
-            model = allModels[self.tableModel]
-        }
 
         //self._log("data")
 
@@ -265,8 +260,8 @@ export default {
             let obj = getBaseObject(self.columns)
 
             self._fetch("/" + self.controller + "/" + self.localOptions.actionNameOfLoad, params).then(function(res) {
-                //self._log(res)
-                if(model) {
+                //self._log("result=",res)
+                if(self.model) {
                     //记录自然的排序规则
                     let keyindexes = {}
                     res.data.forEach((item,index)=>{
@@ -275,7 +270,9 @@ export default {
 
                     let array = []
                     res.data.forEach(item => {
-                        model.load({data:Object.assign(item, obj) ,depth:1}).then(rowinfo=>{
+                        //self._log("model begin load...", item)
+                        self.model.load({data:Object.assign(item, obj) ,depth:1}).then(rowinfo=>{
+                            //self._log("xxxx", rowinfo)
                             array.push(rowinfo)
 
                             if(array.length==res.data.length) {
@@ -289,6 +286,7 @@ export default {
                     })
                 }
                 else {
+                    //self._log(res.data)
                     res.data.forEach(item => self.tableData.push(Object.assign(item, obj)))
                 }
 

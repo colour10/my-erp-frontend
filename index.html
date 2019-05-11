@@ -278,9 +278,19 @@
   z-index: 10;
   width:calc(100% - 30px);
 }
+#nav {
+  margin:0px;
+  top:60px;
+  padding: 8px 2px;
+  position:fixed;
+  z-index: 10;
+  width:calc(100% - 30px);
+  background: white;
+  border-bottom: 1px solid #eeeeee
+}
 
 .el-container {
-  padding-top:5px;
+  padding-top:50px;
 }
 
 #app .el-dialog__body {
@@ -339,6 +349,16 @@ body .el-select-dropdown__wrap {max-height:500px;}
         if(localStorage && localStorage.language) {
           language = localStorage.language
         }
+        //language = "cn"
+        function loadLabel(language){
+            var head= document.getElementsByTagName('head')[0];
+            var script= document.createElement('script');
+            script.type= 'text/javascript';
+            script.src= 'http://erp.localhost.com/common/systemlanguage?language=' + language;
+            head.appendChild(script);
+        }
+
+        loadLabel(language)
 
         let o = new Vue({
           data:function(){
@@ -352,22 +372,21 @@ body .el-select-dropdown__wrap {max-height:500px;}
             let handler = setInterval(function(){
               if(self.pencent<=95) {                
                 self.pencent = self.pencent + Math.floor(Math.random()*10)%2+1
+
+                if(window.ASAP && window.$ASAL) {
+                    self.pencent = 100;
+                    clearInterval(handler)
+                    setTimeout(function(){
+                      self.isShow = false;
+                    }, 500)  
+                }
               }
             }, 330)
-
-            $.getScript("http://erp.localhost.com/common/systemlanguage?language="+language, function(){
-                $.getScript("/dist/asa.js", function(){
-                  self.pencent = 100;
-                  clearInterval(handler)
-                  setTimeout(function(){
-                    self.isShow = false;
-                  }, 500)                  
-                });
-              })
           }
         }).$mount("#load")
         
       })
     </script>
+    <script type="text/javascript" src="/dist/asa.js"></script>
   </body>
 </html>

@@ -7,7 +7,7 @@
                         <el-form class="user-form" ref="form" :model="form" label-width="100px" :inline="true" size="mini">
                             <el-form-item :label="item.label" v-if="!item.is_edit_hide" v-for="item in columns" :key="item.name" :class="item.class?item.class:'width2'">
                                 <el-input :ref="item.name" @keyup.enter.native="onSubmit" :type="item.type?item.type:'text'" v-if="!item.type||item.type=='input'||item.type=='textarea'" v-model="form[item.name]" size="mini"></el-input>
-                                <simple-select :ref="item.name" v-if="item.type=='select'" v-model="form[item.name]" :source="item.source" @change="onChange(item)" :disabled="isDisabled(item)"></simple-select>
+                                <simple-select :ref="item.name" v-if="item.type=='select'" v-model="form[item.name]" :source="item.source" @change="onChange(item, form)" :disabled="isDisabled(item,form)" :multiple="item.multiple||false"></simple-select>
                             </el-form-item>
                         </el-form>
                     </el-tab-pane>
@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import { _label } from '../globals.js'
+import { _label,StringFunc } from '../globals.js'
 
 export default {
     name: 'sp-supplier',
@@ -41,7 +41,7 @@ export default {
                 columns: [
                     { name: "nickname", label: _label("nicheng"), class: "width2" },
                     { name: "suppliercode", label: _label("bianma"), class: "width2" },
-                    { name: "suppliertype", label: _label("leixing"), class: "width2", type: "select", source: "suppliertype" },
+                    { name: "suppliertype", label: _label("leixing"), class: "width2", type: "select", source: "suppliertype", multiple:true },
                     { name: "customtype", label: _label("kehuleixing"), class: "width2", type: "select", source: "customtype" },
                     { name: "suppliername", label: _label("mingcheng"), class: "width1" },
                     { name: "address", label: _label("dizhi"), class: "width1", is_hide: true },
@@ -158,19 +158,18 @@ export default {
             self.id = 0
         },
         onTabClick() {},
-        onChange(column) {
+        onChange(column, form) {
             let self = this
             
             if (column.name == 'suppliertype') {
                 //客户
-                self.suppliertype = self.$refs['suppliertype'][0].getValue()
-                if(self.suppliertype!=2) {
-                    self.$refs['customtype'][0].setValue('')
+                if(!StringFunc.include(form.suppliertype, '2')) {
+                    form.customtype = ''
                 }
             }
         },
-        isDisabled(column) {
-            return column.name=='customtype' && this.suppliertype!=2;
+        isDisabled(column, form) {
+            return column.name=='customtype' && !StringFunc.include(form.suppliertype, 2);
         }
     }
 }

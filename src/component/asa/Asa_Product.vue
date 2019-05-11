@@ -462,7 +462,7 @@ export default {
                 self.setInfo(self.form.id).then(()=>{
                     res.data.list.forEach(function(item) {
                         self.colors.push(extract(item, color_keys))
-                        self._log(item)
+                        //self._log(item)
                     })
                     self.colors_loaded = true
 
@@ -558,7 +558,7 @@ export default {
 
             return new Promise((resolve, reject) => {
                 ProductDetail.load({ data: row, depth: 1, isCache: false }).then(function(info) {
-                    self._log(info)
+                    //self._log(info)
                         //设置默认值
                     info = globals.extend({ sizecontentids: "" }, info);
                     //console.log(info,'----------')
@@ -676,7 +676,7 @@ export default {
     computed: {
         getPriceRate(){
             let form = this.form
-            this._log(form.wordprice, form.nationalprice, this.exchange, this.exchange.rate)
+            //this._log(form.wordprice, form.nationalprice, this.exchange, this.exchange.rate)
             return form.wordprice > 0 && form.nationalprice > 0 && this.exchange && this.exchange.rate ? math.round(form.nationalprice/this.exchange.rate / form.wordprice, 2) : "";
         },
         getRate() {

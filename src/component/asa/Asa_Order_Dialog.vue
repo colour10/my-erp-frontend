@@ -20,7 +20,7 @@
                         </simple-select>
                     </el-form-item>
                     <el-form-item :label="_label('bizhong')">
-                        <simple-select v-model="form.currency" source="supplier" :lang="lang">
+                        <simple-select v-model="form.currency" source="currency" :lang="lang">
                         </simple-select>
                     </el-form-item>
                 </el-col>

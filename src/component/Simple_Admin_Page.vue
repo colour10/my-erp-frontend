@@ -61,7 +61,7 @@ export default {
         let base = self.base || {}
 
         let opt = self.options || {};
-        self._log(opt,"opt")
+        //self._log(opt,"opt")
         opt.isAutohide = typeof(opt.isAutohide)=='undefined' ? true : opt.isAutohide;
         opt.isAutoReload = typeof(opt.isAutoReload)=='undefined' ? false : opt.isAutoReload;
 
@@ -95,7 +95,7 @@ export default {
         },
         onChange(column) {
             let self = this;
-            self._log(column)
+            //self._log(column)
 
             if (column.trigger) {
                 let value = self.form[column.name]

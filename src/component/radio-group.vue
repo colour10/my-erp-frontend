@@ -60,7 +60,9 @@ export default {
 
         self.dataSource.getData(function(data) {
             self.data = data
+            //self._log(data, self.source)
         })
+        self._log("mounted")
     }
 }
 </script>

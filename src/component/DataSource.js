@@ -1,4 +1,4 @@
-import resources_options from './resources.js'
+import getResource from './resources.js'
 import {httpGet} from './http.js'
 import {ASAP} from "./globals.js"
 import {extract} from "./object.js"
@@ -71,6 +71,7 @@ DataSource.prototype.init = function() {
         self.is_loaded = true;
     }
     else if(options.hashtable) {
+        //console.log(options.hashtable)
         Object.keys(options.hashtable).forEach(function(key){
             let row = DataRow.factory({name:options.hashtable[key],value:key}, self);
             self.data.push(row)
@@ -295,6 +296,7 @@ DataSource.prototype.getList = function() {
 }
 
 DataSource.getDataSource = function(resourceName, lang) {
+
     if(resourceName.constructor==DataSource) {
         return resourceName;
     }
@@ -306,22 +308,19 @@ DataSource.getDataSource = function(resourceName, lang) {
         return resources[resourceName]   
     }
     else {
-        var create = function() {
-            
-            if(!resources_options[resourceName]) {
+        let create = function() {
+            let res = getResource(resourceName)
+            //console.log("getDataSource",resourceName, lang, res)
+            if(!res) {
                 //_log(resourceName,"未定义")
                 throw "资源未定义:"+resourceName
             }
-            resources[resourceName] = new DataSource(resources_options[resourceName], lang)
+            resources[resourceName] = new DataSource(res, lang)
             resources[resourceName].init()
             return resources[resourceName]
         }
-
-        var tmp_create = function() {
-            return new DataSource(resources_options[resourceName], lang)
-        }
         
-        return typeof(resourceName)=="string" ? create(): tmp_create();
+        return create()
     }
 }
 

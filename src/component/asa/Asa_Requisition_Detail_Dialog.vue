@@ -87,7 +87,7 @@ import DataSource from '../DataSource.js'
 import {getFetcher} from "../fetcher.js"
 
 const fetcherProduct = getFetcher('product')
-const dataSource = DataSource.getDataSource('requisitionstatus', _label('lang'));
+
 const fetcherWarehouse = getFetcher('warehouse')
 const fetcherUser = getFetcher('user')
 
@@ -108,7 +108,7 @@ export default {
     },
     data() {
         var self = this;
-        
+       
         return {
             form: {
                 apply_username: "",
@@ -133,6 +133,10 @@ export default {
     methods: {
         onQuit() {
             this.dialogVisible = false
+        },
+
+        getDataSource(){
+            return DataSource.getDataSource('requisitionstatus', _label('lang'));
         },
         init(row) {
             let self = this,
@@ -162,7 +166,7 @@ export default {
             }
 
             if (row.status) {
-                dataSource.getRow(row.status, data => form.status_name = data.getLabel())
+                self.getDataSource().getRow(row.status, data => form.status_name = data.getLabel())
             }
 
             if (row.id) {

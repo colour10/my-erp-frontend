@@ -1,7 +1,7 @@
 <template>
     <section class="el-container is-vertical" style="height: auto; border: 0px solid rgb(238, 238, 238);">
         <!--<header class="el-header" style="height: 60px; text-align: left; font-size: 24px;">{{_label("system_name")}}</header>-->
-        <div id="top-menu">
+        <el-row id="top-menu">
             <el-menu class="el-menu-demo" mode="horizontal" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b" @select="onSelect">
                 <el-submenu index="1">
                     <template #title>{{_label("menu-1")}}</template>
@@ -104,15 +104,17 @@
                     <el-menu-item index="login/logout">{{_label("menu-11-3")}}</el-menu-item>
                 </el-submenu>
             </el-menu>
-        </div>
+            
+        </el-row>
+        <el-row id="nav">
+                <el-tag v-for="(tag,index) in tags" :key="index" :closable="tags.length>1" style="margin-right:5px;cursor:pointer" @close="onCloseTag(tag)" @click="onClickTag(tag)" :type="getType(tag.key)">{{tag.label}}</el-tag>
+            </el-row>
         <!-- <el-breadcrumb separator="/" style="padding-top:55px;">
             <el-breadcrumb-item :to="{ path: '/' }">{{_label("shouye")}}</el-breadcrumb-item>
             <el-breadcrumb-item><a href="/">{{moduleName}}</a></el-breadcrumb-item>
         </el-breadcrumb> -->
-        <el-row style="padding-top:55px;">
-            <el-tag v-for="(tag,index) in tags" :key="index" :closable="tags.length>1" style="margin-right:5px;cursor:pointer" @close="onCloseTag(tag)" @click="onClickTag(tag)" :type="getType(tag.key)">{{tag.label}}</el-tag>
-        </el-row>
-        <section class="el-container">
+        
+        <section class="el-container" style="padding-top:90px">
             <transition name="el-fade-in" mode="out-in">
             <keep-alive :include="includes">
                 <router-view :key="module"></router-view>
@@ -129,7 +131,7 @@
 import {config} from '../globals.js'
 
 export default {
-    name: 'asapage-home',
+    name: 'sp-home',
     data() {
         return {}
     },
@@ -166,13 +168,14 @@ export default {
     },
     computed:{
         moduleName() {
-            return config.menus[this.$route.path.substr(1)]
+            return config().menus[this.$route.path.substr(1)]
         },
         module() {
             return this.$route.path.replace(/\//g, "")
         },
         tags(){
             //this._log(this.$store.getters.getTags)
+            //this._log(this.$store.getters.getTags.tags)
             return this.$store.getters.getTags.tags
         },
         current(){
