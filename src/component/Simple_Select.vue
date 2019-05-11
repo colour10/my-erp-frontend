@@ -56,13 +56,33 @@ export default {
         event: 'change'
     },
     data() {
+        let self = this
         return {
+            counter:Math.floor(Math.random()*100),
+            sss: this.getDataSource(),
             currentValue: "",
             keyword:"",
             data: [],
             filterData:[], //查询过滤后的
             keyindexes:{}, //记录元素的顺序，多选时排序用
-            start:-1 //批量选择的时候使用
+            start:-1, //批量选择的时候使用
+            onDataSourceChange() {           
+                self.counter      = self.counter+1
+                //self._log("触发了一次，",self.source, self.counter, self)
+                if (self.parentid == false) {
+                    self.data = []
+                    self.keyindexes = {}
+                    self.getDataSource().getData(function(data) {
+                        //self._log("load", data)
+                        //self.data = data
+                        data.forEach(item => self.push(item))
+                        self.filteredList()
+                    })
+                } else {
+                    //self._log("mounted")
+                    self.load(self.parentid)
+                }
+            }
         }
     },
     methods: {
@@ -107,6 +127,7 @@ export default {
         },
         load(value) {
             var self = this;
+            //self._log("重新加载下拉框数据")
             self.data = []
             self.keyindexes = {}
             self.getDataSource().getSourceByParent(value).then(function(dataSource) {
@@ -116,6 +137,7 @@ export default {
                     data.forEach(item => self.push(item))
                 })
                 self.filteredList();
+                //self._log("追加下拉框数据")
             })
         },
         clear() {
@@ -202,7 +224,7 @@ export default {
                 })
             }
             self.$emit("option-change", self.filterData)
-        }
+        }        
     },
     watch: {
         select_value(newValue) {
@@ -216,21 +238,15 @@ export default {
     mounted: function() {
         let self = this;
         self.setValue(self.select_value)
-
-        if (self.parentid == false) {
-            self.getDataSource().getData(function(data) {
-                //self._log("load", data)
-                //self.data = data
-                data.forEach(item => self.push(item))
-                self.filteredList()
-            })
-        } else {
-            //self._log("mounted")
-            self.load(self.parentid)
-        }
+        self.getDataSource().emitter.on("change", self.onDataSourceChange)
+        //self._log("绑定监听事件")
+        self.onDataSourceChange()        
     },
     computed:{
 
+    },
+    beforeDestroy:function(){
+        this.getDataSource().emitter.off("change", this.onDataSourceChange)
     }
 }
 </script>

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <simple-admin-page v-bind="supplier" ref="page" @before-edit="onBeforeEdit" @before-add="onBeforeAdd">
+        <simple-admin-page v-bind="supplier" ref="page" @before-edit="onBeforeEdit" @before-add="onBeforeAdd" @after-update="onAfterUpdate">
             <template v-slot="{form,columns}">
                 <el-tabs type="border-card" v-model="activeName" @tab-click="onTabClick">
                     <el-tab-pane :label="_label('jibenziliao')" name="info">
@@ -28,6 +28,7 @@
 
 <script>
 import { _label,StringFunc } from '../globals.js'
+import DataSource from '../DataSource.js'
 
 export default {
     name: 'sp-supplier',
@@ -170,6 +171,9 @@ export default {
         },
         isDisabled(column, form) {
             return column.name=='customtype' && !StringFunc.include(form.suppliertype, 2);
+        },
+        onAfterUpdate() {
+            DataSource.getDataSource("supplier", this._label("lang")).clear()
         }
     }
 }

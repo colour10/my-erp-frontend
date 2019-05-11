@@ -2,7 +2,7 @@ import getResource from './resources.js'
 import {httpGet} from './http.js'
 import {ASAP} from "./globals.js"
 import {extract} from "./object.js"
-
+import mitt from 'mitt'
 
 function DataRow(row, id, name, option={}) {
     let self = this;
@@ -50,7 +50,17 @@ function DataSource(options, lang) {
     self.parent = options.parent;
     self.is_loaded = false;
             
-    //_log(data_source.hashtable, data_source.datalist, data_source.url)    
+    self.emitter = mitt()
+}
+
+DataSource.prototype.clear = function() {
+    let self = this;
+    self.data = []
+    self.hashtable = {}
+    self.is_loaded = false
+    self.emitter.emit("change")
+    console.log("清空")
+    self.init()
 }
 
 DataSource.prototype.init = function() {
@@ -114,7 +124,9 @@ DataSource.prototype.loadList = function() {
     let self = this;
     let options = self.options;
     let params = options.params || {}
-    httpGet(options.url).then( function({data=[]}={}){
+
+    console.log("DataSource loadurl")
+    httpGet(options.url+"?"+Date.now(), {enableCache:false}).then( function({data=[]}={}){
         data.forEach(function(item){
             let row = DataRow.factory(item, self)
             self.hashtable[item[self.opvalue]] = row; 

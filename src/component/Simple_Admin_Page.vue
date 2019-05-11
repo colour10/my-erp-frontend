@@ -142,6 +142,8 @@ export default {
                         if (isAutohide) {
                             self.dialogVisible = false
                         }
+                        self.$emit("after-add")
+                        self.$emit("after-update")
                         self.isSubmiting = false;
                     }).catch(()=>{
                         self.isSubmiting = false;
@@ -168,6 +170,8 @@ export default {
                         if (isAutohide) {
                             self.dialogVisible = false
                         }
+                        self.$emit("after-edit")
+                        self.$emit("after-update")
                         self.isSubmiting = false;
                     }).catch(()=>{
                         self.isSubmiting = false;
