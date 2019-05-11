@@ -151,7 +151,7 @@ const StringFunc = {
         }
     },
     include(parent, id){
-        console.log((','+parent + ',').indexOf(','+id+','), parent,id)
+        //console.log((','+parent + ',').indexOf(','+id+','), parent,id)
         return (','+parent + ',').indexOf(','+id+',')>=0
     },
     ucfirst(str){

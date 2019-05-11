@@ -91,6 +91,19 @@ DataSource.prototype.init = function() {
         })
         self.is_loaded = true;
     }
+    else if(options.callback) {
+        options.callback(DataSource).then(dataSource=>{
+            dataSource.getData(function(data){
+                data.forEach(rowData=>{
+                    self.hashtable[rowData.getValue()] = rowData;    
+                    self.data.push(rowData)
+                })
+                self.oplabel = dataSource.oplabel
+                self.opvalue = dataSource.opvalue
+                self.is_loaded = true;
+            })            
+        })
+    }
 }
 
 /**
@@ -125,17 +138,19 @@ DataSource.prototype.getData = function(callback) {
     func();
 }
 
-DataSource.prototype.filter = function(condition, callback) {
+DataSource.prototype.filter = function(callback) {
     var self = this;
-    self.getData(data=>{       
-        var keys = Object.keys(condition)
-        
-        var result = data.filter(row=>{
-            //console.log("DataSource.filter", row, keys.every(key=>condition[key]==row.getRow(key)))
-            return keys.every(key=>condition[key]==row.getRow(key))    
+
+    return new Promise(resolve=>{
+        self.getData(data=>{       
+            let options = extract(self.options,['oplabel','opvalue','parent']);            
+            options.datalist = data.filter(callback).map(item=>item.row)
+            let source = new DataSource(options, self.lang);
+            source.init();
+            
+            resolve(source)
         })
-        callback(result)
-    })
+    })    
 }
 /*DataSource.prototype.filter = function(func) {
     let self = this;
@@ -314,6 +329,9 @@ DataSource.getDataSource = function(resourceName, lang) {
             if(!res) {
                 //_log(resourceName,"未定义")
                 throw "资源未定义:"+resourceName
+            }
+            else if(typeof(res)=='function') {
+                res = {callback:res}
             }
             resources[resourceName] = new DataSource(res, lang)
             resources[resourceName].init()

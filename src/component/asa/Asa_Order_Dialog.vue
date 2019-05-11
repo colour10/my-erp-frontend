@@ -12,7 +12,7 @@
                         </simple-select>
                     </el-form-item>
                     <el-form-item :label="_label('gonghuoshang')" required prop="supplierid">
-                        <simple-select v-model="form.supplierid" source="supplier" :lang="lang">
+                        <simple-select v-model="form.supplierid" source="supplier_2" :lang="lang">
                         </simple-select>
                     </el-form-item>
                     <el-form-item :label="_label('fahuodanwei')">

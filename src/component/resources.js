@@ -168,6 +168,14 @@ function getOption(name) {
     //客户类型
     options["customtype"] =  {hashtable:list.customtype}
 
+    //客户列表
+    options["supplier_2"] = function(DataSource){
+        return DataSource.getDataSource("supplier", _label('lang')).filter(item=>{
+            return StringFunc.include(item.row.suppliertype, '2')
+        })
+    }
+
+
     return options[name]
 }
 
