@@ -11,7 +11,9 @@
                     </el-form-item>
                     <as-button type="primary" @click="search" v-if="option.isedit" size="mini">{{_label("chaxun")}}</as-button>
                     <as-button type="primary" @click="clear" v-if="option.isedit" size="mini">{{_label("qingkong")}}</as-button>
-                    <el-checkbox v-model="is_show">{{_label("as-button")}}</el-checkbox>
+                    <as-button type="primary" @click="onSelectMultiple" size="mini">{{_label("piliangxuanze")}}</as-button>
+                    <as-button type="primary" @click="onQuit" size="mini">{{_label("tuichu")}}</as-button>
+                    <el-checkbox v-model="is_show">{{_label("gaojichaxun")}}</el-checkbox>
                 </el-col>
             </el-row>
             <el-row :gutter="0" v-show="is_show">
@@ -40,7 +42,8 @@
         </el-form>
         <el-collapse v-model="is_collapse" v-show="searchresult.length>0">
             <el-collapse-item :title="_label('chaxunjieguo')" name="1">
-                <el-table :data="searchresult" stripe border style="width:100%;">
+                <el-table ref="table" :data="searchresult" stripe border style="width:100%;" @selection-change="onSelectionChange" @row-click="onRowClick">
+                    <el-table-column type="selection" :width="60"></el-table-column>
                     <el-table-column :label="_label('chanpinmingcheng')" align="center" width="350">
                         <template v-slot="{row}">{{row.getName()}}</template>>
                     </el-table-column>
@@ -67,6 +70,8 @@
 import globals from '../globals.js'
 import { ProductDetail } from "../model.js"
 import Asa_Product_Add from '../asa/Asa_Product_Add.vue'
+import {extend} from "../object.js"
+import chain from "../chain.js"
 
 export default {
     name: "asa-search-panel",
@@ -92,10 +97,14 @@ export default {
             searchresult: [],
             option: {
                 isedit: true
-            }
+            },
+            selected:[]
         }
     },
     methods: {
+        onQuit(){
+            this.$emit("close")
+        },
         search() {
             //查询库存商品
             let self = this
@@ -110,7 +119,8 @@ export default {
                         type: 'warning'
                     }).then(() => {
                         setTimeout(function(){
-                            self.$refs.productadd.setForm(self.form).show(false)
+                            let form = chain(self.form).filter(item=>item.length>0).object()
+                            self.$refs.productadd.setForm(form).show(false)
                         },100)                        
                     }).catch(() => {});
                 } else {
@@ -137,7 +147,7 @@ export default {
         },
         selectRow(row) {
             //this._log(row)
-            this.$emit("select", globals.extend({}, row))
+            this.$emit("select", extend({}, row))
         },
         onBrandGroupChange(value) {
             let self = this
@@ -151,11 +161,24 @@ export default {
             products.forEach(function(item) {
                 ProductDetail.get(item, function(result) {
                     //self._log(result)
-                     self.$emit("select", globals.extend({}, result))
+                     self.$emit("select", extend({}, result))
                 }, 1)
             })
 
             self.$refs.productadd.hide()
+        },
+        onSelectionChange(vals) {
+            this.selected = vals
+        },
+        onSelectMultiple() {
+            let self = this
+            self.selected.forEach(item=>{
+                //self._log(item)
+                self.$emit("select", extend({}, item))
+            })
+        },
+        onRowClick(row){
+            this.$refs.table.toggleRowSelection(row)
         }
     }
 }

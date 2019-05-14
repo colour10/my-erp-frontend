@@ -26,11 +26,11 @@
                         </simple-select>
                     </el-form-item>
                     <el-form-item :label="_label('gonghuoshang')">
-                        <simple-select v-model="form.supplierid" source="supplier_3" :lang="lang">
+                        <simple-select v-model="form.supplierid" source="supplier_3" :clearable="true">
                         </simple-select>
                     </el-form-item>
                     <el-form-item :label="_label('fahuoshang')">
-                        <simple-select v-model="form.finalsupplierid" source="supplier_3" :lang="lang">
+                        <simple-select v-model="form.finalsupplierid" source="supplier_3" :clearable="true">
                         </simple-select>
                     </el-form-item>
                 </el-col>
@@ -44,13 +44,13 @@
                         </simple-select>
                     </el-form-item>
                     <el-form-item :label="_label('jine')">
-                        <el-input placeholder="" v-model="form.factoryprice" class="productcurrency">
-                            <select-currency v-model="form.wordpricecurrency" slot="prepend">
+                        <el-input placeholder="" v-model="total_price" class="productcurrency">
+                            <select-currency v-model="form.currency" slot="prepend">
                             </select-currency>
                         </el-input>
                     </el-form-item>
                     <el-form-item :label="_label('zhekoulv')">
-                        <sp-float-input v-model="form.discount"></sp-float-input>
+                        <sp-float-input v-model="form.discount" @change="onDiscountChange"></sp-float-input>
                     </el-form-item>
                     <el-form-item :label="_label('tuishuilv')">
                         <sp-float-input v-model="form.taxrebate"></sp-float-input>
@@ -111,23 +111,28 @@
                         </template>
                     </el-table-column>
                     <el-table-column prop="label" :label="_label('chengjiaojia')" width="100" align="center">
-                        <template v-slot="scope">
-                            {{scope.row.product.retailprice}}
+                        <template v-slot="{row}">
+                            {{row.product.factoryprice*row.discount}}
                         </template>
                     </el-table-column>
                     <el-table-column prop="label" :label="_label('zongjia')" width="100" align="center">
-                        <template v-slot="scope">
-                            {{scope.row.product.retailprice*scope.row.number}}
+                        <template v-slot="{row}">
+                            {{row.product.factoryprice*row.discount*row.total}}
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="label" :label="_label('zhekoulv')" width="100" align="center">
+                        <template v-slot="{row}">
+                            <el-input v-model="row.discount" size="mini"></el-input>
                         </template>
                     </el-table-column>
                     <el-table-column prop="number" :label="_label('dinggoushuliang')" align="center" :width="width">
                         <template v-slot="{row}">
-                            <asa-sizecontent-input :columns="row.product.sizecontents" :productid="row.product.id" :disabled="!isEditable" @change="onChange"></asa-sizecontent-input>
+                            <asa-sizecontent-input :columns="row.product.sizecontents" :row="row" :disabled="!isEditable" @change="onChange" :key="row.product.id"></asa-sizecontent-input>
                         </template>
                     </el-table-column>
                     <el-table-column :label="_label('caozuo')" width="150" align="center" v-if="isEditable">
                         <template v-slot="scope">
-                            <as-button size="mini" type="danger" @click="deleteRow(scope.$index, scope.row)">{{_label('shanchu')}}</as-button>
+                            <as-button size="mini" type="danger" @click="deleteRow(scope.row)">{{_label('shanchu')}}</as-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -146,6 +151,7 @@ import Asa_Sizecontent_Input from './Asa_Sizecontent_Input.vue'
 import DataSource from '../DataSource.js'
 import globals, { _label } from "../globals.js"
 import { Product } from "../model.js"
+import chain  from "../chain.js"
 
 const props = {
     columns: [
@@ -216,7 +222,9 @@ export default {
             lang: "",
             pro: false,
             formid: '',
-            props
+            props,
+            discounts:{},
+            numbers:{}
         }
     },
     methods: {
@@ -233,18 +241,22 @@ export default {
         showProduct() {
             this.pro = true;
         },
-        onSelect(prodectDetail) {
+        onSelect(productDetail) {
             let self = this;
             //查询是不是已经添加过
             let is_exist = self.tabledata.some(rowData => {
-                return rowData.product.id == prodectDetail.id
+                return rowData.product.id == productDetail.id
             })
 
             if (!is_exist) {
                 self.tabledata.unshift({
-                    product: prodectDetail,
-                    number: 0
+                    product: productDetail,
+                    discount: self.form.discount,
+                    total:0,
+                    numbers:{}
                 })
+
+                self.form.currency = productDetail.factorypricecurrency
             }
 
         },
@@ -312,39 +324,14 @@ export default {
             })
 
         },
-        confirmOrder(status) {
-            let self = this
-            if (!self.canConfirm) {
-                return
-            }
-            self._confirm(self._label("confirm-order"), function() {
-                self._submit("/order/confirm", { id: self.form.id, status: status }).then(function(res) {
-                    self._log(res)
-                    self.form.status = status
-                    self.$emit("change", self.form)
-                });
-            })
-        },
-        cancelConfirm() {
-            let self = this
-            if (!self.canCancel) {
-                return
-            }
-            self._confirm(self._label("confirm-order-cancel"), function() {
-                self._submit("/order/cancel", { id: self.form.id }).then(function(res) {
-                    //self._log(res)
-                    self.form.status = 2
-                    self.$emit("change", self.form)
-                });
-            })
-        },
         getRowCount(rowIndex, row) {
             //this._log(row, "getRowCount")
             return row.sizetoplist.reduce((total, item) => total += item.number, 0)
         },
-        deleteRow(rowIndex, row) {
+        deleteRow(row) {
             var self = this;
-            self.$delete(self.tabledata, rowIndex)
+            let index = self.tabledata.findIndex(item=>item==row)
+            self.$delete(self.tabledata, index)
         },
         appendRow(row) {
             const self = this;
@@ -354,10 +341,21 @@ export default {
                 self.tabledata.push(row)
             })
         },
-        onChange(row) {
+        onChange({row, form}) {
             //row.numbers = 
             let self = this
             self._log(row)
+            row.form = form
+            row.total = chain(form).toArray().array().reduce((total, item)=>total*1+item.value*1, 0)
+            self._log(row.total)
+        },
+        onDiscountChange(newValue, oldValue){
+            let self = this
+            self.tabledata.forEach(item=>{
+                if(item.discount==oldValue) {
+                    item.discount = newValue
+                }
+            })
         }
     },
     computed: {
@@ -389,7 +387,7 @@ export default {
         },
         total_price() {
             return this.tabledata.reduce(function(total, current) {
-                return total + current.number * current.product.realprice
+                return total + current.total * current.product.factoryprice * current.discount
             }, 0)
         }
     },

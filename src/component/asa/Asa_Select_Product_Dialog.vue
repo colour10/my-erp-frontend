@@ -1,6 +1,6 @@
 <template>
   <el-dialog :visible.sync="dialogVisible" :center="true" :fullscreen="true" :modal="false" >
-    <searchpanel @select="onSelect"></searchpanel>
+    <searchpanel @select="onSelect" @close="onClose"></searchpanel>
   </el-dialog>
 </template>
 
@@ -24,9 +24,12 @@ export default {
     },
     methods:{
         onSelect(row) {
-            var self = this
+            let self = this
             self.dialogVisible = false;
             self.$emit("select", row)
+        },
+        onClose(){
+            this.dialogVisible = false;
         }
     },
     watch:{

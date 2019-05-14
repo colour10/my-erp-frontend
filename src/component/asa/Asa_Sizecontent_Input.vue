@@ -24,8 +24,8 @@ export default {
         columns: {
             type: Array
         },
-        productid:{
-            type:[Number,String],
+        row:{
+            type:[Object],
             require:true
         }
     },
@@ -48,8 +48,12 @@ export default {
         },
         onChange() {
             let self = this
-            self.$emit("change", {productid:self.productid, form:extend({},self.form)})
+            self.$emit("change", {row:self.row, form:extend({},self.form)})
         }
+    },
+    mounted:function(){
+        this._log(this.row,"====")
+        extend(this.form, this.row.form)
     }
 }
 </script>

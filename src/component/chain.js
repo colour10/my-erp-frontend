@@ -20,6 +20,17 @@ const ObjectChain = function(target) {
         return new ObjectChain(result)
     }
 
+    self.filter = function(callback) {
+        let result = {}
+        toArray(target).filter(item=>{
+            return callback(item.value, item.key)
+        }).forEach(item=>{
+            result[item.key] = item.value
+        })
+        console.log(result)
+        return new ObjectChain(result)
+    }
+
     self.object = function() {
         return target
     }

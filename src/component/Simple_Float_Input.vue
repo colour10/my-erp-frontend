@@ -36,8 +36,9 @@ export default {
                 self.current_value = self.convertValue(newValue)
             }
         },
-        current_value(newValue) {
-            this.$emit("change", newValue)
+        current_value(newValue, oldValue) {
+            this.$emit("change", newValue, oldValue)
+            //this.$emit("valuechange", )
         }
         ,
         value(newValue) {

@@ -1,6 +1,10 @@
 const extract = function(object, keys){
     let obj = {}
-    keys.forEach(key=>obj[key] = object[key])
+    keys.forEach(key=>{
+        if(typeof(object[key])!='undefined') {
+            obj[key] = object[key]
+        }        
+    })
     return obj
 }
 export {extract}
