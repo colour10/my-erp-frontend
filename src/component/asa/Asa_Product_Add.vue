@@ -1,5 +1,5 @@
 <template>
-    <el-dialog :title="_label('chanpinguanli')" :visible.sync="dialogVisible" :center="true" width="1200px">
+    <el-dialog :title="_label('chanpinguanli')" :visible.sync="dialogVisible" :center="true" width="1200px" :modal="modal">
         <el-row class="product">
             <el-col :span="24">
                 <el-table :data="colors" border style="width:100%;">
@@ -182,7 +182,7 @@ import { loadSetting } from '../setting.js'
 import DataSource from '../DataSource.js'
 import watcher from "../watch.js"
 import Material from '../product/material.vue'
-
+import chain from "../chain.js"
 
 export default {
     name: 'asa-product-add',
@@ -237,7 +237,8 @@ export default {
             colors: [],
             colors_loaded: false,
             rate: "", //倍率
-            siji: "" //控制四季全选
+            siji: "", //控制四季全选
+            modal:true
         }
     },
     methods: {
@@ -319,7 +320,7 @@ export default {
             })
         },
         onSubmit() {
-            var self = this;
+            let self = this;
 
             self.validate().then(() => {
                 let params = {};
@@ -332,7 +333,7 @@ export default {
                     //self._log(res)
                         //self.colors = []
                     self.initColorList()
-                    self.$emit("change")
+                    self.$emit("change", res.data)
                 })
             })
         },
@@ -359,9 +360,20 @@ export default {
             let self = this
             self.$delete(self.colors, $index)
         },
-        show() {
-            var self = this;
+        setForm(info){
+            let self = this
+            extend(self.form, info)
+            extend(self.colors[0], chain(info).extract(['wordcode_1', 'wordcode_2', 'wordcode_3', 'wordcode_4']).map(item=>item.toUpperCase()).object())
+            self._log(self.form, info)
+            return self
+        },
+        show(modal=true) {
+            let self = this;
+            self.modal = modal
             self.dialogVisible = true;
+        },
+        hide(){
+            this.dialogVisible = false;
         },
         initColorList() {
             let self = this

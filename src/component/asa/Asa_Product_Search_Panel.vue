@@ -32,7 +32,7 @@
                         <simple-select v-model="form.countries" source="country" :multiple="true"></simple-select>
                     </el-form-item>
                     <el-form-item :label="_label('niandai')" prop="ageseason">
-                        <simple-select v-model="form.ageseason" source="ageseason"  :multiple="true">
+                        <simple-select v-model="form.ageseason" source="ageseason" :multiple="true">
                         </simple-select>
                     </el-form-item>
                 </el-col>
@@ -41,9 +41,11 @@
         <el-collapse v-model="is_collapse" v-show="searchresult.length>0">
             <el-collapse-item :title="_label('chaxunjieguo')" name="1">
                 <el-table :data="searchresult" stripe border style="width:100%;">
-                    <el-table-column prop="brandcolor_label" :label="_label('chima')" width="100" align="center"> </el-table-column>
-                    <el-table-column prop="productname" :label="_label('chanpinmingcheng')" align="center">
+                    <el-table-column :label="_label('chanpinmingcheng')" align="center" width="350">
                         <template v-slot="{row}">{{row.getName()}}</template>>
+                    </el-table-column>
+                    <el-table-column :label="_label('guojima')" align="center" width="200">
+                        <template v-slot="{row}">{{row.getGoodsCode()}}</template>>
                     </el-table-column>
                     <el-table-column prop="countries_label" :label="_label('chandi')" width="100" align="center"> </el-table-column>
                     <el-table-column prop="brandgroup_label" :label="_label('pinlei')" width="120" align="center"> </el-table-column>
@@ -56,30 +58,36 @@
                 </el-table>
             </el-collapse-item>
         </el-collapse>
+
+        <productadd ref="productadd" @change="onChange"></productadd>
     </div>
 </template>
 
 <script>
 import globals from '../globals.js'
 import { ProductDetail } from "../model.js"
+import Asa_Product_Add from '../asa/Asa_Product_Add.vue'
 
 export default {
     name: "asa-search-panel",
+    components:{
+        "productadd":Asa_Product_Add
+    },
     props: ['filter'],
     data() {
         return {
             is_show: false,
-            is_collapse:"",
+            is_collapse: "",
             form: {
-                wordcode_1:"",
-                wordcode_2:"",
-                wordcode_3:"",
-                wordcode_4:"",
-                brandid:"",
-                brandgroupid:"",
-                childbrand:'',
-                countries:"",
-                ageseason:""
+                wordcode_1: "",
+                wordcode_2: "",
+                wordcode_3: "",
+                wordcode_4: "",
+                brandid: "",
+                brandgroupid: "",
+                childbrand: '',
+                countries: "",
+                ageseason: ""
             },
             searchresult: [],
             option: {
@@ -94,14 +102,26 @@ export default {
 
             self._fetch("/product/search", self.form).then(function(res) {
                 self.searchresult = []
-                //self._log(res)
-                res.data.filter(item=>typeof(self.filter)=='function'? self.filter(item):true).forEach(function(item) {
-                    ProductDetail.get(item, function(result) {
-                        //self._log(result)
-                        self.searchresult.push(result)
-                    }, 1)
-                })
-                self.is_collapse = "1";
+                    //self._log(res)
+                if (res.data.length == 0) {
+                    self.$confirm('商品信息不存在，是否新建商品?', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        setTimeout(function(){
+                            self.$refs.productadd.setForm(self.form).show(false)
+                        },100)                        
+                    }).catch(() => {});
+                } else {
+                    res.data.filter(item => typeof(self.filter) == 'function' ? self.filter(item) : true).forEach(function(item) {
+                        ProductDetail.get(item, function(result) {
+                            //self._log(result)
+                            self.searchresult.push(result)
+                        }, 1)
+                    })
+                    self.is_collapse = "1";
+                }
             });
         },
         setParam(name, value) {
@@ -125,6 +145,17 @@ export default {
             //self._log(value)
             self.$refs.childbrand.load(item => item.row.brandgroupid == value)
             self.form.childbrand = ''
+        },
+        onChange(products) {
+            let self = this
+            products.forEach(function(item) {
+                ProductDetail.get(item, function(result) {
+                    //self._log(result)
+                     self.$emit("select", globals.extend({}, result))
+                }, 1)
+            })
+
+            self.$refs.productadd.hide()
         }
     }
 }

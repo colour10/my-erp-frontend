@@ -122,7 +122,7 @@
                     </el-table-column>
                     <el-table-column prop="number" :label="_label('dinggoushuliang')" align="center" :width="width">
                         <template v-slot="{row}">
-                            <asa-sizecontent-input :columns="row.product.sizecontents" :disabled="!isEditable"></asa-sizecontent-input>
+                            <asa-sizecontent-input :columns="row.product.sizecontents" :productid="row.product.id" :disabled="!isEditable" @change="onChange"></asa-sizecontent-input>
                         </template>
                     </el-table-column>
                     <el-table-column :label="_label('caozuo')" width="150" align="center" v-if="isEditable">
@@ -353,6 +353,11 @@ export default {
                 row.sizecontent = data
                 self.tabledata.push(row)
             })
+        },
+        onChange(row) {
+            //row.numbers = 
+            let self = this
+            self._log(row)
         }
     },
     computed: {

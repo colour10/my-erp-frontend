@@ -11,9 +11,15 @@ export {extend}
 const isPromise = function(obj) {
     return !!obj && (typeof obj === 'object' || typeof obj === 'function') && typeof obj.then === 'function';
 }
-export {isPromise}
+
+const toArray = function(obj, callback=key=>{return {key, value:obj[key]}}) {
+    return Object.keys(obj).map(callback)
+}
+
+export {isPromise,toArray}
 
 export default {
     extract,
-    extend
+    extend,
+    toArray
 }
