@@ -20,6 +20,35 @@
                     <el-tab-pane :label="_label('shouhuodizhi')" name="supplieraddress" :disabled="id==0">
                         <simple-admin-page v-bind="supplieraddress"></simple-admin-page>
                     </el-tab-pane>
+                    <el-tab-pane :label="_label('lianxiren')" name="supplierlinkman" :disabled="id==0">
+                        <simple-admin-page v-bind="supplierlinkman" :isExpand="true">
+                            <template v-slot:expand="{row}">
+                                <el-form label-position="left" class="demo-table-expand">
+                                    <el-form-item label="姓名">
+                                        <span>{{ row.name }}</span>
+                                    </el-form-item>
+                                    <el-form-item :label="_label('email')">
+                                        <span>{{ row.email }}</span>
+                                    </el-form-item>
+                                    <el-form-item :label="_label('chuanzhen')">
+                                        <span>{{ row.fax }}</span>
+                                    </el-form-item>
+                                    <el-form-item :label="_label('zuoji')">
+                                        <span>{{ row.phone }}</span>
+                                    </el-form-item>
+                                    <el-form-item :label="_label('youbian')">
+                                        <span>{{ row.zipcode }}</span>
+                                    </el-form-item>
+                                    <el-form-item :label="_label('dizhi')">
+                                        <span>{{ row.address }}</span>
+                                    </el-form-item>
+                                    <el-form-item :label="_label('bumen')">
+                                        <span>{{ row.department }}</span>
+                                    </el-form-item>
+                                </el-form>
+                            </template>
+                        </simple-admin-page>
+                    </el-tab-pane>
                 </el-tabs>
             </template>
         </simple-admin-page>
@@ -27,7 +56,7 @@
 </template>
 
 <script>
-import { _label,StringFunc } from '../globals.js'
+import { _label, StringFunc } from '../globals.js'
 import DataSource from '../DataSource.js'
 
 export default {
@@ -42,7 +71,7 @@ export default {
                 columns: [
                     { name: "nickname", label: _label("nicheng"), class: "width2" },
                     { name: "suppliercode", label: _label("bianma"), class: "width2" },
-                    { name: "suppliertype", label: _label("leixing"), class: "width2", type: "select", source: "suppliertype", multiple:true },
+                    { name: "suppliertype", label: _label("leixing"), class: "width2", type: "select", source: "suppliertype", multiple: true },
                     { name: "customtype", label: _label("kehuleixing"), class: "width2", type: "select", source: "customtype" },
                     { name: "suppliername", label: _label("mingcheng"), class: "width1" },
                     { name: "address", label: _label("dizhi"), class: "width1", is_hide: true },
@@ -60,12 +89,13 @@ export default {
                 options: {
                     dialogWidth: '1000px',
                     formSize: 'small',
-                    inline: true
+                    inline: true,
+                    isAutoReload: true
                 },
                 controller: "supplier",
-                formTitle:function(row) {
-                    if(row) {
-                        return row.nickname+ ' ' +row.suppliername;
+                formTitle: function(row) {
+                    if (row) {
+                        return row.nickname + ' ' + row.suppliername;
                     }
                 }
             },
@@ -75,7 +105,7 @@ export default {
                     { name: "address", label: _label("dizhi"), class: "width1", is_hide: true },
                     { name: "tax_number", label: _label("shuihao"), class: "width2" },
                     { name: "telephone", label: _label("dianhua"), class: "width2" },
-                    
+
                     { name: "bank", label: _label("kaihuhang"), class: "width2", is_hide: true },
                     { name: "bank_account", label: _label("yinhangzhanghao"), class: "width2", is_hide: true }
                 ],
@@ -88,17 +118,17 @@ export default {
                     dialogWidth: '800px',
                     inline: true
                 },
-                formTitle:function(row) {
+                formTitle: function(row) {
                     return self._label("kaipiaoxinxi")
                 },
-                initialization:{
-                    name:""
+                initialization: {
+                    name: ""
                 }
             },
             "supplierbank": {
                 columns: [
                     { name: "name", label: _label("qiye"), class: "width2" },
-                    { name: "currency", label: _label("bizhong"), class: "width2", type: "select", source: "currency",width:90 },
+                    { name: "currency", label: _label("bizhong"), class: "width2", type: "select", source: "currency", width: 90 },
                     { name: "address", label: _label("dizhi"), class: "width1", is_hide: true },
                     { name: "bank_name", label: _label("yinhangmingcheng"), class: "width1" },
                     { name: "bank_depart", label: _label("fenhangmingcheng"), class: "width1", is_hide: true },
@@ -116,13 +146,40 @@ export default {
                     inline: true
                 }
             },
-            supplieraddress:{
+            supplieraddress: {
                 columns: [
-                    { name: "name", label: _label("shouhuoren"), class: "width2" },
-                    { name: "phone", label: _label("dianhua"), class: "width2" },
-                    { name: "address", label: _label("shouhuodizhi"), class: "width1", is_hide: true }
+                    { name: "name", label: _label("shouhuoren"), class: "width2", width: 120 },
+                    { name: "phone", label: _label("dianhua"), class: "width2", width: 120 },
+                    { name: "address", label: _label("shouhuodizhi"), class: "width1", is_hide: true },
+                    { name: "countryid", label: _label("guojiadiqu"), type: "select", source: "country", class: "width2" },
+                    { name: "zipcode", label: _label("youbian"), class: "width2", width: 80, is_hide: true },
+                    { name: "province", label: _label("shengfen"), class: "width2", width: 120 },
+                    { name: "city", label: _label("chengshi"), class: "width2", width: 120 }
                 ],
                 controller: "supplieraddress",
+                auth: "supplier",
+                base: {
+                    supplierid: ''
+                },
+                options: {
+                    dialogWidth: '800px',
+                    inline: true
+                }
+            },
+
+            supplierlinkman: {
+                columns: [
+                    { name: "name", label: _label("xingming"), class: "width2", width: 140 },
+                    { name: "mobile", label: _label("shoujihao"), class: "width2", width: 120 },
+                    { name: "email", label: _label("email"), class: "width2", is_hide: true },
+                    { name: "fax", label: _label("chuanzhen"), class: "width2", width: 120, is_hide: true },
+                    { name: "address", label: _label("dizhi"), class: "width1", is_hide: true },
+                    { name: "gender", label: _label("xingbie"), type: "select", source: "gender2", class: "width2", width: 80 },
+                    { name: "zipcode", label: _label("youbian"), class: "width2", width: 80, is_hide: true },
+                    { name: "department", label: _label("bumen"), class: "width2", width: 140 },
+                    { name: "phone", label: _label("zuoji"), class: "width2", width: 120, is_hide: true }
+                ],
+                controller: "supplierlinkman",
                 auth: "supplier",
                 base: {
                     supplierid: ''
@@ -137,7 +194,7 @@ export default {
             title: "",
             activeName: "info",
             id: 0,
-            suppliertype:""
+            suppliertype: ""
         }
     },
     methods: {
@@ -150,7 +207,8 @@ export default {
             self.supplierbank.columns[0].default = row.suppliername
 
             self.supplieraddress.base.supplierid = row.id
-            //self.supplieraddress.columns[0].default = row.suppliername
+            self.supplierlinkman.base.supplierid = row.id
+                //self.supplieraddress.columns[0].default = row.suppliername
             self.id = row.id
         },
         onBeforeAdd() {
@@ -161,16 +219,16 @@ export default {
         onTabClick() {},
         onChange(column, form) {
             let self = this
-            
+
             if (column.name == 'suppliertype') {
                 //客户
-                if(!StringFunc.include(form.suppliertype, '2')) {
-                    form.customtype = ''
+                if (!StringFunc.include(form.suppliertype, '2')) {
+                    form.customtype = ""
                 }
             }
         },
         isDisabled(column, form) {
-            return column.name=='customtype' && !StringFunc.include(form.suppliertype, 2);
+            return column.name == 'customtype' && !StringFunc.include(form.suppliertype, 2);
         },
         onAfterUpdate() {
             DataSource.getDataSource("supplier", this._label("lang")).clear()

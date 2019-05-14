@@ -16,7 +16,11 @@
         </el-row>
         <el-row :gutter="20">
             <el-col :span="24">
-                <simple-admin-tablelist ref="tablelist" :controller="controller" :columns="columns" :actions="actions" :buttons="buttons" :options="options" :base="base" :authname="authname" :isedit="opt.isedit" :isdelete="opt.isdelete" :onclickupdate="showFormToEdit"></simple-admin-tablelist>
+                <simple-admin-tablelist ref="tablelist" v-bind="$options.propsData" :isedit="opt.isedit" :isdelete="opt.isdelete" :onclickupdate="showFormToEdit">
+                    <template v-if="isExpand" v-slot:expand="scope">
+                        <slot name="expand" v-bind="scope"></slot>
+                    </template>
+                </simple-admin-tablelist>
             </el-col>
         </el-row>
         <el-dialog :title="title" :visible.sync="dialogVisible" :center="true" :width="opt.dialogWidth||'450px'" :modal="false">
@@ -48,7 +52,7 @@ import globals, { _label } from './globals.js'
 
 export default {
     name: 'simple-admin-page',
-    props: ['columns', 'buttons', "options", "controller", "base", "auth", "hideCreate", 'hideForm', 'actions', "formTitle", "isDisabled"],
+    props: ['columns', 'buttons', "options", "controller", "base", "auth", "hideCreate", 'hideForm', 'actions', "formTitle", "isDisabled", "isExpand"],
     components: {
 
     },
@@ -57,6 +61,8 @@ export default {
         let form = {
             id: ""
         }
+
+        //console.log(self)
 
         let base = self.base || {}
 

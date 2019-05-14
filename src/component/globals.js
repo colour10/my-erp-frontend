@@ -1,5 +1,6 @@
 import {client} from "./browser.js"
 import math from "./math.js"
+import {label} from "./application.js"
 
 const ASAP = window.ASAP || {
     caches:{}, //httpGet的缓存对象
@@ -21,21 +22,18 @@ else {
     ASAP.host = ''
 }
 
-const setLabel = function(labels) {
-    Object.assign($ASAL,labels)
+const setLabel = function(name,value) {
+    //console.log("setLabel", name, value)
+    return label(name, value)
 }
 
 const getLabel = function(name) {
-    if (typeof($ASAL) != 'undefined' && $ASAL[name]) {
-        if($ASAL['lang']=='en') {
-            return typeof($ASAL[name])=='string' ? StringFunc.ucfirst($ASAL[name]) : $ASAL[name]
-        }
-        else {
-            return $ASAL[name]
-        }
-        
-    } else {
-        return "";
+    let text = label(name)
+    if(label('lang')=='en') {
+        return typeof(text)=='string' ? StringFunc.ucfirst(text) : text
+    }
+    else {
+        return text
     }
 }
 
@@ -53,7 +51,6 @@ const clone = function(target) {
     var obj = {}
     Object.keys(target).forEach(function(key) {
         obj[key] = target[key]
-
     });
     return obj;
 }

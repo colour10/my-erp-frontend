@@ -41,7 +41,7 @@ export default {
         },
         placeholder: {
             type: String,
-            default: _label('qingxuanze')
+            default: ""
         },
         filterMethod:{
 

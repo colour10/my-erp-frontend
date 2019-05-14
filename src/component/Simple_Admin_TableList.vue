@@ -1,6 +1,11 @@
 <template>
     <div>
         <sp-table :data="tableData" border style="width: 100%;" :height="tableHeight" :cell-class-name="getCellClassName" :cell-style="getCellStyle" :row-style="getRowStyle">
+            <el-table-column type="expand" v-if="isExpand">
+                <template v-slot="{row, rowIndex}">
+                    <slot name="expand" v-bind:row="row" v-bind:rowIndex="rowIndex"></slot>
+                </template>                
+            </el-table-column>
             <el-table-column :prop="item.name" :label="item.label" :width="item.width||180" v-if="!item.is_hide" v-for="item in columns" :key="item.name" :sortable="!item.is_image">
                 <template v-slot="scope">
                     <img v-if="item.type=='avatar'||item.is_image" :src="getImageSrc(scope.row, item)" :style="getImageStyle(item)" @click="onClickImage(scope.row, item)">
@@ -47,7 +52,7 @@ let getBaseObject = function(columns) {
 
 export default {
     name: 'simple-admin-tablelist',
-    props: ['columns', "buttons", "controller", "base", "onclickupdate", 'isedit', 'isdelete', "options", "authname", "tableHeight", 'actions', 'model'],
+    props: ['columns', "buttons", "controller", "base", "onclickupdate", 'isedit', 'isdelete', "options", "authname", "tableHeight", 'actions', 'model', 'isExpand'],
     components: {
 
     },

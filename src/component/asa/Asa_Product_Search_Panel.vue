@@ -42,7 +42,9 @@
             <el-collapse-item :title="_label('chaxunjieguo')" name="1">
                 <el-table :data="searchresult" stripe border style="width:100%;">
                     <el-table-column prop="brandcolor_label" :label="_label('chima')" width="100" align="center"> </el-table-column>
-                    <el-table-column prop="productname" :label="_label('chanpinmingcheng')" align="center"> </el-table-column>
+                    <el-table-column prop="productname" :label="_label('chanpinmingcheng')" align="center">
+                        <template v-slot="{row}">{{row.getName()}}</template>>
+                    </el-table-column>
                     <el-table-column prop="countries_label" :label="_label('chandi')" width="100" align="center"> </el-table-column>
                     <el-table-column prop="brandgroup_label" :label="_label('pinlei')" width="120" align="center"> </el-table-column>
                     <el-table-column prop="childbrand_label" :label="_label('zipinlei')" width="120" align="center"> </el-table-column>

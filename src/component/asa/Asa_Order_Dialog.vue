@@ -2,62 +2,85 @@
     <div>
         <el-form ref="order-form" class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini" :rules="rules" :inline-message="true">
             <el-row :gutter="0">
+                <au-button auth="order-submit" :type="canSubmit?'primary':'info'" @click="saveOrder(1)">{{_label("baocun")}}</au-button>
+                <au-button auth="order-submit" :type="canDelete?'primary':'info'" @click="deleteOrder()">{{_label("shanchu")}}</au-button>
+                <au-button auth="order-submit" :type="canSubmitPayment?'primary':'info'" @click="addPayment">{{_label("shengchengfahuodan")}}</au-button>
+                <au-button auth="order-submit" :type="canSubmitPayment?'primary':'info'" @click="addPayment">{{_label("fujian")}}</au-button>
+                <au-button auth="order-submit" :type="canSubmitPayment?'primary':'info'" @click="addPayment">{{_label("feiyong")}}</au-button>
+            </el-row>
+            <el-row :gutter="0">
                 <el-col :span="6">
-                    <el-form-item :label="_label('shuxing')" required prop="property">
-                        <simple-select v-model="form.property" source="orderproperty" :lang="lang">
+                    <el-form-item :label="_label('dinghuokehu')" required prop="bookingid">
+                        <simple-select v-model="form.bookingid" source="supplier_2" :lang="lang">
                         </simple-select>
                     </el-form-item>
+                    <el-form-item :label="_label('lianxiren')">
+                        <simple-select v-model="form.linkmanid" source="supplierlinkman" :parentid="form.supplierid">
+                        </simple-select>
+                    </el-form-item>
+                    <el-form-item :label="_label('niandai')" required prop="ageseason">
+                        <simple-select v-model="form.ageseason" source="ageseason" :lang="lang"></simple-select>
+                    </el-form-item>
+                    <el-form-item :label="_label('jijie')">
+                        <simple-select v-model="form.seasontype" source="seasontype" :lang="lang">
+                        </simple-select>
+                    </el-form-item>
+                    <el-form-item :label="_label('gonghuoshang')">
+                        <simple-select v-model="form.supplierid" source="supplier_3" :lang="lang">
+                        </simple-select>
+                    </el-form-item>
+                    <el-form-item :label="_label('fahuoshang')">
+                        <simple-select v-model="form.finalsupplierid" source="supplier_3" :lang="lang">
+                        </simple-select>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="6">
                     <el-form-item :label="_label('yewuleixing')" required prop="bussinesstype">
                         <simple-select v-model="form.bussinesstype" source="bussinesstype" :lang="lang">
                         </simple-select>
                     </el-form-item>
-                    <el-form-item :label="_label('gonghuoshang')" required prop="supplierid">
-                        <simple-select v-model="form.supplierid" source="supplier" :lang="lang">
+                    <el-form-item :label="_label('shuxing')" required prop="property">
+                        <simple-select v-model="form.property" source="orderproperty" :lang="lang">
                         </simple-select>
                     </el-form-item>
-                    <el-form-item :label="_label('fahuodanwei')">
-                        <simple-select v-model="form.finalsupplierid" source="supplier" :lang="lang">
-                        </simple-select>
+                    <el-form-item :label="_label('jine')">
+                        <el-input placeholder="" v-model="form.factoryprice" class="productcurrency">
+                            <select-currency v-model="form.wordpricecurrency" slot="prepend">
+                            </select-currency>
+                        </el-input>
                     </el-form-item>
-                    <el-form-item :label="_label('bizhong')">
-                        <simple-select v-model="form.currency" source="currency" :lang="lang">
-                        </simple-select>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="6">
-                    <el-form-item :label="_label('niandaijijie')" required prop="ageseason">
-                        <simple-select v-model="form.ageseason" source="ageseason" :lang="lang"></simple-select>
-                    </el-form-item>
-                    <el-form-item :label="_label('niandaileixing')">
-                        <simple-select v-model="form.seasontype" source="seasontype" :lang="lang">
-                        </simple-select>
-                    </el-form-item>
-                    <el-form-item :label="_label('dingdanhao')">
-                        <el-input v-model="form.orderno" :placeholder="_label('zidonghuoqu')" disabled></el-input>
-                    </el-form-item>
-                    <el-form-item :label="_label('fapiaohao')">
-                        <el-input v-model="form.invoiceno"></el-input>
-                    </el-form-item>
-                    <el-form-item :label="_label('huilv')">
-                        <sp-float-input v-model="form.exchangerate"></sp-float-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="6">
-                    <el-form-item :label="_label('zhekou')">
+                    <el-form-item :label="_label('zhekoulv')">
                         <sp-float-input v-model="form.discount"></sp-float-input>
                     </el-form-item>
-                    <el-form-item :label="_label('dingdanriqi')">
-                        <el-date-picker v-model="form.makedate" type="date" value-format="yyyy-MM-dd"></el-date-picker>
+                    <el-form-item :label="_label('tuishuilv')">
+                        <sp-float-input v-model="form.taxrebate"></sp-float-input>
+                    </el-form-item>
+                    <el-form-item :label="_label('beizhu')">
+                        <el-input v-model="form.memo"></el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="6">
+                    <el-form-item :label="_label('kehudingdanhao')">
+                        <el-input v-model="form.bookingorderno"></el-input>
+                    </el-form-item>
+                    <el-form-item :label="_label('gongsidingdanhao')">
+                        <el-input v-model="form.orderno" :placeholder="_label('zidonghuoqu')" disabled></el-input>
                     </el-form-item>
                     <el-form-item :label="_label('zhidanren')">
                         <el-input v-model="form.makestaff" :placeholder="_label('zidonghuoqu')" disabled></el-input>
                     </el-form-item>
-                    <el-form-item :label="_label('zhidanriqi')">
-                        <el-input v-model="form.maketime" :placeholder="_label('zidonghuoqu')" disabled></el-input>
+                    <el-form-item :label="_label('dinghuoriqi')">
+                        <el-date-picker v-model="form.makedate" type="date" value-format="yyyy-MM-dd"></el-date-picker>
+                    </el-form-item>
+                    <el-form-item :label="_label('pinpai')">
+                        <el-input v-model="brands" disabled></el-input>
+                    </el-form-item>
+                    <el-form-item :label="_label('xingbie')">
+                        <el-input v-model="genders" disabled></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6">
-                    <el-row type="flex" justify="start">
+                    <!-- <el-row type="flex" justify="start">
                         <au-button auth="order-submit" :type="canSubmit?'primary':'info'" @click="saveOrder(1)">{{_label("baocun")}}</au-button>
                         <au-button auth="order-submit" :type="canDelete?'primary':'info'" @click="deleteOrder()">{{_label("shanchu")}}</au-button>
                     </el-row>
@@ -65,7 +88,7 @@
                         <au-button auth="order-submit" :type="canSubmitPayment?'primary':'info'" @click="addPayment">{{_label("shengchengfahuodan")}}</au-button>
                         <au-button auth="order-submit" :type="canSubmitPayment?'primary':'info'" @click="addPayment">{{_label("fujian")}}</au-button>
                         <au-button auth="order-submit" :type="canSubmitPayment?'primary':'info'" @click="addPayment">{{_label("feiyong")}}</au-button>
-                    </el-row>
+                    </el-row> -->
                 </el-col>
             </el-row>
         </el-form>
@@ -77,14 +100,14 @@
         <el-row>
             <el-col :span="24">
                 <el-table :data="tabledata" stripe border style="width:100%;">
-                    <el-table-column prop="productname" :label="_label('chanpinmingcheng')" align="center">
+                    <el-table-column :label="_label('chanpinmingcheng')" align="center" width="350">
                         <template v-slot="scope">
-                            {{scope.row.product.productname}}
+                            {{scope.row.product.getName()}}
                         </template>
                     </el-table-column>
-                    <el-table-column prop="label" :label="_label('chima')" width="100" align="center">
+                    <el-table-column :label="_label('guojima')" align="center" width="200">
                         <template v-slot="scope">
-                            {{scope.row.sizecontent.getLabel()}}
+                            {{scope.row.product.getGoodsCode()}}
                         </template>
                     </el-table-column>
                     <el-table-column prop="label" :label="_label('chengjiaojia')" width="100" align="center">
@@ -97,9 +120,9 @@
                             {{scope.row.product.retailprice*scope.row.number}}
                         </template>
                     </el-table-column>
-                    <el-table-column prop="number" :label="_label('dinggoushuliang')" width="200" align="center">
-                        <template v-slot="scope">
-                            <el-input-number v-model="scope.row.number" :min="1" :max="10" :disabled="!isEditable"></el-input-number>
+                    <el-table-column prop="number" :label="_label('dinggoushuliang')" align="center" :width="width">
+                        <template v-slot="{row}">
+                            <asa-sizecontent-input :columns="row.product.sizecontents" :disabled="!isEditable"></asa-sizecontent-input>
                         </template>
                     </el-table-column>
                     <el-table-column :label="_label('caozuo')" width="150" align="center" v-if="isEditable">
@@ -119,6 +142,7 @@
 
 <script>
 import Asa_Select_Product_Dialog from './Asa_Select_Product_Dialog.vue'
+import Asa_Sizecontent_Input from './Asa_Sizecontent_Input.vue'
 import DataSource from '../DataSource.js'
 import globals, { _label } from "../globals.js"
 import { Product } from "../model.js"
@@ -148,7 +172,8 @@ const props = {
 export default {
     name: 'sp-orderform',
     components: {
-        'asa-select-product-dialog': Asa_Select_Product_Dialog
+        'asa-select-product-dialog': Asa_Select_Product_Dialog,
+        "asa-sizecontent-input": Asa_Sizecontent_Input
     },
     props: {},
     data() {
@@ -157,26 +182,21 @@ export default {
 
         return {
             form: {
+                bookingid: "",
+                linkmanid: "",
                 bussinesstype: "",
                 supplierid: "",
                 finalsupplierid: "",
                 ageseason: "",
                 seasontype: "",
-                formtype: "",
+                bookingorderno: "",
                 makedate: "",
-                ordercode: "",
-                worldordercode: "",
-                invoiceno: "",
-                exchangerate: "",
                 currency: "",
                 discount: "",
-                property: "",
+                taxrebate: "",
+                property: "1",
                 makestaff: "",
                 maketime: "",
-                auditstaff: "",
-                ourcontactor: "",
-                bookingid: "",
-                contactor: "",
                 memo: "",
                 total: "",
                 orderno: "",
@@ -189,6 +209,8 @@ export default {
                 ageseason: { required: true, message: _label("8000") },
                 property: { required: true, message: _label("8000") }
             },
+            brands: '',
+            genders: "",
             tabledata: [],
             title: "",
             lang: "",
@@ -211,26 +233,19 @@ export default {
         showProduct() {
             this.pro = true;
         },
-        onSelect(row) {
-            var self = this;
-            Product.load({ data: row, depth: 1 }).then(function(product) {
-                //self._log(product, "Product")
-
-                product.sizecontents.map(item => {
-                    //查询是不是已经添加过
-                    let is_exist = self.tabledata.some(rowData => {
-                        return rowData.product.id == row.id && rowData.sizecontent.getValue() == item.getValue()
-                    })
-
-                    if (!is_exist) {
-                        self.tabledata.unshift({
-                            product: product,
-                            sizecontent: item,
-                            number: 0
-                        })
-                    }
-                })
+        onSelect(prodectDetail) {
+            let self = this;
+            //查询是不是已经添加过
+            let is_exist = self.tabledata.some(rowData => {
+                return rowData.product.id == prodectDetail.id
             })
+
+            if (!is_exist) {
+                self.tabledata.unshift({
+                    product: prodectDetail,
+                    number: 0
+                })
+            }
 
         },
         deleteOrder() {
@@ -353,13 +368,8 @@ export default {
             var status = this.form.status;
             return this.form.id > 0 && status == 1
         },
-        canConfirm() {
-            var status = this.form.status;
-            return this.form.id > 0 && status == 2
-        },
-        canCancel() {
-            var status = this.form.status;
-            return this.form.id > 0 && status == 3
+        width() {
+            return this.tabledata.reduce((max,{product})=>Math.max(max,product.sizecontents.length),1)*60+21
         },
         canSubmit() {
             var status = this.form.status;
@@ -413,19 +423,18 @@ export default {
     },
     mounted: function() {
         var self = this;
-        self._log("mounted Order")
-            //globals.copyTo(self.data, this.form)
+        //self._log("mounted Order")
+        //globals.copyTo(self.data, this.form)
         let route = self.$route;
-        let label// = route.params.id == 0 ? self._label("xinjiandingdan") : "订单信息"
-        if(route.params.id==0) {
+        let label // = route.params.id == 0 ? self._label("xinjiandingdan") : "订单信息"
+        if (route.params.id == 0) {
             label = self._label("xinjiandingdan")
-        } 
-        else {
+        } else {
             self.tabledata = []
-            //加载数据
+                //加载数据
             self._fetch("/order/loadorder", { id: route.params.id }).then(function(res) {
                 //self._log("加载订单信息", res)
-                
+
                 globals.copyTo(res.data.form, self.form)
                 if (res.data.list) {
                     res.data.list.forEach(item => {
@@ -433,7 +442,7 @@ export default {
                         self.appendRow(item)
                     })
                 }
-                self._setTitle(self._label("dingdan")+self.form.id)
+                self._setTitle(self._label("dingdan") + self.form.id)
             })
             label = "loading..."
         }

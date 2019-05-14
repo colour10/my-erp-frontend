@@ -105,6 +105,7 @@ function getOption(name) {
     options["saleport"] = {url:'/l/saleport',oplabel:'name', opvalue:'id'}
     options["usersaleport"] = {url:'/user/saleportlist',oplabel:'name', opvalue:'id'}
     options["userwarehouse"] = {url:'/warehouse/userlist',oplabel:'name', opvalue:'id'}
+    options["supplierlinkman"] = {url:'/l/supplierlinkman',oplabel:'name', opvalue:'id', parent:"supplierid"}
 
     options["gender"] = {hashtable:list.gender}
     options["gender2"] = {hashtable:list.gender2}
@@ -169,12 +170,22 @@ function getOption(name) {
     options["customtype"] =  {hashtable:list.customtype}
 
     //客户列表
-    options["supplier_2"] = function(DataSource){
-        return DataSource.getDataSource("supplier", _label('lang')).filter(item=>{
-            return StringFunc.include(item.row.suppliertype, '2')
-        })
+    options["supplier_2"] = {callback:function(DataSource){
+            return DataSource.getDataSource("supplier", _label('lang')).filter(item=>{
+                return StringFunc.include(item.row.suppliertype, '2')
+            })
+        },
+        dependencies:['supplier']
     }
 
+    //供货商
+    options["supplier_3"] = {callback:function(DataSource){
+            return DataSource.getDataSource("supplier", _label('lang')).filter(item=>{
+                return StringFunc.include(item.row.suppliertype, '0')
+            })
+        },
+        dependencies:['supplier']
+    }
 
     return options[name]
 }

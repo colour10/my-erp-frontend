@@ -63,6 +63,24 @@ DataSource.prototype.clear = function() {
     self.init()
 }
 
+function _initDependencies(dataSource, dependencies) {
+    if(dataSource.isDependencies) {
+        return 
+    }
+
+    if(!dataSource.options.dependencies) {
+        return 
+    }
+    dataSource.options.dependencies.forEach(item=>{
+        DataSource.getDataSource(item).emitter.on("change", function(){
+            dataSource.clear()
+            console.log("倚赖清空")
+        })
+
+    })
+    dataSource.isDependencies = true
+}
+
 DataSource.prototype.init = function() {
     let self = this;
     let options = self.options;
@@ -79,6 +97,7 @@ DataSource.prototype.init = function() {
             self.hashtable[key] = row;
         });
         self.is_loaded = true;
+        _initDependencies(self)
     }
     else if(options.hashtable) {
         //console.log(options.hashtable)
@@ -90,6 +109,7 @@ DataSource.prototype.init = function() {
         self.oplabel = "name"
         self.opvalue = "value"
         self.is_loaded = true;
+        _initDependencies(self)
     }
     else if(options.datalist) {
         //_log(options.datalist.forEach,"options")
@@ -100,6 +120,8 @@ DataSource.prototype.init = function() {
             self.data.push(row)
         })
         self.is_loaded = true;
+
+        _initDependencies(self)
     }
     else if(options.callback) {
         options.callback(DataSource).then(dataSource=>{
@@ -111,6 +133,9 @@ DataSource.prototype.init = function() {
                 self.oplabel = dataSource.oplabel
                 self.opvalue = dataSource.opvalue
                 self.is_loaded = true;
+
+                _initDependencies(self)
+                //console.log("设置倚赖关系")
             })            
         })
     }
@@ -125,7 +150,7 @@ DataSource.prototype.loadList = function() {
     let options = self.options;
     let params = options.params || {}
 
-    console.log("DataSource loadurl")
+    //console.log("DataSource loadurl")
     httpGet(options.url+"?"+Date.now(), {enableCache:false}).then( function({data=[]}={}){
         data.forEach(function(item){
             let row = DataRow.factory(item, self)
@@ -133,6 +158,7 @@ DataSource.prototype.loadList = function() {
             self.data.push(row)   
         })
         self.is_loaded = true;
+        _initDependencies(self)
     });
 }
 
@@ -345,6 +371,7 @@ DataSource.getDataSource = function(resourceName, lang) {
             else if(typeof(res)=='function') {
                 res = {callback:res}
             }
+            //console.log("getDatasource",resourceName, res)
             resources[resourceName] = new DataSource(res, lang)
             resources[resourceName].init()
             return resources[resourceName]

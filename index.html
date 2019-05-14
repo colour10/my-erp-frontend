@@ -332,6 +332,14 @@ body .el-select-dropdown__wrap {max-height:500px;}
   opacity: 0;
   transform: translateX(30px);
 }
+
+.sizecontent .el-table__body td, .sizecontent .el-table__header th { padding:0px; }
+.sizecontent .el-table__body .el-table__row .counter { width:60px; }
+.sizecontent .el-table__body .el-table__row .counter .cell {padding-left:0px;padding-right: 0px}
+.sizecontent .el-table__body .el-table__row .counter .el-input__inner { padding:0 5px; }
+.sizecontent .el-table::before { left: 0; bottom: 0; width: 100%; height: 0px; }
+.sizecontent div, .sizecontent td, .sizecontent th {border: 0px !important;}
+
 </style>
   </head>
   <body>
@@ -344,22 +352,6 @@ body .el-select-dropdown__wrap {max-height:500px;}
 
     <script type="text/javascript">      
       $(document).ready(function(){
-        console.log(localStorage)
-        let language = ""
-        if(localStorage && localStorage.language) {
-          language = localStorage.language
-        }
-        //language = "cn"
-        function loadLabel(language){
-            var head= document.getElementsByTagName('head')[0];
-            var script= document.createElement('script');
-            script.type= 'text/javascript';
-            script.src= 'http://erp.localhost.com/common/systemlanguage?language=' + language;
-            head.appendChild(script);
-        }
-
-        loadLabel(language)
-
         let o = new Vue({
           data:function(){
             return {
@@ -369,24 +361,24 @@ body .el-select-dropdown__wrap {max-height:500px;}
           },
           mounted:function(){
             let self = this
+
             let handler = setInterval(function(){
               if(self.pencent<=95) {                
-                self.pencent = self.pencent + Math.floor(Math.random()*10)%2+1
-
-                if(window.ASAP && window.$ASAL) {
-                    self.pencent = 100;
-                    clearInterval(handler)
-                    setTimeout(function(){
-                      self.isShow = false;
-                    }, 500)  
-                }
+                self.pencent = self.pencent + Math.floor(Math.random()*10)%2+1                
               }
             }, 330)
+
+            $.getScript("/dist/asa.js?_"+Date.now(), function(){
+              self.pencent = 100;
+              clearInterval(handler)
+              setTimeout(function(){
+                self.isShow = false;
+              }, 500)  
+            });
           }
         }).$mount("#load")
         
       })
     </script>
-    <script type="text/javascript" src="/dist/asa.js"></script>
   </body>
 </html>

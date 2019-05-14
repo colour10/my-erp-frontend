@@ -29,7 +29,6 @@
                     <el-menu-item index="country">{{_label("menu-2-3-3")}}</el-menu-item>
                     <el-menu-item index="saleport">{{_label("xiaoshouduankou")}}</el-menu-item>
                     <el-menu-item index="price">{{_label("jiagedingyi")}}</el-menu-item>
-                    
                     <el-menu-item index="saletype">{{_label("xiaoshoushuxing")}}</el-menu-item>
                     <el-menu-item index="exchangerate">{{_label("huilvguanli")}}</el-menu-item>
                     <el-menu-item index="language">{{_label("duoguoyuyanguanli")}}</el-menu-item>
@@ -104,22 +103,16 @@
                     <el-menu-item index="login/logout">{{_label("menu-11-3")}}</el-menu-item>
                 </el-submenu>
             </el-menu>
-            
         </el-row>
         <el-row id="nav">
-                <el-tag v-for="(tag,index) in tags" :key="index" :closable="tags.length>1" style="margin-right:5px;cursor:pointer" @close="onCloseTag(tag)" @click="onClickTag(tag)" :type="getType(tag.key)">{{tag.label}}</el-tag>
-            </el-row>
-        <!-- <el-breadcrumb separator="/" style="padding-top:55px;">
-            <el-breadcrumb-item :to="{ path: '/' }">{{_label("shouye")}}</el-breadcrumb-item>
-            <el-breadcrumb-item><a href="/">{{moduleName}}</a></el-breadcrumb-item>
-        </el-breadcrumb> -->
-        
-        <section class="el-container" style="padding-top:90px">
+            <el-tag v-for="(tag,index) in tags" :key="index" :closable="tags.length>1" style="margin-right:5px;cursor:pointer" @close="onCloseTag(tag)" @click="onClickTag(tag)" :type="getType(tag.key)">{{tag.label}}</el-tag>
+        </el-row>
+        <section class="el-container" style="padding-top:60px">
             <transition name="el-fade-in" mode="out-in">
-            <keep-alive :include="includes">
-                <router-view :key="module"></router-view>
-            </keep-alive>
-        </transition>
+                <keep-alive :include="includes">
+                    <router-view :key="module"></router-view>
+                </keep-alive>
+            </transition>
         </section>
         <div id="footer">
             <!--<el-footer class="el-footer"></el-footer>-->
@@ -128,7 +121,7 @@
 </template>
 
 <script>
-import {config} from '../globals.js'
+import { config } from '../globals.js'
 
 export default {
     name: 'sp-home',
@@ -145,7 +138,7 @@ export default {
         },
         onSelect(index, indexPath) {
             //this._log(index, indexPath)
-            this.$router.push('/'+index)
+            this.$router.push('/' + index)
         },
         onCloseTag(tag) {
             this.$store.commit("closeTag", {
@@ -156,7 +149,7 @@ export default {
             this.$router.push(tag.path)
         },
         getType(key) {
-            return key==this.current.key? 'success' : ''
+            return key == this.current.key ? 'success' : ''
         }
     },
     watch: {
@@ -166,28 +159,31 @@ export default {
             self.checkLogin()
         }
     },
-    computed:{
+    computed: {
         moduleName() {
             return config().menus[this.$route.path.substr(1)]
         },
         module() {
             return this.$route.path.replace(/\//g, "")
         },
-        tags(){
+        tags() {
             //this._log(this.$store.getters.getTags)
             //this._log(this.$store.getters.getTags.tags)
             return this.$store.getters.getTags.tags
         },
-        current(){
+        current() {
             //this._log(this.$store.getters.getTags)
             return this.$store.getters.getTags.current
         },
         includes() {
-            return this.$store.getters.getTags.tags.filter(item=>item.name).map(item=>"sp-"+item.name).join(',')
+            return this.$store.getters.getTags.tags.filter(item => item.name).map(item => "sp-" + item.name).join(',')
         }
     },
     mounted: function() {
-        this.checkLogin()    
+
+    },
+    beforeMount: function() {
+        this.checkLogin()
     }
 }
 </script>

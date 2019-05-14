@@ -1,11 +1,11 @@
 <template>
     <el-form v-if="isShowForm" :model="ruleForm2" :rules="rules2" ref="ruleForm2" label-position="left" label-width="0px" class="demo-ruleForm login-container" native-type="submit">
-        <h3 class="title">{{_label("xitongdenglu")}}</h3>
+        <h3 class="title">{{label.title}}</h3>
         <el-form-item prop="username">
-            <el-input type="text" v-model="ruleForm2.username" auto-complete="off" :placeholder="_label('yonghuming')" @keyup.enter.native="handleSubmit2" :autofocus="true"></el-input>
+            <el-input type="text" v-model="ruleForm2.username" auto-complete="off" :placeholder="label.username" @keyup.enter.native="handleSubmit2" :autofocus="true"></el-input>
         </el-form-item>
         <el-form-item prop="password">
-            <el-input type="password" v-model="ruleForm2.password" auto-complete="off" :placeholder="_label('mima')" @keyup.enter.native="handleSubmit2"></el-input>
+            <el-input type="password" v-model="ruleForm2.password" auto-complete="off" :placeholder="label.password" @keyup.enter.native="handleSubmit2"></el-input>
         </el-form-item>
         <el-form-item>
             <el-select v-model="ruleForm2.language" @change="onChange">
@@ -14,7 +14,7 @@
         </el-form-item>
         <!--<el-checkbox v-model="checked" checked class="remember">记住密码</el-checkbox>-->
         <el-form-item style="width:100%;">
-            <as-button type="primary" style="width:100%;" @click.native.prevent="handleSubmit2" :loading="logining">{{_label("denglu")}}</as-button>
+            <as-button type="primary" style="width:100%;" @click.native.prevent="handleSubmit2" :loading="logining">{{label.login}}</as-button>
             <!--<as-button @click.native.prevent="handleReset2">重置</as-button>-->
         </el-form-item>
     </el-form>
@@ -45,9 +45,15 @@ export default {
                 ]
             },
             checked: true,
-            languages: _label("languages"),
+            languages: {},
             isShowForm: false,
-            back: ""
+            back: "",
+            label:{
+                title:"",
+                username:"",
+                password:"",
+                login:""
+            }
         };
     },
     methods: {
@@ -103,7 +109,8 @@ export default {
                                 type: "login",
                                 auth: res.auth
                             })
-                            self.goToPage()
+
+                            self.goToPage()                            
                         } else {
                             //self.$router.push("/login/login") 
                             self.isShowForm = true;
@@ -122,8 +129,49 @@ export default {
             self.$router.push(url)
         },
         onChange() {
-            window.localStorage.setItem("language", this.ruleForm2.language)
-            window.location.href = "/";
+            let self = this
+            if(localStorage && localStorage.language) {
+                localStorage.language = self.ruleForm2.language
+            }
+            self.loadLanguage()
+        },
+        loadLanguage(language) {
+            let self = this
+
+            const loading = self.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)'
+            });
+
+            return new Promise(resolve=>{
+                if(self._label('lang')==self.ruleForm2.language) {
+                    loading.close() 
+                    return resolve()
+                }
+                self._fetch("/common/systemlanguage", {language:self.ruleForm2.language}).then(res=>{
+                    //self._log(res.data)
+             
+                    Object.keys(res.data).forEach((key)=>{
+                        //self._log(key,res.data[key])
+                        setLabel(key, res.data[key])
+                    })
+
+                    //self._log("+++++++++++", self._label("list"))
+
+                    self.label.title = self._label("xitongdenglu")
+                    self.label.username = self._label("yonghuming")
+                    self.label.password = self._label("mima")
+                    self.label.login = self._label("denglu")
+
+                    self.languages =self._label("languages")
+
+                    loading.close()      
+
+                    resolve()          
+                })
+            })            
         }
     },
     computed: {
@@ -140,9 +188,14 @@ export default {
         }
     },
     mounted: function() {
-        var self = this
-            //self._log("mounted", self.$route.params)
-        self.doAction(self.$route.params.action)
+        let self = this       
+        
+        if(localStorage && localStorage.language) {
+          self.ruleForm2.language = localStorage.language
+        }
+        self.loadLanguage().then(()=>{
+            self.doAction(self.$route.params.action)
+        })
     }
 }
 </script>
