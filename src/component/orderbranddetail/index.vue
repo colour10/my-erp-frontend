@@ -10,14 +10,6 @@
             </el-row>
             <el-row :gutter="0">
                 <el-col :span="6">
-                    <el-form-item :label="_label('dinghuokehu')" required prop="bookingid">
-                        <simple-select v-model="form.bookingid" source="supplier_2" :lang="lang">
-                        </simple-select>
-                    </el-form-item>
-                    <el-form-item :label="_label('lianxiren')">
-                        <simple-select v-model="form.linkmanid" source="supplierlinkman" :parentid="form.supplierid">
-                        </simple-select>
-                    </el-form-item>
                     <el-form-item :label="_label('niandai')" required prop="ageseason">
                         <simple-select v-model="form.ageseason" source="ageseason" :lang="lang"></simple-select>
                     </el-form-item>
@@ -25,6 +17,17 @@
                         <simple-select v-model="form.seasontype" source="seasontype" :lang="lang">
                         </simple-select>
                     </el-form-item>
+                    <el-form-item :label="_label('pinpai')">
+                        <simple-select v-model="form.brandid" source="brand" :lang="lang">
+                        </simple-select>
+                    </el-form-item>
+                    <el-form-item :label="_label('xingbie')">
+                        <el-input v-model="genders" disabled></el-input>
+                    </el-form-item>
+
+                    
+                </el-col>
+                <el-col :span="6">
                     <el-form-item :label="_label('gonghuoshang')">
                         <simple-select v-model="form.supplierid" source="supplier_3" :clearable="true">
                         </simple-select>
@@ -33,16 +36,15 @@
                         <simple-select v-model="form.finalsupplierid" source="supplier_3" :clearable="true">
                         </simple-select>
                     </el-form-item>
+
+                    <el-form-item :label="_label('haiwaidingdanhao')">
+                        <el-input v-model="form.foreignorderno"></el-input>
+                    </el-form-item>
+                    <el-form-item :label="_label('gongsidingdanhao')">
+                        <el-input v-model="form.orderno" :placeholder="_label('zidonghuoqu')" disabled></el-input>
+                    </el-form-item>                    
                 </el-col>
                 <el-col :span="6">
-                    <el-form-item :label="_label('yewuleixing')" required prop="bussinesstype">
-                        <simple-select v-model="form.bussinesstype" source="bussinesstype" :lang="lang">
-                        </simple-select>
-                    </el-form-item>
-                    <el-form-item :label="_label('shuxing')" required prop="property">
-                        <simple-select v-model="form.property" source="orderproperty" :lang="lang">
-                        </simple-select>
-                    </el-form-item>
                     <el-form-item :label="_label('jine')">
                         <el-input placeholder="" v-model="total_price" class="productcurrency">
                             <select-currency v-model="form.currency" slot="prepend">
@@ -58,37 +60,16 @@
                     <el-form-item :label="_label('beizhu')">
                         <el-input v-model="form.memo"></el-input>
                     </el-form-item>
+
+                    
                 </el-col>
                 <el-col :span="6">
-                    <el-form-item :label="_label('kehudingdanhao')">
-                        <el-input v-model="form.bookingorderno"></el-input>
-                    </el-form-item>
-                    <el-form-item :label="_label('gongsidingdanhao')">
-                        <el-input v-model="form.orderno" :placeholder="_label('zidonghuoqu')" disabled></el-input>
-                    </el-form-item>
                     <el-form-item :label="_label('zhidanren')">
                         <sp-display-input :value="form.makestaff" source="user" :placeholder="_label('zidonghuoqu')"></sp-display-input>
                     </el-form-item>
-                    <el-form-item :label="_label('dinghuoriqi')">
-                        <el-date-picker v-model="form.orderdate" type="date" value-format="yyyy-MM-dd"></el-date-picker>
-                    </el-form-item>
-                    <el-form-item :label="_label('pinpai')">
-                        <el-input v-model="brands" disabled></el-input>
-                    </el-form-item>
-                    <el-form-item :label="_label('xingbie')">
-                        <el-input v-model="genders" disabled></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="6">
-                    <!-- <el-row type="flex" justify="start">
-                        <au-button auth="order-submit" :type="canSubmit?'primary':'info'" @click="saveOrder(1)">{{_label("baocun")}}</au-button>
-                        <au-button auth="order-submit" :type="canDelete?'primary':'info'" @click="deleteOrder()">{{_label("shanchu")}}</au-button>
-                    </el-row>
-                    <el-row>
-                        <au-button auth="order-submit" :type="canSubmitPayment?'primary':'info'" @click="addPayment">{{_label("shengchengfahuodan")}}</au-button>
-                        <au-button auth="order-submit" :type="canSubmitPayment?'primary':'info'" @click="addPayment">{{_label("fujian")}}</au-button>
-                        <au-button auth="order-submit" :type="canSubmitPayment?'primary':'info'" @click="addPayment">{{_label("feiyong")}}</au-button>
-                    </el-row> -->
+                    <el-form-item :label="_label('zhidanriqi')">
+                        <el-input v-model="form.maketime" :placeholder="_label('zidonghuoqu')" disabled></el-input>
+                    </el-form-item> 
                 </el-col>
             </el-row>
         </el-form>
@@ -151,8 +132,7 @@
 </template>
 
 <script>
-import Asa_Select_Product_Dialog from './Asa_Select_Product_Dialog.vue'
-import Asa_Sizecontent_Input from './Asa_Sizecontent_Input.vue'
+import Asa_Sizecontent_Input from '../asa/Asa_Sizecontent_Input.vue'
 import DataSource from '../DataSource.js'
 import globals, { _label } from "../globals.js"
 import { ProductDetail } from "../model.js"
@@ -182,9 +162,8 @@ const props = {
 }
 
 export default {
-    name: 'sp-orderform',
+    name: 'sp-orderbranddetail',
     components: {
-        'asa-select-product-dialog': Asa_Select_Product_Dialog,
         "asa-sizecontent-input": Asa_Sizecontent_Input
     },
     props: {},
@@ -390,8 +369,9 @@ export default {
         //copyTo(self.data, this.form)
         let route = self.$route;
         let label // = route.params.id == 0 ? self._label("xinjiandingdan") : "订单信息"
-        if (route.params.id == 0) {
-            label = self._label("xinjiandingdan")
+        self._log(route.params)
+        if (route.params.action == 'create') {
+            label = self._label("shengchengpinpaidingdan")
         } else {
             self.tabledata = []
                 //加载数据

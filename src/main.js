@@ -49,6 +49,8 @@ import ImagePreview from './component/image-preview.vue'
 import Creator from './component/develop/index.vue'
 import Home from './component/home/index.vue'
 import Order from './component/order/index.vue'
+import Orderbrand from './component/orderbrand/index.vue'
+import OrderbrandDetail from './component/orderbranddetail/index.vue'
 import User from './component/user/index.vue'
 import Group from './component/group/index.vue'
 import Department from './component/department/index.vue'
@@ -126,6 +128,8 @@ const routes = [
             {path:'/exchangerate', name:"exchangerate", component:Exchangerate},
             //{path: '/order/add', component: Asa_Order_Dialog},
             {path: '/order/:id', name:"orderform", component: Asa_Order_Dialog},
+            {path: '/orderbrand', name:"orderbrand", component: Orderbrand},
+            {path: '/orderbrand/:action/:id', name:"orderbranddetail", component: OrderbrandDetail},
 
             {path:'/ageseason', name:"ageseason", component:getComponentSimple("ageseason")},
             {path:'/ulnarinch', name:"ulnarinch", component:getComponent("ulnarinch")},

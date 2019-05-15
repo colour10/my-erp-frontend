@@ -1,5 +1,5 @@
 <template>
-  <el-input v-model="current_label" disabled></el-input> 
+  <el-input v-model="current_label" :placeholder="placeholder" disabled></el-input> 
 </template>
 
 <script>
@@ -11,10 +11,7 @@ export default {
     components: {
     },
     props: {
-        lang:{
-            type: String,
-            default: _label('lang')
-        },
+        placeholder:{},
         source:{
             type:String,
             required:true
@@ -27,34 +24,35 @@ export default {
         }
     },
     data() {
-        var self = this        
-        var dataSource = DataSource.getDataSource(self.source, self.lang);
+        let self = this        
         
         let value = self.value || []
         return {
             current_label:"",
             current_value:self.convertValue(value),
-            dataSource:dataSource
         }
     },
     methods: {
         convertValue(item) {
-            var self = this;
+            let self = this;
             //self._log("item value", item)
             return typeof(item)=='string' ? item.split(',') : item
         },
         loadList() {
-            var self = this;
+            let self = this;
             //self._log(self.current_value, self.source, "..........")
-            self.dataSource.getRowLabels(self.current_value, label_list=>{
-                //self._log(label_list)
+            if(self.current_value.length==0) {
+                return 
+            }
+            DataSource.getDataSource(self.source, _label('lang')).getRowLabels(self.current_value, function(label_list){
+                //self._log("label_list",label_list, )
                 self.current_label = label_list
             })     
         }
     },
     watch:{
         value(newValue) {
-            var self = this;
+            let self = this;
             self.current_value = self.convertValue(newValue)
             self.loadList()
         }

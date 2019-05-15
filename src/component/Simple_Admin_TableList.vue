@@ -1,6 +1,8 @@
 <template>
     <div>
-        <sp-table :data="tableData" border style="width: 100%;" :height="tableHeight" :cell-class-name="getCellClassName" :cell-style="getCellStyle" :row-style="getRowStyle">
+        <el-table ref="table" :data="tableData" border style="width: 100%;" :height="tableHeight" :cell-class-name="getCellClassName" :cell-style="getCellStyle" :rowClassName="tableRowClassName" :row-style="getRowStyle" @selection-change="onSelectionChange" @row-click="onRowClick">
+            <el-table-column type="selection" :width="60" v-if="isSelect==true">
+            </el-table-column>
             <el-table-column type="expand" v-if="isExpand">
                 <template v-slot="{row, rowIndex}">
                     <slot name="expand" v-bind:row="row" v-bind:rowIndex="rowIndex"></slot>
@@ -26,7 +28,7 @@
                     <as-button size="mini" @click="handleAction(scope,item)" v-for="item in actions" :key="item.label" v-if="isShow(item)">{{item.label}}</as-button>
                 </template>
             </el-table-column>
-        </sp-table>
+        </el-table>
         <el-pagination v-if="tableData.length<pagination.total" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pagination.current*1" :page-sizes="pagination.pageSizes" :page-size="pagination.pageSize*1" layout="total, sizes, prev, pager, next, jumper" :total="pagination.total*1">
         </el-pagination>
     </div>
@@ -52,7 +54,7 @@ let getBaseObject = function(columns) {
 
 export default {
     name: 'simple-admin-tablelist',
-    props: ['columns', "buttons", "controller", "base", "onclickupdate", 'isedit', 'isdelete', "options", "authname", "tableHeight", 'actions', 'model', 'isExpand'],
+    props: ['columns', "buttons", "controller", "base", "onclickupdate", 'isedit', 'isdelete', "options", "authname", "tableHeight", 'actions', 'model', 'isExpand', 'isSelect'],
     components: {
 
     },
@@ -80,7 +82,8 @@ export default {
             },
             localOptions,
             cellClasses:{},
-            searchform:{}
+            searchform:{},
+            selected:[]
         }
     },
     methods: {
@@ -202,6 +205,12 @@ export default {
             }
             return styles;
         },
+        tableRowClassName({ row, rowIndex }) {
+            if (rowIndex%2 === 0) {
+                return 'stripe1';
+            }
+            return '';
+        },
         convert(row, column, rowIndex) {
             let self = this
             let value = row[column.name]
@@ -317,6 +326,17 @@ export default {
             }
 
             return true
+        },
+        onSelectionChange(vals) {
+            this.selected = vals
+        },
+        getSelectValues() {
+            return this.selected.map(item=>item.id)
+        },
+        onRowClick(row){
+            if(this.isSelect===true) {
+                this.$refs.table.toggleRowSelection(row)
+            }            
         }
     },
     watch: {

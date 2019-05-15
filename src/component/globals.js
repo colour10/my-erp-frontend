@@ -98,7 +98,7 @@ const config = function(){
         ouyuan: '9', //欧元货币的id
         menus:{
             "index":getLabel("shouye"),
-            user:getLabel("menu-1-1"),
+            "user":getLabel("menu-1-1"),
             "group":getLabel("menu-1-2"),
             "department":getLabel("menu-1-4"),
             "system":getLabel("xitongshezhi"),
@@ -132,6 +132,7 @@ const config = function(){
             "saletype":getLabel('xiaoshoushuxing'),
             "exchangerate":getLabel('huilvguanli'),
             "property":getLabel("shuxingdingyi"),
+            "orderbrand":getLabel("pinpaidingdan"),
             "language":getLabel("duoguoyuyanguanli"),
             "develop":"生成器"
         }

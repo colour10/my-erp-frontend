@@ -31,6 +31,12 @@ const ObjectChain = function(target) {
         return new ObjectChain(result)
     }
 
+    self.forEach = function(callback){
+        toArray(target).forEach(item=>{
+            callback(item.value, item.key)
+        })
+    }
+
     self.object = function() {
         return target
     }

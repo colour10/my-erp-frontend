@@ -52,7 +52,7 @@ export default {
         }
     },
     mounted:function(){
-        this._log(this.row,"====")
+        //this._log(this.row,"====")
         extend(this.form, this.row.form)
     }
 }

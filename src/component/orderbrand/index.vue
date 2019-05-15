@@ -3,9 +3,8 @@
         <el-row>
             <el-col :span="2">
             </el-col>
-            <el-col :span="8">
+            <el-col :span="2">
                 <auth auth="order-submit"><as-button type="primary" @click="showFormToCreate()">{{_label('xinjian')}}</as-button></auth>
-                <auth auth="order-submit"><as-button type="primary" @click="onClickBrandBtn()">{{_label('shengchengpinpaidingdan')}}</as-button></auth>
             </el-col>
         </el-row>
         <el-row :gutter="20">
@@ -21,7 +20,7 @@ import globals,{_label} from '../globals.js'
 import Simple_Admin_TableList from '../Simple_Admin_TableList.vue'
 
 export default {
-    name: 'sp-order',
+    name: 'sp-orderbrand',
     components: {
         'simple-admin-tablelist': Simple_Admin_TableList
     },
@@ -39,8 +38,7 @@ export default {
                     { name: "status", label: _label('zhuangtai'), type: 'select', source: "orderstatus" },
                     { name: "makedate", label: _label('dingdanriqi') }
                 ],
-                controller: "order",
-                isSelect:true
+                controller: "orderbrand"
             },
             pro: false,
             info: {},
@@ -52,12 +50,6 @@ export default {
             this.info = {}
             this.rowIndex = -1
             this.$router.push('/order/0')
-        },
-        onClickBrandBtn(){
-            let self = this
-            let ids = self.$refs.tablelist.getSelectValues()
-            self._log(ids)
-            this.$router.push('/orderbrand/create/' + ids.join(','))
         },
         showFormToEdit(rowIndex, row) {
             this.info = row;

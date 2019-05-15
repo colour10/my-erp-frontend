@@ -176,6 +176,7 @@ export default {
                 //self._log(item)
                 self.$emit("select", extend({}, item))
             })
+            self.$refs.table.clearSelection()
         },
         onRowClick(row){
             this.$refs.table.toggleRowSelection(row)

@@ -20,10 +20,20 @@ const toArray = function(obj, callback=key=>{return {key, value:obj[key]}}) {
     return Object.keys(obj).map(callback)
 }
 
-export {isPromise,toArray}
+const copyTo = function(fromObj, target) {
+    Object.keys(target).forEach(function(key) {
+        if (typeof(fromObj[key]) != "undefined") {
+            target[key] = fromObj[key]
+            //console.log("copy property",key, target[key])
+        }
+    });
+}
+
+export {isPromise,toArray,copyTo}
 
 export default {
     extract,
     extend,
-    toArray
+    toArray,
+    copyTo
 }

@@ -283,11 +283,12 @@ DataSource.prototype.getRows = function(keyValues='', callback) {
 
     let promise = new Promise(resolve=>{
         self.getData( data => {
-            //_log(valueList, data, '+++++++') 
+            //console.log(keyValues, data, '+++++++') 
             let list = keyValues.map(function(value){
                 return data.find(item=>value==item.getValue())
             }).filter(item=>item)
             
+            //console.log(keyValues, list, '+++++++') 
             resolve(list)
         })
     });
@@ -326,10 +327,12 @@ DataSource.prototype.getRowLabels = function(keyValues, callback) {
 
     let promise = new Promise((resolve)=>{
         self.getRows(keyValues, function(list){
+            //console.log(list, list.map(item=>item.getLabel()).join(","),"-----------")
             resolve(list.map(item=>item.getLabel()).join(","))
         }) 
     });
 
+    //console.log(typeof(callback),keyValues)
     if(typeof(callback)=='function') {
         promise.then(callback)
     }

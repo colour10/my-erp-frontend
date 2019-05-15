@@ -44,6 +44,7 @@
                 <el-submenu index="5">
                     <template #title>{{_label("menu-5")}}</template>
                     <el-menu-item index="order">{{_label("dingdanguanli")}}</el-menu-item>
+                    <el-menu-item index="orderbrand">{{_label("pinpaidingdan")}}</el-menu-item>
                     <el-menu-item index="confirmorder">{{_label("menu-5-2")}}</el-menu-item>
                     <el-menu-item index="warehousing">{{_label("rukudanguanli")}}</el-menu-item>
                 </el-submenu>
