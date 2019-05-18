@@ -36,28 +36,28 @@ var props2 = {
     ],
     actions: [{
         label: _label('dingbu'),
-        handler: function(rowIndex, row, vm) {
+        handler: function({row, vm}) {
             vm._fetch("/sizecontent/top", {id:row.id}).then(function(){
                 vm.loadList(i=>i)
             })
         }
     },{
         label: _label('xiangshang'),
-        handler: function(rowIndex, row, vm) {
+        handler: function({row, vm}) {
             vm._fetch("/sizecontent/up", {id:row.id}).then(function(){
                 vm.loadList(i=>i)
             })
         }
     },{
         label: _label('xiangxia'),
-        handler: function(rowIndex, row, vm) {
+        handler: function({row, vm}) {
             vm._fetch("/sizecontent/down", {id:row.id}).then(function(){
                 vm.loadList(i=>i)
             })
         }
     },{
         label: _label('dibu'),
-        handler: function(rowIndex, row, vm) {
+        handler: function({row, vm}) {
             vm._fetch("/sizecontent/bottom", {id:row.id}).then(function(){
                 vm.loadList(i=>i)
             })
@@ -86,8 +86,6 @@ export default {
         var self = this;
         
         return options
-    },
-    methods:{
     }
 }
 </script>

@@ -1,95 +1,47 @@
 <template>
     <div>
         <el-row>
-            <el-col :span="2">
-            </el-col>
             <el-col :span="8">
-                <auth auth="order-submit"><as-button type="primary" @click="showFormToCreate()">{{_label('xinjian')}}</as-button></auth>
-                <auth auth="order-submit"><as-button type="primary" @click="onClickBrandBtn()">{{_label('shengchengpinpaidingdan')}}</as-button></auth>
+                <auth auth="order-submit"><as-button type="primary" @click="toPage(0)">{{_label('xinjian')}}</as-button></auth>
             </el-col>
         </el-row>
-        <el-row :gutter="20">
-            <el-col :span="24">
-                <simple-admin-tablelist ref="tablelist" v-bind="props" :onclickupdate="showFormToEdit" :isdelete="false"></simple-admin-tablelist>
-            </el-col>
-        </el-row>
+        <simple-admin-tablelist ref="tablelist" v-bind="props" :onclickupdate="toEdit" :isdelete="false"></simple-admin-tablelist>
     </div>
 </template>
 
 <script>
-import globals,{_label} from '../globals.js'
-import Simple_Admin_TableList from '../Simple_Admin_TableList.vue'
-
 export default {
     name: 'sp-order',
-    components: {
-        'simple-admin-tablelist': Simple_Admin_TableList
-    },
-    props: {},
     data() {
-        var self = this;
+        let self = this;
+        let _label = self._label
 
         return {            
             props: {
                 columns: [
-                    { name: "orderno", label: _label('dingdanbianhao'), width: 300 },
+                    { name: "orderno", label: _label('dingdanbianhao'), width: 240 },
+                    { name: "bookingid", label: _label('dinghuokehu'), type: 'select', source: "supplier" },
                     { name: "supplierid", label: _label('gonghuoshang'), type: 'select', source: "supplier" },
-                    { name: "ageseason", label: _label('niandaijijie'), type: 'select', source: "ageseason" },
-                    { name: "bussinesstype", label: _label('yewuleixing'), type: 'select', source: "bussinesstype" },
-                    { name: "status", label: _label('zhuangtai'), type: 'select', source: "orderstatus" },
-                    { name: "makedate", label: _label('dingdanriqi') }
+                    { name: "ageseason", label: _label('niandai'), type: 'select', source: "ageseason", width:100 },
+                    { name: "currency", label: _label('bizhong'), type: 'select', source: "currency", width:80 },
+                    { name: "total", label: _label('jine'), width:100 },
+                    { name: "genders", label: _label('xingbie') },
+                    { name: "brands", label: _label('pinpai') },
+                    { name: "bussinesstype", label: _label('yewuleixing'), type: 'select', source: "bussinesstype", width:100 },
+                    { name: "status", label: _label('zhuangtai'), type: 'select', source: "orderstatus", width:120 },
+                    { name: "orderdate", label: _label('dingdanriqi'), width:120 }
                 ],
-                controller: "order",
-                isSelect:true
-            },
-            pro: false,
-            info: {},
-            rowIndex: -1
+                controller: "order"
+            }
         }
     },
     methods: {
-        showFormToCreate() {
-            this.info = {}
-            this.rowIndex = -1
-            this.$router.push('/order/0')
+        toPage(id) {
+            this.$router.push('/order/'+id)
         },
-        onClickBrandBtn(){
-            let self = this
-            let ids = self.$refs.tablelist.getSelectValues()
-            self._log(ids)
-            this.$router.push('/orderbrand/create/' + ids.join(','))
+        toEdit(rowIndex, row) {
+            this.toPage(row.id)
         },
-        showFormToEdit(rowIndex, row) {
-            this.info = row;
-            this.rowIndex = rowIndex
-            this.$router.push('/order/' + row.id)
-        },
-        onChange(form, isdelete) {
-            let self = this
-
-            //self._log(form,isdelete)
-            if(isdelete) {
-                 if (self.rowIndex >= 0) {
-                    //self._log("删除订单")
-                    self.$refs.tablelist.deleteRow(self.rowIndex)
-                }
-            }
-            else {
-                if (self.rowIndex < 0) {
-                    self.rowIndex = self.$refs.tablelist.appendRow(globals.clone(form))
-                } else {
-                    var row = self.$refs.tablelist.getRow(self.rowIndex)
-                    globals.copyTo(form, row)
-                }
-            }            
-        },
-        isEditable(row) {
-            var status = row.status;
-            return status == '1' || status == '' || !status
-        }
-    },
-    computed: {},
-    watch: {},
-    mounted: function() {}
+    }
 }
 </script>

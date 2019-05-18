@@ -67,7 +67,7 @@ export default {
                     label: _label('fuzhidao'),
                     width: 150,
                     disable_change: true,
-                    handler: function(rowIndex, row) {
+                    handler: function({row}) {
                         self.dialogVisible3 = true;
                         self.brandgroupchildid = row.id
                     }

@@ -49,6 +49,10 @@ export default {
         isBatch:{
             type:Boolean,
             default:false
+        },
+        isIgnoreZero:{
+            type:Boolean,
+            default:true
         }
     },
     model: {
@@ -68,13 +72,14 @@ export default {
             start:-1, //批量选择的时候使用
             onDataSourceChange() {           
                 self.counter      = self.counter+1
-                //self._log("触发了一次，",self.source, self.counter, self)
+                
                 if (self.parentid == false) {
-                    self.data = []
-                    self.keyindexes = {}
+         
                     self.getDataSource().getData(function(data) {
                         //self._log("load", data)
-                        //self.data = data
+                        //self._log("++++++++++++++",self.source)
+                        self.data = []
+                        self.keyindexes = {}
                         data.forEach(item => self.push(item))
                         self.filteredList()
                     })
@@ -126,14 +131,14 @@ export default {
             })
         },
         load(value) {
-            var self = this;
-            //self._log("重新加载下拉框数据")
-            self.data = []
-            self.keyindexes = {}
+            let self = this;
+            //self._log("重新加载下拉框数据", self.source)
+            
             self.getDataSource().getSourceByParent(value).then(function(dataSource) {
-                //self._log("load", self.source, data)
-                    //self.data = data;
                 dataSource.getData(data=>{
+                    //self._log("++++++++++++++------------",self.source)
+                    self.data = []
+                    self.keyindexes = {}
                     data.forEach(item => self.push(item))
                 })
                 self.filteredList();
@@ -153,6 +158,11 @@ export default {
         },
         setValue(value) {
             let self = this;
+
+            if(self.isIgnoreZero===true && (value=='0' || value==0)) {
+                value = ""
+            }
+
             let multiple = self.multiple
             if (multiple) {
                 if (!value || value == '') {
@@ -239,7 +249,7 @@ export default {
         let self = this;
         self.setValue(self.select_value)
         self.getDataSource().emitter.on("change", self.onDataSourceChange)
-        //self._log("绑定监听事件")
+        //self._log("绑定监听事件",self.source)
         self.onDataSourceChange()        
     },
     computed:{

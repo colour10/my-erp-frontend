@@ -4,28 +4,23 @@
             <el-row :gutter="0">
                 <au-button auth="order-submit" :type="canSubmit?'primary':'info'" @click="saveOrder(1)">{{_label("baocun")}}</au-button>
                 <au-button auth="order-submit" :type="canDelete?'primary':'info'" @click="deleteOrder()">{{_label("shanchu")}}</au-button>
-                <au-button auth="order-submit" :type="canSubmitPayment?'primary':'info'" @click="addPayment">{{_label("shengchengfahuodan")}}</au-button>
-                <au-button auth="order-submit" :type="canSubmitPayment?'primary':'info'" @click="addPayment">{{_label("fujian")}}</au-button>
-                <au-button auth="order-submit" :type="canSubmitPayment?'primary':'info'" @click="addPayment">{{_label("feiyong")}}</au-button>
             </el-row>
             <el-row :gutter="0">
                 <el-col :span="6">
                     <el-form-item :label="_label('niandai')" required prop="ageseason">
-                        <simple-select v-model="form.ageseason" source="ageseason" :lang="lang"></simple-select>
+                        <simple-select v-model="form.ageseason" source="ageseason"></simple-select>
                     </el-form-item>
                     <el-form-item :label="_label('jijie')">
-                        <simple-select v-model="form.seasontype" source="seasontype" :lang="lang">
+                        <simple-select v-model="form.seasontype" source="seasontype">
                         </simple-select>
                     </el-form-item>
                     <el-form-item :label="_label('pinpai')">
-                        <simple-select v-model="form.brandid" source="brand" :lang="lang">
+                        <simple-select v-model="form.brandid" source="brand">
                         </simple-select>
                     </el-form-item>
                     <el-form-item :label="_label('xingbie')">
                         <el-input v-model="genders" disabled></el-input>
                     </el-form-item>
-
-                    
                 </el-col>
                 <el-col :span="6">
                     <el-form-item :label="_label('gonghuoshang')">
@@ -36,13 +31,12 @@
                         <simple-select v-model="form.finalsupplierid" source="supplier_3" :clearable="true">
                         </simple-select>
                     </el-form-item>
-
                     <el-form-item :label="_label('haiwaidingdanhao')">
                         <el-input v-model="form.foreignorderno"></el-input>
                     </el-form-item>
                     <el-form-item :label="_label('gongsidingdanhao')">
                         <el-input v-model="form.orderno" :placeholder="_label('zidonghuoqu')" disabled></el-input>
-                    </el-form-item>                    
+                    </el-form-item>
                 </el-col>
                 <el-col :span="6">
                     <el-form-item :label="_label('jine')">
@@ -52,7 +46,7 @@
                         </el-input>
                     </el-form-item>
                     <el-form-item :label="_label('zhekoulv')">
-                        <sp-float-input v-model="form.discount" @change="onDiscountChange"></sp-float-input>
+                        <sp-float-input v-model="form.discount"></sp-float-input>
                     </el-form-item>
                     <el-form-item :label="_label('tuishuilv')">
                         <sp-float-input v-model="form.taxrebate"></sp-float-input>
@@ -60,8 +54,6 @@
                     <el-form-item :label="_label('beizhu')">
                         <el-input v-model="form.memo"></el-input>
                     </el-form-item>
-
-                    
                 </el-col>
                 <el-col :span="6">
                     <el-form-item :label="_label('zhidanren')">
@@ -69,7 +61,7 @@
                     </el-form-item>
                     <el-form-item :label="_label('zhidanriqi')">
                         <el-input v-model="form.maketime" :placeholder="_label('zidonghuoqu')" disabled></el-input>
-                    </el-form-item> 
+                    </el-form-item>
                 </el-col>
             </el-row>
         </el-form>
@@ -81,6 +73,16 @@
         <el-row>
             <el-col :span="24">
                 <el-table :data="tabledata" stripe border style="width:100%;">
+                    <el-table-column align="center" width="60">
+                        <template v-slot="scope">
+                            <img :src="_fileLink(scope.row.product.picture)" style="width:50px;height:50px;" />
+                        </template>
+                    </el-table-column>
+                    <el-table-column :label="_label('dinghuokehu')" align="center" width="150">
+                        <template v-slot="{row}">
+                            <sp-order-tip column="booking_label" :order="row.order"></sp-order-tip>
+                        </template>
+                    </el-table-column>
                     <el-table-column :label="_label('chanpinmingcheng')" align="center" width="350">
                         <template v-slot="scope">
                             {{scope.row.product.getName()}}
@@ -101,19 +103,16 @@
                             {{row.product.factoryprice*row.discount}}
                         </template>
                     </el-table-column>
-                    <el-table-column prop="label" :label="_label('zongjia')" width="100" align="center">
+                    <el-table-column prop="label" :label="_label('zongjia')" width="80" align="center">
                         <template v-slot="{row}">
                             {{row.product.factoryprice*row.discount*row.total}}
                         </template>
                     </el-table-column>
-                    <el-table-column prop="label" :label="_label('zhekoulv')" width="100" align="center">
-                        <template v-slot="{row}">
-                            <el-input v-model="row.discount" size="mini"></el-input>
-                        </template>
+                    <el-table-column prop="discount" :label="_label('zhekoulv')" width="80" align="center">
                     </el-table-column>
                     <el-table-column prop="number" :label="_label('dinggoushuliang')" align="center" :width="width">
                         <template v-slot="{row}">
-                            <asa-sizecontent-input :columns="row.product.sizecontents" :row="row" :disabled="!isEditable" @change="onChange" :key="row.product.id"></asa-sizecontent-input>
+                            <sp-sizecontent-input :columns="row.product.sizecontents" :row="row" :disabled="true" :key="row.product.id"></sp-sizecontent-input>
                         </template>
                     </el-table-column>
                     <el-table-column :label="_label('caozuo')" width="150" align="center" v-if="isEditable">
@@ -124,75 +123,37 @@
                 </el-table>
             </el-col>
         </el-row>
-        <!-- <el-row>
-            <simple-admin-page v-bind="props" ref="payment" :hide-create="true" :hide-form="true" v-if="form.id>0"></simple-admin-page>
-        </el-row> -->
-        <asa-select-product-dialog :visible.sync="pro" @select="onSelect"></asa-select-product-dialog>
+        <asa-select-order-detail-dialog :visible.sync="pro" @select="onSelect"></asa-select-order-detail-dialog>
     </div>
 </template>
 
 <script>
-import Asa_Sizecontent_Input from '../asa/Asa_Sizecontent_Input.vue'
-import DataSource from '../DataSource.js'
-import globals, { _label } from "../globals.js"
-import { ProductDetail } from "../model.js"
-import chain  from "../chain.js"
-import {extend,copyTo}  from "../object.js"
-
-const props = {
-    columns: [
-        { name: "payment_type", label: _label("fukuanleixing"), type: 'select', source: "paymenttype" },
-        { name: "currency", label: _label("bizhong"), type: 'select', source: "currency" },
-        { name: "amount", label: _label("jine") },
-        { name: "paymentdate", label: _label("fukuanriqi"), type: "date" },
-        { name: "memo", label: _label("beizhu") },
-        { name: "makestaff", label: _label("tijiaoren"), type: 'select', source: "user", is_edit_hide: true },
-        { name: "status", label: _label("yiruzhang"), type: "switch", is_edit_hide: true }
-    ],
-    controller: "orderpayment",
-    auth: "order-submit",
-    base: {
-        orderid: ''
-    },
-    options: {
-        isedit: (item) => item.status == 0,
-        isdelete: (item) => item.status == 0,
-        autoreload: true
-    }
-}
+import { extend, copyTo } from "../object.js"
+import detailConvert from "../asa/order-detail.js"
 
 export default {
     name: 'sp-orderbranddetail',
-    components: {
-        "asa-sizecontent-input": Asa_Sizecontent_Input
-    },
+    components: {},
     props: {},
     data() {
         var self = this;
-
+        let _label = self._label
 
         return {
             form: {
-                bookingid: "",
-                orderdate:"",
-                linkmanid: "",
+                foreignorderno: "",
                 bussinesstype: "",
                 supplierid: "",
                 finalsupplierid: "",
                 ageseason: "",
                 seasontype: "",
-                bookingorderno: "",
-                makedate: "",
-                currency: "",
                 discount: "",
                 taxrebate: "",
-                property: "1",
                 makestaff: "",
                 maketime: "",
                 memo: "",
-                total: "",
                 orderno: "",
-                status: "", //状态，1=保存；2=送审；3=审核完成
+                brandid: "",
                 id: ""
             },
             rules: {
@@ -203,35 +164,20 @@ export default {
             },
             tabledata: [],
             title: "",
-            lang: "",
             pro: false,
-            formid: '',
-            props,
-            discounts:{}
+            formid: ''
         }
     },
     methods: {
         onQuit() {
             this.dialogVisible = false
         },
-        addPayment() {
-            let self = this;
-            if (self.canSubmitPayment()) {
-                props.base.orderid = self.form.id
-                self.$refs.payment.showFormToCreate();
-            }
-        },
         showProduct() {
             this.pro = true;
         },
-        onSelect(productDetail) {
+        onSelect(row) {
             let self = this;
-            self.appendRow({
-                id:"",
-                product: productDetail,
-                discount: self.form.discount,
-                total:0
-            })
+            self.appendRow(row)
         },
         deleteOrder() {
             let self = this
@@ -251,51 +197,37 @@ export default {
 
 
             //self.validate(function() {
-                let params = {
-                    form: extend({}, self.form, { status })
+            let params = {
+                form: extend({}, self.form, { status })
+            }
+
+            let list = []
+            self.tabledata.forEach(item => {
+                list.push({ productid: item.product.id, orderid: item.order.id })
+            })
+            params.list = list;
+
+            self._submit("/orderbrand/save", { params: JSON.stringify(params) }).then(function(res) {
+                self._log(res)
+                let data = res.data
+                if (data.id) {
+                    copyTo(data, self.form)
+                    self.formid = self.form.id
                 }
-
-                let list = []
-                self.tabledata.forEach(item => {
-                    if(item.form && item.total>0) {
-                        for(let key in item.form) {
-                            //self._log(item.product.id, key, item.form[key])
-                            list.push( {
-                                id:item.id,
-                                productid: item.product.id,
-                                discount: item.discount,
-                                sizecontentid: key,
-                                number: item.form[key]
-                            } );
-                        }
-                    } 
-                })
-                params.list = list;
-
-                self._submit("/order/saveorder", { params: JSON.stringify(params) }).then(function(res) {
-                    self._log(res)
-                    let data = res.data
-                    if (data.form.id) {
-
-                        copyTo(data.form, self.form)
-                        self.formid = self.form.id
-                        props.base.orderid = self.form.id
-                    }
-                    self.$emit("change", data.form)
-                });
+            });
             //})
 
         },
         deleteRow(row) {
             var self = this;
-            let index = self.tabledata.findIndex(item=>item==row)
+            let index = self.tabledata.findIndex(item => item == row)
             self.$delete(self.tabledata, index)
         },
         appendRow(row) {
             const self = this;
 
             let is_exist = self.tabledata.some(rowData => {
-                return rowData.product.id == row.product.id
+                return rowData.key == row.key
             })
 
             if (!is_exist) {
@@ -303,21 +235,6 @@ export default {
 
                 self.form.currency = row.product.factorypricecurrency
             }
-        },
-        onChange({row, form}) {
-            let self = this
-            self._log(row)
-            row.form = form
-            row.total = chain(form).toArray().array().reduce((total, item)=>total*1+item.value*1, 0)
-            self._log(row.total)
-        },
-        onDiscountChange(newValue, oldValue){
-            let self = this
-            self.tabledata.forEach(item=>{
-                if(item.discount==oldValue) {
-                    item.discount = newValue
-                }
-            })
         }
     },
     computed: {
@@ -334,81 +251,49 @@ export default {
             return this.form.id > 0 && status == 1
         },
         width() {
-            return this.tabledata.reduce((max,{product})=>Math.max(max,product.sizecontents.length),1)*60+21
+            return this.tabledata.reduce((max, { product }) => Math.max(max, product.sizecontents.length), 1) * 60 + 21
         },
         canSubmit() {
             var status = this.form.status;
             return status != 2 && status != 3
-        },
-        canSubmitPayment() {
-            return this.form.id > 0
         },
         total_price() {
             return this.tabledata.reduce(function(total, current) {
                 return total + current.total * current.product.factoryprice * current.discount
             }, 0)
         },
-        brands() {
-            let obj = {}
-            this.tabledata.forEach(item=>obj[item.product.brand_label]=1);
-            return Object.keys(obj).join(",");
-        },
         genders() {
             let obj = {}
-            this.tabledata.forEach(item=>{
-                if(item.product.gender_label.length>0) {
-                    obj[item.product.gender_label]=1
-                }                
+            this.tabledata.forEach(item => {
+                if (item.product.gender_label.length > 0) {
+                    obj[item.product.gender_label] = 1
+                }
             });
             return Object.keys(obj).join(",");
         }
     },
     mounted: function() {
-        var self = this;
+        let self = this;
         //self._log("mounted Order")
         //copyTo(self.data, this.form)
         let route = self.$route;
         let label // = route.params.id == 0 ? self._label("xinjiandingdan") : "订单信息"
         self._log(route.params)
-        if (route.params.action == 'create') {
+        if (route.params.id == '0') {
             label = self._label("shengchengpinpaidingdan")
         } else {
             self.tabledata = []
                 //加载数据
-            self._fetch("/order/loadorder", { id: route.params.id }).then(function(res) {
+            self._fetch("/orderbrand/loadorder", { id: route.params.id }).then(function(res) {
                 //self._log("加载订单信息", res)
 
                 copyTo(res.data.form, self.form)
                 if (res.data.list) {
-                    let result = {}
-                    res.data.list.forEach(item => {
-                        //self._log(item)
-                        if(result[item.productid]) {
-                            result[item.productid]['form'][item.sizecontentid] = item.number
-                            result[item.productid]['total'] += item.number*1
-                        }
-                        else {
-                            let form = {}
-                            form[item.sizecontentid] = item.number
-                            result[item.productid]= {
-                                id:item.id,
-                                product: item.product,
-                                discount: item.discount,
-                                total:item.number*1,
-                                form
-                            }
-                        }
-                        //self.appendRow(item)
-                    })
-                    //self._log(result,"xxxx")
-                    chain(result).forEach(item=>{
-                        ProductDetail.load({data:item.product, depth:1}).then(productDetail=>{
-                            item.product = productDetail
-                            self.appendRow(item)
-                        })
+                    detailConvert(res.data.list).then(results => {
+                        results.forEach(item => self.appendRow(item))
                     })
                 }
-                self._setTitle(self._label("dingdan") + self.form.id)
+                self._setTitle(self._label("pinpaidingdan") + self.form.id)
             })
             label = "loading..."
         }

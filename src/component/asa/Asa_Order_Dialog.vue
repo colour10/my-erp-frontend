@@ -4,7 +4,7 @@
             <el-row :gutter="0">
                 <au-button auth="order-submit" :type="canSubmit?'primary':'info'" @click="saveOrder(1)">{{_label("baocun")}}</au-button>
                 <au-button auth="order-submit" :type="canDelete?'primary':'info'" @click="deleteOrder()">{{_label("shanchu")}}</au-button>
-                <au-button auth="order-submit" :type="canSubmitPayment?'primary':'info'" @click="addPayment">{{_label("shengchengfahuodan")}}</au-button>
+                <!-- <au-button auth="order-submit" :type="canSubmitPayment?'primary':'info'" @click="addPayment">{{_label("shengchengfahuodan")}}</au-button> -->
                 <au-button auth="order-submit" :type="canSubmitPayment?'primary':'info'" @click="addPayment">{{_label("fujian")}}</au-button>
                 <au-button auth="order-submit" :type="canSubmitPayment?'primary':'info'" @click="addPayment">{{_label("feiyong")}}</au-button>
             </el-row>
@@ -15,7 +15,7 @@
                         </simple-select>
                     </el-form-item>
                     <el-form-item :label="_label('lianxiren')">
-                        <simple-select v-model="form.linkmanid" source="supplierlinkman" :parentid="form.supplierid">
+                        <simple-select v-model="form.linkmanid" source="supplierlinkman" :parentid="form.bookingid">
                         </simple-select>
                     </el-form-item>
                     <el-form-item :label="_label('niandai')" required prop="ageseason">
@@ -98,8 +98,13 @@
             </el-col>
         </el-row>
         <el-row>
-            <el-col :span="24">
+            <el-col :span="24" class="product">
                 <el-table :data="tabledata" stripe border style="width:100%;">
+                    <el-table-column align="center" width="60">
+                        <template v-slot="scope">
+                            <img :src="_fileLink(scope.row.product.picture)" style="width:50px;height:50px;" />
+                        </template>
+                    </el-table-column>
                     <el-table-column :label="_label('chanpinmingcheng')" align="center" width="350">
                         <template v-slot="scope">
                             {{scope.row.product.getName()}}
@@ -130,9 +135,11 @@
                             <el-input v-model="row.discount" size="mini"></el-input>
                         </template>
                     </el-table-column>
+                    <el-table-column prop="total" :label="_label('heji')" width="100" align="center">
+                    </el-table-column>
                     <el-table-column prop="number" :label="_label('dinggoushuliang')" align="center" :width="width">
                         <template v-slot="{row}">
-                            <asa-sizecontent-input :columns="row.product.sizecontents" :row="row" :disabled="!isEditable" @change="onChange" :key="row.product.id"></asa-sizecontent-input>
+                            <sp-sizecontent-input :columns="row.product.sizecontents" :row="row" :disabled="!isEditable" @change="onChange" :key="row.product.id"></sp-sizecontent-input>
                         </template>
                     </el-table-column>
                     <el-table-column :label="_label('caozuo')" width="150" align="center" v-if="isEditable">
@@ -151,8 +158,7 @@
 </template>
 
 <script>
-import Asa_Select_Product_Dialog from './Asa_Select_Product_Dialog.vue'
-import Asa_Sizecontent_Input from './Asa_Sizecontent_Input.vue'
+
 import DataSource from '../DataSource.js'
 import globals, { _label } from "../globals.js"
 import { ProductDetail } from "../model.js"
@@ -184,8 +190,6 @@ const props = {
 export default {
     name: 'sp-orderform',
     components: {
-        'asa-select-product-dialog': Asa_Select_Product_Dialog,
-        "asa-sizecontent-input": Asa_Sizecontent_Input
     },
     props: {},
     data() {
@@ -211,7 +215,6 @@ export default {
                 makestaff: "",
                 maketime: "",
                 memo: "",
-                total: "",
                 orderno: "",
                 status: "", //状态，1=保存；2=送审；3=审核完成
                 id: ""
@@ -275,6 +278,9 @@ export default {
                 let params = {
                     form: extend({}, self.form, { status })
                 }
+                params.form.genders = self.genders
+                params.form.total = self.total_price
+                params.form.brands = self.brands
 
                 let list = []
                 self.tabledata.forEach(item => {
@@ -412,7 +418,7 @@ export default {
                             form[item.sizecontentid] = item.number
                             result[item.productid]= {
                                 id:item.id,
-                                product: item.product,
+                                product: item.productid,
                                 discount: item.discount,
                                 total:item.number*1,
                                 form

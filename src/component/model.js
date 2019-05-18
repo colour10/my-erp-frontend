@@ -37,6 +37,8 @@ const promiseAll = function(data) {
         }
     }
 }
+promiseAll.run = promiseAll.all;
+export {promiseAll as promiseRunner}
 
 const switchData = function(value) {
     return new Promise((resolve)=>{
@@ -234,26 +236,11 @@ const Productstock = Object.assign(createModel("productstock"),{
 const OrderDetails = Object.assign(createModel("orderdetails"),{
     init:function(depth, row, callback) {
         let self = this
-        let arr = []
-        arr.push(new Promise(function(resolve){
-            Product.get(row.productid, resolve, depth-1)
-        }))
 
-        const dataSource = DataSource.getDataSource('sizecontent', getLabel('lang'));
-        arr.push(new Promise(function(resolve){
-            dataSource.getRow(row.sizecontentid, data => {
-                resolve(data)
-            })
-        }))
+        let runner = promiseAll(row)
+        runner.push(ProductDetail.load({data:row.productid, depth:1}), 'product')
 
-        Promise.all(arr).then(function(results) {
-            //console.log(results)
-            //self.row.productname = results[0].row.productname
-            row.product = results[0]
-            //self.row.warehousename = results[1].row.name
-            row.sizecontent =  results[1]
-            callback(row)
-        });
+        runner.all().then(callback)
     }
 })
 
@@ -281,7 +268,17 @@ const ProductCodeList = function(productid, callback){
 }
 export {ProductCodeList,ProductDetail}
 
-const Order = createModel("order")
+const Order = Object.assign(createModel("order"),{
+    init:function(depth, row, callback) {
+        let self = this
+
+        let runner = promiseAll(row)
+        runner.push(getDataSource("supplier").getRowLabel(row.bookingid), 'booking_label')
+        runner.push(getDataSource("ageseason").getRowLabel(row.ageseason), 'ageseason_label')
+
+        runner.all().then(callback)
+    }
+})
 const Orderpayment = Object.assign(createModel("orderpayment"),{
     init:function(depth, row, callback) {
         let self = this

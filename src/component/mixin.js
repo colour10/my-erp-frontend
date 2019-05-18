@@ -154,7 +154,7 @@ export default {
             return self
         },
         _fileLink(file, size=40) {
-            if(file=='') {
+            if(!file) {
                 return host+'/imgs/none.png';
             }
             let arr = file.split('.')

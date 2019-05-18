@@ -21,25 +21,44 @@
         </el-form>
         <el-row>
             <el-col :span="24">
-                <el-table :data="tabledata" border style="width:100%;">
-                    <el-table-column :label="_label('shangpinmingcheng')" align="center">
-                        <template v-slot="scope">
-                            {{scope.row.orderdetails.product.productname}}
+                <el-table ref="table" :data="tabledata" border style="width:100%;" @selection-change="onSelectionChange" @row-click="onRowClick">
+                    <el-table-column type="selection" :width="60">
+                    </el-table-column>
+                    <el-table-column :label="_label('dingdanhao')" align="center" width="150">
+                        <template v-slot="{row}">
+                            <sp-order-tip column="booking_label" :order="row.order"></sp-order-tip>
                         </template>
                     </el-table-column>
-                    <el-table-column :label="_label('chima')" width="100" align="center">
+                    <el-table-column :label="_label('chanpinmingcheng')" align="center" width="350">
                         <template v-slot="scope">
-                            {{scope.row.orderdetails.sizecontent.getLabel()}}
+                            {{scope.row.product.getName()}}
                         </template>
                     </el-table-column>
-                    <el-table-column :label="_label('shengyushuliang')" width="200" align="center">
+                    <el-table-column :label="_label('guojima')" align="center" width="200">
                         <template v-slot="scope">
-                            {{scope.row.orderdetails.number-scope.row.orderdetails.confirm_number}}
+                            {{scope.row.product.getGoodsCode()}}
                         </template>
                     </el-table-column>
-                    <el-table-column :label="_label('fahuoshuliang')" width="200" align="center">
-                        <template v-slot="scope">
-                            <el-input-number v-model="scope.row.number" :min="0" :max="scope.row.orderdetails.number-scope.row.orderdetails.confirm_number"></el-input-number>
+                    <el-table-column prop="label" :label="_label('chuchangjia')" width="130" align="center">
+                        <template v-slot="{row}">
+                            {{row.product.factorypricecurrency_label}} {{row.product.factoryprice}}
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="label" :label="_label('chengjiaojia')" width="130" align="center">
+                        <template v-slot="{row}">
+                            {{row.product.factoryprice*row.discount}}
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="label" :label="_label('zongjia')" width="80" align="center">
+                        <template v-slot="{row}">
+                            {{row.product.factoryprice*row.discount*row.total}}
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="discount" :label="_label('zhekoulv')" width="80" align="center">
+                    </el-table-column>
+                    <el-table-column prop="number" :label="_label('dinggoushuliang')" align="center" :width="width">
+                        <template v-slot="{row}">
+                            <sp-sizecontent-input :columns="row.product.sizecontents" :row="row" :disabled="true" :key="row.product.id"></sp-sizecontent-input>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -50,8 +69,8 @@
 
 <script>
 import globals from '../globals.js'
-import { OrderDetails } from "../model.js"
-
+import { Order, ProductDetail, promiseRunner } from "../model.js"
+import detailConvert from "./order-detail.js"
 import simple_select from '../Simple_Select.vue'
 import DataSource from '../DataSource.js'
 
@@ -76,7 +95,8 @@ export default {
             tabledata: [],
             dialogVisible: self.visible,
             title: "",
-            lang: ""            
+            lang: "",
+            selected: []
         }
     },
     methods: {
@@ -89,26 +109,42 @@ export default {
         },
         loadPage() {
             var self = this;
-            self._fetch("/confirmorder/search", self.form).then(function(res) {
+            self._fetch("/order/searchdetail", self.form).then(function(res) {
                 //self._log("loadPage", res)
+                if (res.data) {
+                    self.tabledata = []
+                    detailConvert(res.data).then(results=>{
+                        results.forEach(item=>self.tabledata.push(item))
+                    })
 
-                //处理商品信息列表
-                res.data.list.forEach(function(row) {
-                    OrderDetails.get(row, function(orderdetails) {
-                        self._log("detail", orderdetails)
-                        self.tabledata.push({number:0,orderdetails})
-                    },1)
-                })
+                    self.tabledata.sort(function(a, b){
+                        return a.product.id-b.product.id
+                    })
+                }
             });
         },
         onSearch() {
             this.loadPage();
         },
         onSelect() {
-            var self = this
+            let self = this
             self.dialogVisible = false;
-            self.$emit("select", self.tabledata.filter(item => item.number > 0))
-            self.tabledata = []
+
+            self.selected.forEach(item => {
+                self.$emit("select", item)
+
+                let index = self.tabledata.findIndex(row => item == row)
+                self.tabledata.splice(index, 1)
+            })
+        },
+        onSelectionChange(vals) {
+            this.selected = vals
+        },
+        getSelectValues() {
+            return this.selected.map(item => item.id)
+        },
+        onRowClick(row) {
+            this.$refs.table.toggleRowSelection(row)
         }
     },
     mounted: function() {},
@@ -119,6 +155,11 @@ export default {
         visible(newValue) {
             //console.log("visible", newValue)
             this.dialogVisible = newValue
+        }
+    },
+    computed: {
+        width() {
+            return this.tabledata.reduce((max, { product }) => Math.max(max, product.sizecontents.length), 1) * 60 + 21
         }
     }
 }

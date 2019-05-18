@@ -16,8 +16,11 @@ const isPromise = function(obj) {
     return !!obj && (typeof obj === 'object' || typeof obj === 'function') && typeof obj.then === 'function';
 }
 
-const toArray = function(obj, callback=key=>{return {key, value:obj[key]}}) {
-    return Object.keys(obj).map(callback)
+const default_callback = (key,value)=>{return {key, value}}
+const toArray = function(obj, callback=default_callback) {
+    return Object.keys(obj).map(key=>{
+        return callback(key, obj[key])
+    })
 }
 
 const copyTo = function(fromObj, target) {

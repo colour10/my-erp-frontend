@@ -8,7 +8,6 @@ import mixin from './component/mixin.js'
 Vue.mixin(mixin)
 
 if (typeof window !== 'undefined') {
-    //console.log("hello")
     if(typeof(window.ASAP)=='undefined') {
         window.ASAP = {}
     }
@@ -44,6 +43,10 @@ import Button from './component/button.js'
 import RadioGroup from './component/radio-group.vue'
 import Multiple_Admin_Page from './component/multiple_admin_page.js'
 import Asa_Color_Select from './component/asa/Asa_Color_Select.vue'
+import Asa_Sizecontent_Input from './component/asa/Asa_Sizecontent_Input.vue'
+import Asa_Sizecontent_Confirm from './component/asa/Asa_Sizecontent_Confirm.vue'
+import Asa_Order_Tip from './component/asa/Asa_Order_Tip.vue'
+import SelectText from './component/select-text.js'
 
 import ImagePreview from './component/image-preview.vue'
 import Creator from './component/develop/index.vue'
@@ -61,6 +64,7 @@ import Product from './component/product/index.vue'
 import Sales from './component/sales/index.vue'
 import Login from './component/login/index.vue'
 import Confirmorder from './component/confirmorder/index.vue'
+import ConfirmorderDetail from './component/confirmorder/detail.vue'
 import ModifyPassword from './component/user/modify-password.vue'
 import Warehousing from './component/warehousing/index.vue'
 import Requisition from './component/requisition/index.vue'
@@ -78,6 +82,9 @@ const components = [
     Simple_Avatar,
     Simple_Album,
     Asa_Color_Select,
+    Asa_Sizecontent_Input,
+    Asa_Sizecontent_Confirm,
+    Asa_Order_Tip,
     Asa_Order_Dialog,
     Asa_Select_Product_Dialog,
     Asa_Sales_Dialog,
@@ -89,6 +96,7 @@ const components = [
     Asa_Product,
     Asa_Brandgroupchild_Select,
     Auth,
+    SelectText,
     CheckboxGroup,
     Table,
     Checkbox,
@@ -108,6 +116,7 @@ const routes = [
         children:[
             {path: '/order', name:"order", component: Order},
             {path: '/confirmorder', name:"confirmorder", component: Confirmorder},
+            {path: '/confirmorder/:action/:id', name:"confirmorderdetail", component: ConfirmorderDetail},
             {path: '/warehousing', name:"warehousing", component:Warehousing},
             {path: '/sales', name:"sales", component: Sales},
             {path: '/user', name:"user", component: User},
@@ -129,7 +138,7 @@ const routes = [
             //{path: '/order/add', component: Asa_Order_Dialog},
             {path: '/order/:id', name:"orderform", component: Asa_Order_Dialog},
             {path: '/orderbrand', name:"orderbrand", component: Orderbrand},
-            {path: '/orderbrand/:action/:id', name:"orderbranddetail", component: OrderbrandDetail},
+            {path: '/orderbrand/:id', name:"orderbranddetail", component: OrderbrandDetail},
 
             {path:'/ageseason', name:"ageseason", component:getComponentSimple("ageseason")},
             {path:'/ulnarinch', name:"ulnarinch", component:getComponent("ulnarinch")},

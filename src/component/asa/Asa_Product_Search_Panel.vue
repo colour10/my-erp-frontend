@@ -44,6 +44,11 @@
             <el-collapse-item :title="_label('chaxunjieguo')" name="1">
                 <el-table ref="table" :data="searchresult" stripe border style="width:100%;" @selection-change="onSelectionChange" @row-click="onRowClick">
                     <el-table-column type="selection" :width="60"></el-table-column>
+                    <el-table-column align="center" width="60">
+                        <template v-slot="scope">
+                            <img :src="_fileLink(scope.row.picture)" style="width:50px;height:50px;" />
+                        </template>
+                    </el-table-column>
                     <el-table-column :label="_label('chanpinmingcheng')" align="center" width="350">
                         <template v-slot="{row}">{{row.getName()}}</template>>
                     </el-table-column>
