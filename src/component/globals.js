@@ -120,8 +120,7 @@ const config = function(){
             "product":getLabel("menu-3-1"),
             "supplier":getLabel("menu-4"),
             "order":getLabel("dingdanguanli"),
-            "confirmorder":getLabel("menu-5-2"),
-            "warehousing":getLabel("rukudanguanli"),
+            "shipping":getLabel("menu-5-2"),
             "requisition":getLabel("menu-6-1"),
             "productstock":getLabel("menu-6-4"),
             "sales":getLabel("menu-7-1"),
@@ -132,7 +131,7 @@ const config = function(){
             "saletype":getLabel('xiaoshoushuxing'),
             "exchangerate":getLabel('huilvguanli'),
             "property":getLabel("shuxingdingyi"),
-            "orderbrand":getLabel("pinpaidingdan"),
+            "orderbrand":getLabel("waibudingdan"),
             "language":getLabel("duoguoyuyanguanli"),
             "develop":"生成器"
         }

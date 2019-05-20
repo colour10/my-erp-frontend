@@ -66,7 +66,8 @@ import Login from './component/login/index.vue'
 import Confirmorder from './component/confirmorder/index.vue'
 import ConfirmorderDetail from './component/confirmorder/detail.vue'
 import ModifyPassword from './component/user/modify-password.vue'
-import Warehousing from './component/warehousing/index.vue'
+import Shipping from './component/shipping/index.vue'
+import ShippingDetail from './component/shipping/detail.vue'
 import Requisition from './component/requisition/index.vue'
 import Productstock from './component/productstock/index.vue'
 import System from './component/system/index.vue'
@@ -117,7 +118,8 @@ const routes = [
             {path: '/order', name:"order", component: Order},
             {path: '/confirmorder', name:"confirmorder", component: Confirmorder},
             {path: '/confirmorder/:action/:id', name:"confirmorderdetail", component: ConfirmorderDetail},
-            {path: '/warehousing', name:"warehousing", component:Warehousing},
+            {path: '/shipping', name:"shipping", component:Shipping},
+            {path: '/shipping/:action/:id', name:"shippingdetail", component:ShippingDetail},
             {path: '/sales', name:"sales", component: Sales},
             {path: '/user', name:"user", component: User},
             {path: '/group', name:"group", component: Group},

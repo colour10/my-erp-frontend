@@ -1,5 +1,5 @@
 <template>
-    <el-dialog :visible.sync="dialogVisible" :center="true" :fullscreen="true" :modal="false">
+    <el-dialog :visible.sync="dialogVisible" :center="true" :fullscreen="false" :modal="true" width="1024px">
         <el-form class="user-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini">
             <el-row :gutter="0">
                 <el-col :span="6">
@@ -20,7 +20,7 @@
             </el-row>
         </el-form>
         <el-row>
-            <el-col :span="24">
+            <el-col :span="24" class="product">
                 <el-table ref="table" :data="tabledata" border style="width:100%;" @selection-change="onSelectionChange" @row-click="onRowClick">
                     <el-table-column type="selection" :width="60">
                     </el-table-column>
@@ -29,12 +29,12 @@
                             <sp-order-tip column="booking_label" :order="row.order"></sp-order-tip>
                         </template>
                     </el-table-column>
-                    <el-table-column :label="_label('chanpinmingcheng')" align="center" width="350">
+                    <el-table-column :label="_label('chanpinmingcheng')" align="center" width="200">
                         <template v-slot="scope">
                             {{scope.row.product.getName()}}
                         </template>
                     </el-table-column>
-                    <el-table-column :label="_label('guojima')" align="center" width="200">
+                    <el-table-column :label="_label('guojima')" align="center" width="160">
                         <template v-slot="scope">
                             {{scope.row.product.getGoodsCode()}}
                         </template>

@@ -4,6 +4,7 @@
             <el-row :gutter="0">
                 <au-button auth="order-submit" :type="canSubmit?'primary':'info'" @click="saveOrder(1)">{{_label("baocun")}}</au-button>
                 <au-button auth="order-submit" :type="canDelete?'primary':'info'" @click="deleteOrder()">{{_label("shanchu")}}</au-button>
+                <as-button v-if="isEditable" :type="buttontype" @click="showProduct()">{{_label("xuanzeshangpin")}}</as-button>
             </el-row>
             <el-row :gutter="0">
                 <el-col :span="6">
@@ -46,7 +47,7 @@
                         </el-input>
                     </el-form-item>
                     <el-form-item :label="_label('zhekoulv')">
-                        <sp-float-input v-model="form.discount"></sp-float-input>
+                        <sp-float-input v-model="form.discountbrand"></sp-float-input>
                     </el-form-item>
                     <el-form-item :label="_label('tuishuilv')">
                         <sp-float-input v-model="form.taxrebate"></sp-float-input>
@@ -56,6 +57,10 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="6">
+                    <el-form-item :label="_label('yewuleixing')" required prop="bussinesstype">
+                        <simple-select v-model="form.bussinesstype" source="bussinesstype">
+                        </simple-select>
+                    </el-form-item>
                     <el-form-item :label="_label('zhidanren')">
                         <sp-display-input :value="form.makestaff" source="user" :placeholder="_label('zidonghuoqu')"></sp-display-input>
                     </el-form-item>
@@ -65,11 +70,6 @@
                 </el-col>
             </el-row>
         </el-form>
-        <el-row type="flex" justify="end">
-            <el-col :offset="22" :span="2">
-                <as-button v-if="isEditable" :type="buttontype" @click="showProduct()">{{_label("xuanzeshangpin")}}</as-button>
-            </el-col>
-        </el-row>
         <el-row>
             <el-col :span="24">
                 <el-table :data="tabledata" stripe border style="width:100%;">
@@ -93,9 +93,14 @@
                             {{scope.row.product.getGoodsCode()}}
                         </template>
                     </el-table-column>
-                    <el-table-column prop="label" :label="_label('chuchangjia')" width="130" align="center">
+                    <el-table-column prop="label" :label="_label('bizhong')" width="60" align="center">
                         <template v-slot="{row}">
-                            {{row.product.factorypricecurrency_label}} {{row.product.factoryprice}}
+                            {{row.product.factorypricecurrency_label}}
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="label" :label="_label('chuchangjia')" width="100" align="center">
+                        <template v-slot="{row}">
+                            {{row.product.factoryprice}}
                         </template>
                     </el-table-column>
                     <el-table-column prop="label" :label="_label('chengjiaojia')" width="130" align="center">
@@ -147,7 +152,7 @@ export default {
                 finalsupplierid: "",
                 ageseason: "",
                 seasontype: "",
-                discount: "",
+                discountbrand: "",
                 taxrebate: "",
                 makestaff: "",
                 maketime: "",
@@ -280,7 +285,7 @@ export default {
         let label // = route.params.id == 0 ? self._label("xinjiandingdan") : "订单信息"
         self._log(route.params)
         if (route.params.id == '0') {
-            label = self._label("shengchengpinpaidingdan")
+            label = self._label("shengchengwaibudingdan")
         } else {
             self.tabledata = []
                 //加载数据
@@ -293,7 +298,7 @@ export default {
                         results.forEach(item => self.appendRow(item))
                     })
                 }
-                self._setTitle(self._label("pinpaidingdan") + self.form.id)
+                self._setTitle(self._label("waibudingdan") + self.form.id)
             })
             label = "loading..."
         }

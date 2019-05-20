@@ -7,6 +7,7 @@
                 <!-- <au-button auth="order-submit" :type="canSubmitPayment?'primary':'info'" @click="addPayment">{{_label("shengchengfahuodan")}}</au-button> -->
                 <au-button auth="order-submit" :type="canSubmitPayment?'primary':'info'" @click="addPayment">{{_label("fujian")}}</au-button>
                 <au-button auth="order-submit" :type="canSubmitPayment?'primary':'info'" @click="addPayment">{{_label("feiyong")}}</au-button>
+                <as-button v-if="isEditable" :type="buttontype" @click="showProduct()">{{_label("xuanzeshangpin")}}</as-button>
             </el-row>
             <el-row :gutter="0">
                 <el-col :span="6">
@@ -92,11 +93,6 @@
                 </el-col>
             </el-row>
         </el-form>
-        <el-row type="flex" justify="end">
-            <el-col :offset="22" :span="2">
-                <as-button v-if="isEditable" :type="buttontype" @click="showProduct()">{{_label("xuanzeshangpin")}}</as-button>
-            </el-col>
-        </el-row>
         <el-row>
             <el-col :span="24" class="product">
                 <el-table :data="tabledata" stripe border style="width:100%;">
@@ -105,29 +101,32 @@
                             <img :src="_fileLink(scope.row.product.picture)" style="width:50px;height:50px;" />
                         </template>
                     </el-table-column>
-                    <el-table-column :label="_label('chanpinmingcheng')" align="center" width="350">
-                        <template v-slot="scope">
-                            {{scope.row.product.getName()}}
-                        </template>
-                    </el-table-column>
-                    <el-table-column :label="_label('guojima')" align="center" width="200">
+                    
+                    <el-table-column :label="_label('guojima')" align="left" width="200">
                         <template v-slot="scope">
                             {{scope.row.product.getGoodsCode()}}
                         </template>
                     </el-table-column>
-                    <el-table-column prop="label" :label="_label('chuchangjia')" width="130" align="center">
+
+                    <el-table-column prop="number" :label="_label('dinggoushuliang')" align="center" :width="width">
                         <template v-slot="{row}">
-                            {{row.product.factorypricecurrency_label}} {{row.product.factoryprice}}
+                            <sp-sizecontent-input :columns="row.product.sizecontents" :row="row" :disabled="!isEditable" @change="onChange" :key="row.product.id"></sp-sizecontent-input>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="label" :label="_label('chengjiaojia')" width="130" align="center">
+
+                    <el-table-column prop="label" :label="_label('bizhong')" width="80" align="center">
                         <template v-slot="{row}">
-                            {{row.product.factoryprice*row.discount}}
+                            {{row.product.factorypricecurrency_label}}
                         </template>
                     </el-table-column>
-                    <el-table-column prop="label" :label="_label('zongjia')" width="100" align="center">
+                    <el-table-column prop="label" :label="_label('chuchangjia')" width="100" align="center">
                         <template v-slot="{row}">
-                            {{row.product.factoryprice*row.discount*row.total}}
+                            {{row.product.factoryprice}}
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="label" :label="_label('chuchangjiaheji')" width="100" align="center">
+                        <template v-slot="{row}">
+                            {{row.product.factoryprice * row.total}}
                         </template>
                     </el-table-column>
                     <el-table-column prop="label" :label="_label('zhekoulv')" width="100" align="center">
@@ -135,14 +134,28 @@
                             <el-input v-model="row.discount" size="mini"></el-input>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="total" :label="_label('heji')" width="100" align="center">
-                    </el-table-column>
-                    <el-table-column prop="number" :label="_label('dinggoushuliang')" align="center" :width="width">
+
+                    <el-table-column prop="label" :label="_label('chengjiaojia')" width="130" align="center">
                         <template v-slot="{row}">
-                            <sp-sizecontent-input :columns="row.product.sizecontents" :row="row" :disabled="!isEditable" @change="onChange" :key="row.product.id"></sp-sizecontent-input>
+                            {{row.product.factoryprice*row.discount}}
                         </template>
                     </el-table-column>
-                    <el-table-column :label="_label('caozuo')" width="150" align="center" v-if="isEditable">
+                    <el-table-column prop="label" :label="_label('chengjiaozongjia')" width="100" align="center">
+                        <template v-slot="{row}">
+                            {{row.product.factoryprice*row.discount*row.total}}
+                        </template>
+                    </el-table-column>
+                    
+                    <el-table-column prop="total" :label="_label('zongshu')" width="100" align="center">
+                    </el-table-column>
+
+                    <el-table-column :label="_label('chanpinmingcheng')" align="left" width="300">
+                        <template v-slot="scope">
+                            {{scope.row.product.getName()}}
+                        </template>
+                    </el-table-column>
+                    
+                    <el-table-column :label="_label('caozuo')" width="100" align="center" v-if="isEditable">
                         <template v-slot="scope">
                             <as-button size="mini" type="danger" @click="deleteRow(scope.row)">{{_label('shanchu')}}</as-button>
                         </template>

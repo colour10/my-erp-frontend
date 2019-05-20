@@ -1,10 +1,23 @@
 <template>
     <div class="sizecontent">
-    <el-table :data="orders" style="width:100%;" :cell-class-name="getCellClass" :border="false">
-        <el-table-column :label="column.name" align="center" v-for="column in columns" :key="column.id" width="60">
-            <template v-slot="scope">
-                <el-input v-model="scope.row.form[column.id]" style="width:50px" size="mini" :disabled="disabled"></el-input>
-                <el-input v-model="form[scope.row.order.id][column.id]" style="width:50px" size="mini" @change="onChange"></el-input>
+    <el-table :data="rows" style="width:100%;" :cell-class-name="getCellClass" :border="false">
+        <el-table-column :label="column.name" align="center" v-for="column in columns" :key="column.id" width="51">
+            <template v-slot="{row}">
+                <el-input v-model="row.form[column.id]" style="width:50px" size="mini" :disabled="disabled"></el-input>
+                <el-input v-model="form[row.order.id][column.id]" style="width:50px" size="mini" @keyup.native="onChange(row)" v-if="row.order.id>0"></el-input>
+            </template>
+        </el-table-column>
+        <el-table-column :label="_label('heji')" align="center" width="51">
+            <template v-slot="{row}">
+                <el-input :value="getLineTotal(row.form)" style="width:50px" size="mini" :disabled="disabled" v-if="row.order.id>0"></el-input>
+                <el-input v-model="totals[row.order.id]" style="width:50px" size="mini":disabled="disabled"></el-input>
+            </template>
+        </el-table-column>
+        <el-table-column prop="discount" :label="_label('zhekoulv')" align="center" width="80">
+        </el-table-column>
+        <el-table-column :label="_label('dinghuokehu')" align="left" width="140">
+            <template v-slot="{row}">
+                <sp-order-tip column="booking_label" :order="row.order" v-if="row.order.id>0"></sp-order-tip>
             </template>
         </el-table-column>
     </el-table>
@@ -26,43 +39,104 @@ export default {
         columns: {
             type: Array
         },
-        orders:{
-            type:[Array],
+        row:{
+            type:[Object],
             require:true
         }
     },
     data() {
         let self = this
 
+        //处理默认填入的下方需要确认或者发货的商品数量
         let form = {}
-        self.orders.forEach(order=>{
-            let row = {}
+        let totals = {}
+        self.row.orders.forEach(order=>{
+            let row = order.confirm_form
+            //self._log(row)
+
             self.columns.forEach(column=>{
-                row[column.id] = ''
+                if(!row[column.id]) {
+                    row[column.id] = ''
+                }
             })
-            row.orderid = order.id
-            form[order.id] = row
-        })
-        
+            //row.orderid = order.order.id
+            form[order.order.id] = row
+            totals[order.order.id] = 0
+        })        
 
         return {
             form:form,
-            tabledata:[[]]
+            totals,
+            tabledata:[[]],
+            sumform:{}  //最下面的合计行的数据
         }
     },
     methods: {
         getCellClass() {
             return "counter"
         },
-        onChange() {
+        getLineTotal(formData) {
+            this._log(formData)
+            let total = 0
+            chain(formData).forEach(value=>total+=value*1)
+            return total
+        },
+        onChange({order}) {
             let self = this
-            let output = chain(self.form).toArray().filter(item=>item.value>0).toObject(item=>[item.key, item.value]).object()
-            self.$emit("change", {row:self.row, form:output})
+
+            //计算列的合计
+            let sum = {}
+            let total = 0
+            chain(self.form).forEach((item, orderid)=>{
+                let rowsum = 0
+                chain(item).forEach((value, key)=>{
+                    value = value*1;
+                    sum[key] = sum[key] ? sum[key]+value : value;
+
+                    rowsum += value                    
+                })
+
+                self.totals[orderid] = rowsum
+                total += rowsum
+            })
+            self.totals[0] = total
+            extend(self.sumform, sum)
+
+            self.$emit("change", { row:self.row, form:self.form, total:total })
+        }
+    },
+    computed:{
+        rows:function(){
+            let self = this
+            let results = []
+            self.row.orders.forEach(item=>{
+                //如果备选的总数大于0，显示
+                item.total = self.getLineTotal(item.form)
+                self._log(item.total)
+                if(item.total>0) {
+                    results.push(item)
+                }                
+            })
+
+            if(results.length>0) {
+                results.push({
+                    discount:self._label('heji'),
+                    order:{id:0},
+                    form:self.sumform
+                })
+            }
+            
+            return results
         }
     },
     mounted:function(){
-        //this._log(this.row,"====")
-        //extend(this.form, this.row.form)
+        let self = this
+
+        //备选总数为0
+        if(self.rows.length==0) {
+            self.$emit("hidden",self.row)
+        }
+        self.onChange({})
     }
 }
 </script>

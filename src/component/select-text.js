@@ -17,7 +17,7 @@ export default {
             let self = this
             //self._log("hello")
             let dataSource = DataSource.getDataSource(self.source, self._label("lang"))
-            dataSource.getRowLabel(self.value).then(text=>{
+            dataSource.getRowLabels(self.value).then(text=>{
                 //console.log(text,"==")
                 self.text = text
             })

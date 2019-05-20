@@ -27,9 +27,13 @@ export default {
                     { name: "makedate", label: _label('dingdanriqi') }
                 ],
                 actions:[
-                    { label: "生成确认单", handler:self.toCreateConfirm}
+                    { label: _label("queren"), handler:self.toCreateConfirm},
+                    { label: _label("fahuo"), handler:self.toShipping}
                 ],
-                controller: "orderbrand"
+                controller: "orderbrand",
+                options:{
+                    action_width:300
+                }
             },
             pro: false,
             info: {},
@@ -45,6 +49,9 @@ export default {
         },
         toCreateConfirm({row, vm}){
             this.$router.push('/confirmorder/create/' + row.id)
+        },
+        toShipping({row, vm}){
+            this.$router.push('/shipping/create/' + row.id)
         }
     }
 }
