@@ -35,6 +35,9 @@ export default {
         showFormToCreate() {
             this.$router.push('/shipping/create/0')
         },
+        showFormToEdit(rowIndex, row){
+            this.$router.push('/shipping/update/' + row.id)
+        }
     }
 }
 </script>

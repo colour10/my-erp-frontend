@@ -209,7 +209,10 @@ export default {
 
             let list = []
             self.tabledata.forEach(item => {
-                list.push({ productid: item.product.id, orderid: item.order.id })
+                list.push({ 
+                    productid: item.product.id, 
+                    orderid: item.order.id 
+                })
             })
             params.list = list;
 

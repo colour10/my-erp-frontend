@@ -74,7 +74,7 @@
         </el-form>
         <el-row>
             <el-col :span="24" class="inputtable product">
-                <el-table :data="tabledata" stripe border style="width:100%;">
+                <el-table :data="tabledata" stripe border style="width:100%;" :show-summary="true" :summary-method="getSummary">
                     <el-table-column align="center" width="60">
                         <template v-slot="scope">
                             <img :src="_fileLink(scope.row.product.picture)" style="width:50px;height:50px;" />
@@ -117,10 +117,7 @@
                             <el-input v-model="row.price" size="mini"></el-input>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="label" :label="_label('zongjia')" width="80" align="center">
-                        <template v-slot="{row}">
-                            {{row.product.factoryprice*row.discountbrand*row.confirm_total}}
-                        </template>
+                    <el-table-column prop="confirm_total_price" :label="_label('zongjia')" width="80" align="center">
                     </el-table-column>
                 </el-table>
             </el-col>
@@ -201,14 +198,15 @@ export default {
             self.tabledata.forEach(item => {
                 if (item.form) {
                     chain(item.form).forEach((values, orderid) => {
-                        chain(values).forEach((number, sizecontentid) => {
-                            if (number > 0) {
+                        chain(values).forEach((row, sizecontentid) => {
+                            if (row.number > 0) {
                                 list.push({
                                     orderid,
                                     sizecontentid,
-                                    number,
+                                    number:row.number,
                                     productid: item.product.id,
-                                    discountbrand: item.discountbrand
+                                    discountbrand: item.discountbrand,
+                                    id:row.id
                                 })
                             }
                         })
@@ -244,6 +242,8 @@ export default {
             let self = this
             row.form = form
             row.confirm_total = total;
+            row.confirm_total_price = row.product.factoryprice*row.discountbrand*row.confirm_total
+            row.price = row.product.factoryprice*row.discountbrand
         },
         onDiscountChange(newValue, oldValue) {
             let self = this
@@ -253,6 +253,26 @@ export default {
                     item.discountbrand = newValue
                 }
             })
+        },
+        getSummary({columns, data}){
+            const self = this
+            const sums = []
+            columns.forEach((column, index) => {
+                //self._log(column, index)
+                if(index==0) {
+                    sums[index] = self._label("heji")
+                    return
+                }
+                else if(index==6) {
+                    sums[index] = data.reduce((total, current)=>total+current.confirm_total*1, 0)
+                }
+                else if(index==9) {
+                    sums[index] = data.reduce((total, current)=>total+current.confirm_total_price*1, 0)
+                }
+            })
+            //self._log("data", data)
+
+            return sums
         }
     },
     computed: {

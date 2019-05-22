@@ -177,6 +177,7 @@ import globals, { _label } from "../globals.js"
 import { ProductDetail } from "../model.js"
 import chain  from "../chain.js"
 import {extend,copyTo}  from "../object.js"
+import detailConvert from "./order-detail.js"
 
 const props = {
     columns: [
@@ -297,17 +298,18 @@ export default {
 
                 let list = []
                 self.tabledata.forEach(item => {
+                    self._log("item", item)
                     if(item.form && item.total>0) {
-                        for(let key in item.form) {
-                            //self._log(item.product.id, key, item.form[key])
+                        chain(item.form).forEach((row, sizecontentid)=>{
                             list.push( {
                                 id:item.id,
                                 productid: item.product.id,
                                 discount: item.discount,
-                                sizecontentid: key,
-                                number: item.form[key]
+                                sizecontentid: sizecontentid,
+                                number: row.number,
+                                id:row.id
                             } );
-                        }
+                        })
                     } 
                 })
                 params.list = list;
@@ -348,7 +350,7 @@ export default {
             let self = this
             self._log(row)
             row.form = form
-            row.total = chain(form).toArray().array().reduce((total, item)=>total*1+item.value*1, 0)
+            row.total = chain(form).toArray().array().reduce((total, item)=>total*1+item.value.number*1, 0)
             self._log(row.total)
         },
         onDiscountChange(newValue, oldValue){
@@ -419,32 +421,9 @@ export default {
 
                 copyTo(res.data.form, self.form)
                 if (res.data.list) {
-                    let result = {}
-                    res.data.list.forEach(item => {
-                        //self._log(item)
-                        if(result[item.productid]) {
-                            result[item.productid]['form'][item.sizecontentid] = item.number
-                            result[item.productid]['total'] += item.number*1
-                        }
-                        else {
-                            let form = {}
-                            form[item.sizecontentid] = item.number
-                            result[item.productid]= {
-                                id:item.id,
-                                product: item.productid,
-                                discount: item.discount,
-                                total:item.number*1,
-                                form
-                            }
-                        }
-                        //self.appendRow(item)
-                    })
-                    //self._log(result,"xxxx")
-                    chain(result).forEach(item=>{
-                        ProductDetail.load({data:item.product, depth:1}).then(productDetail=>{
-                            item.product = productDetail
-                            self.appendRow(item)
-                        })
+
+                    detailConvert(res.data.list).then(results=>{
+                        results.forEach(item=>self.appendRow(item))
                     })
                 }
                 self._setTitle(self._label("dingdan") + self.form.id)

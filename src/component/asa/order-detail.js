@@ -90,26 +90,26 @@ const detailConvert = function(list){
         //self._log(item)
         let key = item.orderid + "-" + item.productid
         if (result[key]) {
-            result[key]['form'][item.sizecontentid] = item.number
-            result[key]['confirm_form'][item.sizecontentid] = item.confirm_number==0 ? '' : item.confirm_number
-            result[key]['left_form'][item.sizecontentid] = item.confirm_number-item.shipping_number
+            result[key]['form'][item.sizecontentid] = {number:item.number,id:item.id}
+            result[key]['confirm_form'][item.sizecontentid] =  {number:item.confirm_number==0 ? '' : item.confirm_number,id:item.id}
+            result[key]['left_form'][item.sizecontentid] = {number:item.confirm_number-item.shipping_number,id:item.id}
             result[key]['total'] += item.number * 1
         } else {
             let form = {}
-            form[item.sizecontentid] = item.number
+            form[item.sizecontentid] = {number:item.number,id:item.id}
 
             //确认数量
             let confirm_form = {}
-            confirm_form[item.sizecontentid] = item.confirm_number==0 ? '' : item.confirm_number
+            confirm_form[item.sizecontentid] = {number:item.confirm_number==0 ? '' : item.confirm_number,id:item.id}
 
             //剩余数量
             let left_form = {}
-            left_form[item.sizecontentid] = item.confirm_number-item.shipping_number
+            left_form[item.sizecontentid] = {number:item.confirm_number-item.shipping_number,id:item.id}
             result[key] = {
                 key,
                 productid: item.productid,
-                discount: item.discount,
-                discountbrand:item.discountbrand,
+                discount: item.discount*1,
+                discountbrand:item.discountbrand*1,
                 total: item.number * 1,
                 form,
                 confirm_form,

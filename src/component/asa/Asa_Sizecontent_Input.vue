@@ -3,7 +3,7 @@
     <el-table :data="tabledata" style="width:100%;" :cell-class-name="getCellClass" :border="false">
         <el-table-column :label="column.name" align="center" v-for="column in columns" :key="column.id" width="60">
             <template v-slot="scope">
-                <el-input v-model="form[column.id]" style="width:50px" size="mini" @keyup.native="onChange" :disabled="disabled"></el-input>
+                <el-input v-model="form[column.id].number" style="width:50px" size="mini" @keyup.native="onChange" :disabled="disabled"></el-input>
             </template>
         </el-table-column>
     </el-table>
@@ -35,7 +35,7 @@ export default {
 
         let form = {}
         self.columns.forEach(column=>{
-            form[column.id] = ''
+            form[column.id] = {}
         })
 
         return {
@@ -49,7 +49,7 @@ export default {
         },
         onChange() {
             let self = this
-            let output = chain(self.form).toArray().filter(item=>item.value>0).toObject(item=>[item.key, item.value]).object()
+            let output = chain(self.form).toArray().filter(item=>item.value.number>0).toObject(item=>[item.key, item.value]).object()
             self.$emit("change", {row:self.row, form:output})
         }
     },

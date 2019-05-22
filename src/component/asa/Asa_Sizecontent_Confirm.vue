@@ -9,8 +9,8 @@
         </el-table-column>
         <el-table-column :label="column.name" align="center" v-for="column in columns" :key="column.id" width="51">
             <template v-slot="{row}">
-                <el-input v-model="row.form[column.id]" style="width:50px" size="mini" :disabled="disabled" class="linetop"></el-input>
-                <el-input v-model="form[row.order.id][column.id]" style="width:50px" size="mini" @keyup.native="onChange(row)" v-if="hideInput==false && row.order.id>0"></el-input>
+                <el-input v-model="row.form[column.id].number" style="width:50px" size="mini" :disabled="disabled" class="linetop"></el-input>
+                <el-input v-model="form[row.order.id][column.id].number" style="width:50px" size="mini" @keyup.native="onChange(row)" v-if="hideInput==false && row.order.id>0"></el-input>
             </template>
         </el-table-column>
         <el-table-column :label="_label('heji')" align="right" width="53" v-if="hideInput==false">
@@ -61,7 +61,7 @@ export default {
 
             self.columns.forEach(column=>{
                 if(!row[column.id]) {
-                    row[column.id] = ''
+                    row[column.id] = {}
                 }
             })
             //row.orderid = order.order.id
@@ -80,7 +80,7 @@ export default {
         getLineTotal(formData) {
             //this._log(formData)
             let total = 0
-            chain(formData).forEach(value=>total+=value*1)
+            chain(formData).forEach(value=>total+= value.number*1)
             return total
         },
         onChange({order}) {
@@ -92,10 +92,18 @@ export default {
             chain(self.form).forEach((item, orderid)=>{
                 let rowsum = 0
                 chain(item).forEach((value, key)=>{
-                    value = value*1;
-                    sum[key] = sum[key] ? sum[key]+value : value;
+                    let number = value.number*1;
+                    if(!sum[key]) {
+                        sum[key] = {
+                            id:"",
+                            number:number
+                        }
+                    }
+                    else {
+                        sum[key].number += number
+                    }
 
-                    rowsum += value                    
+                    rowsum += number                   
                 })
 
                 self.totals[orderid] = rowsum

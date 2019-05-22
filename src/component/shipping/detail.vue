@@ -8,35 +8,35 @@
                 <as-button type="primary" @click="showDialog()">{{_label("daorudingdan")}}</as-button>
             </el-row>
             <el-row :gutter="0">
-                <el-col :span="6">
+                <el-col :span="4" style="width:300px">
                     <el-form-item :label="_label('fahuodanhao')">
                         <el-input v-model="form.orderno" :disabled="true"></el-input>
                     </el-form-item>
                     <el-form-item :label="_label('gonghuoshang')">
-                        <simple-select v-model="orderbrand.supplierid" source="supplier_3"></simple-select>
+                        <simple-select v-model="form.supplierid" source="supplier_3"></simple-select>
                     </el-form-item>
                     <el-form-item :label="_label('gonghuodanwei')">
-                        <simple-select v-model="orderbrand.finalsupplierid" source="supplier_3"></simple-select>
+                        <simple-select v-model="form.finalsupplierid" source="supplier_3"></simple-select>
                     </el-form-item>
                     <el-form-item :label="_label('niandaijijie')">
-                        <simple-select v-model="orderbrand.ageseason" source="ageseason"></simple-select>
+                        <simple-select v-model="form.ageseason" source="ageseason"></simple-select>
                     </el-form-item>
                     <el-form-item :label="_label('niandaileixing')">
-                        <simple-select v-model="orderbrand.seasontype" source="seasontype">
+                        <simple-select v-model="form.seasontype" source="seasontype">
                         </simple-select>
                     </el-form-item>
                     <el-form-item :label="_label('yewuleixing')">
-                        <simple-select v-model="orderbrand.bussinesstype" source="bussinesstype">
+                        <simple-select v-model="form.bussinesstype" source="bussinesstype">
                         </simple-select>
                     </el-form-item>
                     <el-form-item :label="_label('zhidanren')">
                         <sp-display-input :value="form.makestaff" source="user"></sp-display-input>
                     </el-form-item>
                     <el-form-item :label="_label('beizhu')">
-                        <el-input v-model="form.hblno"></el-input>
+                        <el-input v-model="form.memo"></el-input>
                     </el-form-item>
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="4" style="width:300px">
                     <el-form-item :label="_label('fahuogang')">
                         <el-input v-model="form.dispatchport"></el-input>
                     </el-form-item>
@@ -68,7 +68,7 @@
                         <simple-select v-model="form.sellerid" source="supplier"></simple-select>
                     </el-form-item> -->
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="4" style="width:300px">
                     <el-form-item :label="_label('fukuanshijian')">
                         <el-date-picker v-model="form.paydate" type="date" value-format="yyyy-MM-dd"></el-date-picker>
                     </el-form-item>
@@ -94,7 +94,7 @@
                         <el-input v-model="form.chargedweight"></el-input>
                     </el-form-item>
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="4" style="width:300px">
                     <el-form-item :label="_label('kongyunshang')">
                         <simple-select v-model="form.transcompany" source="supplier"></simple-select>
                     </el-form-item>
@@ -108,7 +108,7 @@
                         <el-date-picker v-model="form.flightdate" type="date" value-format="yyyy-MM-dd"></el-date-picker>
                     </el-form-item>
                     <el-form-item :label="_label('yujidaodariqi')">
-                        <el-input v-model="form.hblno"></el-input>
+                        <el-date-picker v-model="form.estimatedate" type="date" value-format="yyyy-MM-dd"></el-date-picker>
                     </el-form-item>
                     <el-form-item :label="_label('zhudanhao')">
                         <el-input v-model="form.mblno"></el-input>
@@ -117,7 +117,7 @@
                         <el-input v-model="form.hblno"></el-input>
                     </el-form-item>
                     <el-form-item :label="_label('beizhu')">
-                        <el-input v-model="form.hblno"></el-input>
+                        <el-input v-model="form.memo"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -199,16 +199,14 @@ export default {
         let self = this;
 
         return {
-            orderbrand: {
+            form: {
                 supplierid: "",
                 finalsupplierid: "",
                 ageseason: "",
                 seasontype: "",
                 property: "",
                 currency: "",
-                bussinesstype: ""
-            },
-            form: {
+                bussinesstype: "",
                 warehouseid: "",
                 total: "",
                 exchangerate: "",
@@ -233,7 +231,7 @@ export default {
                 sellerid: "",
                 transporttype: "",
                 paytype: "",
-                status: "", //状态:1-未提交审核；2-待审核；3-审核完成,4-作废
+                estimatedate: "",
                 id: ""
             },
             tabledata: [],
@@ -253,20 +251,32 @@ export default {
             //保存订单
             var self = this
 
-            if (status == 2) {
-                if (!confirm(self._label('order_submit_confirm'))) {
-                    return
-                }
-            }
-            self.form.status = status
-
             var params = { form: self.form }
             var array = []
-            params.list = self.tabledata.map(item => {
-                    return { id: item.id, number: item.number, orderdetailsid: item.orderdetails.id, price: item.price }
-                })
-                //self._log(JSON.stringify(params))
-            self._submit("/confirmorder/saveorder", { params: JSON.stringify(params) }).then(function(res) {
+
+            let list = []
+            self.tabledata.forEach(item => {
+                if (item.form) {
+                    chain(item.form).forEach((values, orderid) => {
+                        chain(values).forEach((number, sizecontentid) => {
+                            if (number > 0) {
+                                list.push({
+                                    orderid,
+                                    sizecontentid,
+                                    number,
+                                    productid: item.product.id,
+                                    discount: item.discountbrand,
+                                    price:item.price
+                                })
+                            }
+                        })
+                    })
+                }
+            })
+            params.list = list;
+
+            self._log(JSON.stringify(params))
+            self._submit("/shipping/add", { params: JSON.stringify(params) }).then(function(res) {
                 self._log(res)
                 if (res.data.form.id) {
                     self.form.id = res.data.form.id
@@ -362,10 +372,10 @@ export default {
         self._log(route.params)
 
         if(route.params.id>0) {
-            self._fetch("/orderbrand/loadorder", { id: route.params.id }).then(function(res) {
+            self._fetch("/shipping/load", { id: route.params.id }).then(function(res) {
                 //self._log("加载订单信息", res)
 
-                copyTo(res.data.form, self.orderbrand)
+                copyTo(res.data.form, self.form)
 
                 if (res.data.list) {
                     shippingList(res.data.list).then(results => {

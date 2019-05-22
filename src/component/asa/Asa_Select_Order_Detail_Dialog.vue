@@ -77,14 +77,9 @@
 import globals from '../globals.js'
 import { Order, ProductDetail, promiseRunner } from "../model.js"
 import detailConvert from "./order-detail.js"
-import simple_select from '../Simple_Select.vue'
-import DataSource from '../DataSource.js'
 
 export default {
     name: 'asa-select-order-detail-dialog',
-    components: {
-        'simple-select': simple_select
-    },
     props: {
         visible: {
             type: Boolean
