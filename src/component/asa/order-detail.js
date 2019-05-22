@@ -30,7 +30,8 @@ function confirmList(list){
                         confirm_total:0,
                         discount:item.discount,
                         discountbrand:item.discountbrand ||"",
-                        is_hidden:false
+                        is_hidden:false,
+                        price:item.product.factoryprice * item.discountbrand
                     }
                 }
             })
@@ -70,7 +71,8 @@ function shippingList(list){
                         confirm_total:0,
                         discount:item.discount,
                         discountbrand:item.discountbrand ||"",
-                        is_hidden:false
+                        is_hidden:false,
+                        price:item.product.factoryprice * item.discountbrand
                     }
                 }
             })

@@ -1,25 +1,27 @@
 <template>
     <div class="sizecontent">
-    <el-table :data="rows" style="width:100%;" :cell-class-name="getCellClass" :border="false">
-        <el-table-column :label="column.name" align="center" v-for="column in columns" :key="column.id" width="51">
-            <template v-slot="{row}">
-                <el-input v-model="row.form[column.id]" style="width:50px" size="mini" :disabled="disabled"></el-input>
-                <el-input v-model="form[row.order.id][column.id]" style="width:50px" size="mini" @keyup.native="onChange(row)" v-if="row.order.id>0"></el-input>
-            </template>
-        </el-table-column>
-        <el-table-column :label="_label('heji')" align="center" width="51">
-            <template v-slot="{row}">
-                <el-input :value="getLineTotal(row.form)" style="width:50px" size="mini" :disabled="disabled" v-if="row.order.id>0"></el-input>
-                <el-input v-model="totals[row.order.id]" style="width:50px" size="mini":disabled="disabled"></el-input>
-            </template>
-        </el-table-column>
-        <el-table-column prop="discount" :label="_label('zhekoulv')" align="center" width="80">
-        </el-table-column>
-        <el-table-column :label="_label('dinghuokehu')" align="left" width="140">
+    <el-table :data="rows" style="width:100%;" :border="false" :row-class-name="rowClassName" :cell-class-name="cellClassName">
+        <el-table-column :label="_label('dinghuokehu')" align="left" width="110">
             <template v-slot="{row}">
                 <sp-order-tip column="booking_label" :order="row.order" v-if="row.order.id>0"></sp-order-tip>
+                <span v-if="row.order.id==0">{{_label('heji')}}</span>
             </template>
         </el-table-column>
+        <el-table-column :label="column.name" align="center" v-for="column in columns" :key="column.id" width="51">
+            <template v-slot="{row}">
+                <el-input v-model="row.form[column.id]" style="width:50px" size="mini" :disabled="disabled" class="linetop"></el-input>
+                <el-input v-model="form[row.order.id][column.id]" style="width:50px" size="mini" @keyup.native="onChange(row)" v-if="hideInput==false && row.order.id>0"></el-input>
+            </template>
+        </el-table-column>
+        <el-table-column :label="_label('heji')" align="right" width="53" v-if="hideInput==false">
+            <template v-slot="{row}">
+                <el-input :value="getLineTotal(row.form)" style="width:50px" size="mini" :disabled="disabled" v-if="row.order.id>0" class="linetop"></el-input>
+                <el-input v-model="totals[row.order.id]" style="width:50px" size="mini":disabled="disabled" class="inputsum"></el-input>
+            </template>
+        </el-table-column><!-- 
+        <el-table-column prop="discount" :label="_label('zhekoulv')" align="center" width="80">
+        </el-table-column> -->
+        
     </el-table>
 </div>
 </template>
@@ -42,6 +44,9 @@ export default {
         row:{
             type:[Object],
             require:true
+        },
+        hideInput:{
+            default:false
         }
     },
     data() {
@@ -72,11 +77,8 @@ export default {
         }
     },
     methods: {
-        getCellClass() {
-            return "counter"
-        },
         getLineTotal(formData) {
-            this._log(formData)
+            //this._log(formData)
             let total = 0
             chain(formData).forEach(value=>total+=value*1)
             return total
@@ -103,6 +105,25 @@ export default {
             extend(self.sumform, sum)
 
             self.$emit("change", { row:self.row, form:self.form, total:total })
+        },
+        rowClassName({row, rowIndex}){
+            if(rowIndex==this.row.orders.length) {
+                return "sumline"
+            }
+
+            return ""
+        },
+        cellClassName({row, column, rowIndex, columnIndex}) {
+            if(rowIndex==this.row.orders.length && this.columns.length+1==columnIndex) {
+                return "counter sumtotal"
+            }
+            else if(this.columns.length+1==columnIndex) {
+                this._log("columnIndex=", columnIndex)
+                return "counter sumcolumn"
+            }
+            else {
+                return "counter"
+            }
         }
     },
     computed:{
@@ -112,15 +133,15 @@ export default {
             self.row.orders.forEach(item=>{
                 //如果备选的总数大于0，显示
                 item.total = self.getLineTotal(item.form)
-                self._log(item.total)
+                //self._log(item.total)
                 if(item.total>0) {
                     results.push(item)
                 }                
             })
 
-            if(results.length>0) {
+            if(results.length>0 && self.hideInput==false) {
                 results.push({
-                    discount:self._label('heji'),
+                    discount:'',
                     order:{id:0},
                     form:self.sumform
                 })

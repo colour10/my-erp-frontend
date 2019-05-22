@@ -71,7 +71,7 @@
             </el-row>
         </el-form>
         <el-row>
-            <el-col :span="24">
+            <el-col :span="24" class="product">
                 <el-table :data="tabledata" stripe border style="width:100%;">
                     <el-table-column align="center" width="60">
                         <template v-slot="scope">
@@ -83,11 +83,7 @@
                             <sp-order-tip column="booking_label" :order="row.order"></sp-order-tip>
                         </template>
                     </el-table-column>
-                    <el-table-column :label="_label('chanpinmingcheng')" align="center" width="350">
-                        <template v-slot="scope">
-                            {{scope.row.product.getName()}}
-                        </template>
-                    </el-table-column>
+                    
                     <el-table-column :label="_label('guojima')" align="center" width="200">
                         <template v-slot="scope">
                             {{scope.row.product.getGoodsCode()}}
@@ -103,7 +99,7 @@
                             {{row.product.factoryprice}}
                         </template>
                     </el-table-column>
-                    <el-table-column prop="label" :label="_label('chengjiaojia')" width="130" align="center">
+                    <el-table-column prop="label" :label="_label('chengjiaojia')" width="80" align="center">
                         <template v-slot="{row}">
                             {{row.product.factoryprice*row.discount}}
                         </template>
@@ -118,6 +114,11 @@
                     <el-table-column prop="number" :label="_label('dinggoushuliang')" align="center" :width="width">
                         <template v-slot="{row}">
                             <sp-sizecontent-input :columns="row.product.sizecontents" :row="row" :disabled="true" :key="row.product.id"></sp-sizecontent-input>
+                        </template>
+                    </el-table-column>
+                    <el-table-column :label="_label('chanpinmingcheng')" align="center" width="200">
+                        <template v-slot="scope">
+                            {{scope.row.product.getName()}}
                         </template>
                     </el-table-column>
                     <el-table-column :label="_label('caozuo')" width="150" align="center" v-if="isEditable">

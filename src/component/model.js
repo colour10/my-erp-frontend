@@ -148,7 +148,18 @@ const ProductDetail = Object.assign(createModel("product"),{
         //runner.push(Product.load({data:row.productid}), 'product')
         //runner.push(Warehouse.load({data:row.warehouseid}), 'warehouse')
         //runner.push(Goods.load({data:row.goodsid}), 'goods')
-        runner.push(getDataSource("sizecontent").getRows(row.sizecontentids), 'sizecontents')
+        
+        //尺码排序
+        let promise = new Promise(resolve=>{
+            getDataSource("sizecontent").getRows(row.sizecontentids).then(result=>{
+                //console.log("result=", result)
+                result.sort(function(a,b){
+                    return a.row.displayindex-b.row.displayindex
+                })
+                resolve(result)
+            })
+        })
+        runner.push(promise, 'sizecontents')
         runner.push(getDataSource("brandgroupchild").getRowLabel(row.childbrand), 'childbrand_label')
         runner.push(getDataSource("brandgroup").getRowLabel(row.brandgroupid), 'brandgroup_label')
         runner.push(getDataSource("country").getRowLabel(row.countries), 'countries_label')

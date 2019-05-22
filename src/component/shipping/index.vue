@@ -1,5 +1,10 @@
 <template>
     <div>
+        <el-row>
+            <el-col :span="2">
+                <auth auth="confirmorder-submit"><as-button type="primary" @click="showFormToCreate()">{{_label('xinjian')}}</as-button></auth>
+            </el-col>
+        </el-row>
         <el-row :gutter="20">
             <el-col :span="24">
                 <simple-admin-tablelist ref="tablelist" v-bind="props" :onclickupdate="showFormToEdit" :isdelete="false"></simple-admin-tablelist>
@@ -27,9 +32,9 @@ export default {
         }
     },
     methods: {
-        showFormToEdit(rowIndex, row) {
-            let self = this
-        }
+        showFormToCreate() {
+            this.$router.push('/shipping/create/0')
+        },
     }
 }
 </script>

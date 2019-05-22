@@ -28,11 +28,11 @@ export default {
                 ],
                 actions:[
                     { label: _label("queren"), handler:self.toCreateConfirm},
-                    { label: _label("fahuo"), handler:self.toShipping}
+                    //{ label: _label("fahuo"), handler:self.toShipping}
                 ],
                 controller: "orderbrand",
                 options:{
-                    action_width:300
+                    action_width:200
                 }
             },
             pro: false,

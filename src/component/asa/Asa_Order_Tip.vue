@@ -1,9 +1,9 @@
 <template>
-    <el-popover trigger="hover" :placement="placement">
+    <el-popover trigger="click" :placement="placement">
         <p>{{_label("dingdanhao")}}: {{ order.orderno }}</p>
         <p>{{_label("niandai")}}: {{ order.ageseason_label }}</p>
         <div slot="reference" class="name-wrapper">
-            <el-tag size="medium">{{ order[column] }}</el-tag>
+            <el-button size="mini">{{ order[column] }}</el-button>
         </div>
     </el-popover>
 </template>

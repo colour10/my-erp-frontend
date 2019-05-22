@@ -15,22 +15,21 @@
                 </el-col>
                 <el-col :span="6">
                     <as-button size="mini" type="primary" @click="onSearch">{{_label("chaxun")}}</as-button>
-                    <as-button size="mini" type="primary" @click="onSelect">{{_label("querensuoxuan")}}</as-button>
+                    <as-button size="mini" type="primary" @click="onSelectMultiple">{{_label("querensuoxuan")}}</as-button>
                 </el-col>
             </el-row>
         </el-form>
         <el-row>
             <el-col :span="24" class="product">
-                <el-table ref="table" :data="tabledata" border style="width:100%;" @selection-change="onSelectionChange" @row-click="onRowClick">
-                    <el-table-column type="selection" :width="30">
-                    </el-table-column>
-                    <el-table-column :label="_label('dingdanhao')" align="center" width="150">
-                        <template v-slot="{row}">
-                            <sp-order-tip column="booking_label" :order="row.order"></sp-order-tip>
+                <el-table ref="table" :data="tabledata" stripe border style="width:100%;" @selection-change="onSelectionChange" @row-click="onRowClick">
+                    <el-table-column type="selection" :width="50"></el-table-column>
+                    <el-table-column align="center" width="60">
+                        <template v-slot="scope">
+                            <img :src="_fileLink(scope.row.product.picture)" style="width:50px;height:50px;" />
                         </template>
                     </el-table-column>
                     
-                    <el-table-column :label="_label('guojima')" align="center" width="160">
+                    <el-table-column :label="_label('guojima')" align="center" width="150">
                         <template v-slot="scope">
                             {{scope.row.product.getGoodsCode()}}
                         </template>
@@ -45,21 +44,17 @@
                             {{row.product.factoryprice}}
                         </template>
                     </el-table-column>
-                    <el-table-column prop="label" :label="_label('chengjiaojia')" width="80" align="center">
+                    <!--<el-table-column prop="label" :label="_label('zongjia')" width="80" align="center">
                         <template v-slot="{row}">
-                            {{row.product.factoryprice*row.discount}}
+                            {{row.product.factoryprice*row.discountbrand*row.confirm_total}}
                         </template>
+                    </el-table-column>-->
+                    <el-table-column prop="discountbrand" :label="_label('zhekoulv')" width="70" align="center" class="counter">
+                        
                     </el-table-column>
-                    <el-table-column prop="label" :label="_label('zongjia')" width="80" align="center">
+                    <el-table-column prop="number" :label="_label('querenshuliang')" align="center" :width="width">
                         <template v-slot="{row}">
-                            {{row.product.factoryprice*row.discount*row.total}}
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="discount" :label="_label('zhekoulv')" width="80" align="center">
-                    </el-table-column>
-                    <el-table-column prop="number" :label="_label('dinggoushuliang')" align="center" :width="width">
-                        <template v-slot="{row}">
-                            <sp-sizecontent-input :columns="row.product.sizecontents" :row="row" :disabled="true" :key="row.product.id"></sp-sizecontent-input>
+                            <sp-sizecontent-confirm :columns="row.product.sizecontents" :row="row" :disabled="true" :key="row.product.id" :hideInput="true"></sp-sizecontent-confirm>
                         </template>
                     </el-table-column>
                     <el-table-column :label="_label('chanpinmingcheng')" align="center" width="200">
@@ -74,17 +69,10 @@
 </template>
 
 <script>
-import globals from '../globals.js'
-import { Order, ProductDetail, promiseRunner } from "../model.js"
-import detailConvert from "./order-detail.js"
-import simple_select from '../Simple_Select.vue'
-import DataSource from '../DataSource.js'
+import {shippingList} from "../asa/order-detail.js"
 
 export default {
-    name: 'asa-select-order-detail-dialog',
-    components: {
-        'simple-select': simple_select
-    },
+    name: 'sp-shipping-select',
     props: {
         visible: {
             type: Boolean
@@ -115,11 +103,11 @@ export default {
         },
         loadPage() {
             var self = this;
-            self._fetch("/order/searchdetail", self.form).then(function(res) {
+            self._fetch("/orderbrand/searchdetail", self.form).then(function(res) {
                 //self._log("loadPage", res)
                 if (res.data) {
                     self.tabledata = []
-                    detailConvert(res.data).then(results=>{
+                    shippingList(res.data).then(results=>{
                         results.forEach(item=>self.tabledata.push(item))
                     })
 
@@ -151,7 +139,16 @@ export default {
         },
         onRowClick(row) {
             this.$refs.table.toggleRowSelection(row)
-        }
+        },
+        onSelectMultiple() {
+            let self = this
+            self.selected.forEach(item=>{
+                //self._log(item)
+                self.$emit("select", item)
+            })
+            self.$refs.table.clearSelection()
+            this.$emit("update:visible", false)
+        },
     },
     mounted: function() {},
     watch: {
@@ -165,7 +162,7 @@ export default {
     },
     computed: {
         width() {
-            return this.tabledata.reduce((max, { product }) => Math.max(max, product.sizecontents.length), 1) * 60 + 21
+            return this.tabledata.reduce((max, { product }) => Math.max(max, product.sizecontents.length), 1) * 60 + 21+ 150 + 50 + 80
         }
     }
 }

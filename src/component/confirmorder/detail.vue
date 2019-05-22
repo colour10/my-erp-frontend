@@ -1,16 +1,15 @@
 <template>
     <div>
-        <el-form class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini">
+        <el-form class="order-form" :model="form" label-width="82px" :inline="true" style="width:100%;" size="mini">
             <el-row :gutter="0">
                 <au-button auth="confirmorder-submit" :type="canSubmit?'primary':'info'" @click="saveOrder(1)">{{_label("baocun")}}</au-button>
                 <as-button :type="form.id?'primary':'info'" @click="showAttachment()">{{_label("fujian")}}</as-button>
                 <auth auth="confirmorder-submit">
                     <as-button :type="canDelete?'primary':'info'" @click="deleteOrder()">{{_label("shanchu")}}</as-button>
                 </auth>
-                <as-button type="primary" @click="createWarehousing()">{{_label("shengchengrukudan")}}</as-button>
             </el-row>
             <el-row :gutter="0">
-                <el-col :span="6">
+                <el-col :span="4" style="width:300px">
                     <el-form-item :label="_label('niandai')" required prop="ageseason">
                         <simple-select v-model="form.ageseason" source="ageseason"></simple-select>
                     </el-form-item>
@@ -26,7 +25,7 @@
                         <el-input v-model="genders" disabled></el-input>
                     </el-form-item>
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="4" style="width:300px">
                     <el-form-item :label="_label('gonghuoshang')">
                         <simple-select v-model="form.supplierid" source="supplier_3" :clearable="true">
                         </simple-select>
@@ -42,7 +41,7 @@
                         <el-input v-model="form.orderno" :placeholder="_label('zidonghuoqu')" disabled></el-input>
                     </el-form-item>
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="4" style="width:300px">
                     <el-form-item :label="_label('jine')">
                         <el-input placeholder="" v-model="total_price" class="productcurrency">
                             <select-currency v-model="form.currency" slot="prepend">
@@ -59,8 +58,8 @@
                         <el-input v-model="form.memo"></el-input>
                     </el-form-item>
                 </el-col>
-                <el-col :span="6">
-                    <el-form-item :label="_label('yewuleixing')" required prop="bussinesstype">
+                <el-col :span="4" style="width:300px">
+                    <el-form-item :label="_label('yewuleixing')">
                         <simple-select v-model="form.bussinesstype" source="bussinesstype">
                         </simple-select>
                     </el-form-item>
@@ -98,22 +97,29 @@
                     </el-table-column>
                     <el-table-column prop="label" :label="_label('chuchangjia')" width="100" align="center">
                         <template v-slot="{row}">
-                            {{row.product.factoryprice}}
+                            {{row.product.factoryprice*1}}
                         </template>
                     </el-table-column>
-                    <el-table-column prop="label" :label="_label('zongjia')" width="80" align="center">
+                    <el-table-column prop="number" :label="_label('querenshuliang')" align="center" :width="width">
                         <template v-slot="{row}">
-                            {{row.product.factoryprice*row.discountbrand*row.confirm_total}}
+                            <sp-sizecontent-confirm :columns="row.product.sizecontents" :row="row" :disabled="true" :key="row.product.id" @change="onChange"></sp-sizecontent-confirm>
                         </template>
+                    </el-table-column>
+                    <el-table-column prop="confirm_total" :label="_label('shuliang')" width="70" align="center" class="counter">
                     </el-table-column>
                     <el-table-column prop="label" :label="_label('zhekoulv')" width="70" align="center" class="counter">
                         <template v-slot="{row}">
                             <el-input v-model="row.discountbrand" size="mini"></el-input>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="number" :label="_label('dinggoushuliang')" align="center" :width="width">
+                    <el-table-column prop="label" :label="_label('danjia')" width="70" align="center">
                         <template v-slot="{row}">
-                            <sp-sizecontent-confirm :columns="row.product.sizecontents" :row="row" :disabled="true" :key="row.product.id" @change="onChange"></sp-sizecontent-confirm>
+                            <el-input v-model="row.price" size="mini"></el-input>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="label" :label="_label('zongjia')" width="80" align="center">
+                        <template v-slot="{row}">
+                            {{row.product.factoryprice*row.discountbrand*row.confirm_total}}
                         </template>
                     </el-table-column>
                 </el-table>
@@ -150,9 +156,9 @@ export default {
                 memo: "",
                 orderno: "",
                 brandid: "",
-                total:"",
-                discountbrand:"",
-                bussinesstype:"",
+                total: "",
+                discountbrand: "",
+                bussinesstype: "",
                 id: ""
             },
             rules: {
@@ -162,7 +168,7 @@ export default {
                 property: { required: true, message: _label("8000") }
             },
             tabledata: [],
-            title: ""        
+            title: ""
         }
     },
     methods: {
@@ -202,7 +208,7 @@ export default {
                                     sizecontentid,
                                     number,
                                     productid: item.product.id,
-                                    discountbrand:item.discountbrand
+                                    discountbrand: item.discountbrand
                                 })
                             }
                         })
@@ -263,7 +269,7 @@ export default {
             return this.form.id > 0 && status == 1
         },
         width() {
-            return this.tabledata.reduce((max, { product }) => Math.max(max, product.sizecontents.length), 1) * 50 + 21 + 150 + 50 + 80
+            return this.tabledata.reduce((max, { product }) => Math.max(max, product.sizecontents.length), 1) * 50 + 191
         },
         canSubmit() {
             var status = this.form.status;
@@ -305,7 +311,7 @@ export default {
                 })
 
             }
-            self._setTitle(self._label("querenwaibudingdan")+":"+self.form.id)
+            self._setTitle(self._label("querenwaibudingdan") + ":" + self.form.id)
         })
     }
 }

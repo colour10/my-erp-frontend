@@ -137,10 +137,11 @@
                     </el-form-item>
 
                     <el-form-item :label="_label('xingbie')">
-                        <sp-radio-group v-model="form.gender" source="gender" :span="8" :lang="lang" class="supermini">
+                        <sp-radio-group v-model="form.gender" source="gender" :span="8" :lang="lang" class="supermini" style="width:270px">
                         </sp-radio-group>
                     </el-form-item>
                     <el-form-item :label="_label('jijie')">
+                        <div  style="width:270px">
                         <el-col :span="8">
                             <sp-checkbox v-model="form.spring">{{_label("chun")}}</sp-checkbox>
                         </el-col>
@@ -156,6 +157,7 @@
                         <el-col :span="8">
                             <sp-checkbox v-model="form.winter">{{_label("dong")}}</sp-checkbox>
                         </el-col>
+                    </div>
                     </el-form-item>
                     
                     <el-form-item :label="_label('beizhu')">

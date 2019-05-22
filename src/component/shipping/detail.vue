@@ -5,7 +5,7 @@
                 <au-button auth="confirmorder-submit" :type="canSubmit?'primary':'info'" @click="saveOrder(1)">{{_label("baocun")}}</au-button>
                 <as-button :type="form.id?'primary':'info'" @click="showAttachment()">{{_label("fujian")}}</as-button>
                 <as-button :type="canDelete?'primary':'info'" @click="deleteOrder()">{{_label("shanchu")}}</as-button>
-                <as-button :type="canCancel?'primary':'info'" @click="createWarehousing()">{{_label("daorudingdan")}}</as-button>
+                <as-button type="primary" @click="showDialog()">{{_label("daorudingdan")}}</as-button>
             </el-row>
             <el-row :gutter="0">
                 <el-col :span="6">
@@ -13,20 +13,20 @@
                         <el-input v-model="form.orderno" :disabled="true"></el-input>
                     </el-form-item>
                     <el-form-item :label="_label('gonghuoshang')">
-                        <simple-select v-model="orderbrand.supplierid" source="supplier" :disabled="true"></simple-select>
+                        <simple-select v-model="orderbrand.supplierid" source="supplier_3"></simple-select>
                     </el-form-item>
                     <el-form-item :label="_label('gonghuodanwei')">
-                        <simple-select v-model="orderbrand.finalsupplierid" source="supplier" :disabled="true"></simple-select>
+                        <simple-select v-model="orderbrand.finalsupplierid" source="supplier_3"></simple-select>
                     </el-form-item>
                     <el-form-item :label="_label('niandaijijie')">
-                        <simple-select v-model="orderbrand.ageseason" source="ageseason" :disabled="true"></simple-select>
+                        <simple-select v-model="orderbrand.ageseason" source="ageseason"></simple-select>
                     </el-form-item>
                     <el-form-item :label="_label('niandaileixing')">
-                        <simple-select v-model="orderbrand.seasontype" source="seasontype" :disabled="true">
+                        <simple-select v-model="orderbrand.seasontype" source="seasontype">
                         </simple-select>
                     </el-form-item>
                     <el-form-item :label="_label('yewuleixing')">
-                        <simple-select v-model="orderbrand.bussinesstype" source="bussinesstype" :disabled="true">
+                        <simple-select v-model="orderbrand.bussinesstype" source="bussinesstype">
                         </simple-select>
                     </el-form-item>
                     <el-form-item :label="_label('zhidanren')">
@@ -150,6 +150,22 @@
                             {{row.product.factoryprice}}
                         </template>
                     </el-table-column>
+                    
+                    <el-table-column prop="number" :label="_label('dinggoushuliang')" align="center" :width="width">
+                        <template v-slot="{row}">
+                            <sp-sizecontent-confirm :columns="row.product.sizecontents" :row="row" :disabled="true" :key="row.product.id" @change="onChange" @hidden="onHide" mode="shipping"></sp-sizecontent-confirm>
+                        </template>
+                    </el-table-column>
+
+                    <el-table-column prop="label" :label="_label('danjia')" width="100" align="center">
+                        <template v-slot="{row}">
+                            <el-input v-model="row.price" size="mini"></el-input>
+                        </template>
+                    </el-table-column>
+
+                    <el-table-column prop="confirm_total" :label="_label('heji')" width="70" align="center" class="counter">
+                    </el-table-column>
+
                     <el-table-column prop="label" :label="_label('zongjia')" width="80" align="center">
                         <template v-slot="{row}">
                             {{row.product.factoryprice*row.discountbrand*row.confirm_total}}
@@ -160,14 +176,11 @@
                             <el-input v-model="row.discountbrand" size="mini"></el-input>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="number" :label="_label('dinggoushuliang')" align="center" :width="width">
-                        <template v-slot="{row}">
-                            <sp-sizecontent-confirm :columns="row.product.sizecontents" :row="row" :disabled="true" :key="row.product.id" @change="onChange" @hidden="onHide" mode="shipping"></sp-sizecontent-confirm>
-                        </template>
-                    </el-table-column>
                 </el-table>
             </el-col>
         </el-row>
+
+        <sp-shipping-select :visible.sync="visible" @select="onSelect"></sp-shipping-select>
     </div>
 </template>
 
@@ -175,11 +188,15 @@
 import { extend, copyTo } from "../object.js"
 import { shippingList } from "../asa/order-detail.js"
 import chain from "../chain.js"
+import Select from "./select.vue"
 
 export default {
     name: 'asa-order-confirm-dialog',
+    components:{
+        "sp-shipping-select":Select
+    },
     data() {
-        var self = this;
+        let self = this;
 
         return {
             orderbrand: {
@@ -221,12 +238,16 @@ export default {
             },
             tabledata: [],
             formid: "",
-            title: ""
+            title: "",
+            visible:false
         }
     },
     methods: {
         onQuit() {
             this.dialogVisible = false
+        },
+        showDialog(){
+            this.visible = true
         },
         saveOrder(status) {
             //保存订单
@@ -291,6 +312,9 @@ export default {
         },
         onHide(row) {
             row.is_hidden = true
+        },
+        onSelect(row){
+            this.appendRow(row)
         }
     },
     computed: {
@@ -311,7 +335,7 @@ export default {
             return status != 2 && status != 3
         },
         width() {
-            return this.tabledata.reduce((max, { product }) => Math.max(max, product.sizecontents.length), 1) * 50 + 21 + 150 + 50 + 80
+            return this.tabledata.reduce((max, { product }) => Math.max(max, product.sizecontents.length), 1) * 50 + 191
         },
         total_price() {
             return this.tabledata.reduce(function(total, current) {
@@ -336,24 +360,30 @@ export default {
         let route = self.$route;
         let label // = route.params.id == 0 ? self._label("xinjiandingdan") : "订单信息"
         self._log(route.params)
-        self._fetch("/orderbrand/loadorder", { id: route.params.id }).then(function(res) {
-            //self._log("加载订单信息", res)
 
-            copyTo(res.data.form, self.orderbrand)
+        if(route.params.id>0) {
+            self._fetch("/orderbrand/loadorder", { id: route.params.id }).then(function(res) {
+                //self._log("加载订单信息", res)
 
-            if (res.data.list) {
-                shippingList(res.data.list).then(results => {
-                    self._log(results)
+                copyTo(res.data.form, self.orderbrand)
 
-                    self.tabledata = []
-                    results.forEach(item => self.appendRow(item))
+                if (res.data.list) {
+                    shippingList(res.data.list).then(results => {
+                        self._log(results)
 
-                    self.onDiscountChange(self.form.discountbrand)
-                })
+                        self.tabledata = []
+                        results.forEach(item => self.appendRow(item))
 
-            }
-            self._setTitle(self._label("fahuodan") + ":" + self.form.id)
-        })
+                        self.onDiscountChange(self.form.discountbrand)
+                    })
+
+                }
+                self._setTitle(self._label("fahuodan") + ":" + self.form.id)
+            })
+        }
+        else {
+            self._setTitle( self._label("shengchengfahuodan") )
+        }        
     }
 }
 </script>
