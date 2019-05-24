@@ -28,7 +28,7 @@ function confirmList(list){
                             discount:item.discount
                         }],
                         confirm_total:0,
-                        discount:item.discount,
+                        discount:item.discount ||"",
                         discountbrand:item.discountbrand ||"",
                         is_hidden:false,
                         price:item.product.factoryprice * item.discountbrand
@@ -43,7 +43,7 @@ function confirmList(list){
 
 export {confirmList}
 
-function shippingList(list){
+function shippingListObject(list){
     return new Promise(resolve=>{
         detailConvert(list).then(results=>{
             let hash = {};
@@ -54,7 +54,7 @@ function shippingList(list){
                     hash[key].orders.push({
                         order:item.order,
                         form:item.left_form,
-                        confirm_form:{},
+                        confirm_form:item.shipping_form,
                         total:item.total,
                         discount:item.discount
                     })
@@ -64,7 +64,7 @@ function shippingList(list){
                         orders: [{
                             order:item.order,
                             form:item.left_form,
-                            confirm_form:{},
+                            confirm_form:item.shipping_form,
                             total:item.total,
                             discount:item.discount
                         }],
@@ -77,12 +77,19 @@ function shippingList(list){
                 }
             })
 
-            resolve(chain(hash).toArray((key,value)=>value).array())
+            resolve(hash)
         })
     })    
 }
 
-export {shippingList}
+async function shippingList(list){
+    let results = await shippingListObject(list)
+
+    return chain(results).toArray((key,value)=>value).array()
+}
+
+
+export { shippingList }
 
 const detailConvert = function(list){
     let result = {}
@@ -93,6 +100,7 @@ const detailConvert = function(list){
             result[key]['form'][item.sizecontentid] = {number:item.number,id:item.id}
             result[key]['confirm_form'][item.sizecontentid] =  {number:item.confirm_number==0 ? '' : item.confirm_number,id:item.id}
             result[key]['left_form'][item.sizecontentid] = {number:item.confirm_number-item.shipping_number,id:item.id}
+            result[key]['shipping_form'][item.sizecontentid] = {number:"",id:item.id}
             result[key]['total'] += item.number * 1
         } else {
             let form = {}
@@ -105,6 +113,9 @@ const detailConvert = function(list){
             //剩余数量
             let left_form = {}
             left_form[item.sizecontentid] = {number:item.confirm_number-item.shipping_number,id:item.id}
+
+            let shipping_form = {}
+            shipping_form[item.sizecontentid] = {number:"",id:item.id}
             result[key] = {
                 key,
                 productid: item.productid,
@@ -114,6 +125,7 @@ const detailConvert = function(list){
                 form,
                 confirm_form,
                 left_form,
+                shipping_form,
                 orderid: item.orderid
             }
         }
@@ -130,5 +142,55 @@ const detailConvert = function(list){
 
     return Promise.all(promises)
 }
+
+const getProduct = async function(list, projectid){
+    let results = await shippingListObject(list)
+    return results[projectid]
+}
+
+export { getProduct }
+
+const shippingConvert = function(list){
+    let result = {}
+    list.forEach(item => {
+        console.log("SSSSSSSS",item)
+        let key = item.price + "-" + item.productid +'-'+ item.orderid
+        if (result[key]) {
+            result[key]['form'][item.sizecontentid] = {number:item.number,id:"", shippingdetailid:item.id}
+        } else {
+            let form = {}
+            form[item.sizecontentid] = {number:item.number,id:"",shippingdetailid:item.id}
+            result[key] = {
+                key,
+                productid: item.productid,
+                orderid:item.orderid,
+                price:item.price*1,
+                form
+            }
+        }
+    })
+
+    let hash = {}
+    chain(result).forEach(item=>{
+        let key = item.productid + item.price
+        if (hash[key]) {
+            hash[key].orders.push({
+                confirm_form:item.form,
+                orderid:item.orderid
+            })
+        } else {
+            hash[key] = {
+                productid:item.productid,
+                orders: [{
+                    confirm_form:item.form,
+                    orderid:item.orderid
+                }],
+                price:item.price
+            }
+        }
+    })
+    return chain(hash).toArray((key,value)=>value).array()
+}
+export { shippingConvert }
 
 export default detailConvert

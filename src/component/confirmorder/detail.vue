@@ -249,7 +249,7 @@ export default {
             let self = this
             self.tabledata.forEach(item => {
                 //self._log(newValue, oldValue, item.discountbrand)
-                if (item.discountbrand == oldValue || item.discountbrand == '') {
+                if (item.discountbrand == oldValue || item.discountbrand == '' || item.discountbrand*1==0) {
                     item.discountbrand = newValue
                 }
             })

@@ -144,6 +144,8 @@ const ProductDetail = Object.assign(createModel("product"),{
     init:function(depth, row, callback) {
         let self = this
 
+        row.factoryprice = row.factoryprice*1
+
         let runner = promiseAll(row)
         //runner.push(Product.load({data:row.productid}), 'product')
         //runner.push(Warehouse.load({data:row.warehouseid}), 'warehouse')

@@ -153,6 +153,13 @@ const StringFunc = {
     },
     ucfirst(str){
         return str.toLowerCase().replace(/ +/g, ' ').split(' ').map(item=>item.substring(0,1).toUpperCase()+item.substring(1)).join(' ');
+    },
+    random(length, chars='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ') {
+        let result = '';
+        for (let i = length; i > 0; --i) {
+            result += chars[Math.floor(Math.random() * chars.length)];
+        }
+        return result;
     }
 }
 

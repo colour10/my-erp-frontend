@@ -33,10 +33,10 @@ export default {
     },
     methods: {
         showFormToCreate() {
-            this.$router.push('/shipping/create/0')
+            this.$router.push('/shipping/0')
         },
         showFormToEdit(rowIndex, row){
-            this.$router.push('/shipping/update/' + row.id)
+            this.$router.push('/shipping/' + row.id)
         }
     }
 }

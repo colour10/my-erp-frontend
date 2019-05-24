@@ -3,14 +3,13 @@
         <el-form ref="order-form" class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini" :rules="rules" :inline-message="true">
             <el-row :gutter="0">
                 <au-button auth="order-submit" :type="canSubmit?'primary':'info'" @click="saveOrder(1)">{{_label("baocun")}}</au-button>
-                <au-button auth="order-submit" :type="canDelete?'primary':'info'" @click="deleteOrder()">{{_label("shanchu")}}</au-button>
                 <!-- <au-button auth="order-submit" :type="canSubmitPayment?'primary':'info'" @click="addPayment">{{_label("shengchengfahuodan")}}</au-button> -->
                 <au-button auth="order-submit" :type="canSubmitPayment?'primary':'info'" @click="addPayment">{{_label("fujian")}}</au-button>
                 <au-button auth="order-submit" :type="canSubmitPayment?'primary':'info'" @click="addPayment">{{_label("feiyong")}}</au-button>
                 <as-button v-if="isEditable" :type="buttontype" @click="showProduct()">{{_label("xuanzeshangpin")}}</as-button>
             </el-row>
             <el-row :gutter="0">
-                <el-col :span="6">
+                <el-col :span="4" style="width:300px">
                     <el-form-item :label="_label('dinghuokehu')" required prop="bookingid">
                         <simple-select v-model="form.bookingid" source="supplier_2" :lang="lang">
                         </simple-select>
@@ -35,7 +34,7 @@
                         </simple-select>
                     </el-form-item>
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="4" style="width:300px">
                     <el-form-item :label="_label('yewuleixing')" required prop="bussinesstype">
                         <simple-select v-model="form.bussinesstype" source="bussinesstype" :lang="lang">
                         </simple-select>
@@ -60,7 +59,7 @@
                         <el-input v-model="form.memo"></el-input>
                     </el-form-item>
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="4" style="width:300px">
                     <el-form-item :label="_label('kehudingdanhao')">
                         <el-input v-model="form.bookingorderno"></el-input>
                     </el-form-item>
@@ -73,23 +72,17 @@
                     <el-form-item :label="_label('dinghuoriqi')">
                         <el-date-picker v-model="form.orderdate" type="date" value-format="yyyy-MM-dd"></el-date-picker>
                     </el-form-item>
-                    <el-form-item :label="_label('pinpai')">
-                        <el-input v-model="brands" disabled></el-input>
-                    </el-form-item>
+                    
                     <el-form-item :label="_label('xingbie')">
                         <el-input v-model="genders" disabled></el-input>
                     </el-form-item>
                 </el-col>
-                <el-col :span="6">
-                    <!-- <el-row type="flex" justify="start">
-                        <au-button auth="order-submit" :type="canSubmit?'primary':'info'" @click="saveOrder(1)">{{_label("baocun")}}</au-button>
-                        <au-button auth="order-submit" :type="canDelete?'primary':'info'" @click="deleteOrder()">{{_label("shanchu")}}</au-button>
-                    </el-row>
-                    <el-row>
-                        <au-button auth="order-submit" :type="canSubmitPayment?'primary':'info'" @click="addPayment">{{_label("shengchengfahuodan")}}</au-button>
-                        <au-button auth="order-submit" :type="canSubmitPayment?'primary':'info'" @click="addPayment">{{_label("fujian")}}</au-button>
-                        <au-button auth="order-submit" :type="canSubmitPayment?'primary':'info'" @click="addPayment">{{_label("feiyong")}}</au-button>
-                    </el-row> -->
+            </el-row>
+            <el-row :gutter="0">
+                <el-col :span="24">
+                    <el-form-item :label="_label('pinpai')" class="threecols">
+                        <el-input v-model="brands" disabled></el-input>
+                    </el-form-item>
                 </el-col>
             </el-row>
         </el-form>
@@ -207,8 +200,7 @@ export default {
     },
     props: {},
     data() {
-        var self = this;
-
+        let self = this;
 
         return {
             form: {
@@ -270,19 +262,7 @@ export default {
                 discount: self.form.discount,
                 total:0
             })
-        },
-        deleteOrder() {
-            let self = this
-            if (!self.canDelete) {
-                return
-            }
-
-            self._remove("/order/delete", { id: self.form.id }).then(function() {
-                self.form.id = ""
-
-                self.$emit("change", {}, true)
-            })
-        },
+        },        
         saveOrder(status) {
             //保存订单
             let self = this

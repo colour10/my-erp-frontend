@@ -61,7 +61,10 @@ export default {
 
             self.columns.forEach(column=>{
                 if(!row[column.id]) {
-                    row[column.id] = {}
+                    row[column.id] = {
+                        number:"",
+                        id:""
+                    }
                 }
             })
             //row.orderid = order.order.id
@@ -80,7 +83,11 @@ export default {
         getLineTotal(formData) {
             //this._log(formData)
             let total = 0
-            chain(formData).forEach(value=>total+= value.number*1)
+            chain(formData).forEach(row=>{
+                if(row.number>0) {
+                    total += row.number*1
+                }
+            })
             return total
         },
         onChange({order}) {
@@ -126,7 +133,7 @@ export default {
                 return "counter sumtotal"
             }
             else if(this.columns.length+1==columnIndex) {
-                this._log("columnIndex=", columnIndex)
+                //this._log("columnIndex=", columnIndex)
                 return "counter sumcolumn"
             }
             else {

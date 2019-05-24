@@ -119,7 +119,7 @@ const routes = [
             {path: '/confirmorder', name:"confirmorder", component: Confirmorder},
             {path: '/confirmorder/:action/:id', name:"confirmorderdetail", component: ConfirmorderDetail},
             {path: '/shipping', name:"shipping", component:Shipping},
-            {path: '/shipping/:action/:id', name:"shippingdetail", component:ShippingDetail},
+            {path: '/shipping/:id', name:"shippingdetail", component:ShippingDetail},
             {path: '/sales', name:"sales", component: Sales},
             {path: '/user', name:"user", component: User},
             {path: '/group', name:"group", component: Group},

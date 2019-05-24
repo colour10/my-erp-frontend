@@ -27,7 +27,7 @@
                     <auth :auth="authname||controller">
                         <as-button size="mini" type="danger" @click="onClickDelete(scope.$index, scope.row)" v-if="isDeletable(scope.row)" icon="el-icon-delete">{{_label('shanchu')}}</as-button>
                     </auth>
-                    <as-button size="mini" @click="handleAction(scope,item)" v-for="item in actions" :key="item.label" v-if="isShow(item)">{{item.label}}</as-button>
+                    <as-button size="mini" @click="handleAction(scope,item)" v-for="item in actions" :key="item.label" :type="item.type" v-if="isShow(item)">{{item.label}}</as-button>
                 </template>
             </el-table-column>
         </el-table>

@@ -70,6 +70,7 @@
 
 <script>
 import {shippingList} from "../asa/order-detail.js"
+import _ from 'lodash'
 
 export default {
     name: 'sp-shipping-select',
@@ -144,7 +145,7 @@ export default {
             let self = this
             self.selected.forEach(item=>{
                 //self._log(item)
-                self.$emit("select", item)
+                self.$emit("select", _.cloneDeep(item))
             })
             self.$refs.table.clearSelection()
             this.$emit("update:visible", false)
