@@ -3,7 +3,6 @@
         <el-form ref="order-form" class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini" :rules="rules" :inline-message="true">
             <el-row :gutter="0">
                 <au-button auth="order-submit" :type="canSubmit?'primary':'info'" @click="saveOrder(1)">{{_label("baocun")}}</au-button>
-                <au-button auth="order-submit" :type="canDelete?'primary':'info'" @click="deleteOrder()">{{_label("shanchu")}}</au-button>
                 <as-button v-if="isEditable" :type="buttontype" @click="showProduct()">{{_label("xuanzeshangpin")}}</as-button>
             </el-row>
             <el-row :gutter="0">
@@ -184,18 +183,6 @@ export default {
         onSelect(row) {
             let self = this;
             self.appendRow(row)
-        },
-        deleteOrder() {
-            let self = this
-            if (!self.canDelete) {
-                return
-            }
-
-            self._remove("/order/delete", { id: self.form.id }).then(function() {
-                self.form.id = ""
-
-                self.$emit("change", {}, true)
-            })
         },
         saveOrder(status) {
             //保存订单

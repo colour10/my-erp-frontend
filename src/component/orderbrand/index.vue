@@ -28,11 +28,17 @@ export default {
                 ],
                 actions:[
                     { label: _label("queren"), handler:self.toCreateConfirm},
-                    //{ label: _label("fahuo"), handler:self.toShipping}
+                    { label:_label("shanchu"), type:"danger", handler:function({row}){
+                        self._remove("/order/delete", { id: row.id }).then(function(result) {
+                            if(result){
+                                self.$refs.tablelist.search(self.searchform)
+                            }                              
+                        })
+                    }}
                 ],
                 controller: "orderbrand",
                 options:{
-                    action_width:200
+                    action_width:270
                 }
             },
             pro: false,

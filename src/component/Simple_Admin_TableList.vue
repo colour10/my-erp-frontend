@@ -10,10 +10,12 @@
             </el-table-column>
             <el-table-column :prop="item.name" :label="item.label" :width="item.width||180" v-if="!item.is_hide" v-for="item in columns" :key="item.name" :sortable="!item.is_image">
                 <template v-slot="scope">
+                    <slot :name="item.slotName || item.name" v-bind:row="scope.row">
                     <img v-if="item.type=='avatar'||item.is_image" :src="getImageSrc(scope.row, item)" :style="getImageStyle(item)" @click="onClickImage(scope.row, item)">
                     <span v-if="item.type!='avatar' && !item.is_image && item.type!='select'" :style="getStyle(item,scope.row)">{{item.convert?item.convert(scope.row,scope.rowIndex,item):convert(scope.row,item, rowIndex)}}</span>
 
                     <sp-select-text v-if="item.type=='select'" :source="item.source" :value="scope.row[item.name]"></sp-select-text>
+                    </slot>
                 </template>
             </el-table-column>
             <el-table-column :label="item.label" align="center" :width="item.width||180" v-for="item in buttons" :key="item.label">
@@ -27,7 +29,7 @@
                     <auth :auth="authname||controller">
                         <as-button size="mini" type="danger" @click="onClickDelete(scope.$index, scope.row)" v-if="isDeletable(scope.row)" icon="el-icon-delete">{{_label('shanchu')}}</as-button>
                     </auth>
-                    <as-button size="mini" @click="handleAction(scope,item)" v-for="item in actions" :key="item.label" :type="item.type" v-if="isShow(item)">{{item.label}}</as-button>
+                    <as-button size="mini" @click="handleAction(scope,item)" v-for="item in actions" :key="item.label" :type="item.type" v-if="isShow(item)" style="margin-right:3px">{{item.label}}</as-button> 
                 </template>
             </el-table-column>
         </el-table>

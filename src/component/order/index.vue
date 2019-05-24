@@ -13,7 +13,11 @@
                 </el-form>
             </el-col>
         </el-row>
-        <simple-admin-tablelist ref="tablelist" v-bind="props" :onclickupdate="toEdit" :isdelete="false"></simple-admin-tablelist>
+        <simple-admin-tablelist ref="tablelist" v-bind="props" :onclickupdate="toEdit" :isdelete="false">
+            <template v-slot:orderno="{row}">
+                <sp-order-tip column="orderno" :order="row"></sp-order-tip>
+            </template>>
+        </simple-admin-tablelist>
     </div>
 </template>
 
@@ -39,7 +43,7 @@ export default {
                     { name: "genders", label: _label('xingbie') },
                     { name: "brands", label: _label('pinpai') },
                     { name: "bussinesstype", label: _label('yewuleixing'), type: 'select', source: "bussinesstype", width: 100 },
-                    { name: "status", label: _label('zhuangtai'), type: 'select', source: "orderstatus", width: 120 },
+                    //{ name: "status", label: _label('zhuangtai'), type: 'select', source: "orderstatus", width: 120 },
                     { name: "orderdate", label: _label('dingdanriqi'), width: 120 }
                 ],
                 controller: "order",
