@@ -4,7 +4,6 @@
             <el-row :gutter="0">
                 <au-button auth="confirmorder-submit" :type="canSubmit?'primary':'info'" @click="saveOrder(1)">{{_label("baocun")}}</au-button>
                 <as-button :type="form.id?'primary':'info'" @click="showAttachment()">{{_label("fujian")}}</as-button>
-                <as-button :type="canDelete?'primary':'info'" @click="deleteOrder()">{{_label("shanchu")}}</as-button>
                 <as-button type="primary" @click="showDialog()">{{_label("daorudingdan")}}</as-button>
             </el-row>
             <el-row :gutter="0">
@@ -50,7 +49,7 @@
                                 <el-input v-model="form.invoiceno"></el-input>
                             </el-form-item>
                             <el-form-item :label="_label('zongjine')">
-                                <sp-float-input placeholder="" v-model="form.total" class="input-with-select">
+                                <sp-float-input placeholder="" :select_value="total_price" class="input-with-select">
                                     <select-currency v-model="form.currency">
                                     </select-currency>
                                 </sp-float-input>
@@ -127,7 +126,7 @@
         </el-form>
         <el-row>
             <el-col :span="24" class="product">
-                <el-table :data="tabledata_filter" stripe border style="width:100%;">
+                <el-table :data="tabledata_filter" stripe border style="width:100%;" :show-summary="true" :summary-method="getSummary">
                     <el-table-column align="center" width="60">
                         <template v-slot="{row}">
                             <img :src="_fileLink(row.source.product.picture)" style="width:50px;height:50px;" />
@@ -175,7 +174,7 @@
                     </el-table-column>
                     <el-table-column prop="label" :label="_label('zongjia')" width="80" align="center">
                         <template v-slot="{row}">
-                            {{row.source.product.factoryprice*row.source.discountbrand*row.source.confirm_total}}
+                            {{getRowTotal(row)}}
                         </template>
                     </el-table-column>
                 </el-table>
@@ -239,7 +238,13 @@ export default {
                 id: ""
             },
             tabledata: [],
-            visible: false
+            visible: false,
+            getRowTotal(row) {
+                return row.price*row.source.confirm_total
+            },
+            getRowFactoryTotal(row) {
+                return row.source.product.factoryprice*row.source.confirm_total
+            }
         }
     },
     methods: {
@@ -358,6 +363,29 @@ export default {
                 })
 
             }
+        },
+        getSummary({columns, data}){
+            const self = this
+            const sums = []
+            columns.forEach((column, index) => {
+                //self._log(column, index)
+                if(index==0) {
+                    sums[index] = self._label("heji")
+                    return
+                }
+                else if(index==4) {
+                    sums[index] = data.reduce((total, row)=>total+self.getRowFactoryTotal(row), 0)
+                }
+                else if(index==8) {
+                    sums[index] = data.reduce((total, row)=>total+row.source.confirm_total*1, 0)
+                }
+                else if(index==9) {
+                    sums[index] = data.reduce((total, row)=>total+self.getRowTotal(row), 0)
+                }
+            })
+            //self._log("data", data)
+
+            return sums
         }
     },
     computed: {
@@ -381,8 +409,9 @@ export default {
             return this.tabledata.reduce((max, { source }) => Math.max(max, source.product.sizecontents.length), 1) * 50 + 191
         },
         total_price() {
-            return this.tabledata.reduce(function(total, current) {
-                return total + current.source.confirm_total * current.source.product.factoryprice * current.source.discountbrand
+            let self = this
+            return self.tabledata.reduce(function(total, current) {
+                return total + self.getRowTotal(current)
             }, 0)
         },
         genders() {

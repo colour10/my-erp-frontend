@@ -25,9 +25,9 @@
             </el-table-column>
             <el-table-column :label="_label('caozuo')" :width="localOptions.action_width" align="center" v-if="localOptions.isaction">
                 <template v-slot="scope">
-                    <as-button size="mini" @click="handleClickUpdate(scope.$index, scope.row)" v-if="isEditable(scope.row)" icon="el-icon-edit">{{_label('bianji')}}</as-button>
+                    <as-button size="mini" @click="handleClickUpdate(scope.$index, scope.row)" v-if="isEditable(scope.row)">{{_label('bianji')}}</as-button>
                     <auth :auth="authname||controller">
-                        <as-button size="mini" type="danger" @click="onClickDelete(scope.$index, scope.row)" v-if="isDeletable(scope.row)" icon="el-icon-delete">{{_label('shanchu')}}</as-button>
+                        <as-button size="mini" type="danger" @click="onClickDelete(scope.$index, scope.row)" v-if="isDeletable(scope.row)">{{_label('shanchu')}}</as-button>
                     </auth>
                     <as-button size="mini" @click="handleAction(scope,item)" v-for="item in actions" :key="item.label" :type="item.type" v-if="isShow(item)" style="margin-right:3px">{{item.label}}</as-button> 
                 </template>

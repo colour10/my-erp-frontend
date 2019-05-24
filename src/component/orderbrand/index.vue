@@ -1,8 +1,14 @@
 <template>
     <div>
         <el-row>
-            <el-col :span="2">
-                <auth auth="order-submit"><as-button type="primary" @click="showFormToCreate()">{{_label('xinjian')}}</as-button></auth>
+            <el-col :span="24">
+                <el-form class="searchform" ref="search-form" :model="searchform" label-width="80px" size="mini" :inline="true" @submit.native.prevent>
+                    <el-form-item class="searchitem">
+                        <el-input v-model="searchform.keyword" width="250" style="width:250px;" @keyup.enter.native="onSearch"></el-input>
+                        <as-button type="primary" @click="onSearch" size="mini" icon="el-icon-search">{{_label("chaxun")}}</as-button>
+                        <auth auth="order-submit"><as-button type="primary" @click="showFormToCreate()">{{_label('xinjian')}}</as-button></auth>
+                    </el-form-item>
+                </el-form>
             </el-col>
         </el-row>
         <simple-admin-tablelist ref="tablelist" v-bind="props" :onclickupdate="showFormToEdit" :isdelete="false"></simple-admin-tablelist>
@@ -16,7 +22,10 @@ export default {
         var self = this;
         let _label = self._label
 
-        return {            
+        return {   
+            searchform:{
+                keyword:""
+            },         
             props: {
                 columns: [
                     { name: "orderno", label: _label('dingdanbianhao'), width: 300 },
@@ -29,7 +38,7 @@ export default {
                 actions:[
                     { label: _label("queren"), handler:self.toCreateConfirm},
                     { label:_label("shanchu"), type:"danger", handler:function({row}){
-                        self._remove("/order/delete", { id: row.id }).then(function(result) {
+                        self._remove("/orderbrand/delete", { id: row.id }).then(function(result) {
                             if(result){
                                 self.$refs.tablelist.search(self.searchform)
                             }                              
@@ -47,6 +56,11 @@ export default {
         }
     },
     methods: {
+        onSearch() {
+            let self = this
+                //self._log(self.searchform)
+            self.$refs.tablelist.search(self.searchform)
+        },
         showFormToCreate() {
             this.$router.push('/orderbrand/0')
         },

@@ -118,6 +118,9 @@
                         </template>
                     </el-table-column>
                     <el-table-column prop="confirm_total_price" :label="_label('zongjia')" width="80" align="center">
+                        <template v-slot="{row}">
+                            {{row.price*row.confirm_total}}
+                        </template>
                     </el-table-column>
                 </el-table>
             </el-col>
@@ -242,7 +245,8 @@ export default {
             let self = this
             row.form = form
             row.confirm_total = total;
-            row.confirm_total_price = row.product.factoryprice*row.discountbrand*row.confirm_total
+            //row.confirm_total_price = row.product.factoryprice*row.discountbrand*row.confirm_total
+            row.confirm_total_price = row.price*row.confirm_total
             row.price = row.product.factoryprice*row.discountbrand
         },
         onDiscountChange(newValue, oldValue) {
@@ -251,6 +255,10 @@ export default {
                 //self._log(newValue, oldValue, item.discountbrand)
                 if (item.discountbrand == oldValue || item.discountbrand == '' || item.discountbrand*1==0) {
                     item.discountbrand = newValue
+
+                    if(item.price=="" || item.price*1==0 || item.price==item.product.factoryprice*oldValue) {
+                        item.price = item.product.factoryprice*item.discountbrand
+                    }
                 }
             })
         },
@@ -297,7 +305,7 @@ export default {
         },
         total_price() {
             return this.tabledata.reduce(function(total, current) {
-                return total + current.confirm_total * current.product.factoryprice * current.discountbrand
+                return total + current.confirm_total * current.price
             }, 0)
         },
         genders() {
