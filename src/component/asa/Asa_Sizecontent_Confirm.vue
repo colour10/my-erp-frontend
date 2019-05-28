@@ -10,12 +10,12 @@
         <el-table-column :label="column.name" align="center" v-for="column in columns" :key="column.id" width="51">
             <template v-slot="{row}">
                 <el-input v-model="row.form[column.id].number" style="width:50px" size="mini" :disabled="disabled" class="linetop"></el-input>
-                <el-input v-model="form[row.order.id][column.id].number" style="width:50px" size="mini" @keyup.native="onChange(row)" v-if="hideInput==false && row.order.id>0"></el-input>
+                <el-input v-model="form[row.order.id][column.id].number" style="width:50px" size="mini" @keyup.native="onChange(row)" v-if="hideInput==false && (row.order.id>0 || row.order.id==-1)"></el-input>
             </template>
         </el-table-column>
         <el-table-column :label="_label('heji')" align="right" width="53" v-if="hideInput==false">
             <template v-slot="{row}">
-                <el-input :value="getLineTotal(row.form)" style="width:50px" size="mini" :disabled="disabled" v-if="row.order.id>0" class="linetop"></el-input>
+                <el-input :value="getLineTotal(row.form)" style="width:50px" size="mini" :disabled="disabled" v-if="row.order.id>0 || row.order.id==-1" class="linetop"></el-input>
                 <el-input v-model="totals[row.order.id]" style="width:50px" size="mini":disabled="disabled" class="inputsum"></el-input>
             </template>
         </el-table-column><!-- 
@@ -149,7 +149,7 @@ export default {
                 //如果备选的总数大于0，显示
                 item.total = self.getLineTotal(item.form)
                 //self._log(item.total)
-                if(item.total>0) {
+                if(item.total>=0) {
                     results.push(item)
                 }                
             })

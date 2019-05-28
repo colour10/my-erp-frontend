@@ -168,6 +168,12 @@ export default {
                 label: title,
                 path: self.$route.path
             })
+        },
+        closeCurrent() {
+            let store = this.$store
+            store.commit("closeTag", {
+                tag:store.getters.getTags.current
+            })
         }
     }
 }

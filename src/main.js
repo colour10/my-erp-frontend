@@ -29,6 +29,7 @@ import Simple_Display_Input from './component/Simple_Display_Input.vue'
 import Simple_Float_Input from './component/Simple_Float_Input.vue'
 import Asa_Order_Confirm_Dialog from './component/asa/Asa_Order_Confirm_Dialog.vue'
 import Asa_Select_Order_Detail_Dialog from './component/asa/Asa_Select_Order_Detail_Dialog.vue'
+import Asa_Productstock_Search from './component/asa/Asa_Productstock_Search.vue'
 import Asa_Warehousing_Dialog from './component/asa/Asa_Warehousing_Dialog.vue'
 import Asa_Product from './component/asa/Asa_Product.vue'
 import Asa_Brandgroupchild_Select from './component/asa/Asa_Brandgroupchild_Select.vue'
@@ -70,6 +71,8 @@ import ModifyPassword from './component/user/modify-password.vue'
 import Shipping from './component/shipping/index.vue'
 import ShippingDetail from './component/shipping/detail.vue'
 import Requisition from './component/requisition/index.vue'
+import RequisitionCreate from './component/requisition/create.vue'
+import RequisitionUpdate from './component/requisition/update.vue'
 import Productstock from './component/productstock/index.vue'
 import System from './component/system/index.vue'
 import Supplier from './component/supplier/index.vue'
@@ -95,6 +98,7 @@ const components = [
     Simple_Float_Input,
     Asa_Order_Confirm_Dialog,
     Asa_Select_Order_Detail_Dialog,
+    Asa_Productstock_Search,
     Asa_Warehousing_Dialog,
     Asa_Product,
     Asa_Brandgroupchild_Select,
@@ -123,6 +127,7 @@ const routes = [
             {path: '/shipping', name:"shipping", component:Shipping},
             {path: '/shipping/:id', name:"shippingdetail", component:ShippingDetail},
             {path: '/sales', name:"sales", component: Sales},
+            {path: '/sales/:id', name:"salesdetail", component: Asa_Sales_Dialog},
             {path: '/user', name:"user", component: User},
             {path: '/group', name:"group", component: Group},
             {path: '/department', name:"department", component: Department},
@@ -131,7 +136,9 @@ const routes = [
             {path: '/brandgroup', name:"brandgroup", component: Brandgroup},
             {path: '/sizetop', name:"sizetop", component: Sizetop},
             {path: '/product', name:"product", component: Product},   
-            {path: '/requisition', name:"requisition", component: Requisition},     
+            {path: '/requisition', name:"requisition", component: Requisition},
+            {path: '/requisition/create', name:"requisitioncreate", component: RequisitionCreate},
+            {path: '/requisition/edit/:id', name:"requisitionedit", component: RequisitionUpdate},
             {path: '/user/modifypassword', name:"modifypassword", component: ModifyPassword},    
             {path: '/orderpayment', name:"orderpayment", component: Orderpayment},    
             {path: '/salesreceive', name:"salesreceive", component: Salesreceive},   

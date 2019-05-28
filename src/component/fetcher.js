@@ -70,6 +70,15 @@ const getFetcher = function(name) {
     }
 }
 
+const getFetcherPromise = function(name) {
+    let fetcher = getFetcher(name)
+    return function(id){
+        return new Promise(resolve=>{
+            fetcher(id, resolve)
+        })
+    }
+}
+
 const getFetcherMultiple = function(name) {
     let fetcher = getFetcher(name)
 
@@ -88,5 +97,5 @@ const getFetcherMultiple = function(name) {
         });
     }
 }
-export {getFetcher,getFetcherMultiple,clear}
+export {getFetcher,getFetcherMultiple,clear,getFetcherPromise}
 export default {getFetcher, getFetcherMultiple, clear}

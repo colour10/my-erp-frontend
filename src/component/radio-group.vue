@@ -1,6 +1,6 @@
 <template>
     <el-radio-group v-model="currentValue" @change="handleChange" :disabled="disabled">
-        <el-col :span="span" v-for="(item,key) in data" :key="item.getValue()"><el-radio :label="item.getValue()">{{item.getLabel()}}</el-radio></el-col>
+        <el-col :span="span" v-for="(item,key) in data" :key="item.getValue()"><el-radio :label="item.getValue()" @click.native="onClick">{{item.getLabel()}}</el-radio></el-col>
     </el-radio-group>
 </template>
 
@@ -45,8 +45,14 @@ export default {
     methods: {
         handleChange(newValue) {
             let self = this;
-
             self.$emit('change', newValue)
+        },
+        onClick({target}) {
+            let self = this;
+            if(target.tagName=='INPUT' && target.value==self.currentValue) {
+                self.currentValue = ""
+                self.$emit('change', "")
+            }
         }
     },
     watch: {

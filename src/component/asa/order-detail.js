@@ -43,6 +43,27 @@ function confirmList(list){
 
 export {confirmList}
 
+/*
+{
+    price:"",
+    is_hidden:false,
+    discount:"",
+    discountbrand:"",
+    confirm_total:"",
+    product:<ProductDetail>,
+    orders:[{
+        order:<Order>,
+        form:{
+            (sizecontentid):剩余待发货数量
+        },
+        confirm_form:{
+            (sizecontentid):发货数量
+        },
+        total:"",
+        discount:""
+    }]
+}
+*/
 function shippingListObject(list){
     return new Promise(resolve=>{
         detailConvert(list).then(results=>{
@@ -93,6 +114,7 @@ export { shippingList }
 
 const detailConvert = function(list){
     let result = {}
+    //console.log(list, "--")
     list.forEach(item => {
         //self._log(item)
         let key = item.orderid + "-" + item.productid
@@ -135,7 +157,14 @@ const detailConvert = function(list){
     chain(result).forEach(item => {
         //console.log(item,"==")
         let runner = promiseRunner(item)
-        runner.push(Order.load({ data: item.orderid, depth: 1 }), "order")
+
+        if(item.orderid>0) {
+            runner.push(Order.load({ data: item.orderid, depth: 1 }), "order")
+        }
+        else {
+            item.order = {id:-1}
+        }
+        
         runner.push(ProductDetail.load({ data: item.productid, depth: 1 }), "product")
         promises.push(runner.all())
     })
@@ -143,17 +172,54 @@ const detailConvert = function(list){
     return Promise.all(promises)
 }
 
-const getProduct = async function(list, projectid){
+const getProduct = async function(list, productid){
     let results = await shippingListObject(list)
-    return results[projectid]
+    //console.log(results, "==")
+    if(results[productid]) {
+        return results[productid]
+    }
+    else {
+        return createEmptyRow({productid})
+    }
 }
 
-export { getProduct }
+const createEmptyRowById = async function(productid){
+    return await ProductDetail.load({ data: productid, depth: 1 })
+}
+
+const createEmptyRow = async function({productid, productDetail}) {
+    if(!productDetail) {
+        productDetail = await createEmptyRowById(productid)
+    }
+
+    let order = {
+        order:{id:-1},
+        form:{},
+        confirm_form:{},
+        total:"",
+        discount:""
+    }
+    productDetail.sizecontents.forEach(item=>{
+        order.form[item.id] = ""
+        order.confirm_form[item.id] = ""
+    })
+    return {
+        price:"",
+        is_hidden:false,
+        discount:0,
+        discountbrand:0,
+        confirm_total:0,
+        product:productDetail,
+        orders:[order]
+    }
+}
+
+export { getProduct,createEmptyRow }
 
 const shippingConvert = function(list){
     let result = {}
     list.forEach(item => {
-        console.log("SSSSSSSS",item)
+        //console.log("SSSSSSSS",item)
         let key = item.price + "-" + item.productid +'-'+ item.orderid
         if (result[key]) {
             result[key]['form'][item.sizecontentid] = {number:item.number,id:"", shippingdetailid:item.id}

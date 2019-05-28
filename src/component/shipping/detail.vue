@@ -5,6 +5,7 @@
                 <au-button auth="confirmorder-submit" :type="canSubmit?'primary':'info'" @click="saveOrder(1)">{{_label("baocun")}}</au-button>
                 <as-button :type="form.id?'primary':'info'" @click="showAttachment()">{{_label("fujian")}}</as-button>
                 <as-button type="primary" @click="showDialog()">{{_label("daorudingdan")}}</as-button>
+                <as-button type="primary" @click="showProduct()">{{_label("xuanzeshangpin")}}</as-button>
             </el-row>
             <el-row :gutter="0">
                 <el-col :span="8" style="width:600px">
@@ -181,13 +182,15 @@
             </el-col>
         </el-row>
         <sp-shipping-select :visible.sync="visible" @select="onSelect"></sp-shipping-select>
+
+        <asa-select-product-dialog :visible.sync="pro" @select="onSelectProduct"></asa-select-product-dialog>
     </div>
 </template>
 
 <script>
 import { StringFunc } from "../globals.js"
 import { extend, copyTo } from "../object.js"
-import { shippingList, shippingConvert, getProduct } from "../asa/order-detail.js"
+import { shippingList, shippingConvert, getProduct,createEmptyRow } from "../asa/order-detail.js"
 import chain from "../chain.js"
 import Select from "./select.vue"
 
@@ -239,6 +242,7 @@ export default {
             },
             tabledata: [],
             visible: false,
+            pro:false,
             getRowTotal(row) {
                 return row.price*row.source.confirm_total
             },
@@ -254,6 +258,20 @@ export default {
         showDialog() {
             this.visible = true
         },
+        showProduct() {
+            this.pro = true;
+        },
+        onSelectProduct(productDetail) {
+            let self = this;
+
+            createEmptyRow({productDetail}).then(row=>{
+                self.appendRow({
+                    source: row,
+                    id: "",
+                    price: row.price
+                })
+            })            
+        },       
         saveOrder(status) {
             //保存订单
             var self = this
@@ -301,7 +319,7 @@ export default {
 
             self._log(JSON.stringify(params))
             self._submit("/shipping/save", { params: JSON.stringify(params) }).then(function(res) {
-                self._log(res)
+                //self._log(res)
 
                 self.convertList(res)
 
@@ -349,12 +367,20 @@ export default {
                 shippingConvert(res.data.list).forEach(async line => {
                     let source = await getProduct(res.data.orderdetails_list, line.productid);
                     //self._log("line", line, source)
-                    line.orders.forEach(function({ orderid, confirm_form }) {
-                        self._log(confirm_form, "XXXXX")
-                        let index = source.orders.findIndex(item => {
-                            return item.order.id == orderid })
-                        extend(source.orders[index].confirm_form, confirm_form)
-                    })
+
+                    if(source) {
+                        //如果有订单详情记录，不是发货单时候单独加入的
+                        line.orders.forEach(function({ orderid, confirm_form }) {
+                            //self._log(confirm_form, "XXXXX")
+                            let index = source.orders.findIndex(item => {
+                                return item.order.id == orderid })
+                            extend(source.orders[index].confirm_form, confirm_form)
+                        })
+                    }
+                    else {
+
+                    }
+                    
 
                     self.appendRow({
                         source: source,

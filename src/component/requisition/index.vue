@@ -12,9 +12,6 @@
                 <simple-admin-tablelist ref="tablelist" v-bind="props" :onclickupdate="showFormToEdit" :isdelete="false"></simple-admin-tablelist>
             </el-col>
         </el-row>
-        <asa-requisition-dialog :visible.sync="visibleDialog" @change="onChange"></asa-requisition-dialog>
-
-        <asa-requisition-detail-dialog :visible.sync="visibleDetailDialog" :data="info" @change="onRowChange"></asa-requisition-detail-dialog>
     </div>
 </template>
 
@@ -54,15 +51,10 @@ export default {
             this.visibleDialog = true;
         },
         showFormToCreate() {
-            this.info = {}
-            this.rowIndex = -1
-            this.showForm()
+            this.$router.push('/requisition/create')
         },
         showFormToEdit(rowIndex, row) {
-            this.info = row;
-            this.rowIndex = rowIndex
-            //console.log(row)
-            this.visibleDetailDialog =  true;
+            this.$router.push('/requisition/edit/' + row.id)
         },
         onChange() {
             let self = this

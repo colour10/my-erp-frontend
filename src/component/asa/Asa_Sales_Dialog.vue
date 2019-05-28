@@ -1,177 +1,169 @@
 <template>
     <div>
-        <el-dialog :title="title" :visible.sync="dialogVisible" :center="true" :fullscreen="true" :modal="false">
-            <el-form class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini">
-                <el-row :gutter="0">
-                    <el-col :span="6">
-                        <el-form-item :label="_label('xiaoshouduankou')">
-                            <simple-select ref="saleportid" v-model="form.saleportid" source="usersaleport" :lang="lang" @change="onChange" :disabled="form.status!=0"></simple-select>
-                        </el-form-item>
-                        <el-form-item :label="_label('zhekou')">
-                            <el-input v-model="form.discount" disabled></el-input>
-                        </el-form-item>
-                        <el-form-item :label="_label('xiaoshoucangku')">
-                            <simple-select v-model="form.warehouseid" source="userwarehouse" :lang="lang" :disabled="form.status!=0" @change="onWarehouseChange"></simple-select>
-                        </el-form-item>
-                        <el-form-item :label="_label('xiaoshouriqi')">
-                            <el-date-picker v-model="form.salesdate" type="date" value-format="yyyy-MM-dd"></el-date-picker>
-                        </el-form-item>
-                        <el-form-item :label="_label('huiyuan')">
-                            <simple-select v-model="form.memberid" source="member" :lang="lang"></simple-select>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="6">
-                        <el-form-item :label="_label('xiaoshouren')">
-                            <simple-select v-model="form.salesstaff" source="user" :lang="lang"></simple-select>
-                        </el-form-item>
-                        <el-form-item :label="_label('waitudingdanhao')">
-                            <el-input v-model="form.externalno"></el-input>
-                        </el-form-item>
-                        <el-form-item :label="_label('duizhangdanhao')">
-                            <el-input v-model="form.ordercode"></el-input>
-                        </el-form-item>
-                        <el-form-item :label="_label('zhidanriqi')">
-                            <el-input :value="form.makedate" :placeholder="_label('zidonghuoqu')" disabled></el-input>
-                        </el-form-item>
-                        <el-form-item :label="_label('zhidanren')">
-                            <sp-display-input :value="form.makestaff" source="user"></sp-display-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="6">
-                        <el-form-item :label="_label('tihuofangshi')">
-                            <simple-select v-model="form.pickingtype" source="pickingtype" :lang="lang"></simple-select>
-                        </el-form-item>
-                        <el-form-item :label="_label('kuaidifukuanfang')">
-                            <simple-select v-model="form.expresspaidtype" source="expresspaidtype" :lang="lang"></simple-select>
-                        </el-form-item>
-                        <el-form-item :label="_label('kuaididanhao')">
-                            <el-input v-model="form.expressno"></el-input>
-                        </el-form-item>
-                        <el-form-item :label="_label('kuaidifeiyong')">
-                            <el-input v-model="form.expressfee"></el-input>
-                        </el-form-item>
-                        <el-form-item :label="_label('shouhuodizhi')">
-                            <el-input v-model="form.address"></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="6">
-                        <el-row type="flex" justify="start">
-                            <au-button auth="sales" :type="canYushou?'primary':'info'" @click="yushou()">{{_label("yushou")}}</au-button>
-                            <au-button auth="sales" :type="canTijiao?'primary':'info'" @click="tijiao()">{{_label("tijiao")}}</au-button>
-                            <au-button auth="sales" :type="form.id>0 && form.status!=2 ?'primary':'info'" @click="showAttachment()">{{_label("fujian")}}</au-button>
-                            <au-button auth="sales" :type="canZuofei?'primary':'info'" @click="zuofei()">{{_label("zuofei")}}</au-button>
-                        </el-row>
-                        <el-row>
-                            <au-button auth="sales" :type="form.id>0 ?'primary':'info'" @click="addReceive">{{_label("tianjiashoukuan")}}</au-button>
-                        </el-row>
-                        <el-row>
-                            <as-button type="primary" @click="onQuit">{{_label("tuichu")}}</as-button>
-                        </el-row>
-                    </el-col>
-                </el-row>
-            </el-form>
-            <el-row type="flex" justify="end" v-if="form.status==0">
-                <el-col :span="24">
-                    <search :base="base" @select="onSelect"></search>
+        <el-form class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini">
+            <el-row :gutter="0">
+                <au-button auth="sales" :type="canYushou?'primary':'info'" @click="yushou()">{{_label("yushou")}}</au-button>
+                <au-button auth="sales" :type="canTijiao?'primary':'info'" @click="tijiao()">{{_label("tijiao")}}</au-button>
+                <au-button auth="sales" :type="form.id>0 && form.status!=2 ?'primary':'info'" @click="showAttachment()">{{_label("fujian")}}</au-button>
+                <au-button auth="sales" :type="canZuofei?'primary':'info'" @click="zuofei()">{{_label("zuofei")}}</au-button>
+                <au-button auth="sales" :type="form.id>0 ?'primary':'info'" @click="addReceive">{{_label("tianjiashoukuan")}}</au-button>
+                <as-button type="primary" @click="showProduct()">{{_label("xuanzeshangpin")}}</as-button>
+            </el-row>
+            <el-row :gutter="0">
+                <el-col :span="4" style="width:300px">
+                    <el-form-item :label="_label('xiaoshouduankou')">
+                        <simple-select ref="saleportid" v-model="form.saleportid" source="usersaleport" :lang="lang" @change="onChange" :disabled="form.status!=0"></simple-select>
+                    </el-form-item>
+                    <el-form-item :label="_label('zhekou')">
+                        <el-input v-model="form.discount" disabled></el-input>
+                    </el-form-item>
+                    <el-form-item :label="_label('xiaoshoucangku')">
+                        <simple-select v-model="form.warehouseid" source="userwarehouse" :lang="lang" :disabled="form.status!=0" @change="onWarehouseChange"></simple-select>
+                    </el-form-item>
+                    <el-form-item :label="_label('xiaoshouriqi')">
+                        <el-date-picker v-model="form.salesdate" type="date" value-format="yyyy-MM-dd"></el-date-picker>
+                    </el-form-item>
+                    <el-form-item :label="_label('huiyuan')">
+                        <simple-select v-model="form.memberid" source="member" :lang="lang"></simple-select>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="4" style="width:300px">
+                    <el-form-item :label="_label('xiaoshouren')">
+                        <simple-select v-model="form.salesstaff" source="user" :lang="lang"></simple-select>
+                    </el-form-item>
+                    <el-form-item :label="_label('waitudingdanhao')">
+                        <el-input v-model="form.externalno"></el-input>
+                    </el-form-item>
+                    <el-form-item :label="_label('duizhangdanhao')">
+                        <el-input v-model="form.ordercode"></el-input>
+                    </el-form-item>
+                    <el-form-item :label="_label('zhidanriqi')">
+                        <el-input :value="form.makedate" :placeholder="_label('zidonghuoqu')" disabled></el-input>
+                    </el-form-item>
+                    <el-form-item :label="_label('zhidanren')">
+                        <sp-display-input :value="form.makestaff" source="user"></sp-display-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="4" style="width:300px">
+                    <el-form-item :label="_label('tihuofangshi')">
+                        <simple-select v-model="form.pickingtype" source="pickingtype" :lang="lang"></simple-select>
+                    </el-form-item>
+                    <el-form-item :label="_label('kuaidifukuanfang')">
+                        <simple-select v-model="form.expresspaidtype" source="expresspaidtype" :lang="lang"></simple-select>
+                    </el-form-item>
+                    <el-form-item :label="_label('kuaididanhao')">
+                        <el-input v-model="form.expressno"></el-input>
+                    </el-form-item>
+                    <el-form-item :label="_label('kuaidifeiyong')">
+                        <el-input v-model="form.expressfee"></el-input>
+                    </el-form-item>
+                    <el-form-item :label="_label('shouhuodizhi')">
+                        <el-input v-model="form.address"></el-input>
+                    </el-form-item>
                 </el-col>
             </el-row>
-            <el-row>
-                <el-col :span="24">
-                    <el-table :data="tabledata" stripe border style="width:100%;" v-if="form.status==0">
-                        <el-table-column prop="productname" :label="_label('chanpinmingcheng')" align="center">
-                            <template v-slot="scope">
-                                {{scope.row.productstock.product.productname}}
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="sizecontent_label" :label="_label('chima')" width="100" align="center">
-                        </el-table-column>
-                        <el-table-column prop="warehousename" :label="_label('cangku')" width="100" align="center">
-                            <template v-slot="scope">
-                                {{scope.row.productstock.warehouse.name}}
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="warehouse_number" :label="_label('kucunshuliang')" width="100" align="center">
-                            <template v-slot="scope">
-                                {{scope.row.productstock.number}}
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="price" :label="_label('danjia')" width="100" align="center">
-                            <template v-slot="scope">
-                                {{scope.row.productstock.goods.price}}
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="price" :label="_label('zongjia')" width="100" align="center">
-                            <template v-slot="scope">
-                                {{form.discount*scope.row.productstock.goods.price*scope.row.number}}
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="number" :label="_label('shuliang')" width="200" align="center">
-                            <template v-slot="scope">
-                                <el-input-number v-model="scope.row.number" :min="1" :max="scope.row.productstock.warehouse.number*1"></el-input-number>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="number" :label="_label('chengjiaojia')" width="200" align="center">
-                            <template v-slot="scope">
-                                <el-input v-model="scope.row.dealprice" v-if="!scope.row.is_match"></el-input>
-                                <el-input :value="form.discount*scope.row.productstock.goods.price*scope.row.number" v-if="scope.row.is_match" disabled></el-input>
-                            </template>
-                        </el-table-column>
-                        <el-table-column :label="_label('jiagepipei')" width="150" align="center">
-                            <template v-slot="scope">
-                                <el-switch v-model="scope.row.is_match"></el-switch>
-                            </template>
-                        </el-table-column>
-                        <el-table-column :label="_label('caozuo')" width="150" align="center">
-                            <template v-slot="scope">
-                                <as-button size="mini" type="danger" @click="deleteRow(scope.$index, scope.row)">{{_label('shanchu')}}</as-button>
-                            </template>
-                        </el-table-column>
-                    </el-table>
-                    <el-table :data="tabledata" stripe border style="width:100%;" v-if="form.status!=0">
-                        <el-table-column prop="productname" :label="_label('chanpinmingcheng')" align="center">
-                        </el-table-column>
-                        <el-table-column prop="sizecontent_label" :label="_label('chima')" width="100" align="center">
-                        </el-table-column>
-                        <el-table-column prop="warehousename" :label="_label('cangku')" width="100" align="center">
-                            <template v-slot="scope">
-                                {{scope.row.productstock.warehouse.name}}
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="price" :label="_label('danjia')" width="100" align="center">
-                            <template v-slot="scope">
-                                {{scope.row.price}}
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="number" :label="_label('xiaoshoushuliang')" width="100" align="center">
-                            <template v-slot="scope">
-                                {{scope.row.number}}
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="discount" :label="_label('zongjia')" width="100" align="center">
-                            <template v-slot="scope">
-                                {{form.discount*scope.row.price*scope.row.number}}
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="dealprice" :label="_label('chengjiaozongjia')" width="200" align="center">
-                            <template v-slot="scope">
-                                {{getDealPrice(scope.row)}}
-                            </template>
-                        </el-table-column>
-                    </el-table>
-                </el-col>
-            </el-row>
-            <el-row>
-                <simple-admin-page v-bind="props" ref="receive" :hide-create="true" :hide-form="true" v-if="form.id>0"></simple-admin-page>
-            </el-row>
-        </el-dialog>
+        </el-form>
+        <el-row type="flex" justify="end" v-if="form.status==0">
+            <el-col :span="24">
+                <search :base="base" @select="onSelect"></search>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-col :span="24">
+                <el-table :data="tabledata" stripe border style="width:100%;" v-if="form.status==0">
+                    <el-table-column prop="productname" :label="_label('chanpinmingcheng')" align="center">
+                        <template v-slot="scope">
+                            {{scope.row.productstock.product.productname}}
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="sizecontent_label" :label="_label('chima')" width="100" align="center">
+                    </el-table-column>
+                    <el-table-column prop="warehousename" :label="_label('cangku')" width="100" align="center">
+                        <template v-slot="scope">
+                            {{scope.row.productstock.warehouse.name}}
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="warehouse_number" :label="_label('kucunshuliang')" width="100" align="center">
+                        <template v-slot="scope">
+                            {{scope.row.productstock.number}}
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="price" :label="_label('danjia')" width="100" align="center">
+                        <template v-slot="scope">
+                            {{scope.row.productstock.goods.price}}
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="price" :label="_label('zongjia')" width="100" align="center">
+                        <template v-slot="scope">
+                            {{form.discount*scope.row.productstock.goods.price*scope.row.number}}
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="number" :label="_label('shuliang')" width="200" align="center">
+                        <template v-slot="scope">
+                            <el-input-number v-model="scope.row.number" :min="1" :max="scope.row.productstock.warehouse.number*1"></el-input-number>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="number" :label="_label('chengjiaojia')" width="200" align="center">
+                        <template v-slot="scope">
+                            <el-input v-model="scope.row.dealprice" v-if="!scope.row.is_match"></el-input>
+                            <el-input :value="form.discount*scope.row.productstock.goods.price*scope.row.number" v-if="scope.row.is_match" disabled></el-input>
+                        </template>
+                    </el-table-column>
+                    <el-table-column :label="_label('jiagepipei')" width="150" align="center">
+                        <template v-slot="scope">
+                            <el-switch v-model="scope.row.is_match"></el-switch>
+                        </template>
+                    </el-table-column>
+                    <el-table-column :label="_label('caozuo')" width="150" align="center">
+                        <template v-slot="scope">
+                            <as-button size="mini" type="danger" @click="deleteRow(scope.$index, scope.row)">{{_label('shanchu')}}</as-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+                <el-table :data="tabledata" stripe border style="width:100%;" v-if="form.status!=0">
+                    <el-table-column prop="productname" :label="_label('chanpinmingcheng')" align="center">
+                    </el-table-column>
+                    <el-table-column prop="sizecontent_label" :label="_label('chima')" width="100" align="center">
+                    </el-table-column>
+                    <el-table-column prop="warehousename" :label="_label('cangku')" width="100" align="center">
+                        <template v-slot="scope">
+                            {{scope.row.productstock.warehouse.name}}
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="price" :label="_label('danjia')" width="100" align="center">
+                        <template v-slot="scope">
+                            {{scope.row.price}}
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="number" :label="_label('xiaoshoushuliang')" width="100" align="center">
+                        <template v-slot="scope">
+                            {{scope.row.number}}
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="discount" :label="_label('zongjia')" width="100" align="center">
+                        <template v-slot="scope">
+                            {{form.discount*scope.row.price*scope.row.number}}
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="dealprice" :label="_label('chengjiaozongjia')" width="200" align="center">
+                        <template v-slot="scope">
+                            {{getDealPrice(scope.row)}}
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </el-col>
+        </el-row><!-- 
+        <el-row>
+            <simple-admin-page v-bind="props" ref="receive" :hide-create="true" :hide-form="true" v-if="form.id>0"></simple-admin-page>
+        </el-row> -->
+        <sp-productstock-search ref="stocksearch" @select="onSelect"></sp-productstock-search>
     </div>
 </template>
 
 <script>
 import globals, { _label } from '../globals.js'
 import { Productstock } from "../model.js"
-
-import simple_select from '../Simple_Select.vue'
+import { extend, copyTo } from "../object.js"
 import Asa_Productstock_Search from './Asa_Productstock_Search.vue'
 import DataSource from '../DataSource.js'
 
@@ -199,7 +191,6 @@ const props = {
 export default {
     name: 'asa-sales-dialog',
     components: {
-        'simple-select': simple_select,
         'search': Asa_Productstock_Search
     },
     props: {
@@ -234,7 +225,6 @@ export default {
                 id: ""
             },
             tabledata: [],
-            dialogVisible: self.visible,
             title: "",
             lang: "",
             formid: "",
@@ -245,9 +235,6 @@ export default {
         }
     },
     methods: {
-        onQuit() {
-            this.dialogVisible = false
-        },
         addReceive() {
             let self = this;
             if (self.form.id > 0) {
@@ -267,6 +254,9 @@ export default {
         },
         onWarehouseChange(newValue) {
             this.base.warehouseid = newValue;
+        },
+        showProduct() {
+            this.$refs.stocksearch.setVisible(true)
         },
         onSelect(productstock) {
             var self = this;
@@ -383,42 +373,32 @@ export default {
             return form.id == "" || form.status == 0
         }
     },
-    watch: {
-        dialogVisible(newValue) {
-            this.$emit("update:visible", newValue)
-        },
-        visible(newValue) {
-            //self._log("visible", newValue)
-            this.dialogVisible = newValue
-        },
-        data(newValue) {
-            var self = this
-            var form = self.form;
-            //self._log("copy data1", newValue, form)
+    mounted: function() {
+        var self = this;
+        //self._log("mounted Order")
+        //copyTo(self.data, this.form)
+        let route = self.$route;
+        let label // = route.params.id == 0 ? self._label("xinjiandingdan") : "订单信息"
+        if (route.params.id == 0) {
+            label = self._label("xinjianxiaoshoudan")
+        } else {
+            self.tabledata = []
+                //加载数据
+            self._fetch("/sales/loadsale", { id: route.params.id }).then(function(res) {
+                //self._log("加载订单信息", res)
 
-            //清空当前表单数据，并复制新记录的数据
-            globals.empty(form)
-            globals.copyTo(newValue, form)
-            props.base.salesid = form.id
-
-            //如果订单的id变化了，则清空明细，重新加载新订单的明细
-            if (form.id != self.fomrid) {
-                self.tabledata = []
-
-                if (form.id != "") {
-                    //加载数据
-                    self._fetch("/sales/loadsale", { id: form.id }).then(function(res) {
-                        //self._log("加载订单信息", res)
-                        if (res.data.list) {
-                            res.data.list.forEach(item => {
-                                //self._log(item)
-                                self.appendRow(item)
-                            })
-                        }
+                copyTo(res.data.form, self.form)
+                if (res.data.list) {
+                    res.data.list.forEach(item => {
+                        //self._log(item)
+                        self.appendRow(item)
                     })
                 }
-            }
+                self._setTitle(self._label("xiaoshoudan") + self.form.id)
+            })
+            label = "loading..."
         }
+        self._setTitle(label)
     }
 }
 </script>

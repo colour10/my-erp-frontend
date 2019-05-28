@@ -4,12 +4,10 @@
 
 <script>
 import DataSource from './DataSource.js'
-import globals,{_label} from './globals.js'
+import {isArray} from './array.js'
 
 export default {
     name: 'sp-display-input',
-    components: {
-    },
     props: {
         placeholder:{},
         source:{
@@ -24,19 +22,24 @@ export default {
         }
     },
     data() {
-        let self = this        
-        
-        let value = self.value || []
+        let self = this          
+
         return {
             current_label:"",
-            current_value:self.convertValue(value),
-        }
+            current_value:self.convertValue(self.value)
+        };
     },
     methods: {
         convertValue(item) {
             let self = this;
-            //self._log("item value", item)
-            return typeof(item)=='string' ? item.split(',') : item
+            if(typeof(self.value)=="string") {
+                return self.value.split(",")
+            }
+            else if(isArray(self.value)) {
+                return self.value
+            }
+
+            return []
         },
         loadList() {
             let self = this;
@@ -44,7 +47,7 @@ export default {
             if(self.current_value.length==0) {
                 return 
             }
-            DataSource.getDataSource(self.source, _label('lang')).getRowLabels(self.current_value, function(label_list){
+            DataSource.getDataSource(self.source, self._label('lang')).getRowLabels(self.current_value, function(label_list){
                 //self._log("label_list",label_list, )
                 self.current_label = label_list
             })     

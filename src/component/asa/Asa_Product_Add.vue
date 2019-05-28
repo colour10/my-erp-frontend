@@ -91,7 +91,7 @@
                     </el-form-item>
 
                     <el-form-item :label="_label('shangpinchicun')">
-                        <simple-select v-model="form.ulnarinch" source="ulnarinch"></simple-select>
+                        <simple-select v-model="form.ulnarinch" source="ulnarinch" :multiple="true"></simple-select>
                     </el-form-item>
 
                     <el-form-item :label="_label('shangpinmiaoshu')">

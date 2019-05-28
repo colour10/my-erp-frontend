@@ -1,6 +1,6 @@
 import DataSource from './DataSource.js'
 import List from './list.js'
-import {getFetcher,clear} from "./fetcher.js"
+import {getFetcher,clear,getFetcherPromise} from "./fetcher.js"
 import {getLabel} from "./globals.js"
 import {httpPost} from "./http.js"
 import {isPromise} from "./object.js"
@@ -235,9 +235,9 @@ const Productstock = Object.assign(createModel("productstock"),{
         let self = this
 
         let runner = promiseAll(row)
-        runner.push(Product.load({data:row.productid}), 'product')
-        runner.push(Warehouse.load({data:row.warehouseid}), 'warehouse')
-        runner.push(Goods.load({data:row.goodsid}), 'goods')
+        runner.push(ProductDetail.load({data:row.productid, depth:depth-1}), 'product')
+        runner.push(Warehouse.load({data:row.warehouseid, depth:depth-1}), 'warehouse')
+        runner.push(Goods.load({data:row.goodsid, depth:depth-1}), 'goods')
         runner.push(getDataSource("sizecontent").getRowLabel(row.sizecontentid), 'sizecontent_label')
         runner.push(getDataSource("orderproperty").getRowLabel(row.property), 'property_label')
         runner.push(getDataSource("defectivelevel").getRowLabel(row.defective_level), 'defectivelevel_label')
@@ -327,7 +327,39 @@ const Salesreceive = Object.assign(createModel("orderpayment"),{
 })
 export {Sales,Salesreceive}
 
-export { Productstock,Warehouse,Product,Goods,OrderDetails,ConfirmorderDetails }
+const User = createModel("user")
+const Requisition = Object.assign(createModel("requisition"),{
+    init:function(depth, row, callback) {
+        let self = this
+console.log(row)
+        let runner = promiseAll(row)
+        if(row.apply_staff) {
+            runner.push(User.load({data:row.apply_staff}), 'applyStuff')
+        }
+
+        if(row.turnin_staff) {
+            runner.push(User.load({data:row.turnin_staff}), 'turninStuff')
+        }
+
+        if(row.turnout_staff) {
+            runner.push(User.load({data:row.turnout_staff}), 'turnoutStuff')
+        }
+
+        if(row.out_id) {
+            runner.push(Warehouse.load({data:row.out_id}), 'outWarehouse')
+        }
+
+        if (row.in_id) {
+            runner.push(Warehouse.load({data:row.in_id}), 'inWarehouse')
+        }
+        
+        runner.push(getDataSource("requisitionstatus").getRowLabel(row.status), 'status_label')
+
+        runner.all().then(callback)
+    }
+})
+
+export { Productstock,Warehouse,Product,Goods,OrderDetails,ConfirmorderDetails,Requisition }
 export default {
     ProductDetail
 }
