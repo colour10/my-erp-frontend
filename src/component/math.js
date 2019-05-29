@@ -6,6 +6,7 @@ const round = function(num, length) {
         return '';
     }
 }
+
 export {round}
 
 export default {round}

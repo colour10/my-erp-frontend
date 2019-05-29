@@ -76,11 +76,8 @@
                     <el-form-item :label="_label('xingbie')">
                         <el-input v-model="genders" disabled></el-input>
                     </el-form-item>
-                </el-col>
-            </el-row>
-            <el-row :gutter="0">
-                <el-col :span="24">
-                    <el-form-item :label="_label('pinpai')" class="threecols">
+
+                    <el-form-item :label="_label('pinpai')">
                         <el-input v-model="brands" disabled></el-input>
                     </el-form-item>
                 </el-col>
@@ -97,7 +94,7 @@
                     
                     <el-table-column :label="_label('guojima')" align="left" width="200">
                         <template v-slot="scope">
-                            {{scope.row.product.getGoodsCode()}}
+                            <sp-product-tip :product="scope.row.product"></sp-product-tip>
                         </template>
                     </el-table-column>
 
@@ -119,7 +116,7 @@
                     </el-table-column>
                     <el-table-column prop="label" :label="_label('chuchangjiaheji')" width="100" align="center">
                         <template v-slot="{row}">
-                            {{row.product.factoryprice * row.total}}
+                            {{formatNumber(row.product.factoryprice * row.total)}}
                         </template>
                     </el-table-column>
                     <el-table-column prop="label" :label="_label('zhekoulv')" width="100" align="center">
@@ -130,12 +127,12 @@
 
                     <el-table-column prop="label" :label="_label('chengjiaojia')" width="130" align="center">
                         <template v-slot="{row}">
-                            {{row.product.factoryprice*row.discount}}
+                            {{formatNumber(row.product.factoryprice*row.discount)}}
                         </template>
                     </el-table-column>
                     <el-table-column prop="label" :label="_label('chengjiaozongjia')" width="100" align="center">
                         <template v-slot="{row}">
-                            {{row.product.factoryprice*row.discount*row.total}}
+                            {{formatNumber(row.product.factoryprice*row.discount*row.total)}}
                         </template>
                     </el-table-column>
                     
@@ -149,8 +146,8 @@
                     </el-table-column>
                     
                     <el-table-column :label="_label('caozuo')" width="100" align="center" v-if="isEditable">
-                        <template v-slot="scope">
-                            <as-button size="mini" type="danger" @click="deleteRow(scope.row)">{{_label('shanchu')}}</as-button>
+                        <template v-slot="{row}">
+                            <as-button size="mini" type="danger" @click="deleteRow(row)">{{_label('shanchu')}}</as-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -171,6 +168,7 @@ import { ProductDetail } from "../model.js"
 import chain  from "../chain.js"
 import {extend,copyTo}  from "../object.js"
 import detailConvert from "./order-detail.js"
+import orderMixin from "../mixins/order.js"
 
 const props = {
     columns: [
@@ -198,7 +196,7 @@ export default {
     name: 'sp-orderform',
     components: {
     },
-    props: {},
+    mixins: [orderMixin],
     data() {
         let self = this;
 
@@ -331,6 +329,7 @@ export default {
             self._log(row)
             row.form = form
             row.total = chain(form).toArray().array().reduce((total, item)=>total*1+item.value.number*1, 0)
+            row.total = self.formatNumber(row.total)
             self._log(row.total)
         },
         onDiscountChange(newValue, oldValue){
@@ -366,9 +365,10 @@ export default {
             return this.form.id > 0
         },
         total_price() {
-            return this.tabledata.reduce(function(total, current) {
+            let total = this.tabledata.reduce(function(total, current) {
                 return total + current.total * current.product.factoryprice * current.discount
             }, 0)
+            return this.formatNumber(total)
         },
         brands() {
             let obj = {}

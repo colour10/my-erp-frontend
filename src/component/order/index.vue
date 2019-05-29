@@ -44,7 +44,11 @@ export default {
                     { name: "brands", label: _label('pinpai') },
                     { name: "bussinesstype", label: _label('yewuleixing'), type: 'select', source: "bussinesstype", width: 100 },
                     //{ name: "status", label: _label('zhuangtai'), type: 'select', source: "orderstatus", width: 120 },
-                    { name: "orderdate", label: _label('dingdanriqi'), width: 120 }
+                    { name: "orderdate", label: _label('dingdanriqi'), width: 120, convert:function(row){
+                        if(row.maketime && row.maketime.length>0) {
+                            return row.maketime.substr(0,10)
+                        }
+                    } }
                 ],
                 controller: "order",
                 actions:[

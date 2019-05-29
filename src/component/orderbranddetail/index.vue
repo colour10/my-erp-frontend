@@ -85,7 +85,7 @@
                     
                     <el-table-column :label="_label('guojima')" align="center" width="200">
                         <template v-slot="scope">
-                            {{scope.row.product.getGoodsCode()}}
+                            <sp-product-tip :product="scope.row.product"></sp-product-tip>
                         </template>
                     </el-table-column>
                     <el-table-column prop="label" :label="_label('bizhong')" width="60" align="center">
@@ -100,12 +100,12 @@
                     </el-table-column>
                     <el-table-column prop="label" :label="_label('chengjiaojia')" width="80" align="center">
                         <template v-slot="{row}">
-                            {{row.product.factoryprice*row.discount}}
+                            {{ formatNumber(row.product.factoryprice*row.discount) }}
                         </template>
                     </el-table-column>
                     <el-table-column prop="label" :label="_label('zongjia')" width="80" align="center">
                         <template v-slot="{row}">
-                            {{row.product.factoryprice*row.discount*row.total}}
+                            {{ formatNumber(row.product.factoryprice*row.discount*row.total) }}
                         </template>
                     </el-table-column>
                     <el-table-column prop="discount" :label="_label('zhekoulv')" width="80" align="center">
@@ -135,11 +135,12 @@
 <script>
 import { extend, copyTo } from "../object.js"
 import detailConvert from "../asa/order-detail.js"
+import orderMixin from "../mixins/order.js"
+
 
 export default {
     name: 'sp-orderbranddetail',
-    components: {},
-    props: {},
+    mixins: [orderMixin],
     data() {
         var self = this;
         let _label = self._label
@@ -254,9 +255,11 @@ export default {
             return status != 2 && status != 3
         },
         total_price() {
-            return this.tabledata.reduce(function(total, current) {
+            let total = this.tabledata.reduce(function(total, current) {
                 return total + current.total * current.product.factoryprice * current.discount
             }, 0)
+
+            return this.formatNumber(total)
         },
         genders() {
             let obj = {}

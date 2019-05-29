@@ -87,7 +87,7 @@
                     </el-table-column>
                     <el-table-column :label="_label('guojima')" align="center" width="150">
                         <template v-slot="scope">
-                            {{scope.row.product.getGoodsCode()}}
+                            <sp-product-tip :product="scope.row.product"></sp-product-tip>
                         </template>
                     </el-table-column>
                     <el-table-column prop="label" :label="_label('bizhong')" width="60" align="center">
@@ -119,7 +119,7 @@
                     </el-table-column>
                     <el-table-column prop="confirm_total_price" :label="_label('zongjia')" width="80" align="center">
                         <template v-slot="{row}">
-                            {{row.price*row.confirm_total}}
+                            {{ formatNumber(row.price*row.confirm_total) }}
                         </template>
                     </el-table-column>
                 </el-table>
@@ -132,11 +132,11 @@
 import { extend, copyTo } from "../object.js"
 import { confirmList } from "../asa/order-detail.js"
 import chain from "../chain.js"
+import orderMixin from "../mixins/order.js"
 
 export default {
     name: 'sp-orderconfirmdetail',
-    components: {},
-    props: {},
+    mixins: [orderMixin],
     data() {
         let self = this;
         let _label = self._label
@@ -246,8 +246,8 @@ export default {
             row.form = form
             row.confirm_total = total;
             //row.confirm_total_price = row.product.factoryprice*row.discountbrand*row.confirm_total
-            row.confirm_total_price = row.price*row.confirm_total
-            row.price = row.product.factoryprice*row.discountbrand
+            row.confirm_total_price = self.formatNumber(row.price*row.confirm_total)
+            row.price = self.formatNumber(row.product.factoryprice*row.discountbrand)
         },
         onDiscountChange(newValue, oldValue) {
             let self = this
@@ -257,7 +257,7 @@ export default {
                     item.discountbrand = newValue
 
                     if(item.price=="" || item.price*1==0 || item.price==item.product.factoryprice*oldValue) {
-                        item.price = item.product.factoryprice*item.discountbrand
+                        item.price = self.formatNumber(item.product.factoryprice*item.discountbrand)
                     }
                 }
             })
@@ -304,9 +304,10 @@ export default {
             return status != 2 && status != 3
         },
         total_price() {
-            return this.tabledata.reduce(function(total, current) {
+            let total = this.tabledata.reduce(function(total, current) {
                 return total + current.confirm_total * current.price
             }, 0)
+            return this.formatNumber(total)
         },
         genders() {
             let obj = {}

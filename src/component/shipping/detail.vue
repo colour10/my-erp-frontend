@@ -140,7 +140,7 @@
                     </el-table-column>
                     <el-table-column :label="_label('guojima')" align="center" width="150">
                         <template v-slot="{row}">
-                            {{row.source.product.getGoodsCode()}}
+                            <sp-product-tip :product="row.source.product"></sp-product-tip>
                         </template>
                     </el-table-column>
                     <el-table-column prop="label" :label="_label('bizhong')" width="60" align="center">
@@ -193,12 +193,14 @@ import { extend, copyTo } from "../object.js"
 import { shippingList, shippingConvert, getProduct,createEmptyRow } from "../asa/order-detail.js"
 import chain from "../chain.js"
 import Select from "./select.vue"
+import orderMixin from "../mixins/order.js"
 
 export default {
     name: 'asa-order-confirm-dialog',
     components: {
         "sp-shipping-select": Select
     },
+    mixins: [orderMixin],
     data() {
         let self = this;
 
@@ -244,10 +246,10 @@ export default {
             visible: false,
             pro:false,
             getRowTotal(row) {
-                return row.price*row.source.confirm_total
+                return self.formatNumber(row.price*row.source.confirm_total)
             },
             getRowFactoryTotal(row) {
-                return row.source.product.factoryprice*row.source.confirm_total
+                return self.formatNumber(row.source.product.factoryprice*row.source.confirm_total)
             }
         }
     },
@@ -343,7 +345,7 @@ export default {
 
             row.key = StringFunc.random(10)
             self.tabledata.unshift(row)
-            self.form.currency = row.source.product.factorypricecurrency
+            self.form.currency = self.formatNumber(row.source.product.factorypricecurrency)
         },
         onChange({ row, form, total }) {
             let self = this
@@ -436,9 +438,10 @@ export default {
         },
         total_price() {
             let self = this
-            return self.tabledata.reduce(function(total, current) {
+            let total = self.tabledata.reduce(function(total, current) {
                 return total + self.getRowTotal(current)
             }, 0)
+            return self.formatNumber(total)
         },
         genders() {
             let obj = {}

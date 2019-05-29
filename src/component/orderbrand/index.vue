@@ -33,7 +33,11 @@ export default {
                     { name: "ageseason", label: _label('niandaijijie'), type: 'select', source: "ageseason" },
                     { name: "bussinesstype", label: _label('yewuleixing'), type: 'select', source: "bussinesstype" },
                     { name: "status", label: _label('zhuangtai'), type: 'select', source: "orderstatus" },
-                    { name: "makedate", label: _label('dingdanriqi') }
+                    { name: "makedate", label: _label('dingdanriqi'), convert:function(row){
+                        if(row.maketime && row.maketime.length>0) {
+                            return row.maketime.substr(0,10)
+                        }
+                    } }
                 ],
                 actions:[
                     { label: _label("queren"), handler:self.toCreateConfirm},

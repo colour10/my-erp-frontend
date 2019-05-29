@@ -2,14 +2,19 @@
     <div style="width:100%">
         <el-form :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini">
             <el-form-item>
-                <simple-select v-model="form.warehouseid" source="warehouse" :lang="lang" :placeholder="_label('cangku')" :clearable="true"></simple-select>
+                <simple-select v-model="form.warehouseid" source="warehouse" :placeholder="_label('cangku')" :clearable="true"></simple-select>
                 <as-button type="primary" @click="search()">{{_label("chaxun")}}</as-button>
             </el-form-item>
         </el-form>
         <sp-table :data="searchresult" border style="width:100%;">
-            <el-table-column prop="productname" :label="_label('chanpinmingcheng')" align="center" sortable>
+            <el-table-column prop="productname" :label="_label('chanpinmingcheng')" align="center" sortable width="200">
                 <template v-slot="scope">
-                    <as-button type="text" @click="selectRow(scope.row)">{{scope.row.product.productname}}</as-button>
+                    <as-button type="text" @click="selectRow(scope.row)">{{scope.row.product.getName()}}</as-button>
+                </template>
+            </el-table-column>
+            <el-table-column prop="productname" :label="_label('guojima')" align="center" sortable width="120">
+                <template v-slot="scope">
+                    {{scope.row.product.getGoodsCode()}}
                 </template>
             </el-table-column>
             <el-table-column prop="sizecontent_label" :label="_label('chima')" width="100" align="center" sortable>
@@ -30,9 +35,7 @@
 </template>
 
 <script>
-import { _label } from '../globals.js'
 import { Productstock } from "../model.js"
-
 import Product from '../asa/Asa_Product.vue'
 
 export default {
@@ -40,16 +43,12 @@ export default {
     components: {
         "product": Product
     },
-    props: {},
     data() {
-        var self = this;
-
         return {
             form: {
                 warehouseid: ""
             },
-            searchresult: [],
-            lang: _label('lang')
+            searchresult: []
         }
     },
     methods: {
@@ -58,7 +57,6 @@ export default {
             let self = this
 
             self._fetch("/productstock/search", self.form).then(function(res) {
-                //self._log("/productstock/page", res)
                 self.searchresult = []
                 res.data.forEach(function(item) {
                     Productstock.get(item, function(result) {
@@ -69,13 +67,7 @@ export default {
         },
         selectRow(row) {
             this.$refs.product.setInfo(row.product).then(product => product.show())
-                //this.$emit("select", row)
         }
-    },
-    computed: {},
-    watch: {},
-    mounted: function() {
-        //this.$refs.product.show();
     }
 }
 </script>

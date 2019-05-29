@@ -30,7 +30,7 @@ export default {
         clearable: {
             type: [Boolean],
             required: false,
-            default: false
+            default: true
         },
         multiple: {
             type: [Boolean],

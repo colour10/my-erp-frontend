@@ -1,23 +1,27 @@
 <template>
-    <el-popover trigger="click" :placement="placement">
-        <p>{{_label("guojima")}}: {{ product.getGoodsCode() }}</p>
-        <p>{{_label("shangpinmingcheng")}}: {{ product.getName() }}</p>
-        <div slot="reference" class="name-wrapper">
-            <el-button size="mini">{{ product.getGoodsCode() }}</el-button>
-        </div>
-    </el-popover>
+    <div>
+        <el-link type="primary" @click="onClick" size="mini">{{ product.getGoodsCode() }}</el-link>
+        <product ref="product"></product>
+    </div>
 </template>
 
 <script>
+import Product from '../asa/Asa_Product.vue'
 
 export default {
     name: 'sp-product-tip',
+    components: {
+        "product": Product
+    },
     props: {
         product: {
             type: Object
-        },
-        placement:{
-            default:'right'
+        }
+    },
+    methods:{
+        onClick:function(){
+            let self = this
+            self.$refs.product.setInfo(self.product).then(product => product.show())
         }
     }
 }
