@@ -49,6 +49,8 @@ import Asa_Sizecontent_Confirm from './component/asa/Asa_Sizecontent_Confirm.vue
 import Asa_Order_Tip from './component/asa/Asa_Order_Tip.vue'
 import Asa_Product_Tip from './component/asa/Asa_Product_Tip.vue'
 import SelectText from './component/select-text.js'
+import Dialog from './component/dialog.vue'
+import Asa_PriceSetting_Cell from './component/asa/Asa_PriceSetting_Cell.vue'
 
 import ImagePreview from './component/image-preview.vue'
 import Creator from './component/develop/index.vue'
@@ -77,6 +79,7 @@ import Productstock from './component/productstock/index.vue'
 import System from './component/system/index.vue'
 import Supplier from './component/supplier/index.vue'
 import Exchangerate from './component/exchangerate/index.vue'
+import PriceSetting from './component/pricesetting/index.vue'
 
 const components = [
     Simple_Admin_Page,
@@ -110,7 +113,10 @@ const components = [
     Button,
     Authbutton, 
     RadioGroup,
-    ImagePreview
+    ImagePreview,
+    Dialog,
+    PriceSetting,
+    Asa_PriceSetting_Cell
 ]
 
 components.forEach(component => {
@@ -154,7 +160,8 @@ const routes = [
             {path:'/ageseason', name:"ageseason", component:getComponentSimple("ageseason")},
             {path:'/ulnarinch', name:"ulnarinch", component:getComponent("ulnarinch")},
             {path:'/currency', name:"currency", component:getComponent("currency")},
-            {path:'/pricesetting', name:"pricesetting", component:getComponentSimple("pricesetting")},
+            //{path:'/pricesetting2', name:"currency", component:getComponentSimple("pricesetting")},
+            //{path:'/pricesetting', name:"pricesetting", component:PriceSetting},
             {path:'/price', name:"price", component:getComponentSimple("price")},
             {path:'/warehouse', name:"warehouse", component:getComponentSimple("warehouse")},
             {path:'/country', name:"country", component:getComponent("country")},

@@ -282,12 +282,11 @@ const props = function(){
             columns: [
                 { name: "priceid", label: _label("jiagemingcheng"), type:"select", source:"price", class:'width2'},
                 { name: "brandid", label: _label("pinpai"), type:"select", source:"brand", trigger:['seriesid'], class:'width2'},
-                { name: "brandgroupid", label: _label("pinlei"), type:"select", source:"brandgroup", trigger:["brandgroupchildid"], class:'width2'},
-                { name: "brandgroupchildid", label: _label("zipinlei"), type:"select", source:"brandgroupchild", class:'width2'},
+                { name: "brandgroupid", label: _label("pinlei"), type:"select", source:"brandgroup", trigger:["brandgroupchildid"], class:'width2', multiple:true},
+                { name: "brandgroupchildid", label: _label("zipinlei"), type:"select", source:"brandgroupchild", class:'width2', multiple:true},
                 { name: "ageseasonid", label: _label("niandai"), type:"select", source:"ageseason", class:'width2'},
                 { name: "seriesid", label: _label("xilie"), type:"select", source:"series", class:'width2'},
-                { name: "discount", label: _label("xishu"), class:'width2'},
-                { name: "filter", label: _label("quzheng"), type:"select", source:"pricefilter", class:'width2'},
+                { name: "discount", label: _label("xishu"), class:'width2'}
             ],
             controller: "pricesetting",
             auth: "pricesetting",
@@ -302,6 +301,7 @@ const props = function(){
                 { name: "countryid", label: _label("guojiadiqu"), type:"select", source:"country"},
                 { name: "pricetype", label: _label("jiageleixing"), type:"select", source:"pricetype"},            
                 { name: "currencyid", label: _label("bizhong"), type:"select", source:"currency"},
+                { name: "filter", label: _label("quzheng"), type:"select", source:"pricefilter", class:'width2'},
                 { name: "displayindex", label: _label("paixu"), sortMethod:sort_method_digit }
             ],
             controller: "price",

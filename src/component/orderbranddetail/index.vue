@@ -6,7 +6,7 @@
                 <as-button v-if="isEditable" :type="buttontype" @click="showProduct()">{{_label("xuanzeshangpin")}}</as-button>
             </el-row>
             <el-row :gutter="0">
-                <el-col :span="6">
+                <el-col :span="4" style="width:300px">
                     <el-form-item :label="_label('niandai')" required prop="ageseason">
                         <simple-select v-model="form.ageseason" source="ageseason"></simple-select>
                     </el-form-item>
@@ -22,7 +22,7 @@
                         <el-input v-model="genders" disabled></el-input>
                     </el-form-item>
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="4" style="width:300px">
                     <el-form-item :label="_label('gonghuoshang')">
                         <simple-select v-model="form.supplierid" source="supplier_3" :clearable="true">
                         </simple-select>
@@ -38,7 +38,7 @@
                         <el-input v-model="form.orderno" :placeholder="_label('zidonghuoqu')" disabled></el-input>
                     </el-form-item>
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="4" style="width:300px">
                     <el-form-item :label="_label('jine')">
                         <el-input placeholder="" v-model="total_price" class="productcurrency">
                             <select-currency v-model="form.currency" slot="prepend">
@@ -55,7 +55,7 @@
                         <el-input v-model="form.memo"></el-input>
                     </el-form-item>
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="4" style="width:300px">
                     <el-form-item :label="_label('yewuleixing')" required prop="bussinesstype">
                         <simple-select v-model="form.bussinesstype" source="bussinesstype">
                         </simple-select>

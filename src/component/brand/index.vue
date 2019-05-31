@@ -38,6 +38,9 @@
                             </template>
                         </simple-admin-page>
                     </el-tab-pane>
+                    <el-tab-pane :label="_label('jiageshezhi')" name="price" :disabled="id==0">
+                        <sp-pricesetting :brandid="id"></sp-pricesetting>
+                    </el-tab-pane>
                 </el-tabs>
             </template>
         </multiple-admin-page>

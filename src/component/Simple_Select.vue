@@ -1,6 +1,6 @@
 <template>
     <el-select v-model="currentValue" :multiple="multiple" :placeholder="placeholder" style="width:150" @change="handleChange" filterable :disabled="disabled" :clearable="clearable" size="mini" :filter-method="onFilter" @visible-change="onVisibleChange">
-        <el-option v-for="(item,key) in filterData" :key="item.id+item.name" :label="item.optionName()" :value="item.id" @click.native="onClick(item)">
+        <el-option v-for="(item,key) in filterData" :key="item.id+item.name" :label="item.optionName()" :value="item.id" @click.native="onClick(item)" :class="getOptionClass(item)">
             <template>
                 <slot v-bind:row="item"></slot>
             </template>
@@ -11,6 +11,35 @@
 <script>
 import DataSource from './DataSource.js'
 import globals, { _label } from './globals.js'
+
+const _func = function(self) {
+    return {
+        isInclude(value) {
+            self._log(self.data)
+            return self.data.findIndex(item=>item.id==value)>=0
+        },
+        filterValue() {
+
+            if(self.multiple==false) {
+                self._log("filterValue", self.multiple, self.currentValue )  
+                if(!this.isInclude(self.currentValue)) {
+                    self.currentValue = ""
+                }
+            }
+            else {
+                let newarray = []
+                self.currentValue.forEach(value=>{
+                    if(this.isInclude(value)) {
+                        newarray.push(value)
+                    }
+                })
+
+                self.currentValue = newarray    
+                self._log(newarray)            
+            }
+        }
+    }
+}
 
 export default {
     name: 'simple-select',
@@ -53,6 +82,9 @@ export default {
         isIgnoreZero:{
             type:Boolean,
             default:true
+        },
+        optionClass:{
+            type:Function
         }
     },
     model: {
@@ -63,14 +95,13 @@ export default {
         let self = this
         return {
             counter:Math.floor(Math.random()*100),
-            sss: this.getDataSource(),
             currentValue: "",
             keyword:"",
             data: [],
             filterData:[], //查询过滤后的
             keyindexes:{}, //记录元素的顺序，多选时排序用
             start:-1, //批量选择的时候使用
-            onDataSourceChange() {           
+            onDataSourceChange(callback) {           
                 self.counter      = self.counter+1
                 
                 if (self.parentid == false) {
@@ -82,10 +113,18 @@ export default {
                         self.keyindexes = {}
                         data.forEach(item => self.push(item))
                         self.filteredList()
+
+                        if(callback){
+                            callback()
+                        }
                     })
                 } else {
                     //self._log("mounted")
-                    self.load(self.parentid)
+                    self.load(self.parentid).then(()=>{
+                        if(callback){
+                            callback()
+                        }
+                    })
                 }
             }
         }
@@ -134,16 +173,29 @@ export default {
             let self = this;
             //self._log("重新加载下拉框数据", self.source)
             
-            self.getDataSource().getSourceByParent(value).then(function(dataSource) {
-                dataSource.getData(data=>{
-                    //self._log("++++++++++++++------------",self.source)
-                    self.data = []
-                    self.keyindexes = {}
-                    data.forEach(item => self.push(item))
+            return new Promise(resolve=>{
+                self.getDataSource().getSourceByParent(value).then(function(dataSource) {
+                    dataSource.getData(data=>{
+                        //self._log("++++++++++++++------------",self.source)
+                        self.data = []
+                        self.keyindexes = {}
+                        data.forEach(item => self.push(item))
+
+                        //检查当前值是否在下拉选项中存在，不存在则去掉
+                        _func(self).filterValue()            
+                    })
+                    self.filteredList();
+                    //self._log("追加下拉框数据")
+                    resolve()
                 })
-                self.filteredList();
-                //self._log("追加下拉框数据")
-            })
+            })            
+        },
+        select(index){
+            let self = this
+            if(self.filterData[index]) {
+                self.setValue(self.filterData[index].id)
+                return true
+            }
         },
         clear() {
             self.$emit("change", "")
@@ -234,7 +286,14 @@ export default {
                 })
             }
             self.$emit("option-change", self.filterData)
-        }        
+        },
+        getOptionClass(row) {
+            if(this.optionClass) {
+                return this.optionClass(row)
+            }
+
+            return ""
+        }
     },
     watch: {
         select_value(newValue) {
@@ -250,7 +309,9 @@ export default {
         self.setValue(self.select_value)
         self.getDataSource().emitter.on("change", self.onDataSourceChange)
         //self._log("绑定监听事件",self.source)
-        self.onDataSourceChange()        
+        self.onDataSourceChange(function(){
+            self.$emit("inited")
+        })        
     },
     computed:{
 

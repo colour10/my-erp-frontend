@@ -1,5 +1,5 @@
 <template>
-    <el-dialog :title="title" :visible.sync="dialogVisible" :center="true" width="1200px" class="product">
+    <el-dialog :title="title" :visible.sync="dialogVisible" :center="true" width="1200px" class="product" :modal="false">
         <el-tabs type="border-card" @tab-click="onTabClick" v-model="currentTab">
             <el-tab-pane :label="_label('jibenziliao')" name="product">
                 <el-row>
@@ -88,7 +88,7 @@
                             </el-form-item>
 
                             <el-form-item :label="_label('cankaobeilv')">
-                                {{rate}}
+                                {{rate? 'none' : rate }} {{_label('lingshoubi')}}:{{getPriceRate}}
                             </el-form-item>
                             
                             <el-form-item :label="_label('chuchangjia')">
@@ -118,9 +118,6 @@
                                     </select-currency>
                                     <span slot="append">{{getReciprocalRateNational}}</span>
                                 </el-input>
-                            </el-form-item>
-                            <el-form-item :label="_label('lingshoubi')">
-                                {{getPriceRate}}
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
@@ -199,7 +196,7 @@
             </el-tab-pane>
             <el-tab-pane :label="_label('tongkuanduose')" name="colorgroup" :disabled="form.id==''">
                 <auth auth="product">
-                    <searchpanel ref="searchpanel" @select="onSelectProduct" :filter="searchProductFilter"></searchpanel>
+                    <searchpanel ref="searchpanel" @select="onSelectProduct" :filter="searchProductFilter" :isCreate="false"></searchpanel>
                 </auth>
 
                 <el-table :data="colors" border style="width:100%;">
@@ -402,7 +399,7 @@ export default {
 
         },
         searchProductFilter(product) {
-            return this.colors.findIndex(item => item.id == product.id) < 0
+            return product.product_group=='' && this.colors.findIndex(item => item.id == product.id) < 0 
         },
         onSubmit() {
             var self = this;

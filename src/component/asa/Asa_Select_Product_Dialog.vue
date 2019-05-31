@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="dialogVisible" :center="true" :fullscreen="false" :modal="true" width="1024px">
+  <el-dialog :visible.sync="dialogVisible" :center="true" :fullscreen="false" :modal="false" width="1024px">
     <searchpanel @select="onSelect" @close="onClose"></searchpanel>
   </el-dialog>
 </template>

@@ -34,15 +34,17 @@ export default {
             },
             props: {
                 columns: [
-                    { name: "orderno", label: _label('dingdanbianhao'), width: 240 },
+                    { name: "orderno", label: _label('dingdanbianhao'), width: 120 },
+
                     { name: "bookingid", label: _label('dinghuokehu'), type: 'select', source: "supplier" },
                     { name: "supplierid", label: _label('gonghuoshang'), type: 'select', source: "supplier" },
                     { name: "ageseason", label: _label('niandai'), type: 'select', source: "ageseason", width: 100 },
                     { name: "currency", label: _label('bizhong'), type: 'select', source: "currency", width: 80 },
                     { name: "total", label: _label('jine'), width: 100 },
+                    { name: "discount", label: _label('zhekoulv'), width: 100 },
                     { name: "genders", label: _label('xingbie') },
                     { name: "brands", label: _label('pinpai') },
-                    { name: "bussinesstype", label: _label('yewuleixing'), type: 'select', source: "bussinesstype", width: 100 },
+                    { name: "bussinesstype", label: _label('yewuleixing'), type: 'select', source: "bussinesstype", width: 120 },
                     //{ name: "status", label: _label('zhuangtai'), type: 'select', source: "orderstatus", width: 120 },
                     { name: "orderdate", label: _label('dingdanriqi'), width: 120, convert:function(row){
                         if(row.maketime && row.maketime.length>0) {

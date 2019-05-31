@@ -21,7 +21,7 @@ export default {
     methods:{
         onClick:function(){
             let self = this
-            self.$refs.product.setInfo(self.product).then(product => product.show())
+            self.$refs.product.setInfo(self.product).then(product => product.show(false))
         }
     }
 }

@@ -304,11 +304,12 @@ DataSource.prototype.getRows = function(keyValues='', callback) {
 DataSource.prototype.getSourceByParent = function(parent) {
     var self = this;
 
+    let parent_array = parent.split(",")
     return new Promise(resolve=>{
         self.getData( data => {
             //console.log(data, parent)
             let list = data.filter(function(value){
-                return value.row[self.parent] == parent
+                return parent_array.indexOf(value.row[self.parent])>=0 //value.row[self.parent] == parent
             })
 
             let options = extract(self.options,['oplabel','opvalue','parent']);
@@ -389,5 +390,5 @@ DataSource.createSource = function(datalist, oplabel, opvalue, lang) {
     source.init()
     return source;
 }
-
+export {DataSource}
 export default DataSource

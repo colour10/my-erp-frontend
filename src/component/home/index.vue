@@ -13,7 +13,6 @@
                 <el-submenu index="2">
                     <template #title>{{_label("menu-2")}}</template>
                     <el-menu-item index="brand">{{_label("menu-2-1-1")}}</el-menu-item>
-                    <el-menu-item index="pricesetting">{{_label("jiageshezhi")}}</el-menu-item>
                     <el-menu-item index="brandgroup">{{_label("menu-2-1-2")}}</el-menu-item>
                     <el-menu-item index="ageseason">{{_label("menu-2-1-3")}}</el-menu-item>
                     <el-menu-item index="colortemplate">{{_label("menu-2-1-4")}}</el-menu-item>

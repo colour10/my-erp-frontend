@@ -50,7 +50,9 @@
                         </template>
                     </el-table-column>
                     <el-table-column :label="_label('chanpinmingcheng')" align="left" width="250">
-                        <template v-slot="{row}">{{row.getName()}}</template>>
+                        <template v-slot="{row}">
+                            <sp-product-tip :product="row"></sp-product-tip>
+                        </template>>
                     </el-table-column>
                     <el-table-column :label="_label('guojima')" align="left" width="180">
                         <template v-slot="{row}">{{row.getGoodsCode()}}</template>>
@@ -83,7 +85,12 @@ export default {
     components:{
         "productadd":Asa_Product_Add
     },
-    props: ['filter'],
+    props: {
+        filter:{}, 
+        isCreate:{
+            default:true
+        }
+    },
     data() {
         return {
             is_show: false,
@@ -118,16 +125,18 @@ export default {
                 self.searchresult = []
                     //self._log(res)
                 if (res.data.length == 0) {
-                    self.$confirm('商品信息不存在，是否新建商品?', '提示', {
-                        confirmButtonText: '确定',
-                        cancelButtonText: '取消',
-                        type: 'warning'
-                    }).then(() => {
-                        setTimeout(function(){
-                            let form = chain(self.form).filter(item=>item.length>0).object()
-                            self.$refs.productadd.setForm(form).show(false)
-                        },100)                        
-                    }).catch(() => {});
+                    if(self.isCreate==true) {
+                        self.$confirm('商品信息不存在，是否新建商品?', '提示', {
+                            confirmButtonText: '确定',
+                            cancelButtonText: '取消',
+                            type: 'warning'
+                        }).then(() => {
+                            setTimeout(function(){
+                                let form = chain(self.form).filter(item=>item.length>0).object()
+                                self.$refs.productadd.setForm(form).show(false)
+                            },100)                        
+                        }).catch(() => {});
+                    }                    
                 } else {
                     res.data.filter(item => typeof(self.filter) == 'function' ? self.filter(item) : true).forEach(function(item) {
                         ProductDetail.get(item, function(result) {

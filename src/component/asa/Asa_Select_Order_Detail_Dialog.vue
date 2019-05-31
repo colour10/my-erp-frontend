@@ -1,5 +1,5 @@
 <template>
-    <el-dialog :visible.sync="dialogVisible" :center="true" :fullscreen="false" :modal="true" width="1024px">
+    <el-dialog :visible.sync="dialogVisible" :center="true" :fullscreen="false" :modal="false" width="1024px">
         <el-form class="user-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini">
             <el-row :gutter="0">
                 <el-col :span="6">

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-form ref="order-form" class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini" :rules="rules" :inline-message="true">
+        <el-form ref="order-form" class="formx" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini" :rules="rules" :inline-message="true">
             <el-row :gutter="0">
                 <au-button auth="order-submit" :type="canSubmit?'primary':'info'" @click="saveOrder(1)">{{_label("baocun")}}</au-button>
                 <!-- <au-button auth="order-submit" :type="canSubmitPayment?'primary':'info'" @click="addPayment">{{_label("shengchengfahuodan")}}</au-button> -->
@@ -9,20 +9,13 @@
                 <as-button v-if="isEditable" :type="buttontype" @click="showProduct()">{{_label("xuanzeshangpin")}}</as-button>
             </el-row>
             <el-row :gutter="0">
-                <el-col :span="4" style="width:300px">
+                <el-col :span="4" style="width:230px">
                     <el-form-item :label="_label('dinghuokehu')" required prop="bookingid">
                         <simple-select v-model="form.bookingid" source="supplier_2" :lang="lang">
                         </simple-select>
                     </el-form-item>
                     <el-form-item :label="_label('lianxiren')">
                         <simple-select v-model="form.linkmanid" source="supplierlinkman" :parentid="form.bookingid">
-                        </simple-select>
-                    </el-form-item>
-                    <el-form-item :label="_label('niandai')" required prop="ageseason">
-                        <simple-select v-model="form.ageseason" source="ageseason" :lang="lang"></simple-select>
-                    </el-form-item>
-                    <el-form-item :label="_label('jijie')">
-                        <simple-select v-model="form.seasontype" source="seasontype" :lang="lang">
                         </simple-select>
                     </el-form-item>
                     <el-form-item :label="_label('gonghuoshang')">
@@ -34,7 +27,15 @@
                         </simple-select>
                     </el-form-item>
                 </el-col>
-                <el-col :span="4" style="width:300px">
+                <el-col :span="4" style="width:230px">
+                    <el-form-item :label="_label('niandai')" required prop="ageseason">
+                        <simple-select v-model="form.ageseason" source="ageseason" :lang="lang"></simple-select>
+                    </el-form-item>
+                    <el-form-item :label="_label('jijie')">
+                        <simple-select v-model="form.seasontype" source="seasontype" :lang="lang">
+                        </simple-select>
+                    </el-form-item>
+
                     <el-form-item :label="_label('yewuleixing')" required prop="bussinesstype">
                         <simple-select v-model="form.bussinesstype" source="bussinesstype" :lang="lang">
                         </simple-select>
@@ -43,6 +44,10 @@
                         <simple-select v-model="form.property" source="orderproperty" :lang="lang">
                         </simple-select>
                     </el-form-item>
+                </el-col>
+
+                <el-col :span="4" style="width:230px">
+                    
                     <el-form-item :label="_label('jine')">
                         <el-input placeholder="" v-model="total_price" class="productcurrency">
                             <select-currency v-model="form.currency" slot="prepend">
@@ -59,7 +64,7 @@
                         <el-input v-model="form.memo"></el-input>
                     </el-form-item>
                 </el-col>
-                <el-col :span="4" style="width:300px">
+                <el-col :span="4" style="width:230px">
                     <el-form-item :label="_label('kehudingdanhao')">
                         <el-input v-model="form.bookingorderno"></el-input>
                     </el-form-item>
@@ -72,7 +77,9 @@
                     <el-form-item :label="_label('dinghuoriqi')">
                         <el-date-picker v-model="form.orderdate" type="date" value-format="yyyy-MM-dd"></el-date-picker>
                     </el-form-item>
-                    
+                </el-col>
+
+                <el-col :span="4" style="width:230px">                    
                     <el-form-item :label="_label('xingbie')">
                         <el-input v-model="genders" disabled></el-input>
                     </el-form-item>
