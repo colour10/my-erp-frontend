@@ -51,6 +51,7 @@ import Asa_Product_Tip from './component/asa/Asa_Product_Tip.vue'
 import SelectText from './component/select-text.js'
 import Dialog from './component/dialog.vue'
 import Asa_PriceSetting_Cell from './component/asa/Asa_PriceSetting_Cell.vue'
+import Toggle_Input from './component/toggle-input.vue'
 
 import ImagePreview from './component/image-preview.vue'
 import Creator from './component/develop/index.vue'
@@ -116,7 +117,8 @@ const components = [
     ImagePreview,
     Dialog,
     PriceSetting,
-    Asa_PriceSetting_Cell
+    Asa_PriceSetting_Cell,
+    Toggle_Input
 ]
 
 components.forEach(component => {

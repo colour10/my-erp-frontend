@@ -8,20 +8,21 @@
             </el-col>
         </el-row>
         <el-table :data="settings" style="width:100%;" stripe>
-            <el-table-column :label="_label('pinlei')" align="left" width="110">
+            <el-table-column :label="_label('pinlei')" align="left" width="90">
                 <template v-slot="{row}">
                     <span v-if="row.brandgroupchildid=='0'">全部</span>
+                    <sp-select-text :value="row.brandgroupid" source="brandgroup" v-if="row.brandgroupchildid>0"></sp-select-text>
                 </template>
             </el-table-column>
-            <el-table-column :label="_label('zipinlei')" align="left" width="150">
+            <el-table-column :label="_label('zipinlei')" align="left" width="120">
                 <template v-slot="{row}">
                     <span v-if="row.brandgroupchildid=='0'">全部</span>
                     <sp-select-text :value="row.brandgroupchildid" source="brandgroupchild" v-if="row.brandgroupchildid>0"></sp-select-text>
                 </template>
             </el-table-column>
-            <el-table-column :label="column.name" align="center" v-for="column in prices" :key="column.id" width="120">
+            <el-table-column :label="column.name" align="center" v-for="column in prices" :key="column.id" width="90">
                 <template v-slot="{row}">
-                    {{getRate({column, row})}}
+                    <tg-input :value="getRate({column, row})" :info="{column,row}" @change="changeHandler"></tg-input>
                 </template>
             </el-table-column>
         </el-table>
@@ -64,7 +65,7 @@ const _func = function(self) {
         return target=='' || target=='0' || target==0 || target==val
     }
 
-    return {
+    let _this = {
         loadPriceList() {
             self._log("loadPriceList")
             self._fetch("/price/page", {}).then(result => {
@@ -108,7 +109,7 @@ const _func = function(self) {
         },
         getRate({ column, row }) {
             //self._log("setting", column, row)
-            return row.discounts[column.id] || ""
+            return row.discounts[column.id] || "-"
         },
         convert(list) {
             let result = {}
@@ -128,17 +129,30 @@ const _func = function(self) {
                 self._log(item, key)
 
                 let array = key.split("-")
-                self.settings.push({
-                    brandgroupchildid:array[0],
-                    ishot:array[1],
-                    discounts:item
+
+                getDataSource("brandgroupchild").getRow(array[0]).then(row=>{
+                    self._log(row)
+                    self.settings.push({
+                        brandgroupid:row ? row.row.brandgroupid: "",
+                        brandgroupchildid:array[0],
+                        ishot:array[1],
+                        discounts:item
+                    })
                 })
+                
+            })
+        },
+        submit(params){
+            self._submit("/pricesetting/add", {params:JSON.stringify(params)}).then(function() {
+                _this.loadSetting()
+                self.form.id = ""
+            }).catch(()=>{
             })
         },
         getParamsList() {
             let push = function(list, brandgroupchildid) {
                 chain(self.formsetting).forEach((discount, priceid)=>{ 
-                    if(discount>0) {
+                    if(discount!="") {
                         list.push({
                             brandgroupchildid,
                             discount,
@@ -178,6 +192,8 @@ const _func = function(self) {
             })
         }
     }
+
+    return _this
 }
 
 
@@ -240,15 +256,13 @@ export default {
                 ishot:self.form.ishot
             }
 
-            _func(self).getParamsList().then(list=>{
+            let func = _func(self)
+
+            func.getParamsList().then(list=>{
                 params.list = list;
                 self._log("params", params)
 
-                self._submit("/pricesetting/add", {params:JSON.stringify(params)}).then(function() {
-                    _func(self).loadSetting()
-                    self.form.id = ""
-                }).catch(()=>{
-                })
+                func.submit(params)
             })
             
         },
@@ -266,6 +280,21 @@ export default {
             let self = this
             self._log("optionClass", row)
             return "option" + row.id
+        },
+        changeHandler({value, target}) {
+            let self = this
+            let {column, row} = target.$attrs.info
+
+            _func(self).submit({
+                brandid:self.form.brandid,
+                ageseasonid:self.form.ageseasonid,
+                ishot:row.ishot,
+                list:[{
+                    brandgroupchildid:row.brandgroupchildid,
+                    discount:value=="-" || value=="" ? '0' : value,
+                    priceid:column.id
+                }]
+            })
         }
     },
     watch:{
