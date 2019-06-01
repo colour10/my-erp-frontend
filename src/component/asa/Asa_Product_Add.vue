@@ -136,6 +136,10 @@
                         <simple-select v-model="form.saletypeid" source="saletype"></simple-select>
                     </el-form-item>
 
+                    <el-form-item :label="_label('xianliangkuan')">
+                        <el-switch v-model="form.ishot" active-value="1" inactive-value="0"></el-switch>
+                    </el-form-item>
+
                     <el-form-item :label="_label('xingbie')">
                         <sp-radio-group v-model="form.gender" source="gender" :span="8" :lang="lang" class="supermini" style="width:270px">
                         </sp-radio-group>
@@ -224,6 +228,7 @@ export default {
                 sizetopid: "",
                 sizecontentids: "",
                 saletypeid:"",
+                ishot:"",
                 productmemoids: "" //商品描述
             },
             rules: {
@@ -380,7 +385,8 @@ export default {
         initColorList() {
             let self = this
             let length = self.colors.length;
-            length = length > 0 ? length : 1;
+            //length = length > 0 ? length : 1;
+            length = 1;
 
             self.colors = []
             for (let i = 0; i < length; i++) {

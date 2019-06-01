@@ -66,7 +66,8 @@ export default {
                     } },
 
                     
-                    { name: "laststoragedate", label: _label("zuihouruku"), width:120 },
+                    { name: "saletypeid", label: _label("xiaoshoushuxing"), width:120, type: "select", source:"saletype" },
+                    { name: "laststoragedate", label: _label("zuihouruku"), width:120 }
                     
                 ],
                 controller: "product",

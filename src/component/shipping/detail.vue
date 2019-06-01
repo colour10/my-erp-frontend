@@ -345,7 +345,7 @@ export default {
 
             row.key = StringFunc.random(10)
             self.tabledata.unshift(row)
-            self.form.currency = self.formatNumber(row.source.product.factorypricecurrency)
+            self.form.currency = row.source.product.factorypricecurrency
         },
         onChange({ row, form, total }) {
             let self = this
@@ -411,7 +411,6 @@ export default {
                     sums[index] = data.reduce((total, row)=>total+self.getRowTotal(row), 0)
                 }
             })
-            //self._log("data", data)
 
             return sums
         }

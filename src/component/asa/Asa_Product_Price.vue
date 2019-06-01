@@ -1,24 +1,27 @@
 <template>
     <div>
         <el-table :data="data" border style="width:100%;">
-            <el-table-column :label="_label('mingcheng')" align="center" width="150" prop="name">
+            <el-table-column :label="_label('mingcheng')" align="center" width="150" prop="name" :sortable="true">
             </el-table-column>
             <el-table-column :label="_label('bizhong')" align="center" width="80" prop="currency">
             </el-table-column>
-            <el-table-column :label="_label('jiage')" align="center" width="150" prop="price">
+            <el-table-column :label="_label('jiage')" align="center" width="100" prop="price" :sortable="true">
                 <template v-slot="{row}">
                     <span v-if="row.is_special=='0'">{{row.price}}</span>
                     <span v-if="row.is_special=='1'" style="color:#F56C6C">{{row.price}}</span>
                 </template>
             </el-table-column>
 
-            <el-table-column :label="_label('huilv')" align="center" width="80" prop="rate">
+            <el-table-column :label="_label('huilv')" align="center" width="80" prop="rate" :sortable="true">
             </el-table-column>
             
-            <el-table-column :label="_label('xishu')" align="center" width="80" prop="discount">
+            <el-table-column :label="_label('xishu')" align="center" width="80" prop="discount" :sortable="true">
             </el-table-column>
 
-            <el-table-column :label="_label('costplus')" align="right" width="80">
+            <el-table-column :label="_label('maoli')" align="center" width="80" :sortable="true">
+            </el-table-column>
+
+            <el-table-column :label="_label('costplus')" align="right" width="100" :sortable="true" prop="costplus">
                 <template v-slot="{row}">
                     {{row.costplus}}%
                 </template>

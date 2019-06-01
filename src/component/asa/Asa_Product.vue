@@ -128,6 +128,11 @@
                             <el-form-item :label="_label('xiaoshoushuxing')">
                                 <simple-select v-model="form.saletypeid" source="saletype" style="color:red"></simple-select>
                             </el-form-item>
+
+                            <el-form-item :label="_label('xianliangkuan')">
+                                <el-switch v-model="form.ishot" active-value="1" inactive-value="0"></el-switch>
+                            </el-form-item>
+
                             <el-form-item :label="_label('xingbie')">
                                 <sp-radio-group v-model="form.gender" source="gender" :span="8" :lang="lang" style="width:270px">
                                 </sp-radio-group>
@@ -345,7 +350,8 @@ export default {
                 colorname:"",
                 makestaff: "",
                 maketime: '',
-                saletypeid:""
+                saletypeid:"",
+                ishot:""
             },
             rules: {
                 sizetopid: Rules.id({ required: true, message: _label("8000") }),
