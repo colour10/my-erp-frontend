@@ -108,7 +108,7 @@ export default {
          
                     self.getDataSource().getData(function(data) {
                         //self._log("load", data)
-                        //self._log("++++++++++++++",self.source)
+                        self._log("++++++++++++++",self.source)
                         self.data = []
                         self.keyindexes = {}
                         data.forEach(item => self.push(item))
@@ -119,7 +119,7 @@ export default {
                         }
                     })
                 } else {
-                    //self._log("mounted")
+                    self._log("mounted")
                     self.load(self.parentid).then(()=>{
                         if(callback){
                             callback()
@@ -314,7 +314,7 @@ export default {
         let self = this;
         self.setValue(self.select_value)
         self.getDataSource().emitter.on("change", self.onDataSourceChange)
-        //self._log("绑定监听事件",self.source)
+        self._log("绑定监听事件",self.source)
         self.onDataSourceChange(function(){
             self.$emit("inited")
         })        
@@ -323,6 +323,7 @@ export default {
 
     },
     beforeDestroy:function(){
+        this._log("移除监听事件",this.source)
         this.getDataSource().emitter.off("change", this.onDataSourceChange)
     }
 }

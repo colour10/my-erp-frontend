@@ -50,8 +50,8 @@
                             </el-form-item>
                             <el-form-item :label="_label('zongjine')">
                                 <sp-float-input placeholder="" :select_value="total_price" class="input-with-select">
-                                    <select-currency v-model="form.currency">
-                                    </select-currency>
+                                    <simple-select source="currency" :clearable="false" v-model="form.currency">
+                                    </simple-select>
                                 </sp-float-input>
                             </el-form-item>
                             <el-form-item :label="_label('huilv')">

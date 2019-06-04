@@ -17,7 +17,7 @@ import Simple_Admin_Page from './component/Simple_Admin_Page.vue'
 //import Multiple_Admin_Page from './component/Multiple_Admin_Page.vue'
 import Simple_Admin_TableList from './component/Simple_Admin_TableList.vue'
 import Simple_Select from './component/Simple_Select.vue'
-import Select_Currency from './component/Select_Currency.vue'
+//import Select_Currency from './component/Select_Currency.vue'
 import Simple_Avatar from './component/Simple_Avatar.vue'
 import Simple_Album from './component/Simple_Album.vue'
 import globals,{config} from './component/globals.js'
@@ -27,7 +27,7 @@ import Asa_Select_Product_Dialog from './component/asa/Asa_Select_Product_Dialog
 import Asa_Sales_Dialog from './component/asa/Asa_Sales_Dialog.vue'
 import Simple_Display_Input from './component/Simple_Display_Input.vue'
 import Simple_Float_Input from './component/Simple_Float_Input.vue'
-import Asa_Order_Confirm_Dialog from './component/asa/Asa_Order_Confirm_Dialog.vue'
+//import Asa_Order_Confirm_Dialog from './component/asa/Asa_Order_Confirm_Dialog.vue'
 import Asa_Select_Order_Detail_Dialog from './component/asa/Asa_Select_Order_Detail_Dialog.vue'
 import Asa_Productstock_Search from './component/asa/Asa_Productstock_Search.vue'
 import Asa_Warehousing_Dialog from './component/asa/Asa_Warehousing_Dialog.vue'
@@ -90,7 +90,7 @@ const components = [
     Multiple_Admin_Page,
     Simple_Admin_TableList,
     Simple_Select,
-    Select_Currency,
+    //Select_Currency,
     Simple_Avatar,
     Simple_Album,
     Asa_Color_Select,
@@ -103,7 +103,7 @@ const components = [
     Asa_Sales_Dialog,
     Simple_Display_Input,
     Simple_Float_Input,
-    Asa_Order_Confirm_Dialog,
+    //Asa_Order_Confirm_Dialog,
     Asa_Select_Order_Detail_Dialog,
     Asa_Productstock_Search,
     Asa_Warehousing_Dialog,

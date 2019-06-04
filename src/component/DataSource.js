@@ -59,7 +59,7 @@ DataSource.prototype.clear = function() {
     self.hashtable = {}
     self.is_loaded = false
     self.emitter.emit("change")
-    console.log("清空")
+    console.log("清空", self)
     self.init()
 }
 

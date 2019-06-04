@@ -84,6 +84,7 @@ export default {
                     { name: "fax", label: _label("chuanzhen"), class: "width2", is_hide: true },
                     { name: "linkman", label: _label("lianxiren"), class: "width2", is_hide: true },
                     { name: "mobile", label: _label("shoujihao"), class: "width2", is_hide: true },
+                    { name: "wechat", label: _label("weixin"), class: "width2", is_hide: true },
                     { name: "email", label: 'Email', class: "width1", is_hide: true }
                 ],
                 options: {
@@ -225,6 +226,13 @@ export default {
                 if (!StringFunc.include(form.suppliertype, '2')) {
                     form.customtype = ""
                 }
+            }
+            else if(column.name == 'countrycity') {
+                self._log(form.countrycity)
+                let source = DataSource.getDataSource("country", self._label("lang"))
+                source.getRow(form.countrycity).then(({row})=>{
+                    self._log(row.area_code)
+                })
             }
         },
         isDisabled(column, form) {

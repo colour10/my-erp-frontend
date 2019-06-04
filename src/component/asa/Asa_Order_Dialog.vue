@@ -50,8 +50,8 @@
                     
                     <el-form-item :label="_label('jine')">
                         <el-input placeholder="" v-model="total_price" class="productcurrency">
-                            <select-currency v-model="form.currency" slot="prepend">
-                            </select-currency>
+                            <simple-select source="currency" :clearable="false" v-model="form.currency" slot="prepend">
+                            </simple-select>
                         </el-input>
                     </el-form-item>
                     <el-form-item :label="_label('zhekoulv')">

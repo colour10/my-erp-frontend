@@ -5,7 +5,7 @@ import { extend } from './object.js'
 export default extendComponent(Simple_Admin_Page, {
     name:"multiple-admin-page",
     methods:{
-        paramsPipe({props}) {
+        paramsPipe({props, on}) {
             let self = this
         
             let languages = self._label("languages");

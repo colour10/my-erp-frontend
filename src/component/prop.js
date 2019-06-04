@@ -1,9 +1,16 @@
 import {getLabel, getAvailableHeight} from "./globals.js"
+import DataSource from './DataSource.js'
+
 const _label = getLabel
 
 const sort_method_digit = function(a,b){
     return a-b
 }
+
+const clearCache = function(name){
+    DataSource.getDataSource(name, _label("lang")).clear()
+}
+
 const props = function(){
     return {
         "ageseason": {
@@ -95,10 +102,12 @@ const props = function(){
                 { name: "area_code", label: _label("guojiquhao") }, 
             ],
             controller: "country",
-            key_column: "name"/*,
-            options:{
-                tableHeight:getAvailableHeight()
-            }*/
+            key_column: "name",
+            on:{
+                "after-update":function(){
+                    clearCache("country")
+                }
+            }
         },
 
         "currency": {
@@ -108,10 +117,12 @@ const props = function(){
                 
             ],
             controller: "currency",
-            key_column: "name"/*,
-            options:{
-                tableHeight:getAvailableHeight()
-            }*/
+            key_column: "name",
+            on:{
+                "after-update":function(){
+                    clearCache("currency")
+                }
+            }
         },
 
         "material": {
@@ -387,14 +398,22 @@ const props = function(){
 }
 
 const getComponent = function(name) {
+    
     return {
         name:"sp-" +name,
         data: function() {
             return {
-                props: props()[name]
+                prop: props()[name]
             }
         },
-        template: '<multiple-admin-page v-bind="props" ref="page"></multiple-admin-page>'
+        render(h) {
+            return h("multiple-admin-page", {
+                props:this.prop,
+                on:this.prop.on || {},
+                ref:"page"
+            })
+        }
+        //template: '<multiple-admin-page v-bind="props" @after-update="prop" ref="page"></multiple-admin-page>'
     }
 }
 
