@@ -76,9 +76,7 @@ export default {
 
                     { name: "nationalprice", label: _label("benguolingshoujia"), width: 130, convert:function(row){
                         return [row.nationalpricecurrency_label, row.nationalprice].join(" ")
-                    } },
-
-                    
+                    } },                    
                     
                     { name: "saletypeid", label: _label("xiaoshoushuxing"), width:120, type: "select", source:"saletype" },
 

@@ -9,8 +9,12 @@
                         </template>
                     </el-table-column>
                     <el-table-column width="80" align="center">
-                        <template v-slot="scope">
-                            <simple-avatar v-model="scope.row.picture2" font-size="14px" :size="35"></simple-avatar>
+                        <template v-slot="{row}">
+                            <simple-avatar v-model="row.picture2" font-size="14px" :size="35" v-if="row.picture2!=''"></simple-avatar>
+
+                            <el-upload class="avatar-uploader" :action="host+'/common/upload?category=product'" :show-file-list="false" :on-success="handleAvatarSuccess" v-if="row.picture2==''" :multiple="true">
+                                <i class="el-icon-plus avatar-uploader-icon" style="width:35px;height:35px;line-height:35px;font-size:14px"></i>
+                            </el-upload>
                         </template>
                     </el-table-column>
                     
@@ -97,6 +101,14 @@
                     <el-form-item :label="_label('shangpinmiaoshu')">
                         <simple-select v-model="form.productmemoids" source="productmemo" :multiple="true"></simple-select>
                     </el-form-item>
+
+                    <el-form-item :label="_label('cankaobeilv')">
+                        <el-row>
+                            <el-col :span="8" style="width:80px">{{rate>0?rate : '-' }}</el-col>
+                            <el-col :span="16" style="width:50px">{{_label('lingshoubi')}}</el-col>
+                            <el-col :span="8" style="width:50px">{{getPriceRate}}</el-col>
+                        </el-row>
+                    </el-form-item>
                     
                     <el-form-item :label="_label('chuchangjia')">
                         <el-input placeholder="" v-model="form.factoryprice" class="productcurrency" ref="factoryprice" @focus="onPriceFocus('factoryprice');watcherprice.start()" @blur="watcherprice.stop()">
@@ -180,7 +192,7 @@
 </template>
 
 <script>
-import { extract, _label, config,math } from '../globals.js'
+import { extract, _label, config,math,empty } from '../globals.js'
 import { initObject } from "../array.js"
 import { extend } from "../object.js"
 import { Rules } from '../rules.js'
@@ -189,6 +201,8 @@ import DataSource from '../DataSource.js'
 import watcher from "../watch.js"
 import Material from '../product/material.vue'
 import chain from "../chain.js"
+import API from "../api.js"
+import { host } from '../http.js'
 
 export default {
     name: 'asa-product-add',
@@ -243,14 +257,33 @@ export default {
             materials: [],
             colors: [],
             colors_loaded: false,
-            rate: "", //倍率
+            rate: "", //参考倍率
+            exchange:{
+                currency_to:"",
+                currency_from:"",
+                rate:""
+            }, //当前的汇率信息；零售比=本国零售价/国际零售价
             siji: "", //控制四季全选
-            modal:true
+            modal:true,
+            host
         }
     },
     methods: {
         onPriceFocus(name){
-            this.$refs['name'].select()
+            this.$refs[name].select()
+        },
+        handleAvatarSuccess(response, file, fileList) {
+            let self = this
+            let picture2 = response["files"][file.name]
+            this._log(file)
+
+            if(self.colors[0].picture2=="") {
+                self.colors[0].picture2 = picture2
+            }
+            else {
+                self.onAppendColor({picture2})
+            }
+            
         },
         onQuit() {
             this.dialogVisible = false
@@ -347,7 +380,7 @@ export default {
                 })
             })
         },
-        onAppendColor() {
+        onAppendColor({picture2}={}) {
             let self = this
             let wordcode1_default = ""
             let wordcode2_default = ""
@@ -364,7 +397,7 @@ export default {
                 wordcode_3: "",
                 wordcode_4: "",
                 picture: picture_default,
-                picture2: "",
+                picture2: picture2 || "",
                 colorname: ""
             })
         },
@@ -411,20 +444,54 @@ export default {
             self._fetch("/brandrate/getrate", extract(self.form, ['brandid', 'ageseason', 'brandgroupid'])).then(res=>{
                 self.rate = res.data;
             })
+        },
+        loadExchangeRate() {
+            //加载汇率信息
+            let self = this;
+
+            if(self.form.nationalpricecurrency=='' || self.form.wordpricecurrency=='') {
+                empty(self.exchange)
+                return 
+            }
+            else if(self.form.nationalpricecurrency!=self.exchange.currency_to || self.form.wordpricecurrency!=self.exchange.currency_from) {
+                empty(self.exchange)
+            }
+
+            API.getExchange(self.form.wordpricecurrency, self.form.nationalpricecurrency).then(result=>{
+                if(result>0) {
+                    self._log("exchange=",result)
+                    extend(self.exchange, {
+                        currency_from:self.form.wordpricecurrency,
+                        currency_to:self.form.nationalpricecurrency,
+                        rate:result
+                    });
+                }                
+            })
         }
     },
     watch: {
         siji: function(newValue) {
             let self = this
             extend(self.form, initObject(['spring', 'summer', 'fall', 'winter'], newValue))
+        },
+        'form.wordpricecurrency':function(){
+            //this._log("wordpricecurrency change")
+            this.loadExchangeRate()
         }
     },
     computed: {
+        getPriceRate(){
+            let form = this.form
+            //this._log(form.wordprice, form.nationalprice, this.exchange, this.exchange.rate)
+            return form.wordprice > 0 && form.nationalprice > 0 && this.exchange && this.exchange.rate ? math.round(form.nationalprice/this.exchange.rate / form.wordprice, 2) : "";
+        },
         getRate() {
-            return this.rate
+           let form = this.form
+            return form.wordprice > 0 && form.factoryprice > 0 ? math.round(form.wordprice / form.factoryprice, 2) : "";
         },
         getReciprocalRate() {
-            return this.rate > 0 ? math.round(1 / this.rate, 2) : ""
+            let form = this.form
+            return form.wordprice > 0 && form.factoryprice > 0 ? math.round(form.factoryprice / form.wordprice, 2) : "";
         },
         getRateNational() {
             let form = this.form
@@ -446,6 +513,7 @@ export default {
             //self._log(config)
             self.form.nationalpricecurrency = config._currencyid
             self.form.nationalfactorypricecurrency = config._currencyid
+            self.loadExchangeRate()
         })
     }
 }

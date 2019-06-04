@@ -88,7 +88,11 @@
                             </el-form-item>
 
                             <el-form-item :label="_label('cankaobeilv')">
-                                {{rate>0?rate : '' }} {{_label('lingshoubi')}}:{{getPriceRate}}
+                                <el-row>
+                                    <el-col :span="8" style="width:80px">{{rate>0?rate : '-' }}</el-col>
+                                    <el-col :span="16" style="width:50px">{{_label('lingshoubi')}}</el-col>
+                                    <el-col :span="8" style="width:50px">{{getPriceRate}}</el-col>
+                                </el-row>
                             </el-form-item>
                             
                             <el-form-item :label="_label('chuchangjia')">
@@ -633,13 +637,8 @@ export default {
         loadRate() {
             let self = this;
 
-            if(self.form.brandid=='' || self.form.ageseason=='' || self.form.brandgroupid=='') {
-                return 
-            }
-
-            self._fetch("/brandrate/getrate", extract(self.form, ['brandid', 'ageseason', 'brandgroupid'])).then(res=>{
-                self.rate = res.data;
-                console.log(res)
+            API.getBrandRate(extract(self.form, ['brandid', 'ageseason', 'brandgroupid'])).then(rate=>{
+                self.rate = rate;
             })
         },
         loadExchangeRate() {

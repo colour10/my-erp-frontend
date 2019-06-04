@@ -26,6 +26,7 @@ const context = {}
 const CacheContext = cache(context)
 
 const API = {
+    //加载汇率
     async getExchange(currency_from, currency_to) {
         if(currency_from==currency_to) {
             return 1
@@ -46,6 +47,16 @@ const API = {
         let result = await _fetch("/exchangerate/getrate", params);
 
         CacheContext.set(key, result.data, 5000)
+        return result.data;
+    },
+    //获得商品倍率
+    async getBrandRate({brandid, brandgroupid, ageseason}) {
+        if(brandid=='' || ageseason=='' || brandgroupid=='') {
+            return ""
+        }
+
+        let result = await _fetch("/brandrate/getrate", {brandid, brandgroupid, ageseason})
+
         return result.data;
     }
 }

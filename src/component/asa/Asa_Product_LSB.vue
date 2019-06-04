@@ -3,9 +3,6 @@
 </template>
 
 <script>
-//显示商品倍率
-import API from "../api.js"
-
 export default {
     name: 'sp-product-lsb',
     props: {
@@ -21,7 +18,6 @@ export default {
     mounted:function(){
         let self = this
         self.product.getLSB().then(result=>{
-            console.log("==", result)
             self.text = result
         })
     }
