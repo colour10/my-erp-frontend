@@ -228,10 +228,14 @@ export default {
                 }
             }
             else if(column.name == 'countrycity') {
-                self._log(form.countrycity)
+                //self._log(form.countrycity)
                 let source = DataSource.getDataSource("country", self._label("lang"))
                 source.getRow(form.countrycity).then(({row})=>{
-                    self._log(row.area_code)
+                    //self._log(row.area_code)
+                    if(form.phone=='') {
+                        form.phone = row.area_code+"-"
+                    }
+                    
                 })
             }
         },

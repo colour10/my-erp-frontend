@@ -16,7 +16,7 @@
                         <multiple-admin-page v-bind="aliases"></multiple-admin-page>
                     </el-tab-pane>
                     <el-tab-pane :label="_label('xilie')" name="xilie" :disabled="id==0">
-                        <simple-admin-page v-bind="series"></simple-admin-page>
+                        <multiple-admin-page v-bind="series"></multiple-admin-page>
                     </el-tab-pane>
                     <el-tab-pane :label="_label('beilv')" name="beilv" :disabled="id==0">
                         <simple-admin-page v-bind="brandrate">

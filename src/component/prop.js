@@ -364,8 +364,9 @@ const props = function(){
         },
         series:{
             columns:[
-                {name:"name", label:_label('xiliemingcheng'), is_multiple:true, is_focus:true},
-                {name:"code", label:_label('xiliebianma')}
+                { name:"name", label:_label('xiliemingcheng'), is_multiple:true, is_focus:true },
+                { name:"code", label:_label('xiliebianma') },
+                { name: "displayindex", label: _label("paixu"), sortMethod:sort_method_digit }
             ],
             controller:"series",
             key_column:"name",
