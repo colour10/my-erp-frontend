@@ -4,6 +4,8 @@ import {getFetcher,clear,getFetcherPromise} from "./fetcher.js"
 import {getLabel} from "./globals.js"
 import {httpPost} from "./http.js"
 import {isPromise} from "./object.js"
+import math from "./math.js"
+import API from "./api.js"
 
 const getDataSource = function(name) {
     return DataSource.getDataSource(name, getLabel('lang'))
@@ -224,6 +226,31 @@ const ProductDetail = Object.assign(createModel("product"),{
             let self = this
             return [self.wordcode_1, self.wordcode_2, self.wordcode_3, self.wordcode_4].join(' ')
         }, "getGoodsCode");
+
+        //商品倍率
+        runner.push(function(){
+            return row.wordprice > 0 && row.factoryprice > 0 ? math.round(row.wordprice / row.factoryprice, 2) : "";
+        }, "getBL");
+
+        //商品折扣率
+        runner.push(function(){
+            return row.wordprice > 0 && row.factoryprice > 0 ? math.round(row.factoryprice / row.wordprice, 2) : "";
+        }, "getZKL");
+
+        //商品零售比
+        runner.push(async function(){
+            if(row.nationalpricecurrency=='' || row.wordpricecurrency=='') {
+                return ""
+            }
+
+            if(row.wordprice > 0 && row.nationalprice > 0) {
+                let exchange = await API.getExchange(row.wordpricecurrency, row.nationalpricecurrency)
+                if(exchange>0) {
+                    return  math.round(row.nationalprice/exchange / row.wordprice, 2);
+                }      
+            }
+            return ""            
+        }, "getLSB");
 
         runner.all().then(callback)
     }

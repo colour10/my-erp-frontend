@@ -51,6 +51,8 @@ import Asa_Product_Tip from './component/asa/Asa_Product_Tip.vue'
 import SelectText from './component/select-text.js'
 import Dialog from './component/dialog.vue'
 import Asa_PriceSetting_Cell from './component/asa/Asa_PriceSetting_Cell.vue'
+import Asa_Product_BL from './component/asa/Asa_Product_BL.vue'
+import Asa_Product_LSB from './component/asa/Asa_Product_LSB.vue'
 import Toggle_Input from './component/toggle-input.vue'
 
 import ImagePreview from './component/image-preview.vue'
@@ -73,6 +75,7 @@ import ConfirmorderDetail from './component/confirmorder/detail.vue'
 import ModifyPassword from './component/user/modify-password.vue'
 import Shipping from './component/shipping/index.vue'
 import ShippingDetail from './component/shipping/detail.vue'
+import ShippingWarehousing from './component/shipping/warehousing.vue'
 import Requisition from './component/requisition/index.vue'
 import RequisitionCreate from './component/requisition/create.vue'
 import RequisitionUpdate from './component/requisition/update.vue'
@@ -106,6 +109,8 @@ const components = [
     Asa_Warehousing_Dialog,
     Asa_Product,
     Asa_Brandgroupchild_Select,
+    Asa_Product_BL,
+    Asa_Product_LSB,
     Auth,
     SelectText,
     CheckboxGroup,
@@ -134,6 +139,7 @@ const routes = [
             {path: '/confirmorder/:action/:id', name:"confirmorderdetail", component: ConfirmorderDetail},
             {path: '/shipping', name:"shipping", component:Shipping},
             {path: '/shipping/:id', name:"shippingdetail", component:ShippingDetail},
+            {path: '/shipping/warehousing/:id', name:"shippingwarehousing", component:ShippingWarehousing},
             {path: '/sales', name:"sales", component: Sales},
             {path: '/sales/:id', name:"salesdetail", component: Asa_Sales_Dialog},
             {path: '/user', name:"user", component: User},

@@ -92,7 +92,7 @@
         </el-form>
         <el-row>
             <el-col :span="24" class="product">
-                <el-table :data="tabledata" stripe border style="width:100%;">
+                <el-table :data="tabledata" stripe border style="width:100%;" :show-summary="true" :summary-method="getSummary">
                     <el-table-column align="center" width="60">
                         <template v-slot="scope">
                             <img :src="_fileLink(scope.row.product.picture)" style="width:50px;height:50px;" />
@@ -123,7 +123,7 @@
                     </el-table-column>
                     <el-table-column prop="label" :label="_label('chuchangjiaheji')" width="100" align="center">
                         <template v-slot="{row}">
-                            {{formatNumber(row.product.factoryprice * row.total)}}
+                            {{formatNumber(row.getRowFactoryTotal())}}
                         </template>
                     </el-table-column>
                     <el-table-column prop="label" :label="_label('zhekoulv')" width="100" align="center">
@@ -139,7 +139,7 @@
                     </el-table-column>
                     <el-table-column prop="label" :label="_label('chengjiaozongjia')" width="100" align="center">
                         <template v-slot="{row}">
-                            {{formatNumber(row.product.factoryprice*row.discount*row.total)}}
+                            {{formatNumber(row.getRowDealTotal())}}
                         </template>
                     </el-table-column>
                     
@@ -346,6 +346,30 @@ export default {
                     item.discount = newValue
                 }
             })
+        },
+        getSummary({columns, data}){
+            const self = this
+            const sums = []
+            columns.forEach((column, index) => {
+                //self._log(column, index)
+                if(index==0) {
+                    sums[index] = self._label("heji")
+                    return
+                }
+                else if(index==5) {
+                    sums[index] = self.formatNumber(data.reduce((total, row)=>total+row.getRowFactoryTotal(), 0))
+                }
+                else if(index==8) {
+                    sums[index] = self.formatNumber(data.reduce((total, row)=>total+row.getRowDealTotal(), 0))
+                }
+                else if(index==9) {
+                    sums[index] = data.reduce((total, row)=>total+row.total, 0)
+                }
+            })
+
+            sums[1] = data.length
+
+            return sums
         }
     },
     computed: {

@@ -280,6 +280,7 @@ export default {
             })
             //self._log("data", data)
 
+            sums[1] = data.length
             return sums
         }
     },

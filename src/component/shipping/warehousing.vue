@@ -4,7 +4,6 @@
             <el-row :gutter="0">
                 <au-button auth="confirmorder-submit" :type="canSubmit?'primary':'info'" @click="saveOrder(1)">{{_label("baocun")}}</au-button>
                 <as-button :type="form.id?'primary':'info'" @click="showAttachment()">{{_label("fujian")}}</as-button>
-                <as-button type="primary" @click="showDialog()">{{_label("daorudingdan")}}</as-button>
                 <as-button type="primary" @click="showProduct()">{{_label("xuanzeshangpin")}}</as-button>
             </el-row>
             <el-row :gutter="0">
@@ -195,8 +194,8 @@ import chain from "../chain.js"
 import Select from "./select.vue"
 import orderMixin from "../mixins/order.js"
 
-export default {
-    name: 'asa-order-confirm-dialog',
+const result = {
+    name: 'sp-warehousing',
     components: {
         "sp-shipping-select": Select
     },
@@ -257,9 +256,6 @@ export default {
         onQuit() {
             this.dialogVisible = false
         },
-        showDialog() {
-            this.visible = true
-        },
         showProduct() {
             this.pro = true;
         },
@@ -267,7 +263,7 @@ export default {
             let self = this;
 
             createEmptyRow({productDetail}).then(row=>{
-                self.appendRow({
+                _private(self).appendRow({
                     source: row,
                     id: "",
                     price: row.price
@@ -340,58 +336,19 @@ export default {
                 self.$emit("change", self.form, "delete")
             });
         },
-        appendRow(row) {
-            const self = this;
-
-            row.key = StringFunc.random(10)
-            self.tabledata.unshift(row)
-            self.form.currency = row.source.product.factorypricecurrency
-        },
+        
         onChange({ row, form, total }) {
             let self = this
             row.form = form
             row.confirm_total = total;
         },
         onSelect(row) {
-            this._log(row)
-            this.appendRow({
+            _private(this).appendRow({
                 source: row,
                 id: "",
                 price: row.price
             })
-        },
-        convertList(res) {
-            let self = this
-            copyTo(res.data.form, self.form)
-
-            if (res.data.list) {
-                self.tabledata = []
-                shippingConvert(res.data.list).forEach(async line => {
-                    let source = await getProduct(res.data.orderdetails_list, line.productid);
-                    //self._log("line", line, source)
-
-                    if(source) {
-                        //如果有订单详情记录，不是发货单时候单独加入的
-                        line.orders.forEach(function({ orderid, confirm_form }) {
-                            //self._log(confirm_form, "XXXXX")
-                            let index = source.orders.findIndex(item => {
-                                return item.order.id == orderid })
-                            extend(source.orders[index].confirm_form, confirm_form)
-                        })
-                    }
-                    else {
-
-                    }
-                    
-
-                    self.appendRow({
-                        source: source,
-                        price: line.price
-                    })
-                })
-
-            }
-        },
+        },        
         getSummary({columns, data}){
             const self = this
             const sums = []
@@ -422,14 +379,6 @@ export default {
             var form = this.form;
             return form.id > 0 && form.status == 1
         },
-        canConfirm() {
-            var form = this.form;
-            return form.id > 0 && form.status == 2
-        },
-        canCancel() {
-            var form = this.form;
-            return form.id > 0 && form.status == 3
-        },
         canSubmit() {
             var status = this.form.status;
             return status != 2 && status != 3
@@ -444,15 +393,6 @@ export default {
             }, 0)
             return self.formatNumber(total)
         },
-        genders() {
-            let obj = {}
-            this.tabledata.forEach(item => {
-                if (item.source.product.gender_label.length > 0) {
-                    obj[item.source.product.gender_label] = 1
-                }
-            });
-            return Object.keys(obj).join(",");
-        },
         tabledata_filter() {
             return this.tabledata.filter(item => item.source.is_hidden == false)
         }
@@ -463,16 +403,59 @@ export default {
         let label // = route.params.id == 0 ? self._label("xinjiandingdan") : "订单信息"
         self._log(route.params)
 
-        if (route.params.id > 0) {
-            self._fetch("/shipping/load", { id: route.params.id }).then(function(res) {
-                //self._log("加载订单信息", res)
+        self._setTitle("Loading...")
+        self._fetch("/shipping/load", { id: route.params.id }).then(function(res) {
+            //self._log("加载订单信息", res)
 
-                self.convertList(res)
-                self._setTitle(self._label("fahuodan") + ":" + self.form.id)
-            })
-        } else {
-            self._setTitle(self._label("shengchengfahuodan"))
-        }
+            _private(self).convertList(res)
+            self._setTitle(self._label("fahuodanruku") + ":" + self.form.id)
+        })
     }
 }
+
+const _private = function(self){
+    const _this = {
+        appendRow(row) {
+            row.key = StringFunc.random(10)
+            self.tabledata.unshift(row)
+            self.form.currency = row.source.product.factorypricecurrency
+        },
+        convertList(res) {
+            copyTo(res.data.form, self.form)
+
+            if (res.data.list) {
+                self.tabledata = []
+                shippingConvert(res.data.list).forEach(async line => {
+                    let source = await getProduct(res.data.orderdetails_list, line.productid);
+                    //self._log("line", line, source)
+
+                    if(source) {
+                        //如果有订单详情记录，不是发货单时候单独加入的
+                        line.orders.forEach(function({ orderid, confirm_form }) {
+                            //self._log(confirm_form, "XXXXX")
+                            let index = source.orders.findIndex(item => {
+                                return item.order.id == orderid })
+                            extend(source.orders[index].confirm_form, confirm_form)
+                        })
+                    }
+                    else {
+
+                    }
+                    
+
+
+                    _this.appendRow({
+                        source: source,
+                        price: line.price
+                    })
+                })
+
+            }
+        }
+    }
+
+    return _this
+}
+
+export default result;
 </script>

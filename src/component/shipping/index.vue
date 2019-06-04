@@ -39,6 +39,9 @@ export default {
                 ],
                 controller: "shipping",
                 actions:[
+                    { label:_label("ruku"), handler:function({row}){
+                        self.$router.push('/shipping/warehousing/' + row.id)
+                    }},
                     { label:_label("shanchu"), type:"danger", handler:function({row}){
                         self._remove("/shipping/delete", { id: row.id }).then(function(result) {
                             if(result){
@@ -46,7 +49,10 @@ export default {
                             }                              
                         })
                     }}
-                ],              
+                ],
+                options:{
+                    action_width:250
+                }
             }
         }
     },

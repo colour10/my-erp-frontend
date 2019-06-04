@@ -78,12 +78,12 @@ export default {
             rowIndex: "",
             tableData: [],
             isLoading:false,
-            pagination: {
+            pagination: extend({
                 pageSizes: globals.pageSizes,
                 pageSize: 1000,
                 total: 0,
                 current: 1
-            },
+            }, localOptions.pagination),
             localOptions,
             cellClasses:{},
             searchform:{},

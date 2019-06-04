@@ -99,28 +99,28 @@
                     </el-form-item>
                     
                     <el-form-item :label="_label('chuchangjia')">
-                        <el-input placeholder="" v-model="form.factoryprice" class="productcurrency" @focus="watcherprice.start()" @blur="watcherprice.stop()">
+                        <el-input placeholder="" v-model="form.factoryprice" class="productcurrency" ref="factoryprice" @focus="onPriceFocus('factoryprice');watcherprice.start()" @blur="watcherprice.stop()">
                             <select-currency v-model="form.wordpricecurrency" slot="prepend">
                             </select-currency>
                             <span slot="append">{{getRate}}</span>
                         </el-input>
                     </el-form-item>
                     <el-form-item :label="_label('guojilingshoujia')">
-                        <el-input placeholder="" v-model="form.wordprice" class="productcurrency">
+                        <el-input placeholder="" v-model="form.wordprice" class="productcurrency" ref="wordprice" @focus="onPriceFocus('wordprice')">
                             <select-currency v-model="form.wordpricecurrency" slot="prepend">
                             </select-currency>
                             <span slot="append">{{getReciprocalRate}}</span>
                         </el-input>
                     </el-form-item>
                     <el-form-item :label="_label('benguochuchangjia')">
-                        <el-input placeholder="" v-model="form.nationalfactoryprice" class="productcurrency">
+                        <el-input placeholder="" v-model="form.nationalfactoryprice" class="productcurrency" ref="nationalfactoryprice" @focus="onPriceFocus('nationalfactoryprice')">
                             <select-currency v-model="form.nationalpricecurrency" slot="prepend">
                             </select-currency>
                             <span slot="append">{{getRateNational}}</span>
                         </el-input>
                     </el-form-item>
                     <el-form-item :label="_label('benguolingshoujia')">
-                        <el-input placeholder="" v-model="form.nationalprice" class="productcurrency">
+                        <el-input placeholder="" v-model="form.nationalprice" class="productcurrency" ref="nationalprice" @focus="onPriceFocus('nationalprice')">
                             <select-currency v-model="form.nationalpricecurrency" slot="prepend">
                             </select-currency>
                             <span slot="append">{{getReciprocalRateNational}}</span>
@@ -249,6 +249,9 @@ export default {
         }
     },
     methods: {
+        onPriceFocus(name){
+            this.$refs['name'].select()
+        },
         onQuit() {
             this.dialogVisible = false
         },
@@ -348,9 +351,11 @@ export default {
             let self = this
             let wordcode1_default = ""
             let wordcode2_default = ""
+            let picture_default =""
             if (self.colors.length > 0) {
                 wordcode1_default = self.colors[0].wordcode_1
                 wordcode2_default = self.colors[0].wordcode_2
+                picture_default = self.colors[0].picture
             }
             self.colors.push({
                 brandcolor: "",
@@ -358,7 +363,7 @@ export default {
                 wordcode_2: wordcode2_default,
                 wordcode_3: "",
                 wordcode_4: "",
-                picture: "",
+                picture: picture_default,
                 picture2: "",
                 colorname: ""
             })

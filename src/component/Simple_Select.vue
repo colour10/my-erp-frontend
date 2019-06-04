@@ -223,8 +223,13 @@ export default {
                     self.currentValue = value.split(',')
                 }
             } else {
-                self._log("=========",value.toString())
-                self.currentValue = value.toString()
+                //self._log("=========",value.toString())
+                if(!value) {
+                    self.currentValue = ""                    
+                }
+                else {
+                    self.currentValue = value.toString()
+                }
             }
         },
         getValue() {

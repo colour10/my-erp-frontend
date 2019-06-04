@@ -7,7 +7,7 @@
                         <el-form class="user-form" ref="form" :model="form" label-width="100px" :inline="false" size="mini">
                             <el-form-item :label="item.label" v-if="!item.is_edit_hide" v-for="item in columns" :key="item.name" :class="item.class?item.class:'width2'">
                                 <el-input :ref="item.name" @keyup.enter.native="onSubmit" :type="item.type?item.type:'text'" v-if="!item.type||item.type=='input'||item.type=='textarea'" v-model="form[item.name]" size="mini"></el-input>
-                                <simple-select :ref="item.name" v-if="item.type=='select'" v-model="form[item.name]" :source="item.source" @change="onChange(item)"></simple-select>
+                                <simple-select :ref="item.name" v-if="item.type=='select'" v-model="form[item.name]" :source="item.source"></simple-select>
                                 <simple-avatar :ref="item.name" v-model="form[item.name]" v-if="item.type=='avatar'" font-size="14px" :size="35"></simple-avatar>
                             </el-form-item>
                         </el-form>

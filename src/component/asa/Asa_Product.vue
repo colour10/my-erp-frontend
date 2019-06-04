@@ -88,7 +88,7 @@
                             </el-form-item>
 
                             <el-form-item :label="_label('cankaobeilv')">
-                                {{rate? 'none' : rate }} {{_label('lingshoubi')}}:{{getPriceRate}}
+                                {{rate>0?rate : '' }} {{_label('lingshoubi')}}:{{getPriceRate}}
                             </el-form-item>
                             
                             <el-form-item :label="_label('chuchangjia')">
@@ -289,6 +289,7 @@ import Asa_Product_Property from './Asa_Product_Property.vue'
 import Asa_Product_Price from './Asa_Product_Price.vue'
 import Asa_Product_ProductStock from './Asa_Product_ProductStock.vue'
 import Material from '../product/material.vue'
+import API from "../api.js"
 
 const color_keys = ['id', 'brandcolor', 'wordcode_1', 'wordcode_2', 'wordcode_3', 'wordcode_4', 'colorname', 'picture', 'picture2']
 
@@ -380,7 +381,8 @@ export default {
                 rate:""
             }, //当前的汇率信息；零售比=本国零售价/国际零售价
             siji: "", //控制四季全选
-            title:""
+            title:"",
+            product:""
         }
     },
     methods: {
@@ -597,11 +599,13 @@ export default {
 
                     self.loadRate()
                     self.loadExchangeRate()
+                    self._log("开始自动执行")
 
 
                     self.currentTab = 'product'
                     self.title = info.getName() + ' ' +info.getGoodsCode()
 
+                    self.product = info
                     resolve(self)
                 })
             })
@@ -635,6 +639,7 @@ export default {
 
             self._fetch("/brandrate/getrate", extract(self.form, ['brandid', 'ageseason', 'brandgroupid'])).then(res=>{
                 self.rate = res.data;
+                console.log(res)
             })
         },
         loadExchangeRate() {
@@ -649,22 +654,14 @@ export default {
                 globals.empty(self.exchange)
             }
 
-            if(self.form.nationalpricecurrency==self.form.wordpricecurrency) {
-                self.exchange.currency_from = self.form.wordpricecurrency
-                self.exchange.currency_to = self.form.wordpricecurrency
-                self.exchange.rate = 1
-                return 
-            }
-
-            let params = {
-                currency_from : self.form.wordpricecurrency,
-                currency_to : self.form.nationalpricecurrency
-            }
-            self._fetch("/exchangerate/getrate", params).then(res=>{
-                //self.priceRate = math.round(res.data * self.form.wordprice/ self.form.nationalprice, 2);
-                if(res.data>0) {
-                    params.rate = res.data
-                    extend(self.exchange, params);
+            API.getExchange(self.form.wordpricecurrency, self.form.nationalpricecurrency).then(result=>{
+                if(result>0) {
+                    self._log("exchange=",result)
+                    extend(self.exchange, {
+                        currency_from:self.form.wordpricecurrency,
+                        currency_to:self.form.nationalpricecurrency,
+                        rate:result
+                    });
                 }                
             })
         }
@@ -675,6 +672,7 @@ export default {
             extend(self.form, initObject(['spring', 'summer', 'fall', 'winter'], newValue))
         },
         'form.wordpricecurrency':function(){
+            //this._log("wordpricecurrency change")
             this.loadExchangeRate()
         }
     },

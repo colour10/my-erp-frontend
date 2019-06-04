@@ -87,24 +87,13 @@ const props = function(){
         },
 
         "country": {
-            columns: [{
-                name: "name",
-                label: _label("guojiamingcheng"),
-                is_multiple: true,
-                is_focus: true
-            }, {
-                name: "code",
-                label: _label("guojiadaima3")
-            },
-            {
-                name: "code_short",
-                label: _label("guojiadaima2")
-            }, {
-                name: "localcurrency",
-                label: _label("bizhong"),
-                type: 'select',
-                source: "currency"
-            }],
+            columns: [
+                { name: "name", label: _label("guojiamingcheng"), is_multiple: true, is_focus: true }, 
+                { name: "code", label: _label("guojiadaima3") },
+                { name: "code_short", label: _label("guojiadaima2") }, 
+                { name: "localcurrency", label: _label("bizhong"), type: 'select', source: "currency" },
+                { name: "area_code", label: _label("guojiquhao") }, 
+            ],
             controller: "country",
             key_column: "name"/*,
             options:{

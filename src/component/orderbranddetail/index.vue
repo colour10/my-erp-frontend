@@ -71,7 +71,7 @@
         </el-form>
         <el-row>
             <el-col :span="24" class="product">
-                <el-table :data="tabledata" stripe border style="width:100%;">
+                <el-table :data="tabledata" stripe border style="width:100%;" :show-summary="true" :summary-method="getSummary">
                     <el-table-column align="center" width="60">
                         <template v-slot="scope">
                             <img :src="_fileLink(scope.row.product.picture)" style="width:50px;height:50px;" />
@@ -232,6 +232,24 @@ export default {
 
                 self.form.currency = row.product.factorypricecurrency
             }
+        },
+        getSummary({columns, data}){
+            const self = this
+            const sums = []
+            columns.forEach((column, index) => {
+                //self._log(column, index)
+                if(index==0) {
+                    sums[index] = self._label("heji")
+                    return
+                }
+                else if(index==6) {
+                    sums[index] = self.formatNumber(data.reduce((total, row)=>total+row.getRowFactoryTotal(), 0))
+                }
+            })
+
+            sums[1] = data.length
+
+            return sums
         }
     },
     computed: {

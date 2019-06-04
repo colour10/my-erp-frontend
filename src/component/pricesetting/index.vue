@@ -20,6 +20,14 @@
                     <sp-select-text :value="row.brandgroupchildid" source="brandgroupchild" v-if="row.brandgroupchildid>0"></sp-select-text>
                 </template>
             </el-table-column>
+
+            <el-table-column :label="_label('xianliangkuan')" align="left" width="120">
+                <template v-slot="{row}">
+                    <span v-if="row.ishot=='0'">{{_label("no")}}</span>
+                    <span v-if="row.ishot=='1'" style="color:#F56C6C">{{_label("yes")}}</span>
+                </template>
+            </el-table-column>
+
             <el-table-column :label="column.name" align="center" v-for="column in prices" :key="column.id" width="90">
                 <template v-slot="{row}">
                     <tg-input :value="getRate({column, row})" :info="{column,row}" @change="changeHandler"></tg-input>
@@ -36,6 +44,10 @@
                 <el-form-item :label="_label('zipinlei')">                    
                     <simple-select v-model="form.brandgroupchildid" ref="brandgroupchildid" source="brandgroupchild" class="width2"></simple-select>
                     <!-- <simple-select v-model="form.brandgroupchildid" ref="brandgroupchildid" source="brandgroupchild" :multiple="true" class="width2"></simple-select> -->
+                </el-form-item>
+
+                <el-form-item :label="_label('xianliangkuan')">
+                    <el-switch v-model="form.ishot" active-value="1" inactive-value="0"></el-switch>
                 </el-form-item>
 
                 <el-form-item :label="column.name" v-for="column in prices" :key="column.id">                    
@@ -74,25 +86,6 @@ const _func = function(self) {
             })
 
             return this;
-        },
-        async loadSubCategory() {
-            let brandgroups = await getDataSource("brandgroup").getList()
-            brandgroups.forEach(async brandgroup => {
-                let source = await getDataSource("brandgroupchild").getSourceByParent(brandgroup.id);
-                let brandgroupchilds = await source.getList();
-
-                let isFirst = true
-                brandgroupchilds.forEach(brandgroupchild => {
-                    self.tablelist.push({
-                        isFirst,
-                        brandgroup: brandgroup,
-                        brandgroupchild: brandgroupchild,
-                        rowSpan: brandgroupchilds.length
-                    })
-
-                    isFirst = false
-                })
-            })
         },
         loadSetting() {
             let _this = this;
@@ -212,9 +205,8 @@ export default {
                 ageseasonid: "",
                 brandgroupid:"",
                 brandgroupchildid:"",
-                ishot:""
+                ishot:"0"
             },
-            tablelist: [],
             prices: [],
             settings: []
         }
@@ -308,7 +300,7 @@ export default {
         //console.log(this)
         this.form.brandid = this.brandid;
         let func = _func(this)
-        func.loadPriceList().loadSubCategory()
+        func.loadPriceList()
         func.loadSetting()
     }
 }

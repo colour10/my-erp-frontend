@@ -26,11 +26,11 @@
                     {{row.costplus}}%
                 </template>
             </el-table-column>
-            <el-table-column :label="_label('quzheng')" align="center" width="80">
+            <!-- <el-table-column :label="_label('quzheng')" align="center" width="80">
                 <template v-slot="{row}">
                     <sp-select-text :value="row.filter" source="pricefilter"></sp-select-text>
                 </template>
-            </el-table-column>
+            </el-table-column> -->
 
             <el-table-column :label="_label('caozuo')" align="center" width="150">
                 <template v-slot="scope">

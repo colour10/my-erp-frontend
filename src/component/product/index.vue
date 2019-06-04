@@ -9,7 +9,14 @@
         </el-row>
         <el-row :gutter="20" class="product">
             <el-col :span="24">
-                <simple-admin-tablelist ref="tablelist" v-bind="props" :onclickupdate="showFormToEdit" @preview="onPreview"></simple-admin-tablelist>
+                <simple-admin-tablelist ref="tablelist" v-bind="props" :onclickupdate="showFormToEdit" @preview="onPreview">
+                    <template v-slot:belv="{row}">
+                        <sp-product-bl :product="row"></sp-product-bl>
+                    </template>
+                    <template v-slot:lingshoubi="{row}">
+                        <sp-product-lsb :product="row"></sp-product-lsb>
+                    </template>
+                </simple-admin-tablelist>
             </el-col>
         </el-row>
         <product ref="product" @change="onChange"></product>
@@ -56,17 +63,26 @@ export default {
                         return [row.factorypricecurrency_label, row.factoryprice].join(" ")
                     } },
 
+                    { name: "belv", label: _label("beilv"), width:120},
+
                     //{ name: "wordpricecurrency_label", label: _label("guojilingshoujia"), width: 100 },
                     { name: "wordprice", label: _label("guojilingshoujia"), width: 130, convert:function(row){
                         return [row.wordpricecurrency_label, row.wordprice].join(" ")
                     } },
+
+                    { name: "zhekoulv", label: _label("lingshoubi"), width:120, convert:function(row){
+                        return row.getZKL()
+                    }},
 
                     { name: "nationalprice", label: _label("benguolingshoujia"), width: 130, convert:function(row){
                         return [row.nationalpricecurrency_label, row.nationalprice].join(" ")
                     } },
 
                     
+                    
                     { name: "saletypeid", label: _label("xiaoshoushuxing"), width:120, type: "select", source:"saletype" },
+
+                    { name: "lingshoubi", label: _label("lingshoubi"), width:120},
                     { name: "laststoragedate", label: _label("zuihouruku"), width:120 }
                     
                 ],
@@ -79,7 +95,10 @@ export default {
                             return {
                                 color:row.saletype.colortemplate.row.name_en
                             }
-                        }            
+                        }
+                    },
+                    pagination:{
+                        pageSize:15
                     }
                 }
             }
