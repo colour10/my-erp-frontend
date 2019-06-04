@@ -21,7 +21,12 @@ const props = function(){
                     }
                 }
             ],
-            controller: "ageseason"
+            controller: "ageseason",
+            on:{
+                "after-update":function(){
+                    clearCache("ageseason")
+                }
+            }
         },
 
         "ulnarinch": {
@@ -31,7 +36,12 @@ const props = function(){
                 { name: "displayindex", label: _label("paixu"), sortMethod:sort_method_digit }
             ],
             controller: "ulnarinch",
-            key_column: "name"
+            key_column: "name",
+            on:{
+                "after-update":function(){
+                    clearCache("ulnarinch")
+                }
+            }
         },
 
         "language": {
@@ -90,7 +100,12 @@ const props = function(){
                     type: "switch"
                 }
             ],
-            controller: "warehouse"
+            controller: "warehouse",
+            on:{
+                "after-update":function(){
+                    clearCache("warehouse")
+                }
+            }
         },
 
         "country": {
@@ -134,6 +149,11 @@ const props = function(){
             options:{
                 dialogWidth:"400px",
                 isAutoReload:false
+            },
+            on:{
+                "after-update":function(){
+                    clearCache("material")
+                }
             }
         },
 
@@ -147,32 +167,27 @@ const props = function(){
             key_column: "content",
             options:{
                 dialogWidth:"400px"
+            },
+            on:{
+                "after-update":function(){
+                    clearCache("materialnote")
+                }
             }
         },
 
         "colortemplate": {
-            columns: [{
-                    name: "name",
-                    label: _label("mingcheng"),
-                    is_multiple: true,
-                    is_focus: true
-                },
-                //{name:"color_name", label:_label("mingcheng")},
-                {
-                    name: "code",
-                    label: _label("asabianhao")
-                },
-                //{name:"colortype", label:_label("yansefenlei")},
-                {
-                    name: "picture",
-                    label: _label("yanseseban"),
-                    type: "avatar",
-                    image_width: 60,
-                    image_height: 60
-                }
+            columns: [
+                { name: "name", label: _label("mingcheng"), is_multiple: true, is_focus: true },
+                { name: "code", label: _label("asabianhao") },
+                { name: "picture", label: _label("yanseseban"), type: "avatar", image_width: 60, image_height: 60 }
             ],
             controller: "colortemplate",
-            key_column: "name"
+            key_column: "name",
+            on:{
+                "after-update":function(){
+                    clearCache("colortemplate")
+                }
+            }
         },
 
         "productmemo": {
@@ -185,6 +200,11 @@ const props = function(){
             key_column: "name",
             options:{
                 dialogWidth:"400px"
+            },
+            on:{
+                "after-update":function(){
+                    clearCache("productmemo")
+                }
             }
         },
 
@@ -198,7 +218,12 @@ const props = function(){
                 label: _label("zhekou"),
                 is_focus: true
             }],
-            controller: "saleport"
+            controller: "saleport",
+            on:{
+                "after-update":function(){
+                    clearCache("saleport")
+                }
+            }
         },
         "orderpayment":{
             columns: [
@@ -220,6 +245,11 @@ const props = function(){
                 isedit:(item)=>item.status==0,
                 isdelete:(item)=>item.status==0,
                 autoreload:true
+            },
+            on:{
+                "after-update":function(){
+                    clearCache("orderpayment")
+                }
             }
         },
         "salesreceive":{
@@ -242,6 +272,11 @@ const props = function(){
                 isedit:(item)=>item.status==0,
                 isdelete:(item)=>item.status==0,
                 autoreload:true
+            },
+            on:{
+                "after-update":function(){
+                    clearCache("salesreceive")
+                }
             }
         },
 
@@ -261,7 +296,12 @@ const props = function(){
                 { name: "heading", label: _label("shuihao"), class: "width2", is_hide: true }
             ],
             controller: "company",
-            auth: "company"
+            auth: "company",
+            on:{
+                "after-update":function(){
+                    clearCache("company")
+                }
+            }
         },
         "companyinvoice":{
             columns: [
@@ -275,6 +315,11 @@ const props = function(){
             auth: "company",
             base:{
               companyid:''
+            },
+            on:{
+                "after-update":function(){
+                    clearCache("companyinvoice")
+                }
             }
         },
         
@@ -293,6 +338,11 @@ const props = function(){
             options:{
                 dialogWidth:"400px", 
                 autoreload:true
+            },
+            on:{
+                "after-update":function(){
+                    clearCache("pricesetting")
+                }
             }
         },
         "price":{
@@ -309,6 +359,11 @@ const props = function(){
             options:{
                 dialogWidth:"400px", 
                 autoreload:true
+            },
+            on:{
+                "after-update":function(){
+                    clearCache("price")
+                }
             }
         },
         "saletype":{
@@ -323,14 +378,24 @@ const props = function(){
                 dialogWidth:"400px", 
                 autoreload:true
             },
-            key_column: "name"
+            key_column: "name",
+            on:{
+                "after-update":function(){
+                    clearCache("saletype")
+                }
+            }
         },
         "productprice":{
             columns: [
                 { name: "pricename", label: _label("jiage"), type: 'label'},
                 { name: "price", label: _label("jine") }
             ],
-            controller: "productprice"
+            controller: "productprice",
+            on:{
+                "after-update":function(){
+                    clearCache("productprice")
+                }
+            }
         },
         "brandrate":{
             columns: [
@@ -349,6 +414,11 @@ const props = function(){
             },
             base:{
                 brandid:""
+            },
+            on:{
+                "after-update":function(){
+                    clearCache("brandrate")
+                }
             }
         },
         aliases:{
@@ -360,6 +430,11 @@ const props = function(){
             key_column:"name",
             base:{
                 brandid:""    
+            },
+            on:{
+                "after-update":function(){
+                    clearCache("aliases")
+                }
             }
         },
         series:{
@@ -372,6 +447,11 @@ const props = function(){
             key_column:"name",
             base:{
                 brandid:""    
+            },
+            on:{
+                "after-update":function(){
+                    clearCache("series")
+                }
             }
         },
         property:{
@@ -380,7 +460,12 @@ const props = function(){
                 { name: "displayindex", label: _label("paixu"), sortMethod:sort_method_digit }
             ],
             controller:"property",
-            key_column:"name"
+            key_column:"name",
+            on:{
+                "after-update":function(){
+                    clearCache("property")
+                }
+            }
         },
         "producttype":{
             columns: [
@@ -393,13 +478,17 @@ const props = function(){
                 dialogWidth:"400px", 
                 autoreload:true
             },
-            key_column: "name"
+            key_column: "name",
+            on:{
+                "after-update":function(){
+                    clearCache("producttype")
+                }
+            }
         },
     }
 }
 
-const getComponent = function(name) {
-    
+const getComponent = function(name) {    
     return {
         name:"sp-" +name,
         data: function() {
@@ -414,7 +503,6 @@ const getComponent = function(name) {
                 ref:"page"
             })
         }
-        //template: '<multiple-admin-page v-bind="props" @after-update="prop" ref="page"></multiple-admin-page>'
     }
 }
 
@@ -423,10 +511,16 @@ const getComponentSimple = function(name) {
         name:"sp-" +name,
         data: function() {
             return {
-                props: props()[name]
+                prop: props()[name]
             }
         },
-        template: '<simple-admin-page v-bind="props" ref="page"></simple-admin-page>'
+        render(h) {
+            return h("simple-admin-page", {
+                props:this.prop,
+                on:this.prop.on || {},
+                ref:"page"
+            })
+        }
     }
 }
 

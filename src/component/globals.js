@@ -129,6 +129,7 @@ const config = function(){
             "user/modifypassword":getLabel("menu-11-2"),
             "login/logout":getLabel("menu-11-3"),
             "saletype":getLabel('xiaoshoushuxing'),
+            "producttype":getLabel('shangpinshuxing'),
             "exchangerate":getLabel('huilvguanli'),
             "property":getLabel("shuxingdingyi"),
             "orderbrand":getLabel("waibudingdan"),

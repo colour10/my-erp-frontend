@@ -16,6 +16,9 @@
                     <template v-slot:lingshoubi="{row}">
                         <sp-product-lsb :product="row"></sp-product-lsb>
                     </template>
+                    <template v-slot:productname="{row}">
+                        <el-link type="primary" @click="showFormToEdit(0, row)">{{row.getName()}}</el-link>
+                    </template>
                 </simple-admin-tablelist>
             </el-col>
         </el-row>

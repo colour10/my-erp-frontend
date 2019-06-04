@@ -67,7 +67,7 @@ const API = {
             return []
         }
 
-        let result = await _fetch("/brandrate/getrate", {brandid, brandgroupid, ageseason})
+        let result = await _fetch("/productlastmodify/load", {brandid})
 
         return result.data;
     }

@@ -31,7 +31,7 @@
                     <el-table-column :label="_label('yanse')" width="140" align="center">
                         <template v-slot="scope">
                             <!--<el-input v-model="scope.row.wordcode_3" size="mini" @keyup.native.down="onKeyDown(scope.$index)" @keyup.native.up="onKeyUp(scope.$index)" :ref="'word'+scope.$index"></el-input>-->
-                            <el-input v-model="scope.row.wordcode_3" size="mini" @keyup.native="onKeyInput(scope.row,'wordcode_3')"></el-input>
+                            <el-input v-model="scope.row.wordcode_3" size="mini" @keyup.native="onWord3Change(scope.row)"></el-input>
                         </template>
                     </el-table-column>
                     <el-table-column :label="_label('yansemingcheng')" width="150" align="center">
@@ -69,7 +69,7 @@
                         <simple-select v-model="form.ageseason" source="ageseason" :multiple="true" @change="loadRate"></simple-select>
                     </el-form-item>
                     <el-form-item :label="_label('pinpai')" prop="brandid">
-                        <simple-select v-model="form.brandid" source="brand" @change="loadRate"></simple-select>
+                        <simple-select v-model="form.brandid" source="brand" @change="onBrandChange"></simple-select>
                     </el-form-item>
                     <el-form-item :label="_label('pinlei')" prop="brandgroupid">
                         <simple-select v-model="form.brandgroupid" source="brandgroup" @change="loadRate"></simple-select>
@@ -203,12 +203,14 @@ import Material from '../product/material.vue'
 import chain from "../chain.js"
 import API from "../api.js"
 import { host } from '../http.js'
+import productMixin from "../mixins/product.js"
 
 export default {
     name: 'asa-product-add',
     components: {
         productmaterial: Material
     },
+    mixins:[productMixin],
     data() {
         return {
             dialogVisible: false,
@@ -284,6 +286,14 @@ export default {
                 self.onAppendColor({picture2})
             }
             
+        },
+        onBrandChange(){
+            this.loadRate();
+            this.getBrandColorSuggest();
+        },
+        onWord3Change(row) {
+            this.onKeyInput(row,'wordcode_3')
+            this.autoMatchSuggest(row)
         },
         onQuit() {
             this.dialogVisible = false
