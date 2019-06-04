@@ -148,8 +148,8 @@
                         <simple-select v-model="form.saletypeid" source="saletype"></simple-select>
                     </el-form-item>
 
-                    <el-form-item :label="_label('xianliangkuan')">
-                        <el-switch v-model="form.ishot" active-value="1" inactive-value="0"></el-switch>
+                    <el-form-item :label="_label('shangpinshuxing')">
+                        <simple-select v-model="form.producttypeid" source="producttype"></simple-select>
                     </el-form-item>
 
                     <el-form-item :label="_label('xingbie')">
@@ -242,7 +242,7 @@ export default {
                 sizetopid: "",
                 sizecontentids: "",
                 saletypeid:"",
-                ishot:"",
+                producttypeid:"",
                 productmemoids: "" //商品描述
             },
             rules: {
@@ -515,6 +515,22 @@ export default {
             self.form.nationalfactorypricecurrency = config._currencyid
             self.loadExchangeRate()
         })
+
+        //关闭页面的时候提示
+        window.onbeforeunload = function (e) {
+            if(self.dialogVisible==true) {
+                e = e || window.event;
+
+                // 兼容IE8和Firefox 4之前的版本
+                if (e) {
+                    e.returnValue = self._label("guanbitishi")
+                }
+
+                // Chrome, Safari, Firefox 4+, Opera 12+ , IE 9+
+                return self._label("guanbitishi")
+            }
+            
+        }   
     }
 }
 </script>

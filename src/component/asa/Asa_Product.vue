@@ -133,8 +133,8 @@
                                 <simple-select v-model="form.saletypeid" source="saletype" style="color:red"></simple-select>
                             </el-form-item>
 
-                            <el-form-item :label="_label('xianliangkuan')">
-                                <el-switch v-model="form.ishot" active-value="1" inactive-value="0"></el-switch>
+                            <el-form-item :label="_label('shangpinshuxing')">
+                                <simple-select v-model="form.producttypeid" source="producttype"></simple-select>
                             </el-form-item>
 
                             <el-form-item :label="_label('xingbie')">
@@ -356,7 +356,7 @@ export default {
                 makestaff: "",
                 maketime: '',
                 saletypeid:"",
-                ishot:""
+                producttypeid:""
             },
             rules: {
                 sizetopid: Rules.id({ required: true, message: _label("8000") }),

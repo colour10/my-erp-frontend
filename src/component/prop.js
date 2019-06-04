@@ -369,7 +369,20 @@ const props = function(){
             ],
             controller:"property",
             key_column:"name"
-        }
+        },
+        "producttype":{
+            columns: [
+                { name: "name", label: _label("mingcheng"), is_multiple: true, is_focus:true},
+                { name: "displayindex", label: _label("paixu"), sortMethod:sort_method_digit }
+            ],
+            controller: "producttype",
+            auth: "producttype",
+            options:{
+                dialogWidth:"400px", 
+                autoreload:true
+            },
+            key_column: "name"
+        },
     }
 }
 

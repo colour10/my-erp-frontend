@@ -28,6 +28,7 @@
                     <el-menu-item index="saleport">{{_label("xiaoshouduankou")}}</el-menu-item>
                     <el-menu-item index="price">{{_label("jiagedingyi")}}</el-menu-item>
                     <el-menu-item index="saletype">{{_label("xiaoshoushuxing")}}</el-menu-item>
+                    <el-menu-item index="producttype">{{_label("shangpinshuxing")}}</el-menu-item>
                     <el-menu-item index="exchangerate">{{_label("huilvguanli")}}</el-menu-item>
                     <el-menu-item index="language">{{_label("duoguoyuyanguanli")}}</el-menu-item>
                 </el-submenu>

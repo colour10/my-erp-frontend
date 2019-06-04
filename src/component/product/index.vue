@@ -58,6 +58,8 @@ export default {
                         return [row.wordcode_1, row.wordcode_2, row.wordcode_3].join(' ')
                     }, style:"font-weight:bold" },
 
+                    { name: "producttypeid", label: _label("shangpinshuxing"), width:120, type: "select", source:"producttype" },
+
                     //{ name: "factorypricecurrency_label", label: _label("chuchangjia"), width: 100 },
                     { name: "factoryprice", label: _label("chuchangjia"), width: 130,convert:function(row){
                         return [row.factorypricecurrency_label, row.factoryprice].join(" ")

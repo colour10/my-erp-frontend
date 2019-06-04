@@ -49,10 +49,22 @@ const API = {
         CacheContext.set(key, result.data, 5000)
         return result.data;
     },
+
     //获得商品倍率
     async getBrandRate({brandid, brandgroupid, ageseason}) {
         if(brandid=='' || ageseason=='' || brandgroupid=='') {
             return ""
+        }
+
+        let result = await _fetch("/brandrate/getrate", {brandid, brandgroupid, ageseason})
+
+        return result.data;
+    },
+
+    //加载品牌的颜色对应的色系和颜色名称
+    async getBrandColorSuggest(brandid) {
+        if(brandid=='') {
+            return []
         }
 
         let result = await _fetch("/brandrate/getrate", {brandid, brandgroupid, ageseason})

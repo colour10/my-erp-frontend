@@ -10,21 +10,21 @@
         <el-table :data="settings" style="width:100%;" stripe>
             <el-table-column :label="_label('pinlei')" align="left" width="90">
                 <template v-slot="{row}">
-                    <span v-if="row.brandgroupchildid=='0'">全部</span>
+                    <span v-if="row.brandgroupchildid=='0'">*</span>
                     <sp-select-text :value="row.brandgroupid" source="brandgroup" v-if="row.brandgroupchildid>0"></sp-select-text>
                 </template>
             </el-table-column>
             <el-table-column :label="_label('zipinlei')" align="left" width="120">
                 <template v-slot="{row}">
-                    <span v-if="row.brandgroupchildid=='0'">全部</span>
+                    <span v-if="row.brandgroupchildid=='0'">*</span>
                     <sp-select-text :value="row.brandgroupchildid" source="brandgroupchild" v-if="row.brandgroupchildid>0"></sp-select-text>
                 </template>
             </el-table-column>
 
-            <el-table-column :label="_label('xianliangkuan')" align="left" width="120">
+            <el-table-column :label="_label('shangpinshuxing')" align="left" width="120">
                 <template v-slot="{row}">
-                    <span v-if="row.ishot=='0'">{{_label("no")}}</span>
-                    <span v-if="row.ishot=='1'" style="color:#F56C6C">{{_label("yes")}}</span>
+                    <span v-if="row.producttypeid=='0'">*</span>
+                    <sp-select-text :value="row.producttypeid" source="producttype" v-if="row.producttypeid>0"></sp-select-text>
                 </template>
             </el-table-column>
 
@@ -46,8 +46,8 @@
                     <!-- <simple-select v-model="form.brandgroupchildid" ref="brandgroupchildid" source="brandgroupchild" :multiple="true" class="width2"></simple-select> -->
                 </el-form-item>
 
-                <el-form-item :label="_label('xianliangkuan')">
-                    <el-switch v-model="form.ishot" active-value="1" inactive-value="0"></el-switch>
+                <el-form-item :label="_label('shangpinshuxing')">
+                    <simple-select v-model="form.producttypeid" source="producttype" class="width2"></simple-select>
                 </el-form-item>
 
                 <el-form-item :label="column.name" v-for="column in prices" :key="column.id">                    
@@ -107,7 +107,7 @@ const _func = function(self) {
         convert(list) {
             let result = {}
             list.forEach(row=>{
-                let key = row.brandgroupchildid + "-" + row.ishot
+                let key = row.brandgroupchildid + "-" + row.producttypeid
                 if(!result[key]) {
                     result[key] = {}
                 }
@@ -128,7 +128,7 @@ const _func = function(self) {
                     self.settings.push({
                         brandgroupid:row ? row.row.brandgroupid: "",
                         brandgroupchildid:array[0],
-                        ishot:array[1],
+                        producttypeid:array[1],
                         discounts:item
                     })
                 })
@@ -205,7 +205,7 @@ export default {
                 ageseasonid: "",
                 brandgroupid:"",
                 brandgroupchildid:"",
-                ishot:"0"
+                producttypeid:""
             },
             prices: [],
             settings: []
@@ -245,7 +245,7 @@ export default {
             let params = {
                 brandid:self.form.brandid,
                 ageseasonid:self.form.ageseasonid,
-                ishot:self.form.ishot
+                producttypeid:self.form.producttypeid
             }
 
             let func = _func(self)
@@ -280,7 +280,7 @@ export default {
             _func(self).submit({
                 brandid:self.form.brandid,
                 ageseasonid:self.form.ageseasonid,
-                ishot:row.ishot,
+                producttypeid:row.producttypeid,
                 list:[{
                     brandgroupchildid:row.brandgroupchildid,
                     discount:value=="-" || value=="" ? '0' : value,

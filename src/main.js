@@ -183,6 +183,7 @@ const routes = [
             {path:'/saleport', name:"saleport", component:getComponentSimple("saleport")},
             {path:'/productmemo', name:"productmemo", component:getComponent("productmemo")},
             {path:'/saletype', name:"saletype", component:getComponent("saletype")},
+            {path:'/producttype', name:"producttype", component:getComponent("producttype")},
             
             {path:'/language', name:"language", component:getComponent("language")}
         ]

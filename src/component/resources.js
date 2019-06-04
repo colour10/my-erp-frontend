@@ -88,6 +88,9 @@ function getOption(name) {
     //销售属性
     options["saletype"] = {url:'/l/saletype',oplabel:'name', opvalue:'id'}
 
+    //商品属性
+    options["producttype"] = {url:'/l/producttype',oplabel:'name', opvalue:'id'}
+
     //成员
     options["member"] = {url:'/l/member',oplabel:'name', opvalue:'id'}
 
