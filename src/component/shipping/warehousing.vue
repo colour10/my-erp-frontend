@@ -126,7 +126,7 @@
         </el-form>
         <el-row>
             <el-col :span="24" class="product">
-                <el-table :data="tabledata_filter" stripe border style="width:100%;" :show-summary="true" :summary-method="getSummary">
+                <el-table :data="tabledata" stripe border style="width:100%;" :show-summary="true" :summary-method="getSummary">
                     <el-table-column align="center" width="60">
                         <template v-slot="{row}">
                             <img :src="_fileLink(row.source.product.picture)" style="width:50px;height:50px;" />
@@ -159,7 +159,7 @@
                     </el-table-column>
                     <el-table-column prop="label" :label="_label('zhekoulv')" width="70" align="center" class="counter">
                         <template v-slot="{row}">
-                            {{row.source.discountbrand}}
+                            {{row.source.discount}}
                         </template>
                     </el-table-column>
                     <el-table-column prop="label" :label="_label('danjia')" width="100" align="center">
@@ -254,9 +254,6 @@ const result = {
         }
     },
     methods: {
-        onQuit() {
-            this.dialogVisible = false
-        },
         showProduct() {
             this.pro = true;
         },
@@ -273,10 +270,10 @@ const result = {
         },       
         saveOrder(status) {
             //保存订单
-            var self = this
+            let self = this
 
-            var params = { form: self.form }
-            var array = []
+            let params = { form: self.form }
+            let array = []
 
             let list = []
             let uniques = {};
@@ -315,8 +312,6 @@ const result = {
 
             self._log(JSON.stringify(params))
             self._submit("/shipping/warehousing", { params: JSON.stringify(params) }).then(function(res) {
-                //self._log(res)
-
                 _private(self).loadDetail(self.$route.params.id)
             });
         },
@@ -331,13 +326,11 @@ const result = {
             self._remove("/confirmorder/delete", { id: self.form.id }).then(function(res) {
                 self.$emit("change", self.form, "delete")
             });
-        },
-        
+        },        
         onChange({ row, form, total }) {
             let self = this
             row.form = form
             row.confirm_total = total;
-            console.log(row)
         },
         onSelect(row) {
             _private(this).appendRow({
@@ -369,24 +362,9 @@ const result = {
             sums[1] = data.length
 
             return sums
-        },
-        appendRow(row) {
-            let self = this
-            row.key = StringFunc.random(10)
-            self._log(row, "XXXXX")
-            self.tabledata.unshift(row)
-            self.form.currency = row.source.product.factorypricecurrency
-        },
+        }        
     },
     computed: {
-        canDelete() {
-            var form = this.form;
-            return form.id > 0 && form.status == 1
-        },
-        canSubmit() {
-            var status = this.form.status;
-            return status != 2 && status != 3
-        },
         width() {
             return this.tabledata.reduce((max, { source }) => Math.max(max, source.product.sizecontents.length), 1) * 50 + 191
         },
@@ -396,24 +374,22 @@ const result = {
                 return total + self.getRowTotal(current)
             }, 0)
             return self.formatNumber(total)
-        },
-        tabledata_filter() {
-            return this.tabledata;//.filter(item => item.source.is_hidden == false)
         }
     },
     mounted: function() {
         let self = this;
-        let route = self.$route;
-        let label // = route.params.id == 0 ? self._label("xinjiandingdan") : "订单信息"
-        self._log(route.params)
-
-        _private(self).loadDetail(route.params.id)
+        _private(self).loadDetail(self.$route.params.id)
     }
 }
 
 const _private = function(self){
     const _this = {
-
+        appendRow(row) {
+            row.key = StringFunc.random(10)
+            //self._log(row, "XXXXX")
+            self.tabledata.unshift(row)
+            self.form.currency = row.source.product.factorypricecurrency
+        },
 
         //将发货单明细转化成商品、订单、列表
         async convertListToProductList(list) {
@@ -435,6 +411,7 @@ const _private = function(self){
                         productid: item.productid,
                         orderid:item.orderid,
                         price:item.price*1,
+                        discount:item.discount,
                         form,
                         confirm_form
                     }
@@ -467,7 +444,8 @@ const _private = function(self){
                     hash[key] = {
                         product:item.product,
                         orders: [],
-                        price:item.price
+                        price:item.price,
+                        discount:item.discount
                     }
                 }
 
@@ -499,7 +477,7 @@ const _private = function(self){
                     self.tabledata = []
                     results.forEach(row=>{
                         row.confirm_total = 0
-                        self.appendRow({
+                        _this.appendRow({
                             source: row,
                             price: row.price
                         })
