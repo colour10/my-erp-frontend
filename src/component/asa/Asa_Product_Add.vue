@@ -459,14 +459,7 @@ export default {
             //加载汇率信息
             let self = this;
 
-            if(self.form.nationalpricecurrency=='' || self.form.wordpricecurrency=='') {
-                empty(self.exchange)
-                return 
-            }
-            else if(self.form.nationalpricecurrency!=self.exchange.currency_to || self.form.wordpricecurrency!=self.exchange.currency_from) {
-                empty(self.exchange)
-            }
-
+            empty(self.exchange)
             API.getExchange(self.form.wordpricecurrency, self.form.nationalpricecurrency).then(result=>{
                 if(result>0) {
                     self._log("exchange=",result)
@@ -485,6 +478,10 @@ export default {
             extend(self.form, initObject(['spring', 'summer', 'fall', 'winter'], newValue))
         },
         'form.wordpricecurrency':function(){
+            //this._log("wordpricecurrency change")
+            this.loadExchangeRate()
+        },
+        'form.nationalpricecurrency':function(){
             //this._log("wordpricecurrency change")
             this.loadExchangeRate()
         }

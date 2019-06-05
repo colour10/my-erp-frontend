@@ -2,8 +2,8 @@
     <div>
         <el-form class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini">
             <el-row :gutter="0">
-                <au-button auth="confirmorder-submit" :type="canSubmit?'primary':'info'" @click="saveOrder(1)">{{_label("baocun")}}</au-button>
-                <as-button :type="form.id?'primary':'info'" @click="showAttachment()">{{_label("fujian")}}</as-button>
+                <au-button auth="confirmorder-submit" type="danger" @click="saveOrder(1)">{{_label("ruku")}}</au-button>
+                <!-- <as-button :type="form.id?'primary':'info'" @click="showAttachment()">{{_label("fujian")}}</as-button> -->
                 <as-button type="primary" @click="showProduct()">{{_label("xuanzeshangpin")}}</as-button>
             </el-row>
             <el-row :gutter="0">
@@ -193,6 +193,7 @@ import { shippingList, shippingConvert, getProduct,createEmptyRow } from "../asa
 import chain from "../chain.js"
 import Select from "./select.vue"
 import orderMixin from "../mixins/order.js"
+import { Order, ProductDetail, promiseRunner } from "../model.js"
 
 const result = {
     name: 'sp-warehousing',
@@ -293,18 +294,15 @@ const result = {
 
                     chain(item.source.form).forEach((values, orderid) => {
                         chain(values).forEach((row, sizecontentid) => {
-                            if (row.number > 0) {
-                                list.push({
-                                    orderid,
-                                    sizecontentid,
-                                    number: row.number,
-                                    productid: item.source.product.id,
-                                    discount: item.source.discountbrand,
-                                    price: item.price,
-                                    orderdetailsid: row.id,
-                                    id: row.shippingdetailid
-                                })
-                            }
+                            list.push({
+                                orderid,
+                                sizecontentid,
+                                number: row.number,
+                                productid: item.source.product.id,
+                                discount: item.source.discountbrand,
+                                price: item.price,
+                                id: row.id
+                            })
                         })
                     })
                 }
@@ -316,12 +314,10 @@ const result = {
             }
 
             self._log(JSON.stringify(params))
-            self._submit("/shipping/save", { params: JSON.stringify(params) }).then(function(res) {
+            self._submit("/shipping/warehousing", { params: JSON.stringify(params) }).then(function(res) {
                 //self._log(res)
 
-                self.convertList(res)
-
-                //copyTo(res.data, self.form)
+                _private(self).loadDetail(self.$route.params.id)
             });
         },
         showAttachment() {
@@ -341,6 +337,7 @@ const result = {
             let self = this
             row.form = form
             row.confirm_total = total;
+            console.log(row)
         },
         onSelect(row) {
             _private(this).appendRow({
@@ -372,7 +369,14 @@ const result = {
             sums[1] = data.length
 
             return sums
-        }
+        },
+        appendRow(row) {
+            let self = this
+            row.key = StringFunc.random(10)
+            self._log(row, "XXXXX")
+            self.tabledata.unshift(row)
+            self.form.currency = row.source.product.factorypricecurrency
+        },
     },
     computed: {
         canDelete() {
@@ -394,7 +398,7 @@ const result = {
             return self.formatNumber(total)
         },
         tabledata_filter() {
-            return this.tabledata.filter(item => item.source.is_hidden == false)
+            return this.tabledata;//.filter(item => item.source.is_hidden == false)
         }
     },
     mounted: function() {
@@ -403,54 +407,106 @@ const result = {
         let label // = route.params.id == 0 ? self._label("xinjiandingdan") : "订单信息"
         self._log(route.params)
 
-        self._setTitle("Loading...")
-        self._fetch("/shipping/load", { id: route.params.id }).then(function(res) {
-            //self._log("加载订单信息", res)
-
-            _private(self).convertList(res)
-            self._setTitle(self._label("fahuodanruku") + ":" + self.form.id)
-        })
+        _private(self).loadDetail(route.params.id)
     }
 }
 
 const _private = function(self){
     const _this = {
-        appendRow(row) {
-            row.key = StringFunc.random(10)
-            self.tabledata.unshift(row)
-            self.form.currency = row.source.product.factorypricecurrency
-        },
-        convertList(res) {
-            copyTo(res.data.form, self.form)
 
-            if (res.data.list) {
-                self.tabledata = []
-                shippingConvert(res.data.list).forEach(async line => {
-                    let source = await getProduct(res.data.orderdetails_list, line.productid);
-                    //self._log("line", line, source)
 
-                    if(source) {
-                        //如果有订单详情记录，不是发货单时候单独加入的
-                        line.orders.forEach(function({ orderid, confirm_form }) {
-                            //self._log(confirm_form, "XXXXX")
-                            let index = source.orders.findIndex(item => {
-                                return item.order.id == orderid })
-                            extend(source.orders[index].confirm_form, confirm_form)
-                        })
+        //将发货单明细转化成商品、订单、列表
+        async convertListToProductList(list) {
+            let result = {}
+            list.forEach(item => {
+                //console.log("SSSSSSSS",item)
+                let key = item.price + "-" + item.productid +'-'+ item.orderid
+                if (result[key]) {
+                    result[key]['form'][item.sizecontentid] = {number:item.number, id:item.id}
+                    result[key]['confirm_form'][item.sizecontentid] = {number:item.warehousingnumber, id:item.id}
+                } else {
+                    let form = {}                    
+                    form[item.sizecontentid] = {number:item.number, id:item.id}
+
+                    let confirm_form = {}
+                    confirm_form[item.sizecontentid] = {number:item.warehousingnumber, id:item.id}
+                    result[key] = {
+                        key,
+                        productid: item.productid,
+                        orderid:item.orderid,
+                        price:item.price*1,
+                        form,
+                        confirm_form
                     }
-                    else {
+                }
+            })
 
+            let promises = []
+            chain(result).forEach(item => {
+                //console.log(item,"==")
+                let runner = promiseRunner(item)
+
+                if(item.orderid>0) {
+                    runner.push(Order.load({ data: item.orderid, depth: 1 }), "order")
+                }
+                else {
+                    item.order = {id:-1}
+                }
+                
+                runner.push(ProductDetail.load({ data: item.productid, depth: 1 }), "product")
+                
+                promises.push(runner.all())
+            })
+
+            let rows = await Promise.all(promises)
+
+            let hash = {}
+            rows.forEach(item=>{
+                let key = item.productid + item.price
+                if (!hash[key]) {
+                    hash[key] = {
+                        product:item.product,
+                        orders: [],
+                        price:item.price
                     }
-                    
+                }
 
-
-                    _this.appendRow({
-                        source: source,
-                        price: line.price
-                    })
+                item.product.sizecontents.forEach(sizecontent=>{
+                    if(!item.form[sizecontent.id]) {
+                        item.form[sizecontent.id] = {number:0, id:""}
+                        item.confirm_form[sizecontent.id] = {number:0, id:""}
+                    }
                 })
 
-            }
+                hash[key].orders.push({                        
+                    confirm_form:item.confirm_form,
+                    form:item.form,
+                    order:item.order
+                })
+            })
+
+            return chain(hash).toArray((key,value)=>value).array()
+        },
+        loadDetail(id) {
+            self._setTitle("Loading...")
+            self._fetch("/shipping/load", { id }).then(async function(res) {
+                //self._log("加载订单信息", res)
+
+                copyTo(res.data.form, self.form)
+                if (res.data.list) {
+                    let results = await _this.convertListToProductList(res.data.list)
+
+                    self.tabledata = []
+                    results.forEach(row=>{
+                        row.confirm_total = 0
+                        self.appendRow({
+                            source: row,
+                            price: row.price
+                        })
+                    })                    
+                }
+                self._setTitle(self._label("fahuodanruku") + ":" + self.form.id)
+            })
         }
     }
 

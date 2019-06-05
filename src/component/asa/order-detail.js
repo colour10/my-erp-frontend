@@ -166,16 +166,7 @@ const detailConvert = function(list){
         }
         
         runner.push(ProductDetail.load({ data: item.productid, depth: 1 }), "product")
-
-        //计算出厂总价
-        item.getRowFactoryTotal = function() {
-            return item.product.factoryprice * item.total
-        }
-
-        //计算成交总价
-        item.getRowDealTotal = function() {
-            return item.product.factoryprice*item.discount*item.total
-        }
+        
         promises.push(runner.all())
     })
 

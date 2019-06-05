@@ -16,6 +16,7 @@ function _fetch(path, form) {
 
     return new Promise(resolve=>{
         emitter.on(key, (result)=>{
+            delete pendings[key]
             resolve(result)
         })
     })
@@ -28,6 +29,7 @@ const CacheContext = cache(context)
 const API = {
     //加载汇率
     async getExchange(currency_from, currency_to) {
+        console.log("Api.getExchange")
         if(currency_from==currency_to) {
             return 1
         }
@@ -35,7 +37,7 @@ const API = {
         let key = "getExchange:"+currency_from+"-"+currency_to
         let exchange = CacheContext.get(key)
         if(exchange) {
-            //console.log("is cache")
+            console.log("is cache")
             return exchange
         }
 

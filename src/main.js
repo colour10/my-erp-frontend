@@ -46,6 +46,7 @@ import Multiple_Admin_Page from './component/multiple_admin_page.js'
 import Asa_Color_Select from './component/asa/Asa_Color_Select.vue'
 import Asa_Sizecontent_Input from './component/asa/Asa_Sizecontent_Input.vue'
 import Asa_Sizecontent_Confirm from './component/asa/Asa_Sizecontent_Confirm.vue'
+
 import Asa_Order_Tip from './component/asa/Asa_Order_Tip.vue'
 import Asa_Product_Tip from './component/asa/Asa_Product_Tip.vue'
 import SelectText from './component/select-text.js'
@@ -84,6 +85,7 @@ import System from './component/system/index.vue'
 import Supplier from './component/supplier/index.vue'
 import Exchangerate from './component/exchangerate/index.vue'
 import PriceSetting from './component/pricesetting/index.vue'
+import SpProductInfo from './component/asa/sp-product-info.vue'
 
 const components = [
     Simple_Admin_Page,
@@ -123,7 +125,8 @@ const components = [
     Dialog,
     PriceSetting,
     Asa_PriceSetting_Cell,
-    Toggle_Input
+    Toggle_Input,
+    SpProductInfo
 ]
 
 components.forEach(component => {

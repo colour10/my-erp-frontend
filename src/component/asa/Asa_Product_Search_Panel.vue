@@ -40,31 +40,56 @@
                 </el-col>
             </el-row>
         </el-form>
+
         <el-collapse v-model="is_collapse" v-show="searchresult.length>0">
             <el-collapse-item :title="_label('chaxunjieguo')" name="1" class="product">
                 <el-table ref="table" :data="searchresult" stripe border style="width:100%;" @selection-change="onSelectionChange" @row-click="onRowClick">
-                    <el-table-column type="selection" :width="50"></el-table-column>
+                    <el-table-column type="selection" :width="30"></el-table-column>
                     <el-table-column align="left" width="50">
                         <template v-slot="scope">
                             <img :src="_fileLink(scope.row.picture)" style="width:50px;height:50px;" />
                         </template>
                     </el-table-column>
-                    <el-table-column :label="_label('chanpinmingcheng')" align="left" width="250">
+
+                    <el-table-column prop="ageseason_label" :label="_label('niandai')" width="90" align="center"> </el-table-column>
+
+                    <el-table-column :label="_label('chanpinmingcheng')" align="left" width="200">
                         <template v-slot="{row}">
-                            <sp-product-tip :product="row"></sp-product-tip>
-                        </template>>
+                            {{row.getName()}}
+                        </template>
                     </el-table-column>
                     <el-table-column :label="_label('guojima')" align="left" width="180">
-                        <template v-slot="{row}">{{row.getGoodsCode()}}</template>>
+                        <template v-slot="{row}">
+                            <sp-product-tip :product="row"></sp-product-tip>
+                        </template>
                     </el-table-column>
+
+                    <el-table-column :label="_label('shangpinshuxing')" align="left" width="90">
+                        <template v-slot="{row}">
+                            <sp-select-text :value="row.producttypeid" source="producttype"></sp-select-text>
+                        </template>
+                    </el-table-column>
+                    
+                    <el-table-column :label="_label('chuchangjia')" align="left" width="120">
+                        <template v-slot="{row}">
+                            {{[row.factorypricecurrency_label, row.factoryprice].join(" ")}}
+                        </template>
+                    </el-table-column>
+
+                    <el-table-column :label="_label('guojilingshoujia')" align="left" width="120">
+                        <template v-slot="{row}">
+                            {{ [row.wordpricecurrency_label, row.wordprice].join(" ") }}
+                        </template>
+                    </el-table-column>
+
                     <el-table-column prop="countries_label" :label="_label('chandi')" width="100" align="center"> </el-table-column>
                     <el-table-column prop="brandgroup_label" :label="_label('pinlei')" width="120" align="center"> </el-table-column>
-                    <el-table-column prop="childbrand_label" :label="_label('zipinlei')" width="120" align="center"> </el-table-column>
+                    <!-- <el-table-column prop="childbrand_label" :label="_label('zipinlei')" width="120" align="center"> </el-table-column>
                     <el-table-column :label="_label('caozuo')" width="100" align="center">
                         <template v-slot="scope">
                             <as-button size="mini" type="primary" @click="selectRow(scope.row)">{{_label('xuanze')}}</as-button>
                         </template>
-                    </el-table-column>
+                    </el-table-column> -->
                 </el-table>
             </el-collapse-item>
         </el-collapse>

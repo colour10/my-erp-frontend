@@ -228,6 +228,15 @@ export default {
             })
 
             if (!is_exist) {
+                row.getRowFactoryTotal = function() {
+                    return row.product.factoryprice * row.total
+                }
+
+                //计算成交总价
+                row.getRowDealTotal = function() {
+                    return row.product.factoryprice*row.discount*row.total
+                }
+                
                 self.tabledata.unshift(row)
 
                 self.form.currency = row.product.factorypricecurrency

@@ -5,7 +5,7 @@
                 <au-button auth="confirmorder-submit" :type="canSubmit?'primary':'info'" @click="saveOrder(1)">{{_label("baocun")}}</au-button>
                 <as-button :type="form.id?'primary':'info'" @click="showAttachment()">{{_label("fujian")}}</as-button>
                 <as-button type="primary" @click="showDialog()">{{_label("daorudingdan")}}</as-button>
-                <as-button type="primary" @click="showProduct()">{{_label("xuanzeshangpin")}}</as-button>
+                <!--<as-button type="primary" @click="showProduct()">{{_label("xuanzeshangpin")}}</as-button>-->
             </el-row>
             <el-row :gutter="0">
                 <el-col :span="8" style="width:600px">

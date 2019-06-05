@@ -237,6 +237,8 @@ export default {
         appendRow(row) {
             const self = this;
 
+            //row.source.confirm_total = 0;
+            self._log("append",  row)
             self.tabledata.unshift(row)
 
             self.form.currency = row.product.factorypricecurrency
@@ -275,10 +277,11 @@ export default {
                     sums[index] = data.reduce((total, current)=>total+current.confirm_total*1, 0)
                 }
                 else if(index==9) {
-                    sums[index] = data.reduce((total, current)=>total+current.confirm_total_price*1, 0)
+                    sums[index] = data.reduce((total, current)=>total+current.confirm_total*current.price, 0)
+                    sums[index] = self.formatNumber(sums[index])
                 }
             })
-            //self._log("data", data)
+            self._log("data", data)
 
             sums[1] = data.length
             return sums

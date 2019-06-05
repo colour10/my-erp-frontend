@@ -645,17 +645,12 @@ export default {
             //加载汇率信息
             let self = this;
 
-            if(self.form.nationalpricecurrency=='' || self.form.wordpricecurrency=='') {
-                globals.empty(self.exchange)
-                return 
-            }
-            else if(self.form.nationalpricecurrency!=self.exchange.currency_to || self.form.wordpricecurrency!=self.exchange.currency_from) {
-                globals.empty(self.exchange)
-            }
+            globals.empty(self.exchange)
+            self._log("加载汇率信息", self.form.wordpricecurrency, self.form.nationalpricecurrency)
 
             API.getExchange(self.form.wordpricecurrency, self.form.nationalpricecurrency).then(result=>{
+                self._log("exchange=",result)
                 if(result>0) {
-                    self._log("exchange=",result)
                     extend(self.exchange, {
                         currency_from:self.form.wordpricecurrency,
                         currency_to:self.form.nationalpricecurrency,
@@ -673,7 +668,11 @@ export default {
         'form.wordpricecurrency':function(){
             //this._log("wordpricecurrency change")
             this.loadExchangeRate()
-        }
+        },
+        'form.nationalpricecurrency':function(){
+            //this._log("wordpricecurrency change")
+            this.loadExchangeRate()
+        },
     },
     computed: {
         getPriceRate(){

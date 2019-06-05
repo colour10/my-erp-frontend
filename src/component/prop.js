@@ -409,7 +409,7 @@ const props = function(){
             auth: "brand",
             options:{
                 dialogWidth:"400px", 
-                autoreload:true,
+                isAutoReload:true,
                 autohide:true
             },
             base:{

@@ -70,7 +70,7 @@ export default {
             props: {
                 columns: [
                     { name: "filename", label: "LOGO", type: "avatar", is_image: true, image_width: 50, image_height: 50, width: 55, className: "picture" },
-                    { name: "name", label: _label('pinpaimingcheng'), is_multiple: true, is_focus: true },
+                    { name: "name_en", label: _label('pinpaimingcheng'), is_multiple: false, is_focus: true },
                     { name: "countryid", label: _label('guishuguojia'), type: "select", source: "country" },
                     { name: "memo", label: _label('memo'), type: "textarea", is_hide: true },
                     { name: "officialwebsite", label: _label('guanwangdizhi'), is_hide: true }
