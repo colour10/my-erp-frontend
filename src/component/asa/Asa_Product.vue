@@ -41,7 +41,7 @@
                         </auth>
                     </el-col>
                 </el-row>
-                <el-form ref="order-form" class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini" :rules="rules" :inline-message="true">
+                <el-form ref="order-form" class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini" :rules="rules" :inline-message="false" :show-message="false">
                     <el-row :gutter="0">
                         <el-col :span="8">
                             <el-form-item :label="_label('niandai')" prop="ageseason">
@@ -222,12 +222,12 @@
                     
                     <el-table-column :label="_label('kuanshi')" width="140" align="center">
                         <template v-slot="scope">
-                            <el-input v-model="scope.row.wordcode_1" size="mini" @focus="onFocus(1)" @blur="onBlur(1)" @keyup.native="onKeyInput(scope.row, 'wordcode_1')"></el-input>
+                            <el-input v-model="scope.row.wordcode_1" size="mini" @keyup.native="onKeyInput(scope.row, 'wordcode_1')"></el-input>
                         </template>
                     </el-table-column>
                     <el-table-column :label="_label('caizhi')" width="140" align="center">
                         <template v-slot="scope">
-                            <el-input v-model="scope.row.wordcode_2" size="mini" @focus="onFocus(2)" @blur="onBlur(2)" @keyup.native="onKeyInput(scope.row, 'wordcode_2')"></el-input>
+                            <el-input v-model="scope.row.wordcode_2" size="mini" @keyup.native="onKeyInput(scope.row, 'wordcode_2')"></el-input>
                         </template>
                     </el-table-column>
                     <el-table-column :label="_label('yanse')" width="140" align="center">
@@ -307,6 +307,7 @@ export default {
         productmaterial: Material
     },
     data() {
+        let self = this
         return {
             dialogVisible: false,
             lang: _label("lang"),
@@ -359,12 +360,12 @@ export default {
                 producttypeid:""
             },
             rules: {
-                sizetopid: Rules.id({ required: true, message: _label("8000") }),
-                brandgroupid: Rules.id({ required: true, message: _label("8000") }),
-                childbrand: Rules.id({ required: true, message: _label("8000") }),
-                brandid: Rules.id({ required: true, message: _label("8000") }),
-                brandcolor: Rules.required({ message: _label("8000") }),
-                ageseason: Rules.required({ message: _label("8000") })
+                sizetopid: Rules.id({ required: true, message: _label("8000"), label:_label("chimazu") }),
+                brandgroupid: Rules.id({ required: true, message: _label("8000"), label:_label("pinlei") }),
+                childbrand: Rules.id({ required: true, message: _label("8000"), label:_label("zipinlei") }),
+                brandid: Rules.id({ required: true, message: _label("8000"), label:_label("pinpai") }),
+                brandcolor: Rules.required({ message: _label("8000"), label:_label("sexi") }),
+                ageseason: Rules.required({ message: _label("8000"), label:_label("niandai") })
             },
             materials: [],
             sizecontents: [],
@@ -390,6 +391,17 @@ export default {
         }
     },
     methods: {
+        validatorGJM(){
+            let form = this.form
+            return new Promise((resolve,reject)=>{
+                if(form.wordcode_1=="" || form.wordcode_2=='' || form.wordcode_3=='') {
+                    reject({message:self._label("8000"), label:self._label("guojima")})
+                }
+                else {
+                    resolve()
+                }
+            })
+        },
         onQuit() {
             this.dialogVisible = false
         },
@@ -416,11 +428,7 @@ export default {
         onSubmit() {
             var self = this;
 
-            this.$refs["order-form"].validate(function(valid) {
-                if (!valid) {
-                    return false;
-                }
-
+            self.validate(self.validatorGJM).then(function() {
                 let params = {
                     form: self.form,
                     materials: self.materials

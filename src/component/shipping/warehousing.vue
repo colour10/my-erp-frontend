@@ -2,9 +2,10 @@
     <div>
         <el-form class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini">
             <el-row :gutter="0">
-                <au-button auth="confirmorder-submit" type="danger" @click="saveOrder(1)">{{_label("ruku")}}</au-button>
+                <au-button auth="confirmorder-submit" type="danger" @click="saveOrder(1)" v-if="form.status=='1'">{{_label("ruku")}}</au-button>
                 <!-- <as-button :type="form.id?'primary':'info'" @click="showAttachment()">{{_label("fujian")}}</as-button> -->
-                <as-button type="primary" @click="showProduct()">{{_label("xuanzeshangpin")}}</as-button>
+                <as-button type="primary" @click="showProduct()" v-if="form.status=='1'">{{_label("xuanzeshangpin")}}</as-button>
+                <as-button type="danger" @click="cancel()" v-if="form.status=='2'">{{_label("quxiaoruku")}}</as-button>
             </el-row>
             <el-row :gutter="0">
                 <el-col :span="8" style="width:600px">
@@ -240,7 +241,8 @@ const result = {
                 estimatedate: "",
                 maketime:"",
                 makestaff:"",
-                id: ""
+                id: "",
+                status:""
             },
             tabledata: [],
             visible: false,
@@ -312,6 +314,17 @@ const result = {
 
             self._log(JSON.stringify(params))
             self._submit("/shipping/warehousing", { params: JSON.stringify(params) }).then(function(res) {
+                _private(self).loadDetail(self.$route.params.id)
+            });
+        },
+        cancel() {
+            let self = this;
+
+            if(!confirm(self._label("quxiaorukutishi"))) {
+                return 
+            }
+
+            self._submit("/shipping/cancel", { id:self.form.id }).then(function(res) {
                 _private(self).loadDetail(self.$route.params.id)
             });
         },

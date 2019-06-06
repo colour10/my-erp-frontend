@@ -1,6 +1,42 @@
 import {_label,extend,config} from './globals.js'
 import {httpPost,httpGet, host} from './http.js'
 import {isArray, initObject} from './array.js'
+import chain from "./chain.js"
+
+const _private = function(self){
+    const _this = {
+        showErorMessage(object) {
+            const h = self.$createElement;
+            let list = []
+            chain(object).forEach(errors=>{
+                errors.forEach(row=>{
+                    let name = row.label || self.rules[row.field].label
+                    list.push(h("p", null, name + row.message))
+                })
+            })
+            self.$msgbox({
+                title: self._label("error_tip"),
+                message: h('p', null, list),
+                showCancelButton: false,
+                confirmButtonText: self._label("button-ok")
+            }).then(action =>{})
+        },
+        doUserCheck(usercheck, callback) {
+            if(usercheck) {
+                usercheck().then(()=>{
+                    callback(true)
+                }).catch(object=>{
+                    callback(false, {x:[object]})
+                })
+            }
+            else {
+                callback(true)
+            }
+        }
+    }
+
+    return _this
+}
 
 export default {
     methods: {
@@ -129,16 +165,28 @@ export default {
                 }
             }
         },
-        validate() {
+        async validate(usercheck) {
             let self = this
+            let func = _private(self)
+
             return new Promise((resolve,reject)=>{
-                self.$refs["order-form"].validate(function(valid) {
+                func.doUserCheck(usercheck, function(valid, object){
                     if(valid) {
-                        resolve()
+                        self.$refs["order-form"].validate((valid, object)=>{
+                            if(valid) {
+                                resolve()
+                            }
+                            else {
+                                self._log(object)
+                                func.showErorMessage(object)
+                            }
+                        })
+                    }
+                    else {
+                        func.showErorMessage(object)
                     }
                 })
             })
-            
         },
         _setting(name, value) {
             let self = this;

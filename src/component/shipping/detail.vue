@@ -2,9 +2,9 @@
     <div>
         <el-form class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini">
             <el-row :gutter="0">
-                <au-button auth="confirmorder-submit" :type="canSubmit?'primary':'info'" @click="saveOrder(1)">{{_label("baocun")}}</au-button>
-                <as-button :type="form.id?'primary':'info'" @click="showAttachment()">{{_label("fujian")}}</as-button>
-                <as-button type="primary" @click="showDialog()">{{_label("daorudingdan")}}</as-button>
+                <au-button auth="confirmorder-submit" type="primary" @click="saveOrder(1)" v-if="form.status!='2'">{{_label("baocun")}}</au-button>
+                <as-button type="primary" @click="showAttachment()">{{_label("fujian")}}</as-button>
+                <as-button type="primary" @click="showDialog()" v-if="form.status!='2'">{{_label("daorudingdan")}}</as-button>
                 <!--<as-button type="primary" @click="showProduct()">{{_label("xuanzeshangpin")}}</as-button>-->
             </el-row>
             <el-row :gutter="0">
@@ -240,7 +240,8 @@ export default {
                 estimatedate: "",
                 maketime:"",
                 makestaff:"",
-                id: ""
+                id: "",
+                status:""
             },
             tabledata: [],
             visible: false,
@@ -464,7 +465,7 @@ export default {
         self._log(route.params)
 
         if (route.params.id > 0) {
-            self._fetch("/shipping/load", { id: route.params.id }).then(function(res) {
+            self._fetch("/shipping/load", { id: route.params.id, type:"shipping" }).then(function(res) {
                 //self._log("加载订单信息", res)
 
                 self.convertList(res)

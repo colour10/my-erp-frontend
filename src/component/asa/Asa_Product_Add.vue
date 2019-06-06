@@ -19,24 +19,23 @@
                     </el-table-column>
                     
                     <el-table-column :label="_label('kuanshi')" width="140" align="center">
-                        <template v-slot="scope">
-                            <el-input v-model="scope.row.wordcode_1" size="mini" @focus="onFocus(1)" @blur="onBlur(1)" @keyup.native="onKeyInput(scope.row,'wordcode_1')"></el-input>
+                        <template v-slot="{row,$index}">
+                            <el-input v-model="row.wordcode_1" size="mini" @focus="onFocus(1)" @blur="onBlur(1)" @keyup.native="onKeyInput(row,'wordcode_1')" @keyup.native.up="onKeyMove(1, $index, 'up')" @keyup.native.down="onKeyMove(1, $index, 'down')" @keyup.native.left="onKeyMove(1, $index, 'left')" @keyup.native.right="onKeyMove(1, $index, 'right')" :ref="'word1-'+$index"></el-input>
                         </template>
                     </el-table-column>
                     <el-table-column :label="_label('caizhi')" width="140" align="center">
-                        <template v-slot="scope">
-                            <el-input v-model="scope.row.wordcode_2" size="mini" @focus="onFocus(2)" @blur="onBlur(2)" @keyup.native="onKeyInput(scope.row,'wordcode_2')"></el-input>
+                        <template v-slot="{row,$index}">
+                            <el-input v-model="row.wordcode_2" size="mini" @focus="onFocus(2)" @blur="onBlur(2)" @keyup.native="onKeyInput(row,'wordcode_2')" @keyup.native.up="onKeyMove(2, $index, 'up')" @keyup.native.down="onKeyMove(2, $index, 'down')" @keyup.native.left="onKeyMove(2, $index, 'left')" @keyup.native.right="onKeyMove(2, $index, 'right')" :ref="'word2-'+$index"></el-input>
                         </template>
                     </el-table-column>
                     <el-table-column :label="_label('yanse')" width="140" align="center">
-                        <template v-slot="scope">
-                            <!--<el-input v-model="scope.row.wordcode_3" size="mini" @keyup.native.down="onKeyDown(scope.$index)" @keyup.native.up="onKeyUp(scope.$index)" :ref="'word'+scope.$index"></el-input>-->
-                            <el-input v-model="scope.row.wordcode_3" size="mini" @keyup.native="onWord3Change(scope.row)"></el-input>
+                        <template v-slot="{row,$index}">
+                            <el-input v-model="row.wordcode_3" size="mini" @keyup.native="onWord3Change(row,'wordcode_3')" @keyup.native.up="onKeyMove(3, $index, 'up')" @keyup.native.down="onKeyMove(3, $index, 'down')" @keyup.native.left="onKeyMove(3, $index, 'left')" @keyup.native.right="onKeyMove(3, $index, 'right')" :ref="'word3-'+$index"></el-input>
                         </template>
                     </el-table-column>
                     <el-table-column :label="_label('yansemingcheng')" width="150" align="center">
-                        <template v-slot="scope">
-                            <el-input v-model="scope.row.colorname" size="mini"></el-input>
+                        <template v-slot="{row,$index}">
+                            <el-input v-model="row.colorname" size="mini" @keyup.native.up="onKeyMove(4, $index, 'up')" @keyup.native.down="onKeyMove(4, $index, 'down')" @keyup.native.left="onKeyMove(4, $index, 'left')" @keyup.native.right="onKeyMove(4, $index, 'right')" :ref="'word4-'+$index"></el-input>
                         </template>
                     </el-table-column>
 
@@ -62,7 +61,7 @@
                 <!-- <div class="el-time-panel el-popper" style="width:900px;height:500px;">sdsd</div> -->
             </el-col>
         </el-row>
-        <el-form ref="order-form" class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;margin-top:5px;" size="mini" :rules="rules" :inline-message="true">
+        <el-form ref="order-form" class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;margin-top:5px;" size="mini" :rules="rules" :inline-message="false" :show-message="false">
             <el-row :gutter="0">
                 <el-col :span="8">
                     <el-form-item :label="_label('niandai')" prop="ageseason">
@@ -248,13 +247,13 @@ export default {
                 productmemoids: "" //商品描述
             },
             rules: {
-                sizetopid: Rules.id({ required: true, message: _label("8000") }),
-                brandgroupid: Rules.id({ required: true, message: _label("8000") }),
-                childbrand: Rules.id({ required: true, message: _label("8000") }),
-                brandid: Rules.id({ required: true, message: _label("8000") }),
-                brandcolor: Rules.required({ message: _label("8000") }),
-                ageseason: Rules.required({ message: _label("8000") }),
-                sizecontentids: Rules.required({ message: _label("8000") })
+                sizetopid: Rules.id({ required: true, message: _label("8000"), label:_label("chimazu") }),
+                brandgroupid: Rules.id({ required: true, message: _label("8000"), label:_label("pinlei") }),
+                childbrand: Rules.id({ required: true, message: _label("8000"), label:_label("zipinlei") }),
+                brandid: Rules.id({ required: true, message: _label("8000"), label:_label("pinpai") }),
+                brandcolor: Rules.required({ message: _label("8000"), label:_label("sexi") }),
+                ageseason: Rules.required({ message: _label("8000"), label:_label("niandai") }),
+                sizecontentids: Rules.required({ message: _label("8000"), label:_label("chimamingxi") })
             },
             materials: [],
             colors: [],
@@ -305,6 +304,25 @@ export default {
             let self = this
             if(options.length==1) {
                 self.form.sizecontentids = options[0].id
+            }
+        },
+        onKeyMove(column, row, way) {
+            if(way=='down') {
+                row += 1
+            }
+            else if(way=='up') {
+                row -= 1
+            }
+            else if(way=='left') {
+                //column -= 1
+            }
+            else if(way=='right') {
+                //column += 1
+            }
+
+            let target = this.$refs['word'+column+'-'+row]
+            if (target) {
+                target.focus()
             }
         },
         onKeyDown(index) {
@@ -375,7 +393,20 @@ export default {
         onSubmit() {
             let self = this;
 
-            self.validate().then(() => {
+            let check = function() {
+                return new Promise((resolve,reject)=>{
+                    for(let i=0;i<self.colors.length;i++) {
+                        let form = self.colors[i]
+                        if(form.wordcode_1=="" || form.wordcode_2=='' || form.wordcode_3=='') {
+                            reject({message:self._label("8000"), label:self._label("guojima")})
+                            break;
+                        }
+                    }
+                    resolve()
+                })
+            }
+
+            self.validate(check).then(() => {
                 let params = {};
                 params.form = extend({}, self.form)
                 params.colors = self.colors
