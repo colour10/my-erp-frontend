@@ -41,7 +41,7 @@
                         </auth>
                     </el-col>
                 </el-row>
-                <el-form ref="order-form" class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini" :rules="rules" :inline-message="false" :show-message="false">
+                <el-form ref="order-form" class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini" :rules="formRules" :inline-message="false" :show-message="false">
                     <el-row :gutter="0">
                         <el-col :span="8">
                             <el-form-item :label="_label('niandai')" prop="ageseason">
@@ -126,7 +126,7 @@
                         </el-col>
                         <el-col :span="8">
                             <el-form-item :label="_label('shangpinxilie')">
-                                <simple-select v-model="form.series" ref="series" source="series" :parentid="form.brandid"> </simple-select>
+                                <simple-select v-model="form.series" ref="series" source="series" :parentid="form.brandid"> </simple-select><as-button class="trimhalf" @click="onAddSeries">{{_label("xinjian")}}</as-button>
                             </el-form-item>
 
                             <el-form-item :label="_label('xiaoshoushuxing')">
@@ -286,7 +286,6 @@ import { ProductCodeList, ProductDetail } from "../model.js"
 import { initObject } from "../array.js"
 import { extend } from "../object.js"
 import List from '../list.js'
-import { Rules } from '../rules.js'
 import DataSource from '../DataSource.js'
 import Asa_Product_Search_Panel from './Asa_Product_Search_Panel.vue'
 import Asa_Product_Property from './Asa_Product_Property.vue'
@@ -294,6 +293,7 @@ import Asa_Product_Price from './Asa_Product_Price.vue'
 import Asa_Product_ProductStock from './Asa_Product_ProductStock.vue'
 import Material from '../product/material.vue'
 import API from "../api.js"
+import _Product from "./product.js"
 
 const color_keys = ['id', 'brandcolor', 'wordcode_1', 'wordcode_2', 'wordcode_3', 'wordcode_4', 'colorname', 'picture', 'picture2']
 
@@ -308,6 +308,7 @@ export default {
     },
     data() {
         let self = this
+
         return {
             dialogVisible: false,
             lang: _label("lang"),
@@ -359,14 +360,6 @@ export default {
                 saletypeid:"",
                 producttypeid:""
             },
-            rules: {
-                sizetopid: Rules.id({ required: true, message: _label("8000"), label:_label("chimazu") }),
-                brandgroupid: Rules.id({ required: true, message: _label("8000"), label:_label("pinlei") }),
-                childbrand: Rules.id({ required: true, message: _label("8000"), label:_label("zipinlei") }),
-                brandid: Rules.id({ required: true, message: _label("8000"), label:_label("pinpai") }),
-                brandcolor: Rules.required({ message: _label("8000"), label:_label("sexi") }),
-                ageseason: Rules.required({ message: _label("8000"), label:_label("niandai") })
-            },
             materials: [],
             sizecontents: [],
             sizecontents_loaded: false,
@@ -401,6 +394,9 @@ export default {
                     resolve()
                 }
             })
+        },
+        onAddSeries(){
+            _Product(this).addSeries();
         },
         onQuit() {
             this.dialogVisible = false
@@ -704,6 +700,21 @@ export default {
             let form = this.form
             return form.nationalprice > 0 && form.nationalfactoryprice > 0 ? math.round(form.nationalfactoryprice / form.nationalprice, 2) : "";
         }
+    },
+    mounted(){
+        let self = this;
+        self.initRules(Rules=>{
+            let _label = self._label
+            return {
+                sizetopid: Rules.id({ required: true, message: _label("8000"), label:_label("chimazu") }),
+                brandgroupid: Rules.id({ required: true, message: _label("8000"), label:_label("pinlei") }),
+                childbrand: Rules.id({ required: true, message: _label("8000"), label:_label("zipinlei") }),
+                brandid: Rules.id({ required: true, message: _label("8000"), label:_label("pinpai") }),
+                brandcolor: Rules.required({ message: _label("8000"), label:_label("sexi") }),
+                ageseason: Rules.required({ message: _label("8000"), label:_label("niandai") }),
+                sizecontentids: Rules.required({ message: _label("8000"), label:_label("chimamingxi") })
+            }
+        })
     }
 }
 </script>

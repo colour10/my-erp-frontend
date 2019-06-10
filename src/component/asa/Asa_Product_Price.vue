@@ -15,7 +15,7 @@
             <el-table-column :label="_label('huilv')" align="center" width="80" prop="rate" :sortable="true">
             </el-table-column>
             
-            <el-table-column :label="_label('xishu')" align="center" width="80" prop="discount" :sortable="true">
+            <el-table-column :label="_label('dingjiaxishu')" align="center" width="120" prop="discount" :sortable="true">
             </el-table-column>
 
             <el-table-column :label="_label('maoli')" align="center" width="80" :sortable="true">

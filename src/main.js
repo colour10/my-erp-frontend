@@ -46,6 +46,7 @@ import Multiple_Admin_Page from './component/multiple_admin_page.js'
 import Asa_Color_Select from './component/asa/Asa_Color_Select.vue'
 import Asa_Sizecontent_Input from './component/asa/Asa_Sizecontent_Input.vue'
 import Asa_Sizecontent_Confirm from './component/asa/Asa_Sizecontent_Confirm.vue'
+import Asa_Sizecontent_Confirm2 from './component/asa/Asa_Sizecontent_Confirm2.vue'
 
 import Asa_Order_Tip from './component/asa/Asa_Order_Tip.vue'
 import Asa_Product_Tip from './component/asa/Asa_Product_Tip.vue'
@@ -61,6 +62,7 @@ import Creator from './component/develop/index.vue'
 import Home from './component/home/index.vue'
 import Order from './component/order/index.vue'
 import Orderbrand from './component/orderbrand/index.vue'
+import OrderbrandCreate from './component/orderbrand/create.vue'
 import OrderbrandDetail from './component/orderbranddetail/index.vue'
 import User from './component/user/index.vue'
 import Group from './component/group/index.vue'
@@ -126,7 +128,8 @@ const components = [
     PriceSetting,
     Asa_PriceSetting_Cell,
     Toggle_Input,
-    SpProductInfo
+    SpProductInfo,
+    Asa_Sizecontent_Confirm2
 ]
 
 components.forEach(component => {
@@ -166,6 +169,7 @@ const routes = [
             //{path: '/order/add', component: Asa_Order_Dialog},
             {path: '/order/:id', name:"orderform", component: Asa_Order_Dialog},
             {path: '/orderbrand', name:"orderbrand", component: Orderbrand},
+            {path: '/orderbrand/create', name:"orderbrandcreate", component: OrderbrandCreate},
             {path: '/orderbrand/:id', name:"orderbranddetail", component: OrderbrandDetail},
 
             {path:'/ageseason', name:"ageseason", component:getComponentSimple("ageseason")},

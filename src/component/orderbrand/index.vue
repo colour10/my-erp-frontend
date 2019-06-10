@@ -66,7 +66,7 @@ export default {
             self.$refs.tablelist.search(self.searchform)
         },
         showFormToCreate() {
-            this.$router.push('/orderbrand/0')
+            this.$router.push('/orderbrand/create')
         },
         showFormToEdit(rowIndex, row) {
             this.$router.push('/orderbrand/' + row.id)

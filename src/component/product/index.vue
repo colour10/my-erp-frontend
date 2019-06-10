@@ -140,6 +140,9 @@ export default {
                 }
             }*/
         }
+    },
+    mounted() {
+        this._log("mounted")
     }
 }
 </script>

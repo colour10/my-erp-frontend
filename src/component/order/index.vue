@@ -16,7 +16,13 @@
         <simple-admin-tablelist ref="tablelist" v-bind="props" :onclickupdate="toEdit" :isdelete="false">
             <template v-slot:orderno="{row}">
                 <sp-order-tip column="orderno" :order="row"></sp-order-tip>
-            </template>>
+            </template>
+            <template v-slot:genders="{row}">
+                <sp-select-text :value="row.genders" source="gender"></sp-select-text>
+            </template>
+            <template v-slot:brandids="{row}">
+                <sp-select-text :value="row.brandids" source="brand"></sp-select-text>
+            </template>
         </simple-admin-tablelist>
     </div>
 </template>
@@ -43,7 +49,7 @@ export default {
                     { name: "total", label: _label('jine'), width: 100 },
                     { name: "discount", label: _label('zhekoulv'), width: 100 },
                     { name: "genders", label: _label('xingbie') },
-                    { name: "brands", label: _label('pinpai') },
+                    { name: "brandids", label: _label('pinpai') },
                     { name: "bussinesstype", label: _label('yewuleixing'), type: 'select', source: "bussinesstype", width: 120 },
                     //{ name: "status", label: _label('zhuangtai'), type: 'select', source: "orderstatus", width: 120 },
                     { name: "orderdate", label: _label('dingdanriqi'), width: 120, convert:function(row){

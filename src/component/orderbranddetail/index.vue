@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-form ref="order-form" class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini" :rules="rules" :inline-message="true">
+        <el-form ref="order-form" class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini" :rules="formRules" :inline-message="false" :show-message="false">
             <el-row :gutter="0">
                 <au-button auth="order-submit" :type="canSubmit?'primary':'info'" @click="saveOrder(1)">{{_label("baocun")}}</au-button>
                 <as-button v-if="isEditable" :type="buttontype" @click="showProduct()">{{_label("xuanzeshangpin")}}</as-button>
@@ -161,12 +161,6 @@ export default {
                 orderno: "",
                 brandid: "",
                 id: ""
-            },
-            rules: {
-                bussinesstype: { required: true, message: _label("8000") },
-                supplierid: { required: true, message: _label("8000") },
-                ageseason: { required: true, message: _label("8000") },
-                property: { required: true, message: _label("8000") }
             },
             tabledata: [],
             title: "",

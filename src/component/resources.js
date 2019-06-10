@@ -80,7 +80,7 @@ function getOption(name) {
     }}
 
     //商品系列
-    options["series"] = {url:'/l/series',oplabel:'name', opvalue:'id', parent:'brandid'}
+    options["series"] = {url:'/l/series',oplabel:'name_en', opvalue:'id', parent:'brandid'}
 
     //商品子系列
     options["series2"] = {url:'/l/series2',oplabel:'name', opvalue:'id'}

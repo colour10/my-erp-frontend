@@ -2,6 +2,8 @@ import {_label,extend,config} from './globals.js'
 import {httpPost,httpGet, host} from './http.js'
 import {isArray, initObject} from './array.js'
 import chain from "./chain.js"
+import { Rules } from './rules.js'
+import { DataSource } from "./DataSource.js"
 
 const _private = function(self){
     const _this = {
@@ -9,8 +11,10 @@ const _private = function(self){
             const h = self.$createElement;
             let list = []
             chain(object).forEach(errors=>{
+
                 errors.forEach(row=>{
-                    let name = row.label || self.rules[row.field].label
+                    self._log(row,"formRules")
+                    let name = row.label || self.formRules[row.field].label
                     list.push(h("p", null, name + row.message))
                 })
             })
@@ -39,7 +43,15 @@ const _private = function(self){
 }
 
 export default {
+    data:function(){
+        return {
+            formRules:{}
+        }
+    },
     methods: {
+        initRules(callback){
+            extend(this.formRules, callback(Rules))
+        },
         _log() {
             let arr = Array.prototype.slice.call(arguments)
             arr.unshift("<" + this.$options.name + ">")
@@ -222,6 +234,10 @@ export default {
             store.commit("closeTag", {
                 tag:store.getters.getTags.current
             })
+        },
+
+        _dataSource(name) {
+            return DataSource.getDataSource(name, this._label('lang'))
         }
     }
 }

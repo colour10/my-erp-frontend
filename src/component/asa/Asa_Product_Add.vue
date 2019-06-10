@@ -61,7 +61,7 @@
                 <!-- <div class="el-time-panel el-popper" style="width:900px;height:500px;">sdsd</div> -->
             </el-col>
         </el-row>
-        <el-form ref="order-form" class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;margin-top:5px;" size="mini" :rules="rules" :inline-message="false" :show-message="false">
+        <el-form ref="order-form" class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;margin-top:5px;" :rules="formRules" size="mini" :inline-message="false" :show-message="false">
             <el-row :gutter="0">
                 <el-col :span="8">
                     <el-form-item :label="_label('niandai')" prop="ageseason">
@@ -194,7 +194,6 @@
 import { extract, _label, config,math,empty } from '../globals.js'
 import { initObject } from "../array.js"
 import { extend } from "../object.js"
-import { Rules } from '../rules.js'
 import { loadSetting } from '../setting.js'
 import DataSource from '../DataSource.js'
 import watcher from "../watch.js"
@@ -211,6 +210,8 @@ export default {
     },
     mixins:[productMixin],
     data() {
+        let self = this
+        
         return {
             dialogVisible: false,
             lang: _label("lang"),
@@ -245,15 +246,6 @@ export default {
                 saletypeid:"",
                 producttypeid:"",
                 productmemoids: "" //商品描述
-            },
-            rules: {
-                sizetopid: Rules.id({ required: true, message: _label("8000"), label:_label("chimazu") }),
-                brandgroupid: Rules.id({ required: true, message: _label("8000"), label:_label("pinlei") }),
-                childbrand: Rules.id({ required: true, message: _label("8000"), label:_label("zipinlei") }),
-                brandid: Rules.id({ required: true, message: _label("8000"), label:_label("pinpai") }),
-                brandcolor: Rules.required({ message: _label("8000"), label:_label("sexi") }),
-                ageseason: Rules.required({ message: _label("8000"), label:_label("niandai") }),
-                sizecontentids: Rules.required({ message: _label("8000"), label:_label("chimamingxi") })
             },
             materials: [],
             colors: [],
@@ -566,9 +558,21 @@ export default {
 
                 // Chrome, Safari, Firefox 4+, Opera 12+ , IE 9+
                 return self._label("guanbitishi")
+            }            
+        }
+
+        self.initRules(Rules=>{
+            let _label = self._label
+            return {
+                sizetopid: Rules.id({ required: true, message: _label("8000"), label:_label("chimazu") }),
+                brandgroupid: Rules.id({ required: true, message: _label("8000"), label:_label("pinlei") }),
+                childbrand: Rules.id({ required: true, message: _label("8000"), label:_label("zipinlei") }),
+                brandid: Rules.id({ required: true, message: _label("8000"), label:_label("pinpai") }),
+                brandcolor: Rules.required({ message: _label("8000"), label:_label("sexi") }),
+                ageseason: Rules.required({ message: _label("8000"), label:_label("niandai") }),
+                sizecontentids: Rules.required({ message: _label("8000"), label:_label("chimamingxi") })
             }
-            
-        }   
+        })
     }
 }
 </script>

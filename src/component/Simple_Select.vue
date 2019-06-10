@@ -174,9 +174,11 @@ export default {
             //self._log("重新加载下拉框数据", self.source)
             
             return new Promise(resolve=>{
+                self._log("++++++++++++++",self.source)
                 self.getDataSource().getSourceByParent(value).then(function(dataSource) {
+                    self._log("------------",self.source)
                     dataSource.getData(data=>{
-                        //self._log("++++++++++++++------------",self.source)
+                        self._log("++++++++++++++------------",self.source)
                         self.data = []
                         self.keyindexes = {}
                         data.forEach(item => self.push(item))

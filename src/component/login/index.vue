@@ -1,5 +1,5 @@
 <template>
-    <el-form v-if="isShowForm" :model="ruleForm2" :rules="rules2" ref="ruleForm2" label-position="left" label-width="0px" class="demo-ruleForm login-container" native-type="submit">
+    <el-form v-if="isShowForm" :model="ruleForm2" ref="ruleForm2" label-position="left" label-width="0px" class="demo-ruleForm login-container" native-type="submit">
         <h3 class="title">{{label.title}}</h3>
         <el-form-item prop="username">
             <el-input type="text" v-model="ruleForm2.username" auto-complete="off" :placeholder="label.username" @keyup.enter.native="handleSubmit2" :autofocus="true"></el-input>
@@ -33,16 +33,6 @@ export default {
                 username: 'admin',
                 password: '123456',
                 language: window.localStorage.language
-            },
-            rules2: {
-                username: [
-                    { required: true, message: '', trigger: 'blur' },
-                    //{ validator: validaePass }
-                ],
-                password: [
-                    { required: true, message: '', trigger: 'blur' },
-                    //{ validator: validaePass2 }
-                ]
             },
             checked: true,
             languages: {},

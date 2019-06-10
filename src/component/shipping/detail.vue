@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-form class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini">
+        <el-form ref="order-form" class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini" :rules="formRules" :inline-message="false" :show-message="false">
             <el-row :gutter="0">
                 <au-button auth="confirmorder-submit" type="primary" @click="saveOrder(1)" v-if="form.status!='2'">{{_label("baocun")}}</au-button>
                 <as-button type="primary" @click="showAttachment()">{{_label("fujian")}}</as-button>
@@ -43,7 +43,7 @@
                             <el-form-item :label="_label('daohuogang')">
                                 <el-input v-model="form.deliveryport"></el-input>
                             </el-form-item>
-                            <el-form-item :label="_label('daohuocangku')">
+                            <el-form-item :label="_label('daohuocangku')" prop="warehouseid">
                                 <simple-select v-model="form.warehouseid" source="warehouse"></simple-select>
                             </el-form-item>
                             <el-form-item :label="_label('haiwaifapiaohao')">
@@ -218,7 +218,6 @@ export default {
                 exchangerate: "",
                 orderno: "",
                 paydate: "",
-                dd_company: "",
                 apickingdate: "",
                 flightno: "",
                 flightdate: "",
@@ -255,9 +254,6 @@ export default {
         }
     },
     methods: {
-        onQuit() {
-            this.dialogVisible = false
-        },
         showDialog() {
             this.visible = true
         },
@@ -320,14 +316,12 @@ export default {
                 return
             }
 
-            self._log(JSON.stringify(params))
-            self._submit("/shipping/save", { params: JSON.stringify(params) }).then(function(res) {
-                //self._log(res)
-
-                self.convertList(res)
-
-                //copyTo(res.data, self.form)
-            });
+            self.validate().then(()=>{
+                self._log(JSON.stringify(params))
+                self._submit("/shipping/save", { params: JSON.stringify(params) }).then(function(res) {
+                    self.convertList(res)
+                });
+            })            
         },
         showAttachment() {
 
@@ -419,22 +413,6 @@ export default {
         }
     },
     computed: {
-        canDelete() {
-            var form = this.form;
-            return form.id > 0 && form.status == 1
-        },
-        canConfirm() {
-            var form = this.form;
-            return form.id > 0 && form.status == 2
-        },
-        canCancel() {
-            var form = this.form;
-            return form.id > 0 && form.status == 3
-        },
-        canSubmit() {
-            var status = this.form.status;
-            return status != 2 && status != 3
-        },
         width() {
             return this.tabledata.reduce((max, { source }) => Math.max(max, source.product.sizecontents.length), 1) * 50 + 191
         },
@@ -445,15 +423,6 @@ export default {
             }, 0)
             return self.formatNumber(total)
         },
-        genders() {
-            let obj = {}
-            this.tabledata.forEach(item => {
-                if (item.source.product.gender_label.length > 0) {
-                    obj[item.source.product.gender_label] = 1
-                }
-            });
-            return Object.keys(obj).join(",");
-        },
         tabledata_filter() {
             return this.tabledata.filter(item => item.source.is_hidden == false)
         }
@@ -461,7 +430,6 @@ export default {
     mounted: function() {
         let self = this;
         let route = self.$route;
-        let label // = route.params.id == 0 ? self._label("xinjiandingdan") : "订单信息"
         self._log(route.params)
 
         if (route.params.id > 0) {
@@ -474,6 +442,13 @@ export default {
         } else {
             self._setTitle(self._label("shengchengfahuodan"))
         }
+
+        self.initRules(Rules=>{
+            let _label = self._label
+            return {
+                warehouseid: Rules.id({ required: true, message: _label("8000"), label:_label("daohuocangku") })
+            }
+        })
     }
 }
 </script>
