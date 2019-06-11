@@ -70,7 +70,8 @@ module.exports = {
     'vue-router': 'VueRouter',
     'vuex': 'Vuex',
     'element-ui/lib/theme-chalk/index.css':'element-ui/lib/theme-chalk/index.css',
-    'element-ui': 'ELEMENT'
+    'element-ui': 'ELEMENT',
+    'vue-chartjs':'VueChartJs'
   }
 }
 
