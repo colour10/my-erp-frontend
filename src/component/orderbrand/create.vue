@@ -3,85 +3,77 @@
         <el-form ref="order-form" class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini" :inline-message="false" :show-message="false">
             <el-row :gutter="0">
                 <au-button auth="order-submit" type="primary" @click="saveOrder(1)">{{_label("baocun")}}</au-button>
-                <as-button type="primary" @click="showProduct()">{{_label("daorudingdan")}}</as-button>
-                <as-button type="primary" @click="showSupplier()">{{_label("zengjiagonghuoshang")}}</as-button>
+                <as-button type="primary" @click="_showDialog('order-dialog')">{{_label("daorudingdan")}}</as-button>
+                <as-button type="primary" @click="_showDialog('add-supplier');form2.supplierid=''">{{_label("zengjiagonghuoshang")}}</as-button>
             </el-row>
         </el-form>
         <el-row>
             <el-table ref="table" :data="suppliers" stripe border style="width:100%;">
-                    <el-table-column :label="_label('gonghuoshang')" width="120" align="center" prop="suppliercode"></el-table-column>
-
-                    <el-table-column :label="_label('zongjine')" width="90" align="center">
-                        <template v-slot="{row}">
-                            {{getSupplierTotal(row.id)}}
-                        </template>
-                    </el-table-column>
-
-                </el-table>
-
+                <el-table-column :label="_label('gonghuoshang')" width="120" align="center" prop="suppliercode"></el-table-column>
+                <el-table-column :label="_label('zongjine')" width="90" align="center">
+                    <template v-slot="{row}">
+                        {{getSupplierTotal(row.id)}}
+                    </template>
+                </el-table-column>
+                <el-table-column :label="_label('leibiezhanbi')" width="200" align="center">
+                    <template v-slot="{row}">
+                        <chart :height="100" :chart-data="getChartData(row.id)"></chart>
+                    </template>
+                </el-table-column>
+            </el-table>
             <el-col :span="24" class="product">
-                
-
                 <br />
-
                 <el-table ref="table" :data="orders" stripe border style="width:100%;" @selection-change="onSelectionChange" @row-click="onRowClick">
                     <el-table-column type="selection" :width="30"></el-table-column>
-
                     <el-table-column prop="orderno" :label="_label('dingdanbianhao')" width="90" align="center"> </el-table-column>
                     <el-table-column :label="_label('dinghuokehu')" width="120" align="center">
                         <template v-slot="{row}">
                             <sp-select-text :value="row.bookingid" source="supplier"></sp-select-text>
                         </template>
                     </el-table-column>
-
                     <el-table-column :label="_label('gonghuoshang')" width="120" align="center">
                         <template v-slot="{row}">
                             <sp-select-text :value="row.supplierid" source="supplier"></sp-select-text>
                         </template>
                     </el-table-column>
-
                     <el-table-column :label="_label('niandai')" width="90" align="center">
                         <template v-slot="{row}">
                             <sp-select-text :value="row.ageseason" source="ageseason"></sp-select-text>
                         </template>
                     </el-table-column>
-
                     <el-table-column :label="_label('bizhong')" width="90" align="center">
                         <template v-slot="{row}">
                             <sp-select-text :value="row.currency" source="currency"></sp-select-text>
                         </template>
                     </el-table-column>
-
                     <el-table-column prop="total" :label="_label('jine')" width="90" align="center"> </el-table-column>
                     <el-table-column prop="discount" :label="_label('zhekoulv')" width="90" align="center"> </el-table-column>
-
                     <el-table-column :label="_label('xingbie')" width="90" align="center">
                         <template v-slot="{row}">
                             <sp-select-text :value="row.genders" source="gender"></sp-select-text>
                         </template>
                     </el-table-column>
-
                     <el-table-column :label="_label('pinpai')" width="150" align="center">
                         <template v-slot="{row}">
                             <sp-select-text :value="row.brandids" source="brand"></sp-select-text>
                         </template>
                     </el-table-column>
-
                     <el-table-column :label="_label('yewuleixing')" width="90" align="center">
                         <template v-slot="{row}">
                             <sp-select-text :value="row.bussinesstype" source="bussinesstype"></sp-select-text>
                         </template>
                     </el-table-column>
-
                     <el-table-column :label="_label('dingdanriqi')" width="100" align="center">
                         <template v-slot="{row}">
                             {{row.maketime && row.maketime.length>0 ? row.maketime.substr(0,10) : ""}}
                         </template>
                     </el-table-column>
                 </el-table>
-
                 <br />
-
+                <el-row :gutter="0">
+                    <el-button type="warning" round @click="_showDialog('supplier-dialog')" size="mini">{{_label("piliangfenpei")}}</el-button>
+                    <el-button type="warning" round @click="resetDistribute" size="mini">{{_label("piliangchongzhi")}}</el-button>
+                </el-row>
                 <el-table ref="tabledetail" :data="orderdetails" stripe border style="width:100%;" :show-summary="true" :summary-method="getSummary" @selection-change="onSelectionChange2">
                     <el-table-column type="selection" :width="30"></el-table-column>
                     <el-table-column align="center" width="60">
@@ -123,7 +115,7 @@
                     </el-table-column>
                     <el-table-column prop="number" :label="_label('dinggoushuliang')" align="center" :width="width">
                         <template v-slot="{row}">
-                            <sp-sizecontent-confirm2 :columns="row.product.sizecontents" :row="row" :suppliers="suppliers" :disabled="true" :key="row.product.id" @change="onNumberChange"></sp-sizecontent-confirm2>
+                            <sp-sizecontent-confirm2 :ref="row.product.id+'-'+row.order.id" :columns="row.product.sizecontents" :row="row" :suppliers="suppliers" :initData="getInit(row)" :key="row.product.id+'-'+row.order.id" @change="onNumberChange"></sp-sizecontent-confirm2>
                         </template>
                     </el-table-column>
                     <el-table-column :label="_label('chanpinmingcheng')" align="center" width="200">
@@ -135,8 +127,8 @@
             </el-col>
         </el-row>
 
-        <el-dialog title="" :visible.sync="dialogVisible" :center="true" width="400px" class="product" :modal="false">
-            <el-form ref="order-form" :model="form" label-width="85px" :inline="false" style="width:100%;" size="mini" :rules="formRules" :inline-message="false" :show-message="false">
+        <sp-dialog ref="order-dialog">
+            <el-form :model="form" label-width="85px" :inline="false" style="width:100%;" size="mini">
                 <el-row :gutter="0">
                     <el-form-item :label="_label('niandai')">
                         <simple-select v-model="form.ageseasonid" source="ageseason"></simple-select>
@@ -151,14 +143,14 @@
                 <el-row :gutter="0">
                     <el-col align="center">
                         <as-button auth="product" type="primary" @click="onSelect">{{_label("daorudingdan")}}</as-button>
-                        <as-button type="primary" @click="onQuit">{{_label("tuichu")}}</as-button>
+                        <as-button type="primary" @click="_hideDialog('order-dialog')">{{_label("tuichu")}}</as-button>
                     </el-col>
                 </el-row>
             </el-form>
-        </el-dialog>
+        </sp-dialog>
 
-        <el-dialog title="" :visible.sync="dialogVisible2" :center="true" width="400px" class="product" :modal="false">
-            <el-form ref="order-form" :model="form" label-width="85px" :inline="false" style="width:100%;" size="mini" :rules="formRules" :inline-message="false" :show-message="false">
+        <sp-dialog ref="add-supplier">
+            <el-form :model="form2" label-width="85px" :inline="false" style="width:100%;" size="mini">
                 <el-row :gutter="0">
                     <el-form-item :label="_label('gonghuoshang')">
                         <simple-select v-model="form2.supplierid" source="supplier_3" :multiple="true"></simple-select>
@@ -167,11 +159,29 @@
                 <el-row :gutter="0">
                     <el-col align="center">
                         <as-button auth="product" type="primary" @click="addSupplier">{{_label("zengjia")}}</as-button>
-                        <as-button type="primary" @click="onQuit">{{_label("tuichu")}}</as-button>
+                        <as-button type="primary" @click="_hideDialog('add-supplier')">{{_label("tuichu")}}</as-button>
                     </el-col>
                 </el-row>
             </el-form>
-        </el-dialog>
+        </sp-dialog>
+
+        <sp-dialog ref="supplier-dialog">
+            <el-form :model="form2" label-width="85px" :inline="false" style="width:100%;" size="mini">
+                <el-row :gutter="0">
+                    <el-form-item :label="_label('gonghuoshang')">
+                        <el-select v-model="form2.supplierid2">
+                            <el-option v-for="item in suppliers" :key="item.id" :label="item.suppliercode" :value="item.id"></el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-row>
+                <el-row :gutter="0">
+                    <el-col align="center">
+                        <as-button auth="product" type="primary" @click="distribute">{{_label("fenpei")}}</as-button>
+                        <as-button type="primary" @click="_hideDialog('supplier-dialog')">{{_label("tuichu")}}</as-button>
+                    </el-col>
+                </el-row>
+            </el-form>
+        </sp-dialog>
     </div>
 </template>
 
@@ -181,9 +191,13 @@ import detailConvert from "../asa/order-detail.js"
 import orderMixin from "../mixins/order.js"
 import chain from "../chain.js"
 import { Order, ProductDetail, promiseRunner } from "../model.js"
+import CommitChart from "../CommitChart.js"
 
 const result = {
     name: 'sp-orderbrandcreate',
+    components: {
+        chart: CommitChart
+    },
     mixins: [orderMixin],
     data() {
         var self = this;
@@ -191,63 +205,86 @@ const result = {
 
         return {
             form: {
-                ageseasonid:"",
-                supplierid:"",
-                brandid:""
+                ageseasonid: "",
+                supplierid: "",
+                brandid: ""
             },
-            form2:{
-                supplierid:""
+            form2: {
+                supplierid: "",
+                supplierid2:""
             },
             tabledata: [],
-            details:[],
-            orders:[],
-            title: "",
-            dialogVisible: false,
-            dialogVisible2: false,
-            selected:[],
-            selected2:[],
+            details: [],
+            orders: [],
+            selected: [],
+            selected2: [],
             //供货商
-            suppliers:[],
-            listdata:[]
+            suppliers: [],
+            listdata: []
         }
     },
     methods: {
-        onQuit() {
-            this.dialogVisible = false
-        },
-        showProduct() {
-            this.dialogVisible = true;
-        },
-        showSupplier(){
-            this.dialogVisible2 = true;
-        },
-        addSupplier(){
+        addSupplier() {
             let self = this
-            self._dataSource("supplier_3").getRows(self.form2.supplierid).then(rows=>{
-                rows.forEach(row=>{
-                    self.suppliers.push(row.row)
+            self._dataSource("supplier_3").getRows(self.form2.supplierid).then(rows => {
+                rows.forEach(row => {
+                    if(!self.suppliers.find(item=>item==row.row)) {
+                        self.suppliers.push(row.row)
+                    }                    
                 })
-                
-                self.dialogVisible2 = false
+
+                self._hideDialog('add-supplier')
+            })
+        },
+        distribute() {
+            let self = this
+
+            if(self.form2.supplierid2>0) {
+                self.selected2.forEach(row=>{
+                    let key = row.product.id+'-'+row.order.id
+                    self.$refs[key].distributeTo(self.form2.supplierid2)
+                })
+            }
+            self._hideDialog('supplier-dialog')
+        },
+        resetDistribute(){
+            let self = this
+
+            self.selected2.forEach(row=>{
+                let key = row.product.id+'-'+row.order.id
+                self.$refs[key].reset()
             })
         },
         onSelect() {
             let self = this;
-            self._fetch("/order/import", self.form).then(result=>{
+            self._fetch("/order/import", self.form).then(result => {
                 self.orders = []
                 self.details = []
-                result.data.orders.forEach(item=>{
+                result.data.orders.forEach(item => {
                     self.orders.push(item)
                 })
 
-                _private(self).convertListToProductList(result.data.details).then(orders=>{
-                    orders.forEach(item=>{
+                _private(self).convertListToProductList(result.data.details).then(orders => {
+                    orders.forEach(item => {
                         self.details.push(item)
                     })
                 })
 
-                self.dialogVisible = false;
+                self._hideDialog('order-dialog')
             })
+        },
+        getInit(row){
+            let result = []
+            this.listdata.forEach(item=>{
+                if(item.row===row && item.number>0) {
+                    result.push({
+                        sizecontentid:item.sizecontentid,
+                        supplierid:item.supplierid,
+                        number:item.number
+                    })
+                }
+            })
+            return result
         },
         saveOrder(status) {
             //保存订单
@@ -322,15 +359,14 @@ const result = {
 
             return sums
         },
-        onNumberChange({row,list}){
+        onNumberChange({ row, list }) {
             let self = this
-            list.forEach(({number,sizecontentid,supplierid})=>{
-                let target = self.listdata.find(item=>item.sizecontentid==sizecontentid && item.supplierid==supplierid && row.product.id==item.row.product.id && row.orderid==item.row.orderid)
+            list.forEach(({ number, sizecontentid, supplierid }) => {
+                let target = self.listdata.find(item => item.sizecontentid == sizecontentid && item.supplierid == supplierid && row.product.id == item.row.product.id && row.orderid == item.row.orderid)
 
-                if(target) {
+                if (target) {
                     target.number = number
-                }
-                else {
+                } else {
                     self.listdata.push({
                         row,
                         number,
@@ -340,11 +376,11 @@ const result = {
                 }
             })
         },
-        getSupplierTotal(supplierid){
+        getSupplierTotal(supplierid) {
             let self = this;
             let total = 0;
-            self.listdata.forEach(item=>{
-                if(supplierid==item.supplierid && item.number>0) {
+            self.listdata.forEach(item => {
+                if (supplierid == item.supplierid && item.number > 0) {
                     total += item.number * item.row.discount * item.row.product.factoryprice
                 }
             })
@@ -354,7 +390,7 @@ const result = {
         onSelectionChange(vals) {
             this.selected = vals
         },
-        onRowClick(row){
+        onRowClick(row) {
 
             this.$refs.table.toggleRowSelection(row)
         },
@@ -364,22 +400,53 @@ const result = {
         getRowTotal(row) {
             const self = this
             return 0
-            return self.formatNumber(row.price*row.source.confirm_total)
+            return self.formatNumber(row.price * row.source.confirm_total)
         },
         getRowFactoryTotal(row) {
             const self = this
             return 0
-            return self.formatNumber(row.source.product.factoryprice*row.source.confirm_total)
+            return self.formatNumber(row.source.product.factoryprice * row.source.confirm_total)
+        },
+        getChartData(supplierid) {
+            let self = this
+            let groupTotal = {}
+            self.listdata.forEach(item => {
+                if (supplierid == item.supplierid && item.number > 0) {
+                    let key = item.row.product.brandgroup_label
+                    groupTotal[key] = groupTotal[key] || 0
+                    groupTotal[key] += item.number * item.row.discount * item.row.product.factoryprice
+                }
+            })
+
+            let labels = []
+            let data = []
+            chain(groupTotal).forEach((total, name)=>{
+                labels.push(name)
+                data.push(Math.round(total))
+            })
+
+            return {
+                labels,
+                datasets: [{
+                    backgroundColor: [
+                        '#41B883',
+                        '#E46651',
+                        '#00D8FF',
+                        '#DD1B16'
+                    ],
+                    data
+                }]
+            }
         }
     },
     computed: {
         orderdetails() {
             let self = this
             let selected = {}
-            self.selected.forEach(item=>{
+            self.selected.forEach(item => {
                 selected[item.id] = 1
             })
-            return self.details.filter(item=>selected[item.orderid]==1)
+            return self.details.filter(item => selected[item.orderid] == 1)
         },
         width() {
             return this.orderdetails.reduce((max, { product }) => Math.max(max, product.sizecontents.length), 1) * 50 + 191
@@ -408,11 +475,11 @@ const result = {
     }
 }
 
-const _private = function(self){
+const _private = function(self) {
     const _this = {
         appendRow(row) {
             row.key = StringFunc.random(10)
-            //self._log(row, "XXXXX")
+                //self._log(row, "XXXXX")
             self.tabledata.unshift(row)
             self.form.currency = row.source.product.factorypricecurrency
         },
@@ -422,19 +489,19 @@ const _private = function(self){
             let result = {}
             list.forEach(item => {
                 //console.log("SSSSSSSS",item)
-                let key = item.productid +'-'+ item.orderid
+                let key = item.productid + '-' + item.orderid
                 if (result[key]) {
-                    result[key]['form'][item.sizecontentid] = item.number-item.brand_number
-                    result[key].total += item.number-item.brand_number
+                    result[key]['form'][item.sizecontentid] = item.number - item.brand_number
+                    result[key].total += item.number - item.brand_number
                 } else {
-                    let form = {}                    
-                    form[item.sizecontentid] = item.number-item.brand_number
+                    let form = {}
+                    form[item.sizecontentid] = item.number - item.brand_number
                     result[key] = {
                         key,
                         productid: item.productid,
-                        orderid:item.orderid,
-                        discount:item.discount,
-                        total:item.number*1,
+                        orderid: item.orderid,
+                        discount: item.discount,
+                        total: item.number * 1,
                         form
                     }
                 }
@@ -445,15 +512,14 @@ const _private = function(self){
                 //console.log(item,"==")
                 let runner = promiseRunner(item)
 
-                if(item.orderid>0) {
+                if (item.orderid > 0) {
                     runner.push(Order.load({ data: item.orderid, depth: 1 }), "order")
+                } else {
+                    item.order = { id: -1 }
                 }
-                else {
-                    item.order = {id:-1}
-                }
-                
+
                 runner.push(ProductDetail.load({ data: item.productid, depth: 1 }), "product")
-                
+
                 promises.push(runner.all())
             })
 
@@ -469,13 +535,13 @@ const _private = function(self){
                     let results = await _this.convertListToProductList(res.data.list)
 
                     self.tabledata = []
-                    results.forEach(row=>{
+                    results.forEach(row => {
                         row.confirm_total = 0
                         _this.appendRow({
                             source: row,
                             price: row.price
                         })
-                    })                    
+                    })
                 }
                 self._setTitle(self._label("fahuodanruku") + ":" + self.form.id)
             })

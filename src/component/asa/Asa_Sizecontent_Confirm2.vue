@@ -3,7 +3,7 @@
     <el-table :data="rows" style="width:100%;" :border="false" :row-class-name="rowClassName" :cell-class-name="cellClassName">
         <el-table-column :label="_label('gonghuoshang')" align="left" width="110">
             <template v-slot="{row}">
-                <div v-if="row.type=='body'" @dblclick="onDblClick(row.supplier.id)">{{row.supplier.suppliercode}}</div>
+                <div v-if="row.type=='body'" @dblclick="distributeTo(row.supplier.id)">{{row.supplier.suppliercode}}</div>
                 <span v-if="row.type=='foot'">{{_label('heji')}}</span>
             </template>
         </el-table-column>
@@ -57,7 +57,8 @@ export default {
             require:true
         },
         suppliers:{
-        }
+        }, 
+        initData:{}
     },
     data() {
         let self = this
@@ -73,6 +74,11 @@ export default {
             totals[supplier.id] = 0
         })
 
+
+        self.initData.forEach(({supplierid,sizecontentid,number})=>{
+            form[sizecontentid+'-'+supplierid] = number
+        })
+
         return {
             form,
             totals,
@@ -84,7 +90,7 @@ export default {
         doNull(){
             this._log("input click")
         },
-        onDblClick(supplierid){
+        distributeTo(supplierid){
             let self = this
             let form = self.form
             this._log(supplierid)
@@ -96,6 +102,14 @@ export default {
                 if(supplierid==tmp_supplierid) {
                     form[key] = self.row.form[sizecontentid]
                 }
+            })
+            self.onChange()
+        },
+        reset(){
+            let self = this
+            let form = self.form
+            Object.keys(form).forEach(key=>{
+                form[key] = ""
             })
             self.onChange()
         },
