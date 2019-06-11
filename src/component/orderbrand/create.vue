@@ -15,12 +15,18 @@
                         {{getSupplierTotal(row.id)}}
                     </template>
                 </el-table-column>
+                <el-table-column :label="_label('zhekoulv')" width="90" align="center">
+                    <template v-slot="{row}">
+                        <el-input v-model="row.discount" size="mini"></el-input>
+                    </template>
+                </el-table-column>
                 <el-table-column :label="_label('leibiezhanbi')" width="200" align="center">
                     <template v-slot="{row}">
                         <chart :height="100" :chart-data="getChartData(row.id)"></chart>
                     </template>
                 </el-table-column>
             </el-table>
+
             <el-col :span="24" class="product">
                 <br />
                 <el-table ref="table" :data="orders" stripe border style="width:100%;" @selection-change="onSelectionChange" @row-click="onRowClick">
@@ -166,21 +172,11 @@
         </sp-dialog>
 
         <sp-dialog ref="supplier-dialog">
-            <el-form :model="form2" label-width="85px" :inline="false" style="width:100%;" size="mini">
-                <el-row :gutter="0">
-                    <el-form-item :label="_label('gonghuoshang')">
-                        <el-select v-model="form2.supplierid2">
-                            <el-option v-for="item in suppliers" :key="item.id" :label="item.suppliercode" :value="item.id"></el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-row>
-                <el-row :gutter="0">
-                    <el-col align="center">
-                        <as-button auth="product" type="primary" @click="distribute">{{_label("fenpei")}}</as-button>
-                        <as-button type="primary" @click="_hideDialog('supplier-dialog')">{{_label("tuichu")}}</as-button>
-                    </el-col>
-                </el-row>
-            </el-form>
+            <el-row :gutter="0">
+                <el-col :span="5" v-for="item in suppliers" :key="item.id">
+                    <as-button auth="product" type="primary" @click="distribute(item.id)">{{item.suppliercode}}</as-button>
+                </el-col>
+            </el-row>
         </sp-dialog>
     </div>
 </template>
@@ -228,23 +224,24 @@ const result = {
             let self = this
             self._dataSource("supplier_3").getRows(self.form2.supplierid).then(rows => {
                 rows.forEach(row => {
-                    if(!self.suppliers.find(item=>item==row.row)) {
-                        self.suppliers.push(row.row)
+                    if(!self.suppliers.find(item=>item.id==row.id)) {
+
+                        let clone = extend({}, row.row)
+                        clone.discount = ""
+                        self.suppliers.push(clone)
                     }                    
                 })
 
                 self._hideDialog('add-supplier')
             })
         },
-        distribute() {
+        distribute(supplierid) {
             let self = this
 
-            if(self.form2.supplierid2>0) {
-                self.selected2.forEach(row=>{
-                    let key = row.product.id+'-'+row.order.id
-                    self.$refs[key].distributeTo(self.form2.supplierid2)
-                })
-            }
+            self.selected2.forEach(row=>{
+                let key = row.product.id+'-'+row.order.id
+                self.$refs[key].distributeTo(supplierid)
+            })
             self._hideDialog('supplier-dialog')
         },
         resetDistribute(){
@@ -361,17 +358,19 @@ const result = {
         },
         onNumberChange({ row, list }) {
             let self = this
-            list.forEach(({ number, sizecontentid, supplierid }) => {
+            list.forEach(({ number, sizecontentid, supplierid,discount }) => {
                 let target = self.listdata.find(item => item.sizecontentid == sizecontentid && item.supplierid == supplierid && row.product.id == item.row.product.id && row.orderid == item.row.orderid)
 
                 if (target) {
                     target.number = number
+                    target.discount = discount
                 } else {
                     self.listdata.push({
                         row,
                         number,
                         sizecontentid,
-                        supplierid
+                        supplierid,
+                        discount
                     });
                 }
             })
@@ -381,7 +380,7 @@ const result = {
             let total = 0;
             self.listdata.forEach(item => {
                 if (supplierid == item.supplierid && item.number > 0) {
-                    total += item.number * item.row.discount * item.row.product.factoryprice
+                    total += item.number * item.discount * item.row.product.factoryprice
                 }
             })
 
@@ -462,7 +461,7 @@ const result = {
             return self.details.filter(item => selected[item.orderid] == 1)
         },
         width() {
-            return this.orderdetails.reduce((max, { product }) => Math.max(max, product.sizecontents.length), 1) * 50 + 191
+            return this.orderdetails.reduce((max, { product }) => Math.max(max, product.sizecontents.length), 1) * 50 + 191 +70
         },
         total_price() {
             let total = this.tabledata.reduce(function(total, current) {

@@ -7,6 +7,13 @@
                 <span v-if="row.type=='foot'">{{_label('heji')}}</span>
             </template>
         </el-table-column>
+
+        <el-table-column :label="_label('zhekoulv')" align="left" width="65">
+            <template v-slot="{row}">
+                <el-input v-if="row.type=='body'" v-model="formdiscount[row.supplier.id].discount" @change="onDiscountChange(row.supplier.id)" size="mini" style="width:50px"></el-input>
+            </template>
+        </el-table-column>
+
         <el-table-column :label="column.name" align="center" v-for="column in columns" :key="column.id" width="51" class="counter">
             <template v-slot="{row}">
                 <el-input v-model="row.form[column.id]" style="width:50px" size="mini" :disabled="true" class="linetop" v-if="row.type=='head'"></el-input>
@@ -36,7 +43,9 @@ const _private = function(self){
         forEach(callback){
             chain(self.form).forEach((number, key)=>{
                 let [sizecontentid, supplierid] = key.split("-")
-                callback({number, sizecontentid, supplierid})
+
+                let target = self.formdiscount[supplierid]
+                callback({number, sizecontentid, supplierid, discount:target.discount})
             })
         }
     }
@@ -66,14 +75,15 @@ export default {
         //处理默认填入的下方需要确认或者发货的商品数量
         let form = {}
         let totals = {}
+        let formdiscount = {}
         self.suppliers.forEach(supplier=>{
             let row = {}
             self.columns.forEach(column=>{
                 form[column.id+'-'+supplier.id] = ""
             })
             totals[supplier.id] = 0
+            formdiscount[supplier.id] = {discount:supplier.discount, match:true}
         })
-
 
         self.initData.forEach(({supplierid,sizecontentid,number})=>{
             form[sizecontentid+'-'+supplierid] = number
@@ -81,6 +91,7 @@ export default {
 
         return {
             form,
+            formdiscount,
             totals,
             tabledata:[[]],
             sumform:{}  //最下面的合计行的数据
@@ -104,6 +115,16 @@ export default {
                 }
             })
             self.onChange()
+        },
+        onDiscountChange(supplierid){
+            let self = this
+            let supplier = self.suppliers.find(item=>item.id==supplierid)
+            if(supplier) {
+                let target = self.formdiscount[supplierid]
+                target.match = target.discount==supplier.discount
+
+                self.onChange()
+            }
         },
         reset(){
             let self = this
@@ -220,6 +241,36 @@ export default {
             })
 
             return results
+        }
+    },
+    watch:{
+        suppliers:{
+            handler: function(newValue, oldValue) {
+                let self = this;
+                self.suppliers.forEach((supplier, index)=>{
+                    if(self.formdiscount[supplier.id].match) {
+                        self.formdiscount[supplier.id].discount = supplier.discount
+                    }
+                    
+                    let target = self.formdiscount[supplier.id]
+                    target.match = target.discount==supplier.discount
+
+                    self.onChange()
+                })
+            },
+            deep: true
+        },
+        formdiscount:{
+            handler: function(newValue, oldValue) {
+                let self = this;
+                self.suppliers.forEach((supplier, index)=>{                    
+                    let target = self.formdiscount[supplier.id]
+                    target.match = target.discount==supplier.discount
+
+                    self.onChange()
+                })
+            },
+            deep: true
         }
     },
     mounted:function(){
