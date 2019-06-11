@@ -314,7 +314,11 @@ body .el-select-dropdown__wrap {max-height:500px;}
 </head>
 <body>
     <div id="app">
-      <sp-page v-bind="props"></sp-page>
+      <sp-page v-bind="props">
+        <template v-slot:time="{form}">
+            <el-time-select v-model="form.time" :picker-options="{start: '06:00', step: '00:30', end: '23:30'}"></el-time-select>
+        </template>
+      </sp-page>
     </div>
 <script>
 $(document).ready(function(){
@@ -329,11 +333,12 @@ $(document).ready(function(){
     let obj = new Vue({
         data:function(){
             return {
+                value:"",
                 props:{
                     columns: [
                         { name: "name", label: "名称", type:"sp-input", listType:'sp-text' },
                         { name: "countryid", label: "国家地区", type:"sp-select", source:"country", listType:"sp-select-text"},
-                        //{ name: "pricetype", label: label("jiageleixing"), type:"sp-select", source:"pricetype", listType:"sp-select-text"},            
+                        { name: "time", label: 'jiageleixing', type:"sp-select", source:"pricetype", listType:"sp-select-text"},            
                         { name: "currencyid", label: "币种", type:"sp-select", source:"currency", listType:"sp-select-text"},
                         { name: "displayindex", label: "排序", type:"sp-input" }
                     ],

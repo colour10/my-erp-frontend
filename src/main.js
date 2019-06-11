@@ -6,7 +6,7 @@ config("host", "http://erp.localhost.com")
 import Simple_Admin_Page from './component/Simple_Admin_Page.vue'
 import Simple_Admin_TableList from './component/Simple_Admin_TableList.vue'
 
-import Select from './component/item/Select.vue'
+import Select from './component/item/select.vue'
 import Checkbox from './component/item/checkbox.js'
 
 import Text from './component/label/text.js'
@@ -15,6 +15,7 @@ import SelectText from './component/label/select-text.js'
 import Table from './component/table.js'
 import Authbutton from './component/authbutton.js'
 import Input from './component/item/input.js'
+import Time from './component/item/time.vue'
 import { DataSource, vue, func } from './component/util/'
 
 
@@ -27,7 +28,8 @@ const components = [
     Table,
     Checkbox,
     Authbutton, 
-    Input
+    Input,
+    Time
 ]
 
 components.forEach(component => {
@@ -47,11 +49,13 @@ const props = {
         { name: "countryid", label: label("guojiadiqu"), type:"sp-select", source:"country", listType:"sp-select-text"},
         //{ name: "pricetype", label: label("jiageleixing"), type:"sp-select", source:"pricetype", listType:"sp-select-text"},            
         { name: "currencyid", label: label("bizhong"), type:"sp-select", source:"currency", listType:"sp-select-text"},
-        { name: "displayindex", label: label("paixu"), type:"sp-input", sortMethod:func.sortDigit }
+        { name: "displayindex", label: label("paixu"), type:"sp-input", sortMethod:func.sortDigit },
+        { name: "pricetype", label: label("jiageleixing"), type:"sp-time", listType:"sp-text"}
     ],
     buttons:[
         { name:"delall", label:"批量删除",click:function(context){
             console.log(context)
+            context.table.loadList()
         }}
     ],
     controller: "price",

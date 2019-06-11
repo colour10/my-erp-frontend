@@ -3,7 +3,7 @@ import {config,label} from "./component/application.js"
 
 import Simple_Admin_Page from './component/Simple_Admin_Page.vue'
 import Simple_Admin_TableList from './component/Simple_Admin_TableList.vue'
-import Select from './component/item/Select.vue'
+import Select from './component/item/select.vue'
 import Input from './component/item/input.js'
 import Text from './component/label/text.js'
 import SelectText from './component/label/select-text.js'

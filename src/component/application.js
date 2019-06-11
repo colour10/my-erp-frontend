@@ -2,6 +2,7 @@ const {config, label} = (function() {
     let _func = function(app, isDefault=false) {
         return function(name, value) {
             if(typeof(value)=='undefined') {
+                console.log(name, app)
                 return isDefault ? app[name] || name : app[name]
             }
             else {

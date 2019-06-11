@@ -17,14 +17,18 @@
         </el-row>
         <el-row :gutter="20">
             <el-col :span="24">
-                <sp-tablelist ref="tablelist" v-bind="$props" @before-edit="showFormToEdit"></sp-tablelist>
+                <slot name="tablelist" v-bind:props="$props">
+                    <sp-tablelist ref="tablelist" v-bind="$props" @before-edit="showFormToEdit"></sp-tablelist>
+                </slot>
             </el-col>
         </el-row>
         <el-dialog :title="title" :visible.sync="dialogVisible" :center="true" :width="dialogWidth" :modal="false">
             <slot v-bind:form="form" v-bind:action="action" v-bind:columns="columns" name="default">
                 <el-form class="user-form" ref="form" :model="form" label-width="100px" :inline="inline" :size="formSize">
-                    <el-form-item :label="item.label" v-if="!item.is_edit_hide" v-for="item in columns" :key="item.name" :class="item.class?item.class:'width2'" :disabled="checkDisabled(item)">                        
-                        <sp-item-transform :ref="item.name" v-model="form[item.name]"  :column="item" :record="form" :option="option"></sp-item-transform>
+                    <el-form-item :label="item.label" v-if="!item.is_edit_hide" v-for="item in columns" :key="item.name" :class="item.class?item.class:'width2'" :disabled="checkDisabled(item)">
+                        <slot :name="item.name" v-bind:form="form">
+                            <sp-item-transform :ref="item.name" v-model="form[item.name]"  :column="item" :record="form" :option="option"></sp-item-transform>
+                        </slot>
                     </el-form-item>
                 </el-form>
             </slot>
@@ -161,7 +165,7 @@ export default {
         onClickButton(buttion) {
             let self = this
 
-            buttion.click({vm:self, selected:self.$refs.tablelist.getSelectValues()})
+            buttion.click({vm:self, selected:self.table.getSelectValues(), table:self.table})
         },
         onSubmit() {
             let self = this;
@@ -175,7 +179,7 @@ export default {
             let issubmit = self.isSubmit;
             let autoreload = self.isAutoReload;
             let autohide = self.isAutoHide;
-            let tablelist = self.$refs.tablelist
+            let tablelist = self.table
 
             if (self.action == "add" && self.form.id=='') {
                 if (issubmit == false) {
@@ -310,6 +314,11 @@ export default {
                 //console.log("change",newValue,oldValue)
             },
             deep: true
+        }
+    },
+    computed:{
+        table() {
+            return this.$refs.tablelist
         }
     }
 }
