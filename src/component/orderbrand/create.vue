@@ -10,11 +10,11 @@
         <el-row>
             <el-table ref="table" :data="suppliers" stripe border style="width:100%;">
                 <el-table-column :label="_label('gonghuoshang')" width="120" align="center" prop="suppliercode"></el-table-column>
-                <el-table-column :label="_label('zongjine')" width="90" align="center">
-                    <template v-slot="{row}">
-                        {{getSupplierTotal(row.id)}}
-                    </template>
-                </el-table-column>
+                <el-table-column :label="_label('zongjine')" width="90" align="center" prop="totalDiscountPrice"></el-table-column>
+                <el-table-column :label="_label('zongjianshu')" width="90" align="center" prop="totalCount"></el-table-column>
+
+                <el-table-column :label="_label('lingshouzongjia')" width="90" align="center" prop="totalPrice"></el-table-column>
+
                 <el-table-column :label="_label('zhekoulv')" width="90" align="center">
                     <template v-slot="{row}">
                         <el-input v-model="row.discount" size="mini"></el-input>
@@ -80,7 +80,7 @@
                     <el-button type="warning" round @click="_showDialog('supplier-dialog')" size="mini">{{_label("piliangfenpei")}}</el-button>
                     <el-button type="warning" round @click="resetDistribute" size="mini">{{_label("piliangchongzhi")}}</el-button>
                 </el-row>
-                <el-table ref="tabledetail" :data="orderdetails" stripe border style="width:100%;" :show-summary="true" :summary-method="getSummary" @selection-change="onSelectionChange2">
+                <el-table ref="tabledetail" :data="orderdetails" stripe border style="width:100%;" @selection-change="onSelectionChange2">
                     <el-table-column type="selection" :width="30"></el-table-column>
                     <el-table-column align="center" width="60">
                         <template v-slot="scope">
@@ -171,7 +171,7 @@
             </el-form>
         </sp-dialog>
 
-        <sp-dialog ref="supplier-dialog">
+        <sp-dialog ref="supplier-dialog" :title="_label('qingxuanze')">
             <el-row :gutter="0">
                 <el-col :span="5" v-for="item in suppliers" :key="item.id">
                     <as-button auth="product" type="primary" @click="distribute(item.id)">{{item.suppliercode}}</as-button>
@@ -227,7 +227,10 @@ const result = {
                     if(!self.suppliers.find(item=>item.id==row.id)) {
 
                         let clone = extend({}, row.row)
-                        clone.discount = ""
+                        clone.discount = "" //折扣率
+                        clone.totalDiscountPrice = 0 //总价
+                        clone.totalCount = 0 //总件数
+                        clone.totalPrice = 0 //零售总价
                         self.suppliers.push(clone)
                     }                    
                 })
@@ -339,23 +342,6 @@ const result = {
                 self.form.currency = row.product.factorypricecurrency
             }
         },
-        getSummary({ columns, data }) {
-            const self = this
-            const sums = []
-            columns.forEach((column, index) => {
-                //self._log(column, index)
-                if (index == 0) {
-                    sums[index] = self._label("heji")
-                    return
-                } else if (index == 6) {
-                    //sums[index] = self.formatNumber(data.reduce((total, row) => total + row.getRowFactoryTotal(), 0))
-                }
-            })
-
-            sums[1] = data.length
-
-            return sums
-        },
         onNumberChange({ row, list }) {
             let self = this
             list.forEach(({ number, sizecontentid, supplierid,discount }) => {
@@ -374,6 +360,38 @@ const result = {
                     });
                 }
             })
+
+            //计算几个统计数据
+            let context = {}
+            self.listdata.forEach(item => {
+                let target = context[item.supplierid] || {
+                    totalDiscountPrice:0,
+                    totalCount:0,
+                    totalPrice:0
+                }
+
+                if ( item.number > 0) {    
+                    target.totalCount +=  item.number*1
+                    target.totalPrice += item.number * item.row.product.wordprice
+                    target.totalDiscountPrice += item.number * item.discount * item.row.product.factoryprice
+
+                    context[item.supplierid] = target
+                }
+            })
+
+            self.suppliers.forEach(supplier=>{
+                let target = context[supplier.id]
+                if(target) {
+                    extend(supplier,target)
+                }
+                else {
+                    extend(supplier, {
+                        totalDiscountPrice:0,
+                        totalCount:0,
+                        totalPrice:0
+                    })
+                }
+            })
         },
         getSupplierTotal(supplierid) {
             let self = this;
@@ -381,6 +399,17 @@ const result = {
             self.listdata.forEach(item => {
                 if (supplierid == item.supplierid && item.number > 0) {
                     total += item.number * item.discount * item.row.product.factoryprice
+                }
+            })
+
+            return self.formatNumber(total)
+        },
+        getSupplierTotalCount(supplierid) {
+            let self = this;
+            let total = 0;
+            self.listdata.forEach(item => {
+                if (supplierid == item.supplierid && item.number > 0) {
+                    total += item.number
                 }
             })
 
@@ -418,10 +447,10 @@ const result = {
             let self = this
             let groupTotal = {}
             self.listdata.forEach(item => {
-                if (supplierid == item.supplierid && item.number > 0) {
+                if (supplierid == item.supplierid && item.number > 0 && item.discount>0) {
                     let key = item.row.product.brandgroup_label
                     groupTotal[key] = groupTotal[key] || 0
-                    groupTotal[key] += item.number * item.row.discount * item.row.product.factoryprice
+                    groupTotal[key] += item.number * item.discount * item.row.product.factoryprice
                 }
             })
 

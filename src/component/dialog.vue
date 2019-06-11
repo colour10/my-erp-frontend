@@ -1,5 +1,5 @@
 <template>
-    <el-dialog :title="title" :visible.sync="visible" :center="true" :width="width" :modal="false">
+    <el-dialog :title="dialogTitle" :visible.sync="visible" :center="true" :width="width" :modal="false">
         <slot name="default"></slot>
     </el-dialog>
 </template>
@@ -7,10 +7,15 @@
 <script>
 export default {
     name: 'sp-dialog',
+    props:{
+        title:{
+            default:""
+        }
+    },
     data() {
         return {
             visible:false,
-            title:"",
+            dialogTitle:this.title,
             width:"500px"
         };
     },
@@ -18,7 +23,7 @@ export default {
         show(option={}) {
             let self = this;
             if(option.title) {
-                self.title = option.title
+                self.dialogTitle = option.title
             }
 
             if(option.width) {
