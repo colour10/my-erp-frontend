@@ -1,6 +1,8 @@
 var path = require('path')
 var webpack = require('webpack')
 
+const version = "1002";
+
 module.exports = {
   /*entry: './src/main.js',
   output: {
@@ -16,7 +18,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, './dist'),
     publicPath: '/dist/',
-    filename: '[name].js'
+    filename: '[name]-' + version + ".js"
   },
   module: {
     rules: [

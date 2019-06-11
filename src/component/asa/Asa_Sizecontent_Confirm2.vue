@@ -9,16 +9,16 @@
         </el-table-column>
         <el-table-column :label="column.name" align="center" v-for="column in columns" :key="column.id" width="51" class="counter">
             <template v-slot="{row}">
-                <el-input v-model="row.form[column.id]" style="width:50px" size="mini" :disabled="disabled" class="linetop" v-if="row.type=='head'"></el-input>
+                <el-input v-model="row.form[column.id]" style="width:50px" size="mini" :disabled="true" class="linetop" v-if="row.type=='head'"></el-input>
                 <el-input v-model="form[column.id+'-'+row.supplier.id]" style="width:50px" size="mini" @keyup.native="onChange(row)" v-if="row.type=='body'" @dblclick.native="onInputDblClick(column.id,row.supplier.id)"></el-input>
-                <el-input v-model="row.form[column.id]" style="width:50px" size="mini" :disabled="disabled" class="linetop" v-if="row.type=='foot'"></el-input>
+                <el-input v-model="row.form[column.id]" style="width:50px" size="mini" :disabled="true" class="linetop" v-if="row.type=='foot'"></el-input>
             </template>
         </el-table-column>
         <el-table-column :label="_label('heji')" align="right" width="53">
             <template v-slot="{row}">
-                <el-input :value="getLineTotal(row.form)" style="width:50px" size="mini" :disabled="disabled" class="linetop" v-if="row.type=='head'"></el-input>
-                <el-input :value="getBodyRowTotal(row.supplier.id)" style="width:50px" size="mini":disabled="disabled" class="inputsum" v-if="row.type=='body'"></el-input>
-                <el-input :value="getLineTotal(row.form)" style="width:50px" size="mini" :disabled="disabled" class="linetop" v-if="row.type=='foot'"></el-input>
+                <el-input :value="getLineTotal(row.form)" style="width:50px" size="mini" :disabled="true" class="linetop" v-if="row.type=='head'"></el-input>
+                <el-input :value="getBodyRowTotal(row.supplier.id)" style="width:50px" size="mini":disabled="true" class="inputsum" v-if="row.type=='body'"></el-input>
+                <el-input :value="getLineTotal(row.form)" style="width:50px" size="mini" :disabled="true" class="linetop" v-if="row.type=='foot'"></el-input>
             </template>
         </el-table-column>        
     </el-table>

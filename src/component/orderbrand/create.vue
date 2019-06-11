@@ -388,7 +388,15 @@ const result = {
             return self.formatNumber(total)
         },
         onSelectionChange(vals) {
+            let self = this
             this.selected = vals
+
+            if(self.suppliers.length==0) {
+                self.$notify.info({
+                    title: self._label("tishi"),
+                    message: self._label("qxzjghs")
+                });
+            }                
         },
         onRowClick(row) {
 
@@ -443,6 +451,11 @@ const result = {
         orderdetails() {
             let self = this
             let selected = {}
+
+            if(self.suppliers.length==0) {
+                return []
+            }
+
             self.selected.forEach(item => {
                 selected[item.id] = 1
             })
