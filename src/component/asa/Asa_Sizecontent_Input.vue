@@ -1,7 +1,7 @@
 <template>
     <div class="sizecontent">
     <el-table :data="tabledata" style="width:100%;" :cell-class-name="getCellClass" :border="false">
-        <el-table-column :label="column.name" align="center" v-for="column in columns" :key="column.id" width="60">
+        <el-table-column :label="column.name" align="center" v-for="column in columns" :key="column.id" width="50">
             <template v-slot="scope">
                 <el-input v-model="form[column.id].number" style="width:50px" size="mini" @keyup.native="onChange" :disabled="disabled"></el-input>
             </template>

@@ -2,6 +2,7 @@
     <div>
         <el-row>
             <el-col :span="2">
+                <as-button type="primary" @click="_showDialog('search',{width:'1200px'})">{{_label("chaxun")}}</as-button>
                 <auth auth="product">
                     <as-button type="primary" @click="showFormToCreate()">{{_label("button-create")}}</as-button>
                 </auth>
@@ -25,6 +26,82 @@
         <product ref="product" @change="onChange"></product>
         <productadd ref="productadd" @change="onChange"></productadd>
         <sp-image-preview></sp-image-preview>
+
+        <sp-dialog ref="search">
+            <el-form :model="form" label-width="85px" :inline="false" style="width:100%;" size="mini">
+                <el-col :span="8">
+                    <el-form-item :label="_label('niandai')" prop="ageseason">
+                        <simple-select v-model="form.ageseason" source="ageseason" :multiple="true"></simple-select>
+                    </el-form-item>
+                    <el-form-item :label="_label('pinpai')" prop="brandid">
+                        <simple-select v-model="form.brandid" source="brand"></simple-select>
+                    </el-form-item>
+                    <el-form-item :label="_label('pinlei')" prop="brandgroupid">
+                        <simple-select v-model="form.brandgroupid" source="brandgroup"></simple-select>
+                    </el-form-item>
+                    <el-form-item :label="_label('zipinlei')" prop="childbrand">
+                        <simple-select ref="childbrand" v-model="form.childbrand" source="brandgroupchild" :parentid="form.brandgroupid"></simple-select>
+                    </el-form-item>                    
+                </el-col>
+                <el-col :span="8">
+                    <el-form-item :label="_label('chandi')" prop="countries">
+                        <simple-select v-model="form.countries" source="country"></simple-select>
+                    </el-form-item>
+
+                    <el-form-item :label="_label('shangpinchicun')">
+                        <simple-select v-model="form.ulnarinch" source="ulnarinch" :multiple="true"></simple-select>
+                    </el-form-item>
+
+                    <el-form-item :label="_label('shangpinmiaoshu')">
+                        <simple-select v-model="form.productmemoids" source="productmemo" :multiple="true"></simple-select>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                    <el-form-item :label="_label('shangpinxilie')">
+                        <simple-select v-model="form.series" ref="series" source="series" :parentid="form.brandid"> </simple-select>
+                    </el-form-item>
+
+                    <el-form-item :label="_label('xiaoshoushuxing')">
+                        <simple-select v-model="form.saletypeid" source="saletype"></simple-select>
+                    </el-form-item>
+
+                    <el-form-item :label="_label('shangpinshuxing')">
+                        <simple-select v-model="form.producttypeid" source="producttype"></simple-select>
+                    </el-form-item>
+
+                    <el-form-item :label="_label('xingbie')">
+                        <sp-radio-group v-model="form.gender" source="gender" :span="8" class="supermini" style="width:270px">
+                        </sp-radio-group>
+                    </el-form-item>
+                    <el-form-item :label="_label('jijie')">
+                        <div  style="width:270px">
+                        <el-col :span="8">
+                            <sp-checkbox v-model="form.spring">{{_label("chun")}}</sp-checkbox>
+                        </el-col>
+                        <el-col :span="8">
+                            <sp-checkbox v-model="form.summer">{{_label("xia")}}</sp-checkbox>
+                        </el-col>
+                        <el-col :span="8">
+                            <sp-checkbox v-model="form.siji">{{_label("siji")}}</sp-checkbox>
+                        </el-col>
+                        <el-col :span="8">
+                            <sp-checkbox v-model="form.fall">{{_label("qiu")}}</sp-checkbox>
+                        </el-col>
+                        <el-col :span="8">
+                            <sp-checkbox v-model="form.winter">{{_label("dong")}}</sp-checkbox>
+                        </el-col>
+                    </div>
+                    </el-form-item>
+                </el-col>
+
+                <el-row :gutter="0">
+                    <el-col align="center">
+                        <as-button auth="product" type="primary" @click="search">{{_label("zengjia")}}</as-button>
+                        <as-button type="primary" @click="_hideDialog('search')">{{_label("tuichu")}}</as-button>
+                    </el-col>
+                </el-row>
+            </el-form>
+        </sp-dialog>
     </div>
 </template>
 
@@ -43,6 +120,27 @@ export default {
     },
     data() {
         return {
+            form:{
+                brandid: '',
+                brandgroupid: "",
+                childbrand: "",
+                productsize: "",
+                countries: "",
+                brandcolor: "",
+                productparst: "",
+                series: "",
+                ulnarinch: "",
+                gender: "",
+                spring: "",
+                summer: "",
+                fall: "",
+                winter: "",
+                ageseason: "",
+                productmemoids: "", //商品描述
+                saletypeid:"",
+                producttypeid:"",
+                siji:""
+            },
             props: {
                 columns: [
                     { name: "picture", label: _label("zhutu"), is_image: true, image_width: 50, image_height: 50, width: 60, className: 'picture' },
@@ -114,6 +212,9 @@ export default {
             //console.log("Product","clear cache")
     },
     methods: {
+        search(){
+
+        },
         showFormToEdit(rowIndex, row) {
             this.$refs.product.setInfo(row).then(product => product.edit(true).show())
         },

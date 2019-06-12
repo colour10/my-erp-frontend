@@ -17,7 +17,7 @@
         <el-table-column :label="column.name" align="center" v-for="column in columns" :key="column.id" width="51" class="counter">
             <template v-slot="{row}">
                 <el-input v-model="row.form[column.id]" style="width:50px" size="mini" :disabled="true" class="linetop" v-if="row.type=='head'"></el-input>
-                <el-input v-model="form[column.id+'-'+row.supplier.id]" style="width:50px" size="mini" @keyup.native="onChange(row)" v-if="row.type=='body'" @dblclick.native="onInputDblClick(column.id,row.supplier.id)"></el-input>
+                <el-input v-model="form[column.id+'-'+row.supplier.id]" style="width:50px" size="mini" @keyup.native="onChange(row)" v-if="row.type=='body'" :ref="column.id+'-'+row.supplier.id" @focus="onFocus(column.id+'-'+row.supplier.id)" @dblclick.native="onInputDblClick(column.id,row.supplier.id)"></el-input>
                 <el-input v-model="row.form[column.id]" style="width:50px" size="mini" :disabled="true" class="linetop" v-if="row.type=='foot'"></el-input>
             </template>
         </el-table-column>
@@ -138,20 +138,43 @@ export default {
             let self = this
             let form = self.form
             this._log("input double click")
-            Object.keys(form).forEach(key=>{
-                self._log(key)
-                
 
-                let [tmp_sizecontentid,tmp_supplierid] = key.split("-")
-                if(tmp_sizecontentid==sizecontentid) {
-                    form[key] = ""
-                    if(supplierid==tmp_supplierid) {
-                        form[key] = self.row.form[sizecontentid]
-                    }
+            let current = form[sizecontentid + '-' + supplierid]
+            if(current=="" || current=='0') {
+                //把剩余的分配给当前
+                let total = 0
+                Object.keys(form).forEach(key=>{
+                    let [tmp_sizecontentid,tmp_supplierid] = key.split("-")
+                    if(tmp_sizecontentid==sizecontentid && form[key]>0) {
+                        total += form[key]*1
+                    }                    
+                })
+
+                if(self.row.form[sizecontentid] - total==0) {
+                    form[sizecontentid + '-' + supplierid] = 1
+                    self.onInputDblClick(sizecontentid, supplierid);
                 }
-                
-            })
+                else {
+                    form[sizecontentid + '-' + supplierid] = self.row.form[sizecontentid] - total
+                }                
+            }
+            else {
+                Object.keys(form).forEach(key=>{
+                    let [tmp_sizecontentid,tmp_supplierid] = key.split("-")
+                    if(tmp_sizecontentid==sizecontentid) {
+                        form[key] = ""
+                        if(supplierid==tmp_supplierid) {
+                            form[key] = self.row.form[sizecontentid]
+                        }
+                    }
+                    
+                })
+            }
+            
             self.onChange()
+        },
+        onFocus(refname){
+            this.$refs[refname][0].select()
         },
         getLineTotal(formData) {
             //this._log(formData)

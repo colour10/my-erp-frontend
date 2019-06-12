@@ -88,6 +88,7 @@ import Supplier from './component/supplier/index.vue'
 import Exchangerate from './component/exchangerate/index.vue'
 import PriceSetting from './component/pricesetting/index.vue'
 import SpProductInfo from './component/asa/sp-product-info.vue'
+//import SelectTable from './component/select-table.vue'
 
 const components = [
     Simple_Admin_Page,
@@ -130,6 +131,7 @@ const components = [
     Toggle_Input,
     SpProductInfo,
     Asa_Sizecontent_Confirm2
+    //SelectTable
 ]
 
 components.forEach(component => {

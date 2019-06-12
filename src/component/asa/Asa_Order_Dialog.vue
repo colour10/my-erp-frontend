@@ -77,7 +77,7 @@
                 </el-col>
                 <el-col :span="4" style="width:230px">
                     <el-form-item :label="_label('xingbie')">
-                        <el-input v-model="genders" disabled></el-input>
+                        <el-input v-model="genderlabels" disabled></el-input>
                     </el-form-item>
                     <el-form-item :label="_label('pinpai')">
                         <el-input v-model="brands" disabled></el-input>
@@ -373,7 +373,7 @@ export default {
             return this.form.id > 0 && status == 1
         },
         width() {
-            return this.tabledata.reduce((max, { product }) => Math.max(max, product.sizecontents.length), 1) * 60 + 21
+            return this.tabledata.reduce((max, { product }) => Math.max(max, product.sizecontents.length), 1) * 50 + 21
         },
         canSubmit() {
             var status = this.form.status;

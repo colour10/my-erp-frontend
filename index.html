@@ -379,7 +379,7 @@ body .el-select-dropdown__wrap {max-height:500px;}
 
     <script type="text/javascript">      
       $(document).ready(function(){
-        var version = '1001'
+        var version = '1002'
         let o = new Vue({
           data:function(){
             return {
@@ -396,7 +396,7 @@ body .el-select-dropdown__wrap {max-height:500px;}
               }
             }, 330)
 
-            $.getScript("/dist/asa.js", function(){
+            $.getScript("/dist/asa-"+version+".js", function(){
               self.pencent = 100;
               clearInterval(handler)
               setTimeout(function(){

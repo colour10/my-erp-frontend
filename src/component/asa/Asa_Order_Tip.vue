@@ -1,9 +1,9 @@
 <template>
-    <el-popover trigger="click" :placement="placement">
+    <el-popover :trigger="trigger" :placement="placement">
         <p>{{_label("dingdanhao")}}: {{ order.orderno }}</p>
-        <p>{{_label("niandai")}}: {{ order.ageseason_label }}</p>
-        <p>{{_label("xingbie")}}: {{ order.genders }}</p>
-        <p>{{_label("pinpai")}}: {{ order.brands }}</p>
+        <p>{{_label("niandai")}}: <sp-select-text :value="order.ageseason" source="ageseason"></sp-select-text></p>
+        <p>{{_label("xingbie")}}: <sp-select-text :value="order.genders" source="gender"></sp-select-text></p>
+        <p>{{_label("pinpai")}}: <sp-select-text :value="order.brandids" source="brand"></sp-select-text></p>
         <div slot="reference" class="name-wrapper">
             <el-button size="mini" type="text">{{ order[column] }}</el-button>
         </div>
@@ -24,6 +24,9 @@ export default {
         },
         placement:{
             default:'right'
+        },
+        trigger:{
+            default:'click'
         }
     }
 }

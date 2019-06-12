@@ -15,7 +15,7 @@
         <el-dialog class="user-form" :title="_label('yonghuxinxi')" :visible.sync="dialogVisible" :center="true" width="500">
             <el-tabs type="border-card" @tab-click="onTabClick" activeName="user">
                 <el-tab-pane :label="_label('user-setting')" name="user">
-                    <el-form ref="order-form" class="order-form" :model="form" label-width="100px" :inline="true" style="width:700px;" size="small" :rules="rules" :inline-message="false" :show-message="false">
+                    <el-form ref="order-form" class="order-form" :model="form" label-width="100px" :inline="true" style="width:700px;" size="small" :rules="formRules" :inline-message="false" :show-message="false">
                         <el-form-item :label="_label('user-loginname')" prop="login_name">
                             <el-input v-model="form.login_name"></el-input>
                         </el-form-item>
