@@ -33,6 +33,12 @@
                         <chart :height="100" :chart-data="getChartData(row.id)"></chart>
                     </template>
                 </el-table-column> -->
+
+                <!-- <el-table-column :label="_label('zhekoulv')" width="90" align="center">
+                    <template v-slot="{row}">
+                        <as-button @click="preview(row.id);">{{_label("yulan")}}</as-button>
+                    </template>
+                </el-table-column> -->
             </el-table>
 
             <el-col :span="24" class="product" style="margin-top:2px;">                
@@ -98,14 +104,25 @@
                         </template>
                     </el-table-column>
                     <el-table-column :label="_label('dinghuokehu')" align="center" width="150">
-                        <template v-slot="{row}">
-                            <sp-order-tip column="booking_label" :order="row.order"></sp-order-tip>
-                        </template>
+                        <el-table-column :label="_label('dinghuokehu')" align="center" width="150">
+                            <template v-slot="{row}">
+                                <sp-order-tip column="booking_label" :order="row.order"></sp-order-tip>
+                            </template>
+
+                            <template v-slot:header="{row}">
+                                <el-input v-model="form2.suppliercode1" size="mini" />
+                            </template>
+                        </el-table-column>
                     </el-table-column>
                     <el-table-column :label="_label('guojima')" align="center" width="200">
-                        <template v-slot="scope">
-                            <sp-product-tip :product="scope.row.product"></sp-product-tip>
-                        </template>
+                        <el-table-column :label="_label('guojima')" align="center" width="200">
+                            <template v-slot="scope">
+                                <sp-product-tip :product="scope.row.product"></sp-product-tip>
+                            </template>
+                            <template v-slot:header="{row}">
+                                <el-input v-model="form2.keyword1" size="mini" />
+                            </template>
+                        </el-table-column>
                     </el-table-column>
                     <el-table-column prop="label" :label="_label('bizhong')" width="60" align="center">
                         <template v-slot="{row}">
@@ -202,6 +219,8 @@ import orderMixin from "../mixins/order.js"
 import chain from "../chain.js"
 import { Order, ProductDetail, promiseRunner } from "../model.js"
 import CommitChart from "../CommitChart.js"
+import { debounce } from "../function.js"
+
 
 const result = {
     name: 'sp-orderbrandcreate',
@@ -220,7 +239,11 @@ const result = {
                 brandid: ""
             },
             form2: {
-                supplierid: ""
+                supplierid: "",
+                keyword:"",
+                keyword1:"",
+                suppliercode1:"",
+                suppliercode:""
             },
             tabledata: [],
             details: [],
@@ -450,20 +473,48 @@ const result = {
             self.selected.forEach(item => {
                 selected[item.id] = 1
             })
-            return self.details.filter(item => selected[item.orderid] == 1)
+
+            let keyword = self.form2.keyword.toUpperCase()
+            let suppliercode = self.form2.suppliercode.toUpperCase()
+            let isMatch = _private(self).isMatch
+            return self.details.filter(item => selected[item.orderid] == 1).filter(item=>{
+                return isMatch(keyword, item.product.getGoodsCode('')) && isMatch(suppliercode, item.order.booking_label.toUpperCase())
+            })
         },
         width() {
             return this.orderdetails.reduce((max, { product }) => Math.max(max, product.sizecontents.length), 1) * 51 + 191 +70
         }
     },
+    watch:{
+        'form2.keyword1':function(newvalue){
+            //console.log(newvalue)
+            this.copyKeywordDebounce()
+        },
+
+        'form2.suppliercode1':function(newvalue){
+            //console.log(newvalue)
+            this.copySuppliercodeDebounce()
+        }
+    },
     mounted: function() {
         let self = this;
         self._setTitle(self._label("shengchengwaibudingdan"))
+
+        self.copyKeywordDebounce = debounce(function(){
+            self.form2.keyword = self.form2.keyword1
+        }, 1000, false)
+
+        self.copySuppliercodeDebounce = debounce(function(){
+            self.form2.suppliercode = self.form2.suppliercode1
+        }, 1000, false)
     }
 }
 
 const _private = function(self) {
     const _this = {
+        isMatch(keyword, search) {
+            return keyword.length>0 ? search.toUpperCase().indexOf(keyword)>=0 : true
+        },
         appendRow(row) {
             row.key = StringFunc.random(10)
                 //self._log(row, "XXXXX")

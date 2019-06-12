@@ -215,7 +215,7 @@ export default {
             return ""
         },
         cellClassName({row, column, rowIndex, columnIndex}) {
-            if( this.columns.length+1==columnIndex) {
+            if( this.columns.length+2==columnIndex) {
                 return "counter sumtotal"
             }
             else if(this.columns.length+1==columnIndex) {
@@ -271,14 +271,19 @@ export default {
             handler: function(newValue, oldValue) {
                 let self = this;
                 self.suppliers.forEach((supplier, index)=>{
-                    if(self.formdiscount[supplier.id].match) {
-                        self.formdiscount[supplier.id].discount = supplier.discount
-                    }
-                    
-                    let target = self.formdiscount[supplier.id]
-                    target.match = target.discount==supplier.discount
+                    if(self.formdiscount[supplier.id]) {
+                        if(self.formdiscount[supplier.id].match) {
+                            self.formdiscount[supplier.id].discount = supplier.discount
+                        }
+                        
+                        let target = self.formdiscount[supplier.id]
+                        target.match = target.discount==supplier.discount
 
-                    self.onChange()
+                        self.onChange()
+                    }
+                    else {
+                        self.formdiscount[supplier.id] = {discount:supplier.discount, match:true}
+                    }
                 })
             },
             deep: true

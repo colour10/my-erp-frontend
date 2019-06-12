@@ -222,9 +222,9 @@ const ProductDetail = Object.assign(createModel("product"),{
             return [self.brand_label, self.gender_label, self.brandcolor_label, self.ulnarinch_label, self.productmemo_label.replace(/,/g, ''), self.childbrand_label].join('')
         }, "getName");
 
-        runner.push(function(){
+        runner.push(function(char=' '){
             let self = this
-            return [self.wordcode_1, self.wordcode_2, self.wordcode_3, self.wordcode_4].join(' ')
+            return [self.wordcode_1, self.wordcode_2, self.wordcode_3, self.wordcode_4].join(char)
         }, "getGoodsCode");
 
         //商品倍率
