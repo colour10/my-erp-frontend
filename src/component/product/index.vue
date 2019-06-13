@@ -2,7 +2,8 @@
     <div>
         <el-row>
             <el-col :span="2">
-                <as-button type="primary" @click="_showDialog('search',{width:'1200px'})">{{_label("chaxun")}}</as-button>
+                <as-button type="primary" @click="_showDialog('search',{width:'600px'})">{{_label("chaxun")}}</as-button>
+                
                 <auth auth="product">
                     <as-button type="primary" @click="showFormToCreate()">{{_label("button-create")}}</as-button>
                 </auth>
@@ -23,80 +24,69 @@
                 </simple-admin-tablelist>
             </el-col>
         </el-row>
-        <product ref="product" @change="onChange"></product>
-        <productadd ref="productadd" @change="onChange"></productadd>
+        <product ref="product" @change="search"></product>
+        <productadd ref="productadd" @change="search"></productadd>
         <sp-image-preview></sp-image-preview>
 
         <sp-dialog ref="search">
-            <el-form :model="form" label-width="85px" :inline="false" style="width:100%;" size="mini">
-                <el-col :span="8">
+            <el-form class="order-form" :model="form" label-width="70px" :inline="false" style="width:100%;" size="mini">
+                <el-row :gutter="0">
+                <el-col :span="8" style="width:270px">
+                    <el-form-item :label="_label('guojima')" prop="ageseason">
+                        <el-input v-model="form.wordcode" class="width2"></el-input>
+                    </el-form-item>
+
                     <el-form-item :label="_label('niandai')" prop="ageseason">
                         <simple-select v-model="form.ageseason" source="ageseason" :multiple="true"></simple-select>
                     </el-form-item>
+
                     <el-form-item :label="_label('pinpai')" prop="brandid">
-                        <simple-select v-model="form.brandid" source="brand"></simple-select>
+                        <simple-select v-model="form.brandid" source="brand" :multiple="true"></simple-select>
                     </el-form-item>
                     <el-form-item :label="_label('pinlei')" prop="brandgroupid">
-                        <simple-select v-model="form.brandgroupid" source="brandgroup"></simple-select>
+                        <simple-select v-model="form.brandgroupid" source="brandgroup" :multiple="true"></simple-select>
                     </el-form-item>
                     <el-form-item :label="_label('zipinlei')" prop="childbrand">
-                        <simple-select ref="childbrand" v-model="form.childbrand" source="brandgroupchild" :parentid="form.brandgroupid"></simple-select>
-                    </el-form-item>                    
-                </el-col>
-                <el-col :span="8">
+                        <simple-select ref="childbrand" v-model="form.childbrand" source="brandgroupchild" :parentid="form.brandgroupid" :multiple="true"></simple-select>
+                    </el-form-item>  
+
                     <el-form-item :label="_label('chandi')" prop="countries">
                         <simple-select v-model="form.countries" source="country"></simple-select>
                     </el-form-item>
 
                     <el-form-item :label="_label('shangpinchicun')">
                         <simple-select v-model="form.ulnarinch" source="ulnarinch" :multiple="true"></simple-select>
-                    </el-form-item>
+                    </el-form-item>                  
+                </el-col>
 
+                <el-col :span="8" style="width:270px">
                     <el-form-item :label="_label('shangpinmiaoshu')">
                         <simple-select v-model="form.productmemoids" source="productmemo" :multiple="true"></simple-select>
                     </el-form-item>
-                </el-col>
-                <el-col :span="8">
                     <el-form-item :label="_label('shangpinxilie')">
-                        <simple-select v-model="form.series" ref="series" source="series" :parentid="form.brandid"> </simple-select>
+                        <simple-select v-model="form.series" ref="series" source="series" :parentid="form.brandid" :multiple="true"> </simple-select>
                     </el-form-item>
 
                     <el-form-item :label="_label('xiaoshoushuxing')">
-                        <simple-select v-model="form.saletypeid" source="saletype"></simple-select>
+                        <simple-select v-model="form.saletypeid" source="saletype" :multiple="true"></simple-select>
                     </el-form-item>
 
                     <el-form-item :label="_label('shangpinshuxing')">
-                        <simple-select v-model="form.producttypeid" source="producttype"></simple-select>
+                        <simple-select v-model="form.producttypeid" source="producttype" :multiple="true"></simple-select>
                     </el-form-item>
 
                     <el-form-item :label="_label('xingbie')">
-                        <sp-radio-group v-model="form.gender" source="gender" :span="8" class="supermini" style="width:270px">
-                        </sp-radio-group>
+                        <simple-select v-model="form.gender" source="gender" :multiple="true"></simple-select>
                     </el-form-item>
                     <el-form-item :label="_label('jijie')">
-                        <div  style="width:270px">
-                        <el-col :span="8">
-                            <sp-checkbox v-model="form.spring">{{_label("chun")}}</sp-checkbox>
-                        </el-col>
-                        <el-col :span="8">
-                            <sp-checkbox v-model="form.summer">{{_label("xia")}}</sp-checkbox>
-                        </el-col>
-                        <el-col :span="8">
-                            <sp-checkbox v-model="form.siji">{{_label("siji")}}</sp-checkbox>
-                        </el-col>
-                        <el-col :span="8">
-                            <sp-checkbox v-model="form.fall">{{_label("qiu")}}</sp-checkbox>
-                        </el-col>
-                        <el-col :span="8">
-                            <sp-checkbox v-model="form.winter">{{_label("dong")}}</sp-checkbox>
-                        </el-col>
-                    </div>
+                        <simple-select v-model="form.season" source="season" :multiple="true"></simple-select>
                     </el-form-item>
                 </el-col>
+                </el-row>
 
                 <el-row :gutter="0">
                     <el-col align="center">
-                        <as-button auth="product" type="primary" @click="search">{{_label("zengjia")}}</as-button>
+                        <as-button auth="product" type="primary" @click="search">{{_label("chaxun")}}</as-button>
                         <as-button type="primary" @click="_hideDialog('search')">{{_label("tuichu")}}</as-button>
                     </el-col>
                 </el-row>
@@ -121,6 +111,7 @@ export default {
     data() {
         return {
             form:{
+                wordcode:"",
                 brandid: '',
                 brandgroupid: "",
                 childbrand: "",
@@ -131,15 +122,11 @@ export default {
                 series: "",
                 ulnarinch: "",
                 gender: "",
-                spring: "",
-                summer: "",
-                fall: "",
-                winter: "",
+                season: "",
                 ageseason: "",
                 productmemoids: "", //商品描述
                 saletypeid:"",
-                producttypeid:"",
-                siji:""
+                producttypeid:""
             },
             props: {
                 columns: [
@@ -213,7 +200,9 @@ export default {
     },
     methods: {
         search(){
-
+            let self = this
+            self.$refs.tablelist.search(self.form)
+            self._hideDialog("search")
         },
         showFormToEdit(rowIndex, row) {
             this.$refs.product.setInfo(row).then(product => product.edit(true).show())
@@ -223,27 +212,10 @@ export default {
         },
         onPreview(url) {
             ImagePreview.show({ url })
-        },
-        onChange(rowdata, type) {
-            let self = this
-            let tablelist = self.$refs.tablelist
-            tablelist.loadList()
-/*
-            //self._log(rowdata)
-            if (type == 'create') {
-                tablelist.appendRow(rowdata)
-            } else {
-                let index = tablelist.findIndex(item => item.id == rowdata.id)
-                if (index < 0) {
-                    tablelist.appendRow(rowdata)
-                } else {
-                    tablelist.updateRow(index, rowdata)
-                }
-            }*/
         }
     },
     mounted() {
-        this._log("mounted")
+        this._log("mounted xxx")
     }
 }
 </script>
