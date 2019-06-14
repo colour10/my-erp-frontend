@@ -9,17 +9,19 @@ export default {
     },
     data(){
         return {
-            text : ""
+            text : "="
         }
     },
     methods:{
         getText() {
             let self = this
             //self._log("hello")
-            let dataSource = DataSource.getDataSource(self.source, self._label("lang"))
-            dataSource.getRowLabels(self.value).then(text=>{
-                //console.log(text,"==")
-                self.text = text
+            let value = self.value
+            self._dataSource(self.source).getRowLabels(self.value).then(text=>{
+                //console.log(text, self.value, "==", self.source, value)
+                if(value===self.value) {
+                    self.text = text
+                }                
             })
         }
     },
@@ -28,6 +30,7 @@ export default {
     },
     watch:{
         value:function(newvalue){
+            //console.log("value changed:", this.source, newvalue)
             this.getText()
         }
     },
