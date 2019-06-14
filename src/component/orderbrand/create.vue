@@ -103,16 +103,6 @@
                         详情
                     </template>
                 </el-table-column>
-                <!-- <el-table-column :label="_label('leibiezhanbi')" width="200" align="center">
-                    <template v-slot="{row}">
-                        <chart :height="100" :chart-data="getChartData(row.id)"></chart>
-                    </template>
-                </el-table-column> -->
-                <!-- <el-table-column :label="_label('zhekoulv')" width="90" align="center">
-                    <template v-slot="{row}">
-                        <as-button @click="preview(row.id);">{{_label("yulan")}}</as-button>
-                    </template>
-                </el-table-column> -->
             </el-table>
             <el-col :span="24" class="product" style="margin-top:2px;">
                 <el-table ref="table" :data="orders" stripe border style="width:100%;" @selection-change="onSelectionChange" @row-click="onRowClick">
@@ -294,19 +284,14 @@
 
 <script>
 import { extend, copyTo } from "../object.js"
-import detailConvert from "../asa/order-detail.js"
 import orderMixin from "../mixins/order.js"
 import chain from "../chain.js"
 import { Order, ProductDetail, promiseRunner } from "../model.js"
-import CommitChart from "../CommitChart.js"
 import { debounce } from "../function.js"
 
 
 const result = {
     name: 'sp-orderbrandcreate',
-    components: {
-        chart: CommitChart
-    },
     mixins: [orderMixin],
     data() {
         var self = this;
@@ -397,14 +382,6 @@ const result = {
             //保存订单
             let self = this
 
-            let suppliers = [];
-            self.suppliers.forEach(supplier => {
-                suppliers.push({
-                    supplierid: supplier.supplierid,
-                    discount: supplier.discount
-                })
-            })
-
             let func = _private(self);
             let list = []
             self.listdata.forEach(item => {
@@ -416,11 +393,17 @@ const result = {
                         supplierid: item.supplierid,
                         number: item.number,
                         discount: item.discount,
-                        orderdetailid: func.getOrderDetaiId(item.row.productid, item.row.orderid, item.sizecontentid)
+                        orderdetailid: func.getOrderDetaiId(item.row.productid, item.row.orderid, item.sizecontentid),
+                        id:func.getOrderbrandDetailId(item.row.productid, item.row.orderid, item.sizecontentid)
                     })
                 }
             })
-            let params = { list, suppliers }
+            let params = { list, suppliers:self.suppliers, form:{
+                bussinesstype:self.order.bussinesstype,
+                ageseason:self.order.ageseason,
+                seasontype:self.order.seasontype,
+                currency:self.order.currency
+            } }
 
             self._log(params)
             self._submit("/orderbrand/add", { params: JSON.stringify(params) }).then(function(res) {
@@ -465,38 +448,6 @@ const result = {
         onSelectionChange2(vals) {
             this.selected2 = vals
         }
-        /*,
-                getChartData(supplierid) {
-                    let self = this
-                    let groupTotal = {}
-                    self.listdata.forEach(item => {
-                        if (supplierid == item.supplierid && item.number > 0 && item.discount>0) {
-                            let key = item.row.product.brandgroup_label
-                            groupTotal[key] = groupTotal[key] || 0
-                            groupTotal[key] += item.number * item.discount * item.row.product.factoryprice
-                        }
-                    })
-
-                    let labels = []
-                    let data = []
-                    chain(groupTotal).forEach((total, name)=>{
-                        labels.push(name)
-                        data.push(Math.round(total))
-                    })
-
-                    return {
-                        labels,
-                        datasets: [{
-                            backgroundColor: [
-                                '#41B883',
-                                '#E46651',
-                                '#00D8FF',
-                                '#DD1B16'
-                            ],
-                            data
-                        }]
-                    }
-                }*/
     },
     computed: {
         orderdetails() {
@@ -521,20 +472,9 @@ const result = {
         width() {
             return this.orderdetails.reduce((max, { product }) => Math.max(max, product.sizecontents.length), 1) * 51 + 191 + 70
         },
-        ageseason() {
-            let self = this
-            if (self.orders.length > 0) {
-                return self.orders[0].ageseason
-            }
-
-            return ""
-        },
         order() {
-            let self = this
-            if (self.orders.length > 0) {
-                return self.orders[0]
-            }
-            return {}
+            let orders = this.orders
+            return orders.length > 0 ? orders[0] : {}
         },
         orderstat() {
             let self = this;
@@ -556,14 +496,12 @@ const result = {
                 row.leftCount = row.totalCount-row.brandCount;
             })
 
-            //如果是修改订单，剩余数量应该把当前订单的数量加上去。
-            
+            //如果是修改订单，剩余数量应该把当前订单的数量加上去。            
             self.orderbrandlist.forEach(detail=>{
                 let row = result[detail.orderid]
                 row.leftCount += detail.number*1;
             })
 
-            console.log(result, '--------')
             return result
         },
         ordercurrent(){
@@ -580,7 +518,6 @@ const result = {
 
                 row.totalCount += detail.number*1;
             })
-            console.log(result, "=========")
             return result
         }
     },
@@ -676,6 +613,11 @@ const _private = function(self) {
             self._log(row, self.orderlist, productid, orderid, sizecontentid)
             return row ? row.id : 0;
         },
+        getOrderbrandDetailId(productid, orderid, sizecontentid){
+            let row = self.orderbrandlist.find(item => item.productid == productid && item.orderid == orderid && item.sizecontentid == sizecontentid)
+            self._log(row, self.orderlist, productid, orderid, sizecontentid)
+            return row ? row.id : 0;
+        },
         importOrders(orders) {
             orders.forEach(item => {
                 self.orders.push(item)
@@ -702,7 +644,6 @@ const _private = function(self) {
                         suppliercode: supplier.suppliercode,
                         supplierid: supplier.id,
                         foreignorderno: "",
-                        bussinesstype: "",
                         finalsupplierid: "",
                         taxrebate: "",
                         makestaff: "",
@@ -729,7 +670,6 @@ const _private = function(self) {
                     supplier.makestaff = orderbrand.makestaff;
                     supplier.maketime = orderbrand.maketime;
                     supplier.foreignorderno = orderbrand.foreignorderno;
-                    supplier.bussinesstype = orderbrand.bussinesstype;
                     supplier.finalsupplierid = orderbrand.finalsupplierid;
                     supplier.taxrebate = orderbrand.taxrebate;
                     supplier.memo = orderbrand.memo;
