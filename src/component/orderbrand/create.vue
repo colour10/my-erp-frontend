@@ -201,7 +201,7 @@
         <sp-dialog ref="supplier-dialog" :title="_label('qingxuanze')">
             <el-row :gutter="0">
                 <el-col :span="5" v-for="item in suppliers" :key="item.id">
-                    <as-button auth="product" type="primary" @click="distribute(item.id)">{{item.suppliercode}}</as-button>
+                    <as-button auth="product" type="primary" @click="distribute(item.supplierid)">{{item.suppliercode}}</as-button>
                 </el-col>
             </el-row>
         </sp-dialog>
@@ -259,17 +259,8 @@ const result = {
         addSupplier() {
             let self = this
             self._dataSource("supplier_3").getRows(self.form2.supplierid).then(rows => {
-                rows.forEach(row => {
-                    if(!self.suppliers.find(item=>item.id==row.id)) {
-
-                        let clone = extend({}, row.row)
-                        clone.discount = "" //折扣率
-                        clone.totalDiscountPrice = 0 //总价
-                        clone.totalCount = 0 //总件数
-                        clone.totalPrice = 0 //零售总价
-                        self.suppliers.push(clone)
-                    }                    
-                })
+                let suppliers = rows.map(item=>item.row)
+                _private(self).importSupplier(suppliers)
 
                 self._hideDialog('add-supplier')
             })
@@ -294,17 +285,12 @@ const result = {
         onSelect() {
             let self = this;
             self._fetch("/order/import", self.form).then(result => {
-                self.orders = []
-                self.details = []
-                result.data.orders.forEach(item => {
-                    self.orders.push(item)
-                })
-
-                _private(self).convertListToProductList(result.data.details).then(orders => {
-                    orders.forEach(item => {
-                        self.details.push(item)
-                    })
-                })
+                //已经导入过的订单不重复导入。
+                let table = chain(self.orders).toObject(item=>[item.id,1]).object()
+                
+                let func = _private(self)
+                func.importOrders(result.data.orders.filter(item=>!table[item.id]))
+                func.importDetails(result.data.details.filter(item=>!table[item.orderid]))                
 
                 self._hideDialog('order-dialog')
             })
@@ -329,11 +315,12 @@ const result = {
             let suppliers = [];
             self.suppliers.forEach(supplier=>{
                 suppliers.push({
-                    id:supplier.id,
+                    supplierid:supplier.supplierid,
                     discount:supplier.discount
                 })
             })
 
+            let func = _private(self);
             let list = []
             self.listdata.forEach(item=>{
                 if(item.number>0) {
@@ -343,23 +330,17 @@ const result = {
                         sizecontentid:item.sizecontentid,
                         supplierid:item.supplierid,
                         number:item.number,
-                        discount:item.discount
+                        discount:item.discount,
+                        orderdetailid:func.getOrderDetaiId(item.row.productid, item.row.orderid, item.sizecontentid)
                     })
                 }                
             })
             let params = {list, suppliers}
 
             self._log(params)
-            return ;
-            self._submit("/orderbrand/save", { params: JSON.stringify(params) }).then(function(res) {
+            self._submit("/orderbrand/add", { params: JSON.stringify(params) }).then(function(res) {
                 self._log(res)
-                let data = res.data
-                if (data.id) {
-                    copyTo(data, self.form)
-                }
             });
-            //})
-
         },
         onNumberChange({ row, list }) {
             let self = this
@@ -380,37 +361,7 @@ const result = {
                 }
             })
 
-            //计算几个统计数据
-            let context = {}
-            self.listdata.forEach(item => {
-                let target = context[item.supplierid] || {
-                    totalDiscountPrice:0,
-                    totalCount:0,
-                    totalPrice:0
-                }
-
-                if ( item.number > 0) {    
-                    target.totalCount +=  item.number*1
-                    target.totalPrice += item.number * item.row.product.wordprice
-                    target.totalDiscountPrice += item.number * item.discount * item.row.product.factoryprice
-
-                    context[item.supplierid] = target
-                }
-            })
-
-            self.suppliers.forEach(supplier=>{
-                let target = context[supplier.id]
-                if(target) {
-                    extend(supplier,target)
-                }
-                else {
-                    extend(supplier, {
-                        totalDiscountPrice:0,
-                        totalCount:0,
-                        totalPrice:0
-                    })
-                }
-            })
+            _private(self).stat();
         },
         onSelectionChange(vals) {
             let self = this
@@ -507,6 +458,21 @@ const result = {
         self.copySuppliercodeDebounce = debounce(function(){
             self.form2.suppliercode = self.form2.suppliercode1
         }, 1000, false)
+
+
+        let params = self.$route.params;
+        if(params.ids!='0') {
+            self._fetch("/orderbrand/load", { ids: params.ids }).then(async function({data}) {
+                let func = _private(self)
+                func.importOrders(data.orders)
+                self.$refs.table.toggleAllSelection()
+                await func.importDetails(data.details)
+                func.importSupplier(data.suppliers, data.orderbrands)
+                func.importList(data.list)
+                func.stat()
+                //self._setTitle(self._label("querenwaibudingdan") + ":" + self.form.id)
+            })
+        }        
     }
 }
 
@@ -514,12 +480,6 @@ const _private = function(self) {
     const _this = {
         isMatch(keyword, search) {
             return keyword.length>0 ? search.toUpperCase().indexOf(keyword)>=0 : true
-        },
-        appendRow(row) {
-            row.key = StringFunc.random(10)
-                //self._log(row, "XXXXX")
-            self.tabledata.unshift(row)
-            self.form.currency = row.source.product.factorypricecurrency
         },
 
         //将发货单明细转化成商品、订单、列表
@@ -563,25 +523,106 @@ const _private = function(self) {
 
             return await Promise.all(promises)
         },
-        loadDetail(id) {
-            self._setTitle("Loading...")
-            self._fetch("/shipping/load", { id }).then(async function(res) {
-                //self._log("加载订单信息", res)
+        getOrderDetaiId(productid, orderid, sizecontentid){
+            let row = self.detailList.find(item=>item.productid==productid && item.orderid==orderid && item.sizecontentid==sizecontentid)
+            self._log(row, self.detailList, productid, orderid, sizecontentid)
+            return row ? row.id : 0;
+        },
+        importOrders(orders){
+            orders.forEach(item => {
+                self.orders.push(item)
+            })
+        },
+        async importDetails(details) {
+            //所有的订单详情
+            self.detailList = details;
 
-                copyTo(res.data.form, self.form)
-                if (res.data.list) {
-                    let results = await _this.convertListToProductList(res.data.list)
+            let orders = await _this.convertListToProductList(details)
 
-                    self.tabledata = []
-                    results.forEach(row => {
-                        row.confirm_total = 0
-                        _this.appendRow({
-                            source: row,
-                            price: row.price
-                        })
+            orders.forEach(item => {
+                self.details.push(item)
+            })
+
+            return "";
+        },
+        importSupplier(suppliers, orderbrands=[]) {
+            suppliers.forEach(supplier=>{
+                if(!self.suppliers.find(item=>item.supplierid==supplier.id)) {
+                    let clone = {
+                        suppliercode:supplier.suppliercode,
+                        supplierid:supplier.id
+                    }
+                    clone.discount = "" //折扣率
+                    clone.totalDiscountPrice = 0 //总价
+                    clone.totalCount = 0 //总件数
+                    clone.totalPrice = 0 //零售总价
+                    clone.orderbrandid = ""
+                    self.suppliers.push(clone)
+                }       
+            })
+
+            orderbrands.forEach(orderbrand=>{
+                let supplier = self.suppliers.find(supplier=>supplier.supplierid==orderbrand.supplierid)
+                if(supplier) {
+                    supplier.discount = orderbrand.discount;
+                    supplier.orderbrandid = orderbrand.id
+                }
+            })
+        },
+        importList(list) {
+            list.forEach(detail=>{
+                let row = self.details.find(item=>item.orderid==detail.orderid && item.productid==detail.productid)
+                let supplier = self.suppliers.find(supplier=>supplier.orderbrandid==detail.orderbrandid)
+
+                //self._log(row, supplier, 'xxx', detail)
+                if(row && supplier) {
+                    self.listdata.push({
+                        row,
+                        number:detail.number,
+                        sizecontentid:detail.sizecontentid,
+                        supplierid:supplier.supplierid,
+                        discount:detail.discount
+                    });
+                }
+
+                if(row) {
+                    row.form[detail.sizecontentid] += detail.number*1
+                }               
+            })
+            
+        },
+        stat() {
+            //计算几个统计数据
+            let context = {}
+            self.listdata.forEach(item => {
+                let target = context[item.supplierid] || {
+                    totalDiscountPrice:0,
+                    totalCount:0,
+                    totalPrice:0
+                }
+
+                if ( item.number > 0) {    
+                    target.totalCount +=  item.number*1
+                    target.totalPrice += item.number * item.row.product.wordprice
+                    target.totalDiscountPrice += item.number * item.discount * item.row.product.factoryprice
+                    //console.log(item.number ,item.discount , item.row.product.factoryprice)
+
+                    context[item.supplierid] = target
+                }
+            })
+
+            self.suppliers.forEach(supplier=>{
+                let target = context[supplier.supplierid]
+                if(target) {
+                    extend(supplier,target)
+                }
+                else {
+                    extend(supplier, {
+                        totalDiscountPrice:0,
+                        totalCount:0,
+                        totalPrice:0
                     })
                 }
-                self._setTitle(self._label("fahuodanruku") + ":" + self.form.id)
             })
         }
     }

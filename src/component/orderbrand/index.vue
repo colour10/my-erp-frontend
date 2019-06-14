@@ -6,12 +6,13 @@
                     <el-form-item class="searchitem">
                         <el-input v-model="searchform.keyword" width="250" style="width:250px;" @keyup.enter.native="onSearch"></el-input>
                         <as-button type="primary" @click="onSearch" size="mini" icon="el-icon-search">{{_label("chaxun")}}</as-button>
-                        <auth auth="order-submit"><as-button type="primary" @click="showFormToCreate()">{{_label('xinjian')}}</as-button></auth>
+                        <auth auth="order-submit"><as-button type="primary" @click="showFormToCreate">{{_label('xinjian')}}</as-button></auth>
+                        <auth auth="order-submit"><as-button type="primary" @click="showFormToEdit">{{_label('bianji')}}</as-button></auth>
                     </el-form-item>
                 </el-form>
             </el-col>
         </el-row>
-        <simple-admin-tablelist ref="tablelist" v-bind="props" :onclickupdate="showFormToEdit" :isdelete="false"></simple-admin-tablelist>
+        <simple-admin-tablelist ref="tablelist" v-bind="props" :onclickupdate="showFormToEdit" :isedit="false" :isdelete="false" :isSelect="true"></simple-admin-tablelist>
     </div>
 </template>
 
@@ -66,10 +67,22 @@ export default {
             self.$refs.tablelist.search(self.searchform)
         },
         showFormToCreate() {
-            this.$router.push('/orderbrand/create')
+            this.$router.push('/orderbrand/0')
         },
-        showFormToEdit(rowIndex, row) {
-            this.$router.push('/orderbrand/' + row.id)
+        showFormToEdit() {
+            let self = this;
+            let rows = self.$refs.tablelist.getSelectRows()
+            let table = {}
+            rows.forEach(item=>{
+                table[item.supplierid]=1
+            })
+
+            if(rows.length==Object.keys(table).length) {
+                self.$router.push('/orderbrand/' + self.$refs.tablelist.getSelectValues())
+            }
+            else {
+                self._info(self._label("tip-tongyige"))
+            }
         },
         toCreateConfirm({row, vm}){
             this.$router.push('/confirmorder/create/' + row.id)

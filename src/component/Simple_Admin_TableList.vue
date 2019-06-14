@@ -328,6 +328,9 @@ export default {
             if (typeof(self.isedit) == 'function') {
                 return self.isedit(row)
             }
+            else if(typeof(self.isedit) == 'boolean') {
+                return self.isedit
+            }
 
             return true
         },
@@ -336,6 +339,9 @@ export default {
         },
         getSelectValues() {
             return this.selected.map(item=>item.id)
+        },
+        getSelectRows() {
+            return this.selected
         },
         onRowClick(row){
             if(this.isSelect===true) {

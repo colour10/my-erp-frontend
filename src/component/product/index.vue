@@ -29,7 +29,7 @@
         <sp-image-preview></sp-image-preview>
 
         <sp-dialog ref="search">
-            <el-form class="order-form" :model="form" label-width="70px" :inline="false" style="width:100%;" size="mini">
+            <el-form class="order-form" :model="form" label-width="70px" :inline="false" style="width:100%;" size="mini" @submit.native.prevent>
                 <el-row :gutter="0">
                 <el-col :span="8" style="width:270px">
                     <el-form-item :label="_label('guojima')" prop="ageseason">
@@ -86,7 +86,7 @@
 
                 <el-row :gutter="0">
                     <el-col align="center">
-                        <as-button auth="product" type="primary" @click="search">{{_label("chaxun")}}</as-button>
+                        <as-button auth="product" type="primary" @click="search" native-type="submit">{{_label("chaxun")}}</as-button>
                         <as-button type="primary" @click="_hideDialog('search')">{{_label("tuichu")}}</as-button>
                     </el-col>
                 </el-row>

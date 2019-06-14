@@ -171,8 +171,8 @@ const routes = [
             //{path: '/order/add', component: Asa_Order_Dialog},
             {path: '/order/:id', name:"orderform", component: Asa_Order_Dialog},
             {path: '/orderbrand', name:"orderbrand", component: Orderbrand},
-            {path: '/orderbrand/create', name:"orderbrandcreate", component: OrderbrandCreate},
-            {path: '/orderbrand/:id', name:"orderbranddetail", component: OrderbrandDetail},
+            {path: '/orderbrand/:ids', name:"orderbrandcreate", component: OrderbrandCreate},
+            //{path: '/orderbrand/:id', name:"orderbranddetail", component: OrderbrandDetail},
 
             {path:'/ageseason', name:"ageseason", component:getComponentSimple("ageseason")},
             {path:'/ulnarinch', name:"ulnarinch", component:getComponent("ulnarinch")},

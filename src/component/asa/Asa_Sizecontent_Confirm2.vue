@@ -3,28 +3,28 @@
     <el-table :data="rows" style="width:100%;" :border="false" :row-class-name="rowClassName" :cell-class-name="cellClassName">
         <el-table-column :label="_label('gonghuoshang')" align="left" width="110">
             <template v-slot="{row}">
-                <div v-if="row.type=='body'" @dblclick="distributeTo(row.supplier.id)">{{row.supplier.suppliercode}}</div>
+                <div v-if="row.type=='body'" @dblclick="distributeTo(row.supplier.supplierid)">{{row.supplier.suppliercode}}</div>
                 <span v-if="row.type=='foot'">{{_label('heji')}}</span>
             </template>
         </el-table-column>
 
         <el-table-column :label="_label('zhekoulv')" align="left" width="65">
             <template v-slot="{row}">
-                <el-input v-if="row.type=='body'" v-model="formdiscount[row.supplier.id].discount" @change="onDiscountChange(row.supplier.id)" size="mini" style="width:50px"></el-input>
+                <el-input v-if="row.type=='body'" v-model="formdiscount[row.supplier.supplierid].discount" @change="onDiscountChange(row.supplier.supplierid)" size="mini" style="width:50px"></el-input>
             </template>
         </el-table-column>
 
         <el-table-column :label="column.name" align="center" v-for="column in columns" :key="column.id" width="51" class="counter">
             <template v-slot="{row}">
                 <el-input v-model="row.form[column.id]" style="width:50px" size="mini" :disabled="true" class="linetop" v-if="row.type=='head'"></el-input>
-                <el-input v-model="form[column.id+'-'+row.supplier.id]" style="width:50px" size="mini" @keyup.native="onChange(row)" v-if="row.type=='body'" :ref="column.id+'-'+row.supplier.id" @focus="onFocus(column.id+'-'+row.supplier.id)" @dblclick.native="onInputDblClick(column.id,row.supplier.id)"></el-input>
+                <el-input v-model="form[column.id+'-'+row.supplier.supplierid]" style="width:50px" size="mini" @keyup.native="onChange(row)" v-if="row.type=='body'" :ref="column.id+'-'+row.supplier.supplierid" @focus="onFocus(column.id+'-'+row.supplier.supplierid)" @dblclick.native="onInputDblClick(column.id,row.supplier.supplierid)"></el-input>
                 <el-input v-model="row.form[column.id]" style="width:50px" size="mini" :disabled="true" class="linetop" v-if="row.type=='foot'"></el-input>
             </template>
         </el-table-column>
         <el-table-column :label="_label('heji')" align="right" width="53">
             <template v-slot="{row}">
                 <el-input :value="getLineTotal(row.form)" style="width:50px" size="mini" :disabled="true" class="linetop" v-if="row.type=='head'"></el-input>
-                <el-input :value="getBodyRowTotal(row.supplier.id)" style="width:50px" size="mini":disabled="true" class="inputsum" v-if="row.type=='body'"></el-input>
+                <el-input :value="getBodyRowTotal(row.supplier.supplierid)" style="width:50px" size="mini":disabled="true" class="inputsum" v-if="row.type=='body'"></el-input>
                 <el-input :value="getLineTotal(row.form)" style="width:50px" size="mini" :disabled="true" class="linetop" v-if="row.type=='foot'"></el-input>
             </template>
         </el-table-column>        
@@ -79,10 +79,10 @@ export default {
         self.suppliers.forEach(supplier=>{
             let row = {}
             self.columns.forEach(column=>{
-                form[column.id+'-'+supplier.id] = ""
+                form[column.id+'-'+supplier.supplierid] = ""
             })
-            totals[supplier.id] = 0
-            formdiscount[supplier.id] = {discount:supplier.discount, match:true}
+            totals[supplier.supplierid] = 0
+            formdiscount[supplier.supplierid] = {discount:supplier.discount, match:true}
         })
 
         self.initData.forEach(({supplierid,sizecontentid,number})=>{
@@ -118,7 +118,7 @@ export default {
         },
         onDiscountChange(supplierid){
             let self = this
-            let supplier = self.suppliers.find(item=>item.id==supplierid)
+            let supplier = self.suppliers.find(item=>item.supplierid==supplierid)
             if(supplier) {
                 let target = self.formdiscount[supplierid]
                 target.match = target.discount==supplier.discount
@@ -271,18 +271,18 @@ export default {
             handler: function(newValue, oldValue) {
                 let self = this;
                 self.suppliers.forEach((supplier, index)=>{
-                    if(self.formdiscount[supplier.id]) {
-                        if(self.formdiscount[supplier.id].match) {
-                            self.formdiscount[supplier.id].discount = supplier.discount
+                    if(self.formdiscount[supplier.supplierid]) {
+                        if(self.formdiscount[supplier.supplierid].match) {
+                            self.formdiscount[supplier.supplierid].discount = supplier.discount
                         }
                         
-                        let target = self.formdiscount[supplier.id]
+                        let target = self.formdiscount[supplier.supplierid]
                         target.match = target.discount==supplier.discount
 
                         self.onChange()
                     }
                     else {
-                        self.formdiscount[supplier.id] = {discount:supplier.discount, match:true}
+                        self.formdiscount[supplier.supplierid] = {discount:supplier.discount, match:true}
                     }
                 })
             },
@@ -292,7 +292,7 @@ export default {
             handler: function(newValue, oldValue) {
                 let self = this;
                 self.suppliers.forEach((supplier, index)=>{                    
-                    let target = self.formdiscount[supplier.id]
+                    let target = self.formdiscount[supplier.supplierid]
                     target.match = target.discount==supplier.discount
 
                     self.onChange()
