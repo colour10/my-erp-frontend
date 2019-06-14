@@ -288,7 +288,7 @@ import orderMixin from "../mixins/order.js"
 import chain from "../chain.js"
 import { Order, ProductDetail, promiseRunner } from "../model.js"
 import { debounce } from "../function.js"
-
+import { group } from "../array.js"
 
 const result = {
     name: 'sp-orderbrandcreate',
@@ -386,6 +386,8 @@ const result = {
             let list = []
             self.listdata.forEach(item => {
                 if (item.number > 0) {
+                    let orderdetailid = func.getOrderDetaiId(item.row.productid, item.row.orderid, item.sizecontentid);
+                    let id = func.getOrderbrandDetailId(item.row.productid, item.row.orderid, item.sizecontentid, item.supplierid)
                     list.push({
                         productid: item.row.productid,
                         orderid: item.row.orderid,
@@ -393,8 +395,8 @@ const result = {
                         supplierid: item.supplierid,
                         number: item.number,
                         discount: item.discount,
-                        orderdetailid: func.getOrderDetaiId(item.row.productid, item.row.orderid, item.sizecontentid),
-                        id:func.getOrderbrandDetailId(item.row.productid, item.row.orderid, item.sizecontentid)
+                        orderdetailid,
+                        id
                     })
                 }
             })
@@ -613,10 +615,17 @@ const _private = function(self) {
             self._log(row, self.orderlist, productid, orderid, sizecontentid)
             return row ? row.id : 0;
         },
-        getOrderbrandDetailId(productid, orderid, sizecontentid){
-            let row = self.orderbrandlist.find(item => item.productid == productid && item.orderid == orderid && item.sizecontentid == sizecontentid)
-            self._log(row, self.orderlist, productid, orderid, sizecontentid)
-            return row ? row.id : 0;
+        getOrderbrandDetailId(productid, orderid, sizecontentid, supplierid){
+            let orderbrand = self.suppliers.find(item=>item.supplierid==supplierid)
+            console.log("YY", orderbrand)
+            if(orderbrand) {
+                 let row = self.orderbrandlist.find(item => item.productid == productid && item.orderid == orderid && item.sizecontentid == sizecontentid  && item.orderbrandid==orderbrand.orderbrandid )
+                self._log(row, self.orderlist, productid, orderid, sizecontentid)
+                return row ? row.id : 0;
+            }
+            else {
+                return 0
+            }           
         },
         importOrders(orders) {
             orders.forEach(item => {
@@ -705,11 +714,13 @@ const _private = function(self) {
         stat() {
             //计算几个统计数据
             let context = {}
+            let brands = group();
             self.listdata.forEach(item => {
                 let target = context[item.supplierid] || {
                     totalDiscountPrice: 0,
                     totalCount: 0,
-                    totalPrice: 0
+                    totalPrice: 0,
+                    brandid:""
                 }
 
                 if (item.number > 0) {
@@ -718,13 +729,17 @@ const _private = function(self) {
                     target.totalDiscountPrice += item.number * item.discount * item.row.product.factoryprice
                         //console.log(item.number ,item.discount , item.row.product.factoryprice)
 
+                    brands.push(item.supplierid, item.row.product.brandid)
+                    console.log("xx", item.supplierid, item.row.product.brandid)
                     context[item.supplierid] = target
                 }
             })
 
+            let result = brands.getResult()
             self.suppliers.forEach(supplier => {
                 let target = context[supplier.supplierid]
                 if (target) {
+                    target.brandid = result[supplier.supplierid]
                     extend(supplier, target)
                 } else {
                     extend(supplier, {
