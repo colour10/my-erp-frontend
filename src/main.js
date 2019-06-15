@@ -47,6 +47,7 @@ import Asa_Color_Select from './component/asa/Asa_Color_Select.vue'
 import Asa_Sizecontent_Input from './component/asa/Asa_Sizecontent_Input.vue'
 import Asa_Sizecontent_Confirm from './component/asa/Asa_Sizecontent_Confirm.vue'
 import Asa_Sizecontent_Confirm2 from './component/asa/Asa_Sizecontent_Confirm2.vue'
+import Asa_Sizecontent_Confirm3 from './component/asa/Asa_Sizecontent_Confirm3.vue'
 
 import Asa_Order_Tip from './component/asa/Asa_Order_Tip.vue'
 import Asa_Product_Tip from './component/asa/Asa_Product_Tip.vue'
@@ -63,7 +64,8 @@ import Home from './component/home/index.vue'
 import Order from './component/order/index.vue'
 import Orderbrand from './component/orderbrand/index.vue'
 import OrderbrandCreate from './component/orderbrand/create.vue'
-import OrderbrandDetail from './component/orderbranddetail/index.vue'
+//import OrderbrandDetail from './component/orderbranddetail/index.vue'
+import OrderbrandConfirm from './component/orderbrand/confirm.vue'
 import User from './component/user/index.vue'
 import Group from './component/group/index.vue'
 import Department from './component/department/index.vue'
@@ -130,7 +132,8 @@ const components = [
     Asa_PriceSetting_Cell,
     Toggle_Input,
     SpProductInfo,
-    Asa_Sizecontent_Confirm2
+    Asa_Sizecontent_Confirm2,
+    Asa_Sizecontent_Confirm3
     //SelectTable
 ]
 
@@ -172,7 +175,7 @@ const routes = [
             {path: '/order/:id', name:"orderform", component: Asa_Order_Dialog},
             {path: '/orderbrand', name:"orderbrand", component: Orderbrand},
             {path: '/orderbrand/:ids', name:"orderbrandcreate", component: OrderbrandCreate},
-            //{path: '/orderbrand/:id', name:"orderbranddetail", component: OrderbrandDetail},
+            {path: '/orderbrand/confirm/:id', name:"orderbrandconfirm", component: OrderbrandConfirm},
 
             {path:'/ageseason', name:"ageseason", component:getComponentSimple("ageseason")},
             {path:'/ulnarinch', name:"ulnarinch", component:getComponent("ulnarinch")},

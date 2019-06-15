@@ -44,6 +44,12 @@ const ObjectChain = function(target) {
     self.extend = function(object){
         return new ObjectChain(extend({}, target, object))
     }
+
+    self.array = function(){
+        return toArray(target, function(key, value){
+            return value
+        });
+    }
 }
 
 const ArrayChain = function(target) {

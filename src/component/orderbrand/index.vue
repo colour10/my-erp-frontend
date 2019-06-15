@@ -29,12 +29,18 @@ export default {
             },         
             props: {
                 columns: [
-                    { name: "orderno", label: _label('dingdanbianhao'), width: 300 },
-                    { name: "supplierid", label: _label('gonghuoshang'), type: 'select', source: "supplier" },
-                    { name: "ageseason", label: _label('niandaijijie'), type: 'select', source: "ageseason" },
-                    { name: "bussinesstype", label: _label('yewuleixing'), type: 'select', source: "bussinesstype" },
-                    { name: "status", label: _label('zhuangtai'), type: 'select', source: "orderstatus" },
-                    { name: "makedate", label: _label('dingdanriqi'), convert:function(row){
+                    { name: "orderno", label: _label('gongsidingdanhao'), width: 120 },
+                    { name: "supplierid", label: _label('gonghuoshang'), type: 'select', source: "supplier", width:90 },
+                    { name: "ageseason", label: _label('niandaijijie'), type: 'select', source: "ageseason", width: 110 },
+                    { name: "bussinesstype", label: _label('yewuleixing'), type: 'select', source: "bussinesstype", width: 110 },
+                    { name: "currency", label: _label('bizhong'), type: 'select', source: "currency", width: 80 },
+                    { name: "total_price", label: _label('zongjine'), width:100 },
+                    { name: "total_number", label: _label('zongjianshu'), width:100 },
+                    { name: "discount", label: _label('zhekoulv'), width:100 },
+                    { name: "taxrebate", label: _label('tuishuilv'), width:100 },
+                    { name: "quantum", label: _label('edu'), width:100 },
+                    { name: "memo", label: _label('beizhu'), width:100, sortable:false },
+                    { name: "makedate", label: _label('dingdanriqi'), width:110, convert:function(row){
                         if(row.maketime && row.maketime.length>0) {
                             return row.maketime.substr(0,10)
                         }
@@ -52,7 +58,7 @@ export default {
                 ],
                 controller: "orderbrand",
                 options:{
-                    action_width:270
+                    action_width:160
                 }
             },
             pro: false,
@@ -85,7 +91,7 @@ export default {
             }
         },
         toCreateConfirm({row, vm}){
-            this.$router.push('/confirmorder/create/' + row.id)
+            this.$router.push('/orderbrand/confirm/' + row.id)
         },
         toShipping({row, vm}){
             this.$router.push('/shipping/create/' + row.id)

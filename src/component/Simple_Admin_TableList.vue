@@ -8,7 +8,7 @@
                     <slot name="expand" v-bind:row="row" v-bind:rowIndex="rowIndex"></slot>
                 </template>                
             </el-table-column>
-            <el-table-column :prop="item.name" :label="item.label" :width="item.width||180" v-if="!item.is_hide" v-for="item in columns" :key="item.name" :sortable="!item.is_image">
+            <el-table-column :prop="item.name" :label="item.label" :width="item.width||180" v-if="!item.is_hide" v-for="item in columns" :key="item.name" :sortable="isSortable(item)">
                 <template v-slot="scope">
                     <slot :name="item.slotName || item.name" v-bind:row="scope.row">
                     <img v-if="item.type=='avatar'||item.is_image" :src="getImageSrc(scope.row, item)" :style="getImageStyle(item)" @click="onClickImage(scope.row, item)">
@@ -94,6 +94,9 @@ export default {
         search(params) {
             this.searchform = extend({},params)
             this.loadList()
+        },
+        isSortable(column) {
+            return typeof(column.sortable)=='boolean' ? column.sortable : !column.is_image
         },
         getCellClassName({row, column, rowIndex, columnIndex}) {
             let self = this

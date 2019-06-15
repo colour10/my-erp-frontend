@@ -40,22 +40,22 @@
                         <sp-select-text :value="order.currency" source="currency"></sp-select-text>
                     </template>
                 </el-table-column>
-                <el-table-column :label="_label('zongjine')" width="90" align="center" prop="totalDiscountPrice">
+                <el-table-column :label="_label('zongjine')" width="90" align="center" prop="total_discount_price">
                     <template v-slot="{row}">
-                        {{f(row.totalDiscountPrice)}}
+                        {{f(row.total_discount_price)}}
                     </template>
                 </el-table-column>
 
-                <el-table-column :label="_label('shengyuedu')" width="90" align="center" prop="totalDiscountPrice">
+                <el-table-column :label="_label('shengyuedu')" width="90" align="center" prop="total_discount_price">
                     <template v-slot="{row}">
-                        {{f(row.quantum-row.totalDiscountPrice)}}
+                        {{f(row.quantum-row.total_discount_price)}}
                     </template>
                 </el-table-column>
 
-                <el-table-column :label="_label('zongjianshu')" width="75" align="center" prop="totalCount"></el-table-column>
-                <el-table-column :label="_label('lingshouzongjia')" width="90" align="center" prop="totalPrice">
+                <el-table-column :label="_label('zongjianshu')" width="75" align="center" prop="total_number"></el-table-column>
+                <el-table-column :label="_label('lingshouzongjia')" width="90" align="center" prop="total_price">
                     <template v-slot="{row}">
-                        {{f(row.totalPrice)}}
+                        {{f(row.total_price)}}
                     </template>
                 </el-table-column>
                 <el-table-column :label="_label('zhekoulv')" width="75" align="center">
@@ -74,12 +74,12 @@
                         <el-input v-model="row.quantum" size="mini"></el-input>
                     </template>
                 </el-table-column>
-                <el-table-column :label="_label('fahuoshang')" width="130" align="center">
+                <el-table-column :label="_label('fahuoshang')" width="100" align="center">
                     <template v-slot="{row}">
                         <simple-select v-model="row.finalsupplierid" source="supplier_3" :clearable="true"></simple-select>
                     </template>
                 </el-table-column>
-                <el-table-column :label="_label('beizhu')" width="130" align="center">
+                <el-table-column :label="_label('beizhu')" width="100" align="center">
                     <template v-slot="{row}">
                         <el-input v-model="row.memo" size="mini"></el-input>
                     </template>
@@ -89,18 +89,21 @@
                         <el-input v-model="row.foreignorderno" size="mini"></el-input>
                     </template>
                 </el-table-column>
-                <el-table-column :label="_label('gongsidingdanhao')" width="100" align="center" prop="orderno">
+                <el-table-column :label="_label('gongsidingdanhao')" width="80" align="center" prop="orderno">
                 </el-table-column>
-                <el-table-column :label="_label('zhidanren')" width="100" align="center">
+                <el-table-column :label="_label('zhidanren')" width="80" align="center">
                     <template v-slot="{row}">
                         <sp-select-text :value="row.makestaff" source="user"></sp-select-text>
                     </template>
                 </el-table-column>
-                <el-table-column :label="_label('zhidanriqi')" width="150" align="center" prop="maketime">
-                </el-table-column>
-                <el-table-column :label="_label('pinpai')" width="150" align="center">
+                <el-table-column :label="_label('zhidanriqi')" width="90" align="center" prop="maketime">
                     <template v-slot="{row}">
-                        详情
+                    {{ row.maketime && row.maketime.length>0 ? row.maketime.substr(0,10) :""}}
+                    </template>
+                </el-table-column>
+                <el-table-column :label="_label('pinpai')" width="200" align="left">
+                    <template v-slot="{row}">
+                        <sp-select-text :value="row.brandid" source="brand"></sp-select-text>
                     </template>
                 </el-table-column>
             </el-table>
@@ -552,11 +555,12 @@ const result = {
             self._fetch("/orderbrand/load", { ids: params.ids }).then(async function({ data }) {
                 let func = _private(self)
                 func.importOrders(data.orders)
-                self.$refs.table.toggleAllSelection()
+                
                 await func.importDetails(data.details)
                 func.importSupplier(data.suppliers, data.orderbrands)
                 func.importList(data.list)
                 func.stat()
+                self.$refs.table.toggleAllSelection()
                     //self._setTitle(self._label("querenwaibudingdan") + ":" + self.form.id)
             })
         }
@@ -663,9 +667,9 @@ const _private = function(self) {
                         quantum:""
                     }
                     clone.discount = "" //折扣率
-                    clone.totalDiscountPrice = 0 //总价
-                    clone.totalCount = 0 //总件数
-                    clone.totalPrice = 0 //零售总价
+                    clone.total_discount_price = 0 //总价
+                    clone.total_number = 0 //总件数
+                    clone.total_price = 0 //零售总价
                     clone.orderbrandid = ""
                     self.suppliers.push(clone)
                 }
@@ -717,16 +721,16 @@ const _private = function(self) {
             let brands = group();
             self.listdata.forEach(item => {
                 let target = context[item.supplierid] || {
-                    totalDiscountPrice: 0,
-                    totalCount: 0,
-                    totalPrice: 0,
+                    total_discount_price: 0,
+                    total_number: 0,
+                    total_price: 0,
                     brandid:""
                 }
 
                 if (item.number > 0) {
-                    target.totalCount += item.number * 1
-                    target.totalPrice += item.number * item.row.product.wordprice
-                    target.totalDiscountPrice += item.number * item.discount * item.row.product.factoryprice
+                    target.total_number += item.number * 1
+                    target.total_price += item.number * item.row.product.wordprice
+                    target.total_discount_price += item.number * item.discount * item.row.product.factoryprice
                         //console.log(item.number ,item.discount , item.row.product.factoryprice)
 
                     brands.push(item.supplierid, item.row.product.brandid)
@@ -743,9 +747,9 @@ const _private = function(self) {
                     extend(supplier, target)
                 } else {
                     extend(supplier, {
-                        totalDiscountPrice: 0,
-                        totalCount: 0,
-                        totalPrice: 0
+                        total_discount_price: 0,
+                        total_number: 0,
+                        total_price: 0
                     })
                 }
             })

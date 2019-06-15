@@ -104,14 +104,14 @@ export default {
         distributeTo(supplierid){
             let self = this
             let form = self.form
-            this._log(supplierid)
+            //this._log(supplierid)
             Object.keys(form).forEach(key=>{
                 //self._log(key)
                 form[key] = ""
 
                 let [sizecontentid,tmp_supplierid] = key.split("-")
                 if(supplierid==tmp_supplierid) {
-                    form[key] = self.row.form[sizecontentid]
+                    form[key] = self.row.form[sizecontentid] ? self.row.form[sizecontentid] : ""
                 }
             })
             self.onChange()
@@ -135,11 +135,18 @@ export default {
             self.onChange()
         },
         onInputDblClick(sizecontentid, supplierid){
+            let refname = sizecontentid + '-' + supplierid
+            this.$refs[refname][0].select()
+        /*
             let self = this
             let form = self.form
             this._log("input double click")
 
             let current = form[sizecontentid + '-' + supplierid]
+            if(!self.row.form[sizecontentid]) {
+                return 
+            }
+
             if(current=="" || current=='0') {
                 //把剩余的分配给当前
                 let total = 0
@@ -171,7 +178,7 @@ export default {
                 })
             }
             
-            self.onChange()
+            self.onChange()*/
         },
         onFocus(refname){
             this.$refs[refname][0].select()
