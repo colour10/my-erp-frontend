@@ -3,7 +3,7 @@ import {extend} from "../util/object.js"
 import DataSource from '../util/DataSource.js'
 
 export default extend({
-    name: 'sp-select-text',
+    name: 'txt-select-text',
     data(){
         return {
             text : ""

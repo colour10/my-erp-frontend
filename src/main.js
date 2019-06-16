@@ -11,11 +11,15 @@ import Checkbox from './component/item/checkbox.js'
 
 import Text from './component/label/text.js'
 import SelectText from './component/label/select-text.js'
+import DateText from './component/label/date.js'
+import DateTimeText from './component/label/datetime.js'
 
 import Table from './component/table.js'
 import Authbutton from './component/authbutton.js'
 import Input from './component/item/input.js'
 import Time from './component/item/time.vue'
+import DateTime from './component/item/datetime.vue'
+
 import { DataSource, vue, func } from './component/util/'
 
 
@@ -24,12 +28,15 @@ const components = [
     Simple_Admin_TableList,
     Select,
     Text,
+    DateText,
+    DateTimeText,
     SelectText,
     Table,
     Checkbox,
     Authbutton, 
     Input,
-    Time
+    Time,
+    DateTime
 ]
 
 components.forEach(component => {

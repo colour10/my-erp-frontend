@@ -6,10 +6,14 @@ import Simple_Admin_TableList from './component/Simple_Admin_TableList.vue'
 import Select from './component/item/select.vue'
 import Input from './component/item/input.js'
 import Text from './component/label/text.js'
+import DateText from './component/label/date.js'
+import DateTimeText from './component/label/datetime.js'
+
 import SelectText from './component/label/select-text.js'
 import Authbutton from './component/authbutton.js'
 import Table from './component/table.js'
-
+import Time from './component/item/time.vue'
+import DateTime from './component/item/datetime.vue'
 const components = [
     DataSource,
     Simple_Admin_Page,
@@ -17,9 +21,13 @@ const components = [
     Input,
     Select,
     Text,
+    DateText,
+    DateTimeText,
     SelectText,
     Authbutton,
-    Table
+    Table,
+    Time,
+    DateTime
 ]
 
 const init = function(callback, options={}) {

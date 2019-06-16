@@ -10,7 +10,7 @@ module.exports = {
   },*/
   entry: {
     //asa:'./src/index.js',
-    lib:'./src/lib.js',
+    'table-admin':'./src/lib.js',
     asa:'./src/main.js'
   },
   output: {

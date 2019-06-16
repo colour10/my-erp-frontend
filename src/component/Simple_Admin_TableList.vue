@@ -10,8 +10,8 @@
             </el-table-column>            
             <el-table-column :label="_label('caozuo')" :width="actionWidth" align="center" v-if="isAction">
                 <template v-slot="scope">
-                    <el-button size="mini" @click="handleClickUpdate(scope.$index, scope.row)" v-if="isButtonShow({action:'view', row:scope.row})" icon="el-icon-edit">{{_label('bianji')}}</el-button>
-                    <el-button size="mini" type="danger" @click="onClickDelete(scope.$index, scope.row)" v-if="isButtonShow({action:'delete', row:scope.row})" icon="el-icon-delete">{{_label('shanchu')}}</el-button>
+                    <el-button size="mini" @click="handleClickUpdate(scope.$index, scope.row)" v-if="isButtonShow({action:'view', row:scope.row})">{{_label('bianji')}}</el-button>
+                    <el-button size="mini" type="danger" @click="onClickDelete(scope.$index, scope.row)" v-if="isButtonShow({action:'delete', row:scope.row})">{{_label('shanchu')}}</el-button>
                     <el-button size="mini" @click="handleAction(scope,item)" v-for="item in actions" :key="item.label" v-if="isButtonShow({action:item.name, row:scope.row})">{{item.label}}</el-button>
                 </template>
             </el-table-column>

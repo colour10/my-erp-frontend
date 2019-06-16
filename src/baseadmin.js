@@ -1,0 +1,149 @@
+const Vue = require('vue')
+const VueRouter = require('vue-router') 
+const Vuex = require('vuex')
+
+import {getComponentSimple,getComponent} from './component/prop.js'
+
+import mixin from './component/mixin.js'
+Vue.mixin(mixin)
+
+if (typeof window !== 'undefined') {
+    //console.log("hello")
+    if(typeof(window.ASAP)=='undefined') {
+        window.ASAP = {}
+    }
+}
+
+import Simple_Admin_Page from './component/Simple_Admin_Page.vue'
+import Simple_Admin_TableList from './component/Simple_Admin_TableList.vue'
+import Simple_Select from './component/Simple_Select.vue'
+import Simple_Avatar from './component/Simple_Avatar.vue'
+import Simple_Album from './component/Simple_Album.vue'
+import globals from './component/globals.js'
+import Simple_Display_Input from './component/Simple_Display_Input.vue'
+import Simple_Float_Input from './component/Simple_Float_Input.vue'
+import CheckboxGroup from './component/CheckboxGroup.vue'
+import Table from './component/table.js'
+import Checkbox from './component/checkbox.js'
+import Button from './component/button.js'
+import RadioGroup from './component/radio-group.vue'
+import Multiple_Admin_Page from './component/multiple_admin_page.js'
+
+import ImagePreview from './component/image-preview.vue'
+import Creator from './component/develop/index.vue'
+
+
+const components = [
+    Simple_Admin_Page,
+    Multiple_Admin_Page,
+    Simple_Admin_TableList,
+    Simple_Select,
+    Simple_Avatar,
+    Simple_Display_Input,
+    Simple_Float_Input,
+    CheckboxGroup,
+    Table,
+    Checkbox,
+    Button,
+    Authbutton, 
+    RadioGroup,
+    ImagePreview
+]
+
+components.forEach(component => {
+    Vue.component(component.name, component);
+});
+
+const routes = [
+    {
+        path: '/', component: Home,
+        children:[
+            {path: '/order', component: Order},
+            {path: '/confirmorder', component: Confirmorder},
+            {path:'/warehousing', component:Warehousing},
+            {path: '/sales', component: Sales},
+            {path: '/user', component: User},
+            {path: '/group', component: Group},
+            {path: '/department', component: Department},
+            {path: '/productstock', component: Productstock},
+            {path: '/brand', component: Brand},
+            {path: '/brandgroup', component: Brandgroup},
+            {path: '/sizetop', component: Sizetop},
+            {path: '/product', component: Product},   
+            {path: '/requisition', component: Requisition},     
+            {path: '/user/modifypassword', component: ModifyPassword},    
+            {path: '/orderpayment', component: Orderpayment},    
+            {path: '/salesreceive', component: Salesreceive},   
+            {path: '/system', component: System}, 
+            {path: '/develop', component: Creator}, 
+
+            {path:'/ageseason', component:getComponentSimple("ageseason")},
+            {path:'/ulnarinch', component:getComponent("ulnarinch")},
+            {path:'/currency', component:getComponent("currency")},
+            {path:'/pricesetting', component:getComponentSimple("pricesetting")},
+            {path:'/price', component:getComponentSimple("price")},
+            {path:'/warehouse', component:getComponentSimple("warehouse")},
+            {path:'/country', component:getComponent("country")},
+            {path:'/materialnote', component:getComponent("materialnote")},
+            {path:'/materialstatus', component:getComponent("materialstatus")},
+            {path:'/material', component:getComponent("material")},   
+            {path:'/property', component:getComponent("property")},           
+            {path:'/member', component:getComponentSimple("member")},
+            {path:'/colortemplate', component:getComponent("colortemplate")},
+            {path:'/supplier', component:Supplier},
+            {path:'/saleport', component:getComponentSimple("saleport")},
+            {path:'/productmemo', component:getComponent("productmemo")},
+            {path:'/saletype', component:getComponent("saletype")},
+            {path:'/exchangerate', component:Exchangerate},
+            {path:'/materialnote', component:getComponent("materialnote")}
+        ]
+    },
+    {path: '/login/:action', component: Login},
+    {path: '/login', redirect: { path: '/login/login' }}
+]
+
+const router = new VueRouter({
+  mode:'history',//default-->hash
+    routes // (缩写) 相当于 routes: routes
+})
+
+const store = new Vuex.Store({
+  state: {
+      auth:{}
+  },
+  getters: {
+      is_login(state) {
+          var auth = state.auth
+          if( auth['id'] && auth['id']>0) {
+              return true;
+          }
+          else {
+              return false;
+          }
+      },
+      allow(state) {
+          return permission=>{
+              return true;
+              //return state.auth && state.auth.permissions && state.auth.permissions.findIndex(item=>item.name==permission)>=0
+          }
+      }
+  },
+  mutations:{
+      login(state,payload) {
+          state.auth = payload.auth;
+      },
+      logout(state,payload) {
+          state.auth = {}
+      }
+  }
+})
+
+//console.log(VueRouter)
+//console.log("+++++++++++++", VueRouter, router, router.resolve)
+const app = new Vue({
+    router,
+    store,
+    mounted:function(){
+      //console.log(this.$options.components)
+    }
+}).$mount('#app')
