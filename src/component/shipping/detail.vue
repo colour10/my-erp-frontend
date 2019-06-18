@@ -3,9 +3,7 @@
         <el-form ref="order-form" class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini" :rules="formRules" :inline-message="false" :show-message="false">
             <el-row :gutter="0">
                 <au-button auth="confirmorder-submit" type="primary" @click="saveOrder(1)" v-if="form.status!='2'">{{_label("baocun")}}</au-button>
-                <as-button type="primary" @click="showAttachment()">{{_label("fujian")}}</as-button>
                 <as-button type="primary" @click="_showDialog('order-dialog')" v-if="form.status!='2'">{{_label("daorudingdan")}}</as-button>
-                <!--<as-button type="primary" @click="showProduct()">{{_label("xuanzeshangpin")}}</as-button>-->
             </el-row>
             <el-row :gutter="0">
                 <el-col :span="8" style="width:600px">
@@ -34,7 +32,6 @@
                             <el-form-item :label="_label('zhidanren')">
                                 <sp-display-input :value="form.makestaff" source="user"></sp-display-input>
                             </el-form-item>
-                            
                         </el-col>
                         <el-col :span="4" style="width:300px">
                             <el-form-item :label="_label('fahuogang')">
@@ -139,31 +136,26 @@
                             <sp-select-text :value="row.supplierid" source="supplier"></sp-select-text>
                         </template>
                     </el-table-column>
-
                     <el-table-column :label="_label('dinghuoshuliang')" width="120" align="center">
                         <template v-slot="{row}">
                             {{orderstat[row.id].totalCount}}
                         </template>
                     </el-table-column>
-
                     <el-table-column :label="_label('querenshuliang')" width="120" align="center">
                         <template v-slot="{row}">
                             {{orderstat[row.id].totalConfirmCount}}
                         </template>
                     </el-table-column>
-
-                    <el-table-column :label="_label('fahuoshuliang')" width="120" align="center">
-                        <template v-slot="{row}">
-                            {{orderstat[row.id].totoaShippingCount}}
-                        </template>
-                    </el-table-column>
-
                     <el-table-column :label="_label('shengyushuliang')" width="120" align="center">
                         <template v-slot="{row}">
-                            {{orderstat[row.id].leftCount}}
+                            {{orderstat[row.id].leftCount-currentstat[row.id]}}
                         </template>
                     </el-table-column>
-
+                    <el-table-column :label="_label('fahuoshuliang')" width="120" align="center">
+                        <template v-slot="{row}">
+                            {{currentstat[row.id]||0}}
+                        </template>
+                    </el-table-column>
                     <el-table-column :label="_label('niandai')" width="90" align="center">
                         <template v-slot="{row}">
                             <sp-select-text :value="row.ageseason" source="ageseason"></sp-select-text>
@@ -198,77 +190,78 @@
                 </el-table>
                 <el-row :gutter="0">
                     <!-- <el-button type="warning" round @click="_showDialog('supplier-dialog')" size="mini">{{_label("piliangfenpei")}}</el-button> -->
-<!--                     <el-button type="warning" round @click="resetDistribute" size="mini">{{_label("piliangchongzhi")}}</el-button>
- -->                </el-row>
-                <el-table ref="tabledetail" :data="tabledata" stripe border style="width:100%;" @selection-change="onSelectionChange2">
-                    <el-table-column type="selection" :width="30" align="center"></el-table-column>
-                    <el-table-column align="center" width="60">
-                        <template v-slot="scope">
-                            <img :src="_fileLink(scope.row.product.picture)" style="width:50px;height:50px;" />
-                        </template>
-                    </el-table-column>
-                    <el-table-column :label="_label('dinghuokehu')" align="center" width="150">
-                        <el-table-column :label="_label('dinghuokehu')" align="center" width="150">
-                            <template v-slot="{row}">
-                                <sp-order-tip column="booking_label" :order="row.order"></sp-order-tip>
-                            </template>
-                            <template v-slot:header="{row}">
-                                <el-input v-model="form2.suppliercode1" size="mini" />
-                            </template>
-                        </el-table-column>
-                    </el-table-column>
-                    <el-table-column :label="_label('guojima')" align="center" width="200">
-                        <el-table-column :label="_label('guojima')" align="center" width="200">
+                    <!--                     <el-button type="warning" round @click="resetDistribute" size="mini">{{_label("piliangchongzhi")}}</el-button>
+ --></el-row>
+                <el-row :gutter="0" class="product clearpadding">
+                    <el-table ref="tabledetail" :data="orderdetails" stripe border style="width:100%;" @selection-change="onSelectionChange2" :show-summary="true" :summary-method="getSummary">
+                        <el-table-column type="selection" :width="30" align="center"></el-table-column>
+                        <el-table-column align="center" width="60">
                             <template v-slot="scope">
-                                <sp-product-tip :product="scope.row.product"></sp-product-tip>
-                            </template>
-                            <template v-slot:header="{row}">
-                                <el-input v-model="form2.keyword1" size="mini" />
+                                <img :src="_fileLink(scope.row.product.picture)" style="width:50px;height:50px;" />
                             </template>
                         </el-table-column>
-                    </el-table-column>
-                    <el-table-column prop="label" :label="_label('bizhong')" width="60" align="center">
-                        <template v-slot="{row}">
-                            {{row.product.factorypricecurrency_label}}
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="label" :label="_label('chuchangjia')" width="100" align="center">
-                        <template v-slot="{row}">
-                            {{row.product.factoryprice}}
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="label" :label="_label('chengjiaojia')" width="80" align="center">
-                        <template v-slot="{row}">
-                            <el-input v-model="row.price" size="mini"></el-input>
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="label" :label="_label('zongjia')" width="80" align="center">
-                        <template v-slot="{row}">
-                            {{ f(row.price*row.total) }}
-                        </template>
-                    </el-table-column>
-                    <el-table-column :label="_label('zhekoulv')" width="80" align="center">
-                        <template v-slot="{row}">
-                            <el-input v-model="row.discount" size="mini" />
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="number" :label="_label('dinggoushuliang')" align="center" :width="width">
-                        <template v-slot="{row}">
-                            <sp-sizecontent-confirm4 :ref="row.product.id+'-'+row.order.id" :columns="row.product.sizecontents" :head="row.form" :uniq="row.key" :data="[]" :key="row.key" @change="onNumberChange"></sp-sizecontent-confirm4>
-                        </template>
-                    </el-table-column>
-                    <el-table-column :label="_label('chanpinmingcheng')" align="center" width="200">
-                        <template v-slot="{row}">
-                            <el-popover placement="right" width="60" trigger="hover">
-                                <el-button size="mini" type="primary">{{_label("fuzhi")}}</el-button>
-                                <span slot="reference">{{row.product.getName()}}</span>
-                            </el-popover>
-                        </template>
-                    </el-table-column>
-                </el-table>
+                        <el-table-column :label="_label('dinghuokehu')" align="center" width="150">
+                            <el-table-column :label="_label('dinghuokehu')" align="center" width="150">
+                                <template v-slot="{row}">
+                                    <sp-order-tip column="booking_label" :order="row.order"></sp-order-tip>
+                                </template>
+                                <template v-slot:header="{row}">
+                                    <el-input v-model="form2.suppliercode1" size="mini" />
+                                </template>
+                            </el-table-column>
+                        </el-table-column>
+                        <el-table-column :label="_label('guojima')" align="center" width="200">
+                            <el-table-column :label="_label('guojima')" align="center" width="200">
+                                <template v-slot="scope">
+                                    <sp-product-tip :product="scope.row.product"></sp-product-tip>
+                                </template>
+                                <template v-slot:header="{row}">
+                                    <el-input v-model="form2.keyword1" size="mini" />
+                                </template>
+                            </el-table-column>
+                        </el-table-column>
+                        <el-table-column prop="label" :label="_label('bizhong')" width="60" align="center">
+                            <template v-slot="{row}">
+                                {{row.product.factorypricecurrency_label}}
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="label" :label="_label('chuchangjia')" width="100" align="center">
+                            <template v-slot="{row}">
+                                {{row.product.factoryprice}}
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="label" :label="_label('chengjiaojia')" width="80" align="center">
+                            <template v-slot="{row}">
+                                <el-input v-model="row.price" size="mini"></el-input>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="label" :label="_label('zongjia')" width="80" align="center">
+                            <template v-slot="{row}">
+                                {{ f(row.price*(count[row.key]) || 0) }}
+                            </template>
+                        </el-table-column>
+                        <el-table-column :label="_label('zhekoulv')" width="80" align="center">
+                            <template v-slot="{row}">
+                                <el-input v-model="row.discount" size="mini" />
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="number" :label="_label('dinggoushuliang')" align="center" :width="width">
+                            <template v-slot="{row}">
+                                <sp-sizecontent-confirm4 :ref="row.product.id+'-'+row.order.id" :columns="row.product.sizecontents" :head="row.form" :uniq="row.key" :data="getInit(row.key)" :key="row.key" @change="onNumberChange"></sp-sizecontent-confirm4>
+                            </template>
+                        </el-table-column>
+                        <el-table-column :label="_label('chanpinmingcheng')" align="center" width="200">
+                            <template v-slot="{row}">
+                                <el-popover placement="right" width="60" trigger="hover">
+                                    <el-button size="mini" type="primary" @click="copyit(row)">{{_label("fuzhi")}}</el-button>
+                                    <span slot="reference">{{row.product.getName()}}</span>
+                                </el-popover>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                </el-row>
             </el-col>
         </el-row>
-
         <sp-dialog ref="order-dialog">
             <el-form :model="form" label-width="85px" :inline="false" style="width:100%;" size="mini">
                 <el-row :gutter="0">
@@ -296,11 +289,11 @@ import { extend, copyTo, extendu } from "../object.js"
 import chain from "../chain.js"
 import orderMixin from "../mixins/order.js"
 import { Order, ProductDetail, promiseRunner } from "../model.js"
+import { debounce } from "../function.js"
 
 export default {
     name: 'asa-order-confirm-dialog',
-    components: {
-    },
+    components: {},
     mixins: [orderMixin],
     data() {
         let self = this;
@@ -338,12 +331,12 @@ export default {
                 transporttype: "",
                 paytype: "",
                 estimatedate: "",
-                maketime:"",
-                makestaff:"",
+                maketime: "",
+                makestaff: "",
                 id: "",
-                status:""
+                status: ""
             },
-            formimport:{
+            formimport: {
                 supplierid: "",
                 ageseason: ""
             },
@@ -355,54 +348,55 @@ export default {
                 suppliercode: ""
             },
             tabledata: [],
-            orderbrands:[],
-            orderbranddetails:[],
-            shippingdetails:[],
-            listdata:[],
-            selected:[],
-            selected2:[],
+            orderbrands: [],
+            orderbranddetails: [],
+            shippingdetails: [],
+            listdata: [],
+            selected: [],
+            selected2: [],
 
-            uniqkey:1
+            uniqkey: 1
         }
     },
     methods: {
         saveOrder(status) {
             //保存订单
-            var self = this
+            let self = this
 
-            var params = { form: self.form }
-            var array = []
+            let params = { form: self.form }
 
             let list = []
             let uniques = {};
             let check_result = true;
-            self.tabledata.forEach(item => {
-                if (check_result && item.source.form) {
-                    //检查重复发货的记录
-                    let check_key = item.price + '_' + item.source.product.id
-                    if (uniques[check_key]) {
-                        alert(self._label("chongfushezhi") + ":" + item.source.product.getGoodsCode())
-                        check_result = false
-                    } else {
-                        uniques[check_key] = true;
-                    }
+            self.listdata.forEach(({ key, sizecontentid, number }) => {
+                if (!check_result || number <= 0) {
+                    return
+                }
 
-                    chain(item.source.form).forEach((values, orderid) => {
-                        chain(values).forEach((row, sizecontentid) => {
-                            if (row.number > 0) {
-                                list.push({
-                                    orderid,
-                                    sizecontentid,
-                                    number: row.number,
-                                    productid: item.source.product.id,
-                                    discount: item.source.discountbrand,
-                                    price: item.price,
-                                    orderdetailsid: row.id,
-                                    id: row.shippingdetailid
-                                })
-                            }
-                        })
-                    })
+                let row = self.tabledata.find(item => item.key == key);
+                console.log(">>>", row, sizecontentid)
+                let orderbranddetail = self.orderbranddetails.find(item => item.orderbrandid == row.orderbrandid && item.sizecontentid == sizecontentid && item.productid == row.product.id && item.orderid == row.order.id)
+
+
+                let check_key = [row.price, row.product.id, row.orderbrandid, sizecontentid].join('-')
+                if (uniques[check_key]) {
+                    check_result = false
+                    alert(self._label("chongfushezhi") + ":" + row.product.getGoodsCode())
+                } else {
+                    list.push({
+                        orderid: row.order.id,
+                        sizecontentid,
+                        number: number,
+                        productid: row.product.id,
+                        discount: row.discount,
+                        price: row.price,
+                        orderdetailid: orderbranddetail.orderdetailid,
+                        orderbrandid: row.orderbrandid,
+                        orderbranddetailid: orderbranddetail.id,
+                        id: ""
+                    });
+
+                    uniques[check_key] = 1
                 }
             })
             params.list = list;
@@ -410,20 +404,16 @@ export default {
             if (!check_result) {
                 return
             }
-
-            self.validate().then(()=>{
+            self._log(JSON.stringify(params))
+            self.validate().then(() => {
                 self._log(JSON.stringify(params))
-                self._submit("/shipping/save", { params: JSON.stringify(params) }).then(function(res) {
-                });
-            })            
+                self._submit("/shipping/save", { params: JSON.stringify(params) }).then(function(res) {});
+            })
         },
-        showAttachment() {
-
-        },
-        onNumberChange(list){
+        onNumberChange(list) {
             let self = this
-            list.forEach(({ number, key, sizecontentid}) => {
-                let target = self.listdata.find(item => item.key == key && item.sizecontentid==sizecontentid)
+            list.forEach(({ number, key, sizecontentid }) => {
+                let target = self.listdata.find(item => item.key == key && item.sizecontentid == sizecontentid)
 
                 if (target) {
                     target.number = number
@@ -436,17 +426,29 @@ export default {
                 }
             })
         },
-        onChange({ row, form, total }) {
+        copyit(row) {
             let self = this
-            row.form = form
-            row.confirm_total = total;
+            let newrow = extend({}, row)
+            _private(self).appendRow(newrow)
+
+            return newrow;
+        },
+        getInit(searchkey) {
+            let self = this
+            let result = []
+            self.listdata.forEach(({ sizecontentid, key, number }) => {
+                if (key == searchkey) {
+                    result.push({ sizecontentid, number })
+                }
+            })
+            return result
         },
         onSelect(row) {
             let self = this
-            self._fetch("/orderbrand/searchorder", self.formimport ).then(function({data}) {
+            self._fetch("/orderbrand/searchorder", self.formimport).then(function({ data }) {
                 self._log(data)
-                let {orderbrands, orderbranddetails} = data;
-                if(orderbrands) {
+                let { orderbrands, orderbranddetails } = data;
+                if (orderbrands) {
                     let func = _private(self)
                     func.importOrderbrands(orderbrands)
                     func.importList(orderbranddetails)
@@ -455,27 +457,30 @@ export default {
                 self._hideDialog("order-dialog")
             });
         },
-        getSummary({columns, data}){
+        getSummary({ columns, data }) {
             const self = this
             const sums = []
-            /*columns.forEach((column, index) => {
+
+            data = self.orderdetails
+            columns.forEach((column, index) => {
                 //self._log(column, index)
-                if(index==0) {
+                if (index == 0) {
                     sums[index] = self._label("heji")
                     return
-                }
-                else if(index==4) {
-                    sums[index] = data.reduce((total, row)=>total+self.getRowFactoryTotal(row), 0)
-                }
-                else if(index==8) {
-                    sums[index] = data.reduce((total, row)=>total+row.source.confirm_total*1, 0)
-                }
-                else if(index==9) {
-                    sums[index] = data.reduce((total, row)=>total+self.getRowTotal(row), 0)
+                } else if (index == 7) {
+                    sums[index] = data.reduce((total, row) => {
+                        let count = self.count[row.key] || 0
+                        return self.f(total + row.price * count)
+                    }, 0)
+                } else if (index == 9) {
+                    sums[index] = data.reduce((total, row) => {
+                        let count = self.count[row.key] || 0
+                        return total + count
+                    }, 0)
                 }
             })
 
-            sums[1] = data.length*/
+            sums[2] = data.length
 
             return sums
         },
@@ -502,79 +507,136 @@ export default {
             let keyword = self.form2.keyword.toUpperCase()
             let suppliercode = self.form2.suppliercode.toUpperCase()
             let isMatch = _private(self).isMatch
-            return self.orderbranddetails.filter(item => selected[item.orderid] == 1).filter(item => {
+            return self.tabledata.filter(item => selected[item.orderbrandid] == 1).filter(item => {
                 return isMatch(keyword, item.product.getGoodsCode('')) && isMatch(suppliercode, item.order.booking_label.toUpperCase())
             })
         },
         width() {
             return this.tabledata.reduce((max, { product }) => Math.max(max, product.sizecontents.length), 1) * 51 + 75
         },
+        count() {
+            let self = this;
+            let result = {}
+            self.listdata.forEach(({ key, number }) => {
+                result[key] = result[key] || 0
+                result[key] += number * 1;
+            })
+            return result
+        },
+        countbyid() {
+            let self = this;
+            let result = {}
+            self.listdata.forEach(({ key, number }) => {
+                let row = self.tabledata.find(item => item.key == key);
+                key = row.orderbrandid
+                result[key] = result[key] || 0
+                result[key] += number * 1;
+            })
+            return result
+        },
         total_price() {
             let self = this;
             let total = 0
-            self.listdata.forEach(({key, number})=>{
-                let row = self.tabledata.find(item=>item.key==key);
+            self.listdata.forEach(({ key, number }) => {
+                let row = self.tabledata.find(item => item.key == key);
 
                 total += row.price * number;
             })
             return total
         },
-        tabledata_filter() {
-            return this.tabledata.filter(item => item.source.is_hidden == false)
-        },
         orderstat() {
             let self = this;
-            let result = {};            
+            let result = {};
 
-            self.orderbranddetails.forEach(detail=>{
-                if(!result[detail.orderbrandid]) {
+            self.orderbranddetails.forEach(detail => {
+                if (!result[detail.orderbrandid]) {
                     result[detail.orderbrandid] = {
-                        totalCount:0,
-                        totalConfirmCount:0,
-                        totoaShippingCount:0,
-                        brandCount:0,
-                        leftCount:0
+                        totalCount: 0,
+                        totalConfirmCount: 0,
+                        totoaShippingCount: 0,
+                        brandCount: 0,
+                        leftCount: 0
                     }
                 }
 
                 let row = result[detail.orderbrandid]
 
-                row.totalCount += detail.number*1;//客户定的总件数
-                row.totalConfirmCount += detail.confirm_number*1; //确认的件数
-                row.totoaShippingCount += detail.shipping_number*1; //发货的件数
-                row.leftCount = row.totalConfirmCount-row.totoaShippingCount; //剩余未发货的件数
+                row.totalCount += detail.number * 1; //客户定的总件数
+                row.totalConfirmCount += detail.confirm_number * 1; //确认的件数
+                row.totoaShippingCount += detail.shipping_number * 1; //发货的件数
+                row.leftCount = row.totalConfirmCount - row.totoaShippingCount; //剩余未发货的件数
             })
 
             //如果是修改订单，剩余数量应该把当前订单的数量加上去。            
-            self.shippingdetails.forEach(detail=>{
+            self.shippingdetails.forEach(detail => {
                 let row = result[detail.orderbrandid]
-                row.leftCount += detail.number*1;
+                row.leftCount += detail.number * 1;
             })
-
-            console.log(result, '=====')
 
             return result
         },
+        currentstat(){
+            let self = this
+
+            let result = {}
+            self.orderbrands.forEach(item=>{
+                result[item.id] = 0
+            })
+
+            self.listdata.forEach(({key, sizecontentid, number})=>{
+                let row = self.tabledata.find(item => item.key == key);
+                result[row.orderbrandid] += number*1
+            })
+
+            return result
+        }
+    },
+    watch: {
+        'form2.keyword1': function(newvalue) {
+            //console.log(newvalue)
+            this.copyKeywordDebounce()
+        },
+
+        'form2.suppliercode1': function(newvalue) {
+            //console.log(newvalue)
+            this.copySuppliercodeDebounce()
+        }
     },
     mounted: function() {
         let self = this;
         let route = self.$route;
         self._log(route.params)
 
-        if (route.params.id > 0) {
-            self._fetch("/shipping/load", { id: route.params.id, type:"shipping" }).then(function(res) {
-                //self._log("加载订单信息", res)
+        self.copyKeywordDebounce = debounce(function() {
+            self.form2.keyword = self.form2.keyword1
+        }, 1000, false)
 
-                self._setTitle(self._label("fahuodan") + ":" + self.form.id)
+        self.copySuppliercodeDebounce = debounce(function() {
+            self.form2.suppliercode = self.form2.suppliercode1
+        }, 1000, false)
+
+
+        if (route.params.id > 0) {
+            self._fetch("/shipping/load", { id: route.params.id, type: "shipping" }).then(async function({ data }) {
+                
+
+                let { form, orderbrands, orderbranddetails, shippingdetails } = data;
+                let func = _private(self)
+
+                copyTo(form, self.form)
+                func.importOrderbrands(orderbrands)
+                await func.importList(orderbranddetails)
+                func.importShippingList(shippingdetails)
+                self._setTitle(self._label("fahuodan") + ":" + self.form.orderno)
             })
         } else {
             self._setTitle(self._label("shengchengfahuodan"))
         }
 
-        self.initRules(Rules=>{
+        self.initRules(Rules => {
             let _label = self._label
             return {
-                warehouseid: Rules.id({ required: true, message: _label("8000"), label:_label("daohuocangku") })
+                warehouseid: Rules.id({ required: true, message: _label("8000"), label: _label("daohuocangku") })
             }
         })
     }
@@ -583,6 +645,9 @@ export default {
 const _private = function(self) {
 
     const _this = {
+        isMatch(keyword, search) {
+            return keyword.length > 0 ? search.toUpperCase().indexOf(keyword) >= 0 : true
+        },
         async convert(list) {
             let result = {}
             list.forEach(item => {
@@ -607,9 +672,9 @@ const _private = function(self) {
                         total: item.number * 1,
                         form,
                         confirm_form,
-                        orderbrandid:item.orderbrandid,
-                        price:"",
-                        is_auto:true
+                        orderbrandid: item.orderbrandid,
+                        price: "",
+                        is_auto: true
                     }
                 }
             })
@@ -631,38 +696,87 @@ const _private = function(self) {
             })
 
             return await Promise.all(promises)
-        }, 
+        },
+        appendRow(row) {
+            row.key = self.uniqkey
+            self.tabledata.push(row)
+            self.uniqkey++;
+        },
         async importList(list) {
             let newlist = []
-            list.forEach(detail=>{
-                let target = self.orderbranddetails.find(item=>item.id==detail.id)
-                if(!target) {
+            list.forEach(detail => {
+                let target = self.orderbranddetails.find(item => item.id == detail.id)
+                if (!target) {
                     self.orderbranddetails.push(detail)
                     newlist.push(detail)
                 }
             })
             let result = await _this.convert(newlist)
-            result.forEach(item=>{
-                item.key = self.uniqkey
-                item.price = self.f(item.product.factoryprice*item.discount)
-                self.tabledata.push(item)
-
-                self.uniqkey++;
+            result.forEach(item => {
+                item.price = self.f(item.product.factoryprice * item.discount)
+                _this.appendRow(item)
             })
         },
         importOrderbrands(orderbrands) {
-            orderbrands.forEach(orderbrand=>{
-                let row = self.orderbrands.find(item=>item.id==orderbrand.id)
-                if(!row) {
+            orderbrands.forEach(orderbrand => {
+                let row = self.orderbrands.find(item => item.id == orderbrand.id)
+                if (!row) {
                     self.orderbrands.push(orderbrand)
 
-                    extendu(self.form, orderbrand, function({target, key, value}){
+                    extendu(self.form, orderbrand, function({ target, key, value }) {
                         console.log(key, value)
-                        return value && target[key]=="" && (key=='supplierid' || key=='ageseason' || key=='seasontype' || key=='bussinesstype' || key=='currency')
+                        return value && target[key] == "" && (key == 'supplierid' || key == 'ageseason' || key == 'seasontype' || key == 'bussinesstype' || key == 'currency')
                     })
                 }
-                
+
             })
+        },
+        importShippingList(list) {
+            self.shippingdetails = list
+
+            let hash = {}
+            let table = {};
+            list.forEach(item => {
+                let row = self.tabledata.find(row => {
+                    return row.orderbrandid == item.orderbrandid && row.product.id == item.productid && row.order.id == item.orderid
+                });
+
+                let key = item.productid + "-" + item.orderbrandid + '-' + item.price
+                if (table[key]) {
+                    
+                    self.listdata.push({
+                        key: table[key],
+                        sizecontentid: item.sizecontentid,
+                        number: item.number
+                    })
+                } else {
+                    if(hash[item.productid + "-" + item.orderbrandid]) {
+                        let newrow = self.copyit(row)
+                        newrow.price = item.price
+                        newrow.discount = item.discount
+                        self.listdata.push({
+                            key: newrow.key,
+                            sizecontentid: item.sizecontentid,
+                            number: item.number
+                        })
+                        table[key] = newrow.key
+                    }
+                    else {
+                        row.price = item.price
+                        row.discount = item.discount
+                        self.listdata.push({
+                            key: row.key,
+                            sizecontentid: item.sizecontentid,
+                            number: item.number
+                        })
+
+                        table[key] = row.key
+                        hash[item.productid + "-" + item.orderbrandid] = 1
+                    }                    
+                }
+            })
+
+            console.log(table, hash, 'tttt')
         }
     }
 
