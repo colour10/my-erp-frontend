@@ -27,7 +27,7 @@
                 <el-input :value="getBodyRowTotal(row.supplier.supplierid)" style="width:50px" size="mini":disabled="true" class="inputsum" v-if="row.type=='body'"></el-input>
                 <el-input :value="getLineTotal(row.form)" style="width:50px" size="mini" :disabled="true" class="linetop" v-if="row.type=='foot'"></el-input>
             </template>
-        </el-table-column>        
+        </el-table-column>
     </el-table>
 </div>
 </template>

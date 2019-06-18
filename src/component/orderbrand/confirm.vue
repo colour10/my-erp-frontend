@@ -37,7 +37,7 @@
                 </el-col>
                 <el-col :span="4" style="width:300px">
                     <el-form-item :label="_label('jine')">
-                        <el-input placeholder="" v-model="total_price" class="productcurrency" disabled>
+                        <el-input :value="stat.total_discount_price" class="productcurrency" disabled>
                             <simple-select source="currency" :clearable="false" v-model="form.currency" slot="prepend" disabled>
                             </simple-select>
                         </el-input>
@@ -165,7 +165,8 @@ export default {
                 property: { required: true, message: _label("8000") }
             },
             tabledata: [],
-            listdata: []
+            listdata: [],
+            details:[]
         }
     },
     methods: {
@@ -177,42 +178,27 @@ export default {
             //保存订单
             let self = this
 
-            //self.validate(function() {
+            let func = _private(self)
+
             let params = {
                 form: extend({}, self.form)
             }
 
             let list = []
-            self.tabledata.forEach(item => {
-                if (item.form) {
-                    chain(item.form).forEach((values, orderid) => {
-                        chain(values).forEach((row, sizecontentid) => {
-                            if (row.number > 0) {
-                                list.push({
-                                    orderid,
-                                    sizecontentid,
-                                    number:row.number,
-                                    productid: item.product.id,
-                                    discountbrand: item.discountbrand,
-                                    id:row.id
-                                })
-                            }
-                        })
+            self.listdata.forEach(item => {
+                if(item.number>0) {
+                    list.push({
+                        id:func.getOrderbrandDetailId(item.product.id, item.order.id, item.sizecontentid),
+                        number:item.number
                     })
-                }
+                }                
             })
             params.list = list;
 
             self._log(params)
             self._submit("/orderbrand/confirm", { params: JSON.stringify(params) }).then(function(res) {
-                self._log(res)
-                let data = res.data
-                if (data.id) {
-                    copyTo(data, self.form)
-                }
-            });
-            //})
-
+                
+            }).catch(()=>{});
         },
         appendRow(row) {
             const self = this;
@@ -319,8 +305,12 @@ export default {
 
                 let func = _private(self)
                 func.importList(data.list)
+
+                self._setTitle(self._label("querenwaibudingdan")+':' + self.form.orderno)
             }  
         })
+
+        self._setTitle(self._label("querenwaibudingdan"))
     }
 }
 
@@ -389,12 +379,17 @@ const _private = function(self){
             return chain(hashtable).array()
         }, 
         async importList(list) {
+            self.details = list;
             let result = await _this.convert(list)
             result.forEach(item=>{
-
                 self.tabledata.push(item)
             })
-        }
+        },
+        getOrderbrandDetailId(productid, orderid, sizecontentid){
+            let row = self.details.find(item => item.productid == productid && item.orderid == orderid && item.sizecontentid == sizecontentid )
+            //self._log(row, self.orderlist, productid, orderid, sizecontentid)
+            return row ? row.id : 0;     
+        },
     }
     return _this
 }

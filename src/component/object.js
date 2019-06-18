@@ -32,11 +32,21 @@ const copyTo = function(fromObj, target) {
     });
 }
 
-export {isPromise,toArray,copyTo}
+const extendu = function(target, source, callback){
+    Object.keys(source).forEach(function(key) {
+        if(callback({target, key, value:source[key]})){
+            target[key] = source[key]
+        }
+    })
+    
+}
+
+export { isPromise, toArray, copyTo, extendu }
 
 export default {
     extract,
     extend,
     toArray,
-    copyTo
+    copyTo,
+    extendu
 }

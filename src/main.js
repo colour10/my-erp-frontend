@@ -48,6 +48,7 @@ import Asa_Sizecontent_Input from './component/asa/Asa_Sizecontent_Input.vue'
 import Asa_Sizecontent_Confirm from './component/asa/Asa_Sizecontent_Confirm.vue'
 import Asa_Sizecontent_Confirm2 from './component/asa/Asa_Sizecontent_Confirm2.vue'
 import Asa_Sizecontent_Confirm3 from './component/asa/Asa_Sizecontent_Confirm3.vue'
+import Asa_Sizecontent_Confirm4 from './component/asa/Asa_Sizecontent_Confirm4.vue'
 
 import Asa_Order_Tip from './component/asa/Asa_Order_Tip.vue'
 import Asa_Product_Tip from './component/asa/Asa_Product_Tip.vue'
@@ -133,7 +134,8 @@ const components = [
     Toggle_Input,
     SpProductInfo,
     Asa_Sizecontent_Confirm2,
-    Asa_Sizecontent_Confirm3
+    Asa_Sizecontent_Confirm3,
+    Asa_Sizecontent_Confirm4
     //SelectTable
 ]
 
