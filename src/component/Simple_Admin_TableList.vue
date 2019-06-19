@@ -29,7 +29,7 @@
                     <auth :auth="authname||controller">
                         <as-button size="mini" type="danger" @click="onClickDelete(scope.$index, scope.row)" v-if="isDeletable(scope.row)">{{_label('shanchu')}}</as-button>
                     </auth>
-                    <as-button size="mini" @click="handleAction(scope,item)" v-for="item in actions" :key="item.label" :type="item.type" v-if="isShow(item)" style="margin-right:3px">{{item.label}}</as-button> 
+                    <as-button size="mini" @click="handleAction(scope,item)" v-for="item in actions" :key="item.label" :type="buttonType(item, scope.row)" v-if="isShow(item,scope.row)" style="margin-right:3px">{{item.label}}</as-button> 
                 </template>
             </el-table-column>
         </el-table>
@@ -131,11 +131,19 @@ export default {
             this.pagination.current = current
             this.loadList()
         },
-        isShow(item) {
+        isShow(item, row) {
             if (item.isShow) {
-                return item.isShow(this)
+                return item.isShow(this, row)
             } else {
                 return true;
+            }
+        },
+        buttonType(item, row) {
+            if(typeof(item.type)=='function') {
+                return item.type({row, button:item})
+            }
+            else {
+                return item.type
             }
         },
         handleAction({ $index, row }, item) {

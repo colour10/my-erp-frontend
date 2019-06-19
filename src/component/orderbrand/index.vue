@@ -47,7 +47,7 @@ export default {
                     } }
                 ],
                 actions:[
-                    { label: _label("queren"), handler:self.toCreateConfirm},
+                    { label: _label("queren"), handler:self.toCreateConfirm, type:({row})=>row.status==1 ? "" : "info" },
                     { label:_label("shanchu"), type:"danger", handler:function({row}){
                         self._remove("/orderbrand/delete", { id: row.id }).then(function(result) {
                             if(result){

@@ -15,13 +15,13 @@ import globals, { _label } from './globals.js'
 const _func = function(self) {
     return {
         isInclude(value) {
-            self._log(self.data)
+            //self._log(self.data)
             return self.data.findIndex(item=>item.id==value)>=0
         },
         filterValue() {
 
             if(self.multiple==false) {
-                self._log("filterValue", self.multiple, self.currentValue )  
+                //self._log("filterValue", self.multiple, self.currentValue )  
                 if(!this.isInclude(self.currentValue)) {
                     self.currentValue = ""
                 }
@@ -35,7 +35,7 @@ const _func = function(self) {
                 })
 
                 self.currentValue = newarray    
-                self._log(newarray)            
+                //self._log(newarray)            
             }
         }
     }
@@ -108,7 +108,7 @@ export default {
          
                     self.getDataSource().getData(function(data) {
                         //self._log("load", data)
-                        self._log("++++++++++++++",self.source)
+                        //self._log("++++++++++++++",self.source)
                         self.data = []
                         self.keyindexes = {}
                         data.forEach(item => self.push(item))
@@ -119,7 +119,7 @@ export default {
                         }
                     })
                 } else {
-                    self._log("mounted")
+                    //self._log("mounted")
                     self.load(self.parentid).then(()=>{
                         if(callback){
                             callback()
@@ -174,11 +174,11 @@ export default {
             //self._log("重新加载下拉框数据", self.source)
             
             return new Promise(resolve=>{
-                self._log("++++++++++++++",self.source)
+                //self._log("++++++++++++++",self.source)
                 self.getDataSource().getSourceByParent(value).then(function(dataSource) {
-                    self._log("------------",self.source)
+                    //self._log("------------",self.source)
                     dataSource.getData(data=>{
-                        self._log("++++++++++++++------------",self.source)
+                        //self._log("++++++++++++++------------",self.source)
                         self.data = []
                         self.keyindexes = {}
                         data.forEach(item => self.push(item))
@@ -316,7 +316,7 @@ export default {
         let self = this;
         self.setValue(self.select_value)
         self.getDataSource().emitter.on("change", self.onDataSourceChange)
-        self._log("绑定监听事件",self.source)
+        //self._log("绑定监听事件",self.source)
         self.onDataSourceChange(function(){
             self.$emit("inited")
         })        
@@ -325,7 +325,7 @@ export default {
 
     },
     beforeDestroy:function(){
-        this._log("移除监听事件",this.source)
+        //this._log("移除监听事件",this.source)
         this.getDataSource().emitter.off("change", this.onDataSourceChange)
     }
 }

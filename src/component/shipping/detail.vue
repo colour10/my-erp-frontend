@@ -167,11 +167,11 @@
                         </template>
                     </el-table-column>
                     <el-table-column prop="discount" :label="_label('zhekoulv')" width="90" align="center"> </el-table-column>
-                    <el-table-column :label="_label('xingbie')" width="90" align="center">
+                    <!-- <el-table-column :label="_label('xingbie')" width="90" align="center">
                         <template v-slot="{row}">
                             <sp-select-text :value="row.genders" source="gender"></sp-select-text>
                         </template>
-                    </el-table-column>
+                    </el-table-column> -->
                     <!-- <el-table-column :label="_label('pinpai')" width="150" align="center">
                         <template v-slot="{row}">
                             <sp-select-text :value="row.brandids" source="brand"></sp-select-text>
@@ -192,7 +192,7 @@
                     <!-- <el-button type="warning" round @click="_showDialog('supplier-dialog')" size="mini">{{_label("piliangfenpei")}}</el-button> -->
                     <!--                     <el-button type="warning" round @click="resetDistribute" size="mini">{{_label("piliangchongzhi")}}</el-button>
  --></el-row>
-                <el-row :gutter="0" class="product clearpadding">
+                <el-row :gutter="0" class="product clearpadding" style="margin-top:3px">
                     <el-table ref="tabledetail" :data="orderdetails" stripe border style="width:100%;" @selection-change="onSelectionChange2" :show-summary="true" :summary-method="getSummary">
                         <el-table-column type="selection" :width="30" align="center"></el-table-column>
                         <el-table-column align="center" width="60">
@@ -628,6 +628,7 @@ export default {
                 await func.importList(orderbranddetails)
                 func.importShippingList(shippingdetails)
                 self._setTitle(self._label("fahuodan") + ":" + self.form.orderno)
+                self.$refs.table.toggleAllSelection()
             })
         } else {
             self._setTitle(self._label("shengchengfahuodan"))
@@ -655,14 +656,10 @@ const _private = function(self) {
                 let key = item.productid + '-' + item.orderbrandid
                 if (result[key]) {
                     result[key]['form'][item.sizecontentid] = item.confirm_number - item.shipping_number
-                    result[key]['confirm_form'][item.sizecontentid] = ""
                     result[key].total += item.confirm_number - item.shipping_number
                 } else {
                     let form = {}
                     form[item.sizecontentid] = item.confirm_number - item.shipping_number
-
-                    let confirm_form = {}
-                    confirm_form[item.sizecontentid] = ""
 
                     result[key] = {
                         key,
@@ -671,7 +668,6 @@ const _private = function(self) {
                         discount: item.discount,
                         total: item.number * 1,
                         form,
-                        confirm_form,
                         orderbrandid: item.orderbrandid,
                         price: "",
                         is_auto: true
@@ -724,7 +720,7 @@ const _private = function(self) {
                     self.orderbrands.push(orderbrand)
 
                     extendu(self.form, orderbrand, function({ target, key, value }) {
-                        console.log(key, value)
+                        //console.log(key, value)
                         return value && target[key] == "" && (key == 'supplierid' || key == 'ageseason' || key == 'seasontype' || key == 'bussinesstype' || key == 'currency')
                     })
                 }
@@ -732,11 +728,17 @@ const _private = function(self) {
             })
         },
         importShippingList(list) {
-            self.shippingdetails = list
+            //self.shippingdetails = list
 
             let hash = {}
             let table = {};
             list.forEach(item => {
+                //不显示入库操作时候，新追加的无订单的商品
+                if(item.orderid<=0) {
+                    return 
+                }
+                self.shippingdetails.push(item)
+
                 let row = self.tabledata.find(row => {
                     return row.orderbrandid == item.orderbrandid && row.product.id == item.productid && row.order.id == item.orderid
                 });
@@ -776,7 +778,7 @@ const _private = function(self) {
                 }
             })
 
-            console.log(table, hash, 'tttt')
+            //console.log(table, hash, 'tttt')
         }
     }
 

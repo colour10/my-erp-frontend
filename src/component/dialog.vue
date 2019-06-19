@@ -1,5 +1,5 @@
 <template>
-    <el-dialog :title="dialogTitle" :visible.sync="visible" :center="true" :width="width" :modal="false">
+    <el-dialog :title="dialogTitle" :visible.sync="visible" :center="true" :width="dialogWidth+'px'" :modal="false">
         <slot name="default"></slot>
     </el-dialog>
 </template>
@@ -10,13 +10,14 @@ export default {
     props:{
         title:{
             default:""
-        }
+        },
+        width:{}
     },
     data() {
         return {
             visible:false,
             dialogTitle:this.title,
-            width:"500px"
+            dialogWidth:this.width || 500
         };
     },
     methods: {
@@ -27,7 +28,7 @@ export default {
             }
 
             if(option.width) {
-                self.width = option.width
+                self.dialogWidth = option.width
             } 
 
             self.visible = true

@@ -91,6 +91,7 @@ import Supplier from './component/supplier/index.vue'
 import Exchangerate from './component/exchangerate/index.vue'
 import PriceSetting from './component/pricesetting/index.vue'
 import SpProductInfo from './component/asa/sp-product-info.vue'
+import ProductSearchForm from './component/asa/product-search-form.vue'
 //import SelectTable from './component/select-table.vue'
 
 const components = [
@@ -135,8 +136,8 @@ const components = [
     SpProductInfo,
     Asa_Sizecontent_Confirm2,
     Asa_Sizecontent_Confirm3,
-    Asa_Sizecontent_Confirm4
-    //SelectTable
+    Asa_Sizecontent_Confirm4,
+    ProductSearchForm
 ]
 
 components.forEach(component => {

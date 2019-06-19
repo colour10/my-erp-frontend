@@ -5,7 +5,7 @@ import {ASAP} from "./globals.js"
 
 const host = ASAP.host;
 
-const httpGet = function(url, {enableCache=true}={}) {
+const doGet = function(url, {enableCache=true}={}) {
     //console.log(window.ASAP)
     if(ASAP.$session_id && ASAP.dev==true) {
         let session_id = ASAP.$session_id
@@ -46,17 +46,44 @@ const httpGet = function(url, {enableCache=true}={}) {
     })    
 }
 
-const httpPost = function(url, params, callback) {
+const httpGet = async function(url, options={}) {
+    //console.log(url)
+    for(let i=0;i<3;i++) {
+        try {
+            return await doGet(url, options)
+        }
+        catch(e) {
+            console.log("httpGet Exception", e)
+        }
+    }
+    
+    throw "http get error."
+}
+
+const doPost = function(url, params) {
     if(ASAP.$session_id && ASAP.dev==true) {
         params._session_id = ASAP.$session_id
     }
 
     return new Promise((resolve, reject)=>{
-        $.post(host+url, params, resolve,"json").error(function(xhr,errorText,errorType){
+        $.post(host+url, params, resolve, "json").error(function(xhr,errorText,errorType){
             reject()
         })
     })
     
+}
+
+const httpPost = async function(url, params) {
+    for(let i=0;i<3;i++) {
+        try {
+            return await doPost(url, params)
+        }
+        catch(e) {
+            console.log("httpPost Exception", e)
+        }
+    }
+    
+    throw "http post error."
 }
 
 export { httpGet, httpPost, host}

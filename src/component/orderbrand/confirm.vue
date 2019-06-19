@@ -2,7 +2,7 @@
     <div>
         <el-form class="order-form" :model="form" label-width="82px" :inline="true" style="width:100%;" size="mini">
             <el-row :gutter="0">
-                <au-button auth="confirmorder-submit" type="primary" @click="saveOrder(1)">{{_label("baocun")}}</au-button>
+                <au-button auth="confirmorder-submit" type="primary" @click="saveOrder" v-if="form.status!=2">{{_label("baocun")}}</au-button>
             </el-row>
             <el-row :gutter="0">
                 <el-col :span="4" style="width:300px">
@@ -156,6 +156,7 @@ export default {
                 total: "",
                 discountbrand: "",
                 bussinesstype: "",
+                status:"",
                 id: ""
             },
             rules: {
@@ -188,7 +189,7 @@ export default {
             self.listdata.forEach(item => {
                 if(item.number>0) {
                     list.push({
-                        id:func.getOrderbrandDetailId(item.product.id, item.order.id, item.sizecontentid),
+                        id:func.getOrderbrandDetailId(item.productid, item.orderid, item.sizecontentid),
                         number:item.number
                     })
                 }                
@@ -212,7 +213,7 @@ export default {
         getTotalCount(product){
             let total = 0
             this.listdata.forEach(item=>{
-                if(item.product==product && item.number>0) {
+                if(item.productid==product.id && item.number>0) {
                     total += item.number*1
                 }
             })
@@ -222,13 +223,20 @@ export default {
             let self = this
             
             list.forEach(item=>{
-                let row = self.listdata.find(detail=>detail.order==item.order && detail.product==item.product && detail.sizecontentid==item.sizecontentid)
+                let row = self.listdata.find(detail=>detail.orderid==item.order.id && detail.productid==item.product.id && detail.sizecontentid==item.sizecontentid)
                 if(row) {
                     row.number = item.number
                 }
                 else {
-                    self.listdata.push(item)
-                }                
+                    self.listdata.push({
+                        sizecontentid:item.sizecontentid,
+                        productid:item.product.id,
+                        orderid:item.order.id,
+                        number:item.number,
+                        product:item.product,
+                        discount:item.discount
+                    })
+                }
             })
         },
         getSummary({columns, data}){
@@ -383,6 +391,19 @@ const _private = function(self){
             let result = await _this.convert(list)
             result.forEach(item=>{
                 self.tabledata.push(item)
+            })
+
+            //初始化listdata
+            list.forEach(detail=>{
+                let row = self.tabledata.find(item=>item.productid==detail.productid)
+                self.listdata.push({
+                    number:detail.confirm_number,
+                    sizecontentid:detail.sizecontentid,
+                    productid:detail.productid,
+                    orderid:detail.orderid,
+                    product:row.product,
+                    discount:detail.discount
+                })
             })
         },
         getOrderbrandDetailId(productid, orderid, sizecontentid){
