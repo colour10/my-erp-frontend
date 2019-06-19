@@ -161,7 +161,7 @@ import globals, { _label } from "../globals.js"
 import { ProductDetail } from "../model.js"
 import chain from "../chain.js"
 import { extend, copyTo } from "../object.js"
-import detailConvert from "./order-detail.js"
+import detailConvert from "../asa/order-detail.js"
 import orderMixin from "../mixins/order.js"
 
 const props = {
@@ -438,7 +438,7 @@ export default {
                         results.forEach(item => self.appendRow(item))
                     })
                 }
-                self._setTitle(self._label("dingdan") + self.form.id)
+                self._setTitle(self._label("dingdan") + ":" +self.form.orderno)
             })
             label = "loading..."
         }

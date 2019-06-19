@@ -292,7 +292,7 @@ import { Order, ProductDetail, promiseRunner } from "../model.js"
 import { debounce } from "../function.js"
 
 export default {
-    name: 'asa-order-confirm-dialog',
+    name: 'sp-shippingdetail',
     components: {},
     mixins: [orderMixin],
     data() {
@@ -464,7 +464,7 @@ export default {
             data = self.orderdetails
             columns.forEach((column, index) => {
                 //self._log(column, index)
-                if (index == 0) {
+                if (index == 1) {
                     sums[index] = self._label("heji")
                     return
                 } else if (index == 7) {

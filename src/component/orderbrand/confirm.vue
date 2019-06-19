@@ -2,7 +2,8 @@
     <div>
         <el-form class="order-form" :model="form" label-width="82px" :inline="true" style="width:100%;" size="mini">
             <el-row :gutter="0">
-                <au-button auth="confirmorder-submit" type="primary" @click="saveOrder" v-if="form.status!=2">{{_label("baocun")}}</au-button>
+                <au-button auth="confirmorder-submit" type="primary" @click="saveOrder" v-if="form.status!=2">{{_label("querenwaibudingdan")}}</au-button>
+                <au-button auth="confirmorder-submit" type="danger" @click="cancel" v-if="form.status==2">{{_label("quxiaoqueren")}}</au-button>
             </el-row>
             <el-row :gutter="0">
                 <el-col :span="4" style="width:300px">
@@ -179,6 +180,10 @@ export default {
             //保存订单
             let self = this
 
+            if(!confirm(self._label('tip-queren'))) {
+                return 
+            }
+
             let func = _private(self)
 
             let params = {
@@ -198,7 +203,19 @@ export default {
 
             self._log(params)
             self._submit("/orderbrand/confirm", { params: JSON.stringify(params) }).then(function(res) {
-                
+                _private(self).loadDetail()
+            }).catch(()=>{});
+        },
+        cancel() {
+            //取消确认
+            let self = this
+
+            if(!confirm(self._label('tip-quxiaoqueren'))) {
+                return 
+            }
+
+            self._submit("/orderbrand/cancel", { id: self.form.id }).then(function(res) {
+                _private(self).loadDetail()
             }).catch(()=>{});
         },
         appendRow(row) {
@@ -292,7 +309,7 @@ export default {
 
                     result.total_count += number;
                     result.total_discount_price += self.f(item.product.factoryprice * item.discount * number);
-                    console.log(item.product.factoryprice , item.discount , number)
+                    //console.log(item.product.factoryprice , item.discount , number)
 
                     let row = result.group[item.product.id] || 0
                     result.group[item.product.id] = row + number
@@ -300,30 +317,33 @@ export default {
                 
             })
 
-            console.log(result, '===')
+            //console.log(result, '===')
             return result
         }
     },
     mounted: function() {
         let self = this;
-        let params = self.$route.params;
-        self._fetch("/orderbrand/load", { ids: params.id }).then(async function({ data }) {            
-            if(data.orderbrands && data.orderbrands.length>0) {
-                extend(self.form, data.orderbrands[0])
-
-                let func = _private(self)
-                func.importList(data.list)
-
-                self._setTitle(self._label("querenwaibudingdan")+':' + self.form.orderno)
-            }  
-        })
-
+        
+        _private(self).loadDetail()
         self._setTitle(self._label("querenwaibudingdan"))
     }
 }
 
 const _private = function(self){
     const _this = {
+        loadDetail(){
+            let params = self.$route.params;
+            self._fetch("/orderbrand/load", { ids: params.id }).then(async function({ data }) {            
+                if(data.orderbrands && data.orderbrands.length>0) {
+                    extend(self.form, data.orderbrands[0])
+
+                    let func = _private(self)
+                    func.importList(data.list)
+
+                    self._setTitle(self._label("querenwaibudingdan")+':' + self.form.orderno)
+                }  
+            })
+        },
         async convert(list) {
             let result = {}
             list.forEach(item => {
@@ -389,11 +409,14 @@ const _private = function(self){
         async importList(list) {
             self.details = list;
             let result = await _this.convert(list)
+
+            self.tabledata = []
             result.forEach(item=>{
                 self.tabledata.push(item)
             })
 
             //初始化listdata
+            self.listdata = []
             list.forEach(detail=>{
                 let row = self.tabledata.find(item=>item.productid==detail.productid)
                 self.listdata.push({

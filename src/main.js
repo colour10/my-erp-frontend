@@ -22,15 +22,15 @@ import Simple_Avatar from './component/Simple_Avatar.vue'
 import Simple_Album from './component/Simple_Album.vue'
 import globals,{config} from './component/globals.js'
 //import Asa_BrandTab from './component/asa/Asa_BrandTab.vue'
-import Asa_Order_Dialog from './component/asa/Asa_Order_Dialog.vue'
+import OrderCreate from './component/order/create.vue'
 import Asa_Select_Product_Dialog from './component/asa/Asa_Select_Product_Dialog.vue'
 import Asa_Sales_Dialog from './component/asa/Asa_Sales_Dialog.vue'
 import Simple_Display_Input from './component/Simple_Display_Input.vue'
 import Simple_Float_Input from './component/Simple_Float_Input.vue'
 //import Asa_Order_Confirm_Dialog from './component/asa/Asa_Order_Confirm_Dialog.vue'
-import Asa_Select_Order_Detail_Dialog from './component/asa/Asa_Select_Order_Detail_Dialog.vue'
+//import Asa_Select_Order_Detail_Dialog from './component/asa/Asa_Select_Order_Detail_Dialog.vue'
 import Asa_Productstock_Search from './component/asa/Asa_Productstock_Search.vue'
-import Asa_Warehousing_Dialog from './component/asa/Asa_Warehousing_Dialog.vue'
+//import Asa_Warehousing_Dialog from './component/asa/Asa_Warehousing_Dialog.vue'
 import Asa_Product from './component/asa/Asa_Product.vue'
 import Asa_Brandgroupchild_Select from './component/asa/Asa_Brandgroupchild_Select.vue'
 import CheckboxGroup from './component/CheckboxGroup.vue'
@@ -45,7 +45,6 @@ import RadioGroup from './component/radio-group.vue'
 import Multiple_Admin_Page from './component/multiple_admin_page.js'
 import Asa_Color_Select from './component/asa/Asa_Color_Select.vue'
 import Asa_Sizecontent_Input from './component/asa/Asa_Sizecontent_Input.vue'
-import Asa_Sizecontent_Confirm from './component/asa/Asa_Sizecontent_Confirm.vue'
 import Asa_Sizecontent_Confirm2 from './component/asa/Asa_Sizecontent_Confirm2.vue'
 import Asa_Sizecontent_Confirm3 from './component/asa/Asa_Sizecontent_Confirm3.vue'
 import Asa_Sizecontent_Confirm4 from './component/asa/Asa_Sizecontent_Confirm4.vue'
@@ -65,7 +64,6 @@ import Home from './component/home/index.vue'
 import Order from './component/order/index.vue'
 import Orderbrand from './component/orderbrand/index.vue'
 import OrderbrandCreate from './component/orderbrand/create.vue'
-//import OrderbrandDetail from './component/orderbranddetail/index.vue'
 import OrderbrandConfirm from './component/orderbrand/confirm.vue'
 import User from './component/user/index.vue'
 import Group from './component/group/index.vue'
@@ -76,8 +74,8 @@ import Sizetop from './component/sizetop/index.vue'
 import Product from './component/product/index.vue'
 import Sales from './component/sales/index.vue'
 import Login from './component/login/index.vue'
-import Confirmorder from './component/confirmorder/index.vue'
-import ConfirmorderDetail from './component/confirmorder/detail.vue'
+//import Confirmorder from './component/confirmorder/index.vue'
+//import ConfirmorderDetail from './component/confirmorder/detail.vue'
 import ModifyPassword from './component/user/modify-password.vue'
 import Shipping from './component/shipping/index.vue'
 import ShippingDetail from './component/shipping/detail.vue'
@@ -104,18 +102,13 @@ const components = [
     Simple_Album,
     Asa_Color_Select,
     Asa_Sizecontent_Input,
-    Asa_Sizecontent_Confirm,
     Asa_Order_Tip,
     Asa_Product_Tip,
-    Asa_Order_Dialog,
     Asa_Select_Product_Dialog,
     Asa_Sales_Dialog,
     Simple_Display_Input,
     Simple_Float_Input,
-    //Asa_Order_Confirm_Dialog,
-    Asa_Select_Order_Detail_Dialog,
     Asa_Productstock_Search,
-    Asa_Warehousing_Dialog,
     Asa_Product,
     Asa_Brandgroupchild_Select,
     Asa_Product_BL,
@@ -149,8 +142,6 @@ const routes = [
         path: '/', name:"index", component: Home,
         children:[
             {path: '/order', name:"order", component: Order},
-            {path: '/confirmorder', name:"confirmorder", component: Confirmorder},
-            {path: '/confirmorder/:action/:id', name:"confirmorderdetail", component: ConfirmorderDetail},
             {path: '/shipping', name:"shipping", component:Shipping},
             {path: '/shipping/:id', name:"shippingdetail", component:ShippingDetail},
             {path: '/shipping/warehousing/:id', name:"shippingwarehousing", component:ShippingWarehousing},
@@ -174,8 +165,7 @@ const routes = [
             {path: '/develop', name:"develop", component: Creator}, 
             {path: '/supplier', name:"supplier", component:Supplier},
             {path:'/exchangerate', name:"exchangerate", component:Exchangerate},
-            //{path: '/order/add', component: Asa_Order_Dialog},
-            {path: '/order/:id', name:"orderform", component: Asa_Order_Dialog},
+            {path: '/order/:id', name:"orderform", component: OrderCreate},
             {path: '/orderbrand', name:"orderbrand", component: Orderbrand},
             {path: '/orderbrand/:ids', name:"orderbrandcreate", component: OrderbrandCreate},
             {path: '/orderbrand/confirm/:id', name:"orderbrandconfirm", component: OrderbrandConfirm},
