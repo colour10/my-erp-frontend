@@ -127,7 +127,6 @@
 
 <script>
 import { extend, copyTo,extract } from "../object.js"
-import { confirmList } from "../asa/order-detail.js"
 import chain from "../chain.js"
 import orderMixin from "../mixins/order.js"
 import { Order, ProductDetail, promiseRunner } from "../model.js"

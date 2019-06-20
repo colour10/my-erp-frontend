@@ -205,7 +205,6 @@
 <script>
 import { StringFunc } from "../globals.js"
 import { extend, copyTo } from "../object.js"
-import { createEmptyRow } from "../asa/order-detail.js"
 import chain from "../chain.js"
 import orderMixin from "../mixins/order.js"
 import { Order, ProductDetail, promiseRunner } from "../model.js"

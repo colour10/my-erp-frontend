@@ -4,6 +4,54 @@
 		"selected_items":
 		[
 			[
+				"_",
+				"_label"
+			],
+			[
+				"pro",
+				"product"
+			],
+			[
+				"or",
+				"orderid"
+			],
+			[
+				"con",
+				"confirm_number"
+			],
+			[
+				"pr",
+				"productid"
+			],
+			[
+				"order",
+				"orderid"
+			],
+			[
+				"type",
+				"typeof"
+			],
+			[
+				"do",
+				"doPost\tconst"
+			],
+			[
+				"list",
+				"listdata"
+			],
+			[
+				"orderbr",
+				"orderbrandid"
+			],
+			[
+				"det",
+				"detail"
+			],
+			[
+				"ord",
+				"orderbrandid"
+			],
+			[
 				"o",
 				"orderbrands"
 			],
@@ -14,14 +62,6 @@
 			[
 				"tab",
 				"table"
-			],
-			[
-				"pro",
-				"productid"
-			],
-			[
-				"or",
-				"orderbrandid"
 			],
 			[
 				"shi",
@@ -44,10 +84,6 @@
 				"findFirstById"
 			],
 			[
-				"ord",
-				"orderbranddetails"
-			],
-			[
 				"ex",
 				"extend"
 			],
@@ -68,10 +104,6 @@
 				"sizecontentid"
 			],
 			[
-				"order",
-				"orderbrandid"
-			],
-			[
 				"orderbrand",
 				"orderbranddetails"
 			],
@@ -84,20 +116,8 @@
 				"TbOrderBrandDetail"
 			],
 			[
-				"det",
-				"details"
-			],
-			[
 				"co",
 				"column"
-			],
-			[
-				"con",
-				"confirm_form"
-			],
-			[
-				"_",
-				"_private"
 			],
 			[
 				"detai",
@@ -126,10 +146,6 @@
 			[
 				"gr",
 				"groups\tparameter"
-			],
-			[
-				"orderbr",
-				"orderbrandlist"
 			],
 			[
 				"lef",
@@ -232,10 +248,6 @@
 				"option\tparameter"
 			],
 			[
-				"list",
-				"listdata"
-			],
-			[
 				"lis",
 				"listdata"
 			],
@@ -274,10 +286,6 @@
 			[
 				"on",
 				"onWord2Change"
-			],
-			[
-				"do",
-				"domProps\twarning"
 			],
 			[
 				"count",
@@ -436,10 +444,6 @@
 				"confirm_form"
 			],
 			[
-				"pr",
-				"price"
-			],
-			[
 				"_l",
 				"_label"
 			],
@@ -510,10 +514,6 @@
 			[
 				"em",
 				"emitter\twarning"
-			],
-			[
-				"getD",
-				"getDataSource\tmethod"
 			]
 		]
 	},
@@ -545,10 +545,22 @@
 			}
 		},
 		{
-			"file": "src/component/asa/Asa_Order_Dialog.vue",
+			"file": "src/component/order/create.vue",
 			"settings":
 			{
-				"buffer_size": 20078,
+				"buffer_size": 20093,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"contents": "<template>\n    <div>\n        <el-form ref=\"order-form\" class=\"formx\" :model=\"form\" label-width=\"85px\" :inline=\"true\" style=\"width:100%;\" size=\"mini\" :rules=\"formRules\" :inline-message=\"false\" :show-message=\"false\">\n            <el-row :gutter=\"0\">\n                <au-button auth=\"order-submit\" :type=\"canSubmit?'primary':'info'\" @click=\"saveOrder(1)\">{{_label(\"baocun\")}}</au-button>\n                <!-- <au-button auth=\"order-submit\" :type=\"canSubmitPayment?'primary':'info'\" @click=\"addPayment\">{{_label(\"shengchengfahuodan\")}}</au-button> -->\n                <au-button auth=\"order-submit\" :type=\"canSubmitPayment?'primary':'info'\" @click=\"addPayment\">{{_label(\"fujian\")}}</au-button>\n                <au-button auth=\"order-submit\" :type=\"canSubmitPayment?'primary':'info'\" @click=\"addPayment\">{{_label(\"feiyong\")}}</au-button>\n                <as-button v-if=\"isEditable\" :type=\"buttontype\" @click=\"showProduct()\">{{_label(\"xuanzeshangpin\")}}</as-button>\n            </el-row>\n            <el-row :gutter=\"0\">\n                <el-col :span=\"4\" style=\"width:230px\">\n                    <el-form-item :label=\"_label('dinghuokehu')\" prop=\"bookingid\">\n                        <simple-select v-model=\"form.bookingid\" source=\"supplier_2\" :lang=\"lang\">\n                        </simple-select>\n                    </el-form-item>\n                    <el-form-item :label=\"_label('lianxiren')\">\n                        <simple-select v-model=\"form.linkmanid\" source=\"supplierlinkman\" :parentid=\"form.bookingid\">\n                        </simple-select>\n                    </el-form-item>\n                    <el-form-item :label=\"_label('gonghuoshang')\">\n                        <simple-select v-model=\"form.supplierid\" source=\"supplier_3\" :clearable=\"true\">\n                        </simple-select>\n                    </el-form-item>\n                    <el-form-item :label=\"_label('fahuoshang')\">\n                        <simple-select v-model=\"form.finalsupplierid\" source=\"supplier_3\" :clearable=\"true\">\n                        </simple-select>\n                    </el-form-item>\n                </el-col>\n                <el-col :span=\"4\" style=\"width:230px\">\n                    <el-form-item :label=\"_label('niandai')\" prop=\"ageseason\">\n                        <simple-select v-model=\"form.ageseason\" source=\"ageseason\" :lang=\"lang\"></simple-select>\n                    </el-form-item>\n                    <el-form-item :label=\"_label('jijie')\">\n                        <simple-select v-model=\"form.seasontype\" source=\"seasontype\" :lang=\"lang\">\n                        </simple-select>\n                    </el-form-item>\n                    <el-form-item :label=\"_label('yewuleixing')\" prop=\"bussinesstype\">\n                        <simple-select v-model=\"form.bussinesstype\" source=\"bussinesstype\" :lang=\"lang\">\n                        </simple-select>\n                    </el-form-item>\n                    <el-form-item :label=\"_label('shuxing')\" prop=\"property\">\n                        <simple-select v-model=\"form.property\" source=\"orderproperty\" :lang=\"lang\">\n                        </simple-select>\n                    </el-form-item>\n                </el-col>\n                <el-col :span=\"4\" style=\"width:230px\">\n                    <el-form-item :label=\"_label('jine')\">\n                        <el-input placeholder=\"\" v-model=\"total_price\" class=\"productcurrency\">\n                            <simple-select source=\"currency\" :clearable=\"false\" v-model=\"form.currency\" slot=\"prepend\">\n                            </simple-select>\n                        </el-input>\n                    </el-form-item>\n                    <el-form-item :label=\"_label('zhekoulv')\">\n                        <sp-float-input v-model=\"form.discount\" @change=\"onDiscountChange\"></sp-float-input>\n                    </el-form-item>\n                    <el-form-item :label=\"_label('tuishuilv')\">\n                        <sp-float-input v-model=\"form.taxrebate\"></sp-float-input>\n                    </el-form-item>\n                    <el-form-item :label=\"_label('beizhu')\">\n                        <el-input v-model=\"form.memo\"></el-input>\n                    </el-form-item>\n                </el-col>\n                <el-col :span=\"4\" style=\"width:230px\">\n                    <el-form-item :label=\"_label('kehudingdanhao')\">\n                        <el-input v-model=\"form.bookingorderno\"></el-input>\n                    </el-form-item>\n                    <el-form-item :label=\"_label('gongsidingdanhao')\">\n                        <el-input v-model=\"form.orderno\" :placeholder=\"_label('zidonghuoqu')\" disabled></el-input>\n                    </el-form-item>\n                    <el-form-item :label=\"_label('zhidanren')\">\n                        <sp-display-input :value=\"form.makestaff\" source=\"user\" :placeholder=\"_label('zidonghuoqu')\"></sp-display-input>\n                    </el-form-item>\n                    <el-form-item :label=\"_label('dinghuoriqi')\">\n                        <el-date-picker v-model=\"form.orderdate\" type=\"date\" value-format=\"yyyy-MM-dd\"></el-date-picker>\n                    </el-form-item>\n                </el-col>\n                <el-col :span=\"4\" style=\"width:230px\">\n                    <el-form-item :label=\"_label('xingbie')\">\n                        <el-input v-model=\"genderlabels\" disabled></el-input>\n                    </el-form-item>\n                    <el-form-item :label=\"_label('pinpai')\">\n                        <el-input v-model=\"brands\" disabled></el-input>\n                    </el-form-item>\n                </el-col>\n            </el-row>\n        </el-form>\n        <el-row>\n            <el-col :span=\"24\" class=\"product\">\n                <el-table :data=\"tabledata\" stripe border style=\"width:100%;\" :show-summary=\"true\" :summary-method=\"getSummary\">\n                    <el-table-column align=\"center\" width=\"60\">\n                        <template v-slot=\"scope\">\n                            <img :src=\"_fileLink(scope.row.product.picture)\" style=\"width:50px;height:50px;\" />\n                        </template>\n                    </el-table-column>\n                    <el-table-column :label=\"_label('guojima')\" align=\"left\" width=\"200\">\n                        <template v-slot=\"scope\">\n                            <sp-product-tip :product=\"scope.row.product\"></sp-product-tip>\n                        </template>\n                    </el-table-column>\n                    <el-table-column prop=\"number\" :label=\"_label('dinggoushuliang')\" align=\"center\" :width=\"width\">\n                        <template v-slot=\"{row}\">\n                            <sp-sizecontent-input :columns=\"row.product.sizecontents\" :row=\"row\" :disabled=\"!isEditable\" @change=\"onChange\" :key=\"row.product.id\"></sp-sizecontent-input>\n                        </template>\n                    </el-table-column>\n                    <el-table-column prop=\"label\" :label=\"_label('bizhong')\" width=\"80\" align=\"center\">\n                        <template v-slot=\"{row}\">\n                            {{row.product.factorypricecurrency_label}}\n                        </template>\n                    </el-table-column>\n                    <el-table-column prop=\"label\" :label=\"_label('chuchangjia')\" width=\"100\" align=\"center\">\n                        <template v-slot=\"{row}\">\n                            {{row.product.factoryprice}}\n                        </template>\n                    </el-table-column>\n                    <el-table-column prop=\"label\" :label=\"_label('chuchangjiaheji')\" width=\"100\" align=\"center\">\n                        <template v-slot=\"{row}\">\n                            {{formatNumber(row.getRowFactoryTotal())}}\n                        </template>\n                    </el-table-column>\n                    <el-table-column prop=\"label\" :label=\"_label('zhekoulv')\" width=\"100\" align=\"center\">\n                        <template v-slot=\"{row}\">\n                            <el-input v-model=\"row.discount\" size=\"mini\"></el-input>\n                        </template>\n                    </el-table-column>\n                    <el-table-column prop=\"label\" :label=\"_label('chengjiaojia')\" width=\"130\" align=\"center\">\n                        <template v-slot=\"{row}\">\n                            {{formatNumber(row.product.factoryprice*row.discount)}}\n                        </template>\n                    </el-table-column>\n                    <el-table-column prop=\"label\" :label=\"_label('chengjiaozongjia')\" width=\"100\" align=\"center\">\n                        <template v-slot=\"{row}\">\n                            {{formatNumber(row.getRowDealTotal())}}\n                        </template>\n                    </el-table-column>\n                    <el-table-column prop=\"total\" :label=\"_label('zongshu')\" width=\"100\" align=\"center\">\n                    </el-table-column>\n                    <el-table-column :label=\"_label('chanpinmingcheng')\" align=\"left\" width=\"300\">\n                        <template v-slot=\"scope\">\n                            {{scope.row.product.getName()}}\n                        </template>\n                    </el-table-column>\n                    <el-table-column :label=\"_label('caozuo')\" width=\"100\" align=\"center\" v-if=\"isEditable\">\n                        <template v-slot=\"{row}\">\n                            <as-button size=\"mini\" type=\"danger\" @click=\"deleteRow(row)\">{{_label('shanchu')}}</as-button>\n                        </template>\n                    </el-table-column>\n                </el-table>\n            </el-col>\n        </el-row>\n        <!-- <el-row>\n            <simple-admin-page v-bind=\"props\" ref=\"payment\" :hide-create=\"true\" :hide-form=\"true\" v-if=\"form.id>0\"></simple-admin-page>\n        </el-row> -->\n        <asa-select-product-dialog :visible.sync=\"pro\" @select=\"onSelect\"></asa-select-product-dialog>\n    </div>\n</template>\n\n<script>\nimport DataSource from '../DataSource.js'\nimport globals, { _label } from \"../globals.js\"\nimport { ProductDetail } from \"../model.js\"\nimport chain from \"../chain.js\"\nimport { extend, copyTo } from \"../object.js\"\nimport detailConvert from \"./order-detail.js\"\nimport orderMixin from \"../mixins/order.js\"\n\nconst props = {\n    columns: [\n        { name: \"payment_type\", label: _label(\"fukuanleixing\"), type: 'select', source: \"paymenttype\" },\n        { name: \"currency\", label: _label(\"bizhong\"), type: 'select', source: \"currency\" },\n        { name: \"amount\", label: _label(\"jine\") },\n        { name: \"paymentdate\", label: _label(\"fukuanriqi\"), type: \"date\" },\n        { name: \"memo\", label: _label(\"beizhu\") },\n        { name: \"makestaff\", label: _label(\"tijiaoren\"), type: 'select', source: \"user\", is_edit_hide: true },\n        { name: \"status\", label: _label(\"yiruzhang\"), type: \"switch\", is_edit_hide: true }\n    ],\n    controller: \"orderpayment\",\n    auth: \"order-submit\",\n    base: {\n        orderid: ''\n    },\n    options: {\n        isedit: (item) => item.status == 0,\n        isdelete: (item) => item.status == 0,\n        autoreload: true\n    }\n}\n\nexport default {\n    name: 'sp-orderform',\n    components: {},\n    mixins: [orderMixin],\n    data() {\n        let self = this;\n\n        return {\n            form: {\n                bookingid: \"\",\n                orderdate: \"\",\n                linkmanid: \"\",\n                bussinesstype: \"\",\n                supplierid: \"\",\n                finalsupplierid: \"\",\n                ageseason: \"\",\n                seasontype: \"\",\n                bookingorderno: \"\",\n                makedate: \"\",\n                currency: \"\",\n                discount: \"\",\n                taxrebate: \"\",\n                property: \"1\",\n                makestaff: \"\",\n                maketime: \"\",\n                memo: \"\",\n                orderno: \"\",\n                status: \"\", //状态，1=保存；2=送审；3=审核完成\n                id: \"\"\n            },\n            tabledata: [],\n            title: \"\",\n            lang: \"\",\n            pro: false,\n            formid: '',\n            props,\n            discounts: {}\n        }\n    },\n    methods: {\n        onQuit() {\n            this.dialogVisible = false\n        },\n        addPayment() {\n            let self = this;\n            if (self.canSubmitPayment()) {\n                props.base.orderid = self.form.id\n                self.$refs.payment.showFormToCreate();\n            }\n        },\n        showProduct() {\n            this.pro = true;\n        },\n        onSelect(productDetail) {\n            let self = this;\n            self.appendRow({\n                id: \"\",\n                product: productDetail,\n                discount: self.form.discount,\n                total: 0\n            })\n        },\n        saveOrder(status) {\n            //保存订单\n            let self = this\n\n\n            let params = {\n                form: extend({}, self.form, { status })\n            }\n            params.form.genders = self.genders\n            params.form.total = self.total_price\n            params.form.brandids = self.brandids\n\n            let list = []\n            self.tabledata.forEach(item => {\n                self._log(\"item\", item)\n                if (item.form && item.total > 0) {\n                    chain(item.form).forEach((row, sizecontentid) => {\n                        list.push({\n                            id: item.id,\n                            productid: item.product.id,\n                            discount: item.discount,\n                            sizecontentid: sizecontentid,\n                            number: row.number,\n                            id: row.id\n                        });\n                    })\n                }\n            })\n            params.list = list;\n\n            self.validate().then(() => {\n                self._submit(\"/order/saveorder\", { params: JSON.stringify(params) }).then(function(res) {\n                    self._log(res)\n                    let data = res.data\n                    if (data.form.id) {\n\n                        copyTo(data.form, self.form)\n                        self.formid = self.form.id\n                        props.base.orderid = self.form.id\n                    }\n                    self.$emit(\"change\", data.form)\n                });\n            })\n\n        },\n        deleteRow(row) {\n            var self = this;\n            let index = self.tabledata.findIndex(item => item == row)\n            self.$delete(self.tabledata, index)\n        },\n        appendRow(row) {\n            const self = this;\n\n            let is_exist = self.tabledata.some(rowData => {\n                return rowData.product.id == row.product.id\n            })\n\n            if (!is_exist) {\n                //计算出厂总价\n                row.getRowFactoryTotal = function() {\n                    return row.product.factoryprice * row.total\n                }\n\n                //计算成交总价\n                row.getRowDealTotal = function() {\n                    return row.product.factoryprice * row.discount * row.total\n                }\n\n                self.tabledata.unshift(row)\n\n                self.form.currency = row.product.factorypricecurrency\n            }\n        },\n        onChange({ row, form }) {\n            let self = this\n            self._log(row)\n            row.form = form\n            row.total = chain(form).toArray().array().reduce((total, item) => total * 1 + item.value.number * 1, 0)\n            row.total = self.formatNumber(row.total)\n            self._log(row.total)\n        },\n        onDiscountChange(newValue, oldValue) {\n            let self = this\n            self.tabledata.forEach(item => {\n                if (item.discount == oldValue || item.discount*1<=0) {\n                    item.discount = newValue\n                }\n            })\n        },\n        getSummary({ columns, data }) {\n            const self = this\n            const sums = []\n            columns.forEach((column, index) => {\n                //self._log(column, index)\n                if (index == 0) {\n                    sums[index] = self._label(\"heji\")\n                    return\n                } else if (index == 5) {\n                    sums[index] = self.formatNumber(data.reduce((total, row) => total + row.getRowFactoryTotal(), 0))\n                } else if (index == 8) {\n                    sums[index] = self.formatNumber(data.reduce((total, row) => total + row.getRowDealTotal(), 0))\n                } else if (index == 9) {\n                    sums[index] = data.reduce((total, row) => total + row.total, 0)\n                }\n            })\n\n            sums[1] = data.length\n\n            return sums\n        }\n    },\n    computed: {\n        buttontype() {\n            var status = this.form.status;\n            return status == '1' || status == '' || !status ? 'primary' : 'info'\n        },\n        isEditable() {\n            var status = this.form.status;\n            return status == '1' || status == '' || !status\n        },\n        canDelete() {\n            var status = this.form.status;\n            return this.form.id > 0 && status == 1\n        },\n        width() {\n            return this.tabledata.reduce((max, { product }) => Math.max(max, product.sizecontents.length), 1) * 50 + 21\n        },\n        canSubmit() {\n            var status = this.form.status;\n            return status != 2 && status != 3\n        },\n        canSubmitPayment() {\n            return this.form.id > 0\n        },\n        total_price() {\n            let total = this.tabledata.reduce(function(total, current) {\n                return total + current.total * current.product.factoryprice * current.discount\n            }, 0)\n            return this.formatNumber(total)\n        },\n        brands() {\n            let obj = {}\n            this.tabledata.forEach(item => obj[item.product.brand_label] = 1);\n            return Object.keys(obj).join(\",\");\n        },\n        brandids() {\n            let obj = {}\n            this.tabledata.forEach(item => obj[item.product.brandid] = 1);\n            return Object.keys(obj).join(\",\");\n        },\n        genderlabels() {\n            let obj = {}\n            this.tabledata.forEach(item => {\n                if (item.product.gender_label.length > 0) {\n                    obj[item.product.gender_label] = 1\n                }\n            });\n            return Object.keys(obj).join(\",\");\n        },\n        genders() {\n            let obj = {}\n            this.tabledata.forEach(item => {\n                if (item.product.gender_label.length > 0) {\n                    obj[item.product.gender] = 1\n                }\n            });\n            return Object.keys(obj).join(\",\");\n        }\n    },\n    mounted: function() {\n        var self = this;\n        //self._log(\"mounted Order\")\n        //copyTo(self.data, this.form)\n        let route = self.$route;\n        let label // = route.params.id == 0 ? self._label(\"xinjiandingdan\") : \"订单信息\"\n        if (route.params.id == 0) {\n            label = self._label(\"xinjiandingdan\")\n        } else {\n            self.tabledata = []\n                //加载数据\n            self._fetch(\"/order/loadorder\", { id: route.params.id }).then(function(res) {\n                //self._log(\"加载订单信息\", res)\n\n                copyTo(res.data.form, self.form)\n                if (res.data.list) {\n\n                    detailConvert(res.data.list).then(results => {\n                        results.forEach(item => self.appendRow(item))\n                    })\n                }\n                self._setTitle(self._label(\"dingdan\") + \":\" +self.form.orderno)\n            })\n            label = \"loading...\"\n        }\n        self._setTitle(label)\n\n\n        self.initRules(Rules => {\n            let _label = self._label\n            return {\n                bussinesstype: Rules.id({ required: true, message: _label(\"8000\"), label: _label(\"yewuleixing\") }),\n                ageseason: Rules.id({ required: true, message: _label(\"8000\"), label: _label(\"niandai\") }),\n                property: Rules.id({ required: true, message: _label(\"8000\"), label: _label(\"shuxing\") }),\n                bookingid:Rules.id({ required: true, message: _label(\"8000\"), label: _label(\"dinghuokehu\") })\n            }\n        })\n    }\n}\n</script>\n",
+			"file": "src/component/asa/Asa_Order_Dialog.vue",
+			"file_size": 20633,
+			"file_write_time": 132054174407409704,
+			"settings":
+			{
+				"buffer_size": 20088,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -599,10 +611,10 @@
 			}
 		},
 		{
-			"file": "src/component/asa/Asa_Select_Order_Detail_Dialog.vue",
+			"file": "src/component/asa/product-search-form.vue",
 			"settings":
 			{
-				"buffer_size": 6752,
+				"buffer_size": 4195,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -611,7 +623,7 @@
 			"file": "src/component/asa/Asa_Select_Product_Dialog.vue",
 			"settings":
 			{
-				"buffer_size": 1074,
+				"buffer_size": 1261,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -664,7 +676,7 @@
 			"file": "src/component/orderbrand/confirm.vue",
 			"settings":
 			{
-				"buffer_size": 16493,
+				"buffer_size": 18150,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -688,19 +700,10 @@
 			}
 		},
 		{
-			"file": "src/component/confirmorder/detail.vue",
-			"settings":
-			{
-				"buffer_size": 15287,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
 			"file": "src/component/shipping/detail.vue",
 			"settings":
 			{
-				"buffer_size": 35725,
+				"buffer_size": 35892,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -709,7 +712,34 @@
 			"file": "/Z/erp/app/home/controllers/ShippingController.php",
 			"settings":
 			{
-				"buffer_size": 23195,
+				"buffer_size": 23297,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Z/erp/app/models/erp/TbProductstock.php",
+			"settings":
+			{
+				"buffer_size": 4657,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Z/erp/app/models/erp/TbShippingDetail.php",
+			"settings":
+			{
+				"buffer_size": 2930,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/Z/erp/app/models/erp/BaseModel.php",
+			"settings":
+			{
+				"buffer_size": 3517,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -718,7 +748,7 @@
 			"file": "/Z/erp/app/models/erp/TbShipping.php",
 			"settings":
 			{
-				"buffer_size": 1348,
+				"buffer_size": 1394,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -727,7 +757,25 @@
 			"file": "/Z/erp/app/home/controllers/OrderbrandController.php",
 			"settings":
 			{
-				"buffer_size": 20512,
+				"buffer_size": 21656,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Z/erp/app/models/erp/TbOrderBrand.php",
+			"settings":
+			{
+				"buffer_size": 891,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/Z/erp/app/models/erp/TbOrder.php",
+			"settings":
+			{
+				"buffer_size": 2123,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -745,7 +793,7 @@
 			"file": "/Z/erp/app/config/languages/cn.php",
 			"settings":
 			{
-				"buffer_size": 25429,
+				"buffer_size": 25405,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -754,7 +802,7 @@
 			"file": "src/component/dialog.vue",
 			"settings":
 			{
-				"buffer_size": 839,
+				"buffer_size": 890,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -807,8 +855,15 @@
 			"file": "src/component/product/index.vue",
 			"settings":
 			{
-				"buffer_size": 10231,
+				"buffer_size": 6020,
 				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"settings":
+			{
+				"buffer_size": 0,
 				"line_ending": "Windows"
 			}
 		},
@@ -825,16 +880,16 @@
 			"file": "src/component/orderbrand/index.vue",
 			"settings":
 			{
-				"buffer_size": 4526,
+				"buffer_size": 4570,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "src/component/confirmorder/index.vue",
+			"file": "src/component/http.js",
 			"settings":
 			{
-				"buffer_size": 4531,
+				"buffer_size": 2315,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -876,19 +931,10 @@
 			}
 		},
 		{
-			"file": "src/component/orderbranddetail/index.vue",
-			"settings":
-			{
-				"buffer_size": 13818,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
 			"file": "src/main.js",
 			"settings":
 			{
-				"buffer_size": 13477,
+				"buffer_size": 12988,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -924,7 +970,7 @@
 			"file": "src/component/asa/order-detail.js",
 			"settings":
 			{
-				"buffer_size": 7888,
+				"buffer_size": 6568,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -1013,7 +1059,7 @@
 			"file": "src/component/Simple_Admin_TableList.vue",
 			"settings":
 			{
-				"buffer_size": 14636,
+				"buffer_size": 14898,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -1022,7 +1068,7 @@
 			"file": "src/component/Simple_Select.vue",
 			"settings":
 			{
-				"buffer_size": 10272,
+				"buffer_size": 10286,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -1066,7 +1112,7 @@
 			"file": "src/component/shipping/warehousing.vue",
 			"settings":
 			{
-				"buffer_size": 24267,
+				"buffer_size": 24696,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -1178,7 +1224,6 @@
 		"/D/code/vue/asa-plugin/src/component/asa",
 		"/D/code/vue/asa-plugin/src/component/brand",
 		"/D/code/vue/asa-plugin/src/component/brandgroup",
-		"/D/code/vue/asa-plugin/src/component/confirmorder",
 		"/D/code/vue/asa-plugin/src/component/department",
 		"/D/code/vue/asa-plugin/src/component/exchangerate",
 		"/D/code/vue/asa-plugin/src/component/group",
@@ -1186,7 +1231,7 @@
 		"/D/code/vue/asa-plugin/src/component/login",
 		"/D/code/vue/asa-plugin/src/component/mixins",
 		"/D/code/vue/asa-plugin/src/component/order",
-		"/D/code/vue/asa-plugin/src/component/orderbranddetail",
+		"/D/code/vue/asa-plugin/src/component/orderbrand",
 		"/D/code/vue/asa-plugin/src/component/orderpayment",
 		"/D/code/vue/asa-plugin/src/component/product",
 		"/D/code/vue/asa-plugin/src/component/productstock",
@@ -1201,6 +1246,10 @@
 	],
 	"file_history":
 	[
+		"/D/code/vue/asa-plugin/src/component/confirmorder/index.vue",
+		"/D/code/vue/asa-plugin/src/component/confirmorder/detail.vue",
+		"/D/code/vue/asa-plugin/src/component/orderbranddetail/index.vue",
+		"/D/code/vue/asa-plugin/src/component/asa/product-search-dialog.vue",
 		"/Z/erp/app/models/erp/TbOrderBrand.php",
 		"/Z/erp/app/home/controllers/OrderbrandController.php",
 		"/Z/erp/app/home/views/index.phtml",
@@ -1260,7 +1309,6 @@
 		"/Z/erp/app/home/controllers/MaterialController.php",
 		"/D/code/vue/asa-plugin/src/component/globals.js",
 		"/D/code/vue/asa-plugin/src/component/asa/Asa_Sizecontent_Input.vue",
-		"/D/code/vue/asa-plugin/src/component/confirmorder/detail.vue",
 		"/D/code/vue/asa-plugin/src/component/requisition/create.vue",
 		"/D/code/vue/asa-plugin/src/component/DataSource.js",
 		"/Z/erp/app/home/controllers/WarehousingController.php",
@@ -1325,10 +1373,7 @@
 		"/D/code/vue/asa-plugin/dist/asa.js",
 		"/Z/erp/app/models/erp/TbOrderdetails.php",
 		"/Z/erp/app/home/controllers/SupplierController.php",
-		"/Z/erp/app/home/controllers/IndexController.php",
-		"/D/code/vue/asa-plugin/src/component/asa/Asa_Product_Property.vue",
-		"/D/code/vue/table-admin/src/main.ts",
-		"/D/code/vue/asa-plugin/src/component/mixin.js"
+		"/Z/erp/app/home/controllers/IndexController.php"
 	],
 	"find":
 	{
@@ -1346,6 +1391,37 @@
 		"case_sensitive": true,
 		"find_history":
 		[
+			"createEmptyRow",
+			"Asa_Order_Dialog",
+			"asa-order-confirm-dialog",
+			"Asa_Warehousing_Dialog",
+			"confirm",
+			"ConfirmorderDetail",
+			"orderbrandde",
+			"确认品牌",
+			"_log",
+			"loadDetail",
+			"110201",
+			"orderbrandid",
+			"searchpanel",
+			"clear",
+			"is_show",
+			"setParam",
+			"onChange",
+			"onBrandGroupChange",
+			"total_price",
+			"loadDetail",
+			"convertListToProductList",
+			"showAttachment",
+			"StringFunc",
+			"getProduct",
+			"shippingList",
+			"shippingConvert",
+			"onSelectProduct",
+			"createEmptyRow",
+			"visible",
+			"getRowFactoryTotal",
+			"getRowTotal",
 			"confirm_form",
 			"select",
 			"editShipping",
@@ -1442,38 +1518,7 @@
 			"page",
 			"getSearchCondition",
 			"春",
-			"orderdetails",
-			"total_price",
-			"getRowFactoryTotal",
-			"getRowTotal",
-			"getSupplierTotal",
-			"getSupplierTotalCount",
-			"deleteRow",
-			"appendRow",
-			"getRowFactoryTotal",
-			"supplierid2",
-			"format",
-			"lang",
-			"onBrandChange",
-			"distribute",
-			"getSupplierTotal",
-			"top-menu",
-			"<<",
-			"title",
-			"getRowFactoryTotal",
-			"canSubmit",
-			"canDelete",
-			"isEditable",
-			"buttontype",
-			"formid",
-			"onDiscountChange",
-			"brands",
-			"price",
-			"确定",
-			"loadRate",
-			"series",
-			"rules",
-			"Rules"
+			"orderdetails"
 		],
 		"highlight": false,
 		"in_selection": false,
@@ -1621,7 +1666,7 @@
 	"groups":
 	[
 		{
-			"selected": 61,
+			"selected": 50,
 			"sheets":
 			[
 				{
@@ -1652,7 +1697,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 50,
+					"stack_index": 61,
 					"type": "text"
 				},
 				{
@@ -1691,7 +1736,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 33,
+					"stack_index": 47,
 					"type": "text"
 				},
 				{
@@ -1727,29 +1772,29 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 20,
+					"stack_index": 42,
 					"type": "text"
 				},
 				{
 					"buffer": 3,
-					"file": "src/component/asa/Asa_Order_Dialog.vue",
+					"file": "src/component/order/create.vue",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 20078,
+						"buffer_size": 20093,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								62,
-								67
+								10104,
+								10104
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1560481553.01,
+							"sorttabs_lastactivated": 1560945578.84,
 							"syntax": "Packages/Vue/vue.tmLanguage",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true,
@@ -1761,14 +1806,45 @@
 							}
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 1890.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 29,
+					"stack_index": 3,
 					"type": "text"
 				},
 				{
 					"buffer": 4,
+					"file": "src/component/asa/Asa_Order_Dialog.vue",
+					"semi_transient": true,
+					"settings":
+					{
+						"buffer_size": 20088,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"sorttabs_lastactivated": 1560945641.11,
+							"syntax": "Packages/Vue/vue.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
 					"file": "src/component/asa/Asa_Product.vue",
 					"semi_transient": false,
 					"settings":
@@ -1780,26 +1856,26 @@
 						"selection":
 						[
 							[
-								1145,
-								1293
+								31706,
+								31706
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1560481552.2,
+							"sorttabs_lastactivated": 1560923690.42,
 							"syntax": "Packages/Vue/vue.tmLanguage",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 8376.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 30,
+					"stack_index": 26,
 					"type": "text"
 				},
 				{
-					"buffer": 5,
+					"buffer": 6,
 					"file": "src/component/asa/Asa_Product_Add.vue",
 					"semi_transient": false,
 					"settings":
@@ -1826,11 +1902,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 44,
+					"stack_index": 56,
 					"type": "text"
 				},
 				{
-					"buffer": 6,
+					"buffer": 7,
 					"file": "src/component/asa/Asa_Product_Price.vue",
 					"semi_transient": false,
 					"settings":
@@ -1857,11 +1933,11 @@
 						"translation.y": 270.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 46,
+					"stack_index": 58,
 					"type": "text"
 				},
 				{
-					"buffer": 7,
+					"buffer": 8,
 					"file": "src/component/asa/Asa_Product_Search_Panel.vue",
 					"semi_transient": false,
 					"settings":
@@ -1873,26 +1949,26 @@
 						"selection":
 						[
 							[
-								7103,
-								7114
+								382,
+								389
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1560133413.54,
+							"sorttabs_lastactivated": 1560923131.05,
 							"syntax": "Packages/Vue/vue.tmLanguage",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1305.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 52,
+					"stack_index": 27,
 					"type": "text"
 				},
 				{
-					"buffer": 8,
+					"buffer": 9,
 					"file": "src/component/asa/Asa_Product_Tip.vue",
 					"semi_transient": false,
 					"settings":
@@ -1910,7 +1986,7 @@
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1560133412.39,
+							"sorttabs_lastactivated": 1560914178.44,
 							"syntax": "Packages/Vue/vue.tmLanguage",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
@@ -1919,60 +1995,29 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 53,
-					"type": "text"
-				},
-				{
-					"buffer": 9,
-					"file": "src/component/asa/Asa_Select_Order_Detail_Dialog.vue",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 6752,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								104,
-								104
-							]
-						],
-						"settings":
-						{
-							"sorttabs_lastactivated": 1559116111.06,
-							"syntax": "Packages/Vue/vue.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 62,
+					"stack_index": 32,
 					"type": "text"
 				},
 				{
 					"buffer": 10,
-					"file": "src/component/asa/Asa_Select_Product_Dialog.vue",
+					"file": "src/component/asa/product-search-form.vue",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1074,
+						"buffer_size": 4195,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								115,
-								115
+								15,
+								15
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1559700376.75,
+							"sorttabs_lastactivated": 1560914854.76,
 							"syntax": "Packages/Vue/vue.tmLanguage",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
@@ -1981,11 +2026,42 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 59,
+					"stack_index": 31,
 					"type": "text"
 				},
 				{
 					"buffer": 11,
+					"file": "src/component/asa/Asa_Select_Product_Dialog.vue",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1261,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								877,
+								877
+							]
+						],
+						"settings":
+						{
+							"sorttabs_lastactivated": 1560915682.3,
+							"syntax": "Packages/Vue/vue.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 30,
+					"type": "text"
+				},
+				{
+					"buffer": 12,
 					"file": "src/component/asa/Asa_Sizecontent_Confirm3.vue",
 					"semi_transient": false,
 					"settings":
@@ -2012,11 +2088,11 @@
 						"translation.y": 1350.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 17,
+					"stack_index": 40,
 					"type": "text"
 				},
 				{
-					"buffer": 12,
+					"buffer": 13,
 					"file": "src/component/asa/Asa_Sizecontent_Confirm4.vue",
 					"semi_transient": false,
 					"settings":
@@ -2049,11 +2125,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 12,
+					"stack_index": 37,
 					"type": "text"
 				},
 				{
-					"buffer": 13,
+					"buffer": 14,
 					"file": "src/component/asa/Asa_Sizecontent_Input.vue",
 					"semi_transient": false,
 					"settings":
@@ -2065,13 +2141,13 @@
 						"selection":
 						[
 							[
-								255,
-								255
+								686,
+								706
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1560584035.12,
+							"sorttabs_lastactivated": 1560944858.57,
 							"syntax": "Packages/Vue/vue.tmLanguage",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
@@ -2080,11 +2156,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 18,
+					"stack_index": 7,
 					"type": "text"
 				},
 				{
-					"buffer": 14,
+					"buffer": 15,
 					"file": "src/component/cache.js",
 					"semi_transient": false,
 					"settings":
@@ -2118,11 +2194,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 35,
+					"stack_index": 49,
 					"type": "text"
 				},
 				{
-					"buffer": 15,
+					"buffer": 16,
 					"file": "src/component/chain.js",
 					"semi_transient": false,
 					"settings":
@@ -2156,42 +2232,42 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 19,
+					"stack_index": 41,
 					"type": "text"
 				},
 				{
-					"buffer": 16,
+					"buffer": 17,
 					"file": "src/component/orderbrand/confirm.vue",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 16493,
+						"buffer_size": 18150,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4217,
-								4267
+								9345,
+								9345
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1560846782.82,
+							"sorttabs_lastactivated": 1560940165.61,
 							"syntax": "Packages/Vue/vue.tmLanguage",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 291.0,
+						"translation.y": 2430.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 7,
+					"stack_index": 18,
 					"type": "text"
 				},
 				{
-					"buffer": 17,
+					"buffer": 18,
 					"file": "src/component/orderbrand/create.vue",
 					"semi_transient": false,
 					"settings":
@@ -2224,11 +2300,11 @@
 						"translation.y": 7386.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 35,
 					"type": "text"
 				},
 				{
-					"buffer": 18,
+					"buffer": 19,
 					"file": "src/component/DataSource.js",
 					"semi_transient": false,
 					"settings":
@@ -2246,7 +2322,7 @@
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1560743294.54,
+							"sorttabs_lastactivated": 1560944607.3,
 							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true,
@@ -2262,37 +2338,6 @@
 						"translation.y": 4410.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 15,
-					"type": "text"
-				},
-				{
-					"buffer": 19,
-					"file": "src/component/confirmorder/detail.vue",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 15287,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								15287
-							]
-						],
-						"settings":
-						{
-							"sorttabs_lastactivated": 1560846562.6,
-							"syntax": "Packages/Vue/vue.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
 					"stack_index": 9,
 					"type": "text"
 				},
@@ -2302,29 +2347,29 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 35725,
+						"buffer_size": 35892,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								16586,
-								16810
+								18993,
+								18993
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1560851939.98,
+							"sorttabs_lastactivated": 1560945052.97,
 							"syntax": "Packages/Vue/vue.tmLanguage",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 3456.0,
+						"translation.y": 3606.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 6,
 					"type": "text"
 				},
 				{
@@ -2333,51 +2378,113 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 23195,
+						"buffer_size": 23297,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								832,
-								832
+								22982,
+								22982
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1560847025.29,
+							"sorttabs_lastactivated": 1560943269.03,
 							"syntax": "Packages/PHP/PHP.sublime-syntax",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1170.0,
+						"translation.y": 5850.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
+					"stack_index": 14,
 					"type": "text"
 				},
 				{
 					"buffer": 22,
-					"file": "/Z/erp/app/models/erp/TbShipping.php",
+					"file": "/Z/erp/app/models/erp/TbProductstock.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1348,
+						"buffer_size": 4657,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								538,
-								538
+								1621,
+								1621
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1560845197.85,
+							"sorttabs_lastactivated": 1560927964.92,
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1350.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 23,
+					"type": "text"
+				},
+				{
+					"buffer": 23,
+					"file": "/Z/erp/app/models/erp/TbShippingDetail.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2930,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2198,
+								2198
+							]
+						],
+						"settings":
+						{
+							"sorttabs_lastactivated": 1560927961.88,
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 360.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 24,
+					"type": "text"
+				},
+				{
+					"buffer": 24,
+					"file": "/Z/erp/app/models/erp/BaseModel.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3517,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1295,
+								1300
+							]
+						],
+						"settings":
+						{
+							"sorttabs_lastactivated": 1560927306.13,
 							"syntax": "Packages/PHP/PHP.sublime-syntax",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
@@ -2386,42 +2493,135 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 10,
+					"stack_index": 25,
 					"type": "text"
 				},
 				{
-					"buffer": 23,
-					"file": "/Z/erp/app/home/controllers/OrderbrandController.php",
+					"buffer": 25,
+					"file": "/Z/erp/app/models/erp/TbShipping.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 20512,
+						"buffer_size": 1394,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								897,
-								1132
+								1034,
+								1034
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1560843736.56,
+							"sorttabs_lastactivated": 1560943616.58,
 							"syntax": "Packages/PHP/PHP.sublime-syntax",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1980.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 11,
+					"stack_index": 13,
 					"type": "text"
 				},
 				{
-					"buffer": 24,
+					"buffer": 26,
+					"file": "/Z/erp/app/home/controllers/OrderbrandController.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 21656,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								15076,
+								15076
+							]
+						],
+						"settings":
+						{
+							"sorttabs_lastactivated": 1560943255.5,
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 4918.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 15,
+					"type": "text"
+				},
+				{
+					"buffer": 27,
+					"file": "/Z/erp/app/models/erp/TbOrderBrand.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 891,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								721,
+								734
+							]
+						],
+						"settings":
+						{
+							"sorttabs_lastactivated": 1560942937.22,
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 16,
+					"type": "text"
+				},
+				{
+					"buffer": 28,
+					"file": "/Z/erp/app/models/erp/TbOrder.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2123,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1962,
+								1975
+							]
+						],
+						"settings":
+						{
+							"sorttabs_lastactivated": 1560940255.27,
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 360.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 17,
+					"type": "text"
+				},
+				{
+					"buffer": 29,
 					"file": "src/component/object.js",
 					"semi_transient": false,
 					"settings":
@@ -2455,60 +2655,60 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 13,
+					"stack_index": 38,
 					"type": "text"
 				},
 				{
-					"buffer": 25,
+					"buffer": 30,
 					"file": "/Z/erp/app/config/languages/cn.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 25429,
+						"buffer_size": 25405,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								18301,
-								18301
+								18454,
+								18464
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1560822728.45,
+							"sorttabs_lastactivated": 1560939592.6,
 							"syntax": "Packages/PHP/PHP.sublime-syntax",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 9270.0,
+						"translation.y": 9276.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 14,
+					"stack_index": 19,
 					"type": "text"
 				},
 				{
-					"buffer": 26,
+					"buffer": 31,
 					"file": "src/component/dialog.vue",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 839,
+						"buffer_size": 890,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								839
+								109,
+								109
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1560309576.44,
+							"sorttabs_lastactivated": 1560916360.47,
 							"syntax": "Packages/Vue/vue.tmLanguage",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
@@ -2517,11 +2717,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 42,
+					"stack_index": 29,
 					"type": "text"
 				},
 				{
-					"buffer": 27,
+					"buffer": 32,
 					"file": "src/component/function.js",
 					"semi_transient": false,
 					"settings":
@@ -2553,11 +2753,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 37,
+					"stack_index": 50,
 					"type": "text"
 				},
 				{
-					"buffer": 28,
+					"buffer": 33,
 					"file": "index.html",
 					"semi_transient": false,
 					"settings":
@@ -2581,14 +2781,14 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 4335.33333333,
+						"translation.y": 4335.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 8,
+					"stack_index": 36,
 					"type": "text"
 				},
 				{
-					"buffer": 29,
+					"buffer": 34,
 					"file": "/C/Users/changwei/Downloads/vue-chartjs-develop/vue-chartjs-develop/src/index.js",
 					"semi_transient": false,
 					"settings":
@@ -2622,11 +2822,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 49,
+					"stack_index": 60,
 					"type": "text"
 				},
 				{
-					"buffer": 30,
+					"buffer": 35,
 					"file": "src/component/supplier/index.vue",
 					"semi_transient": false,
 					"settings":
@@ -2653,11 +2853,11 @@
 						"translation.y": 540.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 56,
+					"stack_index": 64,
 					"type": "text"
 				},
 				{
-					"buffer": 31,
+					"buffer": 36,
 					"file": "src/component/login/index.vue",
 					"semi_transient": false,
 					"settings":
@@ -2684,42 +2884,73 @@
 						"translation.y": 1800.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 55,
+					"stack_index": 63,
 					"type": "text"
 				},
 				{
-					"buffer": 32,
+					"buffer": 37,
 					"file": "src/component/product/index.vue",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 10231,
+						"buffer_size": 6020,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4978,
-								4978
+								147,
+								147
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1560477833.0,
+							"sorttabs_lastactivated": 1560916512.56,
 							"syntax": "Packages/Vue/vue.tmLanguage",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 135.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 31,
+					"stack_index": 28,
 					"type": "text"
 				},
 				{
-					"buffer": 33,
+					"buffer": 38,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 0,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"default_dir": "D:\\code\\vue\\asa-plugin\\src\\component\\product",
+							"sorttabs_lastactivated": 1560913017.67,
+							"syntax": "Packages/Vue/vue.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 33,
+					"type": "text"
+				},
+				{
+					"buffer": 39,
 					"file": "src/component/home/index.vue",
 					"semi_transient": false,
 					"settings":
@@ -2731,44 +2962,44 @@
 						"selection":
 						[
 							[
-								5082,
-								5082
+								5999,
+								6002
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1560235046.29,
+							"sorttabs_lastactivated": 1560944346.58,
 							"syntax": "Packages/Vue/vue.tmLanguage",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 540.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 47,
+					"stack_index": 10,
 					"type": "text"
 				},
 				{
-					"buffer": 34,
+					"buffer": 40,
 					"file": "src/component/orderbrand/index.vue",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 4526,
+						"buffer_size": 4570,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4383,
-								4383
+								4569,
+								4569
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1560580148.0,
+							"sorttabs_lastactivated": 1560935989.77,
 							"syntax": "Packages/Vue/vue.tmLanguage",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true,
@@ -2780,45 +3011,52 @@
 							}
 						},
 						"translation.x": 0.0,
-						"translation.y": 450.0,
+						"translation.y": 540.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 21,
+					"stack_index": 20,
 					"type": "text"
 				},
 				{
-					"buffer": 35,
-					"file": "src/component/confirmorder/index.vue",
+					"buffer": 41,
+					"file": "src/component/http.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 4531,
+						"buffer_size": 2315,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2157,
-								2181
+								1448,
+								1448
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1560579906.8,
-							"syntax": "Packages/Vue/vue.tmLanguage",
+							"sorttabs_lastactivated": 1560944614.81,
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
 							"tab_size": 4,
-							"translate_tabs_to_spaces": true
+							"translate_tabs_to_spaces": true,
+							"typescript_plugin_format_options":
+							{
+								"convertTabsToSpaces": true,
+								"indentSize": 4,
+								"tabSize": 4
+							},
+							"use_tab_stops": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 900.0,
+						"translation.y": 270.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 22,
+					"stack_index": 8,
 					"type": "text"
 				},
 				{
-					"buffer": 36,
+					"buffer": 42,
 					"file": "src/component/shipping/index.vue",
 					"semi_transient": false,
 					"settings":
@@ -2836,7 +3074,7 @@
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1559541391.11,
+							"sorttabs_lastactivated": 1560944128.78,
 							"syntax": "Packages/Vue/vue.tmLanguage",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true,
@@ -2851,11 +3089,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 61,
+					"stack_index": 12,
 					"type": "text"
 				},
 				{
-					"buffer": 37,
+					"buffer": 43,
 					"file": "src/component/brand/index.vue",
 					"semi_transient": false,
 					"settings":
@@ -2882,11 +3120,11 @@
 						"translation.y": 315.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 58,
+					"stack_index": 66,
 					"type": "text"
 				},
 				{
-					"buffer": 38,
+					"buffer": 44,
 					"file": "src/component/pricesetting/index.vue",
 					"semi_transient": false,
 					"settings":
@@ -2914,11 +3152,11 @@
 						"translation.y": 630.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 45,
+					"stack_index": 57,
 					"type": "text"
 				},
 				{
-					"buffer": 39,
+					"buffer": 45,
 					"file": "src/component/order/index.vue",
 					"semi_transient": false,
 					"settings":
@@ -2936,7 +3174,7 @@
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1560147975.04,
+							"sorttabs_lastactivated": 1560944237.03,
 							"syntax": "Packages/Vue/vue.tmLanguage",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
@@ -2945,60 +3183,29 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 51,
+					"stack_index": 11,
 					"type": "text"
 				},
 				{
-					"buffer": 40,
-					"file": "src/component/orderbranddetail/index.vue",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 13818,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								9954,
-								9954
-							]
-						],
-						"settings":
-						{
-							"sorttabs_lastactivated": 1560850569.38,
-							"syntax": "Packages/Vue/vue.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 996.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 4,
-					"type": "text"
-				},
-				{
-					"buffer": 41,
+					"buffer": 46,
 					"file": "src/main.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 13477,
+						"buffer_size": 12988,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								5390,
-								5390
+								8023,
+								8023
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1560850968.9,
+							"sorttabs_lastactivated": 1560945372.9,
 							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true,
@@ -3011,14 +3218,14 @@
 							"use_tab_stops": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 3710.0,
+						"translation.y": 1710.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
-					"buffer": 42,
+					"buffer": 47,
 					"file": "src/component/math.js",
 					"semi_transient": false,
 					"settings":
@@ -3050,11 +3257,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 26,
+					"stack_index": 44,
 					"type": "text"
 				},
 				{
-					"buffer": 43,
+					"buffer": 48,
 					"file": "src/component/mixin.js",
 					"semi_transient": false,
 					"settings":
@@ -3088,11 +3295,11 @@
 						"translation.y": 2880.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 28,
+					"stack_index": 46,
 					"type": "text"
 				},
 				{
-					"buffer": 44,
+					"buffer": 49,
 					"file": "src/component/model.js",
 					"semi_transient": false,
 					"settings":
@@ -3126,29 +3333,29 @@
 						"translation.y": 2880.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 34,
+					"stack_index": 48,
 					"type": "text"
 				},
 				{
-					"buffer": 45,
+					"buffer": 50,
 					"file": "src/component/asa/order-detail.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 7888,
+						"buffer_size": 6568,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								5685,
-								5685
+								5919,
+								5933
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1560328454.14,
+							"sorttabs_lastactivated": 1560945789.42,
 							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true,
@@ -3161,14 +3368,14 @@
 							"use_tab_stops": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 2001.0,
+						"translation.y": 2091.33333333,
 						"zoom_level": 1.0
 					},
-					"stack_index": 36,
+					"stack_index": 0,
 					"type": "text"
 				},
 				{
-					"buffer": 46,
+					"buffer": 51,
 					"file": "src/component/mixins/order.js",
 					"semi_transient": false,
 					"settings":
@@ -3201,11 +3408,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 27,
+					"stack_index": 45,
 					"type": "text"
 				},
 				{
-					"buffer": 47,
+					"buffer": 52,
 					"file": "package.json",
 					"semi_transient": false,
 					"settings":
@@ -3238,11 +3445,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 43,
+					"stack_index": 55,
 					"type": "text"
 				},
 				{
-					"buffer": 48,
+					"buffer": 53,
 					"file": "src/component/asa/product.js",
 					"semi_transient": false,
 					"settings":
@@ -3277,11 +3484,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 48,
+					"stack_index": 59,
 					"type": "text"
 				},
 				{
-					"buffer": 49,
+					"buffer": 54,
 					"file": "src/component/mixins/product.js",
 					"semi_transient": false,
 					"settings":
@@ -3315,11 +3522,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 60,
+					"stack_index": 67,
 					"type": "text"
 				},
 				{
-					"buffer": 50,
+					"buffer": 55,
 					"file": "src/component/prop.js",
 					"semi_transient": false,
 					"settings":
@@ -3353,11 +3560,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 54,
+					"stack_index": 62,
 					"type": "text"
 				},
 				{
-					"buffer": 51,
+					"buffer": 56,
 					"file": "src/component/resources.js",
 					"semi_transient": false,
 					"settings":
@@ -3391,11 +3598,11 @@
 						"translation.y": 1694.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 16,
+					"stack_index": 39,
 					"type": "text"
 				},
 				{
-					"buffer": 52,
+					"buffer": 57,
 					"file": "src/component/select-table.vue",
 					"semi_transient": false,
 					"settings":
@@ -3423,11 +3630,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 38,
+					"stack_index": 51,
 					"type": "text"
 				},
 				{
-					"buffer": 53,
+					"buffer": 58,
 					"file": "src/component/select-text.js",
 					"semi_transient": false,
 					"settings":
@@ -3461,11 +3668,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 23,
+					"stack_index": 43,
 					"type": "text"
 				},
 				{
-					"buffer": 54,
+					"buffer": 59,
 					"file": "src/component/Simple_Admin_Page.vue",
 					"semi_transient": false,
 					"settings":
@@ -3483,7 +3690,7 @@
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1560477476.54,
+							"sorttabs_lastactivated": 1560945359.87,
 							"syntax": "Packages/Vue/vue.tmLanguage",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
@@ -3492,73 +3699,73 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 32,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
-					"buffer": 55,
+					"buffer": 60,
 					"file": "src/component/Simple_Admin_TableList.vue",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 14636,
+						"buffer_size": 14898,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								5175,
-								5175
+								2719,
+								2719
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1560568988.96,
+							"sorttabs_lastactivated": 1560935095.15,
 							"syntax": "Packages/Vue/vue.tmLanguage",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 990.0,
+						"translation.y": 90.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 24,
+					"stack_index": 21,
 					"type": "text"
 				},
 				{
-					"buffer": 56,
+					"buffer": 61,
 					"file": "src/component/Simple_Select.vue",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 10272,
+						"buffer_size": 10286,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								10146,
-								10146
+								955,
+								955
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1560851129.94,
+							"sorttabs_lastactivated": 1560934784.08,
 							"syntax": "Packages/Vue/vue.tmLanguage",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 3780.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 22,
 					"type": "text"
 				},
 				{
-					"buffer": 57,
+					"buffer": 62,
 					"file": "src/component/asa/sp-product-info.vue",
 					"semi_transient": false,
 					"settings":
@@ -3585,11 +3792,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 57,
+					"stack_index": 65,
 					"type": "text"
 				},
 				{
-					"buffer": 58,
+					"buffer": 63,
 					"file": "/D/code/element-dev/packages/table/src/table-body.js",
 					"semi_transient": false,
 					"settings":
@@ -3623,11 +3830,11 @@
 						"translation.y": 540.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 41,
+					"stack_index": 54,
 					"type": "text"
 				},
 				{
-					"buffer": 59,
+					"buffer": 64,
 					"file": "/D/code/element-dev/packages/table/src/table-column.js",
 					"semi_transient": false,
 					"settings":
@@ -3661,11 +3868,11 @@
 						"translation.y": 1800.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 40,
+					"stack_index": 53,
 					"type": "text"
 				},
 				{
-					"buffer": 60,
+					"buffer": 65,
 					"file": "/D/code/element-dev/packages/table/src/table.vue",
 					"semi_transient": false,
 					"settings":
@@ -3692,42 +3899,42 @@
 						"translation.y": 3780.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 39,
+					"stack_index": 52,
 					"type": "text"
 				},
 				{
-					"buffer": 61,
+					"buffer": 66,
 					"file": "src/component/shipping/warehousing.vue",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 24267,
+						"buffer_size": 24696,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								16573,
-								16573
+								12934,
+								12934
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1560852232.99,
+							"sorttabs_lastactivated": 1560945727.54,
 							"syntax": "Packages/Vue/vue.tmLanguage",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 4131.33333333,
+						"translation.y": 2481.33333333,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 1,
 					"type": "text"
 				},
 				{
-					"buffer": 62,
+					"buffer": 67,
 					"file": "webpack.config.js",
 					"semi_transient": false,
 					"settings":
@@ -3745,7 +3952,7 @@
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1560567136.88,
+							"sorttabs_lastactivated": 1560911242.18,
 							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true,
@@ -3761,7 +3968,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 25,
+					"stack_index": 34,
 					"type": "text"
 				}
 			]
