@@ -109,6 +109,7 @@ function getOption(name) {
     options["usersaleport"] = {url:'/user/saleportlist',oplabel:'name', opvalue:'id'}
     options["userwarehouse"] = {url:'/warehouse/userlist',oplabel:'name', opvalue:'id'}
     options["supplierlinkman"] = {url:'/l/supplierlinkman',oplabel:'name', opvalue:'id', parent:"supplierid"}
+    options["winterproofing"] = {url:'/l/winterproofing',oplabel:'name', opvalue:'id'}
 
     options["gender"] = {hashtable:list.gender}
     options["gender2"] = {hashtable:list.gender2}
@@ -117,7 +118,7 @@ function getOption(name) {
     options["orderproperty"] = {hashtable:list.orderproperty}
     options["bussinesstype"] = {hashtable:list.bussinesstype}
     options["sessionmark"] = {hashtable:{"SS":"SS","FW":"FW","XX":"XX"}}
-    options["seasontype"] = {hashtable:{"0":"Pre","1":"Main","2":"Fashion"}}
+    options["seasontype"] = {hashtable:{"3":"Pre","1":"Main","2":"Fashion"}}
 
 
     options["formtype"] = {hashtable:list.formtype}

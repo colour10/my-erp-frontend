@@ -29,7 +29,7 @@
         <sp-image-preview></sp-image-preview>
 
         <sp-dialog ref="search">
-            <sp-product-search-form @search="search" @close="_hideDialog('search')"></sp-product-search-form>
+            <sp-product-search-form @search="onSearch" @close="_hideDialog('search')"></sp-product-search-form>
         </sp-dialog>
     </div>
 </template>
@@ -49,6 +49,7 @@ export default {
     },
     data() {
         return {
+            form:{},
             props: {
                 columns: [
                     { name: "picture", label: _label("zhutu"), is_image: true, image_width: 50, image_height: 50, width: 60, className: 'picture' },
@@ -120,9 +121,13 @@ export default {
             //console.log("Product","clear cache")
     },
     methods: {
-        search(form){
+        onSearch(form){
+            this.form = form
+            this.search()
+        },
+        search(){
             let self = this
-            self.$refs.tablelist.search(form)
+            self.$refs.tablelist.search(self.form)
             self._hideDialog("search")
         },
         showFormToEdit(rowIndex, row) {

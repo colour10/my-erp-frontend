@@ -189,7 +189,8 @@ const routes = [
             {path:'/saletype', name:"saletype", component:getComponent("saletype")},
             {path:'/producttype', name:"producttype", component:getComponent("producttype")},
             
-            {path:'/language', name:"language", component:getComponent("language")}
+            {path:'/language', name:"language", component:getComponent("language")},
+            {path:'/winterproofing', name:"winterproofing", component:getComponent("winterproofing")},
         ]
     },
     {path: '/login/:action', name:"login", component: Login},

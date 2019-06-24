@@ -3,9 +3,13 @@ import List from './list.js'
 import {getFetcher,clear,getFetcherPromise} from "./fetcher.js"
 import {getLabel} from "./globals.js"
 import {httpPost} from "./http.js"
-import {isPromise} from "./object.js"
+import {isPromise, extend} from "./object.js"
 import math from "./math.js"
 import API from "./api.js"
+import mitt from 'mitt'
+
+const ModelBus = mitt();
+export { ModelBus }
 
 const getDataSource = function(name) {
     return DataSource.getDataSource(name, getLabel('lang'))
@@ -147,6 +151,17 @@ const ProductDetail = Object.assign(createModel("product"),{
         let self = this
 
         row.factoryprice = row.factoryprice*1
+
+        ModelBus.on("product-change", function(productid){
+            console.log("product-change", productid)
+            if(productid==row.id) {
+                
+                self.fetch(depth+1, productid, function(newinfo){
+                    console.log("product-change", "重新加载", newinfo)
+                    extend(row, newinfo)
+                })
+            }            
+        })
 
         let runner = promiseAll(row)
         //runner.push(Product.load({data:row.productid}), 'product')

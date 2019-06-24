@@ -485,6 +485,25 @@ const props = function(){
                 }
             }
         },
+        "winterproofing":{
+            columns: [
+                { name: "name", label: _label("mingcheng"), is_multiple: true, is_focus:true},
+                { name: "memo", label: _label("beizhu"), is_multiple: true},
+                { name: "displayindex", label: _label("paixu"), sortMethod:sort_method_digit }
+            ],
+            controller: "winterproofing",
+            auth: "winterproofing",
+            options:{
+                dialogWidth:"400px", 
+                autoreload:true
+            },
+            key_column: "name",
+            on:{
+                "after-update":function(){
+                    clearCache("winterproofing")
+                }
+            }
+        },
     }
 }
 

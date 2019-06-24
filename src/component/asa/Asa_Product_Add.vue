@@ -151,6 +151,10 @@
                         <simple-select v-model="form.producttypeid" source="producttype"/>
                     </el-form-item>
 
+                    <el-form-item :label="_label('fanghanzhishu')">
+                        <simple-select v-model="form.winterproofingid" source="winterproofing"></simple-select>
+                    </el-form-item>
+
                     <el-form-item :label="_label('xingbie')">
                         <sp-radio-group v-model="form.gender" source="gender" :span="8" :lang="lang" class="supermini" style="width:270px">
                         </sp-radio-group>
@@ -246,6 +250,7 @@ export default {
                 sizecontentids: "",
                 saletypeid:"",
                 producttypeid:"",
+                winterproofingid:"",
                 productmemoids: "" //商品描述
             },
             materials: [],

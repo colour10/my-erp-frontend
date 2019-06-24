@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-link type="primary" @click="onClick" size="mini">{{ product.getGoodsCode() }}</el-link>
-        <product ref="product"></product>
+        <product ref="product" @change="onChange"></product>
     </div>
 </template>
 
@@ -22,6 +22,9 @@ export default {
         onClick:function(){
             let self = this
             self.$refs.product.edit(true).setInfo(self.product).then(product => product.show(false))
+        },
+        onChange(form){
+            this.$emit("change", form)
         }
     }
 }

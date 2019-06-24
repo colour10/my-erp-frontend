@@ -135,6 +135,7 @@ const config = function(){
             "property":getLabel("shuxingdingyi"),
             "orderbrand":getLabel("waibudingdan"),
             "language":getLabel("duoguoyuyanguanli"),
+            "winterproofing":getLabel("fanghanzhishu"),
             "develop":"生成器"
         }
     }

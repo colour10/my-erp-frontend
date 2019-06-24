@@ -137,6 +137,10 @@
                                 <simple-select v-model="form.producttypeid" source="producttype"></simple-select>
                             </el-form-item>
 
+                            <el-form-item :label="_label('fanghanzhishu')">
+                                <simple-select v-model="form.winterproofingid" source="winterproofing"></simple-select>
+                            </el-form-item>
+
                             <el-form-item :label="_label('xingbie')">
                                 <sp-radio-group v-model="form.gender" source="gender" :span="8" :lang="lang" style="width:270px">
                                 </sp-radio-group>
@@ -282,7 +286,7 @@
 
 <script>
 import globals, { extract, _label, math } from '../globals.js'
-import { ProductCodeList, ProductDetail } from "../model.js"
+import { ProductCodeList, ProductDetail,ModelBus } from "../model.js"
 import { initObject } from "../array.js"
 import { extend } from "../object.js"
 import List from '../list.js'
@@ -358,7 +362,8 @@ export default {
                 makestaff: "",
                 maketime: '',
                 saletypeid:"",
-                producttypeid:""
+                producttypeid:"",
+                winterproofingid:""
             },
             materials: [],
             sizecontents: [],
@@ -437,6 +442,7 @@ export default {
                 } else {
                     self._submit("/product/edit", { params: JSON.stringify(params) }).then(function() {
                         self.$emit("change", Object.assign({}, self.form), "update")
+                        ModelBus.emit("product-change", self.form.id)
                         self.setInfo(self.form.id)
                     })
                 }
