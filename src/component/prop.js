@@ -244,7 +244,7 @@ const props = function(){
             options:{
                 isedit:(item)=>item.status==0,
                 isdelete:(item)=>item.status==0,
-                autoreload:true
+                isAutoReload:true
             },
             on:{
                 "after-update":function(){
@@ -271,7 +271,7 @@ const props = function(){
             options:{
                 isedit:(item)=>item.status==0,
                 isdelete:(item)=>item.status==0,
-                autoreload:true
+                isAutoReload:true
             },
             on:{
                 "after-update":function(){
@@ -337,7 +337,7 @@ const props = function(){
             auth: "pricesetting",
             options:{
                 dialogWidth:"400px", 
-                autoreload:true
+                isAutoReload:true
             },
             on:{
                 "after-update":function(){
@@ -358,7 +358,7 @@ const props = function(){
             auth: "price",
             options:{
                 dialogWidth:"400px", 
-                autoreload:true
+                isAutoReload:true
             },
             on:{
                 "after-update":function(){
@@ -376,7 +376,7 @@ const props = function(){
             auth: "saletype",
             options:{
                 dialogWidth:"400px", 
-                autoreload:true
+                isAutoReload:true
             },
             key_column: "name",
             on:{
@@ -439,14 +439,17 @@ const props = function(){
         },
         series:{
             columns:[
-                { name:"name", label:_label('xiliemingcheng'), is_multiple:true, is_focus:true },
-                { name:"code", label:_label('xiliebianma') },
+                { name:"name_en", label:_label('xiliemingcheng'), is_focus:true },
+                //{ name:"code", label:_label('xiliebianma') },
                 { name: "displayindex", label: _label("paixu"), sortMethod:sort_method_digit }
             ],
             controller:"series",
-            key_column:"name",
+            key_column:"name_en",
             base:{
                 brandid:""    
+            },
+            options:{
+                isAutoReload:true
             },
             on:{
                 "after-update":function(){
@@ -476,7 +479,7 @@ const props = function(){
             auth: "producttype",
             options:{
                 dialogWidth:"400px", 
-                autoreload:true
+                isAutoReload:true
             },
             key_column: "name",
             on:{
@@ -495,7 +498,7 @@ const props = function(){
             auth: "winterproofing",
             options:{
                 dialogWidth:"400px", 
-                autoreload:true
+                isAutoReload:true
             },
             key_column: "name",
             on:{

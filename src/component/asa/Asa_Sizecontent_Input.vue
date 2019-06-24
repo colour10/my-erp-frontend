@@ -3,7 +3,7 @@
     <el-table :data="tabledata" style="width:100%;" :cell-class-name="getCellClass" :border="false">
         <el-table-column :label="column.name" align="center" v-for="column in columns" :key="column.id" width="50">
             <template v-slot="scope">
-                <el-input v-model="form[column.id].number" style="width:50px" size="mini" @keyup.native="onChange" :disabled="disabled"></el-input>
+                <el-input v-model="form[column.id]" style="width:50px" size="mini" @keyup.native="onChange" :disabled="disabled"></el-input>
             </template>
         </el-table-column>
     </el-table>
@@ -25,17 +25,17 @@ export default {
         columns: {
             type: Array
         },
-        row:{
-            type:[Object],
+        uniq:{
             require:true
-        }
+        },
+        init:{}
     },
     data() {
         let self = this
 
         let form = {}
         self.columns.forEach(column=>{
-            form[column.id] = {}
+            form[column.id] = ""
         })
 
         return {
@@ -49,13 +49,21 @@ export default {
         },
         onChange() {
             let self = this
-            let output = chain(self.form).toArray().filter(item=>item.value.number>0).toObject(item=>[item.key, item.value]).object()
-            self.$emit("change", {row:self.row, form:output})
+            let output = []
+
+            chain(self.form).forEach((number,sizecontentid)=>{
+                output.push({
+                    uniq:self.uniq,
+                    sizecontentid,
+                    number
+                })
+            })
+            self.$emit("change", output)
         }
     },
     mounted:function(){
         //this._log(this.row,"====")
-        extend(this.form, this.row.form)
+        extend(this.form, this.init)
     }
 }
 </script>

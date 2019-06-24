@@ -16,14 +16,14 @@ export default function(self) {
                         return ;
                     }
 
-                    let result = await self._fetch("/series/add", {product:self.form.id, name_en:value, brandid:self.form.brandid})
+                    let result = await self._submit("/series/add", {product:self.form.id, name_en:value, brandid:self.form.brandid})
                     if(result.id>0) {
                         self._log(result)
                         DataSource.getDataSource("series", _label("lang")).clear()
                         self.$refs.series.load(self.form.brandid)
                         self.form.series = result.id
                     }
-                }).catch(() => {
+                }).catch((e) => {
                 });
             }
             else {

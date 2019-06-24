@@ -92,7 +92,7 @@
                     </el-table-column>
                     <el-table-column prop="number" :label="_label('dinggoushuliang')" align="center" :width="width">
                         <template v-slot="{row}">
-                            <sp-sizecontent-input :columns="row.product.sizecontents" :row="row" :disabled="!isEditable" @change="onChange" :key="row.product.id"/>
+                            <sp-sizecontent-input :columns="row.product.sizecontents" :uniq="row.product.id" :disabled="!isEditable" @change="onChange" :init="getInit(row.product.id)" :key="row.product.id"/>
                         </template>
                     </el-table-column>
                     <el-table-column prop="label" :label="_label('bizhong')" width="80" align="center">
@@ -107,7 +107,7 @@
                     </el-table-column>
                     <el-table-column prop="label" :label="_label('chuchangjiaheji')" width="100" align="center">
                         <template v-slot="{row}">
-                            {{formatNumber(row.getRowFactoryTotal())}}
+                            {{f(row.product.factoryprice*stat[row.product.id])}}
                         </template>
                     </el-table-column>
                     <el-table-column prop="label" :label="_label('zhekoulv')" width="100" align="center">
@@ -117,15 +117,18 @@
                     </el-table-column>
                     <el-table-column prop="label" :label="_label('chengjiaojia')" width="130" align="center">
                         <template v-slot="{row}">
-                            {{formatNumber(row.product.factoryprice*row.discount)}}
+                            {{f(row.product.factoryprice*row.discount)}}
                         </template>
                     </el-table-column>
                     <el-table-column prop="label" :label="_label('chengjiaozongjia')" width="100" align="center">
                         <template v-slot="{row}">
-                            {{formatNumber(row.getRowDealTotal())}}
+                            {{f(row.product.factoryprice*row.discount*stat[row.product.id])}}
                         </template>
                     </el-table-column>
                     <el-table-column prop="total" :label="_label('zongshu')" width="100" align="center">
+                        <template v-slot="{row}">
+                            {{stat[row.product.id]}}
+                        </template>
                     </el-table-column>
                     <el-table-column :label="_label('chanpinmingcheng')" align="left" width="300">
                         <template v-slot="scope">
@@ -209,6 +212,8 @@ export default {
                 id: ""
             },
             tabledata: [],
+            listdata:[],
+            details:[],
             title: "",
             lang: "",
             pro: false,
@@ -255,18 +260,17 @@ export default {
             let list = []
             self.tabledata.forEach(item => {
                 self._log("item", item)
-                if (item.form && item.total > 0) {
-                    chain(item.form).forEach((row, sizecontentid) => {
+                self.listdata.forEach(row=>{
+                    if(row.productid===item.product.id && row.number>0) {
                         list.push({
-                            id: item.id,
                             productid: item.product.id,
                             discount: item.discount,
-                            sizecontentid: sizecontentid,
+                            sizecontentid: row.sizecontentid,
                             number: row.number,
-                            id: row.id
+                            id:self.getDetailId(item.product.id, row.sizecontentid)
                         });
-                    })
-                }
+                    }
+                })
             })
             params.list = list;
 
@@ -284,6 +288,10 @@ export default {
                 });
             })
 
+        },
+        getDetailId(productid, sizecontentid){
+            let row = this.details.find(item=>item.productid===productid && item.sizecontentid===sizecontentid)
+            return row?row.id:0
         },
         deleteRow(row) {
             var self = this;
@@ -313,13 +321,37 @@ export default {
                 self.form.currency = row.product.factorypricecurrency
             }
         },
-        onChange({ row, form }) {
+        getInit(productid){
             let self = this
-            self._log(row)
+            let output = {}
+            self.listdata.forEach(item=>{
+                if(item.productid===productid) {
+                    output[item.sizecontentid] = item.number
+                }
+            })
+
+            return output
+        },
+        onChange(list) {
+            let self = this
+            /*self._log(row)
             row.form = form
             row.total = chain(form).toArray().array().reduce((total, item) => total * 1 + item.value.number * 1, 0)
             row.total = self.formatNumber(row.total)
-            self._log(row.total)
+            self._log(row.total)*/
+            list.forEach(item=>{
+                let row = self.listdata.find(({sizecontentid,productid})=>sizecontentid==item.sizecontentid && productid==item.uniq);
+                if(row) {
+                    row.number = item.number
+                }
+                else {
+                    self.listdata.push({
+                        sizecontentid:item.sizecontentid,
+                        number:item.number,
+                        productid:item.uniq
+                    })
+                }                
+            })
         },
         onDiscountChange(newValue, oldValue) {
             let self = this
@@ -338,11 +370,11 @@ export default {
                     sums[index] = self._label("heji")
                     return
                 } else if (index == 5) {
-                    sums[index] = self.formatNumber(data.reduce((total, row) => total + row.getRowFactoryTotal(), 0))
+                    sums[index] = self.formatNumber(data.reduce((total, row) => total + row.product.factoryprice*self.stat[row.product.id], 0))
                 } else if (index == 8) {
-                    sums[index] = self.formatNumber(data.reduce((total, row) => total + row.getRowDealTotal(), 0))
+                    sums[index] = self.formatNumber(data.reduce((total, row) => total + row.product.factoryprice*self.stat[row.product.id]*row.discount, 0))
                 } else if (index == 9) {
-                    sums[index] = data.reduce((total, row) => total + row.total, 0)
+                    sums[index] = self.listdata.reduce((total, row) => total + row.number*1, 0)
                 }
             })
 
@@ -375,8 +407,9 @@ export default {
             return this.form.id > 0
         },
         total_price() {
-            let total = this.tabledata.reduce(function(total, current) {
-                return total + current.total * current.product.factoryprice * current.discount
+            let self = this
+            let total = self.tabledata.reduce(function(total, current) {
+                return total + self.stat[current.product.id] * current.product.factoryprice * current.discount
             }, 0)
             return this.formatNumber(total)
         },
@@ -407,6 +440,18 @@ export default {
                 }
             });
             return Object.keys(obj).join(",");
+        },
+        stat(){
+            let self = this
+            let output = {}
+            self.listdata.forEach(({productid,number})=>{
+                let row = output[productid] || 0
+                row += number*1
+
+                output[productid] = row
+            })
+
+            return output
         }
     },
     mounted: function() {
@@ -425,6 +470,14 @@ export default {
 
                 copyTo(res.data.form, self.form)
                 if (res.data.list) {
+                    self.details = res.data.list;
+                    res.data.list.forEach(item=>{
+                        self.listdata.push({
+                            productid:item.productid,
+                            sizecontentid:item.sizecontentid,
+                            number:item.number
+                        })
+                    })
 
                     detailConvert(res.data.list).then(results => {
                         results.forEach(item => self.appendRow(item))
