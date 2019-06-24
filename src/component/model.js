@@ -262,7 +262,7 @@ const Productstock = Object.assign(createModel("productstock"),{
         let self = this
 
         let runner = promiseAll(row)
-        runner.push(ProductDetail.load({data:row.productid, depth:depth-1}), 'product')
+        runner.push(ProductDetail.load({data:row.productid, depth:depth}), 'product')
         runner.push(Warehouse.load({data:row.warehouseid, depth:depth-1}), 'warehouse')
         runner.push(Goods.load({data:row.goodsid, depth:depth-1}), 'goods')
         runner.push(getDataSource("sizecontent").getRowLabel(row.sizecontentid), 'sizecontent_label')

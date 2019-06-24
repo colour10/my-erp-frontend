@@ -172,6 +172,9 @@ function getOption(name) {
     //客户类型
     options["customtype"] =  {hashtable:list.customtype}
 
+    //发货单状态
+    options["shippingstatus"] =  {hashtable:list.shippingstatus}
+
     //客户列表
     options["supplier_2"] = {callback:function(DataSource){
             return DataSource.getDataSource("supplier", _label('lang')).filter(item=>{
@@ -189,6 +192,16 @@ function getOption(name) {
         },
         dependencies:['supplier']
     }
+
+    //供货商
+    options["season2"] = {callback:function(DataSource){
+            return DataSource.getDataSource("season", _label('lang')).filter(item=>{
+                return item.id<5
+            })
+        },
+        dependencies:['supplier']
+    }
+
 
     return options[name]
 }

@@ -11,76 +11,68 @@
             <el-row :gutter="0">
                 <el-col :span="4" style="width:230px">
                     <el-form-item :label="_label('dinghuokehu')" prop="bookingid">
-                        <simple-select v-model="form.bookingid" source="supplier_2" :lang="lang">
-                        </simple-select>
+                        <simple-select v-model="form.bookingid" source="supplier_2"/>
                     </el-form-item>
                     <el-form-item :label="_label('lianxiren')">
-                        <simple-select v-model="form.linkmanid" source="supplierlinkman" :parentid="form.bookingid">
-                        </simple-select>
+                        <simple-select v-model="form.linkmanid" source="supplierlinkman" :parentid="form.bookingid"/>
                     </el-form-item>
                     <el-form-item :label="_label('gonghuoshang')">
-                        <simple-select v-model="form.supplierid" source="supplier_3" :clearable="true">
-                        </simple-select>
+                        <simple-select v-model="form.supplierid" source="supplier_3" :clearable="true"/>
                     </el-form-item>
                     <el-form-item :label="_label('fahuoshang')">
-                        <simple-select v-model="form.finalsupplierid" source="supplier_3" :clearable="true">
-                        </simple-select>
+                        <simple-select v-model="form.finalsupplierid" source="supplier_3" :clearable="true"/>
                     </el-form-item>
                 </el-col>
                 <el-col :span="4" style="width:230px">
                     <el-form-item :label="_label('niandai')" prop="ageseason">
-                        <simple-select v-model="form.ageseason" source="ageseason" :lang="lang"></simple-select>
+                        <simple-select v-model="form.ageseason" source="ageseason"/>
                     </el-form-item>
                     <el-form-item :label="_label('jijie')">
-                        <simple-select v-model="form.seasontype" source="seasontype" :lang="lang">
-                        </simple-select>
+                        <simple-select v-model="form.seasontype" source="seasontype"/>
                     </el-form-item>
                     <el-form-item :label="_label('yewuleixing')" prop="bussinesstype">
-                        <simple-select v-model="form.bussinesstype" source="bussinesstype" :lang="lang">
-                        </simple-select>
+                        <simple-select v-model="form.bussinesstype" source="bussinesstype"/>
                     </el-form-item>
                     <el-form-item :label="_label('shuxing')" prop="property">
-                        <simple-select v-model="form.property" source="orderproperty" :lang="lang">
-                        </simple-select>
+                        <simple-select v-model="form.property" source="orderproperty"/>
                     </el-form-item>
                 </el-col>
                 <el-col :span="4" style="width:230px">
                     <el-form-item :label="_label('jine')">
                         <el-input placeholder="" v-model="total_price" class="productcurrency">
-                            <simple-select source="currency" :clearable="false" v-model="form.currency" slot="prepend">
-                            </simple-select>
+                            <simple-select source="currency" :clearable="false" v-model="form.currency" slot="prepend"/>
                         </el-input>
                     </el-form-item>
                     <el-form-item :label="_label('zhekoulv')">
-                        <sp-float-input v-model="form.discount" @change="onDiscountChange"></sp-float-input>
+                        <sp-float-input v-model="form.discount" @change="onDiscountChange"/>
                     </el-form-item>
                     <el-form-item :label="_label('tuishuilv')">
-                        <sp-float-input v-model="form.taxrebate"></sp-float-input>
+                        <sp-float-input v-model="form.taxrebate"/>
                     </el-form-item>
                     <el-form-item :label="_label('beizhu')">
-                        <el-input v-model="form.memo"></el-input>
+                        <el-input v-model="form.memo"/>
                     </el-form-item>
                 </el-col>
                 <el-col :span="4" style="width:230px">
                     <el-form-item :label="_label('kehudingdanhao')">
-                        <el-input v-model="form.bookingorderno"></el-input>
+                        <el-input v-model="form.bookingorderno"/>
                     </el-form-item>
                     <el-form-item :label="_label('gongsidingdanhao')">
-                        <el-input v-model="form.orderno" :placeholder="_label('zidonghuoqu')" disabled></el-input>
+                        <el-input v-model="form.orderno" :placeholder="_label('zidonghuoqu')" disabled/>
                     </el-form-item>
                     <el-form-item :label="_label('zhidanren')">
-                        <sp-display-input :value="form.makestaff" source="user" :placeholder="_label('zidonghuoqu')"></sp-display-input>
+                        <sp-display-input :value="form.makestaff" source="user" :placeholder="_label('zidonghuoqu')"/>
                     </el-form-item>
                     <el-form-item :label="_label('dinghuoriqi')">
-                        <el-date-picker v-model="form.orderdate" type="date" value-format="yyyy-MM-dd"></el-date-picker>
+                        <el-date-picker v-model="form.orderdate" type="date" value-format="yyyy-MM-dd"/>
                     </el-form-item>
                 </el-col>
                 <el-col :span="4" style="width:230px">
                     <el-form-item :label="_label('xingbie')">
-                        <el-input v-model="genderlabels" disabled></el-input>
+                        <el-input v-model="genderlabels" disabled/>
                     </el-form-item>
                     <el-form-item :label="_label('pinpai')">
-                        <el-input v-model="brands" disabled></el-input>
+                        <el-input v-model="brands" disabled/>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -95,12 +87,12 @@
                     </el-table-column>
                     <el-table-column :label="_label('guojima')" align="left" width="200">
                         <template v-slot="scope">
-                            <sp-product-tip :product="scope.row.product"></sp-product-tip>
+                            <sp-product-tip :product="scope.row.product"/>
                         </template>
                     </el-table-column>
                     <el-table-column prop="number" :label="_label('dinggoushuliang')" align="center" :width="width">
                         <template v-slot="{row}">
-                            <sp-sizecontent-input :columns="row.product.sizecontents" :row="row" :disabled="!isEditable" @change="onChange" :key="row.product.id"></sp-sizecontent-input>
+                            <sp-sizecontent-input :columns="row.product.sizecontents" :row="row" :disabled="!isEditable" @change="onChange" :key="row.product.id"/>
                         </template>
                     </el-table-column>
                     <el-table-column prop="label" :label="_label('bizhong')" width="80" align="center">
@@ -120,7 +112,7 @@
                     </el-table-column>
                     <el-table-column prop="label" :label="_label('zhekoulv')" width="100" align="center">
                         <template v-slot="{row}">
-                            <el-input v-model="row.discount" size="mini"></el-input>
+                            <el-input v-model="row.discount" size="mini"/>
                         </template>
                     </el-table-column>
                     <el-table-column prop="label" :label="_label('chengjiaojia')" width="130" align="center">
@@ -151,7 +143,7 @@
         <!-- <el-row>
             <simple-admin-page v-bind="props" ref="payment" :hide-create="true" :hide-form="true" v-if="form.id>0"></simple-admin-page>
         </el-row> -->
-        <asa-select-product-dialog :visible.sync="pro" @select="onSelect"></asa-select-product-dialog>
+        <asa-select-product-dialog :visible.sync="pro" @select="onSelect"/>
     </div>
 </template>
 

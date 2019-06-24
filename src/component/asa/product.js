@@ -26,6 +26,9 @@ export default function(self) {
                 }).catch(() => {
                 });
             }
+            else {
+                self._info(self._label("tip-pinpai"))
+            }
         }
     }
 

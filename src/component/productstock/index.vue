@@ -7,42 +7,38 @@
             </el-form-item>
         </el-form>
         <sp-table :data="searchresult" border style="width:100%;">
-            <el-table-column prop="productname" :label="_label('chanpinmingcheng')" align="center" sortable width="200">
-                <template v-slot="scope">
-                    <as-button type="text" @click="selectRow(scope.row)">{{scope.row.product.getName()}}</as-button>
+            <el-table-column :label="_label('chanpinmingcheng')" align="center" sortable width="200">
+                <template v-slot="{row}">
+                    {{row.product.getName()}}
                 </template>
             </el-table-column>
-            <el-table-column prop="productname" :label="_label('guojima')" align="center" sortable width="120">
-                <template v-slot="scope">
-                    {{scope.row.product.getGoodsCode()}}
+            <el-table-column :label="_label('guojima')" align="center" sortable width="200">
+                <template v-slot="{row}">
+                    <sp-product-tip :product="row.product"/>
                 </template>
             </el-table-column>
             <el-table-column prop="sizecontent_label" :label="_label('chima')" width="100" align="center" sortable>
             </el-table-column>
-            <el-table-column prop="warehouseid" sortable :label="_label('cangku')" width="100" align="center">
-                <template v-slot="scope">
-                    {{scope.row.warehouse.name}}
+            <el-table-column sortable :label="_label('cangku')" width="100" align="center">
+                <template v-slot="{row}">
+                    {{row.warehouse.name}}
                 </template>
             </el-table-column>
-            <el-table-column prop="number" :label="_label('kucunshuliang')" width="200" align="center">
-                <template v-slot="scope">
-                    {{scope.row.number}}
+            <el-table-column :label="_label('kucunshuliang')" width="110" align="center">
+                <template v-slot="{row}">
+                    {{row.number}}
                 </template>
             </el-table-column>
+
         </sp-table>
-        <product ref="product"></product>
     </div>
 </template>
 
 <script>
 import { Productstock } from "../model.js"
-import Product from '../asa/Asa_Product.vue'
 
 export default {
     name: 'sp-productstock',
-    components: {
-        "product": Product
-    },
     data() {
         return {
             form: {
@@ -64,9 +60,6 @@ export default {
                     }, 2)
                 })
             })
-        },
-        selectRow(row) {
-            this.$refs.product.setInfo(row.product).then(product => product.show())
         }
     }
 }

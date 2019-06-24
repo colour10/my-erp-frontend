@@ -16,9 +16,14 @@
                 </el-row>
             </el-form>
             <el-table :data="searchresult" stripe border style="width:100%;">
-                <el-table-column prop="productname" :label="_label('chanpinmingcheng')" align="center">
-                    <template v-slot="scope">
-                        {{scope.row.product.productname}}
+                <el-table-column :label="_label('guojima')" align="center">
+                    <template v-slot="{row}">
+                        <sp-product-tip :product="row.product"></sp-product-tip>
+                    </template>
+                </el-table-column>
+                <el-table-column :label="_label('chanpinmingcheng')" align="center">
+                    <template v-slot="{row}">
+                        {{row.product.getName()}}
                     </template>
                 </el-table-column>
                 <el-table-column prop="sizecontent_label" :label="_label('chima')" width="100" align="center"></el-table-column>

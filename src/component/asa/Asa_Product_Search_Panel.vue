@@ -91,6 +91,7 @@
                         </template>
                     </el-table-column> -->
                 </el-table>
+                <el-pagination v-if="searchresult.length<pagination.total" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pagination.current*1" :page-sizes="pagination.pageSizes" :page-size="pagination.pageSize*1" layout="total, sizes, prev, pager, next, jumper" :total="pagination.total*1"></el-pagination>
             </el-collapse-item>
         </el-collapse>
 
@@ -135,18 +136,32 @@ export default {
             option: {
                 isedit: true
             },
-            selected:[]
+            selected:[],
+            pagination: {
+                pageSizes: globals.pageSizes,
+                pageSize: 20,
+                total: 0,
+                current: 1
+            }
         }
     },
     methods: {
         onQuit(){
             this.$emit("close")
         },
-        search() {
+        search(){
+            this.pagination.current = 1
+            this.reload()
+        },
+        reload() {
             //查询库存商品
             let self = this
 
-            self._fetch("/product/search", self.form).then(function(res) {
+            let form = extend({}, self.form)
+            form.page = self.pagination.current
+            form.pageSize = self.pagination.pageSize
+
+            self._fetch("/product/search", form).then(function(res) {
                 self.searchresult = []
                     //self._log(res)
                 if (res.data.length == 0) {
@@ -169,9 +184,20 @@ export default {
                             self.searchresult.push(result)
                         }, 1)
                     })
+
+                    extend(self.pagination, res.pagination)
+
                     self.is_collapse = "1";
                 }
             });
+        },
+        handleSizeChange(pageSize) {
+            this.pagination.pageSize = pageSize
+            this.reload()
+        },
+        handleCurrentChange(current) {
+            this.pagination.current = current
+            this.reload()
         },
         setParam(name, value) {
             let self = this

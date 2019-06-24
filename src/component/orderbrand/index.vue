@@ -2,17 +2,55 @@
     <div>
         <el-row>
             <el-col :span="24">
-                <el-form class="searchform" ref="search-form" :model="searchform" label-width="80px" size="mini" :inline="true" @submit.native.prevent>
-                    <el-form-item class="searchitem">
-                        <el-input v-model="searchform.keyword" width="250" style="width:250px;" @keyup.enter.native="onSearch"></el-input>
-                        <as-button type="primary" @click="onSearch" size="mini" icon="el-icon-search">{{_label("chaxun")}}</as-button>
-                        <auth auth="order-submit"><as-button type="primary" @click="showFormToCreate">{{_label('xinjian')}}</as-button></auth>
-                        <auth auth="order-submit"><as-button type="primary" @click="showFormToEdit">{{_label('bianji')}}</as-button></auth>
-                    </el-form-item>
-                </el-form>
+                <as-button type="primary" @click="_showDialog('search')" size="mini" icon="el-icon-search">{{_label("chaxun")}}</as-button>
+                <auth auth="order-submit"><as-button type="primary" @click="showFormToCreate">{{_label('xinjian')}}</as-button></auth>
+                <auth auth="order-submit"><as-button type="primary" @click="showFormToEdit">{{_label('bianji')}}</as-button></auth>
             </el-col>
         </el-row>
-        <simple-admin-tablelist ref="tablelist" v-bind="props" :onclickupdate="showFormToEdit" :isedit="false" :isdelete="false" :isSelect="true"></simple-admin-tablelist>
+        <simple-admin-tablelist ref="tablelist" v-bind="props" :onclickupdate="showFormToEdit" :isedit="false" :isdelete="false" :isSelect="true">
+            <template v-slot:brandid="{row}">
+                <sp-select-text :value="row.brandid" source="brand"></sp-select-text>
+            </template>
+        </simple-admin-tablelist>
+
+        <sp-dialog ref="search" width="600">
+            <el-form class="order-form" :model="form" label-width="70px" :inline="false" style="width:100%;" size="mini" @submit.native.prevent>
+                <el-row :gutter="0">
+                    <el-col :span="8" style="width:270px">
+                        <el-form-item :label="_label('dingdanhao')">
+                            <el-input v-model="form.orderno" class="width2"/>
+                        </el-form-item>
+                        <el-form-item :label="_label('gonghuoshang')">
+                            <simple-select v-model="form.supplierid" source="supplier_3" :multiple="true"/>
+                        </el-form-item>
+                        <el-form-item :label="_label('niandai')">
+                            <simple-select v-model="form.ageseason" source="ageseason" :multiple="true"/>
+                        </el-form-item>
+                        <el-form-item :label="_label('pinpai')">
+                            <simple-select v-model="form.brandid" source="brand" :multiple="true"/>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8" style="width:270px">
+                        <el-form-item :label="_label('jijie')">
+                            <simple-select v-model="form.seasontype" source="seasontype"/>
+                        </el-form-item>
+                        <el-form-item :label="_label('yewuleixing')" prop="bussinesstype">
+                            <simple-select v-model="form.bussinesstype" source="bussinesstype"/>
+                        </el-form-item>
+
+                        <el-form-item :label="_label('beizhu')">
+                            <el-input v-model="form.memo" class="width2"/>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row :gutter="0">
+                    <el-col align="center">
+                        <as-button auth="product" type="primary" @click="onSearch(form)" native-type="submit">{{_label("chaxun")}}</as-button>
+                        <as-button type="primary" @click="_hideDialog('search')">{{_label("tuichu")}}</as-button>
+                    </el-col>
+                </el-row>
+            </el-form>
+        </sp-dialog>
     </div>
 </template>
 
@@ -24,8 +62,14 @@ export default {
         let _label = self._label
 
         return {   
-            searchform:{
-                keyword:""
+            form:{
+                orderno:"",
+                brandid:"",
+                supplierid:"",
+                ageseason:"",
+                seasontype:"",
+                bussinesstype:"",
+                memo:""
             },         
             props: {
                 columns: [
@@ -44,7 +88,8 @@ export default {
                         if(row.maketime && row.maketime.length>0) {
                             return row.maketime.substr(0,10)
                         }
-                    } }
+                    } },
+                    { name: "brandid", label: _label('品牌'), width:150, sortable:false }
                 ],
                 actions:[
                     { label: _label("queren"), handler:self.toCreateConfirm, type:({row})=>row.status==1 ? "" : "info" },
@@ -70,7 +115,7 @@ export default {
         onSearch() {
             let self = this
                 //self._log(self.searchform)
-            self.$refs.tablelist.search(self.searchform)
+            self.$refs.tablelist.search(self.form)
         },
         showFormToCreate() {
             this.$router.push('/orderbrand/0')

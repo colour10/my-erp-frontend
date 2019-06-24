@@ -1,7 +1,7 @@
 <template>
     <div style="width:100%">
         <el-row :gutter="20">
-            <el-col :span="8">
+            <el-col :span="8" style="width:300px">
                 <el-tree ref="tree" :data="data" node-key="id" :props="defaultProps" default-expand-all :expand-on-click-node="false" @node-click="onNodeClick"></el-tree>
             </el-col>
             <el-col :span="7" v-if="form.id>0">
@@ -46,15 +46,9 @@
 
 <script>
 import globals from '../globals.js'
-//import Simple_Admin_TableList from '../Simple_Admin_TableList.vue'
-
-const _log = globals.logger("asapage-department");
 
 export default {
     name: 'sp-department',
-    components: {
-        // 'simple-admin-tablelist':Simple_Admin_TableList
-    },
     data() {
         return {
             form: {

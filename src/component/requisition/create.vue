@@ -27,11 +27,16 @@
         <el-row>
             <el-col :span="24">
                 <el-table :data="tabledata" stripe border style="width:100%;">
-                    <el-table-column prop="productname" :label="_label('chanpinmingcheng')" align="center">
-                        <template v-slot="scope">
-                            {{scope.row.product.productname}}
-                        </template>
-                    </el-table-column>
+                    <el-table-column :label="_label('guojima')" align="center" width="150">
+                    <template v-slot="{row}">
+                        <sp-product-tip :product="row.product"></sp-product-tip>
+                    </template>
+                </el-table-column>
+                <el-table-column :label="_label('chanpinmingcheng')" align="center" width="200">
+                    <template v-slot="{row}">
+                        {{row.product.getName()}}
+                    </template>
+                </el-table-column>
                     <el-table-column prop="sizecontent_label" :label="_label('chima')" width="100" align="center">
                     </el-table-column>
                     <el-table-column prop="warehousename" :label="_label('cangku')" width="100" align="center">
@@ -49,7 +54,7 @@
                     </el-table-column>
                     <el-table-column prop="select_number" :label="_label('diaoboshuliang')" width="200" align="center">
                         <template v-slot="scope">
-                            <el-input-number v-model="scope.row.select_number" :min="1" :max="scope.row.number*1"></el-input-number>
+                            <el-input-number v-model="scope.row.select_number" :min="1" :max="scope.row.number*1" size="mini"></el-input-number>
                         </template>
                     </el-table-column>
                     <el-table-column :label="_label('caozuo')" width="150" align="center">
@@ -67,9 +72,9 @@
 
 <script>
 export default {
-    name: 'asa-requisition-dialog',
+    name: 'sp-requisitioncreate',
     data() {
-        var self = this;
+        let self = this;
 
         return {
             form: {
@@ -86,7 +91,7 @@ export default {
             this.$refs.stocksearch.setVisible(true)
         },
         onSelect(row) {
-            var self = this;
+            let self = this;
             let index = self.tabledata.findIndex(item => item.id == row.id)
             if (index < 0) {
                 row.select_number = 1
@@ -97,14 +102,14 @@ export default {
         },
         saveOrder(status) {
             //保存订单
-            var self = this
+            let self = this
 
             if (!confirm(self._label('order_submit_confirm'))) {
                 return
             }
 
-            var params = { form: self.form }
-            var array = []
+            let params = { form: self.form }
+            let array = []
             params.list = self.tabledata.map(item => {
                 if (self.form.allin == 1) {
                     return { out_id: item.warehouseid, productstockid: item.id, number: item.select_number, in_id: self.form.in_id }
@@ -113,7 +118,7 @@ export default {
                 }
 
             })
-            self._log(JSON.stringify(params))
+            //self._log(JSON.stringify(params))
             self._submit("/requisition/save", { params: JSON.stringify(params) }).then(function(res) {
                 self.$emit("change")
             });

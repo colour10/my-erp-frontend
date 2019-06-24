@@ -20,22 +20,22 @@
                     
                     <el-table-column :label="_label('kuanshi')" width="140" align="center">
                         <template v-slot="{row,$index}">
-                            <el-input v-model="row.wordcode_1" size="mini" @focus="onFocus(1)" @blur="onBlur(1)" @keyup.native="onKeyInput(row,'wordcode_1')" @keyup.native.up="onKeyMove(1, $index, 'up')" @keyup.native.down="onKeyMove(1, $index, 'down')" @keyup.native.left="onKeyMove(1, $index, 'left')" @keyup.native.right="onKeyMove(1, $index, 'right')" :ref="'word1-'+$index"></el-input>
+                            <el-input v-model="row.wordcode_1" size="mini" @focus="onFocus(1)" @blur="onBlur(1)" @keyup.native="onKeyInput(row,'wordcode_1')" @keyup.native.up="onKeyMove(1, $index, 'up')" @keyup.native.down="onKeyMove(1, $index, 'down')" @keyup.native.left="onKeyMove(1, $index, 'left')" @keyup.native.right="onKeyMove(1, $index, 'right')" :ref="'word1-'+$index"/>
                         </template>
                     </el-table-column>
                     <el-table-column :label="_label('caizhi')" width="140" align="center">
                         <template v-slot="{row,$index}">
-                            <el-input v-model="row.wordcode_2" size="mini" @focus="onFocus(2)" @blur="onBlur(2)" @keyup.native="onKeyInput(row,'wordcode_2')" @keyup.native.up="onKeyMove(2, $index, 'up')" @keyup.native.down="onKeyMove(2, $index, 'down')" @keyup.native.left="onKeyMove(2, $index, 'left')" @keyup.native.right="onKeyMove(2, $index, 'right')" :ref="'word2-'+$index"></el-input>
+                            <el-input v-model="row.wordcode_2" size="mini" @focus="onFocus(2)" @blur="onBlur(2)" @keyup.native="onKeyInput(row,'wordcode_2')" @keyup.native.up="onKeyMove(2, $index, 'up')" @keyup.native.down="onKeyMove(2, $index, 'down')" @keyup.native.left="onKeyMove(2, $index, 'left')" @keyup.native.right="onKeyMove(2, $index, 'right')" :ref="'word2-'+$index"/>
                         </template>
                     </el-table-column>
                     <el-table-column :label="_label('yanse')" width="140" align="center">
                         <template v-slot="{row,$index}">
-                            <el-input v-model="row.wordcode_3" size="mini" @keyup.native="onWord3Change(row,'wordcode_3')" @keyup.native.up="onKeyMove(3, $index, 'up')" @keyup.native.down="onKeyMove(3, $index, 'down')" @keyup.native.left="onKeyMove(3, $index, 'left')" @keyup.native.right="onKeyMove(3, $index, 'right')" :ref="'word3-'+$index"></el-input>
+                            <el-input v-model="row.wordcode_3" size="mini" @keyup.native="onWord3Change(row,'wordcode_3')" @keyup.native.up="onKeyMove(3, $index, 'up')" @keyup.native.down="onKeyMove(3, $index, 'down')" @keyup.native.left="onKeyMove(3, $index, 'left')" @keyup.native.right="onKeyMove(3, $index, 'right')" :ref="'word3-'+$index"/>
                         </template>
                     </el-table-column>
                     <el-table-column :label="_label('yansemingcheng')" width="150" align="center">
                         <template v-slot="{row,$index}">
-                            <el-input v-model="row.colorname" size="mini" @keyup.native.up="onKeyMove(4, $index, 'up')" @keyup.native.down="onKeyMove(4, $index, 'down')" @keyup.native.left="onKeyMove(4, $index, 'left')" @keyup.native.right="onKeyMove(4, $index, 'right')" :ref="'word4-'+$index"></el-input>
+                            <el-input v-model="row.colorname" size="mini" @keyup.native.up="onKeyMove(4, $index, 'up')" @keyup.native.down="onKeyMove(4, $index, 'down')" @keyup.native.left="onKeyMove(4, $index, 'left')" @keyup.native.right="onKeyMove(4, $index, 'right')" :ref="'word4-'+$index"/>
                         </template>
                     </el-table-column>
 
@@ -47,7 +47,7 @@
 
                     <el-table-column :label="_label('fuzhuma')" width="130" align="center">
                         <template v-slot="scope">
-                            <el-input v-model="scope.row.wordcode_4" size="mini"></el-input>
+                            <el-input v-model="scope.row.wordcode_4" size="mini"/>
                         </template>
                     </el-table-column>
                     
@@ -65,19 +65,19 @@
             <el-row :gutter="0">
                 <el-col :span="8">
                     <el-form-item :label="_label('niandai')" prop="ageseason">
-                        <simple-select v-model="form.ageseason" source="ageseason" :multiple="true" @change="loadRate"></simple-select>
+                        <simple-select v-model="form.ageseason" source="ageseason" :multiple="true" @change="loadRate"/>
                     </el-form-item>
                     <el-form-item :label="_label('pinpai')" prop="brandid">
-                        <simple-select v-model="form.brandid" source="brand" @change="onBrandChange"></simple-select>
+                        <simple-select v-model="form.brandid" source="brand" @change="onBrandChange"/>
                     </el-form-item>
                     <el-form-item :label="_label('pinlei')" prop="brandgroupid">
-                        <simple-select v-model="form.brandgroupid" source="brandgroup" @change="loadRate"></simple-select>
+                        <simple-select v-model="form.brandgroupid" source="brandgroup" @change="loadRate"/>
                     </el-form-item>
                     <el-form-item :label="_label('zipinlei')" prop="childbrand">
-                        <simple-select ref="childbrand" v-model="form.childbrand" source="brandgroupchild" :parentid="form.brandgroupid"></simple-select>
+                        <simple-select ref="childbrand" v-model="form.childbrand" source="brandgroupchild" :parentid="form.brandgroupid"/>
                     </el-form-item>
                     <el-form-item :label="_label('chimazu')" prop="sizetopid">
-                        <simple-select v-model="form.sizetopid" source="sizetop"></simple-select>
+                        <simple-select v-model="form.sizetopid" source="sizetop"/>
                     </el-form-item>
                     <el-form-item :label="_label('chimamingxi')" prop="sizecontentids">
                         <simple-select v-model="form.sizecontentids" source="sizecontent" :parentid="form.sizetopid" :multiple="true" :isBatch="true" @option-change="onOptionChange"> </simple-select><as-button @click="onTrimSize" class="trimhalf">{{_label("qubanma")}}</as-button>
@@ -90,15 +90,15 @@
                     </el-form-item>
 
                     <el-form-item :label="_label('chandi')" prop="countries">
-                        <simple-select v-model="form.countries" source="country"></simple-select>
+                        <simple-select v-model="form.countries" source="country"/>
                     </el-form-item>
 
                     <el-form-item :label="_label('shangpinchicun')">
-                        <simple-select v-model="form.ulnarinch" source="ulnarinch" :multiple="true"></simple-select>
+                        <simple-select v-model="form.ulnarinch" source="ulnarinch" :multiple="true"/>
                     </el-form-item>
 
                     <el-form-item :label="_label('shangpinmiaoshu')">
-                        <simple-select v-model="form.productmemoids" source="productmemo" :multiple="true"></simple-select>
+                        <simple-select v-model="form.productmemoids" source="productmemo" :multiple="true"/>
                     </el-form-item>
 
                     <el-form-item :label="_label('cankaobeilv')">
@@ -140,15 +140,15 @@
                 </el-col>
                 <el-col :span="8">
                     <el-form-item :label="_label('shangpinxilie')">
-                        <simple-select v-model="form.series" ref="series" source="series" :parentid="form.brandid"> </simple-select>
+                        <simple-select v-model="form.series" ref="series" source="series" :parentid="form.brandid"> </simple-select><as-button class="trimhalf" @click="onAddSeries">{{_label("xinjian")}}</as-button>
                     </el-form-item>
 
                     <el-form-item :label="_label('xiaoshoushuxing')">
-                        <simple-select v-model="form.saletypeid" source="saletype"></simple-select>
+                        <simple-select v-model="form.saletypeid" source="saletype"/>
                     </el-form-item>
 
                     <el-form-item :label="_label('shangpinshuxing')">
-                        <simple-select v-model="form.producttypeid" source="producttype"></simple-select>
+                        <simple-select v-model="form.producttypeid" source="producttype"/>
                     </el-form-item>
 
                     <el-form-item :label="_label('xingbie')">
@@ -176,7 +176,7 @@
                     </el-form-item>
                     
                     <el-form-item :label="_label('beizhu')">
-                        <el-input v-model="form.memo"></el-input>
+                        <el-input v-model="form.memo"/>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -202,6 +202,7 @@ import chain from "../chain.js"
 import API from "../api.js"
 import { host } from '../http.js'
 import productMixin from "../mixins/product.js"
+import _Product from "./product.js"
 
 export default {
     name: 'asa-product-add',
@@ -277,6 +278,9 @@ export default {
                 self.onAppendColor({picture2})
             }
             
+        },
+        onAddSeries(){
+            _Product(this).addSeries();
         },
         onBrandChange(){
             this.loadRate();

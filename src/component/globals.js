@@ -93,6 +93,7 @@ const getAvailableHeight = function() {
 }
 
 const pageSizes = [10, 15, 20, 30, 50, 100]
+
 const config = function(){
     return {
         ouyuan: '9', //欧元货币的id

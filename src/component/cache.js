@@ -5,7 +5,7 @@ export default function(context) {
 
             setTimeout(function(){
                 delete context[key]
-                console.log("删除缓存")
+                //console.log("删除缓存")
             }, expire)
         },
         get(key) {

@@ -9,13 +9,13 @@
                 </el-col>
                 <el-col :span="18">
                     <el-tag type="warning">
-                        <sp-select-text :value="order.ageseason" source="ageseason"></sp-select-text>
+                        <sp-select-text :value="order.ageseason" source="ageseason"/>
                     </el-tag>
                     <el-tag type="warning">
-                        <sp-select-text :value="order.seasontype" source="seasontype"></sp-select-text>
+                        <sp-select-text :value="order.seasontype" source="seasontype"/>
                     </el-tag>
                     <el-tag type="warning">
-                        <sp-select-text :value="order.bussinesstype" source="bussinesstype"></sp-select-text>
+                        <sp-select-text :value="order.bussinesstype" source="bussinesstype"/>
                     </el-tag>
                 </el-col>
             </el-row>
@@ -34,10 +34,10 @@
                         </el-form>
                     </template>
                 </el-table-column> -->
-                <el-table-column :label="_label('gonghuoshang')" width="120" align="center" prop="suppliercode"></el-table-column>
+                <el-table-column :label="_label('gonghuoshang')" width="120" align="center" prop="suppliercode"/>
                 <el-table-column :label="_label('bizhong')" width="60" align="center">
                     <template v-slot="{row}">
-                        <sp-select-text :value="order.currency" source="currency"></sp-select-text>
+                        <sp-select-text :value="order.currency" source="currency"/>
                     </template>
                 </el-table-column>
                 <el-table-column :label="_label('zongjine')" width="90" align="center" prop="total_discount_price">
@@ -52,7 +52,7 @@
                     </template>
                 </el-table-column>
 
-                <el-table-column :label="_label('zongjianshu')" width="75" align="center" prop="total_number"></el-table-column>
+                <el-table-column :label="_label('zongjianshu')" width="75" align="center" prop="total_number"/>
                 <el-table-column :label="_label('lingshouzongjia')" width="90" align="center" prop="total_price">
                     <template v-slot="{row}">
                         {{f(row.total_price)}}
@@ -60,40 +60,39 @@
                 </el-table-column>
                 <el-table-column :label="_label('zhekoulv')" width="75" align="center">
                     <template v-slot="{row}">
-                        <el-input v-model="row.discount" size="mini"></el-input>
+                        <el-input v-model="row.discount" size="mini"/>
                     </template>
                 </el-table-column>
                 <el-table-column :label="_label('tuishuilv')" width="75" align="center">
                     <template v-slot="{row}">
-                        <el-input v-model="row.taxrebate" size="mini"></el-input>
+                        <el-input v-model="row.taxrebate" size="mini"/>
                     </template>
                 </el-table-column>
 
                 <el-table-column :label="_label('edu')" width="75" align="center">
                     <template v-slot="{row}">
-                        <el-input v-model="row.quantum" size="mini"></el-input>
+                        <el-input v-model="row.quantum" size="mini"/>
                     </template>
                 </el-table-column>
                 <el-table-column :label="_label('fahuoshang')" width="100" align="center">
                     <template v-slot="{row}">
-                        <simple-select v-model="row.finalsupplierid" source="supplier_3" :clearable="true"></simple-select>
+                        <simple-select v-model="row.finalsupplierid" source="supplier_3" :clearable="true"/>
                     </template>
                 </el-table-column>
                 <el-table-column :label="_label('beizhu')" width="100" align="center">
                     <template v-slot="{row}">
-                        <el-input v-model="row.memo" size="mini"></el-input>
+                        <el-input v-model="row.memo" size="mini"/>
                     </template>
                 </el-table-column>
                 <el-table-column :label="_label('haiwaidingdanhao')" width="100" align="center">
                     <template v-slot="{row}">
-                        <el-input v-model="row.foreignorderno" size="mini"></el-input>
+                        <el-input v-model="row.foreignorderno" size="mini"/>
                     </template>
                 </el-table-column>
-                <el-table-column :label="_label('gongsidingdanhao')" width="80" align="center" prop="orderno">
-                </el-table-column>
+                <el-table-column :label="_label('gongsidingdanhao')" width="80" align="center" prop="orderno"/>
                 <el-table-column :label="_label('zhidanren')" width="80" align="center">
                     <template v-slot="{row}">
-                        <sp-select-text :value="row.makestaff" source="user"></sp-select-text>
+                        <sp-select-text :value="row.makestaff" source="user"/>
                     </template>
                 </el-table-column>
                 <el-table-column :label="_label('zhidanriqi')" width="90" align="center" prop="maketime">
@@ -103,21 +102,21 @@
                 </el-table-column>
                 <el-table-column :label="_label('pinpai')" width="200" align="left">
                     <template v-slot="{row}">
-                        <sp-select-text :value="row.brandid" source="brand"></sp-select-text>
+                        <sp-select-text :value="row.brandid" source="brand"/>
                     </template>
                 </el-table-column>
             </el-table>
             <el-col :span="24" class="product" style="margin-top:2px;">
                 <el-table ref="table" :data="orders" stripe border style="width:100%;" @selection-change="onSelectionChange" @row-click="onRowClick">
-                    <el-table-column type="selection" :width="30" align="center"></el-table-column>
+                    <el-table-column type="selection" :width="30" align="center"/>
                     <el-table-column prop="orderno" :label="_label('dingdanbianhao')" width="90" align="center">
                         <template v-slot="{row}">
-                            <sp-order-tip column="orderno" :order="row" trigger="hover"></sp-order-tip>
+                            <sp-order-tip column="orderno" :order="row" trigger="hover"/>
                         </template>
                     </el-table-column>
                     <el-table-column :label="_label('dinghuokehu')" width="120" align="center">
                         <template v-slot="{row}">
-                            <sp-select-text :value="row.bookingid" source="supplier"></sp-select-text>
+                            <sp-select-text :value="row.bookingid" source="supplier"/>
                         </template>
                     </el-table-column>
 
@@ -135,34 +134,34 @@
 
                     <el-table-column :label="_label('gonghuoshang')" width="120" align="center">
                         <template v-slot="{row}">
-                            <sp-select-text :value="row.supplierid" source="supplier"></sp-select-text>
+                            <sp-select-text :value="row.supplierid" source="supplier"/>
                         </template>
                     </el-table-column>
                     <el-table-column :label="_label('niandai')" width="90" align="center">
                         <template v-slot="{row}">
-                            <sp-select-text :value="row.ageseason" source="ageseason"></sp-select-text>
+                            <sp-select-text :value="row.ageseason" source="ageseason"/>
                         </template>
                     </el-table-column>
                     <el-table-column :label="_label('bizhong')" width="90" align="center">
                         <template v-slot="{row}">
-                            <sp-select-text :value="row.currency" source="currency"></sp-select-text>
+                            <sp-select-text :value="row.currency" source="currency"/>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="total" :label="_label('jine')" width="90" align="center"> </el-table-column>
-                    <el-table-column prop="discount" :label="_label('zhekoulv')" width="90" align="center"> </el-table-column>
+                    <el-table-column prop="total" :label="_label('jine')" width="90" align="center"/>
+                    <el-table-column prop="discount" :label="_label('zhekoulv')" width="90" align="center"/>
                     <el-table-column :label="_label('xingbie')" width="90" align="center">
                         <template v-slot="{row}">
-                            <sp-select-text :value="row.genders" source="gender"></sp-select-text>
+                            <sp-select-text :value="row.genders" source="gender"/>
                         </template>
                     </el-table-column>
                     <!-- <el-table-column :label="_label('pinpai')" width="150" align="center">
                         <template v-slot="{row}">
-                            <sp-select-text :value="row.brandids" source="brand"></sp-select-text>
+                            <sp-select-text :value="row.brandids" source="brand"/>
                         </template>
                     </el-table-column> -->
                     <el-table-column :label="_label('yewuleixing')" width="90" align="center">
                         <template v-slot="{row}">
-                            <sp-select-text :value="row.bussinesstype" source="bussinesstype"></sp-select-text>
+                            <sp-select-text :value="row.bussinesstype" source="bussinesstype"/>
                         </template>
                     </el-table-column>
                     <el-table-column :label="_label('dingdanriqi')" width="100" align="center">
@@ -176,16 +175,16 @@
                     <el-button type="warning" round @click="resetDistribute" size="mini">{{_label("piliangchongzhi")}}</el-button>
                 </el-row>
                 <el-table ref="tabledetail" :data="orderdetails" stripe border style="width:100%;" @selection-change="onSelectionChange2">
-                    <el-table-column type="selection" :width="30" align="center"></el-table-column>
+                    <el-table-column type="selection" :width="30" align="center"/>
                     <el-table-column align="center" width="60">
                         <template v-slot="scope">
-                            <img :src="_fileLink(scope.row.product.picture)" style="width:50px;height:50px;" />
+                            <img :src="_fileLink(scope.row.product.picture)" style="width:50px;height:50px;" AAAA/>
                         </template>
                     </el-table-column>
                     <el-table-column :label="_label('dinghuokehu')" align="center" width="150">
                         <el-table-column :label="_label('dinghuokehu')" align="center" width="150">
                             <template v-slot="{row}">
-                                <sp-order-tip column="booking_label" :order="row.order"></sp-order-tip>
+                                <sp-order-tip column="booking_label" :order="row.order"/>
                             </template>
                             <template v-slot:header="{row}">
                                 <el-input v-model="form2.suppliercode1" size="mini" />
@@ -195,7 +194,7 @@
                     <el-table-column :label="_label('guojima')" align="center" width="200">
                         <el-table-column :label="_label('guojima')" align="center" width="200">
                             <template v-slot="scope">
-                                <sp-product-tip :product="scope.row.product"></sp-product-tip>
+                                <sp-product-tip :product="scope.row.product"/>
                             </template>
                             <template v-slot:header="{row}">
                                 <el-input v-model="form2.keyword1" size="mini" />
@@ -222,8 +221,7 @@
                             {{ formatNumber(row.product.factoryprice*row.discount*row.total) }}
                         </template>
                     </el-table-column>
-                    <el-table-column prop="discount" :label="_label('zhekoulv')" width="80" align="center">
-                    </el-table-column>
+                    <el-table-column prop="discount" :label="_label('zhekoulv')" width="80" align="center"/>
                     <el-table-column prop="number" :label="_label('dinggoushuliang')" align="center" :width="width">
                         <template v-slot="{row}">
                             <sp-sizecontent-confirm2 :ref="row.product.id+'-'+row.order.id" :columns="row.product.sizecontents" :row="row" :suppliers="suppliers" :initData="getInit(row)" :key="row.product.id+'-'+row.order.id" @change="onNumberChange"></sp-sizecontent-confirm2>
@@ -241,13 +239,13 @@
             <el-form :model="form" label-width="85px" :inline="false" style="width:100%;" size="mini">
                 <el-row :gutter="0">
                     <el-form-item :label="_label('niandai')">
-                        <simple-select v-model="form.ageseasonid" source="ageseason"></simple-select>
+                        <simple-select v-model="form.ageseasonid" source="ageseason"/>
                     </el-form-item>
                     <el-form-item :label="_label('dinghuokehu')">
-                        <simple-select v-model="form.bookingid" source="supplier_2" :multiple="true"></simple-select>
+                        <simple-select v-model="form.bookingid" source="supplier_2" :multiple="true"/>
                     </el-form-item>
                     <el-form-item :label="_label('pinpai')">
-                        <simple-select v-model="form.brandid" source="brand"></simple-select>
+                        <simple-select v-model="form.brandid" source="brand"/>
                     </el-form-item>
                 </el-row>
                 <el-row :gutter="0">
@@ -262,7 +260,7 @@
             <el-form :model="form2" label-width="85px" :inline="false" style="width:100%;" size="mini">
                 <el-row :gutter="0">
                     <el-form-item :label="_label('gonghuoshang')">
-                        <simple-select v-model="form2.supplierid" source="supplier_3" :multiple="true"></simple-select>
+                        <simple-select v-model="form2.supplierid" source="supplier_3" :multiple="true"/>
                     </el-form-item>
                 </el-row>
                 <el-row :gutter="0">
@@ -280,8 +278,7 @@
                 </el-col>
             </el-row>
         </sp-dialog>
-        <sp-dialog ref="preview">
-        </sp-dialog>
+        <sp-dialog ref="preview"/>
     </div>
 </template>
 
@@ -403,16 +400,18 @@ const result = {
                     })
                 }
             })
-            let params = { list, suppliers:self.suppliers, form:{
+
+            let suppliers = self.suppliers.filter(item=>item.total_number>0)
+            let params = { list, suppliers:suppliers, form:{
                 bussinesstype:self.order.bussinesstype,
                 ageseason:self.order.ageseason,
                 seasontype:self.order.seasontype,
                 currency:self.order.currency
             } }
 
-            self._log(params)
+            //self._log(params)
             self._submit("/orderbrand/add", { params: JSON.stringify(params) }).then(function(res) {
-                self._log(res)
+                //self._log(res)
             });
         },
         onNumberChange({ row, list }) {
@@ -616,15 +615,15 @@ const _private = function(self) {
         },
         getOrderDetaiId(productid, orderid, sizecontentid) {
             let row = self.orderlist.find(item => item.productid == productid && item.orderid == orderid && item.sizecontentid == sizecontentid)
-            self._log(row, self.orderlist, productid, orderid, sizecontentid)
+            //self._log(row, self.orderlist, productid, orderid, sizecontentid)
             return row ? row.id : 0;
         },
         getOrderbrandDetailId(productid, orderid, sizecontentid, supplierid){
             let orderbrand = self.suppliers.find(item=>item.supplierid==supplierid)
             console.log("YY", orderbrand)
             if(orderbrand) {
-                 let row = self.orderbrandlist.find(item => item.productid == productid && item.orderid == orderid && item.sizecontentid == sizecontentid  && item.orderbrandid==orderbrand.orderbrandid )
-                self._log(row, self.orderlist, productid, orderid, sizecontentid)
+                let row = self.orderbrandlist.find(item => item.productid == productid && item.orderid == orderid && item.sizecontentid == sizecontentid  && item.orderbrandid==orderbrand.orderbrandid )
+                //self._log(row, self.orderlist, productid, orderid, sizecontentid)
                 return row ? row.id : 0;
             }
             else {

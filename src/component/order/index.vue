@@ -2,17 +2,13 @@
     <div>
         <el-row>
             <el-col :span="24">
-                <el-form class="searchform" ref="search-form" :model="searchform" label-width="80px" size="mini" :inline="true" @submit.native.prevent>
-                    <el-form-item class="searchitem">
-                        <el-input v-model="searchform.keyword" width="250" style="width:250px;" @keyup.enter.native="onSearch"></el-input>
-                        <as-button type="primary" @click="onSearch" size="mini" icon="el-icon-search">{{_label("chaxun")}}</as-button>
-                        <auth auth="order-submit">
-                            <as-button type="primary" @click="toPage(0)">{{_label('xinjian')}}</as-button>
-                        </auth>
-                    </el-form-item>
-                </el-form>
+                <as-button type="primary" @click="_showDialog('search')" size="mini" icon="el-icon-search">{{_label("chaxun")}}</as-button>
+                <auth auth="order-submit">
+                    <as-button type="primary" @click="toPage(0)">{{_label('xinjian')}}</as-button>
+                </auth>
             </el-col>
         </el-row>
+
         <simple-admin-tablelist ref="tablelist" v-bind="props" :onclickupdate="toEdit" :isdelete="false">
             <template v-slot:orderno="{row}">
                 <sp-order-tip column="orderno" :order="row"></sp-order-tip>
@@ -24,6 +20,47 @@
                 <sp-select-text :value="row.brandids" source="brand"></sp-select-text>
             </template>
         </simple-admin-tablelist>
+
+        <sp-dialog ref="search" width="600">
+            <el-form class="order-form" :model="form" label-width="70px" :inline="false" style="width:100%;" size="mini" @submit.native.prevent>
+                <el-row :gutter="0">
+                    <el-col :span="8" style="width:270px">
+                        <el-form-item :label="_label('dingdanhao')">
+                            <el-input v-model="form.keyword" class="width2"/>
+                        </el-form-item>
+                        <el-form-item :label="_label('dinghuokehu')">
+                            <simple-select v-model="form.bookingid" source="supplier_2" :multiple="true"/>
+                        </el-form-item>
+                        <el-form-item :label="_label('niandai')">
+                            <simple-select v-model="form.ageseason" source="ageseason" :multiple="true"/>
+                        </el-form-item>
+                        <el-form-item :label="_label('pinpai')">
+                            <simple-select v-model="form.brandids" source="brand" :multiple="true"/>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8" style="width:270px">
+                        <el-form-item :label="_label('gonghuoshang')">
+                            <simple-select v-model="form.supplierid" source="supplier_3" :clearable="true"/>
+                        </el-form-item>
+                        <el-form-item :label="_label('jijie')">
+                            <simple-select v-model="form.seasontype" source="seasontype"/>
+                        </el-form-item>
+                        <el-form-item :label="_label('yewuleixing')" prop="bussinesstype">
+                            <simple-select v-model="form.bussinesstype" source="bussinesstype"/>
+                        </el-form-item>
+                        <el-form-item :label="_label('shuxing')" prop="property">
+                            <simple-select v-model="form.property" source="orderproperty"/>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row :gutter="0">
+                    <el-col align="center">
+                        <as-button auth="product" type="primary" @click="onSearch(form)" native-type="submit">{{_label("chaxun")}}</as-button>
+                        <as-button type="primary" @click="_hideDialog('search')">{{_label("tuichu")}}</as-button>
+                    </el-col>
+                </el-row>
+            </el-form>
+        </sp-dialog>
     </div>
 </template>
 
@@ -35,8 +72,15 @@ export default {
         let _label = self._label
 
         return {
-            searchform:{
-                keyword:""
+            form:{
+                keyword:"",
+                bookingid:"",
+                ageseason:"",
+                brandids:"",
+                supplierid:"",
+                seasontype:"",
+                bussinesstype:"",
+                property:""
             },
             props: {
                 columns: [
@@ -72,10 +116,11 @@ export default {
         }
     },
     methods: {
-        onSearch() {
+        onSearch(form) {
             let self = this
                 //self._log(self.searchform)
-            self.$refs.tablelist.search(self.searchform)
+            self.$refs.tablelist.search(form)
+            self._hideDialog("search")
         },
         toPage(id) {
             this.$router.push('/order/' + id)
