@@ -436,7 +436,6 @@ export default {
                 total:0
             })
 
-            let result = {}
             self.tabledata.forEach(item=>{
                 let row = helper.get(item.product.id)
 
