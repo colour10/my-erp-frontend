@@ -64,7 +64,7 @@
             </el-menu>
         </el-row>
         <el-row id="nav">
-            <el-tag v-for="(tag,index) in tags" :key="index" :closable="tags.length>1" style="margin-right:5px;cursor:pointer" @close="onCloseTag(tag)" @click="onClickTag(tag)" :type="getType(tag.key)">{{tag.label}}</el-tag>
+            <el-tag v-for="(tag,index) in tags" :key="index" :closable="tags.length>=1" style="margin-right:5px;cursor:pointer" @close="onCloseTag(tag)" @click="onClickTag(tag)" :type="getType(tag.key)">{{tag.label}}</el-tag>
         </el-row>
         <section class="el-container" style="padding-top:60px">
             <transition name="el-fade-in" mode="out-in">

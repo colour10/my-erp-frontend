@@ -412,7 +412,19 @@ const result = {
 
             //self._log(params)
             self._submit("/orderbrand/add", { params: JSON.stringify(params) }).then(function(res) {
-                //self._log(res)
+                /*self.tabledata = []
+                self.details = [];
+                self.orders = [];
+                self.selected = [];
+                self.selected2 = [];
+                //供货商
+                self.suppliers = [];
+                self.listdata = [];
+                self.orderlist = [];
+                self.orderbrandlist = []
+                _private(self).loadInfo()*/
+
+                self._redirect("/orderbrand/"+ res.data.join(','))
             });
         },
         onNumberChange({ row, list }) {
@@ -565,25 +577,29 @@ const result = {
         }, 1000, false)
 
 
-        let params = self.$route.params;
-        if (params.ids != '0') {
-            self._fetch("/orderbrand/load", { ids: params.ids }).then(async function({ data }) {
-                let func = _private(self)
-                func.importOrders(data.orders)
-
-                await func.importDetails(data.details)
-                func.importSupplier(data.suppliers, data.orderbrands)
-                func.importList(data.list)
-                func.stat()
-                self.$refs.table.toggleAllSelection()
-                    //self._setTitle(self._label("querenwaibudingdan") + ":" + self.form.id)
-            })
-        }
+        _private(self).loadInfo()
     }
 }
 
 const _private = function(self) {
     const _this = {
+        loadInfo(){
+            let params = self.$route.params;
+            console.log(self.$route)
+            if (params.ids != '0') {
+                self._fetch("/orderbrand/load", { ids: params.ids }).then(async function({ data }) {
+
+                    _this.importOrders(data.orders)
+
+                    await _this.importDetails(data.details)
+                    _this.importSupplier(data.suppliers, data.orderbrands)
+                    _this.importList(data.list)
+                    _this.stat()
+                    self.$refs.table.toggleAllSelection()
+                })
+            }
+        },
+
         isMatch(keyword, search) {
             return keyword.length > 0 ? search.toUpperCase().indexOf(keyword) >= 0 : true
         },
@@ -646,11 +662,15 @@ const _private = function(self) {
                 return 0
             }
         },
+
+        //导入订单列表
         importOrders(orders) {
             orders.forEach(item => {
                 self.orders.push(item)
             })
         },
+
+        //导入订单明细列表
         async importDetails(details) {
             //所有的订单详情
             details.forEach(item=>{

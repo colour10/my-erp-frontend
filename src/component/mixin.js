@@ -95,7 +95,7 @@ export default {
                         resolve(result)
                     }
                 })
-            })            
+            })
         },
         _submit(path, form, options) {
             const self = this
@@ -117,7 +117,7 @@ export default {
         },
         async _remove(path, form, options) {
             var self = this;
-            
+
             try {
                 await self.$confirm(_label('delete_warning'), _label('tip'), {
                     confirmButtonText: _label('ok'),
@@ -138,7 +138,7 @@ export default {
                     });
 
                     return false;
-                } 
+                }
                 else {
                     self.$message({
                         message: _label('delete_success'),
@@ -223,7 +223,7 @@ export default {
         },
         _setTitle(title) {
             let self = this;
-        
+
             self.$store.commit("setTagLabel", {
                 label: title,
                 path: self.$route.path
@@ -234,6 +234,20 @@ export default {
             store.commit("closeTag", {
                 tag:store.getters.getTags.current
             })
+        },
+
+        _reload(){
+            let self = this
+            self._redirect(self.$route.path)
+        },
+
+        _redirect(path) {
+            let self = this
+
+            self.closeCurrent()
+            setTimeout(function(){
+                self.$router.push(path)
+            }, 100)
         },
 
         _dataSource(name) {

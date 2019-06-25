@@ -1,5 +1,5 @@
 const Vue = require('vue')
-const VueRouter = require('vue-router') 
+const VueRouter = require('vue-router')
 const Vuex = require('vuex')
 
 import {getComponentSimple,getComponent} from './component/prop.js'
@@ -81,7 +81,7 @@ const components = [
     Table,
     Checkbox,
     Button,
-    Authbutton, 
+    Authbutton,
     RadioGroup,
     ImagePreview,
     Dialog,
@@ -118,15 +118,15 @@ const routes = [
             {path: '/brand', name:"brand", component: resolve=>require(['./component/brand/index.vue'],resolve) },
             {path: '/brandgroup', name:"brandgroup", component: resolve=>require(['./component/brandgroup/index.vue'],resolve) },
             {path: '/sizetop', name:"sizetop", component: resolve=>require(['./component/sizetop/index.vue'],resolve) },
-            {path: '/product', name:"product", component: resolve=>require(['./component/product/index.vue'],resolve) },   
+            {path: '/product', name:"product", component: resolve=>require(['./component/product/index.vue'],resolve) },
             {path: '/requisition', name:"requisition", component: resolve=>require(['./component/requisition/index.vue'],resolve) },
             {path: '/requisition/create', name:"requisitioncreate", component: resolve=>require(['./component/requisition/create.vue'],resolve) },
             {path: '/requisition/edit/:id', name:"requisitionedit", component: resolve=>require(['./component/requisition/update.vue'],resolve) },
-            {path: '/user/modifypassword', name:"modifypassword", component: resolve=>require(['./component/user/modify-password.vue'],resolve) },    
-            {path: '/orderpayment', name:"orderpayment", component: resolve=>require(['./component/orderpayment/index.vue'],resolve) },    
-            {path: '/salesreceive', name:"salesreceive", component: resolve=>require(['./component/salesreceive/index.vue'],resolve) },   
-            {path: '/system', name:"system", component: resolve=>require(['./component/system/index.vue'],resolve) }, 
-            {path: '/develop', name:"develop", component: Creator}, 
+            {path: '/user/modifypassword', name:"modifypassword", component: resolve=>require(['./component/user/modify-password.vue'],resolve) },
+            {path: '/orderpayment', name:"orderpayment", component: resolve=>require(['./component/orderpayment/index.vue'],resolve) },
+            {path: '/salesreceive', name:"salesreceive", component: resolve=>require(['./component/salesreceive/index.vue'],resolve) },
+            {path: '/system', name:"system", component: resolve=>require(['./component/system/index.vue'],resolve) },
+            {path: '/develop', name:"develop", component: Creator},
             {path: '/supplier', name:"supplier", component:resolve=>require(['./component/supplier/index.vue'],resolve) },
             {path:'/exchangerate', name:"exchangerate", component:resolve=>require(['./component/exchangerate/index.vue'],resolve) },
             {path: '/order/:id', name:"orderform", component: resolve=>require(['./component/order/create.vue'],resolve)},
@@ -142,16 +142,16 @@ const routes = [
             {path:'/country', name:"country", component:getComponent("country")},
             {path:'/materialnote', name:"materialnote", component:getComponent("materialnote")},
             {path:'/materialstatus', name:"materialstatus", component:getComponent("materialstatus")},
-            {path:'/material', name:"material", component:getComponent("material")},   
-            {path:'/property', name:"property", component:getComponent("property")},           
+            {path:'/material', name:"material", component:getComponent("material")},
+            {path:'/property', name:"property", component:getComponent("property")},
             {path:'/member', name:"member", component:getComponentSimple("member")},
             {path:'/colortemplate', name:"colortemplate", component:getComponent("colortemplate")},
-            
+
             {path:'/saleport', name:"saleport", component:getComponentSimple("saleport")},
             {path:'/productmemo', name:"productmemo", component:getComponent("productmemo")},
             {path:'/saletype', name:"saletype", component:getComponent("saletype")},
             {path:'/producttype', name:"producttype", component:getComponent("producttype")},
-            
+
             {path:'/language', name:"language", component:getComponent("language")},
             {path:'/winterproofing', name:"winterproofing", component:getComponent("winterproofing")},
         ]
@@ -181,7 +181,7 @@ router.beforeEach((to, from, next) => {
             name:to.name
       })
     }
-    
+
     next()
 })
 
@@ -221,9 +221,10 @@ const store = new Vuex.Store({
       addTag(state, payload) {
           let tag = state.tags.find(item=>item.key==payload.key)
           if(tag) {
-              state.currentTag = tag
+              tag.label = payload.label;
+              state.currentTag = tag;
           }
-          else { 
+          else {
               state.currentTag = {
                   key:payload.key,
                   label:payload.label,
@@ -231,7 +232,7 @@ const store = new Vuex.Store({
                   name:payload.name
               }
               state.tags.push(state.currentTag)
-          }            
+          }
       },
       clearTags(state, payload){
           state.tags = []
@@ -247,10 +248,12 @@ const store = new Vuex.Store({
           let tags = state.tags;
           let index = tags.indexOf(payload.tag)
           let length = tags.length;
-          
+
           //最后一个窗口不允许关闭
           if(length==1) {
-              return 
+              tags.splice(0,1)
+              router.push("/")
+              return
           }
           //console.log(index)
 
@@ -260,7 +263,7 @@ const store = new Vuex.Store({
           }
           else if(index<length-1) {
               router.push(tags[index].path)
-          }  
+          }
       }
   }
 })
