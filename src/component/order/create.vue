@@ -102,12 +102,12 @@
                     </el-table-column>
                     <el-table-column prop="label" :label="_label('chuchangjia')" width="100" align="center">
                         <template v-slot="{row}">
-                            {{row.product.factoryprice}}
+                            {{stat[row.product.id].factoryprice}}
                         </template>
                     </el-table-column>
                     <el-table-column prop="label" :label="_label('chuchangjiaheji')" width="100" align="center">
                         <template v-slot="{row}">
-                            {{f(row.product.factoryprice*stat[row.product.id])}}
+                            {{f(stat[row.product.id].factoryprice*stat[row.product.id].total)}}
                         </template>
                     </el-table-column>
                     <el-table-column prop="label" :label="_label('zhekoulv')" width="100" align="center">
@@ -117,17 +117,17 @@
                     </el-table-column>
                     <el-table-column prop="label" :label="_label('chengjiaojia')" width="130" align="center">
                         <template v-slot="{row}">
-                            {{f(row.product.factoryprice*row.discount)}}
+                            {{f(stat[row.product.id].factoryprice*row.discount)}}
                         </template>
                     </el-table-column>
                     <el-table-column prop="label" :label="_label('chengjiaozongjia')" width="100" align="center">
                         <template v-slot="{row}">
-                            {{f(row.product.factoryprice*row.discount*stat[row.product.id])}}
+                            {{f(stat[row.product.id].factoryprice*row.discount*stat[row.product.id].total)}}
                         </template>
                     </el-table-column>
                     <el-table-column prop="total" :label="_label('zongshu')" width="100" align="center">
                         <template v-slot="{row}">
-                            {{stat[row.product.id]}}
+                            {{ stat[row.product.id].total }}
                         </template>
                     </el-table-column>
                     <el-table-column :label="_label('chanpinmingcheng')" align="left" width="300">
@@ -158,6 +158,7 @@ import chain from "../chain.js"
 import { extend, copyTo } from "../object.js"
 import detailConvert from "../asa/order-detail.js"
 import orderMixin from "../mixins/order.js"
+import { statHelper } from "../helper.js"
 
 const props = {
     columns: [
@@ -279,7 +280,6 @@ export default {
                     self._log(res)
                     let data = res.data
                     if (data.form.id) {
-
                         copyTo(data.form, self.form)
                         self.formid = self.form.id
                         props.base.orderid = self.form.id
@@ -306,19 +306,8 @@ export default {
             })
 
             if (!is_exist) {
-                //计算出厂总价
-                row.getRowFactoryTotal = function() {
-                    return row.product.factoryprice * row.total
-                }
-
-                //计算成交总价
-                row.getRowDealTotal = function() {
-                    return row.product.factoryprice * row.discount * row.total
-                }
-
                 self.tabledata.unshift(row)
-
-                self.form.currency = row.product.factorypricecurrency
+                self.form.currency = self.currencyid
             }
         },
         getInit(productid){
@@ -350,7 +339,7 @@ export default {
                         number:item.number,
                         productid:item.uniq
                     })
-                }                
+                }
             })
         },
         onDiscountChange(newValue, oldValue) {
@@ -370,9 +359,10 @@ export default {
                     sums[index] = self._label("heji")
                     return
                 } else if (index == 5) {
-                    sums[index] = self.formatNumber(data.reduce((total, row) => total + row.product.factoryprice*self.stat[row.product.id], 0))
+
+                    sums[index] = self.formatNumber(data.reduce((total, row) => total + self.stat[row.product.id].factoryprice*self.stat[row.product.id].total, 0))
                 } else if (index == 8) {
-                    sums[index] = self.formatNumber(data.reduce((total, row) => total + row.product.factoryprice*self.stat[row.product.id]*row.discount, 0))
+                    sums[index] = self.formatNumber(data.reduce((total, row) => total + self.stat[row.product.id].factoryprice*self.stat[row.product.id].total*row.discount, 0))
                 } else if (index == 9) {
                     sums[index] = self.listdata.reduce((total, row) => total + row.number*1, 0)
                 }
@@ -392,10 +382,6 @@ export default {
             var status = this.form.status;
             return status == '1' || status == '' || !status
         },
-        canDelete() {
-            var status = this.form.status;
-            return this.form.id > 0 && status == 1
-        },
         width() {
             return this.tabledata.reduce((max, { product }) => Math.max(max, product.sizecontents.length), 1) * 50 + 21
         },
@@ -408,8 +394,8 @@ export default {
         },
         total_price() {
             let self = this
-            let total = self.tabledata.reduce(function(total, current) {
-                return total + self.stat[current.product.id] * current.product.factoryprice * current.discount
+            let total = self.tabledata.reduce(function(total, row) {
+                return total + self.stat[row.product.id].total * self.stat[row.product.id].factoryprice * row.discount
             }, 0)
             return this.formatNumber(total)
         },
@@ -443,15 +429,47 @@ export default {
         },
         stat(){
             let self = this
-            let output = {}
-            self.listdata.forEach(({productid,number})=>{
-                let row = output[productid] || 0
-                row += number*1
 
-                output[productid] = row
+            let helper = statHelper({
+                factoryprice:0,
+                currencyid:"",
+                total:0
             })
 
-            return output
+            let result = {}
+            self.tabledata.forEach(item=>{
+                let row = helper.get(item.product.id)
+
+                row.factoryprice = item.product.factoryprice
+            })
+
+            self.details.forEach(item=>{
+                let row = helper.get(item.productid);
+                if(item.factoryprice>0) {
+                    row.factoryprice = item.factoryprice
+                }
+            })
+
+            self.listdata.forEach(({productid,number})=>{
+                let row = helper.get(productid)
+                row.total += number*1
+            })
+
+            return helper.result()
+        },
+        currencyid() {
+            let self = this
+            if(self.form.currency>0) {
+                return self.form.currency
+            }
+
+            for(let i=0;i<self.details.length;i++) {
+                return self.details[i].currencyid
+            }
+
+            for(let i=0;i<self.tabledata.length;i++) {
+                return self.tabledata[i].product.factorypricecurrency
+            }
         }
     },
     mounted: function() {
@@ -465,7 +483,7 @@ export default {
         } else {
             self.tabledata = []
                 //加载数据
-            self._fetch("/order/loadorder", { id: route.params.id }).then(function(res) {
+            self._fetch("/order/loadorder", { id: route.params.id }).then(async function(res) {
                 //self._log("加载订单信息", res)
 
                 copyTo(res.data.form, self.form)
@@ -479,9 +497,10 @@ export default {
                         })
                     })
 
-                    detailConvert(res.data.list).then(results => {
-                        results.forEach(item => self.appendRow(item))
-                    })
+                    let results = await detailConvert(res.data.list);
+                    results.forEach(item => self.appendRow(item));
+
+                    self.form.currency = self.currencyid
                 }
                 self._setTitle(self._label("dingdan") + ":" +self.form.orderno)
             })

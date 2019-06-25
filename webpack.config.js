@@ -1,7 +1,7 @@
 var path = require('path')
 var webpack = require('webpack')
 
-const version = "1007";
+const version = "1008";
 
 module.exports = {
   /*entry: './src/main.js',
@@ -17,7 +17,6 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, './dist'),
-    chunkFilename: '[name].bundle.js',
     publicPath: '/dist/',
     filename: '[name]-' + version + ".js"
   },
@@ -57,7 +56,7 @@ module.exports = {
       'vue$': 'vue/dist/vue.esm.js'
     },
     extensions: ['*', '.js', '.vue', '.json']
-  },    
+  },
   devServer: {
     historyApiFallback: true,
     noInfo: true,

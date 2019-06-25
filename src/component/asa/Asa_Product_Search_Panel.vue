@@ -3,11 +3,8 @@
         <el-form ref="search-form" class="order-form" :model="form" label-width="80px" size="mini" :inline="true">
             <el-row :gutter="0">
                 <el-col :span="24">
-                    <el-form-item :label="_label('chaxun')" class="wordcode">
-                        <el-input v-model="form.wordcode_1" class="wordcode" :placeholder="_label('kuanshi')"></el-input>
-                        <el-input v-model="form.wordcode_2" class="wordcode" :placeholder="_label('caizhi')"></el-input>
-                        <el-input v-model="form.wordcode_3" style="width:110px;" :placeholder="_label('yanse')"></el-input>
-                        <el-input v-model="form.wordcode_4" style="width:110px;" :placeholder="_label('fuzhuma')"></el-input>
+                    <el-form-item :label="_label('chaxun')" >
+                        <el-input v-model="form.wordcode" class="wordcode" :placeholder="_label('guojima')"></el-input>
                     </el-form-item>
                     <as-button type="primary" @click="search" v-if="option.isedit" size="mini">{{_label("chaxun")}}</as-button>
                     <as-button type="primary" @click="clear" v-if="option.isedit" size="mini">{{_label("qingkong")}}</as-button>
@@ -23,11 +20,11 @@
                         </simple-select>
                     </el-form-item>
                     <el-form-item :label="_label('pinlei')" prop="brandgroupid">
-                        <simple-select v-model="form.brandgroupid" source="brandgroup" @change="onBrandGroupChange">
+                        <simple-select v-model="form.brandgroupid" source="brandgroup">
                         </simple-select>
                     </el-form-item>
                     <el-form-item :label="_label('zipinlei')" prop="childbrand">
-                        <simple-select ref="childbrand" v-model="form.childbrand" source="brandgroupchild" :lazy="true">
+                        <simple-select ref="childbrand" v-model="form.childbrand" source="brandgroupchild" :parentid="form.brandgroupid" :lazy="true">
                         </simple-select>
                     </el-form-item>
                     <el-form-item :label="_label('chandi')" prop="countries">
@@ -69,7 +66,7 @@
                             <sp-select-text :value="row.producttypeid" source="producttype"></sp-select-text>
                         </template>
                     </el-table-column>
-                    
+
                     <el-table-column :label="_label('chuchangjia')" align="left" width="120">
                         <template v-slot="{row}">
                             {{[row.factorypricecurrency_label, row.factoryprice].join(" ")}}
@@ -112,7 +109,7 @@ export default {
         "productadd":Asa_Product_Add
     },
     props: {
-        filter:{}, 
+        filter:{},
         isCreate:{
             default:true
         }
@@ -122,10 +119,7 @@ export default {
             is_show: false,
             is_collapse: "",
             form: {
-                wordcode_1: "",
-                wordcode_2: "",
-                wordcode_3: "",
-                wordcode_4: "",
+                wordcode: "",
                 brandid: "",
                 brandgroupid: "",
                 childbrand: '',
@@ -174,9 +168,9 @@ export default {
                             setTimeout(function(){
                                 let form = chain(self.form).filter(item=>item.length>0).object()
                                 self.$refs.productadd.setForm(form).show(false)
-                            },100)                        
+                            },100)
                         }).catch(() => {});
-                    }                    
+                    }
                 } else {
                     res.data.filter(item => typeof(self.filter) == 'function' ? self.filter(item) : true).forEach(function(item) {
                         ProductDetail.get(item, function(result) {

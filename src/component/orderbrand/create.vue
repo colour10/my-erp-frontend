@@ -390,6 +390,7 @@ const result = {
                     let id = func.getOrderbrandDetailId(item.row.productid, item.row.orderid, item.sizecontentid, item.supplierid)
                     list.push({
                         productid: item.row.productid,
+                        factoryprice:self.factoryprice[item.row.productid],
                         orderid: item.row.orderid,
                         sizecontentid: item.sizecontentid,
                         supplierid: item.supplierid,
@@ -482,7 +483,7 @@ const result = {
         },
         orderstat() {
             let self = this;
-            let result = {};            
+            let result = {};
 
             self.orderlist.forEach(detail=>{
                 if(!result[detail.orderid]) {
@@ -500,7 +501,7 @@ const result = {
                 row.leftCount = row.totalCount-row.brandCount;
             })
 
-            //如果是修改订单，剩余数量应该把当前订单的数量加上去。            
+            //如果是修改订单，剩余数量应该把当前订单的数量加上去。
             self.orderbrandlist.forEach(detail=>{
                 let row = result[detail.orderid]
                 row.leftCount += detail.number*1;
@@ -522,6 +523,21 @@ const result = {
 
                 row.totalCount += detail.number*1;
             })
+            return result
+        },
+        factoryprice(){
+            let self = this
+            let result = {}
+            self.details.forEach(item=>{
+                result[item.product.id] = item.product.factoryprice
+            })
+
+            self.orderbrandlist.forEach(item=>{
+                if(item.factoryprice>0) {
+                    result[item.productid] = item.factoryprice;
+                }
+            })
+
             return result
         }
     },
@@ -554,7 +570,7 @@ const result = {
             self._fetch("/orderbrand/load", { ids: params.ids }).then(async function({ data }) {
                 let func = _private(self)
                 func.importOrders(data.orders)
-                
+
                 await func.importDetails(data.details)
                 func.importSupplier(data.suppliers, data.orderbrands)
                 func.importList(data.list)
@@ -628,7 +644,7 @@ const _private = function(self) {
             }
             else {
                 return 0
-            }           
+            }
         },
         importOrders(orders) {
             orders.forEach(item => {

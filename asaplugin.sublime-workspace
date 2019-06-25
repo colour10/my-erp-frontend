@@ -5,7 +5,35 @@
 		[
 			[
 				"re",
-				"reload"
+				"resolve\tparameter"
+			],
+			[
+				"de",
+				"details"
+			],
+			[
+				"pro",
+				"productid"
+			],
+			[
+				"cu",
+				"current"
+			],
+			[
+				"pru",
+				"productid"
+			],
+			[
+				"si",
+				"sizecontentid"
+			],
+			[
+				"ex",
+				"extend\talias"
+			],
+			[
+				"ca",
+				"callback\tparameter"
 			],
 			[
 				"pa",
@@ -30,10 +58,6 @@
 			[
 				"_",
 				"_label"
-			],
-			[
-				"pro",
-				"product"
 			],
 			[
 				"or",
@@ -96,16 +120,8 @@
 				"toArray"
 			],
 			[
-				"de",
-				"detail"
-			],
-			[
 				"find",
 				"findFirstById"
-			],
-			[
-				"ex",
-				"extend"
 			],
 			[
 				"orderb",
@@ -114,10 +130,6 @@
 			[
 				"ta",
 				"tabledata"
-			],
-			[
-				"cu",
-				"currency"
 			],
 			[
 				"siz",
@@ -264,10 +276,6 @@
 				"listdata"
 			],
 			[
-				"si",
-				"sizecontentid"
-			],
-			[
 				"nam",
 				"name_en"
 			],
@@ -278,10 +286,6 @@
 			[
 				"wor",
 				"wordcode_3"
-			],
-			[
-				"ca",
-				"callback\twarning"
 			],
 			[
 				"wa",
@@ -510,10 +514,6 @@
 			[
 				"isE",
 				"isExpand"
-			],
-			[
-				"d",
-				"dependencies\twarning"
 			]
 		]
 	},
@@ -532,7 +532,7 @@
 			"file": "src/component/asa/Asa_Product.vue",
 			"settings":
 			{
-				"buffer_size": 35818,
+				"buffer_size": 36175,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -541,7 +541,7 @@
 			"file": "src/component/asa/product.js",
 			"settings":
 			{
-				"buffer_size": 1197,
+				"buffer_size": 1199,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -550,7 +550,7 @@
 			"file": "src/component/asa/Asa_Product_Add.vue",
 			"settings":
 			{
-				"buffer_size": 26637,
+				"buffer_size": 26891,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -577,16 +577,16 @@
 			"file": "src/component/globals.js",
 			"settings":
 			{
-				"buffer_size": 5245,
+				"buffer_size": 5301,
 				"encoding": "UTF-8",
-				"line_ending": "Unix"
+				"line_ending": "Windows"
 			}
 		},
 		{
 			"file": "src/component/asa/Asa_Product_Tip.vue",
 			"settings":
 			{
-				"buffer_size": 612,
+				"buffer_size": 705,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -622,7 +622,8 @@
 			"file": "src/component/asa/Asa_Sizecontent_Input.vue",
 			"settings":
 			{
-				"buffer_size": 1634,
+				"buffer_size": 1713,
+				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
 		},
@@ -657,7 +658,7 @@
 			"file": "src/component/order/create.vue",
 			"settings":
 			{
-				"buffer_size": 19498,
+				"buffer_size": 21589,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -675,7 +676,7 @@
 			"file": "src/component/DataSource.js",
 			"settings":
 			{
-				"buffer_size": 10314,
+				"buffer_size": 10056,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -694,18 +695,6 @@
 			"settings":
 			{
 				"buffer_size": 10198,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"contents": "<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <meta charset=\"utf-8\">\n    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n    <meta name=\"viewport\" content=\"width=device-width,initial-scale=1.0\">\n    <link rel=\"icon\" href=\"/favicon.ico\">\n    <title><?=isset($__title)?$__title:\"ERP\"?> - ASA</title>\n    <script src=\"https://unpkg.com/vue@2.6.9/dist/vue.js\"></script>\n    <script src=\"https://unpkg.com/vuex@3.1.0/dist/vuex.js\"></script>\n    <script src=\"https://unpkg.com/vue-router@3.0.4/dist/vue-router.js\"></script>\n    \n\n    <!-- 引入样式 -->\n    <link rel=\"stylesheet\" href=\"https://unpkg.com/element-ui/lib/theme-chalk/index.css\">\n    <!-- 引入组件库 -->\n    <script src=\"https://unpkg.com/element-ui/lib/index.js\"></script>\n    <script src=\"/js/jquery.min.js\"></script>\n\n    <script src=\"https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js\"></script>\n    <script src=\"https://unpkg.com/vue-chartjs/dist/vue-chartjs.min.js\"></script>\n    \n  </head>\n<style>\n      body{font-family: Arial,sans-serif;}\n  .el-header {\n    background-color: #B3C0D1;\n    color: #333;\n    line-height: 60px;\n  }\n  \n  .el-footer{\n    clear: both;\n    display: block;\n    text-align: center;    \n    margin: 0px auto;\n    bottom: 0px;\n  }\n\n  .el-aside {\n    color: #333;\n  }  \n\n\n  .bg-purple-dark {\n    background: #99a9bf;\n  }\n  .bg-purple {\n    background: #d3dce6;\n  }\n  .bg-purple-light {\n    background: #e5e9f2;\n  }\n  .grid-content {\n    border-radius: 4px;\n    min-height: 36px;\n  }\n  .row-bg {\n    padding: 10px 0;\n    background-color: #f9fafc;\n  }\n  \n  .el-menu-item a {\n    color:white;\n    text-decoration : none  \n  }\n  \n  #ell{margin:5px;}\n\n\n    .user-form .width2 .el-input__inner {\n        width:200px;\n    }\n\n    .user-form  .width2 .el-input-group {\n        width:200px;\n    }\n    \n    .user-form .width1 .el-input__inner {\n        width:510px;\n    }\n    \n    .user-form .width1 .el-textarea__inner {\n        width:510px;\n    }\n    \n    .user-form .width2 .el-date-editor.el-input, .el-date-editor.el-input__inner {\n        width:150px\n    }\n\n    .user-form .width2 .el-input-group .el-input__inner {\n        width:155px;\n    }\n    .user-form .width2 .el-input-group--prepend .el-input__inner {\n        width:99px;\n    }\n\n    .user-form .width2 .el-form-item__content {\n        width:200px;\n    }\n\n    .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item {\n        margin-bottom: 5px;\n    }\n\n    .user-form .el-checkbox {\n        margin-right:12px;\n    }\n\n    .user-form .el-checkbox__label {\n        padding-left:4px;\n    }\n\n    .order-form .el-input__inner {\n        width:200px;\n    }\n\n    .order-form .el-input-group {\n        width:200px;\n    }\n\n    .order-form .el-input-group .el-input__inner {\n        width:156px;\n    }\n    .order-form .el-input-group--prepend .el-input__inner {\n        width:138px;\n    }\n\n    .order-form .el-input-group--prepend .el-input-group__prepend .el-input__inner {\n        width:60px;\n        padding:0px 5px;\n    }\n\n    .order-form .el-input-group--prepend .el-select {\n        width:60px;\n    }\n\n    \n    /*  */\n    .order-form .wordcode .el-form-item__content {\n        width:440px;\n    }\n\n    .order-form .wordcode .el-form-item__content .el-input {\n        width:99px;\n    }\n\n    .order-form .wordcode .el-form-item__content .el-input__inner {\n        width:99px;\n    }\n\n\n    .order-form .el-date-editor.el-input, .el-date-editor.el-input__inner {\n        width:150px\n    }\n\n    .order-form .twocols .el-input__inner { width:500px; }\n    .order-form .threecols .el-input__inner { width:800px; }\n\n    .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item {\n        margin-bottom: 5px;\n    }\n\n    .order-form .font12 label{\n        font-size:12px;\n    }\n\n    .order-form .el-checkbox {\n        margin-right:12px;\n        line-height: 20px;\n    }\n\n    .order-form label.siji {\n      margin-right:0px;\n\n    }\n\n    .order-form .el-checkbox__label {\n        padding-left:10px;\n    }\n\n    .order-form .el-radio {line-height: 20px;}\n\n    .formx .el-input__inner {width:130px;}\n    .formx .el-input-group {width:130px;}\n    .formx .el-input-group--prepend .el-input-group__prepend .el-input__inner { width:60px; padding:0px 5px;}\n    .formx .el-input-group--prepend .el-input__inner { width:69px; }\n    .formx .el-date-editor.el-input, .el-date-editor.el-input__inner { width:80px }\n    .formx .productcurrency .el-input__inner { padding:0px 2px; }\n\n    .searchform .searchitem .el-form-item__content {\n      width:100%;\n    }\n\n    .login-container {\n    /*box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.06), 0 1px 0px 0 rgba(0, 0, 0, 0.02);*/\n    -webkit-border-radius: 5px;\n    border-radius: 5px;\n    -moz-border-radius: 5px;\n    background-clip: padding-box;\n    margin: 180px auto;\n    width: 350px;\n    padding: 35px 35px 15px 35px;\n    background: #fff;\n    border: 1px solid #eaeaea;\n    box-shadow: 0 0 25px #cac6c6;\n    .title {\n      margin: 0px auto 40px auto;\n      text-align: center;\n      color: #505458;\n    }\n    .remember {\n      margin: 0px 0px 35px 0px;\n    }\n  }\n\n  .avatar-uploader .el-upload {\n    border: 1px dashed #d9d9d9;\n    border-radius: 6px;\n    cursor: pointer;\n    position: relative;\n    overflow: hidden;\n  }\n  .avatar-uploader .el-upload:hover {\n    border-color: #409EFF;\n  }\n  .avatar-uploader-icon {\n    font-size: 28px;\n    color: #8c939d;\n    width: 148px;\n    height: 148px;\n    line-height: 148px;\n    text-align: center;\n  }\n  .avatar {\n    width: 148px;\n    height: 148px;\n    display: block;\n  }\n\n  .el-table .el-table__body .success-row {\n    color: red !important;\n    background: rgba(103,194,58,.2) !important;\n  }\n\n  .el-table .stripe1 {\n      background: oldlace;\n  }\n\n  .color-group {\n    margin:3px;\n  }\n\n  .color-group .box{\n    border: 1px dashed #d9d9d9;\n    border-radius: 6px;\n    cursor: pointer;\n    position: relative;\n    overflow: hidden;\n    margin:auto;\n  }\n  .color-group .box:hover {\n    border-color: #409EFF;\n  }\n  .color-group-icon {\n    font-size: 14px;\n    color: #8c939d;\n    width: 36px;\n    height: 36px;\n    line-height: 36px;\n    text-align: center;\n  }\n\n\n.product .el-table td, .product .el-table th { padding:0px; }\n.product .el-tabs .el-table td, .product .el-tabs .el-table th { padding:0px 0px; }\n.product img {padding:0px;margin:0px;display: block;}\n.product td.picture .cell {padding-left:0px}\n.product .el-table th div .el-input {display:block; line-height:25px;}\n\n.supermini .el-checkbox__label {\n    font-size: 14px\n}\n\n#top-menu {\n  top:0px;\n  position:fixed;\n  z-index: 10;\n  width:calc(100% - 30px);\n}\n#nav {\n  margin:0px;\n  top:60px;\n  padding: 8px 2px;\n  position:fixed;\n  z-index: 10;\n  width:calc(100% - 30px);\n  background: white;\n  border-bottom: 1px solid #eeeeee\n}\n\n.el-container {\n  padding-top:50px;\n}\n\n#app .el-dialog__body {\n  padding:10px 20px;\n}\n\n.el-button {margin:5px;}\n.cell .el-button {margin:0px;}\n\n.imgline .icon{ display: inline-block; width: 30px; height: 20px; margin-right: 3px; vertical-align: middle; background-size: 100%;}\n.imgline span{ vertical-align: middle;}\n\nbody .el-select-dropdown__wrap {max-height:500px;}\n\n.productcurrency .el-input-group__append {\n    background-color: white;\n    border: 0;\n    padding-left: 5px;\n}\n\n.productcurrency .el-input__inner {\n    border-top-right-radius: 4px !important;\n    border-bottom-right-radius: 4px !important;\n}\n\n#app button.trimhalf {padding:7px 10px;}\n\n.fade-transform-leave-active,\n.fade-transform-enter-active {\n  transition: all .5s;\n}\n\n.fade-transform-enter {\n  opacity: 0;\n  transform: translateX(-30px);\n}\n\n.fade-transform-leave-to {\n  opacity: 0;\n  transform: translateX(30px);\n}\n\n.clearpadding .el-table__body .el-table__row .cell {padding-left:0px !important;;padding-right: 0px !important;}\n.clearpadding .el-table__header .cell {padding-left:0px !important;;padding-right: 0px !important;}\n.clearpadding.el-input__inner {width:100%;}\n\n.sizecontent .el-table__body td, .sizecontent .el-table__header th { padding:0px; }\n.sizecontent .el-table__body .el-table__row .counter { width:60px; }\n.sizecontent .el-table__body .el-table__row .counter .cell {padding-left:0px;padding-right: 0px}\n.sizecontent .el-table__body .el-table__row .counter .el-input__inner { padding:0 5px; }\n.sizecontent .el-table::before { left: 0; bottom: 0; width: 100%; height: 0px; }\n.sizecontent div, .sizecontent td, .sizecontent th {border-left: 0px !important;border-right: 0px !important;}\n.sizecontent input {text-align: center}\n\n.sizecontent .el-table__body .cell {line-height: 15px }\n.sizecontent .el-table__body .sumline td {padding-top:5px}\n.sizecontent .linetop .el-input__inner {height:15px}\n.sizecontent .sumline .el-input__inner {color:red; background: #99cccc;}\n.sizecontent .sumline .sumtotal .el-input__inner {color:blue; background: #99cccc;height:22px}\n.sizecontent .sumline .linetop .el-input__inner {height:22px}\n.sizecontent .sumcolumn .inputsum .el-input__inner{color:yellow; background: #CD9B9B}\n\n.inputtable .el-table__body .el-table__row .el-input__inner { padding:0 5px; }\n\n.el-select-dropdown .option1 span {color:#67C23A;}\n.el-select-dropdown .option2 span {color:#F56C6C;}\n</style>\n<body>\n  <div id=\"app\">\n        <router-view></router-view>\n    </div>\n    <div id=\"load\" style=\"position:relative;margin:auto;text-align:center;top:200px;\">\n      <el-progress type=\"circle\" :percentage=\"pencent\" v-show=\"isShow\"></el-progress>\n    </div>\n\n    <script type=\"text/javascript\">      \n      $(document).ready(function(){\n        var version = '1007'\n        let o = new Vue({\n          data:function(){\n            return {\n              isShow:true,\n              pencent:0\n            }\n          },\n          mounted:function(){\n            let self = this\n\n            let handler = setInterval(function(){\n              if(self.pencent<=95) {                \n                self.pencent = self.pencent + Math.floor(Math.random()*10)%2+1                \n              }\n            }, 330)\n\n            $.getScript(\"/js/asa-\" + version + \".js\", function(){\n              self.pencent = 100;\n              clearInterval(handler)\n              setTimeout(function(){\n                self.isShow = false;\n              }, 500)  \n            });\n          }\n        }).$mount(\"#load\")\n        \n      })\n    </script>\n</body>\n</html>\n",
-			"file": "/Z/erp/app/home/views/index.phtml",
-			"file_size": 10705,
-			"file_write_time": 132055835150000000,
-			"settings":
-			{
-				"buffer_size": 10276,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -732,7 +721,7 @@
 			"file": "src/component/product/index.vue",
 			"settings":
 			{
-				"buffer_size": 6020,
+				"buffer_size": 6134,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -741,7 +730,7 @@
 			"file": "src/component/home/index.vue",
 			"settings":
 			{
-				"buffer_size": 7254,
+				"buffer_size": 7354,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -783,33 +772,6 @@
 			}
 		},
 		{
-			"file": "/Z/erp/app/home/controllers/ProductstockController.php",
-			"settings":
-			{
-				"buffer_size": 730,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/Z/erp/app/home/controllers/ShippingController.php",
-			"settings":
-			{
-				"buffer_size": 24082,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/Z/erp/app/config/languages/cn.php",
-			"settings":
-			{
-				"buffer_size": 25503,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
 			"file": "src/component/brand/index.vue",
 			"settings":
 			{
@@ -828,58 +790,27 @@
 			}
 		},
 		{
-			"file": "/Z/erp/app/home/controllers/OrderController.php",
-			"settings":
-			{
-				"buffer_size": 12332,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/Z/erp/app/home/controllers/OrderbrandController.php",
-			"settings":
-			{
-				"buffer_size": 22576,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/Z/erp/app/home/controllers/ProductController.php",
-			"settings":
-			{
-				"buffer_size": 22045,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/Z/erp/app/home/controllers/AdminController.php",
-			"settings":
-			{
-				"buffer_size": 8607,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"contents": "<?php\n\nnamespace Asa\\Erp;\n\nuse AlibabaCloud\\Client\\AlibabaCloud;\nuse AlibabaCloud\\Client\\Exception\\ClientException;\nuse AlibabaCloud\\Client\\Exception\\ServerException;\nuse Gregwar\\Image\\Image;\nuse PHPExcel;\nuse PHPMailer\\PHPMailer\\PHPMailer;\nuse ZipArchive;\n\nclass Util\n{\n    /**\n     * 格式化为目录树\n     * @param array $result 结果集\n     * @param int $pid 上级id\n     * @param int $level 上级等级\n     * @return array\n     */\n    public static function format_tree($result, $pid = 0, $level = 0)\n    {\n        // 初始化一个变量\n        $tree = [];\n        // 开始循环\n        foreach ($result as $k => $v) {\n            // 找到父级是0的\n            if ($v['up_dp_id'] == $pid) {\n                // 判断当前模型是否有子集\n                $children = self::format_tree($result, $v['id'], $level + 1);\n                // 数据合并\n                // 并判断是否有子集加不加children\n                if (empty($children)) {\n                    $tree[] = [\n                        'id' => $v['id'],\n                        'label' => $v['name'],\n                        'memo' => $v['memo'],\n                        'level' => $level,\n                        'children' => [],\n                    ];\n                } else {\n                    $tree[] = [\n                        'id' => $v['id'],\n                        'label' => $v['name'],\n                        'memo' => $v['memo'],\n                        'level' => $level,\n                        // 新增children\n                        'children' => $children,\n                    ];\n                }\n            }\n        }\n        // 返回\n        return $tree;\n    }\n\n    /**\n     * 格式化为目录树-一维数组\n     * @param array $result 结果集\n     * @param int $pid 上级id\n     * @param int $level 上级等级\n     * @return array\n     */\n    public static function format_tree_single_array($result, $pid = 0, $level = 0)\n    {\n        // 初始化变量\n        $tree = [];\n        $str_repeat = '　 ';\n        // 开始循环\n        foreach ($result as $k => $v) {\n            // 找到父级是0的\n            if ($v['up_dp_id'] == $pid) {\n                // 数据合并\n                $tree[] = [\n                    'id' => $v['id'],\n                    'label' => str_repeat($str_repeat, $level) . $v['name'],\n                    'memo' => $v['memo'],\n                    'level' => $level,\n                ];\n                // 继续寻找\n                $tree = array_merge($tree, self::format_tree_single_array($result, $v['id'], $level + 1));\n            }\n        }\n        // 返回\n        return $tree;\n    }\n\n    /**\n     * 字符串转为数组\n     * @param $str\n     * @return array\n     */\n    public static function char_to_array($str)\n    {\n        // 逻辑\n        // 如果有逗号，就分割\n        if (strpos($str, ',') !== false) {\n            $arr = explode(',', $str);\n        } else {\n            $arr = [$str];\n        }\n        return $arr;\n    }\n\n    /**\n     * 判断id类字段是否合法\n     * @param $id\n     * @return bool\n     */\n    public static function checkid($id)\n    {\n        // 判断id类字段是否合法\n        $pattern = '/^[1-9]+\\d*$/';\n        if (preg_match($pattern, $id)) {\n            return true;\n        } else {\n            return false;\n        }\n    }\n\n    /**\n     * 字符串位数补全\n     * @param $str 字符串\n     * @param int $length 处理后的位数，默认是6位\n     * @return bool|string\n     */\n    public static function cover_position($str, $length = 6)\n    {\n        // 逻辑\n        $len = strlen($str);\n        if ($len > $length) {\n            $str = substr($str, 0, $length);\n        } else if ($len < $length) {\n            // 如果小于$length，就进行补位\n            $diff = $length - $len;\n            $str = str_repeat('0', $diff) . $str;\n        }\n        // 返回\n        return $str;\n    }\n\n\n    /**\n     * 把货币改成简写\n     * @param $currency\n     * @return string\n     */\n    public static function change_currency($currency)\n    {\n        // 逻辑\n        if ($currency == 'USD') {\n            $new_currency = '$';\n        } else if ($currency == 'CAD') {\n            $new_currency = 'CAD';\n        } else if ($currency == 'EUR') {\n            $new_currency = '€';\n        } else if ($currency == 'HKD') {\n            $new_currency = 'HK$';\n        } else if ($currency == 'GBP') {\n            $new_currency = '￡';\n        } else if ($currency == 'JPY') {\n            $new_currency = 'J￥';\n        } else {\n            $new_currency = '￥';\n        }\n        // 返回\n        return $new_currency;\n    }\n\n    /**\n     * 判断一个字符串是否为合法网址\n     * @param $str\n     * @return bool\n     */\n    public static function is_url($str)\n    {\n        // 逻辑\n        if (filter_var($str, FILTER_VALIDATE_URL)) {\n            return true;\n        } else {\n            return false;\n        }\n    }\n\n    /**\n     * 根据查询到的一个结果集，获取指定列，并生成数组\n     */\n    public static function recordListColumn($list, $column)\n    {\n        $array = [];\n        foreach ($list as $key => $value) {\n            $array[] = $value->$column;\n        }\n        return $array;\n    }\n\n    /**\n     * 根据查询到的一个结果集，指定两列，生成哈希表\n     */\n    public static function recordToHashtable($list, $columnKey, $columnValue = '')\n    {\n        $array = [];\n        foreach ($list as $key => $value) {\n            $array[$value->$columnKey] = $columnValue == '' ? $value : $value->$columnValue;\n        }\n        return $array;\n    }\n\n    public static function getAuthResourse()\n    {\n        return [\n            [\"user\", \"modifypassword\"],\n            [\"warehouseuser\", \"page\"],\n            [\"user\", \"page\"],\n            [\"product\", \"page\"],\n            [\"group\", \"page\"],\n            ['group', 'getpermissions'],\n            [\"department\", \"single\"],\n            [\"department\", \"departments\"],\n            [\"brand\", \"page\"],\n            [\"common\", \"list\"],\n            [\"common\", \"loadname\"],\n            [\"brandgroup\", \"page\"],\n            [\"brandgroupchild\", \"page\"],\n            [\"brandgroupchildproperty\", \"page\"],\n            [\"ageseason\", \"page\"],\n            [\"colortemplate\", \"page\"],\n            [\"sizetop\", \"page\"],\n            [\"sizecontent\", \"page\"],\n            [\"ulnarinch\", \"page\"],\n            [\"material\", \"page\"],\n            [\"warehouse\", \"page\"],\n            [\"country\", \"page\"],\n            [\"saleport\", \"page\"],\n            [\"supplier\", \"page\"],\n            [\"order\", \"page\"],\n            [\"order\", \"loadorder\"],\n            [\"confirmorder\", \"loadorder\"],\n            [\"confirmorder\", \"page\"],\n            [\"warehousing\", \"page\"],\n            [\"warehousing\", \"load\"],\n            [\"requisition\", \"page\"],\n            [\"requisition\", \"load\"],\n            [\"requisition\", \"confirmout\"],\n            [\"requisition\", \"confirmin\"],\n            [\"productstock\", \"search\"],\n            [\"permission\", \"tree\"],\n            [\"user\", \"saleportlist\"],\n            [\"sales\", \"page\"],\n            [\"sales\", \"loadsale\"],\n            [\"product\", \"getproperties\"],\n            [\"product\", \"picture\"],\n            [\"product\", \"getcolorgrouplist\"],\n            [\"product\", \"codelist\"],\n            [\"product\", \"search\"],\n            ['aliases', 'page'],\n            ['series', 'page'],\n            ['warehouse', 'userlist'],\n            ['series2', 'page'],\n            ['productmemo', 'page'],\n            ['companyinvoice', 'page'],\n            ['supplierbank', 'page'],\n            ['supplierinvoice', 'page'],\n            ['currency', 'page'],\n            ['company', 'info'],\n        ];\n    }\n\n    public static function getPublicResourse()\n    {\n        return [\n            [\"index\", 'index'],\n            ['login', 'login'],\n            [\"login\", \"logout\"],\n            ['login', 'checklogin'],\n            ['common', 'systemlanguage'],\n        ];\n    }\n\n\n    /**\n     * 把图片转换成对应的分辨率，都是正方形格式的\n     * @param $filepath 图片的绝对路径，比如：/www/wwwroot/www.jinxiaocun.com/erp/public/upload/product/model4.jpg\n     * @param $resizeArray 分辨率数组，例如[80, 200]，代表裁剪为两组分辨率，分别是80*80、200*200，路径保存在和原来的图片相同的目录下\n     * @throws \\Exception\n     */\n    public static function convertPics($filepath, $resizeArray)\n    {\n        // 逻辑\n        // 首先获取图片的参数\n        $pathinfo = pathinfo($filepath);\n        foreach ($resizeArray as $resize) {\n            // 开始处理\n            Image::open($filepath)\n                ->resize($resize, $resize)\n                ->save(dirname($filepath) . '/' . $pathinfo['basename'] . '_' . $resize . 'x' . $resize . '.' . $pathinfo['extension']);\n        }\n    }\n\n\n    /**\n     * 导入带图片格式的excel，即使是每一列含有多张图片也没有问题\n     * @param $excelFilePath excel文件的绝对路径\n     * @param $pictureSaveFolder 图片保存的文件夹，具体是指/public/upload下面的具体文件夹名称，比如product\n     * @return array|bool\n     * @throws \\PHPExcel_Exception\n     * @throws \\PHPExcel_Reader_Exception\n     */\n    public static function importExcel($excelFilePath, $pictureSaveFolder)\n    {\n        // 逻辑\n        // 首先创建所需的文件夹\n        $imgPath = APP_PATH . '/public/upload/' . $pictureSaveFolder;\n        if (!file_exists($imgPath)) {\n            mkdir($imgPath);\n        }\n\n        // 图片保存逻辑\n        // 使用 PHPExcel_IOFactory 来鉴别文件应该使用哪一个读取类\n        $inputFileType = \\PHPExcel_IOFactory::identify($excelFilePath);\n        $objReader = \\PHPExcel_IOFactory::createReader($inputFileType);\n        // 载入文件\n        $objPHPExcel = $objReader->load($excelFilePath);\n        // 取出数据\n        $datas = $objPHPExcel->getSheet(0);\n\n        // 先处理图片\n        $AllImages = $datas->getDrawingCollection();\n        foreach ($AllImages as $drawing) {\n            // xls和xlsx对于图片处理有着不同的逻辑，所以要进行分别处理\n            // 如果是xls\n            if ($drawing instanceof \\PHPExcel_Worksheet_MemoryDrawing) {\n                // 原始文件名\n                $filename = $drawing->getIndexedFilename();\n\n                // jpeg后缀名处理\n                $imgName = substr($filename, 0, strrpos($filename, '.') - 1);\n                $imgType = @end(explode(\".\", $filename));\n                // 如果扩展名是jpeg，则修改为jpg\n                if ($imgType == 'jpeg') {\n                    $img = $imgName . '.jpg';\n                } else {\n                    $img = $imgName . '.' . $imgType;\n                }\n\n                // 把图片保存在服务器中\n                ob_start();\n                call_user_func(\n                    $drawing->getRenderingFunction(),\n                    $drawing->getImageResource()\n                );\n                $imageContents = ob_get_contents();\n                file_put_contents($imgPath . '/' . $img, $imageContents); //把文件保存到本地\n                ob_end_clean();\n\n                // 获取当前单元格位置，便于后续操作\n                $XY = $drawing->getCoordinates();\n\n                // 把图片的单元格的值设置为最终路径\n                $cell = $datas->getCell($XY);\n                $cell->setValue($pictureSaveFolder . '/' . $img);\n            }\n\n            // 如果是xlsx\n            if ($drawing instanceof \\PHPExcel_Worksheet_Drawing) {\n                // 文件完整路径$filename\n                // 类似于：zip:///data/www/xxx/bdac99339.xlsx#xl/media/image2.jpg\n                $filename = $drawing->getPath();\n                // 文件后缀\n                $imgType = @end(explode(\".\", $filename));\n                // 文件名部分\n                $imgName = md5(time() . mt_rand(100, 999) . uniqid());\n                // 如果扩展名是jpeg，则修改为jpg\n                if ($imgType == 'jpeg') {\n                    $img = $imgName . '.jpg';\n                } else {\n                    $img = $imgName . '.' . $imgType;\n                }\n                // 即将要复制到的文件路径\n                copy($filename, $imgPath . '/' . $img);\n\n                // 获取当前单元格位置，便于后续操作\n                $XY = $drawing->getCoordinates();\n\n                // 把图片的单元格的值设置为最终路径\n                $cell = $datas->getCell($XY);\n                $cell->setValue($pictureSaveFolder . '/' . $img);\n            }\n        }\n\n        // 返回去掉首行excel标题的数组\n        return self::unsetFirstArray($datas->toArray());\n    }\n\n\n    /**\n     * 返回去掉首行，并且重新组合的数组\n     * @param $array\n     * @return array|bool\n     */\n    public static function unsetFirstArray($array)\n    {\n        // 逻辑\n        // 如果是数组\n        if (is_array($array)) {\n            // 去掉第一行\n            unset($array[0]);\n            // 重新组装数组\n            return array_values($array);\n        } else {\n            // 不是数组直接返回错误\n            return false;\n        }\n    }\n\n    /**\n     * excel导出功能，带图片\n     * @param array $title\n     * @param array $data\n     * @param string $fileName\n     * @param string $savePath\n     * @param bool $isDown\n     * @return string\n     * @throws \\PHPExcel_Exception\n     */\n    public static function excelExport($title = [], $data = [], $fileName = '', $savePath = './', $isDown = true)\n    {\n        // 逻辑\n        // 初始化\n        $obj = new PHPExcel();\n\n        // 横向单元格标识\n        $cellName = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'AA', 'AB', 'AC', 'AD', 'AE', 'AF', 'AG', 'AH', 'AI', 'AJ', 'AK', 'AL', 'AM', 'AN', 'AO', 'AP', 'AQ', 'AR', 'AS', 'AT', 'AU', 'AV', 'AW', 'AX', 'AY', 'AZ'];\n\n        // 设置sheet名称，默认为sheet1\n        $obj->getActiveSheet()->setTitle('sheet1');\n\n        // 设置默认对齐方式\n        $obj->getDefaultStyle()->getAlignment()->setHorizontal(\\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);\n        $obj->getDefaultStyle()->getAlignment()->setVertical(\\PHPExcel_Style_Alignment::VERTICAL_CENTER);\n\n        // 设置纵向单元格标识\n        $_row = 1;\n        if ($title) {\n            // 注释掉最上面一行合并单元格的内容，有需要再恢复\n            // $_cnt = count($title);\n            // // 合并单元格\n            // $obj->getActiveSheet(0)->mergeCells('A'.$_row.':'.$cellName[$_cnt-1].$_row);\n            // 设置合并后的单元格内容\n            // $obj->setActiveSheetIndex(0)->setCellValue('A'.$_row, '数据导出：'.date('Y-m-d H:i:s'));\n            // $_row++;\n            $i = 0;\n            // 设置列标题\n            foreach ($title AS $v) {\n                $obj->setActiveSheetIndex(0)->setCellValue($cellName[$i] . $_row, $v);\n                $i++;\n            }\n            $_row++;\n        }\n\n        // 填写数据\n        if ($data) {\n            $i = 0;\n            foreach ($data as $_v) {\n                $j = 0;\n                foreach ($_v as $_cell) {\n                    $obj->getActiveSheet()->setCellValue($cellName[$j] . ($i + $_row), $_cell);\n                    // 设置自动换行\n                    $obj->getActiveSheet()->getStyle($cellName[$j] . ($i + $_row))->getAlignment()->setWrapText(TRUE);\n                    // 如果数据库含有图片，那么就把图片的地址改为插入图片\n                    if (strpos($_cell, 'jpg') !== false || strpos($_cell, 'gif') !== false || strpos($_cell, 'png') !== false) {\n                        // 首先修改图片列的单元格宽度和高度\n                        // 宽度\n                        $obj->getActiveSheet()->getColumnDimension($cellName[$j])->setWidth(16);\n                        // 然后修改默认行高和第一行高\n                        //设置默认行高\n                        $obj->getActiveSheet()->getDefaultRowDimension()->setRowHeight(100);\n                        //设置第一行高\n                        $obj->getActiveSheet()->getRowDimension(1)->setRowHeight(20);\n\n                        // 然后把图片列的内容清空\n                        $obj->getActiveSheet()->setCellValue($cellName[$j] . ($i + $_row), '');\n                        // 处理图片显示位置\n                        $img = new \\PHPExcel_Worksheet_Drawing();\n                        $img->setPath(APP_PATH . '/public/upload/' . $_cell);//写入图片路径\n                        $img->setHeight(80);//写入图片高度\n                        $img->setWidth(80);//写入图片宽度\n                        $img->setOffsetX(15);//写入图片在指定格中的X坐标值\n                        $img->setOffsetY(15);//写入图片在指定格中的Y坐标值\n                        $img->setRotation(1);//设置旋转角度\n                        $img->setResizeProportional(false); //默认是按原图像缩放的，设置成false才可以。\n                        $img->getShadow()->setVisible(true);//\n                        $img->getShadow()->setDirection(50);//\n                        $img->setCoordinates($cellName[$j] . ($i + $_row));//设置图片所在表格位置\n                        $img->setWorksheet($obj->getActiveSheet());//把图片写到当前的表格中\n                    }\n\n                    $j++;\n                }\n                $i++;\n            }\n        }\n\n        // 文件名处理\n        if (!$fileName) {\n            $fileName = uniqid(time(), true);\n        }\n        $objWrite = \\PHPExcel_IOFactory::createWriter($obj, 'Excel5');\n\n        // 网页下载\n        if ($isDown) {\n            header('pragma:public');\n            header(\"Content-Disposition:attachment;filename=$fileName.xls\");\n            $objWrite->save('php://output');\n            exit;\n        }\n\n        // 转码，防止文件名乱码\n        $_fileName = iconv(\"utf-8\", \"gb2312\", $fileName);\n        $_savePath = $savePath . $_fileName . '.xls';\n        $objWrite->save($_savePath);\n\n        // 返回文件名\n        return $savePath . $fileName . '.xls';\n    }\n\n    /**\n     * 判断数据是否为合法的json字符串\n     * @param $data\n     * @param bool $assoc\n     * @return bool\n     */\n    public static function is_json($data, $assoc = false)\n    {\n        // 逻辑\n        // 因为json_decode里面放的只要是非string类型就会报错，这个需要加个@强制屏蔽，否则将无法进行下面的验证\n        $data = @json_decode($data, $assoc);\n        if (($data && (is_object($data))) || (is_array($data) && !empty($data))) {\n            return true;\n        }\n        return false;\n    }\n\n    /**\n     * 针对配置文件的多维数组转成一维关联数组，每个键名之间默认用.分割\n     * @param array $array 待处理的多维数组\n     * @param string $key 原来的键值，需要做保留处理\n     * @param string $separator 每个键名之间的分隔符，默认是.号\n     * @return array\n     */\n    public static function multiarray_to_assocarray(array $array, $key = '', $separator = '|')\n    {\n        // 逻辑\n        $return = [];\n        // 遍历\n        foreach ($array as $k => $item) {\n            // 判断是否为空决定放不放分隔符\n            $current_key = $key == '' ? $k : $key . $separator . $k;\n            // 如果仍是数组，则执行自身\n            if (is_array($item)) {\n                // 把$k键值也要保留并且传递过去，采用相加合并数组，因为要保留数字键名，不可用array_merge\n                $return += self::multiarray_to_assocarray($item, $current_key, $separator);\n            } else {\n                // 非数组则直接输出即可\n                $return[$current_key] = $item;\n            }\n        }\n        // 返回\n        return $return;\n    }\n\n    /**\n     * 多维数组转成一维简单数组\n     * @param array $array 待处理的多维数组\n     * @return array\n     */\n    public static function multiarray_to_simplearray(array $array)\n    {\n        // 逻辑\n        $return = [];\n        $assocarray = self::multiarray_to_assocarray($array);\n        foreach ($assocarray as $k => $item) {\n            $return[] = $k . '|' . $item;\n        }\n        return $return;\n    }\n\n    /**\n     * 一维关联数组转成多维关联数组\n     * @param array $array\n     * @return array\n     */\n    public static function simplearray_to_multiarray(array $array)\n    {\n        $return = [];\n        foreach ($array as $key => $item) {\n            // 判断是否有|，如果有就切割\n            if (strpos($item, '|') !== false) {\n                // 开始遍历\n                $rpos = strrpos($item, '|');\n                $left = substr($item, 0, $rpos);\n                $right = substr($item, $rpos + 1);\n                // 分隔left\n                $keys = explode('|', $left);\n                $current_str = '';\n                foreach ($keys as $j => $key) {\n                    // 依次生成当前的元素\n                    // 当前循环元素\n                    $current_str .= '[' . \"'$key'\" . ']';\n                }\n                // 使用神器eval进行智能拼接\n                eval(\"\\$return $current_str = \\$right;\");\n            } else {\n                $return[$key] = $item;\n            }\n        }\n        // 返回\n        return $return;\n    }\n\n    /**\n     * 文件批量打包导出，并通过浏览器下载\n     * 前台参考演示模板路径：/app/shop/views/temp/exportfiles.phtml\n     *\n     * 调用方法：(仅供参考，因为考虑到有可能导出文件列表较多，所以用post传输)\n     * if ($this->request->isPost()) {\n     * // 获得文件列表\n     * $json_files = $this->request->get('files');\n     * // 开始导出\n     * Util::exportFiles($json_files);\n     * }\n     *\n     * @param string $json_files 一个前台经过JSON.stringify处理过的json字符串，需要转成数组遍历\n     */\n    public static function exportFiles($json_files)\n    {\n        // 逻辑\n        // 如果是json，则把传过来的json字符串转成数组\n        if (Util::is_json($json_files)) {\n            $files = json_decode($json_files, true);\n        }\n\n        // 判断是否需要转成绝对路径，如果不是绝对路径，那么就进行转换\n        if (strpos($json_files, APP_PATH) === false) {\n            foreach ($files as $k => $file) {\n                $files[$k] = APP_PATH . '/public/' . $file;\n            }\n        }\n\n        // 定义一个压缩文件名\n        $zipname = APP_PATH . \"/public/tempExportFiles.zip\";\n        // 执行压缩逻辑\n        $zip = new ZipArchive();\n        $res = $zip->open($zipname, ZipArchive::CREATE);\n        if ($res === TRUE) {\n            foreach ($files as $file) {\n                //这里直接用原文件的名字进行打包，也可以直接命名，需要注意如果文件名字一样会导致后面文件覆盖前面的文件，所以建议重新命名\n                $new_filename = substr($file, strrpos($file, '/') + 1);\n                $zip->addFile($file, $new_filename);\n            }\n            //关闭文件\n            $zip->close();\n            //这里是下载zip文件\n            header(\"Content-Type: application/zip\");\n            header(\"Content-Transfer-Encoding: Binary\");\n\n            header(\"Content-Length: \" . filesize($zipname));\n            header(\"Content-Disposition: attachment; filename=\\\"\" . basename($zipname) . \"\\\"\");\n\n            readfile($zipname);\n            exit;\n        }\n    }\n\n    public static function filterIds($ids)\n    {\n        $array = explode(\",\", $ids);\n\n        $result = [];\n        foreach ($array as $row) {\n            $result[] = (int)$row;\n        }\n        return implode(\",\", $result);\n    }\n\n    /**\n     * 求两个日期之间相差的天数\n     * (针对1970年1月1日之后，求之前可以采用泰勒公式)\n     * @param string $day1\n     * @param string $day2\n     * @return number\n     */\n    public static function diffBetweenTwoDays($day1, $day2)\n    {\n        $second1 = strtotime($day1);\n        $second2 = strtotime($day2);\n\n        if ($second1 < $second2) {\n            $tmp = $second2;\n            $second2 = $second1;\n            $second1 = $tmp;\n        }\n        return ($second1 - $second2) / 86400;\n    }\n\n    /**\n     * 获取当前数组最大值的键名\n     * @param array $array\n     * @return mixed\n     */\n    public static function getArrayMaxKey(array $array)\n    {\n        // 逻辑\n        // 先取出最大值\n        // 如果数组为空，那么就为null\n        if (!$array) {\n            return null;\n        }\n        $max = max($array);\n        // 翻转数组，键名键值互换\n        $flip = array_flip($array);\n        // 最终返回\n        return $flip[$max];\n    }\n\n    /**\n     * 加密、解密字符串\n     * ENCODE为加密，DECODE为解密\n     * @param string $string 待处理字符串\n     * @param string $action 操作，ENCODE|DECODE\n     * @return string\n     * @global array $pwServer\n     * @global string $db_hash\n     */\n    public static function strCode($string, $action = 'ENCODE')\n    {\n        $action != 'ENCODE' && $string = base64_decode($string);\n        $code = '';\n        $key = substr(md5($_SERVER['HTTP_USER_AGENT']), 8, 18);\n        $keyLen = strlen($key);\n        $strLen = strlen($string);\n        for ($i = 0; $i < $strLen; $i++) {\n            $k = $i % $keyLen;\n            $code .= $string[$i] ^ $key[$k];\n        }\n        return ($action != 'DECODE' ? base64_encode($code) : $code);\n    }\n\n\n    /**\n     * 功能函数 - 发送email\n     * @param string $toemail 要发送到的email地址, 多个使用一维数组即可;\n     * @param string $subject email标题\n     * @param string $body email主体内容\n     * @return bool\n     * @throws \\PHPMailer\\PHPMailer\\Exception\n     */\n    public static function sendEmail($toemail, $subject, $body)\n    {\n        //示例化PHPMailer核心类\n        //vendor模式\n        $mail = new PHPMailer();\n        //nameplace 模式;\n        //$mail = new \\LaneLead\\PHPMailer\\PHPMailer();\n        //读取config配置文件\n        $config = require APP_PATH . '/app/config/config.php';\n        $email_config = $config['email_config'];\n\n        //是否启用smtp的debug进行调试 开发环境建议开启 生产环境注释掉即可 默认关闭debug调试模式\n        $mail->SMTPDebug = 0;\n\n        //使用smtp鉴权方式发送邮件，当然你可以选择pop方式 sendmail方式等 本文不做详解\n        //可以参考http://phpmailer.github.io/PHPMailer/当中的详细介绍\n        $mail->isSMTP();\n        //加密方式 \"ssl\" or \"tls\"\n        $mail->SMTPSecure = $email_config['secure']; //这里要注意, QQ发送邮件使用的ssl方式,如果不设置, 则会失败! 请认真查看下面的配置文件!!!\n        //smtp需要鉴权 这个必须是true\n        $mail->SMTPAuth = true;\n        //链接qq域名邮箱的服务器地址\n        $mail->Host = $email_config['host'];\n        //设置ssl连接smtp服务器的远程服务器端口号 可选465或587\n        $mail->Port = $email_config['port'];\n        //smtp登录的账号 这里填入字符串格式的qq号即可\n        $mail->Username = $email_config['username'];\n        //smtp登录的密码 这里填入“独立密码” 若为设置“独立密码”则填入登录qq的密码 建议设置“独立密码”\n        $mail->Password = $email_config['psw'];\n        //设置发件人邮箱地址 这里填入上述提到的“发件人邮箱”\n        $mail->From = $email_config['From'];\n        //设置发件人姓名（昵称） 任意内容，显示在收件人邮件的发件人邮箱地址前的发件人姓名\n        $mail->FromName = $email_config['FromName'];\n\n        //设置发送的邮件的编码 可选GB2312 我喜欢utf-8 据说utf8在某些客户端收信下会乱码\n        $mail->CharSet = 'UTF-8';\n        //邮件正文是否为html编码 注意此处是一个方法 不再是属性 true或false\n        $mail->isHTML(true);\n        //设置收件人邮箱地址 该方法有两个参数 第一个参数为收件人邮箱地址 第二参数为给该地址设置的昵称 不同的邮箱系统会自动进行处理变动 这里第二个参数的意义不大\n        // 添加收件人地址，可以多次使用来添加多个收件人\n        if (is_array($toemail)) {\n            foreach ($toemail as $to_email) {\n                $mail->AddAddress($to_email);\n            }\n        } else {\n            $mail->AddAddress($toemail);\n        }\n        //添加该邮件的主题\n        $mail->Subject = $subject;\n        //添加邮件正文 上方将isHTML设置成了true，则可以是完整的html字符串 如：使用file_get_contents函数读取本地的html文件\n        $mail->Body = $body;\n        //为该邮件添加附件 该方法也有两个参数 第一个参数为附件存放的目录（相对目录、或绝对目录均可） 第二参数为在邮件附件中该附件的名称\n        //$mail->addAttachment('./d.jpg','mm.jpg');\n        //同样该方法可以多次调用 上传多个附件\n        //$mail->addAttachment('./Jlib-1.1.0.js','Jlib.js');\n        //dump($mail);exit;\n\n        //发送命令 返回布尔值\n        //PS：经过测试，要是收件人不存在，若不出现错误依然返回true 也就是说在发送之前 自己需要些方法实现检测该邮箱是否真实有效\n        $status = $mail->send();\n\n        //简单的判断与提示信息\n        if ($status) {\n            return true;\n        } else {\n            return false;\n        }\n    }\n\n    /**\n     * 手动刷新阿里云cdn缓存\n     * @param string|array $path 文件列表，里面的链接必须是完整的路径（包含http://或者https://）\n     * @return mixed\n     * @throws ClientException\n     */\n    public static function refreshAliyunCdnCaches($path)\n    {\n        // 逻辑\n        // 配置文件初始化\n        $config = require APP_PATH . '/app/config/config.php';\n        $alibabacloud = $config['alibabacloud'];\n        $accessKeyId = $alibabacloud['accessKeyId'];\n        $accessKeySecret = $alibabacloud['accessKeySecret'];\n\n        // 参数列表\n        // 文件列表必须有值\n        if (empty($path)) {\n            return false;\n        }\n        // path必须是文件或者数组格式\n        if (!is_string($path) && !is_array($path)) {\n            return false;\n        }\n        // 判断是文件夹还是文件，如果每个链接后面都有/则为目录，否则为文件\n        if (is_array($path)) {\n            $type = Util::isFileOrDirectory($path[0]);\n            // api中要求每个链接地址用\"\\n\"或者\"\\r\\n\"分割\n            $path = implode(\"\\n\", $path);\n        } else {\n            $type = Util::isFileOrDirectory($path);\n        }\n\n        // 首先关闭错误提示\n        ini_set('display_errors', 'off');\n        error_reporting(0);\n\n        // api\n        AlibabaCloud::accessKeyClient($accessKeyId, $accessKeySecret)\n            ->regionId('cn-hangzhou')// replace regionId as you need\n            ->asDefaultClient();\n\n        try {\n            $result = AlibabaCloud::rpc()\n                ->product('Cdn')\n                // ->scheme('https') // https | http\n                ->version('2018-05-10')\n                ->action('RefreshObjectCaches')\n                ->method('POST')\n                ->options([\n                    'query' => [\n                        'ObjectPath' => $path,\n                        'ObjectType' => $type,\n                    ],\n                ])\n                ->request();\n            if ($result = $result->toArray()) {\n                return true;\n            } else {\n                return false;\n            }\n        } catch (ClientException $e) {\n            return false;\n        } catch (ServerException $e) {\n            return false;\n        }\n    }\n\n    /**\n     * 判断一个网络路径是文件还是文件夹，如果最后一个字符是/，那么就是文件夹，否则就是文件\n     * @param string|array $path 文件路径\n     * @return string\n     */\n    public static function isFileOrDirectory($path)\n    {\n        // 逻辑\n        if (substr($path, -1, 1) === '/') {\n            $type = 'Directory';\n        } else {\n            $type = 'File';\n        }\n        // 返回\n        return $type;\n    }\n\n    /**\n     * 递归创建文件夹\n     * @param $dir\n     * @return bool\n     */\n    public static function Directory($dir)\n    {\n        return is_dir($dir) or self::Directory(dirname($dir)) and mkdir($dir, 0777);\n    }\n\n}",
-			"file": "/Z/erp/app/models/erp/Util.php",
-			"file_size": 32967,
-			"file_write_time": 132050392720000000,
-			"settings":
-			{
-				"buffer_size": 28103,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
 			"file": "src/main.js",
 			"settings":
 			{
-				"buffer_size": 12866,
+				"buffer_size": 12042,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/component/pricesetting/index.vue",
+			"settings":
+			{
+				"buffer_size": 11068,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/component/sales/create.vue",
+			"settings":
+			{
+				"buffer_size": 17868,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -897,7 +828,7 @@
 			"file": "src/component/model.js",
 			"settings":
 			{
-				"buffer_size": 13676,
+				"buffer_size": 14150,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -969,7 +900,7 @@
 			"file": "src/component/prop.js",
 			"settings":
 			{
-				"buffer_size": 19730,
+				"buffer_size": 20506,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -978,7 +909,7 @@
 			"file": "src/component/resources.js",
 			"settings":
 			{
-				"buffer_size": 6762,
+				"buffer_size": 6849,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -1144,6 +1075,7 @@
 		"/D/code/vue/asa-plugin/src/component/order",
 		"/D/code/vue/asa-plugin/src/component/orderbrand",
 		"/D/code/vue/asa-plugin/src/component/orderpayment",
+		"/D/code/vue/asa-plugin/src/component/pricesetting",
 		"/D/code/vue/asa-plugin/src/component/product",
 		"/D/code/vue/asa-plugin/src/component/productstock",
 		"/D/code/vue/asa-plugin/src/component/requisition",
@@ -1157,8 +1089,26 @@
 	],
 	"file_history":
 	[
-		"/Z/erp/app/models/erp/Sql.php",
+		"/Z/erp/app/home/controllers/CommonController.php",
+		"/Z/erp/app/models/erp/TbBrand.php",
+		"/Z/erp/app/home/controllers/AdminController.php",
+		"/Z/erp/app/models/erp/TbSeries.php",
+		"/Z/erp/app/config/languages/cn.php",
+		"/Z/erp/app/home/controllers/OrderbrandController.php",
+		"/Z/erp/app/home/controllers/ProductController.php",
 		"/Z/erp/app/home/views/index.phtml",
+		"/Z/erp/app/home/controllers/OrderController.php",
+		"/Z/erp/app/home/controllers/SeriesController.php",
+		"/Z/erp/create-sql.sql",
+		"/D/code/vue/asa-plugin/dist/asa-1007.js",
+		"/D/code/vue/asa-plugin/dist/3-1007.js",
+		"/D/code/vue/asa-plugin/dist/0-03b7967d.js",
+		"/D/code/vue/asa-plugin/dist/common.js-1007.js.map",
+		"/D/code/vue/asa-plugin/dist/common.js-1007.js",
+		"/Z/erp/app/models/erp/Util.php",
+		"/Z/erp/app/home/controllers/ShippingController.php",
+		"/Z/erp/app/home/controllers/ProductstockController.php",
+		"/Z/erp/app/models/erp/Sql.php",
 		"/D/code/vue/asa-plugin/src/component/select-table.vue",
 		"/D/code/vue/asa-plugin/src/component/select-text.js",
 		"/D/code/vue/asa-plugin/src/component/pricesetting/index.vue",
@@ -1174,25 +1124,19 @@
 		"/D/code/vue/asa-plugin/src/component/math.js",
 		"/C/Users/changwei/Downloads/vue-chartjs-develop/vue-chartjs-develop/src/index.js",
 		"/D/code/vue/asa-plugin/src/component/http.js",
-		"/Z/erp/app/config/languages/cn.php",
 		"/Z/erp/app/models/erp/TbOrder.php",
 		"/Z/erp/app/models/erp/TbOrderBrand.php",
-		"/Z/erp/app/home/controllers/OrderbrandController.php",
 		"/Z/erp/app/models/erp/TbShipping.php",
 		"/Z/erp/app/models/erp/BaseModel.php",
 		"/Z/erp/app/models/erp/TbShippingDetail.php",
 		"/Z/erp/app/models/erp/TbProductstock.php",
-		"/Z/erp/app/home/controllers/ShippingController.php",
 		"/D/code/vue/asa-plugin/src/component/confirmorder/index.vue",
 		"/D/code/vue/asa-plugin/src/component/confirmorder/detail.vue",
 		"/D/code/vue/asa-plugin/src/component/orderbranddetail/index.vue",
 		"/D/code/vue/asa-plugin/src/component/asa/product-search-dialog.vue",
 		"/D/code/vue/asa-plugin/src/component/productstock/index.vue",
 		"/D/code/vue/asa-plugin/src/component/user/index.vue",
-		"/Z/erp/app/home/controllers/OrderController.php",
 		"/Z/erp/app/home/controllers/ExchangerateController.php",
-		"/Z/erp/app/home/controllers/ProductController.php",
-		"/Z/erp/app/home/controllers/AdminController.php",
 		"/Z/erp/app/plugins/ExceptionPlugin.php",
 		"/Z/erp/app/plugins/SecurityPlugin.php",
 		"/Y/autocharge/app/models/TtCharge.php",
@@ -1200,7 +1144,6 @@
 		"/D/code/vue/asa-plugin/src/component/CommitChart.js",
 		"/C/Users/changwei/Downloads/vue-chartjs-develop/vue-chartjs-develop/src/BaseCharts.js",
 		"/D/code/vue/asa-plugin/src/component/asa/Asa_Order_Tip.vue",
-		"/Z/erp/app/models/erp/Util.php",
 		"/Z/erp/app/config/config-dist.php",
 		"/Z/erp/app/config/config.php",
 		"/Y/gamecenter/app/plugins/SecurityPlugin.php",
@@ -1208,8 +1151,6 @@
 		"/C/Users/changwei/Downloads/vue-chartjs-develop/vue-chartjs-develop/src/main.js",
 		"/C/Users/changwei/Downloads/vue-chartjs-develop/vue-chartjs-develop/src/examples/PieExample.js",
 		"/Z/erp/app/models/erp/TbProduct.php",
-		"/Z/erp/app/home/controllers/SeriesController.php",
-		"/Z/erp/app/home/controllers/CommonController.php",
 		"/Z/erp/app/models/erp/TbOrderBrandDetail.php",
 		"/Z/erp/app/models/erp/TbWarehousingdetails.php",
 		"/Z/erp/app/home/controllers/SalesController.php",
@@ -1223,7 +1164,6 @@
 		"/Z/erp/app/home/controllers/PricesettingController.php",
 		"/D/code/opensourse/vue/src/core/index.js",
 		"/Z/erp/app/models/erp/TbProductLastmodify.php",
-		"/Z/erp/create-sql.sql",
 		"/Z/erp/app/home/controllers/ProductlastmodifyController.php",
 		"/D/code/vue/asa-plugin/src/component/asa/Asa_Productstock_Search.vue",
 		"/D/code/vue/asa-plugin/src/component/asa/Asa_Sales_Dialog.vue",
@@ -1276,19 +1216,11 @@
 		"/D/code/vue/asa-plugin/src/component/Simple_Album.vue",
 		"/D/code/vue/asa-plugin/src/component/department/index.vue",
 		"/D/code/vue/asa-plugin/src/component/exchangerate/index.vue",
-		"/D/code/vue/asa-plugin/src/component/warehousing/index.vue",
-		"/D/code/vue/asa-plugin/src/component/group/index.vue",
-		"/D/code/vue/asa-plugin/src/component/brandgroup/index.vue",
-		"/D/code/vue/asa-plugin/src/component/system/index.vue",
-		"/D/code/vue/asa-plugin/src/component/sizetop/index.vue",
-		"/D/code/vue/asa-plugin/src/component/salesreceive/index.vue",
-		"/D/code/vue/asa-plugin/src/component/orderpayment/index.vue",
-		"/D/code/vue/asa-plugin/src/component/asa/order-detail.js",
-		"/D/code/vue/tableAdmin/src/component/label/base.js"
+		"/D/code/vue/asa-plugin/src/component/warehousing/index.vue"
 	],
 	"find":
 	{
-		"height": 39.3333333333
+		"height": 39.0
 	},
 	"find_in_files":
 	{
@@ -1302,6 +1234,19 @@
 		"case_sensitive": true,
 		"find_history":
 		[
+			"\\s+$",
+			"PriceSetting",
+			"Order",
+			"autoreload",
+			"auto",
+			"addS",
+			"getRowDealTotal",
+			"form",
+			"winterproofing",
+			"name_",
+			"供货单位",
+			"pre",
+			"Pre",
 			"_Product",
 			"onAddSeries",
 			"current",
@@ -1416,20 +1361,7 @@
 			"doNull",
 			"onChange",
 			"getLineTotal",
-			"reset",
-			"onDiscountChange",
-			"totals",
-			"sumform",
-			"formdiscount",
-			"onNumberChange",
-			"suppliers",
-			"onInputDblClick",
-			"suppliers",
-			"total_price",
-			"getRowTotal",
-			"tabledata",
-			"convert",
-			"ordercurrent"
+			"reset"
 		],
 		"highlight": false,
 		"in_selection": false,
@@ -1437,6 +1369,8 @@
 		"regex": true,
 		"replace_history":
 		[
+			"",
+			"memo_",
 			"$1/>",
 			"/>",
 			"></simple-select>",
@@ -1582,7 +1516,7 @@
 	"groups":
 	[
 		{
-			"selected": 20,
+			"selected": 17,
 			"sheets":
 			[
 				{
@@ -1621,7 +1555,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 42,
+					"stack_index": 39,
 					"type": "text"
 				},
 				{
@@ -1630,29 +1564,29 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 35818,
+						"buffer_size": 36175,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								20106,
-								20071
+								25165,
+								25165
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1561109724.73,
+							"sorttabs_lastactivated": 1561361156.22,
 							"syntax": "Packages/Vue/vue.tmLanguage",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 3636.0,
+						"translation.y": 5811.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 15,
 					"type": "text"
 				},
 				{
@@ -1661,20 +1595,20 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1197,
+						"buffer_size": 1199,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1178,
-								1178
+								1042,
+								1042
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1561109764.33,
+							"sorttabs_lastactivated": 1561367951.34,
 							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true,
@@ -1690,7 +1624,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 8,
 					"type": "text"
 				},
 				{
@@ -1699,29 +1633,29 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 26637,
+						"buffer_size": 26891,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								13677,
-								13677
+								16144,
+								16148
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1561109713.1,
+							"sorttabs_lastactivated": 1561367340.91,
 							"syntax": "Packages/Vue/vue.tmLanguage",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 4185.0,
+						"translation.y": 3756.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
+					"stack_index": 9,
 					"type": "text"
 				},
 				{
@@ -1752,7 +1686,7 @@
 						"translation.y": 270.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 54,
+					"stack_index": 47,
 					"type": "text"
 				},
 				{
@@ -1783,7 +1717,7 @@
 						"translation.y": 2340.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 7,
+					"stack_index": 22,
 					"type": "text"
 				},
 				{
@@ -1792,20 +1726,20 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 5245,
+						"buffer_size": 5301,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2044,
-								2044
+								3973,
+								3986
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1561106822.65,
+							"sorttabs_lastactivated": 1561356496.06,
 							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true,
@@ -1821,7 +1755,7 @@
 						"translation.y": 1080.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 12,
+					"stack_index": 19,
 					"type": "text"
 				},
 				{
@@ -1830,20 +1764,20 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 612,
+						"buffer_size": 705,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								523,
-								523
+								169,
+								169
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1561109430.19,
+							"sorttabs_lastactivated": 1561357826.39,
 							"syntax": "Packages/Vue/vue.tmLanguage",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
@@ -1852,7 +1786,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 9,
+					"stack_index": 17,
 					"type": "text"
 				},
 				{
@@ -1883,7 +1817,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 50,
+					"stack_index": 43,
 					"type": "text"
 				},
 				{
@@ -1914,7 +1848,7 @@
 						"translation.y": 1350.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 51,
+					"stack_index": 44,
 					"type": "text"
 				},
 				{
@@ -1930,13 +1864,13 @@
 						"selection":
 						[
 							[
-								355,
-								494
+								1909,
+								1913
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1561014294.27,
+							"sorttabs_lastactivated": 1561362432.4,
 							"syntax": "Packages/Vue/vue.tmLanguage",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true,
@@ -1948,10 +1882,10 @@
 							}
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 1620.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 39,
+					"stack_index": 12,
 					"type": "text"
 				},
 				{
@@ -1960,29 +1894,29 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1634,
+						"buffer_size": 1713,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								686,
-								706
+								1437,
+								1437
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1560944858.57,
+							"sorttabs_lastactivated": 1561365469.85,
 							"syntax": "Packages/Vue/vue.tmLanguage",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 180.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 46,
+					"stack_index": 11,
 					"type": "text"
 				},
 				{
@@ -2058,7 +1992,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 52,
+					"stack_index": 45,
 					"type": "text"
 				},
 				{
@@ -2098,20 +2032,20 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 19498,
+						"buffer_size": 21589,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								5762,
-								5808
+								12851,
+								12851
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1561098979.2,
+							"sorttabs_lastactivated": 1561367306.95,
 							"syntax": "Packages/Vue/vue.tmLanguage",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true,
@@ -2123,10 +2057,10 @@
 							}
 						},
 						"translation.x": 0.0,
-						"translation.y": 900.0,
+						"translation.y": 3591.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 15,
+					"stack_index": 10,
 					"type": "text"
 				},
 				{
@@ -2142,13 +2076,13 @@
 						"selection":
 						[
 							[
-								28286,
-								28290
+								17743,
+								17750
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1561021146.81,
+							"sorttabs_lastactivated": 1561359974.95,
 							"syntax": "Packages/Vue/vue.tmLanguage",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true,
@@ -2160,10 +2094,10 @@
 							}
 						},
 						"translation.x": 0.0,
-						"translation.y": 8631.0,
+						"translation.y": 9810.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 35,
+					"stack_index": 16,
 					"type": "text"
 				},
 				{
@@ -2172,20 +2106,20 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 10314,
+						"buffer_size": 10056,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								8979,
-								8986
+								3718,
+								3718
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1560944607.3,
+							"sorttabs_lastactivated": 1561432225.79,
 							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true,
@@ -2198,10 +2132,10 @@
 							"use_tab_stops": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 4410.0,
+						"translation.y": 1065.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 47,
+					"stack_index": 0,
 					"type": "text"
 				},
 				{
@@ -2232,7 +2166,7 @@
 						"translation.y": 4140.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 43,
+					"stack_index": 40,
 					"type": "text"
 				},
 				{
@@ -2260,45 +2194,14 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 4995.33333333,
+						"translation.y": 4995.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 21,
 					"type": "text"
 				},
 				{
 					"buffer": 20,
-					"file": "/Z/erp/app/home/views/index.phtml",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 10276,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								9490,
-								9490
-							]
-						],
-						"settings":
-						{
-							"sorttabs_lastactivated": 1561113120.91,
-							"syntax": "Packages/PHP/PHP.sublime-syntax",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 4453.33333333,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				},
-				{
-					"buffer": 21,
 					"file": "src/component/supplier/index.vue",
 					"semi_transient": false,
 					"settings":
@@ -2325,11 +2228,11 @@
 						"translation.y": 345.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 41,
+					"stack_index": 38,
 					"type": "text"
 				},
 				{
-					"buffer": 22,
+					"buffer": 21,
 					"file": "src/component/login/index.vue",
 					"semi_transient": false,
 					"settings":
@@ -2356,73 +2259,73 @@
 						"translation.y": 1800.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 55,
-					"type": "text"
-				},
-				{
-					"buffer": 23,
-					"file": "src/component/product/index.vue",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 6020,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1401,
-								1556
-							]
-						],
-						"settings":
-						{
-							"sorttabs_lastactivated": 1561106578.07,
-							"syntax": "Packages/Vue/vue.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 13,
-					"type": "text"
-				},
-				{
-					"buffer": 24,
-					"file": "src/component/home/index.vue",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 7254,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								5999,
-								6002
-							]
-						],
-						"settings":
-						{
-							"sorttabs_lastactivated": 1560944346.58,
-							"syntax": "Packages/Vue/vue.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 540.0,
-						"zoom_level": 1.0
-					},
 					"stack_index": 48,
 					"type": "text"
 				},
 				{
-					"buffer": 25,
+					"buffer": 22,
+					"file": "src/component/product/index.vue",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 6134,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								5711,
+								5711
+							]
+						],
+						"settings":
+						{
+							"sorttabs_lastactivated": 1561357081.39,
+							"syntax": "Packages/Vue/vue.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 630.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 18,
+					"type": "text"
+				},
+				{
+					"buffer": 23,
+					"file": "src/component/home/index.vue",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 7354,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								5283,
+								5291
+							]
+						],
+						"settings":
+						{
+							"sorttabs_lastactivated": 1561425145.15,
+							"syntax": "Packages/Vue/vue.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1395.33333333,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 24,
 					"file": "src/component/orderbrand/index.vue",
 					"semi_transient": false,
 					"settings":
@@ -2455,11 +2358,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 33,
+					"stack_index": 35,
 					"type": "text"
 				},
 				{
-					"buffer": 26,
+					"buffer": 25,
 					"file": "src/component/shipping/index.vue",
 					"semi_transient": false,
 					"settings":
@@ -2492,11 +2395,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 31,
+					"stack_index": 34,
 					"type": "text"
 				},
 				{
-					"buffer": 27,
+					"buffer": 26,
 					"file": "src/component/department/index.vue",
 					"semi_transient": false,
 					"settings":
@@ -2523,11 +2426,11 @@
 						"translation.y": 540.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 17,
+					"stack_index": 25,
 					"type": "text"
 				},
 				{
-					"buffer": 28,
+					"buffer": 27,
 					"file": "src/component/productstock/index.vue",
 					"semi_transient": false,
 					"settings":
@@ -2554,104 +2457,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 14,
+					"stack_index": 24,
 					"type": "text"
 				},
 				{
-					"buffer": 29,
-					"file": "/Z/erp/app/home/controllers/ProductstockController.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 730,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								532,
-								532
-							]
-						],
-						"settings":
-						{
-							"sorttabs_lastactivated": 1561096066.64,
-							"syntax": "Packages/PHP/PHP.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 18,
-					"type": "text"
-				},
-				{
-					"buffer": 30,
-					"file": "/Z/erp/app/home/controllers/ShippingController.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 24082,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								542,
-								1321
-							]
-						],
-						"settings":
-						{
-							"sorttabs_lastactivated": 1561096064.71,
-							"syntax": "Packages/PHP/PHP.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 111.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 19,
-					"type": "text"
-				},
-				{
-					"buffer": 31,
-					"file": "/Z/erp/app/config/languages/cn.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 25503,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								18532,
-								18532
-							]
-						],
-						"settings":
-						{
-							"sorttabs_lastactivated": 1561109891.23,
-							"syntax": "Packages/PHP/PHP.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 9471.33333333,
-						"zoom_level": 1.0
-					},
-					"stack_index": 3,
-					"type": "text"
-				},
-				{
-					"buffer": 32,
+					"buffer": 28,
 					"file": "src/component/brand/index.vue",
 					"semi_transient": false,
 					"settings":
@@ -2678,11 +2488,11 @@
 						"translation.y": 315.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 56,
+					"stack_index": 49,
 					"type": "text"
 				},
 				{
-					"buffer": 33,
+					"buffer": 29,
 					"file": "src/component/order/index.vue",
 					"semi_transient": false,
 					"settings":
@@ -2700,7 +2510,7 @@
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1561021150.35,
+							"sorttabs_lastactivated": 1561356167.08,
 							"syntax": "Packages/Vue/vue.tmLanguage",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
@@ -2709,184 +2519,29 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 34,
+					"stack_index": 20,
 					"type": "text"
 				},
 				{
-					"buffer": 34,
-					"file": "/Z/erp/app/home/controllers/OrderController.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 12332,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								952,
-								1491
-							]
-						],
-						"settings":
-						{
-							"sorttabs_lastactivated": 1561107319.2,
-							"syntax": "Packages/PHP/PHP.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 120.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 11,
-					"type": "text"
-				},
-				{
-					"buffer": 35,
-					"file": "/Z/erp/app/home/controllers/OrderbrandController.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 22576,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								972,
-								972
-							]
-						],
-						"settings":
-						{
-							"sorttabs_lastactivated": 1561022890.31,
-							"syntax": "Packages/PHP/PHP.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 32,
-					"type": "text"
-				},
-				{
-					"buffer": 36,
-					"file": "/Z/erp/app/home/controllers/ProductController.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 22045,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								10671,
-								10671
-							]
-						],
-						"settings":
-						{
-							"sorttabs_lastactivated": 1561107462.1,
-							"syntax": "Packages/PHP/PHP.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 2970.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 10,
-					"type": "text"
-				},
-				{
-					"buffer": 37,
-					"file": "/Z/erp/app/home/controllers/AdminController.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 8607,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								49,
-								80
-							]
-						],
-						"settings":
-						{
-							"sorttabs_lastactivated": 1561096009.41,
-							"syntax": "Packages/PHP/PHP.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 23,
-					"type": "text"
-				},
-				{
-					"buffer": 38,
-					"file": "/Z/erp/app/models/erp/Util.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 28103,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								25,
-								7
-							]
-						],
-						"settings":
-						{
-							"sorttabs_lastactivated": 1561016520.98,
-							"syntax": "Packages/PHP/PHP.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 38,
-					"type": "text"
-				},
-				{
-					"buffer": 39,
+					"buffer": 30,
 					"file": "src/main.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 12866,
+						"buffer_size": 12042,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								5358,
-								5369
+								8245,
+								8248
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1561098920.14,
+							"sorttabs_lastactivated": 1561427866.06,
 							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true,
@@ -2899,14 +2554,82 @@
 							"use_tab_stops": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 936.0,
+						"translation.y": 3240.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 16,
+					"stack_index": 1,
 					"type": "text"
 				},
 				{
-					"buffer": 40,
+					"buffer": 31,
+					"file": "src/component/pricesetting/index.vue",
+					"semi_transient": true,
+					"settings":
+					{
+						"buffer_size": 11068,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								7955,
+								7967
+							]
+						],
+						"settings":
+						{
+							"sorttabs_lastactivated": 1561425831.17,
+							"syntax": "Packages/Vue/vue.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true,
+							"typescript_plugin_format_options":
+							{
+								"convertTabsToSpaces": true,
+								"indentSize": 4,
+								"tabSize": 4
+							}
+						},
+						"translation.x": 0.0,
+						"translation.y": 1980.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 32,
+					"file": "src/component/sales/create.vue",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 17868,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								11414,
+								11414
+							]
+						],
+						"settings":
+						{
+							"sorttabs_lastactivated": 1561425218.76,
+							"syntax": "Packages/Vue/vue.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 2070.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 33,
 					"file": "src/component/mixin.js",
 					"semi_transient": false,
 					"settings":
@@ -2940,29 +2663,29 @@
 						"translation.y": 2880.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 53,
+					"stack_index": 46,
 					"type": "text"
 				},
 				{
-					"buffer": 41,
+					"buffer": 34,
 					"file": "src/component/model.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 13676,
+						"buffer_size": 14150,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								9129,
-								9129
+								4558,
+								4558
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1561002709.62,
+							"sorttabs_lastactivated": 1561362154.01,
 							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true,
@@ -2975,14 +2698,14 @@
 							"use_tab_stops": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 3240.0,
+						"translation.y": 1620.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 40,
+					"stack_index": 14,
 					"type": "text"
 				},
 				{
-					"buffer": 42,
+					"buffer": 35,
 					"file": "src/component/asa/Asa_Productstock_Search.vue",
 					"semi_transient": false,
 					"settings":
@@ -3015,11 +2738,11 @@
 						"translation.y": 360.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 24,
+					"stack_index": 29,
 					"type": "text"
 				},
 				{
-					"buffer": 43,
+					"buffer": 36,
 					"file": "src/component/requisition/create.vue",
 					"semi_transient": false,
 					"settings":
@@ -3046,11 +2769,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 25,
+					"stack_index": 30,
 					"type": "text"
 				},
 				{
-					"buffer": 44,
+					"buffer": 37,
 					"file": "src/component/function.js",
 					"semi_transient": false,
 					"settings":
@@ -3084,11 +2807,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 26,
+					"stack_index": 31,
 					"type": "text"
 				},
 				{
-					"buffer": 45,
+					"buffer": 38,
 					"file": "src/component/object.js",
 					"semi_transient": false,
 					"settings":
@@ -3122,11 +2845,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 27,
+					"stack_index": 32,
 					"type": "text"
 				},
 				{
-					"buffer": 46,
+					"buffer": 39,
 					"file": "src/component/asa/order-detail.js",
 					"semi_transient": false,
 					"settings":
@@ -3160,11 +2883,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 20,
+					"stack_index": 26,
 					"type": "text"
 				},
 				{
-					"buffer": 47,
+					"buffer": 40,
 					"file": "src/component/mixins/order.js",
 					"semi_transient": false,
 					"settings":
@@ -3197,11 +2920,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 28,
+					"stack_index": 33,
 					"type": "text"
 				},
 				{
-					"buffer": 48,
+					"buffer": 41,
 					"file": "src/component/asa/product-search-form.vue",
 					"semi_transient": false,
 					"settings":
@@ -3228,29 +2951,29 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 21,
+					"stack_index": 27,
 					"type": "text"
 				},
 				{
-					"buffer": 49,
+					"buffer": 42,
 					"file": "src/component/prop.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 19730,
+						"buffer_size": 20506,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								58,
-								99
+								19360,
+								19360
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1561095099.26,
+							"sorttabs_lastactivated": 1561369652.54,
 							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true,
@@ -3263,32 +2986,32 @@
 							"use_tab_stops": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 6591.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 30,
+					"stack_index": 6,
 					"type": "text"
 				},
 				{
-					"buffer": 50,
+					"buffer": 43,
 					"file": "src/component/resources.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 6762,
+						"buffer_size": 6849,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								6478,
-								6485
+								4519,
+								4519
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1561095133.05,
+							"sorttabs_lastactivated": 1561362259.11,
 							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true,
@@ -3301,14 +3024,14 @@
 							"use_tab_stops": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1849.66666667,
+						"translation.y": 1131.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 29,
+					"stack_index": 13,
 					"type": "text"
 				},
 				{
-					"buffer": 51,
+					"buffer": 44,
 					"file": "src/component/Simple_Admin_Page.vue",
 					"semi_transient": false,
 					"settings":
@@ -3320,26 +3043,26 @@
 						"selection":
 						[
 							[
-								3784,
-								3784
+								4677,
+								4689
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1560945359.87,
+							"sorttabs_lastactivated": 1561368867.58,
 							"syntax": "Packages/Vue/vue.tmLanguage",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 360.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 45,
+					"stack_index": 7,
 					"type": "text"
 				},
 				{
-					"buffer": 52,
+					"buffer": 45,
 					"file": "src/component/Simple_Admin_TableList.vue",
 					"semi_transient": false,
 					"settings":
@@ -3366,11 +3089,11 @@
 						"translation.y": 666.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 8,
+					"stack_index": 23,
 					"type": "text"
 				},
 				{
-					"buffer": 53,
+					"buffer": 46,
 					"file": "src/component/Simple_Select.vue",
 					"semi_transient": false,
 					"settings":
@@ -3397,11 +3120,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 49,
+					"stack_index": 42,
 					"type": "text"
 				},
 				{
-					"buffer": 54,
+					"buffer": 47,
 					"file": "src/component/asa/sp-product-info.vue",
 					"semi_transient": false,
 					"settings":
@@ -3428,11 +3151,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 44,
+					"stack_index": 41,
 					"type": "text"
 				},
 				{
-					"buffer": 55,
+					"buffer": 48,
 					"file": "src/component/shipping/warehousing.vue",
 					"semi_transient": false,
 					"settings":
@@ -3459,11 +3182,11 @@
 						"translation.y": 1206.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 22,
+					"stack_index": 28,
 					"type": "text"
 				},
 				{
-					"buffer": 56,
+					"buffer": 49,
 					"file": "webpack.config.js",
 					"semi_transient": false,
 					"settings":
@@ -3475,13 +3198,13 @@
 						"selection":
 						[
 							[
-								82,
-								82
+								1859,
+								1859
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1561109892.85,
+							"sorttabs_lastactivated": 1561376107.15,
 							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true,
@@ -3494,10 +3217,10 @@
 							"use_tab_stops": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 270.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 5,
 					"type": "text"
 				}
 			]
@@ -3546,7 +3269,7 @@
 	"project": "",
 	"replace":
 	{
-		"height": 70.0
+		"height": 70.6666666667
 	},
 	"save_all_on_build": true,
 	"select_file":

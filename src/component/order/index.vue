@@ -108,7 +108,7 @@ export default {
                         self._remove("/order/delete", { id: row.id }).then(function(result) {
                             if(result){
                                 self.$refs.tablelist.search(self.searchform)
-                            }                              
+                            }
                         })
                     }}
                 ]

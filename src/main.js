@@ -14,29 +14,20 @@ if (typeof window !== 'undefined') {
 }
 
 import Simple_Admin_Page from './component/Simple_Admin_Page.vue'
-//import Multiple_Admin_Page from './component/Multiple_Admin_Page.vue'
 import Simple_Admin_TableList from './component/Simple_Admin_TableList.vue'
 import Simple_Select from './component/Simple_Select.vue'
-//import Select_Currency from './component/Select_Currency.vue'
 import Simple_Avatar from './component/Simple_Avatar.vue'
 import Simple_Album from './component/Simple_Album.vue'
 import globals,{config} from './component/globals.js'
-//import Asa_BrandTab from './component/asa/Asa_BrandTab.vue'
 
 import Asa_Select_Product_Dialog from './component/asa/Asa_Select_Product_Dialog.vue'
-import Asa_Sales_Dialog from './component/asa/Asa_Sales_Dialog.vue'
 import Simple_Display_Input from './component/Simple_Display_Input.vue'
 import Simple_Float_Input from './component/Simple_Float_Input.vue'
-//import Asa_Order_Confirm_Dialog from './component/asa/Asa_Order_Confirm_Dialog.vue'
-//import Asa_Select_Order_Detail_Dialog from './component/asa/Asa_Select_Order_Detail_Dialog.vue'
 import Asa_Productstock_Search from './component/asa/Asa_Productstock_Search.vue'
-//import Asa_Warehousing_Dialog from './component/asa/Asa_Warehousing_Dialog.vue'
 import Asa_Product from './component/asa/Asa_Product.vue'
 import Asa_Brandgroupchild_Select from './component/asa/Asa_Brandgroupchild_Select.vue'
 import CheckboxGroup from './component/CheckboxGroup.vue'
 import Auth from './component/Auth.vue'
-import Orderpayment from './component/orderpayment/index.vue'
-import Salesreceive from './component/salesreceive/index.vue'
 import Table from './component/table.js'
 import Checkbox from './component/checkbox.js'
 import Authbutton from './component/authbutton.js'
@@ -48,7 +39,6 @@ import Asa_Sizecontent_Input from './component/asa/Asa_Sizecontent_Input.vue'
 import Asa_Sizecontent_Confirm2 from './component/asa/Asa_Sizecontent_Confirm2.vue'
 import Asa_Sizecontent_Confirm3 from './component/asa/Asa_Sizecontent_Confirm3.vue'
 import Asa_Sizecontent_Confirm4 from './component/asa/Asa_Sizecontent_Confirm4.vue'
-
 import Asa_Order_Tip from './component/asa/Asa_Order_Tip.vue'
 import Asa_Product_Tip from './component/asa/Asa_Product_Tip.vue'
 import SelectText from './component/select-text.js'
@@ -57,39 +47,13 @@ import Asa_PriceSetting_Cell from './component/asa/Asa_PriceSetting_Cell.vue'
 import Asa_Product_BL from './component/asa/Asa_Product_BL.vue'
 import Asa_Product_LSB from './component/asa/Asa_Product_LSB.vue'
 import Toggle_Input from './component/toggle-input.vue'
-
 import ImagePreview from './component/image-preview.vue'
 import Creator from './component/develop/index.vue'
 import Home from './component/home/index.vue'
-import Order from       './component/order/index.vue'
-import OrderCreate from './component/order/create.vue'
-import Orderbrand from       './component/orderbrand/index.vue'
-import OrderbrandCreate from './component/orderbrand/create.vue'
-import OrderbrandConfirm from './component/orderbrand/confirm.vue'
-import User from './component/user/index.vue'
-import Group from './component/group/index.vue'
-import Department from './component/department/index.vue'
-import Brand from './component/brand/index.vue'
-import Brandgroup from './component/brandgroup/index.vue'
-import Sizetop from './component/sizetop/index.vue'
-import Product from './component/product/index.vue'
-import Sales from './component/sales/index.vue'
 import Login from './component/login/index.vue'
-import ModifyPassword from './component/user/modify-password.vue'
-import Shipping from './component/shipping/index.vue'
-import ShippingDetail from './component/shipping/detail.vue'
-import ShippingWarehousing from './component/shipping/warehousing.vue'
-import Requisition from './component/requisition/index.vue'
-import RequisitionCreate from './component/requisition/create.vue'
-import RequisitionUpdate from './component/requisition/update.vue'
-import Productstock from './component/productstock/index.vue'
-import System from './component/system/index.vue'
-import Supplier from './component/supplier/index.vue'
-import Exchangerate from './component/exchangerate/index.vue'
 import PriceSetting from './component/pricesetting/index.vue'
 import SpProductInfo from './component/asa/sp-product-info.vue'
 import ProductSearchForm from './component/asa/product-search-form.vue'
-//import SelectTable from './component/select-table.vue'
 
 const components = [
     Simple_Admin_Page,
@@ -104,7 +68,6 @@ const components = [
     Asa_Order_Tip,
     Asa_Product_Tip,
     Asa_Select_Product_Dialog,
-    Asa_Sales_Dialog,
     Simple_Display_Input,
     Simple_Float_Input,
     Asa_Productstock_Search,
@@ -136,44 +99,44 @@ components.forEach(component => {
     Vue.component(component.name, component);
 });
 
+
+
 const routes = [
     {
         path: '/', name:"index", component: Home,
         children:[
-            {path: '/order', name:"order", component: Order},
-            {path: '/shipping', name:"shipping", component:Shipping},
-            {path: '/shipping/:id', name:"shippingdetail", component:ShippingDetail},
-            {path: '/shipping/warehousing/:id', name:"shippingwarehousing", component:ShippingWarehousing},
-            {path: '/sales', name:"sales", component: Sales},
-            {path: '/sales/:id', name:"salesdetail", component: Asa_Sales_Dialog},
-            {path: '/user', name:"user", component: User},
-            {path: '/group', name:"group", component: Group},
-            {path: '/department', name:"department", component: Department},
-            {path: '/productstock', name:"productstock", component: Productstock},
-            {path: '/brand', name:"brand", component: Brand},
-            {path: '/brandgroup', name:"brandgroup", component: Brandgroup},
-            {path: '/sizetop', name:"sizetop", component: Sizetop},
-            {path: '/product', name:"product", component: Product},   
-            {path: '/requisition', name:"requisition", component: Requisition},
-            {path: '/requisition/create', name:"requisitioncreate", component: RequisitionCreate},
-            {path: '/requisition/edit/:id', name:"requisitionedit", component: RequisitionUpdate},
-            {path: '/user/modifypassword', name:"modifypassword", component: ModifyPassword},    
-            {path: '/orderpayment', name:"orderpayment", component: Orderpayment},    
-            {path: '/salesreceive', name:"salesreceive", component: Salesreceive},   
-            {path: '/system', name:"system", component: System}, 
+            {path: '/order', name:"order", component: resolve=>require(['./component/order/index.vue'],resolve) },
+            {path: '/shipping', name:"shipping", component:resolve=>require(['./component/shipping/index.vue'],resolve) },
+            {path: '/shipping/:id', name:"shippingdetail", component:resolve=>require(['./component/shipping/detail.vue'],resolve) },
+            {path: '/shipping/warehousing/:id', name:"shippingwarehousing", component:resolve=>require(['./component/shipping/warehousing.vue'],resolve) },
+            {path: '/sales', name:"sales", component: resolve=>require(['./component/sales/index.vue'],resolve)},
+            {path: '/sales/:id', name:"salesdetail", component: resolve=>require(['./component/sales/create.vue'],resolve)},
+            {path: '/user', name:"user", component: resolve=>require(['./component/user/index.vue'],resolve) },
+            {path: '/group', name:"group", component: resolve=>require(['./component/group/index.vue'],resolve) },
+            {path: '/department', name:"department", component: resolve=>require(['./component/department/index.vue'],resolve) },
+            {path: '/productstock', name:"productstock", component: resolve=>require(['./component/productstock/index.vue'],resolve) },
+            {path: '/brand', name:"brand", component: resolve=>require(['./component/brand/index.vue'],resolve) },
+            {path: '/brandgroup', name:"brandgroup", component: resolve=>require(['./component/brandgroup/index.vue'],resolve) },
+            {path: '/sizetop', name:"sizetop", component: resolve=>require(['./component/sizetop/index.vue'],resolve) },
+            {path: '/product', name:"product", component: resolve=>require(['./component/product/index.vue'],resolve) },   
+            {path: '/requisition', name:"requisition", component: resolve=>require(['./component/requisition/index.vue'],resolve) },
+            {path: '/requisition/create', name:"requisitioncreate", component: resolve=>require(['./component/requisition/create.vue'],resolve) },
+            {path: '/requisition/edit/:id', name:"requisitionedit", component: resolve=>require(['./component/requisition/update.vue'],resolve) },
+            {path: '/user/modifypassword', name:"modifypassword", component: resolve=>require(['./component/user/modify-password.vue'],resolve) },    
+            {path: '/orderpayment', name:"orderpayment", component: resolve=>require(['./component/orderpayment/index.vue'],resolve) },    
+            {path: '/salesreceive', name:"salesreceive", component: resolve=>require(['./component/salesreceive/index.vue'],resolve) },   
+            {path: '/system', name:"system", component: resolve=>require(['./component/system/index.vue'],resolve) }, 
             {path: '/develop', name:"develop", component: Creator}, 
-            {path: '/supplier', name:"supplier", component:Supplier},
-            {path:'/exchangerate', name:"exchangerate", component:Exchangerate},
-            {path: '/order/:id', name:"orderform", component: OrderCreate},
-            {path: '/orderbrand', name:"orderbrand", component: Orderbrand},
-            {path: '/orderbrand/:ids', name:"orderbrandcreate", component: OrderbrandCreate},
-            {path: '/orderbrand/confirm/:id', name:"orderbrandconfirm", component: OrderbrandConfirm},
+            {path: '/supplier', name:"supplier", component:resolve=>require(['./component/supplier/index.vue'],resolve) },
+            {path:'/exchangerate', name:"exchangerate", component:resolve=>require(['./component/exchangerate/index.vue'],resolve) },
+            {path: '/order/:id', name:"orderform", component: resolve=>require(['./component/order/create.vue'],resolve)},
+            {path: '/orderbrand', name:"orderbrand", component: resolve=>require(['./component/orderbrand/index.vue'],resolve)},
+            {path: '/orderbrand/:ids', name:"orderbrandcreate", component: resolve=>require(['./component/orderbrand/create.vue'],resolve)},
+            {path: '/orderbrand/confirm/:id', name:"orderbrandconfirm", component: resolve=>require(['./component/orderbrand/confirm.vue'],resolve) },
 
             {path:'/ageseason', name:"ageseason", component:getComponentSimple("ageseason")},
             {path:'/ulnarinch', name:"ulnarinch", component:getComponent("ulnarinch")},
             {path:'/currency', name:"currency", component:getComponent("currency")},
-            //{path:'/pricesetting2', name:"currency", component:getComponentSimple("pricesetting")},
-            //{path:'/pricesetting', name:"pricesetting", component:PriceSetting},
             {path:'/price', name:"price", component:getComponentSimple("price")},
             {path:'/warehouse', name:"warehouse", component:getComponentSimple("warehouse")},
             {path:'/country', name:"country", component:getComponent("country")},
