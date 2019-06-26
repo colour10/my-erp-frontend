@@ -391,7 +391,9 @@ const result = {
                     let id = func.getOrderbrandDetailId(item.row.productid, item.row.orderid, item.sizecontentid, item.supplierid)
                     list.push({
                         productid: item.row.productid,
-                        factoryprice:self.factoryprice[item.row.productid],
+                        factoryprice:self.stat[item.row.productid].factoryprice,
+                        wordprice:self.stat[item.row.productid].wordprice,
+                        currencyid:self.stat[item.row.productid].currencyid,
                         orderid: item.row.orderid,
                         sizecontentid: item.sizecontentid,
                         supplierid: item.supplierid,

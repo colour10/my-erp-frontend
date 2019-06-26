@@ -266,6 +266,10 @@ export default {
             if(dialog) {
                 dialog.hide()
             }
+        },
+
+        _path(){
+            return this.$route.path;
         }
     }
 }

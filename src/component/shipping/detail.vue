@@ -222,12 +222,12 @@
                         </el-table-column>
                         <el-table-column prop="label" :label="_label('bizhong')" width="60" align="center">
                             <template v-slot="{row}">
-                                {{row.product.factorypricecurrency_label}}
+                                <sp-select-text :value="productStat[row.productid].currencyid" source="currency" />
                             </template>
                         </el-table-column>
                         <el-table-column prop="label" :label="_label('chuchangjia')" width="100" align="center">
                             <template v-slot="{row}">
-                                {{row.product.factoryprice}}
+                                {{productStat[row.product.id].factoryprice}}
                             </template>
                         </el-table-column>
                         <el-table-column prop="label" :label="_label('chengjiaojia')" width="80" align="center">
@@ -290,6 +290,7 @@ import chain from "../chain.js"
 import orderMixin from "../mixins/order.js"
 import { Order, ProductDetail, promiseRunner } from "../model.js"
 import { debounce } from "../function.js"
+import { statHelper } from "../helper.js"
 
 export default {
     name: 'sp-shippingdetail',
@@ -405,9 +406,17 @@ export default {
                 return
             }
             self._log(JSON.stringify(params))
-            self.validate().then(() => {
-                self._log(JSON.stringify(params))
-                self._submit("/shipping/save", { params: JSON.stringify(params) }).then(function(res) {});
+            self.validate().then(async () => {
+                self._log(JSON.stringify(params));
+                let {data} = await self._submit("/shipping/save", { params: JSON.stringify(params) });
+
+                let path = "/shipping/" + data.form.id;
+                if(self._path()!==path) {
+                    self._redirect(path);
+                }
+                else {
+                    extend(self.form, data.form)
+                }
             })
         },
         onNumberChange(list) {
@@ -567,7 +576,7 @@ export default {
                 row.leftCount = row.totalConfirmCount - row.totoaShippingCount; //剩余未发货的件数
             })
 
-            //如果是修改订单，剩余数量应该把当前订单的数量加上去。            
+            //如果是修改订单，剩余数量应该把当前订单的数量加上去。
             self.shippingdetails.forEach(detail => {
                 let row = result[detail.orderbrandid]
                 row.leftCount += detail.number * 1;
@@ -589,6 +598,25 @@ export default {
             })
 
             return result
+        },
+        productStat(){
+            let self = this
+
+            let helper = statHelper({
+                factoryprice:0,
+                wordprice:0,
+                currencyid:"",
+                total:0
+            })
+
+            self.orderbranddetails.forEach(detail => {
+                let row = helper.get(detail.productid)
+                row.factoryprice = detail.factoryprice;
+                row.wordprice = detail.wordprice;
+                row.currencyid = detail.currencyid;
+            })
+
+            return helper.result()
         }
     },
     watch: {
@@ -618,7 +646,7 @@ export default {
 
         if (route.params.id > 0) {
             self._fetch("/shipping/load", { id: route.params.id, type: "shipping" }).then(async function({ data }) {
-                
+
 
                 let { form, orderbrands, orderbranddetails, shippingdetails } = data;
                 let func = _private(self)
@@ -709,7 +737,7 @@ const _private = function(self) {
             })
             let result = await _this.convert(newlist)
             result.forEach(item => {
-                item.price = self.f(item.product.factoryprice * item.discount)
+                item.price = self.f(self.productStat[item.productid].factoryprice * item.discount)
                 _this.appendRow(item)
             })
         },
@@ -735,7 +763,7 @@ const _private = function(self) {
             list.forEach(item => {
                 //不显示入库操作时候，新追加的无订单的商品
                 if(item.orderid<=0) {
-                    return 
+                    return
                 }
                 self.shippingdetails.push(item)
 
@@ -745,7 +773,7 @@ const _private = function(self) {
 
                 let key = item.productid + "-" + item.orderbrandid + '-' + item.price
                 if (table[key]) {
-                    
+
                     self.listdata.push({
                         key: table[key],
                         sizecontentid: item.sizecontentid,
@@ -774,7 +802,7 @@ const _private = function(self) {
 
                         table[key] = row.key
                         hash[item.productid + "-" + item.orderbrandid] = 1
-                    }                    
+                    }
                 }
             })
 
