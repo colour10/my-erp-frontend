@@ -203,22 +203,22 @@
                     </el-table-column>
                     <el-table-column prop="label" :label="_label('bizhong')" width="60" align="center">
                         <template v-slot="{row}">
-                            {{row.product.factorypricecurrency_label}}
+                            <sp-select-text :value="stat[row.product.id].currencyid" source="currency" />
                         </template>
                     </el-table-column>
                     <el-table-column prop="label" :label="_label('chuchangjia')" width="100" align="center">
                         <template v-slot="{row}">
-                            {{row.product.factoryprice}}
+                            {{ stat[row.product.id].factoryprice }}
                         </template>
                     </el-table-column>
                     <el-table-column prop="label" :label="_label('chengjiaojia')" width="80" align="center">
                         <template v-slot="{row}">
-                            {{ formatNumber(row.product.factoryprice*row.discount) }}
+                            {{ f(stat[row.product.id].factoryprice*row.discount) }}
                         </template>
                     </el-table-column>
                     <el-table-column prop="label" :label="_label('zongjia')" width="80" align="center">
                         <template v-slot="{row}">
-                            {{ formatNumber(row.product.factoryprice*row.discount*row.total) }}
+                            {{ f( stat[row.product.id].factoryprice *row.discount*stat[row.product.id].total) }}
                         </template>
                     </el-table-column>
                     <el-table-column prop="discount" :label="_label('zhekoulv')" width="80" align="center"/>
@@ -289,6 +289,7 @@ import chain from "../chain.js"
 import { Order, ProductDetail, promiseRunner } from "../model.js"
 import { debounce } from "../function.js"
 import { group } from "../array.js"
+import { statHelper } from "../helper.js"
 
 const result = {
     name: 'sp-orderbrandcreate',
@@ -319,7 +320,7 @@ const result = {
             suppliers: [],
             listdata: [],
             orderlist:[],
-            orderbrandlist:[]
+            orderbrandDetailList:[]
         }
     },
     methods: {
@@ -413,7 +414,7 @@ const result = {
             //self._log(params)
             self._submit("/orderbrand/add", { params: JSON.stringify(params) }).then(function(res) {
                 /*self.tabledata = []
-                self.details = [];
+                self.tabledata = [];
                 self.orders = [];
                 self.selected = [];
                 self.selected2 = [];
@@ -421,7 +422,7 @@ const result = {
                 self.suppliers = [];
                 self.listdata = [];
                 self.orderlist = [];
-                self.orderbrandlist = []
+                self.orderbrandDetailList = []
                 _private(self).loadInfo()*/
 
                 self._redirect("/orderbrand/"+ res.data.join(','))
@@ -482,7 +483,7 @@ const result = {
             let keyword = self.form2.keyword.toUpperCase()
             let suppliercode = self.form2.suppliercode.toUpperCase()
             let isMatch = _private(self).isMatch
-            return self.details.filter(item => selected[item.orderid] == 1).filter(item => {
+            return self.tabledata.filter(item => selected[item.orderid] == 1).filter(item => {
                 return isMatch(keyword, item.product.getGoodsCode('')) && isMatch(suppliercode, item.order.booking_label.toUpperCase())
             })
         },
@@ -514,7 +515,7 @@ const result = {
             })
 
             //如果是修改订单，剩余数量应该把当前订单的数量加上去。
-            self.orderbrandlist.forEach(detail=>{
+            self.orderbrandDetailList.forEach(detail=>{
                 let row = result[detail.orderid]
                 row.leftCount += detail.number*1;
             })
@@ -540,17 +541,52 @@ const result = {
         factoryprice(){
             let self = this
             let result = {}
-            self.details.forEach(item=>{
+            self.tabledata.forEach(item=>{
                 result[item.product.id] = item.product.factoryprice
             })
 
-            self.orderbrandlist.forEach(item=>{
+            self.orderbrandDetailList.forEach(item=>{
                 if(item.factoryprice>0) {
                     result[item.productid] = item.factoryprice;
                 }
             })
 
             return result
+        },
+        stat(){
+            let self = this
+
+            let helper = statHelper({
+                factoryprice:0,
+                wordprice:0,
+                currencyid:"",
+                total:0
+            })
+
+            self.tabledata.forEach(item=>{
+                let row = helper.get(item.product.id)
+
+                row.factoryprice = item.product.factoryprice;
+                row.currencyid = item.product.factorypricecurrency;
+                row.wordprice = item.product.wordprice;
+            })
+
+            self.orderlist.forEach(item=>{
+                if(item.factoryprice>0) {
+                    let row = helper.get(item.productid);
+                    row.factoryprice = item.factoryprice;
+                    row.currencyid = item.currencyid;
+                    row.wordprice = item.wordprice;
+                }
+            })
+
+            self.listdata.forEach(detail=>{
+                let row = helper.get(detail.row.product.id)
+
+                row.total += detail.number*1;
+            })
+
+            return helper.result()
         }
     },
     watch: {
@@ -654,7 +690,7 @@ const _private = function(self) {
             let orderbrand = self.suppliers.find(item=>item.supplierid==supplierid)
             console.log("YY", orderbrand)
             if(orderbrand) {
-                let row = self.orderbrandlist.find(item => item.productid == productid && item.orderid == orderid && item.sizecontentid == sizecontentid  && item.orderbrandid==orderbrand.orderbrandid )
+                let row = self.orderbrandDetailList.find(item => item.productid == productid && item.orderid == orderid && item.sizecontentid == sizecontentid  && item.orderbrandid==orderbrand.orderbrandid )
                 //self._log(row, self.orderlist, productid, orderid, sizecontentid)
                 return row ? row.id : 0;
             }
@@ -680,7 +716,7 @@ const _private = function(self) {
             let orders = await _this.convertListToProductList(details)
 
             orders.forEach(item => {
-                self.details.push(item)
+                self.tabledata.push(item)
             })
 
             return "";
@@ -728,9 +764,9 @@ const _private = function(self) {
             })
         },
         importList(list) {
-            self.orderbrandlist = list
+            self.orderbrandDetailList = list
             list.forEach(detail => {
-                let row = self.details.find(item => item.orderid == detail.orderid && item.productid == detail.productid)
+                let row = self.tabledata.find(item => item.orderid == detail.orderid && item.productid == detail.productid)
                 let supplier = self.suppliers.find(supplier => supplier.orderbrandid == detail.orderbrandid)
 
                 //self._log(row, supplier, 'xxx', detail)
@@ -754,39 +790,31 @@ const _private = function(self) {
             //计算几个统计数据
             let context = {}
             let brands = group();
+
+            let helper = statHelper({
+                total_discount_price: 0,
+                total_number: 0,
+                total_price: 0,
+                brandid:""
+            })
+
             self.listdata.forEach(item => {
-                let target = context[item.supplierid] || {
-                    total_discount_price: 0,
-                    total_number: 0,
-                    total_price: 0,
-                    brandid:""
-                }
+                let target = helper.get(item.supplierid);
 
                 if (item.number > 0) {
                     target.total_number += item.number * 1
-                    target.total_price += item.number * item.row.product.wordprice
-                    target.total_discount_price += item.number * item.discount * item.row.product.factoryprice
-                        //console.log(item.number ,item.discount , item.row.product.factoryprice)
+                    target.total_price += item.number * self.stat[item.row.productid].wordprice
+                    target.total_discount_price += item.number * item.discount * self.stat[item.row.productid].factoryprice
 
                     brands.push(item.supplierid, item.row.product.brandid)
-                    console.log("xx", item.supplierid, item.row.product.brandid)
-                    context[item.supplierid] = target
                 }
             })
 
             let result = brands.getResult()
             self.suppliers.forEach(supplier => {
-                let target = context[supplier.supplierid]
-                if (target) {
-                    target.brandid = result[supplier.supplierid]
-                    extend(supplier, target)
-                } else {
-                    extend(supplier, {
-                        total_discount_price: 0,
-                        total_number: 0,
-                        total_price: 0
-                    })
-                }
+                let target = helper.get(supplier.supplierid);
+                target.brandid = result[supplier.supplierid]
+                extend(supplier, target)
             })
         }
     }

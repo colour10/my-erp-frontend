@@ -221,7 +221,10 @@ const store = new Vuex.Store({
       addTag(state, payload) {
           let tag = state.tags.find(item=>item.key==payload.key)
           if(tag) {
-              tag.label = payload.label;
+              if(payload.label) {
+                  tag.label = payload.label;
+              }
+
               state.currentTag = tag;
           }
           else {
