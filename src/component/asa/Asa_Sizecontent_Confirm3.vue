@@ -9,21 +9,21 @@
         </el-table-column>
         <el-table-column :label="column.name" align="center" v-for="column in columns" :key="column.id" width="51">
             <template v-slot="{row}">
-                <el-input v-model="row.form[column.id]" style="width:50px" size="mini" :disabled="disabled" class="linetop" v-if="row.order.id>0"></el-input>
-                <el-input v-model="form[column.id+'-'+row.order.id]" style="width:50px" size="mini" @keyup.native="onChange(row)" v-if="row.order.id>0"></el-input>
+                <el-input v-model="row.form[column.id]" style="width:50px" size="mini" :disabled="true" class="linetop" v-if="row.order.id>0"></el-input>
+                <el-input v-model="form[column.id+'-'+row.order.id]" style="width:50px" size="mini" @keyup.native="onChange(row)" v-if="row.order.id>0" :disabled="disabled"></el-input>
                 <el-input :value="getTotal({sizecontentid:column.id})" style="width:50px" size="mini" :disabled="disabled" class="linetop" v-if="row.order.id==0"></el-input>
             </template>
         </el-table-column>
         <el-table-column :label="_label('heji')" align="right" width="53" v-if="hideInput==false">
             <template v-slot="{row}">
-                <el-input :value="getLineTotal(row.form)" style="width:50px" size="mini" :disabled="disabled" class="linetop" v-if="row.order.id>0"></el-input>
-                <el-input :value="getTotal({orderid:row.order.id})" style="width:50px" size="mini":disabled="disabled" class="inputsum" v-if="row.order.id>0"></el-input>
-                <el-input :value="getTotal()" style="width:50px" size="mini":disabled="disabled" class="inputsum" v-if="row.order.id==0"></el-input>
+                <el-input :value="getLineTotal(row.form)" style="width:50px" size="mini" :disabled="true" class="linetop" v-if="row.order.id>0"></el-input>
+                <el-input :value="getTotal({orderid:row.order.id})" style="width:50px" size="mini":disabled="true" class="inputsum" v-if="row.order.id>0"></el-input>
+                <el-input :value="getTotal()" style="width:50px" size="mini":disabled="true" class="inputsum" v-if="row.order.id==0"></el-input>
             </template>
-        </el-table-column><!-- 
+        </el-table-column><!--
         <el-table-column prop="discount" :label="_label('zhekoulv')" align="center" width="80">
         </el-table-column> -->
-        
+
     </el-table>
 </div>
 </template>
@@ -78,7 +78,7 @@ export default {
             self.columns.forEach(column=>{
                 form[column.id+'-'+order.order.id] = row[column.id]
             })
-        })        
+        })
 
         return {
             form:form,
@@ -103,7 +103,7 @@ export default {
             _private(this).forEach(function(item){
                 if(item.number>0 && (item.orderid==orderid || !orderid) && (item.sizecontentid==sizecontentid || !sizecontentid)) {
                     total += item.number*1
-                }                
+                }
             })
 
             return total
@@ -117,7 +117,7 @@ export default {
                 item.product = self.row.product
                 item.order = order.order;
                 item.discount = self.row.discount
-                list.push(item)              
+                list.push(item)
             })
 
             self.$emit("change", list)
@@ -152,7 +152,7 @@ export default {
                 //self._log(item.total)
                 if(item.total>=0 || true) {
                     results.push(item)
-                }                
+                }
             })
 
             results.push({
@@ -160,7 +160,7 @@ export default {
                 order:{id:0},
                 form:self.sumform
             })
-            
+
             return results
         }
     },
