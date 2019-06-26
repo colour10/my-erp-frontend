@@ -153,12 +153,12 @@
                     </el-table-column>
                     <el-table-column prop="label" :label="_label('bizhong')" width="60" align="center">
                         <template v-slot="{row}">
-                            {{row.product.factorypricecurrency_label}}
+                            <sp-select-text :value="productStat[row.productid].currencyid" source="currency" />
                         </template>
                     </el-table-column>
                     <el-table-column prop="label" :label="_label('chuchangjia')" width="100" align="center">
                         <template v-slot="{row}">
-                            {{row.product.factoryprice}}
+                            {{productStat[row.product.id].factoryprice}}
                         </template>
                     </el-table-column>
                     <el-table-column prop="number" :label="_label('dinggoushuliang')" align="center" :width="width">
@@ -209,6 +209,7 @@ import chain from "../chain.js"
 import orderMixin from "../mixins/order.js"
 import { Order, ProductDetail, promiseRunner } from "../model.js"
 import { debounce } from "../function.js"
+import { statHelper } from "../helper.js"
 
 const result = {
     name: 'sp-warehousing',
@@ -265,6 +266,7 @@ const result = {
             },
             tabledata: [],
             shippingdetails: [],
+            orderbranddetails:[],
             listdata: [],
             uniqkey: 1,
             visible: false,
@@ -443,6 +445,25 @@ const result = {
             })
             return total
         },
+        productStat(){
+            let self = this
+
+            let helper = statHelper({
+                factoryprice:0,
+                wordprice:0,
+                currencyid:"",
+                total:0
+            })
+
+            self.orderbranddetails.forEach(detail => {
+                let row = helper.get(detail.productid)
+                row.factoryprice = detail.factoryprice;
+                row.wordprice = detail.wordprice;
+                row.currencyid = detail.currencyid;
+            })
+
+            return helper.result()
+        }
     },
     watch: {
         'form2.keyword1': function(newvalue) {
@@ -562,7 +583,8 @@ const _private = function(self) {
                 let { form, orderbrands, orderbranddetails, shippingdetails } = data;
                 copyTo(form, self.form)
 
-                _this.importList(shippingdetails)
+                _this.importList(shippingdetails);
+                self.orderbranddetails = orderbranddetails;
 
                 self._setTitle(self._label("fahuodanruku") + ":" + self.form.orderno)
             })
