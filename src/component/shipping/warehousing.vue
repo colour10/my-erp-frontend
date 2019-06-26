@@ -455,6 +455,13 @@ const result = {
                 total:0
             })
 
+            self.tabledata.forEach(({product})=>{
+                let row = helper.get(product.id)
+                row.factoryprice = product.factoryprice;
+                row.wordprice = product.wordprice;
+                row.currencyid = product.factorypricecurrency;
+            })
+
             self.orderbranddetails.forEach(detail => {
                 let row = helper.get(detail.productid)
                 row.factoryprice = detail.factoryprice;
@@ -500,7 +507,7 @@ const _private = function(self) {
             row.key = StringFunc.random(10)
                 //self._log(row, "XXXXX")
             self.tabledata.unshift(row)
-            self.form.currency = row.product.factorypricecurrency
+            self.form.currency = self.productStat[row.product.id].currencyid;
         },
 
         //将发货单明细转化成商品、订单、列表
