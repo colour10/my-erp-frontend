@@ -172,7 +172,7 @@ export default {
                 columns: [
                     { name: "name", label: _label("xingming"), class: "width2", width: 140 },
                     { name: "mobile", label: _label("shoujihao"), class: "width2", width: 120 },
-                    { name: "email", label: _label("email"), class: "width2", is_hide: true },
+                    { name: "email", label: _label("email"), class: "width2", is_hide: false },
                     { name: "fax", label: _label("chuanzhen"), class: "width2", width: 120, is_hide: true },
                     { name: "address", label: _label("dizhi"), class: "width1", is_hide: true },
                     { name: "gender", label: _label("xingbie"), type: "select", source: "gender2", class: "width2", width: 80 },
@@ -209,6 +209,7 @@ export default {
 
             self.supplieraddress.base.supplierid = row.id
             self.supplierlinkman.base.supplierid = row.id
+            self.supplierlinkman.columns[4].default = row.address
                 //self.supplieraddress.columns[0].default = row.suppliername
             self.id = row.id
         },
@@ -235,7 +236,7 @@ export default {
                     if(form.phone=='') {
                         form.phone = row.area_code+"-"
                     }
-                    
+
                 })
             }
         },

@@ -1,5 +1,5 @@
 <template>
-    <el-select v-model="currentValue" :multiple="multiple" :placeholder="placeholder" style="width:150" @change="handleChange" filterable :disabled="disabled" :clearable="clearable" size="mini" :filter-method="onFilter" @visible-change="onVisibleChange">
+    <el-select ref="select" v-model="currentValue" :multiple="multiple" :placeholder="placeholder" style="width:150" @change="handleChange" filterable :disabled="disabled" :clearable="clearable" size="mini" :filter-method="onFilter" @visible-change="onVisibleChange">
         <el-option v-for="(item,key) in filterData" :key="item.id+item.name" :label="item.optionName()" :value="item.id" @click.native="onClick(item)" :class="getOptionClass(item)">
             <template>
                 <slot v-bind:row="item"></slot>
@@ -21,7 +21,7 @@ const _func = function(self) {
         filterValue() {
 
             if(self.multiple==false) {
-                //self._log("filterValue", self.multiple, self.currentValue )  
+                //self._log("filterValue", self.multiple, self.currentValue )
                 if(!this.isInclude(self.currentValue)) {
                     self.currentValue = ""
                 }
@@ -34,8 +34,8 @@ const _func = function(self) {
                     }
                 })
 
-                self.currentValue = newarray    
-                //self._log(newarray)            
+                self.currentValue = newarray
+                //self._log(newarray)
             }
         }
     }
@@ -101,11 +101,11 @@ export default {
             filterData:[], //查询过滤后的
             keyindexes:{}, //记录元素的顺序，多选时排序用
             start:-1, //批量选择的时候使用
-            onDataSourceChange(callback) {           
+            onDataSourceChange(callback) {
                 self.counter      = self.counter+1
-                
+
                 if (self.parentid == false) {
-         
+
                     self.getDataSource().getData(function(data) {
                         //self._log("load", data)
                         //self._log("++++++++++++++",self.source)
@@ -141,7 +141,7 @@ export default {
             //self._log("isVisible", isVisible)
             if(!isVisible) {
                 self.onFilter("")
-            }            
+            }
         },
         handleChange(newValue) {
             let self = this
@@ -164,7 +164,7 @@ export default {
             self.keyindexes = {}
 
             //console.log("++++++++++++++++++++++")
-            self.getDataSource().getData(data=>{ 
+            self.getDataSource().getData(data=>{
                 data.filter(callback).forEach(item=>self.push(item))
                 self.filteredList();
             })
@@ -172,7 +172,7 @@ export default {
         load(value) {
             let self = this;
             //self._log("重新加载下拉框数据", self.source)
-            
+
             return new Promise(resolve=>{
                 //self._log("++++++++++++++",self.source)
                 self.getDataSource().getSourceByParent(value).then(function(dataSource) {
@@ -184,13 +184,13 @@ export default {
                         data.forEach(item => self.push(item))
 
                         //检查当前值是否在下拉选项中存在，不存在则去掉
-                        _func(self).filterValue()            
+                        _func(self).filterValue()
                     })
                     self.filteredList();
                     //self._log("追加下拉框数据")
                     resolve()
                 })
-            })            
+            })
         },
         select(index){
             let self = this
@@ -227,7 +227,7 @@ export default {
             } else {
                 //self._log("=========",value.toString())
                 if(!value) {
-                    self.currentValue = ""                    
+                    self.currentValue = ""
                 }
                 else {
                     self.currentValue = value.toString()
@@ -267,6 +267,7 @@ export default {
                     self.start = -1
                     self.sort()
                     self.$emit("change", self.getValue())
+                    self.$refs['select'].blur();
                 }
                 else {
                     self.start = self.keyindexes[item.id]
@@ -274,11 +275,11 @@ export default {
             }
         },
         isSelected(id) {
-            return this.currentValue.find(item=>item==id) 
+            return this.currentValue.find(item=>item==id)
         },
         filteredList() {
             let self = this
-            //self._log("重新计算",self.keyword)            
+            //self._log("重新计算",self.keyword)
             let keyword = this.keyword.toUpperCase()
             if(keyword.length==0) {
                 self.filterData = self.data
@@ -319,7 +320,7 @@ export default {
         //self._log("绑定监听事件",self.source)
         self.onDataSourceChange(function(){
             self.$emit("inited")
-        })        
+        })
     },
     computed:{
 

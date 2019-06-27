@@ -1,30 +1,30 @@
 <template>
     <div class="sizecontent">
-    <el-table :data="rows" style="width:100%;" :border="false" :row-class-name="rowClassName" :cell-class-name="cellClassName">
+    <el-table :data="tabledata" style="width:100%;" :border="false" :row-class-name="rowClassName" :cell-class-name="cellClassName">
         <el-table-column :label="_label('gonghuoshang')" align="left" width="110">
             <template v-slot="{row}">
-                <div v-if="row.type=='body'" @dblclick="distributeTo(row.supplier.supplierid)">{{row.supplier.suppliercode}}</div>
+                <div v-if="row.type=='body'" @dblclick="distributeTo(row.supplierid)">{{row.suppliercode}}</div>
                 <span v-if="row.type=='foot'">{{_label('heji')}}</span>
             </template>
         </el-table-column>
 
         <el-table-column :label="_label('zhekoulv')" align="left" width="65">
             <template v-slot="{row}">
-                <el-input v-if="row.type=='body'" v-model="formdiscount[row.supplier.supplierid].discount" @change="onDiscountChange(row.supplier.supplierid)" size="mini" style="width:50px"></el-input>
+                <el-input v-if="row.type=='body'" v-model="row.discount" @change="onDiscountChange(row.supplierid, $event)" size="mini" style="width:50px"></el-input>
             </template>
         </el-table-column>
 
         <el-table-column :label="column.name" align="center" v-for="column in columns" :key="column.id" width="51" class="counter">
             <template v-slot="{row}">
                 <el-input v-model="row.form[column.id]" style="width:50px" size="mini" :disabled="true" class="linetop" v-if="row.type=='head'"></el-input>
-                <el-input v-model="form[column.id+'-'+row.supplier.supplierid]" style="width:50px" size="mini" @keyup.native="onChange(row)" v-if="row.type=='body'" :ref="column.id+'-'+row.supplier.supplierid" @focus="onFocus(column.id+'-'+row.supplier.supplierid)" @dblclick.native="onInputDblClick(column.id,row.supplier.supplierid)"></el-input>
+                <el-input v-model="form[column.id+'-'+row.supplierid]" style="width:50px" size="mini" @keyup.native="onChange(row)" v-if="row.type=='body'" :ref="column.id+'-'+row.supplierid" @focus="onFocus(column.id+'-'+row.supplierid)"></el-input>
                 <el-input v-model="row.form[column.id]" style="width:50px" size="mini" :disabled="true" class="linetop" v-if="row.type=='foot'"></el-input>
             </template>
         </el-table-column>
         <el-table-column :label="_label('heji')" align="right" width="53">
             <template v-slot="{row}">
                 <el-input :value="getLineTotal(row.form)" style="width:50px" size="mini" :disabled="true" class="linetop" v-if="row.type=='head'"></el-input>
-                <el-input :value="getBodyRowTotal(row.supplier.supplierid)" style="width:50px" size="mini":disabled="true" class="inputsum" v-if="row.type=='body'"></el-input>
+                <el-input :value="getBodyRowTotal(row.supplierid)" style="width:50px" size="mini":disabled="true" class="inputsum" v-if="row.type=='body'"></el-input>
                 <el-input :value="getLineTotal(row.form)" style="width:50px" size="mini" :disabled="true" class="linetop" v-if="row.type=='foot'"></el-input>
             </template>
         </el-table-column>
@@ -44,8 +44,8 @@ const _private = function(self){
             chain(self.form).forEach((number, key)=>{
                 let [sizecontentid, supplierid] = key.split("-")
 
-                let target = self.formdiscount[supplierid]
-                callback({number, sizecontentid, supplierid, discount:target.discount})
+                let row = self.getTableRow(supplierid);
+                callback({number, sizecontentid, supplierid, discount:row.discount })
             })
         }
     }
@@ -66,7 +66,7 @@ export default {
             require:true
         },
         suppliers:{
-        }, 
+        },
         initData:{}
     },
     data() {
@@ -75,14 +75,12 @@ export default {
         //处理默认填入的下方需要确认或者发货的商品数量
         let form = {}
         let totals = {}
-        let formdiscount = {}
         self.suppliers.forEach(supplier=>{
             let row = {}
             self.columns.forEach(column=>{
                 form[column.id+'-'+supplier.supplierid] = ""
             })
             totals[supplier.supplierid] = 0
-            formdiscount[supplier.supplierid] = {discount:supplier.discount, match:true}
         })
 
         self.initData.forEach(({supplierid,sizecontentid,number})=>{
@@ -91,13 +89,16 @@ export default {
 
         return {
             form,
-            formdiscount,
             totals,
-            tabledata:[[]],
+            tabledata:[],
             sumform:{}  //最下面的合计行的数据
         }
     },
     methods: {
+        getDiscount(supplierid){
+            let row = this.discounts.find(item=>item.supplierid===supplierid);
+            return row ? row.discount : "";
+        },
         doNull(){
             this._log("input click")
         },
@@ -116,15 +117,15 @@ export default {
             })
             self.onChange()
         },
-        onDiscountChange(supplierid){
+        onDiscountChange(supplierid, event){
             let self = this
-            let supplier = self.suppliers.find(item=>item.supplierid==supplierid)
-            if(supplier) {
-                let target = self.formdiscount[supplierid]
-                target.match = target.discount==supplier.discount
-
-                self.onChange()
+            //console.log(event)
+            let target = self.getTableRow(supplierid);
+            //self._log(target)
+            if(target) {
+                target.match = false
             }
+            self.onChange();
         },
         reset(){
             let self = this
@@ -137,48 +138,6 @@ export default {
         onInputDblClick(sizecontentid, supplierid){
             let refname = sizecontentid + '-' + supplierid
             this.$refs[refname][0].select()
-        /*
-            let self = this
-            let form = self.form
-            this._log("input double click")
-
-            let current = form[sizecontentid + '-' + supplierid]
-            if(!self.row.form[sizecontentid]) {
-                return 
-            }
-
-            if(current=="" || current=='0') {
-                //把剩余的分配给当前
-                let total = 0
-                Object.keys(form).forEach(key=>{
-                    let [tmp_sizecontentid,tmp_supplierid] = key.split("-")
-                    if(tmp_sizecontentid==sizecontentid && form[key]>0) {
-                        total += form[key]*1
-                    }                    
-                })
-
-                if(self.row.form[sizecontentid] - total==0) {
-                    form[sizecontentid + '-' + supplierid] = 1
-                    self.onInputDblClick(sizecontentid, supplierid);
-                }
-                else {
-                    form[sizecontentid + '-' + supplierid] = self.row.form[sizecontentid] - total
-                }                
-            }
-            else {
-                Object.keys(form).forEach(key=>{
-                    let [tmp_sizecontentid,tmp_supplierid] = key.split("-")
-                    if(tmp_sizecontentid==sizecontentid) {
-                        form[key] = ""
-                        if(supplierid==tmp_supplierid) {
-                            form[key] = self.row.form[sizecontentid]
-                        }
-                    }
-                    
-                })
-            }
-            
-            self.onChange()*/
         },
         onFocus(refname){
             this.$refs[refname][0].select()
@@ -208,7 +167,7 @@ export default {
 
             let list = []
             _private(this).forEach(item=>{
-                list.push(item)              
+                list.push(item)
             })
 
             self.$emit("change", { row:self.row, list })
@@ -232,13 +191,17 @@ export default {
             else {
                 return "counter"
             }
-        }
-    },
-    computed:{
-        rows:function(){
+        },
+        initTableData(){
             let self = this
-            let results = []
-            results.push({
+
+            let hash = {}
+            self.tabledata.forEach(item=>{
+                hash[item.supplierid] = extend({},item);
+            })
+
+            self.tabledata = []
+            self.tabledata.push({
                 type:"head",
                 form:self.row.form
             })
@@ -250,13 +213,24 @@ export default {
                         row[column.id] = ""
                     }
                 })
-                //row.orderid = order.order.id
-                //totals[supplier.id] = 0
-                results.push({
+
+                let target = {
                     type:"body",
                     form:row,
-                    supplier
-                })
+                    suppliercode:supplier.suppliercode,
+                    supplierid:supplier.supplierid
+                }
+
+                if(hash[supplier.supplierid] && hash[supplier.supplierid].match===false) {
+                    target.discount = hash[supplier.supplierid].discount;
+                    target.match = false;
+                }
+                else {
+                    target.discount = supplier.discount;
+                    target.match = true;
+                }
+
+                self.tabledata.push(target)
             })
 
             let footForm = {}
@@ -265,45 +239,24 @@ export default {
                 footForm[sizecontentid] += number*1
             })
 
-            results.push({
+            self.tabledata.push({
                 type:"foot",
                 form:footForm
             })
 
-            return results
+            self.onChange();
+        },
+        getTableRow(supplierid) {
+            return this.tabledata.find(item=>item.type=='body' && item.supplierid===supplierid)
         }
     },
     watch:{
         suppliers:{
             handler: function(newValue, oldValue) {
                 let self = this;
-                self.suppliers.forEach((supplier, index)=>{
-                    if(self.formdiscount[supplier.supplierid]) {
-                        if(self.formdiscount[supplier.supplierid].match) {
-                            self.formdiscount[supplier.supplierid].discount = supplier.discount
-                        }
-                        
-                        let target = self.formdiscount[supplier.supplierid]
-                        target.match = target.discount==supplier.discount
 
-                        self.onChange()
-                    }
-                    else {
-                        self.formdiscount[supplier.supplierid] = {discount:supplier.discount, match:true}
-                    }
-                })
-            },
-            deep: true
-        },
-        formdiscount:{
-            handler: function(newValue, oldValue) {
-                let self = this;
-                self.suppliers.forEach((supplier, index)=>{                    
-                    let target = self.formdiscount[supplier.supplierid]
-                    target.match = target.discount==supplier.discount
-
-                    self.onChange()
-                })
+                self.initTableData();
+                console.log("change suppliers")
             },
             deep: true
         }
@@ -311,6 +264,7 @@ export default {
     mounted:function(){
         let self = this
         //self.onChange({})
+        self.initTableData();
     }
 }
 </script>

@@ -90,6 +90,7 @@
                     </template>
                 </el-table-column>
                 <el-table-column :label="_label('gongsidingdanhao')" width="80" align="center" prop="orderno"/>
+
                 <el-table-column :label="_label('zhidanren')" width="80" align="center">
                     <template v-slot="{row}">
                         <sp-select-text :value="row.makestaff" source="user"/>
@@ -164,6 +165,13 @@
                             <sp-select-text :value="row.bussinesstype" source="bussinesstype"/>
                         </template>
                     </el-table-column>
+
+                    <el-table-column :label="_label('pinpai')" width="150" align="center">
+                        <template v-slot="{row}">
+                            <sp-select-text :value="row.brandids" source="brand"/>
+                        </template>
+                    </el-table-column>
+
                     <el-table-column :label="_label('dingdanriqi')" width="100" align="center">
                         <template v-slot="{row}">
                             {{row.maketime && row.maketime.length>0 ? row.maketime.substr(0,10) : ""}}
@@ -265,7 +273,7 @@
                 </el-row>
                 <el-row :gutter="0">
                     <el-col align="center">
-                        <as-button auth="product" type="primary" @click="addSupplier">{{_label("zengjia")}}</as-button>
+                        <as-button auth="product" type="primary" @click="addSupplier">{{_label("queding")}}</as-button>
                         <as-button type="primary" @click="_hideDialog('add-supplier')">{{_label("tuichu")}}</as-button>
                     </el-col>
                 </el-row>
@@ -415,18 +423,6 @@ const result = {
 
             //self._log(params)
             self._submit("/orderbrand/add", { params: JSON.stringify(params) }).then(function(res) {
-                /*self.tabledata = []
-                self.tabledata = [];
-                self.orders = [];
-                self.selected = [];
-                self.selected2 = [];
-                //供货商
-                self.suppliers = [];
-                self.listdata = [];
-                self.orderlist = [];
-                self.orderbrandDetailList = []
-                _private(self).loadInfo()*/
-
                 self._redirect("/orderbrand/"+ res.data.join(','))
             });
         },
@@ -538,21 +534,6 @@ const result = {
 
                 row.totalCount += detail.number*1;
             })
-            return result
-        },
-        factoryprice(){
-            let self = this
-            let result = {}
-            self.tabledata.forEach(item=>{
-                result[item.product.id] = item.product.factoryprice
-            })
-
-            self.orderbrandDetailList.forEach(item=>{
-                if(item.factoryprice>0) {
-                    result[item.productid] = item.factoryprice;
-                }
-            })
-
             return result
         },
         stat(){

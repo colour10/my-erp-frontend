@@ -3,7 +3,7 @@
         <el-row>
             <el-col :span="2">
                 <as-button type="primary" @click="_showDialog('search',{width:600})">{{_label("chaxun")}}</as-button>
-                
+
                 <auth auth="product">
                     <as-button type="primary" @click="showFormToCreate()">{{_label("button-create")}}</as-button>
                 </auth>
@@ -20,6 +20,9 @@
                     </template>
                     <template v-slot:productname="{row}">
                         <el-link type="primary" @click="showFormToEdit(0, row)">{{row.getName()}}</el-link>
+                    </template>
+                    <template v-slot:series="{row}">
+                        <sp-select-text :value="row.series" source="series" />
                     </template>
                 </simple-admin-tablelist>
             </el-col>
@@ -53,7 +56,7 @@ export default {
             props: {
                 columns: [
                     { name: "picture", label: _label("zhutu"), is_image: true, image_width: 50, image_height: 50, width: 60, className: 'picture' },
-                    { name: "picture2", label: _label("futu"), is_image: true, image_width: 50, image_height: 50, width: 60, className: 'picture' }, 
+                    { name: "picture2", label: _label("futu"), is_image: true, image_width: 50, image_height: 50, width: 60, className: 'picture' },
                     {
                         name: "productname",
                         label: _label("shangpinmingcheng"),
@@ -88,13 +91,14 @@ export default {
 
                     { name: "nationalprice", label: _label("benguolingshoujia"), width: 130, convert:function(row){
                         return [row.nationalpricecurrency_label, row.nationalprice].join(" ")
-                    } },                    
-                    
+                    } },
+
                     { name: "saletypeid", label: _label("xiaoshoushuxing"), width:120, type: "select", source:"saletype" },
 
                     { name: "lingshoubi", label: _label("lingshoubi"), width:120},
+                    { name: "series", label: _label("xilie"), width:120},
                     { name: "laststoragedate", label: _label("zuihouruku"), width:120 }
-                    
+
                 ],
                 controller: "product",
                 model: ProductDetail,

@@ -95,6 +95,11 @@
                             <sp-sizecontent-input :columns="row.product.sizecontents" :uniq="row.product.id" :disabled="!isEditable" @change="onChange" :init="getInit(row.product.id)" :key="row.product.id"/>
                         </template>
                     </el-table-column>
+                    <el-table-column prop="total" :label="_label('zongshu')" width="100" align="center">
+                        <template v-slot="{row}">
+                            {{ stat[row.product.id].total }}
+                        </template>
+                    </el-table-column>
                     <el-table-column prop="label" :label="_label('bizhong')" width="80" align="center">
                         <template v-slot="{row}">
                             {{row.product.factorypricecurrency_label}}
@@ -125,11 +130,7 @@
                             {{f(stat[row.product.id].factoryprice*row.discount*stat[row.product.id].total)}}
                         </template>
                     </el-table-column>
-                    <el-table-column prop="total" :label="_label('zongshu')" width="100" align="center">
-                        <template v-slot="{row}">
-                            {{ stat[row.product.id].total }}
-                        </template>
-                    </el-table-column>
+
                     <el-table-column :label="_label('chanpinmingcheng')" align="left" width="300">
                         <template v-slot="scope">
                             {{scope.row.product.getName()}}
@@ -202,8 +203,8 @@ export default {
                 bookingorderno: "",
                 makedate: "",
                 currency: "",
-                discount: "",
-                taxrebate: "",
+                discount: "1",
+                taxrebate: "1",
                 property: "1",
                 makestaff: "",
                 maketime: "",
