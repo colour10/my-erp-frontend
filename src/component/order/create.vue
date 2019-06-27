@@ -122,12 +122,12 @@
                     </el-table-column>
                     <el-table-column prop="label" :label="_label('chengjiaojia')" width="130" align="center">
                         <template v-slot="{row}">
-                            {{f(stat[row.product.id].factoryprice*row.discount)}}
+                            {{f(stat[row.product.id].dealPrice)}}
                         </template>
                     </el-table-column>
                     <el-table-column prop="label" :label="_label('chengjiaozongjia')" width="100" align="center">
                         <template v-slot="{row}">
-                            {{f(stat[row.product.id].factoryprice*row.discount*stat[row.product.id].total)}}
+                            {{f(stat[row.product.id].dealPrice*stat[row.product.id].total)}}
                         </template>
                     </el-table-column>
 
@@ -359,12 +359,12 @@ export default {
                 if (index == 0) {
                     sums[index] = self._label("heji")
                     return
-                } else if (index == 5) {
+                } else if (index == 6) {
 
-                    sums[index] = self.formatNumber(data.reduce((total, row) => total + self.stat[row.product.id].factoryprice*self.stat[row.product.id].total, 0))
-                } else if (index == 8) {
-                    sums[index] = self.formatNumber(data.reduce((total, row) => total + self.stat[row.product.id].factoryprice*self.stat[row.product.id].total*row.discount, 0))
+                    sums[index] = self.f(data.reduce((total, row) => total + self.stat[row.product.id].factoryprice*self.stat[row.product.id].total, 0))
                 } else if (index == 9) {
+                    sums[index] = self.f(data.reduce((total, row) => total + self.stat[row.product.id].dealPrice*self.stat[row.product.id].total, 0))
+                } else if (index == 3) {
                     sums[index] = self.listdata.reduce((total, row) => total + row.number*1, 0)
                 }
             })
@@ -396,7 +396,7 @@ export default {
         total_price() {
             let self = this
             let total = self.tabledata.reduce(function(total, row) {
-                return total + self.stat[row.product.id].total * self.stat[row.product.id].factoryprice * row.discount
+                return total + self.stat[row.product.id].total * self.stat[row.product.id].dealPrice;
             }, 0)
             return this.formatNumber(total)
         },
@@ -441,6 +441,9 @@ export default {
                 let row = helper.get(item.product.id)
 
                 row.factoryprice = item.product.factoryprice
+
+                //成交价
+                row.dealPrice = self.form.taxrebate==0?0:self.f(row.factoryprice * item.discount / self.form.taxrebate);
             })
 
             self.details.forEach(item=>{
