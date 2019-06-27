@@ -207,6 +207,7 @@ import API from "../api.js"
 import { host } from '../http.js'
 import productMixin from "../mixins/product.js"
 import _Product from "./product.js"
+import { roundFormat } from "../math.js"
 
 export default {
     name: 'asa-product-add',
@@ -379,9 +380,9 @@ export default {
                 return
             }
 
-            let oldprice = math.round(oldvalue*self.rate,2)
+            let oldprice = roundFormat(oldvalue*self.rate)
             if (self.form.wordprice == '' || self.form.wordprice == oldprice) {
-                self.form.wordprice = math.round(newvalue*self.rate,2)
+                self.form.wordprice = roundFormat(newvalue*self.rate)
             }
         },
         onTrimSize() {
