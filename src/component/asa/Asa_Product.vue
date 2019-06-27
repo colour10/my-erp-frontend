@@ -48,7 +48,7 @@
                                 <simple-select v-model="form.ageseason" source="ageseason" :multiple="true" @change="loadRate"></simple-select>
                             </el-form-item>
                             <el-form-item :label="_label('pinpai')" prop="brandid">
-                                <simple-select v-model="form.brandid" source="brand" @change="loadRate">
+                                <simple-select v-model="form.brandid" source="brand" @change="onBrandChange">
                                 </simple-select>
                             </el-form-item>
                             <el-form-item :label="_label('pinlei')" prop="brandgroupid">
@@ -237,7 +237,7 @@
                     <el-table-column :label="_label('yanse')" width="140" align="center">
                         <template v-slot="scope">
                             <!--<el-input v-model="scope.row.wordcode_3" size="mini" @keyup.native.down="onKeyDown(scope.$index)" @keyup.native.up="onKeyUp(scope.$index)" :ref="'word'+scope.$index"></el-input>-->
-                            <el-input v-model="scope.row.wordcode_3" size="mini" @keyup.native="onKeyInput(scope.row, 'wordcode_3')"></el-input>
+                            <el-input v-model="scope.row.wordcode_3" size="mini" @keyup.native="onColorcodeChange(scope.row, 'wordcode_3')"></el-input>
                         </template>
                     </el-table-column>
                     <el-table-column :label="_label('yansemingcheng')" width="150" align="center">
@@ -285,24 +285,27 @@
 </template>
 
 <script>
-import globals, { extract, _label, math } from '../globals.js'
-import { ProductCodeList, ProductDetail,ModelBus } from "../model.js"
-import { initObject } from "../array.js"
-import { extend } from "../object.js"
-import List from '../list.js'
-import DataSource from '../DataSource.js'
-import Asa_Product_Search_Panel from './Asa_Product_Search_Panel.vue'
-import Asa_Product_Property from './Asa_Product_Property.vue'
-import Asa_Product_Price from './Asa_Product_Price.vue'
-import Asa_Product_ProductStock from './Asa_Product_ProductStock.vue'
-import Material from '../product/material.vue'
-import API from "../api.js"
-import _Product from "./product.js"
+import globals, { extract, _label, math } from '../globals.js';
+import { ProductCodeList, ProductDetail,ModelBus } from "../model.js";
+import { initObject } from "../array.js";
+import { extend } from "../object.js";
+import List from '../list.js';
+import DataSource from '../DataSource.js';
+import Asa_Product_Search_Panel from './Asa_Product_Search_Panel.vue';
+import Asa_Product_Property from './Asa_Product_Property.vue';
+import Asa_Product_Price from './Asa_Product_Price.vue';
+import Asa_Product_ProductStock from './Asa_Product_ProductStock.vue';
+import Material from '../product/material.vue';
+import API from "../api.js";
+import _Product from "./product.js";
+import productMixin from "../mixins/product.js";
+
 
 const color_keys = ['id', 'brandcolor', 'wordcode_1', 'wordcode_2', 'wordcode_3', 'wordcode_4', 'colorname', 'picture', 'picture2']
 
 export default {
     name: 'asa-product',
+    mixins:[productMixin],
     components: {
         searchpanel: Asa_Product_Search_Panel,
         property: Asa_Product_Property,
@@ -389,6 +392,17 @@ export default {
         }
     },
     methods: {
+        onBrandChange(){
+            this.loadRate();
+            this.getBrandColorSuggest();
+        },
+        onColorcodeChange(row, columnName){
+            this.onKeyInput(row, columnName);
+            //自动匹配色系和颜色
+            if(columnName=='wordcode_3') {
+                this.autoMatchSuggest(row)
+            }
+        },
         validatorGJM(){
             let self = this;
             let form = this.form
@@ -408,7 +422,9 @@ export default {
             this.dialogVisible = false
         },
         onKeyInput(target, columnName){
-            target[columnName] = target[columnName].toUpperCase()
+            target[columnName] = target[columnName].toUpperCase();
+
+
         },
         onOptionChange(options) {
             let self = this
@@ -623,8 +639,9 @@ export default {
 
                     self.clearValidate(50)
 
-                    self.loadRate()
-                    self.loadExchangeRate()
+                    self.loadRate();
+                    self.loadExchangeRate();
+                    self.getBrandColorSuggest();
                     self._log("开始自动执行")
 
 
