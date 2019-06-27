@@ -1,9 +1,9 @@
 <template>
     <div class="sizecontent">
     <el-table :data="tabledata" style="width:100%;" :cell-class-name="getCellClass" :border="false">
-        <el-table-column :label="column.name" align="center" v-for="column in columns" :key="column.id" width="50">
-            <template v-slot="scope">
-                <el-input v-model="form[column.id]" style="width:50px" size="mini" @keyup.native="onChange" :disabled="disabled"></el-input>
+        <el-table-column :label="column.name" align="center" v-for="(column, index) in columns" :key="column.id" width="50">
+            <template v-slot="{$index}">
+                <el-input v-model="form[column.id]" :ref="index" style="width:50px" size="mini" @keyup.native="onChange($event, index)" @focus="onFocus(index)" :disabled="disabled"></el-input>
             </template>
         </el-table-column>
     </el-table>
@@ -47,18 +47,46 @@ export default {
         getCellClass() {
             return "counter"
         },
-        onChange() {
+        onChange(event, index) {
             let self = this
             let output = []
-
-            chain(self.form).forEach((number,sizecontentid)=>{
-                output.push({
-                    uniq:self.uniq,
-                    sizecontentid,
-                    number
+            console.log(event, index)
+            if(event.key==='ArrowRight') {
+                self.focus(index+1)
+            }
+            else if(event.key==='ArrowLeft') {
+                self.focus(index-1)
+            }
+            else if(event.key==='ArrowUp') {
+                self.$emit("up")
+            }
+            else if(event.key==='ArrowDown') {
+                self.$emit("down")
+            }
+            else {
+                chain(self.form).forEach((number,sizecontentid)=>{
+                    output.push({
+                        uniq:self.uniq,
+                        sizecontentid,
+                        number
+                    })
                 })
-            })
-            self.$emit("change", output)
+                self.$emit("change", output)
+            }
+        },
+        focus(index=0) {
+            let target = this.$refs[index];
+            if(target && target[0]) {
+                console.log(target)
+                target[0].focus();
+                //target[0].select();
+            }
+        },
+        onFocus(index) {
+            let target = this.$refs[index];
+            if(target && target[0]) {
+                target[0].select();
+            }
         }
     },
     mounted:function(){
