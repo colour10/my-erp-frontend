@@ -17,7 +17,7 @@
                             </el-upload>
                         </template>
                     </el-table-column>
-                    
+
                     <el-table-column :label="_label('kuanshi')" width="140" align="center">
                         <template v-slot="{row,$index}">
                             <el-input v-model="row.wordcode_1" size="mini" @focus="onFocus(1)" @blur="onBlur(1)" @keyup.native="onKeyInput(row,'wordcode_1')" @keyup.native.up="onKeyMove(1, $index, 'up')" @keyup.native.down="onKeyMove(1, $index, 'down')" @keyup.native.left="onKeyMove(1, $index, 'left')" @keyup.native.right="onKeyMove(1, $index, 'right')" :ref="'word1-'+$index"/>
@@ -50,7 +50,7 @@
                             <el-input v-model="scope.row.wordcode_4" size="mini"/>
                         </template>
                     </el-table-column>
-                    
+
                     <el-table-column :label="_label('caozuo')" width="159" align="center">
                         <template v-slot="scope">
                             <as-button type="danger" @click="onDeleteColorGroup(scope, scope.row)" v-if="scope.$index>0">{{_label("shanchu")}}</as-button>
@@ -82,7 +82,7 @@
                     <el-form-item :label="_label('chimamingxi')" prop="sizecontentids">
                         <simple-select v-model="form.sizecontentids" source="sizecontent" :parentid="form.sizetopid" :multiple="true" :isBatch="true" @option-change="onOptionChange"> </simple-select><as-button @click="onTrimSize" class="trimhalf">{{_label("qubanma")}}</as-button>
                     </el-form-item>
-                    
+
                 </el-col>
                 <el-col :span="8">
                     <el-form-item :label="_label('caizhi')">
@@ -108,7 +108,7 @@
                             <el-col :span="8" style="width:50px">{{getPriceRate}}</el-col>
                         </el-row>
                     </el-form-item>
-                    
+
                     <el-form-item :label="_label('chuchangjia')">
                         <el-input placeholder="" v-model="form.factoryprice" class="productcurrency" ref="factoryprice" @focus="onPriceFocus('factoryprice');watcherprice.start()" @blur="watcherprice.stop()">
                             <simple-select source="currency" :clearable="false" v-model="form.wordpricecurrency" slot="prepend">
@@ -178,7 +178,7 @@
                         </el-col>
                     </div>
                     </el-form-item>
-                    
+
                     <el-form-item :label="_label('beizhu')">
                         <el-input v-model="form.memo"/>
                     </el-form-item>
@@ -216,7 +216,7 @@ export default {
     mixins:[productMixin],
     data() {
         let self = this
-        
+
         return {
             dialogVisible: false,
             lang: _label("lang"),
@@ -282,7 +282,7 @@ export default {
             else {
                 self.onAppendColor({picture2})
             }
-            
+
         },
         onAddSeries(){
             _Product(this).addSeries();
@@ -383,7 +383,7 @@ export default {
             if (self.form.wordprice == '' || self.form.wordprice == oldprice) {
                 self.form.wordprice = math.round(newvalue*self.rate,2)
             }
-        },        
+        },
         onTrimSize() {
             let self = this
             let source = DataSource.getDataSource("sizecontent", self._label("lang"))
@@ -398,8 +398,13 @@ export default {
                 return new Promise((resolve,reject)=>{
                     for(let i=0;i<self.colors.length;i++) {
                         let form = self.colors[i]
-                        if(form.wordcode_1=="" || form.wordcode_2=='' || form.wordcode_3=='') {
+                        if(form.wordcode_1=="" && form.wordcode_2=='' && form.wordcode_3=='') {
                             reject({message:self._label("8000"), label:self._label("guojima")})
+                            break;
+                        }
+
+                        if(form.brandcolor=="") {
+                            reject({message:self._label("8000"), label:self._label("sexi")})
                             break;
                         }
                     }
@@ -480,7 +485,7 @@ export default {
             let self = this;
 
             if(self.form.brandid=='' || self.form.ageseason=='' || self.form.brandgroupid=='') {
-                return 
+                return
             }
 
             self._fetch("/brandrate/getrate", extract(self.form, ['brandid', 'ageseason', 'brandgroupid'])).then(res=>{
@@ -500,7 +505,7 @@ export default {
                         currency_to:self.form.nationalpricecurrency,
                         rate:result
                     });
-                }                
+                }
             })
         }
     },
@@ -567,7 +572,7 @@ export default {
 
                 // Chrome, Safari, Firefox 4+, Opera 12+ , IE 9+
                 return self._label("guanbitishi")
-            }            
+            }
         }
 
         self.initRules(Rules=>{

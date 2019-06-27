@@ -219,20 +219,10 @@
                             {{ stat[row.product.id].factoryprice }}
                         </template>
                     </el-table-column>
-                    <el-table-column prop="label" :label="_label('chengjiaojia')" width="80" align="center">
-                        <template v-slot="{row}">
-                            {{ f(stat[row.product.id].factoryprice*row.discount) }}
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="label" :label="_label('zongjia')" width="80" align="center">
-                        <template v-slot="{row}">
-                            {{ f( stat[row.product.id].factoryprice *row.discount*stat[row.product.id].total) }}
-                        </template>
-                    </el-table-column>
                     <el-table-column prop="discount" :label="_label('zhekoulv')" width="80" align="center"/>
                     <el-table-column prop="number" :label="_label('dinggoushuliang')" align="center" :width="width">
                         <template v-slot="{row}">
-                            <sp-sizecontent-confirm2 :ref="row.product.id+'-'+row.order.id" :columns="row.product.sizecontents" :row="row" :suppliers="suppliers" :initData="getInit(row)" :key="row.product.id+'-'+row.order.id" @change="onNumberChange"></sp-sizecontent-confirm2>
+                            <sp-sizecontent-confirm2 :ref="row.product.id+'-'+row.order.id" :columns="row.product.sizecontents" :row="row" :suppliers="suppliers" :initData="getInit(row)" :factoryprice="stat[row.product.id].factoryprice" :key="row.product.id+'-'+row.order.id" @change="onNumberChange"></sp-sizecontent-confirm2>
                         </template>
                     </el-table-column>
                     <el-table-column :label="_label('chanpinmingcheng')" align="center" width="200">
@@ -428,19 +418,23 @@ const result = {
         },
         onNumberChange({ row, list }) {
             let self = this
-            list.forEach(({ number, sizecontentid, supplierid, discount }) => {
+            list.forEach(({ number, sizecontentid, supplierid, discount, price }) => {
                 let target = self.listdata.find(item => item.sizecontentid == sizecontentid && item.supplierid == supplierid && row.product.id == item.row.product.id && row.orderid == item.row.orderid)
 
                 if (target) {
-                    target.number = number
-                    target.discount = discount
+                    target.number = number;
+                    target.discount = discount;
+                    target.price = price;
+                    target.priceTotal = self.f(price*number)
                 } else {
                     self.listdata.push({
                         row,
                         number,
                         sizecontentid,
                         supplierid,
-                        discount
+                        discount,
+                        price,
+                        priceTotal:self.f(price*number)
                     });
                 }
             })
@@ -486,7 +480,7 @@ const result = {
             })
         },
         width() {
-            return this.orderdetails.reduce((max, { product }) => Math.max(max, product.sizecontents.length), 1) * 51 + 191 + 70
+            return this.orderdetails.reduce((max, { product }) => Math.max(max, product.sizecontents.length), 1) * 51 + 191 + 70+100
         },
         order() {
             let orders = this.orders
@@ -787,7 +781,7 @@ const _private = function(self) {
                 if (item.number > 0) {
                     target.total_number += item.number * 1
                     target.total_price += item.number * self.stat[item.row.productid].wordprice
-                    target.total_discount_price += item.number * item.discount * self.stat[item.row.productid].factoryprice
+                    target.total_discount_price += item.priceTotal;
 
                     brands.push(item.supplierid, item.row.product.brandid)
                 }

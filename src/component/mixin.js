@@ -200,6 +200,9 @@ export default {
                 })
             })
         },
+        _showErorMessage(object){
+            return _private(this).showErorMessage({x:[object]})
+        },
         _setting(name, value) {
             let self = this;
             if(isArray(name)) {

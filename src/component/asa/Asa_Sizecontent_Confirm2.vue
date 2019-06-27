@@ -4,7 +4,7 @@
         <el-table-column :label="_label('gonghuoshang')" align="left" width="110">
             <template v-slot="{row}">
                 <div v-if="row.type=='body'" @dblclick="distributeTo(row.supplierid)">{{row.suppliercode}}</div>
-                <span v-if="row.type=='foot'">{{_label('heji')}}</span>
+                <span v-if="row.type=='foot'">{{_label('jiaoyan')}}</span>
             </template>
         </el-table-column>
 
@@ -18,14 +18,26 @@
             <template v-slot="{row}">
                 <el-input v-model="row.form[column.id]" style="width:50px" size="mini" :disabled="true" class="linetop" v-if="row.type=='head'"></el-input>
                 <el-input v-model="form[column.id+'-'+row.supplierid]" style="width:50px" size="mini" @keyup.native="onChange(row)" v-if="row.type=='body'" :ref="column.id+'-'+row.supplierid" @focus="onFocus(column.id+'-'+row.supplierid)"></el-input>
-                <el-input v-model="row.form[column.id]" style="width:50px" size="mini" :disabled="true" class="linetop" v-if="row.type=='foot'"></el-input>
+                <el-input v-model="row.form[column.id]" style="width:50px" size="mini" :disabled="true" :class="getFootCellClass(row.form[column.id])" v-if="row.type=='foot'"></el-input>
             </template>
         </el-table-column>
         <el-table-column :label="_label('heji')" align="right" width="53">
             <template v-slot="{row}">
-                <el-input :value="getLineTotal(row.form)" style="width:50px" size="mini" :disabled="true" class="linetop" v-if="row.type=='head'"></el-input>
-                <el-input :value="getBodyRowTotal(row.supplierid)" style="width:50px" size="mini":disabled="true" class="inputsum" v-if="row.type=='body'"></el-input>
-                <el-input :value="getLineTotal(row.form)" style="width:50px" size="mini" :disabled="true" class="linetop" v-if="row.type=='foot'"></el-input>
+                <el-input :value="supplierStat[row.type]" style="width:50px" size="mini" :disabled="true" class="linetop" v-if="row.type=='head'"></el-input>
+                <el-input :value="supplierStat[row.supplierid]" style="width:50px" size="mini":disabled="true" class="inputsum" v-if="row.type=='body'"></el-input>
+                <el-input :value="supplierStat[row.type]" style="width:50px" size="mini" :disabled="true" :class="getFootCellClass(supplierStat[row.type])" v-if="row.type=='foot'"></el-input>
+            </template>
+        </el-table-column>
+
+        <el-table-column :label="_label('chengjiaojia')" align="right" width="58">
+            <template v-slot="{row}">
+                <el-input :value="dealPrice[row.supplierid]" style="width:55px" size="mini":disabled="true" class="inputsum" v-if="row.type=='body'"></el-input>
+            </template>
+        </el-table-column>
+
+        <el-table-column :label="_label('zongjia')" align="right" width="68">
+            <template v-slot="{row}">
+                <el-input :value="f(dealPrice[row.supplierid]*supplierStat[row.supplierid])" style="width:65px" size="mini":disabled="true" class="inputsum" v-if="row.type=='body'"></el-input>
             </template>
         </el-table-column>
     </el-table>
@@ -36,6 +48,7 @@
 import { _label } from '../globals.js'
 import { toArray,extend } from '../object.js'
 import chain from '../chain.js'
+import orderMixin from "../mixins/order.js"
 
 const _private = function(self){
 
@@ -45,7 +58,7 @@ const _private = function(self){
                 let [sizecontentid, supplierid] = key.split("-")
 
                 let row = self.getTableRow(supplierid);
-                callback({number, sizecontentid, supplierid, discount:row.discount })
+                callback({number, sizecontentid, supplierid, discount:row.discount,price:self.dealPrice[supplierid] })
             })
         }
     }
@@ -53,6 +66,7 @@ const _private = function(self){
 
 export default {
     name: 'sp-sizecontent-confirm2',
+    mixins:[orderMixin],
     props: {
         disabled: {
             type: Boolean,
@@ -67,7 +81,8 @@ export default {
         },
         suppliers:{
         },
-        initData:{}
+        initData:{},
+        factoryprice:{}//出厂价
     },
     data() {
         let self = this
@@ -99,8 +114,15 @@ export default {
             let row = this.discounts.find(item=>item.supplierid===supplierid);
             return row ? row.discount : "";
         },
-        doNull(){
-            this._log("input click")
+        getFootCellClass(number){
+            if(number>0) {
+                return 'normal';
+            }
+            else if(number<0) {
+                return 'danger';
+            }
+
+            return 'success';
         },
         distributeTo(supplierid){
             let self = this
@@ -146,9 +168,7 @@ export default {
             //this._log(formData)
             let total = 0
             chain(formData).forEach(number=>{
-                if(number>0) {
-                    total += number*1
-                }
+                total += number*1
             })
             return total
         },
@@ -218,7 +238,8 @@ export default {
                     type:"body",
                     form:row,
                     suppliercode:supplier.suppliercode,
-                    supplierid:supplier.supplierid
+                    supplierid:supplier.supplierid,
+                    taxrebate:supplier.taxrebate
                 }
 
                 if(hash[supplier.supplierid] && hash[supplier.supplierid].match===false) {
@@ -233,10 +254,9 @@ export default {
                 self.tabledata.push(target)
             })
 
-            let footForm = {}
+            let footForm = extend({}, self.row.form)
             _private(this).forEach(({number,sizecontentid})=>{
-                footForm[sizecontentid] = footForm[sizecontentid] || 0
-                footForm[sizecontentid] += number*1
+                footForm[sizecontentid] -= number;
             })
 
             self.tabledata.push({
@@ -248,6 +268,33 @@ export default {
         },
         getTableRow(supplierid) {
             return this.tabledata.find(item=>item.type=='body' && item.supplierid===supplierid)
+        }
+    },
+    computed:{
+        supplierStat() {
+            let self = this;
+            let result = {};
+            self.tabledata.forEach(({type,supplierid,form})=>{
+                if(type==='body') {
+                    result[supplierid] = self.getBodyRowTotal(supplierid);
+                }
+                else {
+                    result[type] = self.getLineTotal(form);
+                }
+            })
+
+            return result;
+        },
+        dealPrice(){
+            let self = this;
+            let result = {};
+            self.tabledata.forEach(({type,supplierid,form,discount,taxrebate})=>{
+                if(type==='body') {
+                    result[supplierid] = taxrebate==0?0:self.f(self.factoryprice * discount / taxrebate);
+                }
+            })
+
+            return result;
         }
     },
     watch:{

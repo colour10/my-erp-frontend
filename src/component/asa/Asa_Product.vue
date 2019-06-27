@@ -69,7 +69,7 @@
                             <el-form-item :label="_label('sexi')" prop="brandcolor">
                                 <colorselect v-model="form.brandcolor"></colorselect>
                             </el-form-item>
-                            
+
                         </el-col>
                         <el-col :span="8">
                             <el-form-item :label="_label('caizhi')">
@@ -94,7 +94,7 @@
                                     <el-col :span="8" style="width:50px">{{getPriceRate}}</el-col>
                                 </el-row>
                             </el-form-item>
-                            
+
                             <el-form-item :label="_label('chuchangjia')">
                                 <el-input placeholder="" v-model="form.factoryprice" class="productcurrency">
                                     <simple-select source="currency" :clearable="false" v-model="form.wordpricecurrency" slot="prepend">
@@ -164,7 +164,7 @@
                                 </el-col>
                             </div>
                             </el-form-item>
-                            
+
                             <el-form-item :label="_label('beizhu')">
                                 <el-input v-model="form.memo"></el-input>
                             </el-form-item>
@@ -223,7 +223,7 @@
                             <simple-avatar v-model="scope.row.picture2" font-size="14px" :size="35"></simple-avatar>
                         </template>
                     </el-table-column>
-                    
+
                     <el-table-column :label="_label('kuanshi')" width="140" align="center">
                         <template v-slot="scope">
                             <el-input v-model="scope.row.wordcode_1" size="mini" @keyup.native="onKeyInput(scope.row, 'wordcode_1')"></el-input>
@@ -257,7 +257,7 @@
                             <el-input v-model="scope.row.wordcode_4" size="mini"></el-input>
                         </template>
                     </el-table-column>
-                    
+
                     <el-table-column :label="_label('caozuo')" width="130" align="center">
                         <template v-slot="scope">
                             <as-button type="danger" @click="onDeleteColorGroup(scope, scope.row)" v-if="option.isedit && form.id!=scope.row.id">{{_label("shanchu")}}</as-button>
@@ -390,9 +390,10 @@ export default {
     },
     methods: {
         validatorGJM(){
+            let self = this;
             let form = this.form
             return new Promise((resolve,reject)=>{
-                if(form.wordcode_1=="" || form.wordcode_2=='' || form.wordcode_3=='') {
+                if(form.wordcode_1=="" && form.wordcode_2=='' && form.wordcode_3=='') {
                     reject({message:self._label("8000"), label:self._label("guojima")})
                 }
                 else {
@@ -424,7 +425,7 @@ export default {
 
         },
         searchProductFilter(product) {
-            return product.product_group=='' && this.colors.findIndex(item => item.id == product.id) < 0 
+            return product.product_group=='' && this.colors.findIndex(item => item.id == product.id) < 0
         },
         onSubmit() {
             var self = this;
@@ -478,7 +479,18 @@ export default {
             let self = this;
             let params = { productid: self.form.id }
             params.list = self.colors.map(item => extract(item, color_keys))
-                //self._log(params)
+
+            for(let i=0;i<params.list.length;i++) {
+                let row = params.list[i];
+                if(row.wordcode_1=='' && row.wordcode_2=='' && row.wordcode_3=='') {
+                    return self._showErorMessage({message:self._label("8000"), label:self._label("guojima")})
+                }
+
+                if(row.brandcolor=="") {
+                    return self._showErorMessage({message:self._label("8000"), label:self._label("sexi")})
+                }
+            }
+
             self._submit("/product/savecolorgroup", { params: JSON.stringify(params) }).then(function(res) {
                 self.setInfo(self.form.id).then(()=>{
                     res.data.list.forEach(function(item) {
@@ -489,7 +501,7 @@ export default {
 
                     self.$emit("change", Object.assign({}, self.form), "update")
                     self.currentTab = "colorgroup"
-                })                
+                })
             });
         },
         onAppendColor() {
@@ -666,7 +678,7 @@ export default {
                         currency_to:self.form.nationalpricecurrency,
                         rate:result
                     });
-                }                
+                }
             })
         }
     },
