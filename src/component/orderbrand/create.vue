@@ -221,8 +221,8 @@
                     </el-table-column>
                     <el-table-column prop="discount" :label="_label('zhekoulv')" width="80" align="center"/>
                     <el-table-column prop="number" :label="_label('dinggoushuliang')" align="center" :width="width">
-                        <template v-slot="{row}">
-                            <sp-sizecontent-confirm2 :ref="row.product.id+'-'+row.order.id" :columns="row.product.sizecontents" :row="row" :suppliers="suppliers" :initData="getInit(row)" :factoryprice="stat[row.product.id].factoryprice" :key="row.product.id+'-'+row.order.id" @change="onNumberChange"></sp-sizecontent-confirm2>
+                        <template v-slot="{row, $index}">
+                            <sp-sizecontent-confirm2 :ref="row.product.id+'-'+row.order.id" :columns="row.product.sizecontents" :row="row" :suppliers="suppliers" :initData="getInit(row)" :factoryprice="stat[row.product.id].factoryprice" :key="row.product.id+'-'+row.order.id" @change="onNumberChange" :setMap="setMap($index, row.product.id, row.order.id)" @up="focus($event, 'up', $index-1)" @down="focus($event, 'down', $index+1)"></sp-sizecontent-confirm2>
                         </template>
                     </el-table-column>
                     <el-table-column :label="_label('chanpinmingcheng')" align="center" width="200">
@@ -318,10 +318,21 @@ const result = {
             suppliers: [],
             listdata: [],
             orderlist:[],
-            orderbrandDetailList:[]
+            orderbrandDetailList:[],
+            refsMap:{}
         }
     },
     methods: {
+        setMap(rowIndex, productid, orderid){
+            this.refsMap[rowIndex] = productid + '-' + orderid;
+        },
+        focus(colIndex, way, rowIndex) {
+            let self = this;
+            let key = this.refsMap[rowIndex];
+            if(key && self.$refs[key]) {
+                self.$refs[key].startFocus(way, colIndex);
+            }
+        },
         cellStyle() {
             return "padding-left:0px"
         },

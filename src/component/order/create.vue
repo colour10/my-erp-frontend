@@ -92,7 +92,7 @@
                     </el-table-column>
                     <el-table-column prop="number" :label="_label('dinggoushuliang')" align="center" :width="width">
                         <template v-slot="{row, $index}">
-                            <sp-sizecontent-input :ref="$index" :columns="row.product.sizecontents" :uniq="row.product.id" :disabled="!isEditable" @change="onChange" :init="getInit(row.product.id)" :key="row.product.id" @up="focus($index-1)" @down="focus($index+1)" />
+                            <sp-sizecontent-input :ref="$index" :columns="row.product.sizecontents" :uniq="row.product.id" :disabled="!isEditable" @change="onChange" :init="getInit(row.product.id)" :key="row.product.id" @up="focus($event, $index-1)" @down="focus($event, $index+1)" />
                         </template>
                     </el-table-column>
                     <el-table-column prop="total" :label="_label('zongshu')" width="100" align="center">
@@ -235,10 +235,10 @@ export default {
                 self.$refs.payment.showFormToCreate();
             }
         },
-        focus(index) {
+        focus(colIndex, index) {
             let target = this.$refs[index];
             if(target) {
-                target.focus();
+                target.startFocus(colIndex);
             }
         },
         showProduct() {

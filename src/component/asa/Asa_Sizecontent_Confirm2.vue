@@ -9,15 +9,15 @@
         </el-table-column>
 
         <el-table-column :label="_label('zhekoulv')" align="left" width="65">
-            <template v-slot="{row}">
-                <el-input v-if="row.type=='body'" v-model="row.discount" @change="onDiscountChange(row.supplierid, $event)" size="mini" style="width:50px"></el-input>
+            <template v-slot="{row, $index}">
+                <el-input v-if="row.type=='body'" v-model="row.discount" @change="onDiscountChange(row.supplierid, $event)" :ref="'xx-'+row.supplierid" @keyup.native="onKeyUp($event, $index, -1, 'xx', row.supplierid)" :setmap="setMap($index, -1, 'xx', row.supplierid)" size="mini" style="width:50px"></el-input>
             </template>
         </el-table-column>
 
-        <el-table-column :label="column.name" align="center" v-for="column in columns" :key="column.id" width="51" class="counter">
-            <template v-slot="{row}">
+        <el-table-column :label="column.name" align="center" v-for="(column, colindex) in columns" :key="column.id" width="51" class="counter">
+            <template v-slot="{row, $index}">
                 <el-input v-model="row.form[column.id]" style="width:50px" size="mini" :disabled="true" class="linetop" v-if="row.type=='head'"></el-input>
-                <el-input v-model="form[column.id+'-'+row.supplierid]" style="width:50px" size="mini" @keyup.native="onChange(row)" v-if="row.type=='body'" :ref="column.id+'-'+row.supplierid" @focus="onFocus(column.id+'-'+row.supplierid)"></el-input>
+                <el-input v-model="form[column.id+'-'+row.supplierid]" style="width:50px" size="mini" @keyup.native="onKeyUp($event, $index, colindex, column.id, row.supplierid)" :setmap="setMap($index, colindex, column.id, row.supplierid)" v-if="row.type=='body'" :ref="column.id+'-'+row.supplierid" @focus="onFocus(column.id+'-'+row.supplierid)"></el-input>
                 <el-input v-model="row.form[column.id]" style="width:50px" size="mini" :disabled="true" :class="getFootCellClass(row.form[column.id])" v-if="row.type=='foot'"></el-input>
             </template>
         </el-table-column>
@@ -103,6 +103,7 @@ export default {
         })
 
         return {
+            refsMap:{},
             form,
             totals,
             tabledata:[],
@@ -110,6 +111,10 @@ export default {
         }
     },
     methods: {
+        setMap(rowIndex, colIndex, sizecontentid, supplierid){
+            let key = rowIndex +'-'+ colIndex;
+            this.refsMap[key] = sizecontentid +'-'+ supplierid;
+        },
         getDiscount(supplierid){
             let row = this.discounts.find(item=>item.supplierid===supplierid);
             return row ? row.discount : "";
@@ -181,6 +186,58 @@ export default {
             })
 
             return total
+        },
+        focus(rowIndex=1, colIndex=0){
+            let self = this;
+            let key = rowIndex +'-'+ colIndex;
+            //console.log(key)
+            key = self.refsMap[key];
+            if(self.$refs[key]) {
+                if(self.$refs[key][0]) {
+                    self.$refs[key][0].focus();
+                }
+                else {
+                    self.$refs[key].focus();
+                    self.$refs[key].select();
+                }
+                return true
+            }
+            else {
+                return false;
+            }
+        },
+        startFocus(lastFrom, colIndex){
+            let self = this;
+            colIndex = colIndex<self.columns.length ? colIndex : self.columns.length-1;
+            if(lastFrom=='down') {
+                this.focus(1, colIndex);
+            }
+            else {
+                this.focus(this.tabledata.length-2, colIndex);
+            }
+        },
+        onKeyUp(event, rowIndex, colIndex){
+            let self = this
+            if(event.key==='ArrowRight') {
+                self.focus(rowIndex, colIndex+1)
+            }
+            else if(event.key==='ArrowLeft') {
+                self.focus(rowIndex, colIndex-1)
+            }
+            else if(event.key==='ArrowUp') {
+                if(self.focus(rowIndex-1, colIndex)===false) {
+                    self.$emit("up", colIndex)
+                }
+
+            }
+            else if(event.key==='ArrowDown') {
+                if(self.focus(rowIndex+1, colIndex)===false) {
+                    self.$emit("down", colIndex)
+                }
+            }
+            else {
+                self.onChange();
+            }
         },
         onChange() {
             let self = this

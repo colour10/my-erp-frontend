@@ -50,7 +50,7 @@ export default {
         onChange(event, index) {
             let self = this
             let output = []
-            console.log(event, index)
+            //console.log(event, index)
             if(event.key==='ArrowRight') {
                 self.focus(index+1)
             }
@@ -58,10 +58,10 @@ export default {
                 self.focus(index-1)
             }
             else if(event.key==='ArrowUp') {
-                self.$emit("up")
+                self.$emit("up", index)
             }
             else if(event.key==='ArrowDown') {
-                self.$emit("down")
+                self.$emit("down", index)
             }
             else {
                 chain(self.form).forEach((number,sizecontentid)=>{
@@ -77,10 +77,16 @@ export default {
         focus(index=0) {
             let target = this.$refs[index];
             if(target && target[0]) {
-                console.log(target)
+                //console.log(target)
                 target[0].focus();
                 //target[0].select();
             }
+        },
+        startFocus(colIndex){
+            let self = this;
+            //console.log(colIndex)
+            colIndex = colIndex<self.columns.length ? colIndex : self.columns.length-1;
+            self.focus(colIndex);
         },
         onFocus(index) {
             let target = this.$refs[index];
