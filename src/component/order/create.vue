@@ -284,14 +284,10 @@ export default {
 
             self.validate().then(() => {
                 self._submit("/order/saveorder", { params: JSON.stringify(params) }).then(function(res) {
-                    self._log(res)
-                    let data = res.data
-                    if (data.form.id) {
-                        copyTo(data.form, self.form)
-                        self.formid = self.form.id
-                        props.base.orderid = self.form.id
-                    }
-                    self.$emit("change", data.form)
+                    self._log(res);
+                    let data = res.data;
+                    self.$emit("change", data.form);
+                    self._redirect("/order/"+ res.data.form.id);
                 });
             })
 

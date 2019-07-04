@@ -15,7 +15,7 @@ const props = function(){
     return {
         "ageseason": {
             columns: [
-                { name: "sessionmark", label: _label("fabuji"), is_hide: true, type: 'select', source: "sessionmark" }, 
+                { name: "sessionmark", label: _label("fabuji"), is_hide: true, type: 'select', source: "sessionmark" },
                 { name: "name", label: _label("nianfen"), is_focus: true, convert: function(row, rowIndex, column) {
                         return row.sessionmark + row.name
                     }
@@ -110,11 +110,11 @@ const props = function(){
 
         "country": {
             columns: [
-                { name: "name", label: _label("guojiamingcheng"), is_multiple: true, is_focus: true }, 
+                { name: "name", label: _label("guojiamingcheng"), is_multiple: true, is_focus: true },
                 { name: "code", label: _label("guojiadaima3") },
-                { name: "code_short", label: _label("guojiadaima2") }, 
+                { name: "code_short", label: _label("guojiadaima2") },
                 { name: "localcurrency", label: _label("bizhong"), type: 'select', source: "currency" },
-                { name: "area_code", label: _label("guojiquhao") }, 
+                { name: "area_code", label: _label("guojiquhao") },
             ],
             controller: "country",
             key_column: "name",
@@ -129,7 +129,7 @@ const props = function(){
             columns: [
                 { name: "code", label: _label("bianma") },
                 { name: "name", label: _label("mingcheng"), is_multiple: true,  is_focus: true }
-                
+
             ],
             controller: "currency",
             key_column: "name",
@@ -160,7 +160,7 @@ const props = function(){
         "materialnote": {
             columns: [
                 { name: "brandgroupids", label: _label("pinlei"), type: "select", source:"brandgroup", multiple:true },
-                { name: "content", label: _label("mingcheng"), is_focus: true, is_multiple: true}, 
+                { name: "content", label: _label("mingcheng"), is_focus: true, is_multiple: true},
                 { name: "displayindex", label: _label("paixu"), sortMethod:sort_method_digit }
             ],
             controller: "materialnote",
@@ -225,33 +225,6 @@ const props = function(){
                 }
             }
         },
-        "orderpayment":{
-            columns: [
-                { name: "orderno", label: _label("dingdanhao"), type: 'label'},
-                { name: "payment_type", label: _label("fukuanleixing"), type: 'select', source: "paymenttype" },
-                { name: "currency", label: _label("bizhong"), type: 'select', source: "currency" },
-                { name: "amount", label: _label("jine") },
-                { name: "paymentdate", label: _label("fukuanriqi"), type:"date" },
-                { name: "memo", label: _label("beizhu") },
-                { name: "makestaff", label: _label("tijiaoren"),  type: 'select', source: "user", is_edit_hide:true },
-                { name: "status", label: _label("yiruzhang"), type:"switch", is_edit_hide:true }
-            ],
-            controller: "orderpayment",
-            auth: "order-submit",    
-            base:{
-              orderid:''
-            },
-            options:{
-                isedit:(item)=>item.status==0,
-                isdelete:(item)=>item.status==0,
-                isAutoReload:true
-            },
-            on:{
-                "after-update":function(){
-                    clearCache("orderpayment")
-                }
-            }
-        },
         "salesreceive":{
             columns: [
                 { name: "orderno", label: _label("dingdanhao"), type: 'label'},
@@ -264,7 +237,7 @@ const props = function(){
                 { name: "status", label: _label("yiruzhang"), type:"switch", is_edit_hide:true }
             ],
             controller: "salesreceive",
-            auth: "order-submit",    
+            auth: "order-submit",
             base:{
               orderid:''
             },
@@ -286,13 +259,13 @@ const props = function(){
                 { name: "countryid", label: _label("guojiadiqu"), type: 'select', source: "country", class: "width2" },
                 { name: "language", label: _label("morenyuyan"), type: 'select', source: "languages", class: "width2" },
                 { name: "currencyid", label: _label("benguohuobi"), type: 'select', source: "currency", class: "width2" },
-                { name: "address", label: _label("dizhi"), class: "width1", is_hide: true }, 
-                { name: "englishname", label: _label("yingwenmingcheng"), class: "width1", is_hide: true }, 
-                { name: "website", label: _label("wangzhi"), class: "width2", is_hide: true }, 
-                { name: "fax", label: _label("chuanzhen"), class: "width2", is_hide: true }, 
-                { name: "legal", label: _label("faren"), class: "width2", is_hide: true }, 
-                { name: "registeredcapital", label: _label("zhuceziben"), class: "width2", is_hide: true }, 
-                { name: "businesslicense", label: _label("yingyezhizhaohao"), class: "width2", is_hide: true }, 
+                { name: "address", label: _label("dizhi"), class: "width1", is_hide: true },
+                { name: "englishname", label: _label("yingwenmingcheng"), class: "width1", is_hide: true },
+                { name: "website", label: _label("wangzhi"), class: "width2", is_hide: true },
+                { name: "fax", label: _label("chuanzhen"), class: "width2", is_hide: true },
+                { name: "legal", label: _label("faren"), class: "width2", is_hide: true },
+                { name: "registeredcapital", label: _label("zhuceziben"), class: "width2", is_hide: true },
+                { name: "businesslicense", label: _label("yingyezhizhaohao"), class: "width2", is_hide: true },
                 { name: "heading", label: _label("shuihao"), class: "width2", is_hide: true }
             ],
             controller: "company",
@@ -307,8 +280,8 @@ const props = function(){
             columns: [
                 { name: "name", label: _label("mingcheng"), class: "width1"},
                 { name: "telephone", label: _label("dianhua"), class: "width1"},
-                { name: "address", label: _label("dizhi"), class: "width1", is_hide: true }, 
-                { name: "bank", label: _label("kaihuhang"), class: "width1" }, 
+                { name: "address", label: _label("dizhi"), class: "width1", is_hide: true },
+                { name: "bank", label: _label("kaihuhang"), class: "width1" },
                 { name: "bank_account", label: _label("yinhangzhanghao"), class: "width1" }
             ],
             controller: "companyinvoice",
@@ -322,7 +295,7 @@ const props = function(){
                 }
             }
         },
-        
+
         "pricesetting":{
             columns: [
                 { name: "priceid", label: _label("jiagemingcheng"), type:"select", source:"price", class:'width2'},
@@ -336,7 +309,7 @@ const props = function(){
             controller: "pricesetting",
             auth: "pricesetting",
             options:{
-                dialogWidth:"400px", 
+                dialogWidth:"400px",
                 isAutoReload:true
             },
             on:{
@@ -349,7 +322,7 @@ const props = function(){
             columns: [
                 { name: "name", label: _label("mingcheng") },
                 { name: "countryid", label: _label("guojiadiqu"), type:"select", source:"country"},
-                { name: "pricetype", label: _label("jiageleixing"), type:"select", source:"pricetype"},            
+                { name: "pricetype", label: _label("jiageleixing"), type:"select", source:"pricetype"},
                 { name: "currencyid", label: _label("bizhong"), type:"select", source:"currency"},
                 { name: "filter", label: _label("quzheng"), type:"select", source:"pricefilter", class:'width2'},
                 { name: "displayindex", label: _label("paixu"), sortMethod:sort_method_digit }
@@ -357,7 +330,7 @@ const props = function(){
             controller: "price",
             auth: "price",
             options:{
-                dialogWidth:"400px", 
+                dialogWidth:"400px",
                 isAutoReload:true
             },
             on:{
@@ -375,7 +348,7 @@ const props = function(){
             controller: "saletype",
             auth: "saletype",
             options:{
-                dialogWidth:"400px", 
+                dialogWidth:"400px",
                 isAutoReload:true
             },
             key_column: "name",
@@ -408,7 +381,7 @@ const props = function(){
             controller: "brandrate",
             auth: "brand",
             options:{
-                dialogWidth:"400px", 
+                dialogWidth:"400px",
                 isAutoReload:true,
                 autohide:true
             },
@@ -429,7 +402,7 @@ const props = function(){
             controller:"aliases",
             key_column:"name",
             base:{
-                brandid:""    
+                brandid:""
             },
             on:{
                 "after-update":function(){
@@ -446,7 +419,7 @@ const props = function(){
             controller:"series",
             key_column:"name_en",
             base:{
-                brandid:""    
+                brandid:""
             },
             options:{
                 isAutoReload:true
@@ -478,7 +451,7 @@ const props = function(){
             controller: "producttype",
             auth: "producttype",
             options:{
-                dialogWidth:"400px", 
+                dialogWidth:"400px",
                 isAutoReload:true
             },
             key_column: "name",
@@ -497,7 +470,7 @@ const props = function(){
             controller: "winterproofing",
             auth: "winterproofing",
             options:{
-                dialogWidth:"400px", 
+                dialogWidth:"400px",
                 isAutoReload:true
             },
             key_column: "name",
@@ -507,10 +480,30 @@ const props = function(){
                 }
             }
         },
+        "feename":{
+            columns: [
+                { name: "name", label: _label("mingcheng"), is_multiple: true, is_focus:true},
+                { name: "is_amortize", label: _label("shifoutanxiao"), type:"switch"},
+                { name: "amortize_type", label: _label("tanxiaofangshi"), type:"select", source:"amortizetype" },
+                { name: "displayindex", label: _label("paixu"), sortMethod:sort_method_digit }
+            ],
+            controller: "feename",
+            auth: "feename",
+            options:{
+                dialogWidth:"400px",
+                isAutoReload:true
+            },
+            key_column: "name",
+            on:{
+                "after-update":function(){
+                    clearCache("feename")
+                }
+            }
+        },
     }
 }
 
-const getComponent = function(name) {    
+const getComponent = function(name) {
     return {
         name:"sp-" +name,
         data: function() {

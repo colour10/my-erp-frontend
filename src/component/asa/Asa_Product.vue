@@ -17,7 +17,7 @@
                             <el-form-item :label="_label('guojima')">
                                 <el-input v-model="form.wordcode_1" style="width:110px;" :placeholder="_label('kuanshi')" @keyup.native="onKeyInput(form, 'wordcode_1')"></el-input>
                                 <el-input v-model="form.wordcode_2" style="width:110px;" :placeholder="_label('caizhi')" @keyup.native="onKeyInput(form, 'wordcode_2')"></el-input>
-                                <el-input v-model="form.wordcode_3" style="width:110px;" :placeholder="_label('yanse')" @keyup.native="onKeyInput(form, 'wordcode_3')"></el-input>
+                                <el-input v-model="form.wordcode_3" style="width:110px;" :placeholder="_label('yanse')" @keyup.native="onColorcodeChange(form, 'wordcode_3')"></el-input>
                                 <el-input v-model="form.colorname" style="width:110px;" :placeholder="_label('yansemingcheng')"></el-input>
                                 <el-input v-model="form.wordcode_4" style="width:110px;" :placeholder="_label('fuzhuma')"></el-input>
                             </el-form-item>
@@ -398,6 +398,7 @@ export default {
         },
         onColorcodeChange(row, columnName){
             this.onKeyInput(row, columnName);
+            console.log(row, columnName)
             //自动匹配色系和颜色
             if(columnName=='wordcode_3') {
                 this.autoMatchSuggest(row)

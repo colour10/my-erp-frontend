@@ -22,18 +22,6 @@
         </el-form>
         <el-row class="product clearpadding">
             <el-table ref="table" class="" :data="suppliers" stripe border style="width:100%;" :cell-style="cellStyle">
-                <!-- <el-table-column type="expand">
-                    <template v-slot="{row}">
-                        <el-form label-position="left">
-                            <el-form-item :label="_label('pinpai')">
-                                <span>{{ row.suppliercode }}</span>
-                            </el-form-item>
-                            <el-form-item :label="_label('xingbie')">
-                                <span>{{ row.suppliercode }}</span>
-                            </el-form-item>
-                        </el-form>
-                    </template>
-                </el-table-column> -->
                 <el-table-column :label="_label('gonghuoshang')" width="120" align="center" prop="suppliercode"/>
                 <el-table-column :label="_label('bizhong')" width="60" align="center">
                     <template v-slot="{row}">
@@ -42,20 +30,24 @@
                 </el-table-column>
                 <el-table-column :label="_label('zongjine')" width="90" align="center" prop="total_discount_price">
                     <template v-slot="{row}">
-                        {{f(row.total_discount_price)}}
+                        {{f(supplierStat[row.supplierid].total_discount_price)}}
                     </template>
                 </el-table-column>
 
                 <el-table-column :label="_label('shengyuedu')" width="90" align="center" prop="total_discount_price">
                     <template v-slot="{row}">
-                        {{f(row.quantum-row.total_discount_price)}}
+                        {{f(row.quantum-supplierStat[row.supplierid].total_discount_price)}}
                     </template>
                 </el-table-column>
 
-                <el-table-column :label="_label('zongjianshu')" width="75" align="center" prop="total_number"/>
+                <el-table-column :label="_label('zongjianshu')" width="75" align="center">
+                    <template v-slot="{row}">
+                        {{supplierStat[row.supplierid].total_number}}
+                    </template>
+                </el-table-column>
                 <el-table-column :label="_label('lingshouzongjia')" width="90" align="center" prop="total_price">
                     <template v-slot="{row}">
-                        {{f(row.total_price)}}
+                        {{f(supplierStat[row.supplierid].total_price)}}
                     </template>
                 </el-table-column>
                 <el-table-column :label="_label('zhekoulv')" width="75" align="center">
@@ -177,6 +169,11 @@
                             {{row.maketime && row.maketime.length>0 ? row.maketime.substr(0,10) : ""}}
                         </template>
                     </el-table-column>
+                    <el-table-column :label="_label('caozuo')" width="110" align="center">
+                        <template v-slot="{row}">
+                            <el-button type="danger" round @click.stop="onDeleteOrder(row.id)" size="mini">{{_label("shanchu")}}</el-button>
+                        </template>
+                    </el-table-column>
                 </el-table>
                 <el-row :gutter="0">
                     <el-button type="warning" round @click="_showDialog('supplier-dialog')" size="mini">{{_label("piliangfenpei")}}</el-button>
@@ -288,6 +285,7 @@ import { Order, ProductDetail, promiseRunner } from "../model.js"
 import { debounce } from "../function.js"
 import { group } from "../array.js"
 import { statHelper } from "../helper.js"
+import { removeFilter } from "../array.js"
 
 const result = {
     name: 'sp-orderbrandcreate',
@@ -323,6 +321,21 @@ const result = {
         }
     },
     methods: {
+        onDeleteOrder(orderid){
+            let self = this;
+            let row = self.orderbrandDetailList.find(item=>item.orderid==orderid);
+            if(row) {
+                alert(self._label("tip-bunengshanchu"));
+                return
+            }
+
+            if(confirm(self._label('quedingshanchu'))) {
+                removeFilter(self.orderlist, item=>item.orderid===orderid);
+                removeFilter(self.tabledata, item=>item.orderid===orderid);
+                removeFilter(self.orders, item=>item.id===orderid);
+                removeFilter(self.listdata, item=>item.row.orderid===orderid);
+            }
+        },
         setMap(rowIndex, productid, orderid){
             this.refsMap[rowIndex] = productid + '-' + orderid;
         },
@@ -449,8 +462,6 @@ const result = {
                     });
                 }
             })
-
-            _private(self).stat();
         },
         onSelectionChange(vals) {
             let self = this
@@ -575,6 +586,38 @@ const result = {
             })
 
             return helper.result()
+        },
+        supplierStat() {
+            let self = this;
+            //计算几个统计数据
+            let brands = group();
+
+            let helper = statHelper({
+                total_discount_price: 0,
+                total_number: 0,
+                total_price: 0,
+                brandid:""
+            })
+
+            self.listdata.forEach(item => {
+                let target = helper.get(item.supplierid);
+
+                if (item.number > 0) {
+                    target.total_number += item.number * 1
+                    target.total_price += item.number * self.stat[item.row.productid].wordprice
+                    target.total_discount_price += item.priceTotal;
+
+                    brands.push(item.supplierid, item.row.product.brandid)
+                }
+            })
+
+            let result = brands.getResult()
+            self.suppliers.forEach(supplier => {
+                let target = helper.get(supplier.supplierid);
+                target.brandid = result[supplier.supplierid];
+            })
+
+            return helper.result();
         }
     },
     watch: {
@@ -618,7 +661,6 @@ const _private = function(self) {
                     await _this.importDetails(data.details)
                     _this.importSupplier(data.suppliers, data.orderbrands)
                     _this.importList(data.list)
-                    _this.stat()
                     self.$refs.table.toggleAllSelection()
                 })
             }
@@ -771,38 +813,6 @@ const _private = function(self) {
                 if (row) {
                     row.form[detail.sizecontentid] += detail.number * 1
                 }
-            })
-
-        },
-        stat() {
-            //计算几个统计数据
-            let context = {}
-            let brands = group();
-
-            let helper = statHelper({
-                total_discount_price: 0,
-                total_number: 0,
-                total_price: 0,
-                brandid:""
-            })
-
-            self.listdata.forEach(item => {
-                let target = helper.get(item.supplierid);
-
-                if (item.number > 0) {
-                    target.total_number += item.number * 1
-                    target.total_price += item.number * self.stat[item.row.productid].wordprice
-                    target.total_discount_price += item.priceTotal;
-
-                    brands.push(item.supplierid, item.row.product.brandid)
-                }
-            })
-
-            let result = brands.getResult()
-            self.suppliers.forEach(supplier => {
-                let target = helper.get(supplier.supplierid);
-                target.brandid = result[supplier.supplierid]
-                extend(supplier, target)
             })
         }
     }

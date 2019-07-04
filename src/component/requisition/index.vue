@@ -1,7 +1,8 @@
 <template>
     <div>
         <el-row>
-            <el-col :span="2">
+            <el-col :span="6">
+                <as-button type="primary" @click="onSearch">{{_label('chaxun')}}</as-button>
                 <auth auth="requisition">
                 <as-button type="primary" @click="showFormToCreate()">{{_label('xinjian')}}</as-button>
             </auth>
@@ -67,6 +68,9 @@ export default {
         isEditable(row) {
             var status = row.status;
             return status == '1' || status == '' || !status
+        },
+        onSearch(){
+            this.$refs.tablelist.search();
         }
     },
     computed: {},

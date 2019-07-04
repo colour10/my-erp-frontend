@@ -2,9 +2,12 @@
     <div>
         <el-form class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini">
             <el-row :gutter="0">
-                <au-button auth="confirmorder-submit" type="danger" @click="saveOrder(1)" v-if="form.status=='1'">{{_label("ruku")}}</au-button>
+                <au-button auth="confirmorder-submit" type="danger" @click="confirmShipping()" v-if="form.status=='1'">{{_label("queren")}}</au-button>
                 <as-button type="primary" @click="pro=true" v-if="form.status=='1'">{{_label("xuanzeshangpin")}}</as-button>
-                <as-button type="danger" @click="cancel()" v-if="form.status=='2'">{{_label("quxiaoruku")}}</as-button>
+                <as-button type="danger" @click="cancelConfirm()" v-if="form.status=='2'">{{_label("quxiaoqueren")}}</as-button>
+                <as-button type="primary" @click="warehousing()" v-if="form.status=='2'">{{_label("ruku")}}</as-button>
+                <as-button type="primary" @click="cancelWarehousing()" v-if="form.status=='3'">{{_label("quxiaoruku")}}</as-button>
+                <as-button type="primary" @click="showPayment()" v-if="form.status=='2' ||form.status=='3'">{{_label("feiyong")}}</as-button>
             </el-row>
             <el-row :gutter="0">
                 <el-col :span="8" style="width:600px">
@@ -163,7 +166,7 @@
                     </el-table-column>
                     <el-table-column prop="number" :label="_label('dinggoushuliang')" align="center" :width="width">
                         <template v-slot="{row, $index}">
-                            <sp-sizecontent-confirm4 :columns="row.product.sizecontents" :head="row.form" :uniq="row.key" :data="getInit(row.key)" :key="row.key" @change="onNumberChange"></sp-sizecontent-confirm4>
+                            <sp-sizecontent-confirm4 :columns="row.product.sizecontents" :head="row.form" :uniq="row.key" :data="getInit(row.key)" :key="row.key" @change="onNumberChange" :disabled="isDisabled"></sp-sizecontent-confirm4>
                         </template>
                     </el-table-column>
                     <el-table-column prop="label" :label="_label('zhekoulv')" width="70" align="center" class="counter">
@@ -173,7 +176,7 @@
                     </el-table-column>
                     <el-table-column :label="_label('danjia')" width="100" align="center" prop="price">
                         <template v-slot="{row}">
-                            <el-input v-model="row.price" size="mini" v-if="!row.order" />
+                            <el-input v-model="row.price" size="mini" v-if="!row.order"  :disabled="isDisabled"/>
                             <span v-if="row.order">{{row.price}}</span>
                         </template>
                     </el-table-column>
@@ -199,6 +202,14 @@
         <sp-dialog ref="search">
             <sp-product-search-form @search="search" @close="_hideDialog('search')"></sp-product-search-form>
         </sp-dialog>
+
+        <sp-dialog ref="orderpayment" :width="900">
+            <simple-admin-page v-bind="orderpayment">
+                <template v-slot="scope">
+
+                </template>
+            </simple-admin-page>
+        </sp-dialog>
     </div>
 </template>
 
@@ -217,6 +228,7 @@ const result = {
     mixins: [orderMixin],
     data() {
         let self = this;
+        let _label = self._label;
 
         return {
             form: {
@@ -270,10 +282,36 @@ const result = {
             listdata: [],
             uniqkey: 1,
             visible: false,
-            pro: false
+            pro: false,
+            orderpayment:{
+                columns: [
+                    { name: "feenameid", label: _label("feiyongmingcheng"), type: 'select', source: "feename", width:110 },
+                    { name: "currencyid", label: _label("bizhong"), type: 'select', source: "currency", width:90 },
+                    { name: "amount", label: _label("jine"), width:110 },
+                    { name: "memo", label: _label("beizhu"), width:110 },
+                    { name: "makestaff", label: _label("tijiaoren"), type: 'select', source: "user", is_edit_hide:true, width:110 }
+                ],
+                controller: "shippingfee",
+                auth: "shippingfee",
+                base:{
+                    shippingid:''
+                },
+                options:{
+                    isedit:(item)=>self.form.status=='2',
+                    isdelete:(item)=>self.form.status=='2',
+                    isAdd:false,
+                    isSearch:false,
+                    isAutoReload:true
+                }
+            }
         }
     },
     methods: {
+        showPayment(){
+            let self = this;
+            self.orderpayment.base.shippingid = self.form.id;
+            self._showDialog("orderpayment");
+        },
         showProduct() {
 
         },
@@ -309,7 +347,7 @@ const result = {
             self.pro = true
             self.$refs.products.search(form)
         },
-        saveOrder(status) {
+        confirmShipping(status) {
             //保存订单
             let self = this
 
@@ -346,11 +384,22 @@ const result = {
             params.list = list;
 
             self._log(JSON.stringify(params))
-            self._submit("/shipping/warehousing", { params: JSON.stringify(params) }).then(function(res) {
+            self._submit("/shipping/confirm", { params: JSON.stringify(params) }).then(function(res) {
                 _private(self).loadDetail(self.$route.params.id)
             });
         },
-        cancel() {
+        warehousing(){
+            let self = this;
+
+            if (!confirm(self._label("quxiaorukutishi"))) {
+                return
+            }
+
+            self._submit("/shipping/warehousing", { id: self.form.id }).then(function(res) {
+                _private(self).loadDetail(self.$route.params.id)
+            });
+        },
+        cancelWarehousing() {
             let self = this;
 
             if (!confirm(self._label("quxiaorukutishi"))) {
@@ -358,6 +407,17 @@ const result = {
             }
 
             self._submit("/shipping/cancel", { id: self.form.id }).then(function(res) {
+                _private(self).loadDetail(self.$route.params.id)
+            });
+        },
+        cancelConfirm() {
+            let self = this;
+
+            if (!confirm(self._label("quxiaorukutishi"))) {
+                return
+            }
+
+            self._submit("/shipping/cancelconfirm", { id: self.form.id }).then(function(res) {
                 _private(self).loadDetail(self.$route.params.id)
             });
         },
@@ -470,6 +530,9 @@ const result = {
             })
 
             return helper.result()
+        },
+        isDisabled(){
+            return  this.form.status!='1'
         }
     },
     watch: {

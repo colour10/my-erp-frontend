@@ -4,7 +4,7 @@
         <el-table-column :label="column.name" align="center" v-for="column in columns" :key="column.id" width="50" class="counter">
             <template v-slot="{row}">
                 <el-input v-model="row.form[column.id]" style="width:50px" size="mini" :disabled="true" class="linetop" v-if="row.type=='head'"></el-input>
-                <el-input v-model="form[column.id]" style="width:50px" size="mini" @keyup.native="onChange(row)" v-if="row.type=='body'" :ref="column.id" @focus="onFocus(column.id)"></el-input>
+                <el-input v-model="form[column.id]" style="width:50px" size="mini" @keyup.native="onChange(row)" v-if="row.type=='body'" :ref="column.id" @focus="onFocus(column.id)" :disabled="disabled"></el-input>
             </template>
         </el-table-column>
         <el-table-column :label="_label('heji')" align="right" width="53">
@@ -55,7 +55,7 @@ export default {
 
         //处理默认填入的下方需要确认或者发货的商品数量
         let form = {}
-        
+
         let row = {}
         self.columns.forEach(column=>{
             form[column.id] = ""
@@ -112,7 +112,7 @@ export default {
             let list = []
             _private(this).forEach(item=>{
                 item.key = self.uniq
-                list.push(item)              
+                list.push(item)
             })
 
             self.$emit("change", list)

@@ -3,14 +3,14 @@
         <el-row>
             <el-col :span="24">
                 <slot name="form">
-                    <el-form class="searchform" ref="search-form" :model="form" label-width="80px" size="mini" :inline="true" @submit.native.prevent v-if="hideForm!==true">
+                    <el-form class="searchform" ref="search-form" :model="form" label-width="80px" size="mini" :inline="true" @submit.native.prevent v-if="opt.isSearch!==false">
                         <el-form-item class="searchitem">
                             <el-input v-model="searchform.keyword" width="250" style="width:250px;" @keyup.enter.native="onSearch" v-if="isSubmit"></el-input>
                             <as-button type="primary" @click="onSearch" size="mini" v-if="isSubmit" icon="el-icon-search">{{_label("chaxun")}}</as-button>
-                            <au-button :auth="authname" type="primary" @click="showFormToCreate()" v-if="hideCreate!==true">{{_label("xinjian")}}</au-button>
+                            <au-button :auth="authname" type="primary" @click="showFormToCreate()" v-if="opt.isAdd!==false">{{_label("xinjian")}}</au-button>
                         </el-form-item>
                     </el-form>
-                    <au-button :auth="authname" type="primary" @click="showFormToCreate()" v-if="hideCreate!==true && hideForm===true">{{_label("xinjian")}}</au-button>
+                    <au-button :auth="authname" type="primary" @click="showFormToCreate()" v-if="opt.isAdd!==false && opt.isSearch===false">{{_label("xinjian")}}</au-button>
                 </slot>
             </el-col>
         </el-row>
@@ -52,7 +52,7 @@ import globals, { _label } from './globals.js'
 
 export default {
     name: 'simple-admin-page',
-    props: ['columns', 'buttons', "options", "controller", "base", "auth", "hideCreate", 'hideForm', 'actions', "formTitle", "isDisabled", "isExpand"],
+    props: ['columns', 'buttons', "options", "controller", "base", "auth", "hideCreate", 'actions', "formTitle", "isExpand"],
     components: {
 
     },
@@ -117,7 +117,7 @@ export default {
 
             //self._log("是否正在提交",self.isSubmiting)
             if(self.isSubmiting==true) {
-                return 
+                return
             }
             self.isSubmiting = true;
 
@@ -267,7 +267,7 @@ export default {
             deep: true
         }
     },
-    computed: {        
+    computed: {
         isSubmit() {
             return this.opt.issubmit || true
         },

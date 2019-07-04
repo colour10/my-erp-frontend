@@ -136,6 +136,7 @@ const config = function(){
             "orderbrand":getLabel("waibudingdan"),
             "language":getLabel("duoguoyuyanguanli"),
             "winterproofing":getLabel("fanghanzhishu"),
+            "feename":getLabel("feiyongguanli"),
             "develop":"生成器"
         }
     }

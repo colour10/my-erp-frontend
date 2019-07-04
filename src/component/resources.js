@@ -5,19 +5,19 @@ function getOption(name) {
     let options = {};
 
     options["test.hashtable"] = {
-        hashtable:{"SS":"春夏","FW":"秋冬","XX":"经典"}       
+        hashtable:{"SS":"春夏","FW":"秋冬","XX":"经典"}
     }
 
     options["test.hashlist"] = {
         hashlist:{"SS":{tname:"春夏",tvalue:"SS"}, "FW":{tname:"秋冬",tvalue:"FW"}, "XX":{tname:"经典",tvalue:"XX"}},
         oplabel:"tname",
-        opvalue:"tvalue" 
+        opvalue:"tvalue"
     }
 
     options["test.datalist"] = {
         datalist:[{tname:"春夏",tvalue:"SS"}, {tname:"秋冬",tvalue:"FW"}, {tname:"经典",tvalue:"XX"}],
         oplabel:"tname",
-        opvalue:"tvalue" 
+        opvalue:"tvalue"
     }
 
     //品牌
@@ -110,6 +110,7 @@ function getOption(name) {
     options["userwarehouse"] = {url:'/warehouse/userlist',oplabel:'name', opvalue:'id'}
     options["supplierlinkman"] = {url:'/l/supplierlinkman',oplabel:'name', opvalue:'id', parent:"supplierid"}
     options["winterproofing"] = {url:'/l/winterproofing',oplabel:'name', opvalue:'id'}
+    options["feename"] = {url:'/l/feename',oplabel:'name', opvalue:'id'}
 
     options["gender"] = {hashtable:list.gender}
     options["gender2"] = {hashtable:list.gender2}
@@ -176,10 +177,13 @@ function getOption(name) {
     //发货单状态
     options["shippingstatus"] =  {hashtable:list.shippingstatus}
 
+    //费用摊销方式
+    options["amortizetype"] =  {hashtable:list.amortizetype}
+
     //客户列表
     options["supplier_2"] = {callback:function(DataSource){
             return DataSource.getDataSource("supplier", _label('lang')).filter(item=>{
-                return StringFunc.include(item.row.suppliertype, '2')
+                return StringFunc.include(item.row.suppliertype, '2') || StringFunc.include(item.row.suppliertype, '5')
             })
         },
         dependencies:['supplier']

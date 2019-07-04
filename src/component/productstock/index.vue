@@ -30,6 +30,18 @@
                 </template>
             </el-table-column>
 
+            <el-table-column :label="_label('zaitushuliang')" width="110" align="center">
+                <template v-slot="{row}">
+                    {{row.shipping_number}}
+                </template>
+            </el-table-column>
+
+            <el-table-column :label="_label('suodingshuliang')" width="110" align="center">
+                <template v-slot="{row}">
+                    {{row.reserve_number}}
+                </template>
+            </el-table-column>
+
         </sp-table>
     </div>
 </template>

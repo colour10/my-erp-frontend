@@ -154,6 +154,7 @@ const routes = [
 
             {path:'/language', name:"language", component:getComponent("language")},
             {path:'/winterproofing', name:"winterproofing", component:getComponent("winterproofing")},
+            {path:'/feename', name:"feename", component:getComponent("feename")},
         ]
     },
     {path: '/login/:action', name:"login", component: Login},
@@ -166,12 +167,8 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-    //console.log(to, from, next)
-    //console.log(store)
-
     if(to.name=='login') {
         store.commit("clearTags", {})
-        //console.log("=====clear")
     }
     else {
         store.commit("addTag", {

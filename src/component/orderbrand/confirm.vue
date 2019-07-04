@@ -468,3 +468,7 @@ const _private = function(self){
     return _this
 }
 </script>
+
+<style scoped>
+    body {color:red;background:blue;}
+</style>

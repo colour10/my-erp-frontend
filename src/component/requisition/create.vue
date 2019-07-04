@@ -71,6 +71,8 @@
 </template>
 
 <script>
+import { extend } from "../object.js"
+
 export default {
     name: 'sp-requisitioncreate',
     data() {
@@ -120,7 +122,13 @@ export default {
             })
             //self._log(JSON.stringify(params))
             self._submit("/requisition/save", { params: JSON.stringify(params) }).then(function(res) {
-                self.$emit("change")
+                extend(self.form, {
+                    allin: 0,
+                    out_id: "",
+                    in_id: "",
+                    memo: ""
+                })
+                self.tabledata = [];
             });
         }
     },

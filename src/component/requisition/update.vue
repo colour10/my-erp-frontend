@@ -86,7 +86,7 @@ import { Productstock } from "../model.js"
 export default {
     name: 'asa-requisition-detail-dialog',
     data() {
-        var self = this;
+        let self = this;
 
         return {
             form: {
@@ -109,14 +109,14 @@ export default {
     methods: {
         doAction(action) {
             //保存订单
-            var self = this
+            let self = this
 
             if (!confirm(self._label('order_submit_confirm'))) {
                 return
             }
 
-            var params = { id: self.form.id }
-            var array = {}
+            let params = { id: self.form.id }
+            let array = {}
             let total = 0,
                 total_number = 0
             self.tabledata.forEach(item => {
@@ -146,7 +146,7 @@ export default {
         },
         init(result) {
             let self = this
-            self._log("加载订单信息", result)
+            //self._log("加载订单信息", result)
 
             copyTo(result.data.form, self.form)
 
@@ -162,12 +162,9 @@ export default {
         }
     },
     mounted: function() {
-        let self = this
-        
+        let self = this;
 
         let route = self.$route;
-        self._log(route.params)
-
         if (route.params.id > 0) {
             self._setTitle(self._label("diaobodan")+":"+ route.params.id )
             self._fetch("/requisition/load", { id: route.params.id }).then(function(res) {
