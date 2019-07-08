@@ -1,5 +1,4 @@
 <template>
-    
     <el-form class="order-form" :model="form" label-width="70px" :inline="false" style="width:100%;" size="mini" @submit.native.prevent>
         <el-row :gutter="0">
             <el-col :span="8" style="width:270px">

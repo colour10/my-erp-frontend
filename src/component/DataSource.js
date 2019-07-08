@@ -287,6 +287,8 @@ DataSource.prototype.getRowLabels = function(keyValues, callback) {
         return promise;
     }
 }
+DataSource.prototype.getLabel = DataSource.prototype.getRowLabels;
+
 DataSource.prototype.getList = function() {
     var self = this;
     return new Promise((resolve)=>{

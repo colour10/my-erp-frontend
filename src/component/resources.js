@@ -103,6 +103,9 @@ function getOption(name) {
     //仓库
     options["warehouse"] = {url:'/l/warehouse',oplabel:'name', opvalue:'id'}
 
+    //用户价格
+    options["userprice"] = {url:'/l/userprice',oplabel:'name', opvalue:'priceid'}
+
     //供货商 发货单位
     options["supplier"] = {url:'/l/supplier',oplabel:'suppliercode', opvalue:'id'}
     options["saleport"] = {url:'/l/saleport',oplabel:'name', opvalue:'id'}

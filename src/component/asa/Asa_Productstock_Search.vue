@@ -1,9 +1,9 @@
 <template>
     <div>
         <el-dialog :visible.sync="visible" :center="true" :fullscreen="false" :modal="true" width="1024px">
-            <el-form class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini">
+            <el-form class="order-form" :model="form" label-width="75px" :inline="true" style="width:100%;" size="mini">
                 <el-row :gutter="0">
-                    <el-col :span="6">
+                    <el-col :span="6" style="width:300px">
                         <el-form-item :label="_label('cangku')">
                             <simple-select v-model="form.warehouseid" source="warehouse"></simple-select>
                         </el-form-item>
@@ -33,8 +33,8 @@
                     </template>
                 </el-table-column>
                 <el-table-column prop="number" :label="_label('kucunshuliang')" width="200" align="center">
-                    <template v-slot="scope">
-                        {{scope.row.number}}
+                    <template v-slot="{row}">
+                        {{row.getAvailableNumber()}}
                     </template>
                 </el-table-column>
                 <el-table-column :label="_label('caozuo')" width="150" align="center">

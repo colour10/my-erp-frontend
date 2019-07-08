@@ -148,7 +148,8 @@ export default {
             if(self.multiple) {
                 self.sort()
             }
-            self.$emit("change", self.getValue())
+            //self.$emit("change", self.getValue())
+            self.emitChange();
         },
         sort() {
             let self = this
@@ -200,7 +201,7 @@ export default {
             }
         },
         clear() {
-            self.$emit("change", "")
+            self.$emit("change", "", "")
             self.data = []
             self.filterData = []
             self.keyindexes = {}
@@ -266,7 +267,7 @@ export default {
                     }
                     self.start = -1
                     self.sort()
-                    self.$emit("change", self.getValue())
+                    self.emitChange();
                     self.$refs['select'].blur();
                 }
                 else {
@@ -302,6 +303,13 @@ export default {
             }
 
             return ""
+        },
+        async emitChange() {
+            let self = this;
+
+            let value = self.getValue();
+            let label = await self.getDataSource().getLabel(value);
+            self.$emit("change", value, label)
         }
     },
     watch: {

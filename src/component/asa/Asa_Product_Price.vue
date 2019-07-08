@@ -14,7 +14,7 @@
 
             <el-table-column :label="_label('huilv')" align="center" width="80" prop="rate" :sortable="true">
             </el-table-column>
-            
+
             <el-table-column :label="_label('dingjiaxishu')" align="center" width="120" prop="discount" :sortable="true">
             </el-table-column>
 
@@ -51,6 +51,7 @@ import globals, { _label } from '../globals.js';
 import DataSource from '../DataSource.js';
 import simpleform from '../Simple_Form.vue';
 import { extract, extend } from '../object.js';
+import API from "../api.js"
 
 export default {
     name: 'asa-product-price',
@@ -103,11 +104,11 @@ export default {
             }
 
             //加载数据
-            let res = await self._fetch("/product/getprices", { id: self.productid })
-            self._log(res)
+            let result = await API.getPriceByProductIds("", self.productid);
+            self._log(result)
 
             let source = DataSource.getDataSource("currency")
-            self.data = res.data.map(item => {
+            self.data = result.map(item => {
                 item.currency = ""
                 source.getRow(item.currencyid, row => item.currency = row.row.code)
                 return item

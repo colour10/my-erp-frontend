@@ -65,7 +65,9 @@
                 <el-tab-pane :label="_label('cangku')" name="warehouse">
                     <simple-admin-page v-bind="props2" ref="page2"></simple-admin-page>
                 </el-tab-pane>
-                <el-tab-pane :label="_label('gerenshezhi')" name="setting">个人设置</el-tab-pane>
+                <el-tab-pane :label="_label('jiage')" name="userprice">
+                    <simple-admin-page v-bind="userprice" ref="userprice"></simple-admin-page>
+                </el-tab-pane>
             </el-tabs>
             <span slot="footer" class="dialog-footer">
                 <auth auth="user">
@@ -120,23 +122,10 @@ export default {
             warehouse_list: [], //仓库信息
             warehouse_loaded: false,
             props:{
-                columns: [{
-                    name: "login_name",
-                    label: _label("dengluming"),
-                    is_create: true,
-                    is_update: true,
-                    is_show: true,
-                    is_focus: true,
-                    width: 200
-                }, {
-                    name: "real_name",
-                    label: _label("xingming"),
-                    is_create: true,
-                    is_update: true,
-                    is_show: true,
-                    width: 200,
-                    is_focus: true
-                }],
+                columns: [
+                    { name: "login_name", label: _label("dengluming"), is_create: true, is_update: true, is_show: true, is_focus: true, width: 200 },
+                    { name: "real_name", label: _label("xingming"), is_create: true, is_update: true, is_show: true, width: 200, is_focus: true }
+                ],
                 controller: "user"
             },
             props2:{
@@ -147,6 +136,18 @@ export default {
                 controller: "warehouseuser",
                 base: {
                     userid: ""
+                }
+            },
+            userprice:{
+                columns: [
+                    { name: "priceid", label: _label("jiage"), type: 'select', source: "price" }
+                ],
+                controller: "userprice",
+                base: {
+                    userid: ""
+                },
+                options:{
+                    isSearch:false
                 }
             }
         }
@@ -168,7 +169,7 @@ export default {
                         globals.copyTo(self.form, self.row)
                     })
                 }
-            })            
+            })
         },
         onTabClick(tab) {
             let self = this
@@ -196,6 +197,7 @@ export default {
             globals.copyTo(row, this.form)
             self.saleport = row.saleportids ? row.saleportids.split(",") : []
             self.props2.base.userid = row.id;
+            self.userprice.base.userid = row.id;
 
             self.showDialog();
         },

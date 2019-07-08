@@ -20,7 +20,7 @@ function _fetch(path, form) {
             resolve(result)
         })
     })
-    
+
 }
 
 const context = {}
@@ -72,7 +72,14 @@ const API = {
         let result = await _fetch("/productlastmodify/load", {brandid})
 
         return result.data;
-    }
+    },
+
+    //加载商品的价格信息
+    async getPriceByProductIds(priceids, productids) {
+        let result = await _fetch("/product/getprices", {priceids, productids})
+
+        return result.data;
+    },
 }
 
 export default API

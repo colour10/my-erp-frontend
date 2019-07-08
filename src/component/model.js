@@ -28,7 +28,7 @@ const promiseAll = function(data) {
                     resolve(promise)
                 }))
             }
-            
+
             this.names.push(name)
         },
         all:async function(){
@@ -76,7 +76,7 @@ const createModel = function(tablename) {
             if(!isCache) {
                 clear(tablename)
             }
-            
+
             return new Promise((resolve, reject)=>{
                 if(typeof(data)=='object') {
                     if(depth<=0) {
@@ -105,7 +105,7 @@ const createModel = function(tablename) {
         },
         init:function(depth, row, callback) {
             let self = this
-            callback(row)        
+            callback(row)
         }
     }
 }
@@ -116,7 +116,7 @@ const Product = Object.assign(createModel("product"),{
     init:function(depth, row, callback) {
         let self = this
         let arr = []
-        
+
         const sizecontent = DataSource.getDataSource('sizecontent', getLabel('lang'));
         arr.push(new Promise(function(resolve){
             sizecontent.getRows(row.sizecontentids, resolve)
@@ -141,7 +141,7 @@ const SaleType = Object.assign(createModel("saletype"),{
         }
         else {
             callback(row)
-        }        
+        }
     }
 })
 
@@ -155,19 +155,19 @@ const ProductDetail = Object.assign(createModel("product"),{
         ModelBus.on("product-change", function(productid){
             console.log("product-change", productid)
             if(productid==row.id) {
-                
+
                 self.fetch(depth+1, productid, function(newinfo){
                     console.log("product-change", "重新加载", newinfo)
                     extend(row, newinfo)
                 })
-            }            
+            }
         })
 
         let runner = promiseAll(row)
         //runner.push(Product.load({data:row.productid}), 'product')
         //runner.push(Warehouse.load({data:row.warehouseid}), 'warehouse')
         //runner.push(Goods.load({data:row.goodsid}), 'goods')
-        
+
         //尺码排序
         let promise = new Promise(resolve=>{
             getDataSource("sizecontent").getRows(row.sizecontentids).then(result=>{
@@ -200,7 +200,7 @@ const ProductDetail = Object.assign(createModel("product"),{
         runner.push(new Promise(function(resolve){
             if(row.product_group=='') {
                 resolve([])
-                return 
+                return
             }
 
             let product_group = row.product_group || ""
@@ -262,9 +262,9 @@ const ProductDetail = Object.assign(createModel("product"),{
                 let exchange = await API.getExchange(row.wordpricecurrency, row.nationalpricecurrency)
                 if(exchange>0) {
                     return  math.round(row.nationalprice/exchange / row.wordprice, 2);
-                }      
+                }
             }
-            return ""            
+            return ""
         }, "getLSB");
 
         runner.all().then(callback)
@@ -274,15 +274,20 @@ const ProductDetail = Object.assign(createModel("product"),{
 const Goods = createModel("goods")
 const Productstock = Object.assign(createModel("productstock"),{
     init:function(depth, row, callback) {
-        let self = this
+        let self = this;
 
-        let runner = promiseAll(row)
-        runner.push(ProductDetail.load({data:row.productid, depth:depth}), 'product')
-        runner.push(Warehouse.load({data:row.warehouseid, depth:depth-1}), 'warehouse')
-        runner.push(Goods.load({data:row.goodsid, depth:depth-1}), 'goods')
-        runner.push(getDataSource("sizecontent").getRowLabel(row.sizecontentid), 'sizecontent_label')
-        runner.push(getDataSource("orderproperty").getRowLabel(row.property), 'property_label')
-        runner.push(getDataSource("defectivelevel").getRowLabel(row.defective_level), 'defectivelevel_label')
+        let runner = promiseAll(row);
+        runner.push(ProductDetail.load({data:row.productid, depth:depth}), 'product');
+        runner.push(Warehouse.load({data:row.warehouseid, depth:depth-1}), 'warehouse');
+        runner.push(Goods.load({data:row.goodsid, depth:depth-1}), 'goods');
+        runner.push(getDataSource("sizecontent").getRowLabel(row.sizecontentid), 'sizecontent_label');
+        runner.push(getDataSource("orderproperty").getRowLabel(row.property), 'property_label');
+        runner.push(getDataSource("defectivelevel").getRowLabel(row.defective_level), 'defectivelevel_label');
+
+        //有效库存
+        runner.push(function(){
+            return row.number-Math.max(row.shipping_number, row.reserve_number);
+        }, "getAvailableNumber");
 
         runner.all().then(callback)
     }
@@ -303,7 +308,7 @@ const ConfirmorderDetails = Object.assign(createModel("confirmorderdetails"),{
     init:function(depth, row, callback) {
         let self = this
         let arr = []
-        arr.push(new Promise(function(resolve){            
+        arr.push(new Promise(function(resolve){
             OrderDetails.get(row.orderdetailsid, resolve, depth-1)
         }))
 
@@ -394,7 +399,7 @@ console.log(row)
         if (row.in_id) {
             runner.push(Warehouse.load({data:row.in_id}), 'inWarehouse')
         }
-        
+
         runner.push(getDataSource("requisitionstatus").getRowLabel(row.status), 'status_label')
 
         runner.all().then(callback)

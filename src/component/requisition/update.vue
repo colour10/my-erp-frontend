@@ -2,9 +2,9 @@
     <div>
         <el-form class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini">
             <el-row type="flex" justify="start">
-                <as-button :type="form.status==2?'primary':'info'" @click="saveOrder(1)">{{_label("zuofei")}}</as-button>
-                <as-button :type="form.status==2?'primary':'info'" @click="confirmout()">{{_label("chukuqueren")}}</as-button>
-                <as-button :type="form.status==3?'primary':'info'" @click="confirmin()">{{_label("rukuqueren")}}</as-button>
+                <as-button :type="form.status==2?'primary':'info'" @click="cancel">{{_label("zuofei")}}</as-button>
+                <as-button :type="form.status==2?'primary':'info'" @click="confirmout">{{_label("chukuqueren")}}</as-button>
+                <as-button :type="form.status==3?'primary':'info'" @click="confirmin">{{_label("rukuqueren")}}</as-button>
             </el-row>
             <el-row :gutter="0">
                 <el-col :span="6" style="width:300px">
@@ -143,6 +143,11 @@ export default {
         },
         confirmin() {
             this.doAction('confirmin')
+        },
+        cancel(){
+            let self = this;
+            self.tabledata.forEach(item=>item.select_number=0);
+            self.doAction("confirmout");
         },
         init(result) {
             let self = this
