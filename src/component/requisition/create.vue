@@ -59,7 +59,7 @@
                     </el-table-column>
                     <el-table-column :label="_label('caozuo')" width="150" align="center">
                         <template v-slot="scope">
-                            <as-button size="mini" type="danger" @click="deleteRow(scope.$index, scope.row)">{{_label('shanchu')}}</as-button>
+                            <as-button size="mini" type="danger" @click="deleteRow(scope)">{{_label('shanchu')}}</as-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -130,6 +130,10 @@ export default {
                 })
                 self.tabledata = [];
             });
+        },
+        deleteRow({$index}) {
+            //console.log(scope)
+            this.tabledata.splice($index,1);
         }
     },
     mounted:function(){

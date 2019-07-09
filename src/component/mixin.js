@@ -97,13 +97,27 @@ export default {
                 })
             })
         },
-        _submit(path, form, options) {
+        async _submit(path, form, options) {
             const self = this
             options = options || {}
             options.showMessage = true
             options.isReject = true
 
-            return self._fetch(path, form, options)
+            const loading = self.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)'
+            });
+
+            return new Promise(resolve=>{
+                self._fetch(path, form, options).then(result=>{
+                    loading.close();
+                    resolve(result)
+                }).catch(()=>{
+                    loading.close();
+                })
+            })
         },
         _confirm(message, callback) {
             var self = this;

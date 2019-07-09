@@ -69,8 +69,8 @@
                         </template>
                     </el-table-column>
                     <el-table-column :label="_label('rukushuliang')" width="250" align="center" v-if="form.status==3" key="4">
-                        <template v-slot="scope">
-                            <el-input-number v-model="scope.row.select_number" :min="0" :max="scope.row.out_number*1"></el-input-number>
+                        <template v-slot="{row}">
+                            <el-input-number v-model="row.select_number" :min="0" :max="row.out_number*1" :disabled="row.out_number==0"></el-input-number>
                         </template>
                     </el-table-column>
                 </el-table>

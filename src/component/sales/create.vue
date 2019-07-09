@@ -2,12 +2,19 @@
     <div>
         <el-form class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini">
             <el-row :gutter="0">
-                <au-button auth="sales" :type="canYushou?'primary':'info'" @click="yushou()">{{_label("yushou")}}</au-button>
-                <au-button auth="sales" :type="canTijiao?'primary':'info'" @click="tijiao()">{{_label("tijiao")}}</au-button>
-                <au-button auth="sales" :type="form.id>0 && form.status!=2 ?'primary':'info'" @click="showAttachment()">{{_label("fujian")}}</au-button>
-                <au-button auth="sales" :type="canZuofei?'primary':'info'" @click="zuofei()">{{_label("zuofei")}}</au-button>
-                <au-button auth="sales" :type="form.id>0 ?'primary':'info'" @click="addReceive">{{_label("tianjiashoukuan")}}</au-button>
-                <as-button type="primary" @click="showProduct()">{{_label("xuanzeshangpin")}}</as-button>
+                <au-button auth="sales" type="primary" @click="yushou" v-if="form.status=='0' || form.status=='1'">{{_label("yushou")}}</au-button>
+
+                <au-button auth="sales" type="primary" @click="save" v-if="form.status==2">{{_label("baocun")}}</au-button>
+                <au-button auth="sales" :type="isChanged===true?'info':'primary'" @click="sale()" v-if="form.status==1">{{_label("xiaoshou")}}</au-button>
+
+                <!--<au-button auth="sales" type="primary" @click="showAttachment()" v-if="form.id>0 && form.status!=3">{{_label("fujian")}}</au-button>-->
+                <au-button auth="sales" type="primary" @click="cancel" v-if="form.status=='1'">{{_label("zuofei")}}</au-button>
+                <au-button auth="sales" :type="form.id>0 ?'primary':'info'" @click="addReceive" v-if="form.id>0 && form.status!=3">{{_label("tianjiashoukuan")}}</au-button>
+                <as-button type="primary" @click="showProduct()" v-if="form.status<=1">{{_label("xuanzeshangpin")}}</as-button>
+
+                <el-tag type="warning" v-if="form.status>0">
+                        <sp-select-text :value="form.status" source="salestatus"/>
+                </el-tag>
             </el-row>
             <el-row :gutter="0">
                 <el-col :span="4" style="width:300px">
@@ -15,7 +22,7 @@
                         <simple-select ref="saleportid" v-model="form.saleportid" source="usersaleport"></simple-select>
                     </el-form-item>
                     <el-form-item :label="_label('jiage')">
-                        <simple-select ref="priceid" v-model="form.priceid" source="userprice" @change="onPriceChange"></simple-select>
+                        <simple-select ref="priceid" v-model="form.priceid" source="userprice" @change="onPriceChange" :disabled="form.status!=0"></simple-select>
                     </el-form-item>
                     <el-form-item :label="_label('xiaoshoucangku')">
                         <simple-select v-model="form.warehouseid" source="userwarehouse" :disabled="form.status!=0" @change="onWarehouseChange"></simple-select>
@@ -70,7 +77,7 @@
         </el-row>
         <el-row>
             <el-col :span="24">
-                <el-table :data="tabledata" stripe border style="width:100%;" v-if="form.status==0">
+                <el-table :data="tabledata" stripe border style="width:100%;">
                     <el-table-column :label="_label('guojima')" align="left" width="200">
                         <template v-slot="{row}">
                             <sp-product-tip :product="row.productstock.product"/>
@@ -101,51 +108,19 @@
                             {{row.dealprice*row.number}}
                         </template>
                     </el-table-column>
-                    <el-table-column :label="_label('shuliang')" width="200" align="center">
+                    <el-table-column :label="_label('shuliang')" width="100" align="center">
                         <template v-slot="{row}">
-                            <el-input-number v-model="row.number" :min="1" :max="row.productstock.getAvailableNumber()" size="mini"></el-input-number>
+                            <el-input v-model="row.number" size="mini" style="width:100%" :disabled="form.status>=2"></el-input>
                         </template>
                     </el-table-column>
-                    <el-table-column :label="_label('chengjiaojia')" width="200" align="center">
+                    <el-table-column :label="_label('chengjiaojia')" width="130" align="center">
                         <template v-slot="{row}">
-                            <el-input v-model="row.dealprice" size="mini"></el-input>
+                            <el-input v-model="row.dealprice" size="mini" style="width:100%"></el-input>
                         </template>
                     </el-table-column>
-                    <el-table-column :label="_label('caozuo')" width="150" align="center">
+                    <el-table-column :label="_label('caozuo')" width="150" align="center" v-if="form.status==0 || form.status==1">
                         <template v-slot="{row,$index}">
                             <as-button size="mini" type="danger" @click="deleteRow($index, row)">{{_label('shanchu')}}</as-button>
-                        </template>
-                    </el-table-column>
-                </el-table>
-
-                <el-table :data="tabledata" stripe border style="width:100%;" v-if="form.status!=0">
-                    <el-table-column prop="productname" :label="_label('chanpinmingcheng')" align="center">
-                    </el-table-column>
-                    <el-table-column prop="sizecontent_label" :label="_label('chima')" width="100" align="center">
-                    </el-table-column>
-                    <el-table-column prop="warehousename" :label="_label('cangku')" width="100" align="center">
-                        <template v-slot="scope">
-                            {{scope.row.productstock.warehouse.name}}
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="price" :label="_label('danjia')" width="100" align="center">
-                        <template v-slot="scope">
-                            {{scope.row.price}}
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="number" :label="_label('xiaoshoushuliang')" width="100" align="center">
-                        <template v-slot="scope">
-                            {{scope.row.number}}
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="discount" :label="_label('zongjia')" width="100" align="center">
-                        <template v-slot="scope">
-                            {{form.discount*scope.row.price*scope.row.number}}
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="dealprice" :label="_label('chengjiaozongjia')" width="200" align="center">
-                        <template v-slot="scope">
-                            {{getDealPrice(scope.row)}}
                         </template>
                     </el-table-column>
                 </el-table>
@@ -190,6 +165,7 @@ const props = {
 const _private = function(self) {
     let _this = {
         async loadPrice(){
+            //console.log("loadPrice", self.form)
             if(self.form.priceid=='') {
                 return
             }
@@ -224,7 +200,7 @@ const _private = function(self) {
         onSelect(productstock) {
             let target = self.tabledata.find(item=>item.productstock.id===productstock.id);
             if(!target) {
-                self.tabledata.push({ productstock: productstock, number: 1, is_match: true, dealprice: 0, price: 0 });
+                self.tabledata.push({ productstock: productstock, number: 1, dealprice: "", price: 0 });
                 _this.loadPrice();
             }
         }
@@ -263,7 +239,7 @@ export default {
                 expressfee: "",
                 address: "",
                 saleportid: "",
-                status: 0, //销售单状态：0-预售 1-已售 2-作废
+                status: '0', //销售单状态：0-预售 1-已售 2-作废
                 priceid: "",
                 makestaff: "",
                 makedate: "",
@@ -275,7 +251,8 @@ export default {
             },
             props,
             pricename:"",
-            productPrices:[]
+            productPrices:[],
+            isChanged:false
         }
     },
     methods: {
@@ -308,16 +285,16 @@ export default {
         },
         saveOrder(status) {
             //保存订单
-            let self = this
+            let self = this;
 
             //订单已经作废了。
-            if (self.form.status == 2) {
-                return
+            if (self.form.status == 3) {
+                return;
             }
 
-            self.form.status = status
-            var params = { form: self.form }
-            var array = []
+            let form = extend({}, self.form);
+            form.status = status;
+            let params = { form };
             params.list = self.tabledata.map(item => {
                 return {
                     productstockid: item.productstock.id,
@@ -332,17 +309,53 @@ export default {
             //return;
 
             self._submit("/sales/savesale", { params: JSON.stringify(params) }).then(function(res) {
-                let data = res.data
-                if (data.form.id) {
-                    globals.copyTo(data.form, self.form)
-                    props.base.salesid = self.form.id
+                self.load();
 
-                    self.tabledata = []
-                    data.list.forEach(item => {
-                        self._log(item)
-                        self.appendRow(item)
-                    })
+                //通知列表，数据变化了
+                self.$emit("change", res.data.form);
+
+                self._redirect("/sales/"+ res.data.form.id);
+            });
+        },
+        save(){
+            let self = this;
+
+            let form = extend({}, self.form);
+            let params = { form };
+            params.list = self.tabledata.map(item => {
+                return {
+                    id: item.id,
+                    dealprice: item.dealprice
                 }
+            })
+
+            self._submit("/sales/save", { params: JSON.stringify(params) }).then(function(res) {
+                self.load();
+            });
+        },
+        sale() {
+            let self = this;
+
+            if(!confirm(self._label('querentijiao'))) {
+                return false;
+            }
+
+            self._submit("/sales/sale", {id:self.form.id}).then(function(res) {
+                self.load();
+
+                //通知列表，数据变化了
+                self.$emit("change", res.data.form)
+            })
+        },
+        cancel() {
+            let self = this;
+
+            if(!confirm(self._label('zuofei_warning'))) {
+                return false;
+            }
+
+            self._submit("/sales/cancel", {id:self.form.id}).then(function(res) {
+                self.load();
 
                 //通知列表，数据变化了
                 self.$emit("change", res.data.form)
@@ -358,24 +371,10 @@ export default {
                 //done
             }
         },
-        zuofei() {
-            const self = this
-            if (!self.canZuofei) {
-                return;
-            }
-
-            self.$confirm(self._label('zuofei_warning'), self._label('tip'), {
-                confirmButtonText: self._label('ok'),
-                cancelButtonText: self._label('cancel'),
-                type: 'warning'
-            }).then(() => {
-                self.saveOrder(2)
-            })
-        },
         yushou() {
             let self = this
-            if (self.canYushou) {
-                this.saveOrder(0)
+            if(self.form.status==0 || self.form.status==1) {
+                self.saveOrder(1);
             }
         },
         tijiao() {
@@ -389,23 +388,50 @@ export default {
                 cancelButtonText: self._label('cancel'),
                 type: 'warning'
             }).then(() => {
-                self.saveOrder(1)
+                self.saveOrder(2)
             })
         },
         deleteRow(rowIndex, row) {
             var self = this;
             self.$delete(self.tabledata, rowIndex)
         },
-        appendRow(row) {
+        async appendRow(row) {
             const self = this;
+            let result = await Productstock.load({data:row.productstock, depth:1})
 
-            Productstock.get(row.productstock, function(result) {
-                self._log("Productstock", result)
-                row.productstock = result
+            row.productstock = result
+            self.tabledata.push(row);
+            return row;
+        },
+        async load() {
+            let self = this;
+            let route = self.$route;
+            let label;
+            self._setTitle("loading...");
 
-                row.is_match = parseInt(row.is_match) == 1
-                self.tabledata.push(row)
-            }, 1)
+            if (route.params.id == 0) {
+                self._setTitle(self._label("xinjianxiaoshoudan"));
+            } else {
+                //加载数据
+                let result = await self._fetch("/sales/loadsale", { id: route.params.id });
+
+                self.tabledata = [];
+                copyTo(result.data.form, self.form);
+
+                if (result.data.list) {
+                    let promises = result.data.list.map(item => {
+                        //self._log(item)
+                        return self.appendRow(item);
+                    });
+
+                    let array = await Promise.all(promises);
+
+                    _private(self).loadPrice();
+                    self.pricename = await self._dataSource("price").getLabel(self.form.priceid);
+                    self.isChanged = false;
+                }
+                self._setTitle(self._label("xiaoshoudan") +':'+ result.data.form.orderno);
+            }
         }
     },
     computed: {
@@ -413,16 +439,21 @@ export default {
             var status = this.form.status;
             return status == 0 || status == '' || !status
         },
-        canZuofei() {
-            return this.form.id > 0 && this.form.status == 0
-        },
         canTijiao() {
             let form = this.form
-            return form.id == '' || form.status != 2
-        },
-        canYushou() {
-            let form = this.form
-            return form.id == "" || form.status == 0
+            if(form.warehouseid=='' || (form.status!=0 && form.status!=1) ) {
+                return false;
+            }
+
+            let target = this.tabledata.some(item=>{
+                return item.productstock.warehouseid!=form.warehouseid;
+            });
+
+            if(target) {
+                return false;
+            }
+
+            return true;
         },
         computeProductPrice(){
             let self = this;
@@ -438,28 +469,16 @@ export default {
     },
     mounted: function() {
         let self = this;
-        let route = self.$route;
-        let label;
-        if (route.params.id == 0) {
-            label = self._label("xinjianxiaoshoudan");
-        } else {
-            self.tabledata = [];
-                //加载数据
-            self._fetch("/sales/loadsale", { id: route.params.id }).then(function(res) {
-                //self._log("加载订单信息", res)
-
-                copyTo(res.data.form, self.form)
-                if (res.data.list) {
-                    res.data.list.forEach(item => {
-                        //self._log(item)
-                        self.appendRow(item);
-                    })
-                }
-                self._setTitle(self._label("xiaoshoudan") + self.form.id);
-            })
-            label = "loading...";
+        self.load();
+        console.log("hhhhhhhhhhhhhhhhhh")
+    },
+    watch:{
+        'tabledata':{
+            handler: function(newValue, oldValue) {
+                this.isChanged = true;
+            },
+            deep: true
         }
-        self._setTitle(label);
     }
 }
 </script>

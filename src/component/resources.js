@@ -183,6 +183,9 @@ function getOption(name) {
     //费用摊销方式
     options["amortizetype"] =  {hashtable:list.amortizetype}
 
+    //销售单状态
+    options["salestatus"] =  {hashtable:list.salestatus}
+
     //客户列表
     options["supplier_2"] = {callback:function(DataSource){
             return DataSource.getDataSource("supplier", _label('lang')).filter(item=>{
