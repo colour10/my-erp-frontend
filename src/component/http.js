@@ -13,7 +13,7 @@ const doGet = function(url, {enableCache=true}={}) {
     }
 
     //console.log(url, enableCache)
-    const caches = ASAP.caches 
+    const caches = ASAP.caches
     return new Promise((resolve, reject)=>{
         if (caches[url]) {
             if (caches[url].loaded == false) {
@@ -43,7 +43,7 @@ const doGet = function(url, {enableCache=true}={}) {
                 resolve(res, false)
             }, "json")
         }
-    })    
+    })
 }
 
 const httpGet = async function(url, options={}) {
@@ -56,7 +56,7 @@ const httpGet = async function(url, options={}) {
             console.log("httpGet Exception", e)
         }
     }
-    
+
     throw "http get error."
 }
 
@@ -70,11 +70,11 @@ const doPost = function(url, params) {
             reject()
         })
     })
-    
+
 }
 
 const httpPost = async function(url, params) {
-    for(let i=0;i<3;i++) {
+    for(let i=0;i<1;i++) {
         try {
             return await doPost(url, params)
         }
@@ -82,7 +82,7 @@ const httpPost = async function(url, params) {
             console.log("httpPost Exception", e)
         }
     }
-    
+
     throw "http post error."
 }
 

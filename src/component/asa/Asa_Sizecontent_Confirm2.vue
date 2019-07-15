@@ -18,14 +18,14 @@
             <template v-slot="{row, $index}">
                 <el-input v-model="row.form[column.id]" style="width:50px" size="mini" :disabled="true" class="linetop" v-if="row.type=='head'"></el-input>
                 <el-input v-model="form[column.id+'-'+row.supplierid]" style="width:50px" size="mini" @keyup.native="onKeyUp($event, $index, colindex, column.id, row.supplierid)" :setmap="setMap($index, colindex, column.id, row.supplierid)" v-if="row.type=='body'" :ref="column.id+'-'+row.supplierid" @focus="onFocus(column.id+'-'+row.supplierid)"></el-input>
-                <el-input v-model="row.form[column.id]" style="width:50px" size="mini" :disabled="true" :class="getFootCellClass(row.form[column.id])" v-if="row.type=='foot'"></el-input>
+                <el-input v-model="sizecontentStat[column.id]" style="width:50px" size="mini" :disabled="true" :class="getFootCellClass(row.form[column.id])" v-if="row.type=='foot'"></el-input>
             </template>
         </el-table-column>
         <el-table-column :label="_label('heji')" align="right" width="53">
             <template v-slot="{row}">
                 <el-input :value="supplierStat[row.type]" style="width:50px" size="mini" :disabled="true" class="linetop" v-if="row.type=='head'"></el-input>
                 <el-input :value="supplierStat[row.supplierid]" style="width:50px" size="mini":disabled="true" class="inputsum" v-if="row.type=='body'"></el-input>
-                <el-input :value="supplierStat[row.type]" style="width:50px" size="mini" :disabled="true" :class="getFootCellClass(supplierStat[row.type])" v-if="row.type=='foot'"></el-input>
+                <el-input :value="getLineTotal(sizecontentStat)" style="width:50px" size="mini" :disabled="true" :class="getFootCellClass(supplierStat[row.type])" v-if="row.type=='foot'"></el-input>
             </template>
         </el-table-column>
 
@@ -311,9 +311,11 @@ export default {
                 self.tabledata.push(target)
             })
 
-            let footForm = extend({}, self.row.form)
+            let footForm = extend({}, self.row.form);
             _private(this).forEach(({number,sizecontentid})=>{
-                footForm[sizecontentid] -= number;
+                if(footForm[sizecontentid] && footForm[sizecontentid]>=0) {
+                    footForm[sizecontentid] -= number;
+                }
             })
 
             self.tabledata.push({
@@ -328,6 +330,19 @@ export default {
         }
     },
     computed:{
+        sizecontentStat() {
+            let self = this;
+            let result = extend({}, self.row.form);
+            _private(this).forEach(({number,sizecontentid})=>{
+                if(!result[sizecontentid]) {
+                    result[sizecontentid] = 0;
+                }
+
+                result[sizecontentid] -= number;
+            });
+
+            return result;
+        },
         supplierStat() {
             let self = this;
             let result = {};

@@ -427,7 +427,10 @@ const result = {
                 }
             })
 
-            let suppliers = self.suppliers.filter(item=>item.total_number>0)
+            let suppliers = self.suppliers.filter(item=>{
+                return self.supplierStat[item.supplierid].total_number>0;
+            });
+
             let params = { list, suppliers:suppliers, form:{
                 bussinesstype:self.order.bussinesstype,
                 ageseason:self.order.ageseason,
