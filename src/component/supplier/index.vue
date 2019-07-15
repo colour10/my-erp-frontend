@@ -57,7 +57,6 @@
 
 <script>
 import { _label, StringFunc } from '../globals.js'
-import DataSource from '../DataSource.js'
 
 export default {
     name: 'sp-supplier',
@@ -230,7 +229,7 @@ export default {
             }
             else if(column.name == 'countrycity') {
                 //self._log(form.countrycity)
-                let source = DataSource.getDataSource("country", self._label("lang"))
+                let source = self._dataSource("country")
                 source.getRow(form.countrycity).then(({row})=>{
                     //self._log(row.area_code)
                     if(form.phone=='') {
@@ -244,8 +243,23 @@ export default {
             return column.name == 'customtype' && !StringFunc.include(form.suppliertype, 2);
         },
         onAfterUpdate() {
-            DataSource.getDataSource("supplier", this._label("lang")).clear()
+            this._dataSource("supplier").clear()
         }
+    },
+    mounted() {
+        let self = this;
+        self.initRules(Rules=>{
+            let _label = self._label
+            return {
+                sizetopid: Rules.id({ required: true, message: _label("8000"), label:_label("chimazu") }),
+                brandgroupid: Rules.id({ required: true, message: _label("8000"), label:_label("pinlei") }),
+                childbrand: Rules.id({ required: true, message: _label("8000"), label:_label("zipinlei") }),
+                brandid: Rules.id({ required: true, message: _label("8000"), label:_label("pinpai") }),
+                brandcolor: Rules.required({ message: _label("8000"), label:_label("sexi") }),
+                ageseason: Rules.required({ message: _label("8000"), label:_label("niandai") }),
+                sizecontentids: Rules.required({ message: _label("8000"), label:_label("chimamingxi") })
+            }
+        })
     }
 }
 </script>

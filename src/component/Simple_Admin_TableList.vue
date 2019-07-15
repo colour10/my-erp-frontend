@@ -6,7 +6,7 @@
             <el-table-column type="expand" v-if="isExpand">
                 <template v-slot="{row, rowIndex}">
                     <slot name="expand" v-bind:row="row" v-bind:rowIndex="rowIndex"></slot>
-                </template>                
+                </template>
             </el-table-column>
             <el-table-column :prop="item.name" :label="item.label" :width="item.width||180" v-if="!item.is_hide" v-for="item in columns" :key="item.name" :sortable="isSortable(item)">
                 <template v-slot="scope">
@@ -29,7 +29,7 @@
                     <auth :auth="authname||controller">
                         <as-button size="mini" type="danger" @click="onClickDelete(scope.$index, scope.row)" v-if="isDeletable(scope.row)">{{_label('shanchu')}}</as-button>
                     </auth>
-                    <as-button size="mini" @click="handleAction(scope,item)" v-for="item in actions" :key="item.label" :type="buttonType(item, scope.row)" v-if="isShow(item,scope.row)" style="margin-right:3px">{{item.label}}</as-button> 
+                    <as-button size="mini" @click="handleAction(scope,item)" v-for="item in actions" :key="item.label" :type="buttonType(item, scope.row)" v-if="isShow(item,scope.row)" style="margin-right:3px">{{item.label}}</as-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -80,7 +80,7 @@ export default {
             isLoading:false,
             pagination: extend({
                 pageSizes: globals.pageSizes,
-                pageSize: 1000,
+                pageSize: 15,
                 total: 0,
                 current: 1
             }, localOptions.pagination),
@@ -238,7 +238,7 @@ export default {
 
                 if (row[column.name + "__columncopy"] != value && value) {
                     dataSource.getRowLabels(value, function(rowInfo) {
-                        
+
                         row[column.name + "__label"] = rowInfo;
                         row[column.name + "__columncopy"] = value;
                         //row[column.name + "__style"] = rowInfo.getRow('style');
@@ -276,7 +276,7 @@ export default {
              if(self.isLoading) {
                 return ;
             }
-            
+
             self.isLoading = true;
 
             self.tableData = []
@@ -311,7 +311,7 @@ export default {
 
                                 self.tableData = array
                             }
-                        })                        
+                        })
                     })
                 }
                 else {
@@ -357,7 +357,7 @@ export default {
         onRowClick(row){
             if(this.isSelect===true) {
                 this.$refs.table.toggleRowSelection(row)
-            }            
+            }
         }
     },
     watch: {
@@ -367,7 +367,7 @@ export default {
                 //this._log("change", newValue, oldValue)
                 setTimeout(function(){
                     self.loadList()
-                },10)                
+                },10)
             },
             deep: true
         }
@@ -377,7 +377,7 @@ export default {
         let self = this
         if(self.localOptions.isSubmit) {
             self.loadList()
-        }        
+        }
 
         self.columns.forEach(item=>{
             if(item.className) {

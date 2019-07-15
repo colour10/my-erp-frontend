@@ -50,7 +50,7 @@ export default {
         handleSubmit2(ev) {
             let self = this;
             if(self.logining==true) {
-                return 
+                return
             }
 
             self.$refs.ruleForm2.validate((valid) => {
@@ -70,7 +70,7 @@ export default {
 
                         ASAP.$session_id = res.session_id;
                         self.goToPage()
-                        self.logining = false;                        
+                        self.logining = false;
                     }).catch(() => {
                         self.logining = false
                     })
@@ -100,9 +100,9 @@ export default {
                                 auth: res.auth
                             })
 
-                            self.goToPage()                            
+                            self.goToPage()
                         } else {
-                            //self.$router.push("/login/login") 
+                            //self.$router.push("/login/login")
                             self.isShowForm = true;
                         }
                     })
@@ -136,13 +136,9 @@ export default {
             });
 
             return new Promise(resolve=>{
-                if(self._label('lang')==self.ruleForm2.language) {
-                    loading.close() 
-                    return resolve()
-                }
                 self._fetch("/common/systemlanguage", {language:self.ruleForm2.language}).then(res=>{
                     //self._log(res.data)
-             
+
                     Object.keys(res.data).forEach((key)=>{
                         //self._log(key,res.data[key])
                         setLabel(key, res.data[key])
@@ -157,11 +153,11 @@ export default {
 
                     self.languages =self._label("languages")
 
-                    loading.close()      
+                    loading.close()
 
-                    resolve()          
+                    resolve()
                 })
-            })            
+            })
         }
     },
     computed: {
@@ -178,8 +174,8 @@ export default {
         }
     },
     mounted: function() {
-        let self = this       
-        
+        let self = this
+
         if(localStorage && localStorage.language) {
           self.ruleForm2.language = localStorage.language
         }

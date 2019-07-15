@@ -130,6 +130,10 @@
             <simple-admin-page v-bind="props" ref="receive" :hide-create="true" :hide-form="true" v-if="form.id>0"></simple-admin-page>
         </el-row> -->
         <sp-productstock-search ref="stocksearch" @select="onSelect"></sp-productstock-search>
+
+        <sp-dialog ref="receive-dialog" :title="_label('qingxuanze')" :width="1050" class="product">
+            <simple-admin-page v-bind="props" ref="receive" :hide-create="true" :hide-form="true" v-if="form.id>0"></simple-admin-page>
+        </sp-dialog>
     </div>
 </template>
 
@@ -143,13 +147,13 @@ import API from "../api.js"
 
 const props = {
     columns: [
-        { name: "payment_type", label: _label("fukuanleixing"), type: 'select', source: "paymenttype" },
-        { name: "currency", label: _label("bizhong"), type: 'select', source: "currency" },
-        { name: "amount", label: _label("jine") },
-        { name: "paymentdate", label: _label("fukuanriqi"), type: "date" },
-        { name: "memo", label: _label("beizhu") },
-        { name: "makestaff", label: _label("tijiaoren"), type: 'select', source: "user", is_edit_hide: true },
-        { name: "status", label: _label("yiruzhang"), type: "switch", is_edit_hide: true }
+        { name: "payment_type", label: _label("fukuanleixing"), type: 'select', source: "paymenttype",width:110 },
+        { name: "currency", label: _label("bizhong"), type: 'select', source: "currency",width:90 },
+        { name: "amount", label: _label("jine"),width:110 },
+        { name: "paymentdate", label: _label("fukuanriqi"), type: "date",width:110 },
+        { name: "memo", label: _label("beizhu"),width:150 },
+        { name: "makestaff", label: _label("tijiaoren"), type: 'select', source: "user", is_edit_hide: true,width:130 },
+        { name: "status", label: _label("yiruzhang"), type: "switch", is_edit_hide: true,width:90 }
     ],
     controller: "salesreceive",
     auth: "sales",
@@ -263,8 +267,8 @@ export default {
         addReceive() {
             let self = this;
             if (self.form.id > 0) {
+                self._showDialog("receive-dialog");
                 props.base.salesid = self.form.id
-                self.$refs.receive.showFormToCreate();
             }
         },
         getDealPrice(row) {
@@ -435,10 +439,6 @@ export default {
         }
     },
     computed: {
-        isEditable() {
-            var status = this.form.status;
-            return status == 0 || status == '' || !status
-        },
         canTijiao() {
             let form = this.form
             if(form.warehouseid=='' || (form.status!=0 && form.status!=1) ) {
