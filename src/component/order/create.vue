@@ -161,6 +161,7 @@ import detailConvert from "../asa/order-detail.js"
 import orderMixin from "../mixins/order.js"
 import { statHelper } from "../helper.js"
 
+
 const props = {
     columns: [
         { name: "payment_type", label: _label("fukuanleixing"), type: 'select', source: "paymenttype" },

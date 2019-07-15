@@ -106,8 +106,8 @@
                         </template>
                     </el-table-column>
                     <el-table-column prop="number" :label="_label('querenshuliang')" align="center" :width="width">
-                        <template v-slot="{row}">
-                            <sp-sizecontent-confirm3 :columns="row.product.sizecontents" :row="row" :key="row.product.id" @change="onChange" :disabled="form.status==2"></sp-sizecontent-confirm3>
+                        <template v-slot="{row, $index}">
+                            <sp-sizecontent-confirm3 :ref="$index" :columns="row.product.sizecontents" :row="row" :key="row.product.id" @change="onChange" :disabled="form.status==2" @up="focus($event, $index-1)" @down="focus($event, $index+1)"></sp-sizecontent-confirm3>
                         </template>
                     </el-table-column>
                     <el-table-column :label="_label('shuliang')" width="70" align="center" class="counter">
@@ -178,6 +178,12 @@ export default {
         onSelect(row) {
             let self = this;
             self.appendRow(row)
+        },
+        focus(colIndex, rowIndex) {
+            let self = this;
+            if(self.$refs[rowIndex]) {
+                self.$refs[rowIndex].startFocus(colIndex);
+            }
         },
         saveOrder() {
             //保存订单

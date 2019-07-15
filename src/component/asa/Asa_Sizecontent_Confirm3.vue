@@ -7,10 +7,10 @@
                 <span v-if="row.order.id==0">{{_label('heji')}}</span>
             </template>
         </el-table-column>
-        <el-table-column :label="column.name" align="center" v-for="column in columns" :key="column.id" width="51">
+        <el-table-column :label="column.name" align="center" v-for="(column,colindex) in columns" :key="column.id" width="51">
             <template v-slot="{row}">
                 <el-input v-model="row.form[column.id]" style="width:50px" size="mini" :disabled="true" class="linetop" v-if="row.order.id>0"></el-input>
-                <el-input v-model="form[column.id+'-'+row.order.id]" style="width:50px" size="mini" @keyup.native="onChange(row)" v-if="row.order.id>0" :disabled="disabled"></el-input>
+                <el-input v-model="form[column.id+'-'+row.order.id]" ref="field" style="width:50px" size="mini" @keyup.native="onKeyUp($event, row, colindex)" @focus="focus(colindex)" v-if="row.order.id>0" :disabled="disabled"></el-input>
                 <el-input :value="getTotal({sizecontentid:column.id})" style="width:50px" size="mini" :disabled="disabled" class="linetop" v-if="row.order.id==0"></el-input>
             </template>
         </el-table-column>
@@ -107,6 +107,43 @@ export default {
             })
 
             return total
+        },
+        startFocus(colIndex) {
+            let self = this;
+            if(self.focus(colIndex)==false) {
+                self.focus(0);
+            }
+        },
+        onKeyUp(event, row, colIndex){
+            let self = this;
+            //console.log(event)
+            if(event.key==='ArrowRight') {
+                self.focus(colIndex+1)
+            }
+            else if(event.key==='ArrowLeft') {
+                self.focus(colIndex-1)
+            }
+            else if(event.key==='ArrowUp') {
+                self.$emit("up", colIndex);
+            }
+            else if(event.key==='ArrowDown') {
+                self.$emit("down", colIndex);
+            }
+            else {
+                self.onChange(row);
+            }
+        },
+        focus(colIndex=0){
+            let self = this;console.log('xxxx',colIndex);
+            if(self.$refs['field'][colIndex]) {
+                const field = self.$refs['field'][colIndex];
+                field.focus();
+                field.select();
+                return true
+            }
+            else {
+                return false;
+            }
         },
         onChange({order}) {
             let self = this

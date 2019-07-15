@@ -270,23 +270,20 @@ export default {
         _dataSource(name) {
             return DataSource.getDataSource(name, this._label('lang'))
         },
-
         _showDialog(name, option){
             let dialog = this.$refs[name]
             if(dialog) {
                 dialog.show(option)
             }
         },
-
         _hideDialog(name){
             let dialog = this.$refs[name]
             if(dialog) {
                 dialog.hide()
             }
         },
-
         _path(){
             return this.$route.path;
-        }
-    }
+        },
+    },
 }

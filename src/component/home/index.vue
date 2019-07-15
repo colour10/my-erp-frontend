@@ -82,11 +82,17 @@
 
 <script>
 import { config } from '../globals.js'
+import bus from '../bus.js';
 
 export default {
     name: 'sp-home',
     data() {
         return {}
+    },
+    provide() {
+        return {
+            bus
+        };
     },
     methods: {
         checkLogin() {
@@ -101,12 +107,16 @@ export default {
             this.$router.push('/' + index)
         },
         onCloseTag(tag) {
+            bus.$emit('close', tag.path);
             this.$store.commit("closeTag", {
                 tag
-            })
+            });
+
+            console.log("close", tag.path)
         },
         onClickTag(tag) {
-            this.$router.push(tag.path)
+            this.$router.push(tag.path);
+
         },
         getType(key) {
             return key == this.current.key ? 'success' : ''

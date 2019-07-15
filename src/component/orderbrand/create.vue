@@ -274,6 +274,7 @@
             </el-row>
         </sp-dialog>
         <sp-dialog ref="preview"/>
+        <el-button @click="$destroy()">销毁</el-button>
     </div>
 </template>
 
@@ -286,10 +287,11 @@ import { debounce } from "../function.js"
 import { group } from "../array.js"
 import { statHelper } from "../helper.js"
 import { removeFilter } from "../array.js"
+import cachecomponent from '../mixins/cachecomponent.js';
 
 const result = {
     name: 'sp-orderbrandcreate',
-    mixins: [orderMixin],
+    mixins: [orderMixin, cachecomponent],
     data() {
         var self = this;
         let _label = self._label
@@ -385,6 +387,9 @@ const result = {
                 func.importOrders(result.data.orders.filter(item => !table[item.id]))
                 func.importDetails(result.data.details.filter(item => !table[item.orderid]))
 
+                self.form.ageseasonid = '';
+                self.form.bookingid = '';
+                self.form.brandid = '';
                 self._hideDialog('order-dialog')
             })
         },
@@ -500,8 +505,21 @@ const result = {
             let keyword = self.form2.keyword.toUpperCase()
             let suppliercode = self.form2.suppliercode.toUpperCase()
             let isMatch = _private(self).isMatch
-            return self.tabledata.filter(item => selected[item.orderid] == 1).filter(item => {
-                return isMatch(keyword, item.product.getGoodsCode('')) && isMatch(suppliercode, item.order.booking_label.toUpperCase())
+            return self.tabledata.filter(item => {
+                if(selected[item.orderid]==1) {
+                    // 如果当前订单详情不在品牌订单详情中，并且剩余数量为0，则不显示。
+
+                    let target = self.listdata.find(findrow=>findrow.row===item);
+                    if(item.total>0 || target) {
+                        return isMatch(keyword, item.product.getGoodsCode('')) && isMatch(suppliercode, item.order.booking_label.toUpperCase());
+                    }
+                    else {
+                        return false;
+                    }
+                }
+                else {
+                    return false;
+                }
             })
         },
         width() {
@@ -514,16 +532,15 @@ const result = {
         orderstat() {
             let self = this;
             let result = {};
+            self.orders.forEach(item=>{
+                result[item.id] = {
+                    totalCount:0,
+                    brandCount:0,
+                    leftCount:0,
+                }
+            })
 
             self.orderlist.forEach(detail=>{
-                if(!result[detail.orderid]) {
-                    result[detail.orderid] = {
-                        totalCount:0,
-                        brandCount:0,
-                        leftCount:0
-                    }
-                }
-
                 let row = result[detail.orderid]
 
                 row.totalCount += detail.number*1;
@@ -647,7 +664,7 @@ const result = {
         }, 1000, false)
 
 
-        _private(self).loadInfo()
+        _private(self).loadInfo();
     }
 }
 
@@ -655,7 +672,7 @@ const _private = function(self) {
     const _this = {
         loadInfo(){
             let params = self.$route.params;
-            console.log(self.$route)
+            //console.log(self.$route)
             if (params.ids != '0') {
                 self._fetch("/orderbrand/load", { ids: params.ids }).then(async function({ data }) {
 
@@ -678,19 +695,22 @@ const _private = function(self) {
             let result = {}
             list.forEach(item => {
                 //console.log("SSSSSSSS",item)
-                let key = item.productid + '-' + item.orderid
+                let key = item.productid + '-' + item.orderid;
+
+                // 如果已经确认过了，按照确认后计算，否则按照加入品牌订单中的数量计算
+                let number = item.confirm_number>0 ? item.confirm_number : item.brand_number;
                 if (result[key]) {
-                    result[key]['form'][item.sizecontentid] = item.number - item.brand_number
-                    result[key].total += item.number - item.brand_number
+                    result[key]['form'][item.sizecontentid] = item.number-number;
+                    result[key].total += item.number-number;
                 } else {
-                    let form = {}
-                    form[item.sizecontentid] = item.number - item.brand_number
+                    let form = {};
+                    form[item.sizecontentid] = item.number-number;
                     result[key] = {
                         key,
                         productid: item.productid,
                         orderid: item.orderid,
                         discount: item.discount,
-                        total: item.number * 1,
+                        total: item.number-number,
                         form
                     }
                 }

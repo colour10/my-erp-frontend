@@ -143,7 +143,8 @@ import { Productstock } from "../model.js"
 import { extend, copyTo } from "../object.js"
 import Asa_Productstock_Search from '../asa/Asa_Productstock_Search.vue'
 import DataSource from '../DataSource.js'
-import API from "../api.js"
+import API from "../api.js";
+import cachecomponent from '../mixins/cachecomponent.js';
 
 const props = {
     columns: [
@@ -215,6 +216,7 @@ const _private = function(self) {
 
 export default {
     name: 'sp-salesdetail',
+    mixins: [cachecomponent],
     components: {
         'search': Asa_Productstock_Search
     },
