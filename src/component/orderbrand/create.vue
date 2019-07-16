@@ -452,13 +452,13 @@ const result = {
             let self = this
             list.forEach(({ number, sizecontentid, supplierid, discount, price }) => {
                 let target = self.listdata.find(item => item.sizecontentid == sizecontentid && item.supplierid == supplierid && row.product.id == item.row.product.id && row.orderid == item.row.orderid)
-
                 if (target) {
                     target.number = number;
                     target.discount = discount;
                     target.price = price;
-                    target.priceTotal = self.f(price*number)
+                    target.priceTotal = self.f(price*number);
                 } else {
+
                     self.listdata.push({
                         row,
                         number,
@@ -469,7 +469,13 @@ const result = {
                         priceTotal:self.f(price*number)
                     });
                 }
-            })
+            });
+
+            // 变动listdata，强制刷新computed缓存
+            let head = self.listdata.shift();
+            if(head) {
+                self.listdata.unshift(head);
+            }
         },
         onSelectionChange(vals) {
             let self = this
@@ -618,7 +624,7 @@ const result = {
                 total_price: 0,
                 brandid:""
             })
-
+console.log("supplierStat change")
             self.listdata.forEach(item => {
                 let target = helper.get(item.supplierid);
 
@@ -698,7 +704,8 @@ const _private = function(self) {
                 let key = item.productid + '-' + item.orderid;
 
                 // 如果已经确认过了，按照确认后计算，否则按照加入品牌订单中的数量计算
-                let number = item.confirm_number>0 ? item.confirm_number : item.brand_number;
+                // let number = item.confirm_number>0 ? item.confirm_number : item.brand_number;
+                let number = item.brand_number;
                 if (result[key]) {
                     result[key]['form'][item.sizecontentid] = item.number-number;
                     result[key].total += item.number-number;

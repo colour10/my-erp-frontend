@@ -2,7 +2,8 @@
     <div>
         <el-form ref="order-form" class="formx" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini" :rules="formRules" :inline-message="false" :show-message="false">
             <el-row :gutter="0">
-                <au-button auth="order-submit" :type="canSubmit?'primary':'info'" @click="saveOrder(1)">{{_label("baocun")}}</au-button>
+                <au-button auth="order-submit" type="primary" @click="saveOrder(1)" v-if="form.status!='2'">{{_label("baocun")}}</au-button>
+                <au-button auth="order-submit" type="primary" @click="finish()" v-if="form.status!='2'">{{_label("wancheng")}}</au-button>
                 <!-- <au-button auth="order-submit" :type="canSubmitPayment?'primary':'info'" @click="addPayment">{{_label("shengchengfahuodan")}}</au-button> -->
                 <au-button auth="order-submit" :type="canSubmitPayment?'primary':'info'" @click="addPayment">{{_label("fujian")}}</au-button>
                 <au-button auth="order-submit" :type="canSubmitPayment?'primary':'info'" @click="addPayment">{{_label("feiyong")}}</au-button>
@@ -254,6 +255,13 @@ export default {
                 total: 0
             })
         },
+        finish() {
+            const self = this;
+
+            self._submit("/order/finish", { id: self.form.id }).then(function(res) {
+                self._redirect("/order/"+ res.data.form.id);
+            });
+        },
         saveOrder(status) {
             //保存订单
             let self = this
@@ -294,36 +302,36 @@ export default {
 
         },
         getDetailId(productid, sizecontentid){
-            let row = this.details.find(item=>item.productid===productid && item.sizecontentid===sizecontentid)
-            return row?row.id:0
+            let row = this.details.find(item=>item.productid===productid && item.sizecontentid===sizecontentid);
+            return row?row.id:0;
         },
         deleteRow(row) {
             var self = this;
-            let index = self.tabledata.findIndex(item => item == row)
-            self.$delete(self.tabledata, index)
+            let index = self.tabledata.findIndex(item => item == row);
+            self.$delete(self.tabledata, index);
         },
         appendRow(row) {
             const self = this;
 
             let is_exist = self.tabledata.some(rowData => {
-                return rowData.product.id == row.product.id
+                return rowData.product.id == row.product.id;
             })
 
             if (!is_exist) {
-                self.tabledata.unshift(row)
-                self.form.currency = self.currencyid
+                self.tabledata.unshift(row);
+                self.form.currency = self.currencyid;
             }
         },
         getInit(productid){
-            let self = this
-            let output = {}
+            let self = this;
+            let output = {};
             self.listdata.forEach(item=>{
                 if(item.productid===productid) {
-                    output[item.sizecontentid] = item.number
+                    output[item.sizecontentid] = item.number;
                 }
             })
 
-            return output
+            return output;
         },
         onChange(list) {
             let self = this

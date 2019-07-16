@@ -4,6 +4,66 @@
 		"selected_items":
 		[
 			[
+				"on",
+				"onChange"
+			],
+			[
+				"or",
+				"orderbrand"
+			],
+			[
+				"su",
+				"success"
+			],
+			[
+				"col",
+				"colIndex"
+			],
+			[
+				"f",
+				"field"
+			],
+			[
+				"se",
+				"select"
+			],
+			[
+				"br",
+				"brandid"
+			],
+			[
+				"to",
+				"total"
+			],
+			[
+				"brand",
+				"brand_number"
+			],
+			[
+				"order",
+				"orderdetailid"
+			],
+			[
+				"ge",
+				"getLineTotal"
+			],
+			[
+				"si",
+				"sizecontentStat"
+			],
+			[
+				"confir",
+				"confirm_number"
+			],
+			[
+				"sta",
+				"status"
+			],
+			[
+				"con",
+				"conditions"
+			],
+			[
 				"re",
 				"receive-dialog"
 			],
@@ -30,14 +90,6 @@
 			[
 				"ro",
 				"rollback"
-			],
-			[
-				"con",
-				"confirmout"
-			],
-			[
-				"se",
-				"select_number"
 			],
 			[
 				"wa",
@@ -92,10 +144,6 @@
 				"shipping-"
 			],
 			[
-				"to",
-				"total_number"
-			],
-			[
 				"shi",
 				"shippingDetail"
 			],
@@ -136,16 +184,8 @@
 				"number"
 			],
 			[
-				"ge",
-				"getResult"
-			],
-			[
 				"h",
 				"helper"
-			],
-			[
-				"or",
-				"orderlist"
 			],
 			[
 				"ta",
@@ -160,16 +200,8 @@
 				"refsMap"
 			],
 			[
-				"col",
-				"colIndex"
-			],
-			[
 				"row",
 				"rowIndex"
-			],
-			[
-				"on",
-				"onKeyUp"
 			],
 			[
 				"fo",
@@ -184,16 +216,8 @@
 				"number\tparameter"
 			],
 			[
-				"br",
-				"brandcolor"
-			],
-			[
 				"price",
 				"priceTotal"
-			],
-			[
-				"su",
-				"supplierid"
 			],
 			[
 				"supp",
@@ -214,10 +238,6 @@
 			[
 				"total_",
 				"total_price"
-			],
-			[
-				"order",
-				"orderbrand"
 			],
 			[
 				"orderbr",
@@ -242,10 +262,6 @@
 			[
 				"pru",
 				"productid"
-			],
-			[
-				"si",
-				"sizecontentid"
 			],
 			[
 				"ex",
@@ -330,10 +346,6 @@
 			[
 				"lef",
 				"leftCount"
-			],
-			[
-				"brand",
-				"brandCount"
 			],
 			[
 				"le",
@@ -502,18 +514,6 @@
 			[
 				"ser",
 				"server"
-			],
-			[
-				"font",
-				"font-size\tproperty"
-			],
-			[
-				"plat",
-				"platforms"
-			],
-			[
-				"pl",
-				"platforms"
 			]
 		]
 	},
@@ -595,7 +595,7 @@
 			"file": "src/component/asa/Asa_Sizecontent_Confirm2.vue",
 			"settings":
 			{
-				"buffer_size": 12886,
+				"buffer_size": 13386,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -604,7 +604,7 @@
 			"file": "src/component/asa/Asa_Sizecontent_Confirm3.vue",
 			"settings":
 			{
-				"buffer_size": 5808,
+				"buffer_size": 6995,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -667,7 +667,7 @@
 			"file": "src/component/orderbrand/confirm.vue",
 			"settings":
 			{
-				"buffer_size": 19195,
+				"buffer_size": 19467,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -676,7 +676,25 @@
 			"file": "src/component/order/create.vue",
 			"settings":
 			{
-				"buffer_size": 22341,
+				"buffer_size": 22720,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/Z/erp/app/home/controllers/ShippingController.php",
+			"settings":
+			{
+				"buffer_size": 24829,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Z/erp/app/models/erp/TbShipping.php",
+			"settings":
+			{
+				"buffer_size": 3792,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -685,7 +703,7 @@
 			"file": "src/component/orderbrand/create.vue",
 			"settings":
 			{
-				"buffer_size": 35971,
+				"buffer_size": 36870,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -694,27 +712,81 @@
 			"file": "src/component/sales/create.vue",
 			"settings":
 			{
-				"buffer_size": 19002,
+				"buffer_size": 19091,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "/Z/erp/app/home/controllers/RequisitionController.php",
+			"file": "/Z/erp/app/config/languages/cn.php",
 			"settings":
 			{
-				"buffer_size": 6412,
+				"buffer_size": 28504,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "/Z/erp/app/home/controllers/SalesController.php",
+			"file": "/Z/erp/app/models/erp/TbRequisition.php",
 			"settings":
 			{
-				"buffer_size": 15427,
+				"buffer_size": 12869,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Z/erp/app/models/erp/TbOrderBrand.php",
+			"settings":
+			{
+				"buffer_size": 1277,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/Z/erp/app/home/controllers/OrderbrandController.php",
+			"settings":
+			{
+				"buffer_size": 23442,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Z/erp/app/home/controllers/OrderController.php",
+			"settings":
+			{
+				"buffer_size": 12519,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Z/erp/app/models/erp/TbOrder.php",
+			"settings":
+			{
+				"buffer_size": 2608,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Z/erp/app/home/controllers/ProductController.php",
+			"settings":
+			{
+				"buffer_size": 22118,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/component/http.js",
+			"settings":
+			{
+				"buffer_size": 2298,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
 			}
 		},
 		{
@@ -772,6 +844,15 @@
 			}
 		},
 		{
+			"file": "/Z/erp/app/home/views/index.phtml",
+			"settings":
+			{
+				"buffer_size": 10192,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
 			"file": "src/component/supplier/index.vue",
 			"settings":
 			{
@@ -802,8 +883,33 @@
 			"file": "src/component/home/index.vue",
 			"settings":
 			{
-				"buffer_size": 7448,
+				"buffer_size": 7633,
 				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/D/code/vue/caicai/src/App.vue",
+			"settings":
+			{
+				"buffer_size": 2069,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/D/code/vue/caicai/src/bus.js",
+			"settings":
+			{
+				"buffer_size": 52,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/component/bus.js",
+			"settings":
+			{
+				"buffer_size": 52,
 				"line_ending": "Windows"
 			}
 		},
@@ -883,8 +989,34 @@
 			"file": "src/component/mixin.js",
 			"settings":
 			{
-				"buffer_size": 9014,
+				"buffer_size": 9013,
 				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/component/mixins/cachecomponent.js",
+			"settings":
+			{
+				"buffer_size": 351,
+				"encoding": "UTF-8",
+				"line_ending": "Windows",
+				"name": "export default {"
+			}
+		},
+		{
+			"file": "/D/code/vue/caicai/src/views/Charge.vue",
+			"settings":
+			{
+				"buffer_size": 1650,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"settings":
+			{
+				"buffer_size": 0,
 				"line_ending": "Windows"
 			}
 		},
@@ -1144,6 +1276,8 @@
 	],
 	"file_history":
 	[
+		"/Z/erp/app/home/controllers/SalesController.php",
+		"/Z/erp/app/home/controllers/RequisitionController.php",
 		"/D/code/vue/h5/vue.config.js",
 		"/D/code/vue/asa-plugin/src/component/helper.js",
 		"/D/code/vue/h5/src/views/Home.vue",
@@ -1176,7 +1310,6 @@
 		"/Z/erp/app/models/erp/TbWarehouse.php",
 		"/Z/erp/app/models/erp/TbProductstock.php",
 		"/Z/erp/app/models/erp/TbSalesdetails.php",
-		"/Z/erp/app/home/controllers/SalesController.php",
 		"/Z/erp/app/home/controllers/OrderController.php",
 		"/Z/erp/app/models/erp/TbRequisition.php",
 		"/Z/erp/app/home/views/index.phtml",
@@ -1188,7 +1321,6 @@
 		"/Z/erp/app/models/erp/TbProduct.php",
 		"/Z/erp/app/home/controllers/ProductController.php",
 		"/Z/erp/app/home/controllers/ProductstockController.php",
-		"/Z/erp/app/home/controllers/RequisitionController.php",
 		"/Z/erp/app/home/Module.php",
 		"/Z/erp/app/models/erp/TbRequisitionDetail.php",
 		"/Z/erp/app/models/erp/TbUserPrice.php",
@@ -1289,6 +1421,19 @@
 		"case_sensitive": true,
 		"find_history":
 		[
+			"onNumberChange",
+			"priceTotal",
+			"supplierStat",
+			"status",
+			"isstatus",
+			"startFocus",
+			"orders",
+			"orderlist",
+			"totalCount",
+			"search",
+			"wordprice",
+			"totalCount",
+			"suppliers",
 			"isChanged",
 			"canTijiao",
 			"isEditable",
@@ -1403,20 +1548,7 @@
 			"供货单位",
 			"pre",
 			"Pre",
-			"_Product",
-			"onAddSeries",
-			"current",
-			"Asa_Product",
-			"_log",
-			"</?(?!p|a[ />]|img)([^> /]+)[^>]*/?>",
-			"</?(?!p|a|img)([^> /]+)[^>]*/?>",
-			"_log",
-			"total_number",
-			"(<[a-z][^<>]+)(?<!/)>\\s*</[-a-z]+>",
-			"<[a-z][^<>]+(?<!/)>\\s*</[-a-z]+>",
-			"<[a-z][^<>]+>\\s*</[-a-z]+>",
-			"<[a-z][^<>]+>\\s</[-a-z]+>",
-			"(?<=(?:A*)/)>"
+			"_Product"
 		],
 		"highlight": false,
 		"in_selection": false,
@@ -1571,7 +1703,7 @@
 	"groups":
 	[
 		{
-			"selected": 19,
+			"selected": 8,
 			"sheets":
 			[
 				{
@@ -1610,7 +1742,7 @@
 						"translation.y": 270.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 31,
+					"stack_index": 47,
 					"type": "text"
 				},
 				{
@@ -1641,7 +1773,7 @@
 						"translation.y": 10506.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 31,
 					"type": "text"
 				},
 				{
@@ -1672,7 +1804,7 @@
 						"translation.y": 3861.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 44,
+					"stack_index": 59,
 					"type": "text"
 				},
 				{
@@ -1703,7 +1835,7 @@
 						"translation.y": 1080.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 30,
+					"stack_index": 46,
 					"type": "text"
 				},
 				{
@@ -1734,7 +1866,7 @@
 						"translation.y": 1605.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 21,
+					"stack_index": 41,
 					"type": "text"
 				},
 				{
@@ -1765,7 +1897,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 50,
+					"stack_index": 65,
 					"type": "text"
 				},
 				{
@@ -1802,7 +1934,7 @@
 						"translation.y": 345.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 20,
+					"stack_index": 40,
 					"type": "text"
 				},
 				{
@@ -1833,7 +1965,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 55,
+					"stack_index": 70,
 					"type": "text"
 				},
 				{
@@ -1842,29 +1974,29 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 12886,
+						"buffer_size": 13386,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								12523,
-								12754
+								9301,
+								9305
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1562576085.67,
+							"sorttabs_lastactivated": 1563195432.38,
 							"syntax": "Packages/Vue/vue.tmLanguage",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 4440.0,
+						"translation.y": 3150.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 26,
+					"stack_index": 0,
 					"type": "text"
 				},
 				{
@@ -1873,29 +2005,29 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 5808,
+						"buffer_size": 6995,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2070,
-								2070
+								4262,
+								4262
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1562576078.73,
+							"sorttabs_lastactivated": 1563195029.68,
 							"syntax": "Packages/Vue/vue.tmLanguage",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1440.0,
+						"translation.y": 1260.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 27,
+					"stack_index": 1,
 					"type": "text"
 				},
 				{
@@ -1917,7 +2049,7 @@
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1562576072.96,
+							"sorttabs_lastactivated": 1563182238.88,
 							"syntax": "Packages/Vue/vue.tmLanguage",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true,
@@ -1929,10 +2061,10 @@
 							}
 						},
 						"translation.x": 0.0,
-						"translation.y": 1440.0,
+						"translation.y": 945.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 28,
+					"stack_index": 12,
 					"type": "text"
 				},
 				{
@@ -1963,7 +2095,7 @@
 						"translation.y": 180.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 43,
+					"stack_index": 58,
 					"type": "text"
 				},
 				{
@@ -2001,7 +2133,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 42,
+					"stack_index": 57,
 					"type": "text"
 				},
 				{
@@ -2032,7 +2164,7 @@
 						"translation.y": 508.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 17,
+					"stack_index": 37,
 					"type": "text"
 				},
 				{
@@ -2063,7 +2195,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 9,
+					"stack_index": 35,
 					"type": "text"
 				},
 				{
@@ -2094,7 +2226,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 23,
+					"stack_index": 43,
 					"type": "text"
 				},
 				{
@@ -2103,29 +2235,29 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 19195,
+						"buffer_size": 19467,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								19147,
-								19147
+								9583,
+								9593
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1562579228.23,
+							"sorttabs_lastactivated": 1563183437.06,
 							"syntax": "Packages/Vue/vue.tmLanguage",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 2070.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 25,
+					"stack_index": 11,
 					"type": "text"
 				},
 				{
@@ -2134,20 +2266,20 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 22341,
+						"buffer_size": 22720,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								157,
-								166
+								14553,
+								14553
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1562754216.75,
+							"sorttabs_lastactivated": 1563190635.1,
 							"syntax": "Packages/Vue/vue.tmLanguage",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true,
@@ -2159,32 +2291,94 @@
 							}
 						},
 						"translation.x": 0.0,
-						"translation.y": 2610.0,
+						"translation.y": 4320.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 18,
+					"file": "/Z/erp/app/home/controllers/ShippingController.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 24829,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								17225,
+								17231
+							]
+						],
+						"settings":
+						{
+							"sorttabs_lastactivated": 1563192573.7,
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 5991.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 19,
+					"file": "/Z/erp/app/models/erp/TbShipping.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3792,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"sorttabs_lastactivated": 1563190983.71,
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 900.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 5,
 					"type": "text"
 				},
 				{
-					"buffer": 18,
+					"buffer": 20,
 					"file": "src/component/orderbrand/create.vue",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 35971,
+						"buffer_size": 36870,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								16370,
-								16743
+								28500,
+								28500
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1562750319.87,
+							"sorttabs_lastactivated": 1563195009.61,
 							"syntax": "Packages/Vue/vue.tmLanguage",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true,
@@ -2196,107 +2390,300 @@
 							}
 						},
 						"translation.x": 0.0,
-						"translation.y": 3600.0,
+						"translation.y": 8481.33333333,
 						"zoom_level": 1.0
 					},
-					"stack_index": 12,
+					"stack_index": 2,
 					"type": "text"
 				},
 				{
-					"buffer": 19,
+					"buffer": 21,
 					"file": "src/component/sales/create.vue",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 19002,
+						"buffer_size": 19091,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								18242,
-								18242
+								11775,
+								11775
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1562983148.2,
+							"sorttabs_lastactivated": 1563181113.92,
 							"syntax": "Packages/Vue/vue.tmLanguage",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 5886.0,
+						"translation.y": 2601.33333333,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 13,
 					"type": "text"
 				},
 				{
-					"buffer": 20,
-					"file": "/Z/erp/app/home/controllers/RequisitionController.php",
+					"buffer": 22,
+					"file": "/Z/erp/app/config/languages/cn.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 6412,
+						"buffer_size": 28504,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1583,
-								1583
+								28166,
+								28166
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1562752913.35,
+							"sorttabs_lastactivated": 1563193229.78,
 							"syntax": "Packages/PHP/PHP.sublime-syntax",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 28.0,
+						"translation.y": 13500.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 23,
+					"file": "/Z/erp/app/models/erp/TbRequisition.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 12869,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								12710,
+								12722
+							]
+						],
+						"settings":
+						{
+							"sorttabs_lastactivated": 1563156590.18,
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 4590.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 29,
+					"type": "text"
+				},
+				{
+					"buffer": 24,
+					"file": "/Z/erp/app/models/erp/TbOrderBrand.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1277,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1277,
+								1277
+							]
+						],
+						"settings":
+						{
+							"sorttabs_lastactivated": 1563185344.34,
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
+					"type": "text"
+				},
+				{
+					"buffer": 25,
+					"file": "/Z/erp/app/home/controllers/OrderbrandController.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 23442,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								11224,
+								11224
+							]
+						],
+						"settings":
+						{
+							"sorttabs_lastactivated": 1563185175.54,
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 3171.33333333,
+						"zoom_level": 1.0
+					},
+					"stack_index": 8,
+					"type": "text"
+				},
+				{
+					"buffer": 26,
+					"file": "/Z/erp/app/home/controllers/OrderController.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 12519,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								10812,
+								10812
+							]
+						],
+						"settings":
+						{
+							"sorttabs_lastactivated": 1563184400.42,
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 4230.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 10,
 					"type": "text"
 				},
 				{
-					"buffer": 21,
-					"file": "/Z/erp/app/home/controllers/SalesController.php",
+					"buffer": 27,
+					"file": "/Z/erp/app/models/erp/TbOrder.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 15427,
+						"buffer_size": 2608,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								605,
-								2714
+								2395,
+								2408
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1562752703.03,
+							"sorttabs_lastactivated": 1563184405.27,
 							"syntax": "Packages/PHP/PHP.sublime-syntax",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 360.0,
+						"translation.y": 720.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 11,
+					"stack_index": 9,
 					"type": "text"
 				},
 				{
-					"buffer": 22,
+					"buffer": 28,
+					"file": "/Z/erp/app/home/controllers/ProductController.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 22118,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1457,
+								1457
+							]
+						],
+						"settings":
+						{
+							"sorttabs_lastactivated": 1563170417.31,
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 96.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 23,
+					"type": "text"
+				},
+				{
+					"buffer": 29,
+					"file": "src/component/http.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2298,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2052,
+								2052
+							]
+						],
+						"settings":
+						{
+							"sorttabs_lastactivated": 1563161811.15,
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true,
+							"typescript_plugin_format_options":
+							{
+								"convertTabsToSpaces": true,
+								"indentSize": 4,
+								"tabSize": 4
+							},
+							"use_tab_stops": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 180.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 24,
+					"type": "text"
+				},
+				{
+					"buffer": 30,
 					"file": "src/component/requisition/create.vue",
 					"semi_transient": false,
 					"settings":
@@ -2323,11 +2710,11 @@
 						"translation.y": 1170.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 18,
+					"stack_index": 38,
 					"type": "text"
 				},
 				{
-					"buffer": 23,
+					"buffer": 31,
 					"file": "src/component/DataSource.js",
 					"semi_transient": false,
 					"settings":
@@ -2361,11 +2748,11 @@
 						"translation.y": 3531.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 32,
+					"stack_index": 48,
 					"type": "text"
 				},
 				{
-					"buffer": 24,
+					"buffer": 32,
 					"file": "src/component/shipping/detail.vue",
 					"semi_transient": false,
 					"settings":
@@ -2392,11 +2779,11 @@
 						"translation.y": 2691.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 48,
+					"stack_index": 63,
 					"type": "text"
 				},
 				{
-					"buffer": 25,
+					"buffer": 33,
 					"file": "src/component/function.js",
 					"semi_transient": false,
 					"settings":
@@ -2430,11 +2817,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 51,
+					"stack_index": 66,
 					"type": "text"
 				},
 				{
-					"buffer": 26,
+					"buffer": 34,
 					"file": "src/component/globals.js",
 					"semi_transient": false,
 					"settings":
@@ -2468,11 +2855,11 @@
 						"translation.y": 1530.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 13,
+					"stack_index": 36,
 					"type": "text"
 				},
 				{
-					"buffer": 27,
+					"buffer": 35,
 					"file": "index.html",
 					"semi_transient": false,
 					"settings":
@@ -2484,13 +2871,13 @@
 						"selection":
 						[
 							[
-								9545,
-								9545
+								9518,
+								9518
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1562750259.36,
+							"sorttabs_lastactivated": 1563157022.54,
 							"syntax": "Packages/HTML/HTML.sublime-syntax",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true,
@@ -2502,14 +2889,45 @@
 							}
 						},
 						"translation.x": 0.0,
-						"translation.y": 5490.0,
+						"translation.y": 5226.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 14,
+					"stack_index": 26,
 					"type": "text"
 				},
 				{
-					"buffer": 28,
+					"buffer": 36,
+					"file": "/Z/erp/app/home/views/index.phtml",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 10192,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								9446,
+								9446
+							]
+						],
+						"settings":
+						{
+							"sorttabs_lastactivated": 1563157450.59,
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 5181.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 25,
+					"type": "text"
+				},
+				{
+					"buffer": 37,
 					"file": "src/component/supplier/index.vue",
 					"semi_transient": false,
 					"settings":
@@ -2536,11 +2954,11 @@
 						"translation.y": 2961.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 30,
 					"type": "text"
 				},
 				{
-					"buffer": 29,
+					"buffer": 38,
 					"file": "src/component/login/index.vue",
 					"semi_transient": false,
 					"settings":
@@ -2567,11 +2985,11 @@
 						"translation.y": 1710.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
+					"stack_index": 33,
 					"type": "text"
 				},
 				{
-					"buffer": 30,
+					"buffer": 39,
 					"file": "src/component/product/index.vue",
 					"semi_transient": false,
 					"settings":
@@ -2598,42 +3016,139 @@
 						"translation.y": 1260.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 36,
+					"stack_index": 52,
 					"type": "text"
 				},
 				{
-					"buffer": 31,
+					"buffer": 40,
 					"file": "src/component/home/index.vue",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 7448,
+						"buffer_size": 7633,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								5294,
-								5505
+								6300,
+								6310
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1562749690.26,
+							"sorttabs_lastactivated": 1563178923.3,
 							"syntax": "Packages/Vue/vue.tmLanguage",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 270.0,
+						"translation.y": 990.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 15,
+					"stack_index": 16,
 					"type": "text"
 				},
 				{
-					"buffer": 32,
+					"buffer": 41,
+					"file": "/D/code/vue/caicai/src/App.vue",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2069,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1053,
+								1522
+							]
+						],
+						"settings":
+						{
+							"sorttabs_lastactivated": 1563177825.56,
+							"syntax": "Packages/Vue/vue.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 17,
+					"type": "text"
+				},
+				{
+					"buffer": 42,
+					"file": "/D/code/vue/caicai/src/bus.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 52,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								52
+							]
+						],
+						"settings":
+						{
+							"sorttabs_lastactivated": 1563177582.59,
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"typescript_plugin_format_options":
+							{
+								"convertTabsToSpaces": true,
+								"indentSize": 2,
+								"tabSize": 2
+							},
+							"use_tab_stops": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 20,
+					"type": "text"
+				},
+				{
+					"buffer": 43,
+					"file": "src/component/bus.js",
+					"semi_transient": true,
+					"settings":
+					{
+						"buffer_size": 52,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"sorttabs_lastactivated": 1563177514.53,
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"use_tab_stops": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 21,
+					"type": "text"
+				},
+				{
+					"buffer": 44,
 					"file": "src/component/orderbrand/index.vue",
 					"semi_transient": false,
 					"settings":
@@ -2666,11 +3181,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 53,
+					"stack_index": 68,
 					"type": "text"
 				},
 				{
-					"buffer": 33,
+					"buffer": 45,
 					"file": "src/component/shipping/index.vue",
 					"semi_transient": false,
 					"settings":
@@ -2703,11 +3218,11 @@
 						"translation.y": 420.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 22,
+					"stack_index": 42,
 					"type": "text"
 				},
 				{
-					"buffer": 34,
+					"buffer": 46,
 					"file": "src/component/department/index.vue",
 					"semi_transient": false,
 					"settings":
@@ -2734,11 +3249,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 41,
+					"stack_index": 56,
 					"type": "text"
 				},
 				{
-					"buffer": 35,
+					"buffer": 47,
 					"file": "src/component/productstock/index.vue",
 					"semi_transient": false,
 					"settings":
@@ -2765,11 +3280,11 @@
 						"translation.y": 780.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 29,
+					"stack_index": 45,
 					"type": "text"
 				},
 				{
-					"buffer": 36,
+					"buffer": 48,
 					"file": "src/component/brand/index.vue",
 					"semi_transient": false,
 					"settings":
@@ -2796,11 +3311,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 40,
+					"stack_index": 55,
 					"type": "text"
 				},
 				{
-					"buffer": 37,
+					"buffer": 49,
 					"file": "src/component/order/index.vue",
 					"semi_transient": false,
 					"settings":
@@ -2827,11 +3342,11 @@
 						"translation.y": 900.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 49,
+					"stack_index": 64,
 					"type": "text"
 				},
 				{
-					"buffer": 38,
+					"buffer": 50,
 					"file": "src/main.js",
 					"semi_transient": false,
 					"settings":
@@ -2843,13 +3358,13 @@
 						"selection":
 						[
 							[
-								9308,
-								9308
+								9648,
+								9652
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1562753743.18,
+							"sorttabs_lastactivated": 1563176712.69,
 							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true,
@@ -2862,14 +3377,14 @@
 							"use_tab_stops": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 2250.0,
+						"translation.y": 2880.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 7,
+					"stack_index": 22,
 					"type": "text"
 				},
 				{
-					"buffer": 39,
+					"buffer": 51,
 					"file": "src/component/math.js",
 					"semi_transient": false,
 					"settings":
@@ -2903,29 +3418,29 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 46,
+					"stack_index": 61,
 					"type": "text"
 				},
 				{
-					"buffer": 40,
+					"buffer": 52,
 					"file": "src/component/mixin.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 9014,
+						"buffer_size": 9013,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								8526,
-								8537
+								9011,
+								9011
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1562754397.07,
+							"sorttabs_lastactivated": 1563179033.63,
 							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true,
@@ -2938,14 +3453,111 @@
 							"use_tab_stops": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 3060.0,
+						"translation.y": 3616.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 15,
 					"type": "text"
 				},
 				{
-					"buffer": 41,
+					"buffer": 53,
+					"file": "src/component/mixins/cachecomponent.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 351,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								347,
+								347
+							]
+						],
+						"settings":
+						{
+							"auto_name": "export default {",
+							"sorttabs_lastactivated": 1563179291.43,
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"typescript_plugin_format_options":
+							{
+								"convertTabsToSpaces": true,
+								"indentSize": 2,
+								"tabSize": 2
+							},
+							"use_tab_stops": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 14,
+					"type": "text"
+				},
+				{
+					"buffer": 54,
+					"file": "/D/code/vue/caicai/src/views/Charge.vue",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1650,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"sorttabs_lastactivated": 1563177801.08,
+							"syntax": "Packages/Vue/vue.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 18,
+					"type": "text"
+				},
+				{
+					"buffer": 55,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 0,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"default_dir": "D:\\code\\vue\\asa-plugin\\src\\component",
+							"sorttabs_lastactivated": 1563177750.47,
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 19,
+					"type": "text"
+				},
+				{
+					"buffer": 56,
 					"file": "src/component/model.js",
 					"semi_transient": false,
 					"settings":
@@ -2979,11 +3591,11 @@
 						"translation.y": 3420.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 19,
+					"stack_index": 39,
 					"type": "text"
 				},
 				{
-					"buffer": 42,
+					"buffer": 57,
 					"file": "src/component/object.js",
 					"semi_transient": false,
 					"settings":
@@ -3017,11 +3629,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 52,
+					"stack_index": 67,
 					"type": "text"
 				},
 				{
-					"buffer": 43,
+					"buffer": 58,
 					"file": "src/component/asa/order-detail.js",
 					"semi_transient": false,
 					"settings":
@@ -3055,11 +3667,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 47,
+					"stack_index": 62,
 					"type": "text"
 				},
 				{
-					"buffer": 44,
+					"buffer": 59,
 					"file": "src/component/mixins/order.js",
 					"semi_transient": false,
 					"settings":
@@ -3092,11 +3704,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 32,
 					"type": "text"
 				},
 				{
-					"buffer": 45,
+					"buffer": 60,
 					"file": "src/component/asa/product-search-form.vue",
 					"semi_transient": false,
 					"settings":
@@ -3123,11 +3735,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 37,
+					"stack_index": 53,
 					"type": "text"
 				},
 				{
-					"buffer": 46,
+					"buffer": 61,
 					"file": "src/component/asa/product.js",
 					"semi_transient": false,
 					"settings":
@@ -3161,11 +3773,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 45,
+					"stack_index": 60,
 					"type": "text"
 				},
 				{
-					"buffer": 47,
+					"buffer": 62,
 					"file": "src/component/prop.js",
 					"semi_transient": false,
 					"settings":
@@ -3199,11 +3811,11 @@
 						"translation.y": 6601.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 35,
+					"stack_index": 51,
 					"type": "text"
 				},
 				{
-					"buffer": 48,
+					"buffer": 63,
 					"file": "src/component/user/index.vue",
 					"semi_transient": false,
 					"settings":
@@ -3230,11 +3842,11 @@
 						"translation.y": 1710.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 34,
+					"stack_index": 50,
 					"type": "text"
 				},
 				{
-					"buffer": 49,
+					"buffer": 64,
 					"file": "src/component/resources.js",
 					"semi_transient": false,
 					"settings":
@@ -3268,11 +3880,11 @@
 						"translation.y": 2264.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 24,
+					"stack_index": 44,
 					"type": "text"
 				},
 				{
-					"buffer": 50,
+					"buffer": 65,
 					"file": "src/component/Simple_Admin_Page.vue",
 					"semi_transient": false,
 					"settings":
@@ -3299,11 +3911,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 38,
+					"stack_index": 54,
 					"type": "text"
 				},
 				{
-					"buffer": 51,
+					"buffer": 66,
 					"file": "src/component/Simple_Admin_TableList.vue",
 					"semi_transient": false,
 					"settings":
@@ -3330,11 +3942,11 @@
 						"translation.y": 816.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 8,
+					"stack_index": 34,
 					"type": "text"
 				},
 				{
-					"buffer": 52,
+					"buffer": 67,
 					"file": "src/component/Simple_Select.vue",
 					"semi_transient": false,
 					"settings":
@@ -3361,11 +3973,11 @@
 						"translation.y": 4191.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 33,
+					"stack_index": 49,
 					"type": "text"
 				},
 				{
-					"buffer": 53,
+					"buffer": 68,
 					"file": "src/component/asa/sp-product-info.vue",
 					"semi_transient": false,
 					"settings":
@@ -3392,11 +4004,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 54,
+					"stack_index": 69,
 					"type": "text"
 				},
 				{
-					"buffer": 54,
+					"buffer": 69,
 					"file": "src/component/shipping/warehousing.vue",
 					"semi_transient": false,
 					"settings":
@@ -3414,20 +4026,20 @@
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1562206772.26,
+							"sorttabs_lastactivated": 1563156975.42,
 							"syntax": "Packages/Vue/vue.tmLanguage",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 3510.0,
+						"translation.y": 1425.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 39,
+					"stack_index": 28,
 					"type": "text"
 				},
 				{
-					"buffer": 55,
+					"buffer": 70,
 					"file": "webpack.config.js",
 					"semi_transient": false,
 					"settings":
@@ -3439,13 +4051,13 @@
 						"selection":
 						[
 							[
-								0,
-								2182
+								78,
+								82
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1562745122.0,
+							"sorttabs_lastactivated": 1563156977.78,
 							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true,
@@ -3461,7 +4073,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 16,
+					"stack_index": 27,
 					"type": "text"
 				}
 			]
