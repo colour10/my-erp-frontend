@@ -434,14 +434,27 @@ const result = {
 
             let suppliers = self.suppliers.filter(item=>{
                 return self.supplierStat[item.supplierid].total_number>0;
+            }).map(item=>{
+                const stat = self.supplierStat[item.supplierid];
+                let result = extend({}, item);
+                self._log(stat, result);
+                result.total_number = stat.total_number;
+                result.total_discount_price = stat.total_discount_price;
+                result.total_price = stat.total_price;
+                result.brandid = stat.brandid;
+                return result;
             });
 
-            let params = { list, suppliers:suppliers, form:{
-                bussinesstype:self.order.bussinesstype,
-                ageseason:self.order.ageseason,
-                seasontype:self.order.seasontype,
-                currency:self.order.currency
-            } }
+            let params = {
+                list,
+                suppliers,
+                form:{
+                    bussinesstype:self.order.bussinesstype,
+                    ageseason:self.order.ageseason,
+                    seasontype:self.order.seasontype,
+                    currency:self.order.currency
+                }
+            }
 
             //self._log(params)
             self._submit("/orderbrand/add", { params: JSON.stringify(params) }).then(function(res) {
@@ -624,7 +637,7 @@ const result = {
                 total_price: 0,
                 brandid:""
             })
-console.log("supplierStat change")
+
             self.listdata.forEach(item => {
                 let target = helper.get(item.supplierid);
 
@@ -748,7 +761,7 @@ const _private = function(self) {
         },
         getOrderbrandDetailId(productid, orderid, sizecontentid, supplierid){
             let orderbrand = self.suppliers.find(item=>item.supplierid==supplierid)
-            console.log("YY", orderbrand)
+            //console.log("YY", orderbrand)
             if(orderbrand) {
                 let row = self.orderbrandDetailList.find(item => item.productid == productid && item.orderid == orderid && item.sizecontentid == sizecontentid  && item.orderbrandid==orderbrand.orderbrandid )
                 //self._log(row, self.orderlist, productid, orderid, sizecontentid)
