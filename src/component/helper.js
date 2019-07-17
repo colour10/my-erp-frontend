@@ -13,7 +13,7 @@ let statHelper = function(initCell){
         },
         result() {
             return result;
-        }
+        },
     }
 }
 export { statHelper }

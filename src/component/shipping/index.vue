@@ -6,7 +6,11 @@
                 <auth auth="confirmorder-submit"><as-button type="primary" @click="showFormToCreate()">{{_label('xinjian')}}</as-button></auth>
             </el-col>
         </el-row>
-        <simple-admin-tablelist ref="tablelist" v-bind="props" :onclickupdate="showFormToEdit" :isdelete="false"></simple-admin-tablelist>
+        <simple-admin-tablelist ref="tablelist" v-bind="props" :onclickupdate="showFormToEdit" :isdelete="false" :isedit="false">
+            <template v-slot:orderno="{row}">
+                <router-link :to="'/shipping/warehousing/'+row.id">{{row.orderno}}</router-link>
+            </template>
+        </simple-admin-tablelist>
 
         <sp-dialog ref="search" width="600">
             <el-form class="order-form" :model="form" label-width="70px" :inline="false" style="width:100%;" size="mini" @submit.native.prevent>
@@ -60,7 +64,7 @@ export default {
         let self = this;
         let _label = self._label
 
-        return {               
+        return {
             form:{
                 orderno:"",
                 warehouseid:"",
@@ -69,7 +73,7 @@ export default {
                 seasontype:"",
                 bussinesstype:"",
                 status:""
-            },   
+            },
             props: {
                 columns: [
                     { name: "orderno", label: _label('rukudanhao'), width: 120 },
@@ -100,12 +104,12 @@ export default {
                         self._remove("/shipping/delete", { id: row.id }).then(function(result) {
                             if(result){
                                 self.$refs.tablelist.search(self.searchform)
-                            }                              
+                            }
                         })
                     }}
                 ],
                 options:{
-                    action_width:250
+                    action_width:200
                 }
             }
         }

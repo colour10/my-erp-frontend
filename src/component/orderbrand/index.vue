@@ -4,12 +4,15 @@
             <el-col :span="24">
                 <as-button type="primary" @click="_showDialog('search')" size="mini" icon="el-icon-search">{{_label("chaxun")}}</as-button>
                 <auth auth="order-submit"><as-button type="primary" @click="showFormToCreate">{{_label('xinjian')}}</as-button></auth>
-                <auth auth="order-submit"><as-button type="primary" @click="showFormToEdit">{{_label('bianji')}}</as-button></auth>
+                <!-- <auth auth="order-submit"><as-button type="primary" @click="showFormToEdit">{{_label('bianji')}}</as-button></auth> -->
             </el-col>
         </el-row>
-        <simple-admin-tablelist ref="tablelist" v-bind="props" :onclickupdate="showFormToEdit" :isedit="false" :isdelete="false" :isSelect="true">
+        <simple-admin-tablelist ref="tablelist" v-bind="props" :onclickupdate="showFormToEdit" :isedit="false" :isdelete="false" :isSelect="false">
             <template v-slot:brandid="{row}">
                 <sp-select-text :value="row.brandid" source="brand"></sp-select-text>
+            </template>
+            <template v-slot:orderno="{row}">
+                <router-link :to="'/orderbrand/'+row.id">{{row.orderno}}</router-link>
             </template>
         </simple-admin-tablelist>
 
@@ -61,7 +64,7 @@ export default {
         var self = this;
         let _label = self._label
 
-        return {   
+        return {
             form:{
                 orderno:"",
                 brandid:"",
@@ -70,7 +73,7 @@ export default {
                 seasontype:"",
                 bussinesstype:"",
                 memo:""
-            },         
+            },
             props: {
                 columns: [
                     { name: "orderno", label: _label('gongsidingdanhao'), width: 120 },
@@ -78,7 +81,7 @@ export default {
                     { name: "ageseason", label: _label('niandaijijie'), type: 'select', source: "ageseason", width: 110 },
                     { name: "bussinesstype", label: _label('yewuleixing'), type: 'select', source: "bussinesstype", width: 110 },
                     { name: "currency", label: _label('bizhong'), type: 'select', source: "currency", width: 80 },
-                    { name: "total_price", label: _label('zongjine'), width:100 },
+                    { name: "total_discount_price", label: _label('zongjine'), width:100 },
                     { name: "total_number", label: _label('zongjianshu'), width:100 },
                     { name: "discount", label: _label('zhekoulv'), width:100 },
                     { name: "taxrebate", label: _label('tuishuilv'), width:100 },
@@ -97,7 +100,7 @@ export default {
                         self._remove("/orderbrand/delete", { id: row.id }).then(function(result) {
                             if(result){
                                 self.$refs.tablelist.search(self.searchform)
-                            }                              
+                            }
                         })
                     }}
                 ],

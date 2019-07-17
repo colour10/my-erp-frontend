@@ -48,8 +48,7 @@
                             </el-form-item>
                             <el-form-item :label="_label('zongjine')">
                                 <sp-float-input placeholder="" :select_value="total_price" class="input-with-select">
-                                    <simple-select source="currency" :clearable="false" v-model="form.currency">
-                                    </simple-select>
+                                    <simple-select source="currency" :clearable="false" v-model="form.currency"></simple-select>
                                 </sp-float-input>
                             </el-form-item>
                             <el-form-item :label="_label('huilv')">
@@ -410,7 +409,7 @@ export default {
                 self._log(JSON.stringify(params));
                 let {data} = await self._submit("/shipping/save", { params: JSON.stringify(params) });
 
-                let path = "/shipping/" + data.form.id;
+                let path = '/shipping/warehousing/' + data.form.id;
                 if(self._path()!==path) {
                     self._redirect(path);
                 }
@@ -555,20 +554,19 @@ export default {
         },
         orderstat() {
             let self = this;
-            let result = {};
+
+            let helper = statHelper({
+                totalCount: 0,
+                totalConfirmCount: 0,
+                totoaShippingCount: 0,
+                brandCount: 0,
+                leftCount: 0,
+            });
+
+            self.orderbrands.forEach((item)=>{helper.get(item.id);});
 
             self.orderbranddetails.forEach(detail => {
-                if (!result[detail.orderbrandid]) {
-                    result[detail.orderbrandid] = {
-                        totalCount: 0,
-                        totalConfirmCount: 0,
-                        totoaShippingCount: 0,
-                        brandCount: 0,
-                        leftCount: 0
-                    }
-                }
-
-                let row = result[detail.orderbrandid]
+                let row = helper.get(detail.orderbrandid);
 
                 row.totalCount += detail.number * 1; //客户定的总件数
                 row.totalConfirmCount += detail.confirm_number * 1; //确认的件数
@@ -578,11 +576,11 @@ export default {
 
             //如果是修改订单，剩余数量应该把当前订单的数量加上去。
             self.shippingdetails.forEach(detail => {
-                let row = result[detail.orderbrandid]
+                let row = helper.get(detail.orderbrandid);
                 row.leftCount += detail.number * 1;
-            })
+            });
 
-            return result
+            return helper.result();
         },
         currentstat(){
             let self = this
@@ -646,8 +644,6 @@ export default {
 
         if (route.params.id > 0) {
             self._fetch("/shipping/load", { id: route.params.id, type: "shipping" }).then(async function({ data }) {
-
-
                 let { form, orderbrands, orderbranddetails, shippingdetails } = data;
                 let func = _private(self)
 
@@ -672,7 +668,6 @@ export default {
 }
 
 const _private = function(self) {
-
     const _this = {
         isMatch(keyword, search) {
             return keyword.length > 0 ? search.toUpperCase().indexOf(keyword) >= 0 : true
@@ -734,6 +729,11 @@ const _private = function(self) {
                     self.orderbranddetails.push(detail)
                     newlist.push(detail)
                 }
+
+                // 默认设置币种
+                if(self.form.currency=='' && detail.currencyid>0) {
+                    self.form.currency = detail.currencyid;
+                }
             })
             let result = await _this.convert(newlist)
             result.forEach(item => {
@@ -756,8 +756,6 @@ const _private = function(self) {
             })
         },
         importShippingList(list) {
-            //self.shippingdetails = list
-
             let hash = {}
             let table = {};
             list.forEach(item => {
@@ -800,13 +798,11 @@ const _private = function(self) {
                             number: item.number
                         })
 
-                        table[key] = row.key
-                        hash[item.productid + "-" + item.orderbrandid] = 1
+                        table[key] = row.key;
+                        hash[item.productid + "-" + item.orderbrandid] = 1;
                     }
                 }
-            })
-
-            //console.log(table, hash, 'tttt')
+            });
         }
     }
 

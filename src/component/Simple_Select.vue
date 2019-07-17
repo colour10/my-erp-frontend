@@ -73,7 +73,7 @@ export default {
             default: ""
         },
         filterMethod:{
-
+            type: Function,
         },
         isBatch:{
             type:Boolean,
@@ -319,7 +319,11 @@ export default {
         parentid(newValue) {
             //this._log("watch parentid")
             this.load(newValue)
-        }
+        },
+        filterMethod() {
+            //this._log("filterMethod changed.");
+            this.filteredList();
+        },
     },
     mounted: function() {
         let self = this;

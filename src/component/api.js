@@ -23,8 +23,8 @@ function _fetch(path, form) {
 
 }
 
-const context = {}
-const CacheContext = cache(context)
+const context = {};
+const CacheContext = cache(context);
 
 const API = {
     //加载汇率
@@ -80,6 +80,41 @@ const API = {
 
         return result.data;
     },
+
+    // 查询商品
+    async getProductList(wordcode, goods_code) {
+        let params = {
+            wordcode,
+            goods_code,
+            page: 1,
+            pageSize: 10,
+        };
+
+        try {
+            let result = await _fetch("/product/search", params);
+            return result.data;
+        }
+        catch(e) {
+            return [];
+        }
+    },
+
+    // 查询库存
+    async getProductstock({productid, sizecontentid, warehouseid}) {
+        let params = {
+            productid,
+            sizecontentid,
+            warehouseid,
+        };
+
+        try {
+            let result = await _fetch("/productstock/search", params);
+            return result.data;
+        }
+        catch(e) {
+            return [];
+        }
+    },
 }
 
-export default API
+export default API;

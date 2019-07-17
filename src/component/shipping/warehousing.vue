@@ -2,12 +2,13 @@
     <div>
         <el-form class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini">
             <el-row :gutter="0">
-                <au-button auth="confirmorder-submit" type="danger" @click="confirmShipping()" v-if="form.status=='1'">{{_label("queren")}}</au-button>
+                <au-button auth="confirmorder-submit" type="danger" @click="confirmShipping()" v-if="form.status=='1'">{{_label("baocunxinxi")}}</au-button>
+                <au-button auth="confirmorder-submit" type="danger" @click="confirmShipping()" v-if="form.status=='1'">{{_label("querenruku")}}</au-button>
                 <as-button type="primary" @click="pro=true" v-if="form.status=='1'">{{_label("xuanzeshangpin")}}</as-button>
                 <as-button type="danger" @click="cancelConfirm()" v-if="form.status=='2'">{{_label("quxiaoqueren")}}</as-button>
-                <as-button type="primary" @click="warehousing()" v-if="form.status=='2'">{{_label("ruku")}}</as-button>
-                <as-button type="primary" @click="cancelWarehousing()" v-if="form.status=='3'">{{_label("quxiaoruku")}}</as-button>
-                <as-button type="primary" @click="showPayment()" v-if="form.status=='2' ||form.status=='3'">{{_label("feiyong")}}</as-button>
+                <as-button type="danger" @click="warehousing()" v-if="form.status=='2'">{{_label("feiyongshuqi")}}</as-button>
+                <as-button type="danger" @click="cancelWarehousing()" v-if="form.status=='3'">{{_label("quxiao")}}</as-button>
+                <as-button type="primary" @click="showPayment()" v-if="form.status>0">{{_label("feiyong")}}</as-button>
             </el-row>
             <el-row :gutter="0">
                 <el-col :span="8" style="width:600px">
@@ -174,9 +175,14 @@
                             {{row.discount}}
                         </template>
                     </el-table-column>
-                    <el-table-column :label="_label('danjia')" width="100" align="center" prop="price">
+                    <el-table-column :label="_label('chengjiaojia')" width="100" align="center" prop="price">
                         <template v-slot="{row}">
                             <el-input v-model="row.price" size="mini" v-if="!row.order"  :disabled="isDisabled"/>
+                            <span v-if="row.order">{{row.price}}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column :label="_label('chengben')" width="100" align="center" prop="price">
+                        <template v-slot="{row}">
                             <span v-if="row.order">{{row.price}}</span>
                         </template>
                     </el-table-column>

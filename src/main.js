@@ -34,26 +34,27 @@ import Authbutton from './component/authbutton.js'
 import Button from './component/button.js'
 import RadioGroup from './component/radio-group.vue'
 import Multiple_Admin_Page from './component/multiple_admin_page.js'
-import Asa_Color_Select from './component/asa/Asa_Color_Select.vue'
-import Asa_Sizecontent_Input from './component/asa/Asa_Sizecontent_Input.vue'
-import Asa_Sizecontent_Confirm2 from './component/asa/Asa_Sizecontent_Confirm2.vue'
-import Asa_Sizecontent_Confirm3 from './component/asa/Asa_Sizecontent_Confirm3.vue'
-import Asa_Sizecontent_Confirm4 from './component/asa/Asa_Sizecontent_Confirm4.vue'
-import Asa_Order_Tip from './component/asa/Asa_Order_Tip.vue'
-import Asa_Product_Tip from './component/asa/Asa_Product_Tip.vue'
-import SelectText from './component/select-text.js'
-import Dialog from './component/dialog.vue'
-import Asa_PriceSetting_Cell from './component/asa/Asa_PriceSetting_Cell.vue'
-import Asa_Product_BL from './component/asa/Asa_Product_BL.vue'
-import Asa_Product_LSB from './component/asa/Asa_Product_LSB.vue'
-import Toggle_Input from './component/toggle-input.vue'
-import ImagePreview from './component/image-preview.vue'
-import Creator from './component/develop/index.vue'
-import Home from './component/home/index.vue'
-import Login from './component/login/index.vue'
-import PriceSetting from './component/pricesetting/index.vue'
-import SpProductInfo from './component/asa/sp-product-info.vue'
-import ProductSearchForm from './component/asa/product-search-form.vue'
+import Asa_Color_Select from './component/asa/Asa_Color_Select.vue';
+import Asa_Sizecontent_Input from './component/asa/Asa_Sizecontent_Input.vue';
+import Asa_Sizecontent_Confirm2 from './component/asa/Asa_Sizecontent_Confirm2.vue';
+import Asa_Sizecontent_Confirm3 from './component/asa/Asa_Sizecontent_Confirm3.vue';
+import Asa_Sizecontent_Confirm4 from './component/asa/Asa_Sizecontent_Confirm4.vue';
+import Asa_Order_Tip from './component/asa/Asa_Order_Tip.vue';
+import Asa_Product_Tip from './component/asa/Asa_Product_Tip.vue';
+import SelectText from './component/select-text.js';
+import Dialog from './component/dialog.vue';
+import Asa_PriceSetting_Cell from './component/asa/Asa_PriceSetting_Cell.vue';
+import Asa_Product_BL from './component/asa/Asa_Product_BL.vue';
+import Asa_Product_LSB from './component/asa/Asa_Product_LSB.vue';
+import Toggle_Input from './component/toggle-input.vue';
+import ImagePreview from './component/image-preview.vue';
+import Creator from './component/develop/index.vue';
+import Home from './component/home/index.vue';
+import Login from './component/login/index.vue';
+import PriceSetting from './component/pricesetting/index.vue';
+import SpProductInfo from './component/asa/sp-product-info.vue';
+import ProductSearchForm from './component/asa/product-search-form.vue';
+import Asa_Productstock_Input from './component/asa/Asa_Productstock_Input.vue';
 
 const components = [
     Simple_Admin_Page,
@@ -92,7 +93,8 @@ const components = [
     Asa_Sizecontent_Confirm2,
     Asa_Sizecontent_Confirm3,
     Asa_Sizecontent_Confirm4,
-    ProductSearchForm
+    ProductSearchForm,
+    Asa_Productstock_Input,
 ]
 
 components.forEach(component => {
