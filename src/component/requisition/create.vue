@@ -33,18 +33,26 @@
 
             </el-col>
         </el-row>
+        <el-row v-if="form.requisitiontype=='2' && form.in_id>0">
+            <el-col :span="24" class="product">
+                <sp-requisition-in ref="requisition" :in_id="form.in_id"> </sp-requisition-in>
+
+            </el-col>
+        </el-row>
     </div>
 </template>
 
 <script>
 import { extend } from '../object.js';
 import Asa_Requisition_Out from '../asa/Asa_Requisition_Out.vue';
+import Asa_Requisition_In from '../asa/Asa_Requisition_In.vue';
 import API from '../api.js';
 
 export default {
     name: 'sp-requisitioncreate',
     components: {
-        [Asa_Requisition_Out.name]: Asa_Requisition_Out
+        [Asa_Requisition_Out.name]: Asa_Requisition_Out,
+        [Asa_Requisition_In.name]: Asa_Requisition_In,
     },
     data() {
         let self = this;
