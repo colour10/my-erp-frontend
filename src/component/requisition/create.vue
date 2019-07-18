@@ -6,80 +6,31 @@
             </el-row>
             <el-row :gutter="0">
                 <el-col :span="6" style="width:300px">
+                    <el-form-item :label="_label('diaobofangshi')">
+                        <simple-select v-model="form.requisitiontype" source="requisitiontype"></simple-select>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="6" style="width:300px" v-if="form.requisitiontype=='1'">
                     <el-form-item :label="_label('diaochucangku')">
                         <simple-select v-model="form.out_id" source="warehouse" @change="onOutChange"></simple-select>
                     </el-form-item>
                 </el-col>
-                <el-col :span="6" style="width:300px">
+                <el-col :span="6" style="width:300px" v-if="form.requisitiontype=='2'">
                     <el-form-item :label="_label('diaorucangku')">
                         <simple-select v-model="form.in_id" source="warehouse" @change="onInChange"></simple-select>
                     </el-form-item>
                 </el-col>
-                <el-col :span="6" style="width:300px">
+                <el-col :span="6" style="width:300px"  v-if="form.requisitiontype>0">
                     <el-form-item :label="_label('beizhu')">
                         <el-input v-model="form.memo"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
         </el-form>
-        <el-row>
-            <el-col :span="24">
-                <el-table :data="tabledata" stripe border style="width:100%;">
-                    <el-table-column :label="_label('guojima')" align="center" width="150">
-                    <template v-slot="{row}">
-                        <sp-product-tip :product="row.product"></sp-product-tip>
-                    </template>
-                </el-table-column>
-                <el-table-column :label="_label('chanpinmingcheng')" align="center" width="200">
-                    <template v-slot="{row}">
-                        {{row.product.getName()}}
-                    </template>
-                </el-table-column>
-                    <el-table-column :label="_label('chima')" width="100" align="center">
-                        <template v-slot="{row}">
-                            <sp-select-text :value="row.sizecontentid" source="sizecontent"/>
-                        </template>
-                    </el-table-column>
-                    <el-table-column :label="_label('diaochucangku')" width="180" align="center">
-                        <template v-slot="{row}">
-                            <simple-select v-model="row.out_id" source="warehouse" @change="onWarehouseChange($event, row)" :disabled="form.out_id>0" :filterMethod="filterMethods[row.index]"></simple-select>
-                        </template>
-                    </el-table-column>
+        <el-row v-if="form.requisitiontype=='1' && form.out_id>0">
+            <el-col :span="24" class="product">
+                <sp-requisition-out ref="requisition" :out_id="form.out_id"> </sp-requisition-out>
 
-                    <el-table-column :label="_label('shuxing')" width="100" align="center">
-                        <template v-slot="{row}">
-                            <simple-select v-model="row.property" source="orderproperty"></simple-select>
-                        </template>
-                    </el-table-column>
-
-                    <el-table-column :label="_label('canpin')" width="100" align="center">
-                        <template v-slot="{row}">
-                            <simple-select v-model="row.defective_level" source="defectivelevel"></simple-select>
-                        </template>
-                    </el-table-column>
-
-                    <el-table-column :label="_label('kucunshuliang')" width="100" align="center">
-                        <template v-slot="{row}">
-                            {{stocks[row.index]}}
-                        </template>
-                    </el-table-column>
-                    <el-table-column :label="_label('diaorucangku')" width="180" align="center">
-                        <template v-slot="{row}">
-                            <simple-select v-model="row.in_id" source="warehouse" :disabled="form.in_id>0"></simple-select>
-                        </template>
-                    </el-table-column>
-                    <el-table-column :label="_label('diaoboshuliang')" width="100" align="center">
-                        <template v-slot="{row}">
-                            <el-input v-model="row.number" size="mini"></el-input>
-                        </template>
-                    </el-table-column>
-                    <el-table-column :label="_label('caozuo')" width="150" align="center">
-                        <template v-slot="scope">
-                            <as-button size="mini" type="danger" @click="deleteRow(scope)">{{_label('shanchu')}}</as-button>
-                        </template>
-                    </el-table-column>
-                </el-table>
-                <sp-productstock-input @input="onSelect"></sp-productstock-input>
             </el-col>
         </el-row>
     </div>
@@ -87,15 +38,20 @@
 
 <script>
 import { extend } from '../object.js';
+import Asa_Requisition_Out from '../asa/Asa_Requisition_Out.vue';
 import API from '../api.js';
 
 export default {
     name: 'sp-requisitioncreate',
+    components: {
+        [Asa_Requisition_Out.name]: Asa_Requisition_Out
+    },
     data() {
         let self = this;
 
         return {
             form: {
+                requisitiontype: '',
                 out_id: "",
                 in_id: "",
                 memo: "",
@@ -167,21 +123,32 @@ export default {
             //保存订单
             let self = this;
 
+
+
+            let params = { memo: self.form.memo };
+            params.list = self.$refs.requisition.getList();
+            for(let i=0;i<params.list.length;i++) {
+                let row = params.list[i];
+                if(row.out_id>0 && row.in_id>0) {
+                    if(row.stock_number>=row.number) {
+                        continue;
+                    }
+                    else {
+                        // 库存不足
+                        alert(self._label('kucunbuzu'));
+                        return ;
+                    }
+                }
+                else {
+                    // 请选择仓库
+                    alert(self._label('qingxuanzecangku'));
+                    return ;
+                }
+            }
+
             if (!confirm(self._label('order_submit_confirm'))) {
                 return;
             }
-
-            let params = { memo: self.form.memo };
-            params.list = self.tabledata.map(({product, sizecontentid, out_id, in_id, property, defective_level, number})=>{
-                return {
-                    productid: product.id,
-                    sizecontentid,
-                    out_id, in_id,
-                    property,
-                    defective_level,
-                    number,
-                };
-            });
             //self._log(JSON.stringify(params))
             self._submit("/requisition/save", { params: JSON.stringify(params) }).then(function(res) {
                 extend(self.form, {
@@ -192,9 +159,6 @@ export default {
                 self.tabledata = [];
                 self.productstocks = [];
             });
-        },
-        deleteRow({$index}) {
-            this.tabledata.splice($index,1);
         },
     },
     mounted() {

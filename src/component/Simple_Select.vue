@@ -85,7 +85,7 @@ export default {
         },
         optionClass:{
             type:Function
-        }
+        },
     },
     model: {
         prop: 'select_value',

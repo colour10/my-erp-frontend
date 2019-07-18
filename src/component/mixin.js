@@ -49,6 +49,10 @@ export default {
         }
     },
     methods: {
+        confirm() {
+            console.log(_label('querentijiao'));
+            return confirm(this._label('querentijiao'));
+        },
         initRules(callback){
             extend(this.formRules, callback(Rules))
         },

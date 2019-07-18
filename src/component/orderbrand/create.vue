@@ -3,9 +3,9 @@
         <el-form ref="order-form" class="order-form" :model="form" label-width="85px" style="width:100%;" size="mini" :inline-message="false" :show-message="false">
             <el-row :gutter="0">
                 <el-col :span="6" style="width:300px">
-                    <au-button auth="order-submit" type="primary" @click="saveOrder(1)" v-if="form.id==''">{{_label("baocun")}}</au-button>
-                    <as-button type="primary" @click="_showDialog('order-dialog')" v-if="form.id==''">{{_label("daorudingdan")}}</as-button>
-                    <as-button type="primary" @click="_showDialog('add-supplier');form2.supplierid=''" v-if="form.id==''">{{_label("zengjiagonghuoshang")}}</as-button>
+                    <au-button auth="order-submit" type="primary" @click="saveOrder(1)" v-if="$route.params.ids=='0'">{{_label("baocun")}}</au-button>
+                    <as-button type="primary" @click="_showDialog('order-dialog')" v-if="$route.params.ids=='0'">{{_label("daorudingdan")}}</as-button>
+                    <as-button type="primary" @click="_showDialog('add-supplier');form2.supplierid=''" v-if="$route.params.ids=='0'">{{_label("zengjiagonghuoshang")}}</as-button>
                 </el-col>
                 <el-col :span="18">
                     <el-tag type="warning">
@@ -171,11 +171,11 @@
                     </el-table-column>
                     <el-table-column :label="_label('caozuo')" width="110" align="center">
                         <template v-slot="{row}">
-                            <el-button type="danger" round @click.stop="onDeleteOrder(row.id)" size="mini" v-if="form.id==''">{{_label("shanchu")}}</el-button>
+                            <el-button type="danger" round @click.stop="onDeleteOrder(row.id)" size="mini" v-if="$route.params.ids=='0'">{{_label("shanchu")}}</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
-                <el-row :gutter="0" v-if="form.id==''">
+                <el-row :gutter="0" v-if="$route.params.ids=='0'">
                     <el-button type="warning" round @click="_showDialog('supplier-dialog')" size="mini">{{_label("piliangfenpei")}}</el-button>
                     <el-button type="warning" round @click="resetDistribute" size="mini">{{_label("piliangchongzhi")}}</el-button>
                 </el-row>

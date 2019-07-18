@@ -54,7 +54,7 @@ import Login from './component/login/index.vue';
 import PriceSetting from './component/pricesetting/index.vue';
 import SpProductInfo from './component/asa/sp-product-info.vue';
 import ProductSearchForm from './component/asa/product-search-form.vue';
-import Asa_Productstock_Input from './component/asa/Asa_Productstock_Input.vue';
+import Asa_Product_Code from './component/asa/Asa_Product_Code.vue';
 
 const components = [
     Simple_Admin_Page,
@@ -94,7 +94,7 @@ const components = [
     Asa_Sizecontent_Confirm3,
     Asa_Sizecontent_Confirm4,
     ProductSearchForm,
-    Asa_Productstock_Input,
+    Asa_Product_Code,
 ]
 
 components.forEach(component => {

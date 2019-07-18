@@ -10,7 +10,6 @@
                 <!--<au-button auth="sales" type="primary" @click="showAttachment()" v-if="form.id>0 && form.status!=3">{{_label("fujian")}}</au-button>-->
                 <au-button auth="sales" type="primary" @click="cancel" v-if="form.status=='1'">{{_label("zuofei")}}</au-button>
                 <au-button auth="sales" :type="form.id>0 ?'primary':'info'" @click="addReceive" v-if="form.id>0 && form.status!=3">{{_label("tianjiashoukuan")}}</au-button>
-                <as-button type="primary" @click="showProduct()" v-if="form.status<=1">{{_label("xuanzeshangpin")}}</as-button>
 
                 <el-tag type="warning" v-if="form.status>0">
                         <sp-select-text :value="form.status" source="salestatus"/>
@@ -124,12 +123,9 @@
                         </template>
                     </el-table-column>
                 </el-table>
+                <sp-productstock-input @input="onSelect"></sp-productstock-input>
             </el-col>
-        </el-row><!--
-        <el-row>
-            <simple-admin-page v-bind="props" ref="receive" :hide-create="true" :hide-form="true" v-if="form.id>0"></simple-admin-page>
-        </el-row> -->
-        <sp-productstock-search ref="stocksearch" @select="onSelect"></sp-productstock-search>
+        </el-row>
 
         <sp-dialog ref="receive-dialog" :title="_label('qingxuanze')" :width="1050" class="product">
             <simple-admin-page v-bind="props" ref="receive" :hide-create="true" :hide-form="true" v-if="form.id>0"></simple-admin-page>

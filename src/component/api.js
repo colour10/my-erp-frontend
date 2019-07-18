@@ -115,6 +115,37 @@ const API = {
             return [];
         }
     },
+
+    // 通过商品条码查询信息
+    async getProductByCode(code) {
+        let params = {
+            code,
+        };
+
+        try {
+            let result = await _fetch("/product/searchcode", params);
+            return result.data;
+        }
+        catch(e) {
+            return;
+        }
+    },
+
+    // 通过商品条码查询信息
+    async getProductCode(productid, sizecontentid) {
+        let params = {
+            productid,
+            sizecontentid,
+        };
+
+        try {
+            let result = await _fetch("/product/getcode", params);
+            return result.data;
+        }
+        catch(e) {
+            return '';
+        }
+    },
 }
 
 export default API;

@@ -109,24 +109,24 @@ export default {
     methods: {
         doAction(action) {
             //保存订单
-            let self = this
+            let self = this;
 
-            if (!confirm(self._label('order_submit_confirm'))) {
-                return
+            if(!self.confirm()) {
+                return;
             }
 
-            let params = { id: self.form.id }
-            let array = {}
+            let params = { id: self.form.id };
+            let array = {};
             let total = 0,
                 total_number = 0
             self.tabledata.forEach(item => {
                 array[item.id] = item.select_number;
                 total += item.select_number;
                 total_number += item.number;
-            })
+            });
 
             params.total = "";
-            if (total == 0) {
+            if(total == 0) {
                 params.total = 'deny';
             } else if (total_number == total) {
                 params.total = "allow"
@@ -144,10 +144,10 @@ export default {
         confirmin() {
             this.doAction('confirmin')
         },
-        cancel(){
+        async cancel(){
             let self = this;
             self.tabledata.forEach(item=>item.select_number=0);
-            self.doAction("confirmout");
+            self.doAction("cancel");
         },
         init(result) {
             let self = this
