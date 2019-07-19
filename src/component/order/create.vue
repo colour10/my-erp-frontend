@@ -3,10 +3,10 @@
         <el-form ref="order-form" class="formx" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini" :rules="formRules" :inline-message="false" :show-message="false">
             <el-row :gutter="0">
                 <au-button auth="order-submit" type="primary" @click="saveOrder(1)" v-if="form.status!='2'">{{_label("baocun")}}</au-button>
-                <au-button auth="order-submit" type="primary" @click="finish()" v-if="form.status!='2'">{{_label("wancheng")}}</au-button>
+                <au-button auth="order-submit" type="primary" @click="finish()" v-if="form.id>0 && form.status!='2'">{{_label("wancheng")}}</au-button>
                 <!-- <au-button auth="order-submit" :type="canSubmitPayment?'primary':'info'" @click="addPayment">{{_label("shengchengfahuodan")}}</au-button> -->
-                <au-button auth="order-submit" :type="canSubmitPayment?'primary':'info'" @click="addPayment">{{_label("fujian")}}</au-button>
-                <au-button auth="order-submit" :type="canSubmitPayment?'primary':'info'" @click="addPayment">{{_label("feiyong")}}</au-button>
+                <au-button auth="order-submit" :type="canSubmitPayment?'primary':'info'" @click="addPayment" v-if="form.id>0">{{_label("fujian")}}</au-button>
+                <au-button auth="order-submit" :type="canSubmitPayment?'primary':'info'" @click="addPayment" v-if="form.id>0">{{_label("feiyong")}}</au-button>
                 <as-button v-if="isEditable" :type="buttontype" @click="showProduct()">{{_label("xuanzeshangpin")}}</as-button>
             </el-row>
             <el-row :gutter="0">

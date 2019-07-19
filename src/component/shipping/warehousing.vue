@@ -2,7 +2,7 @@
     <div>
         <el-form class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini">
             <el-row :gutter="0">
-                <au-button auth="confirmorder-submit" type="danger" @click="confirmShipping()" v-if="form.status=='1'">{{_label("baocunxinxi")}}</au-button>
+                <au-button auth="confirmorder-submit" type="danger" @click="saveInfo()" v-if="form.status=='1'">{{_label("baocunxinxi")}}</au-button>
                 <au-button auth="confirmorder-submit" type="danger" @click="confirmShipping()" v-if="form.status=='1'">{{_label("querenruku")}}</au-button>
                 <as-button type="primary" @click="pro=true" v-if="form.status=='1'">{{_label("xuanzeshangpin")}}</as-button>
                 <as-button type="danger" @click="cancelConfirm()" v-if="form.status=='2'">{{_label("quxiaoqueren")}}</as-button>
@@ -183,7 +183,7 @@
                     </el-table-column>
                     <el-table-column :label="_label('chengben')" width="100" align="center" prop="price">
                         <template v-slot="{row}">
-                            <span v-if="row.order">{{row.price}}</span>
+                            <span v-if="row.order">{{costPrice[row.product.id]}}</span>
                         </template>
                     </el-table-column>
                     <el-table-column :label="_label('heji')" width="70" align="center" class="counter">
@@ -220,17 +220,17 @@
 </template>
 
 <script>
-import { StringFunc } from "../globals.js"
-import { extend, copyTo } from "../object.js"
-import chain from "../chain.js"
-import orderMixin from "../mixins/order.js"
-import { Order, ProductDetail, promiseRunner } from "../model.js"
-import { debounce } from "../function.js"
-import { statHelper } from "../helper.js"
+import API from '../api.js';
+import { StringFunc } from "../globals.js";
+import { extend, copyTo } from "../object.js";
+import chain from "../chain.js";
+import orderMixin from "../mixins/order.js";
+import { Order, ProductDetail, promiseRunner } from "../model.js";
+import { debounce } from "../function.js";
+import { statHelper } from "../helper.js";
 
 const result = {
     name: 'sp-warehousing',
-    components: {},
     mixins: [orderMixin],
     data() {
         let self = this;
@@ -286,6 +286,7 @@ const result = {
             shippingdetails: [],
             orderbranddetails:[],
             listdata: [],
+            costs: [], //成本数据
             uniqkey: 1,
             visible: false,
             pro: false,
@@ -303,9 +304,9 @@ const result = {
                     shippingid:''
                 },
                 options:{
-                    isedit:(item)=>self.form.status=='2',
-                    isdelete:(item)=>self.form.status=='2',
-                    isAdd:false,
+                    isedit: (item)=>self.form.status>0 && self.form.status!='3',
+                    isdelete: (item)=>self.form.status>0 && self.form.status!='3',
+                    isAdd:true,
                     isSearch:false,
                     isAutoReload:true
                 }
@@ -318,9 +319,6 @@ const result = {
             self.orderpayment.base.shippingid = self.form.id;
             self._showDialog("orderpayment");
         },
-        showProduct() {
-
-        },
         onSelectProduct(productDetail) {
             let self = this;
 
@@ -329,21 +327,21 @@ const result = {
                 product: productDetail,
                 discount: 1,
                 price: "",
-                form: {}
-            })
+                form: {},
+            });
         },
         onNumberChange(list) {
-            let self = this
+            let self = this;
             list.forEach(({ number, key, sizecontentid }) => {
-                let target = self.listdata.find(item => item.key == key && item.sizecontentid == sizecontentid)
+                let target = self.listdata.find(item => item.key == key && item.sizecontentid == sizecontentid);
 
-                if (target) {
-                    target.number = number
+                if(target) {
+                    target.number = number;
                 } else {
                     self.listdata.push({
                         key,
                         number,
-                        sizecontentid
+                        sizecontentid,
                     });
                 }
             })
@@ -353,11 +351,19 @@ const result = {
             self.pro = true
             self.$refs.products.search(form)
         },
+        saveInfo() {
+            // 保存信息
+            const self = this;
+
+            self._submit("/shipping/saveinfo", self.form).then(function(res) {
+                _private(self).loadDetail(self.$route.params.id);
+            });
+        },
         confirmShipping(status) {
             //保存订单
-            let self = this
+            let self = this;
 
-            if (!confirm(self._label("confirm-ruku"))) {
+            if(!confirm(self._label("confirm-ruku"))) {
                 return
             }
 
@@ -366,7 +372,7 @@ const result = {
             let check_result = true;
             let list = []
             self.listdata.forEach(({ key, sizecontentid, number }) => {
-                if (number <= 0) {
+                if(number <= 0) {
                     return
                 }
 
@@ -539,7 +545,20 @@ const result = {
         },
         isDisabled(){
             return  this.form.status!='1'
-        }
+        },
+        costPrice() {
+            let self = this;
+            let result = {};
+
+            self.tabledata.forEach(item=>{
+                result[item.product.id] = item.price;
+            });
+
+            self.costs.forEach(item=>{
+                result[item.productid] = self.f(item.amount/item.number);
+            });
+            return result;
+        },
     },
     watch: {
         'form2.keyword1': function(newvalue) {
@@ -557,13 +576,13 @@ const result = {
 
         self.copyKeywordDebounce = debounce(function() {
             self.form2.keyword = self.form2.keyword1
-        }, 1000, false)
+        }, 1000, false);
 
         self.copySuppliercodeDebounce = debounce(function() {
             self.form2.suppliercode = self.form2.suppliercode1
-        }, 1000, false)
+        }, 1000, false);
 
-        _private(self).loadDetail(self.$route.params.id)
+        _private(self).loadDetail(self.$route.params.id);
     }
 }
 
@@ -652,22 +671,30 @@ const _private = function(self) {
             })
         },
         loadDetail(id) {
-            self._setTitle("Loading...")
+            self._setTitle("Loading...");
             self._fetch("/shipping/load", { id }).then(async function({ data }) {
                 //self._log("加载订单信息", res)
 
-                let { form, orderbrands, orderbranddetails, shippingdetails } = data;
-                copyTo(form, self.form)
+                let { form, orderbrands, orderbranddetails, shippingdetails, costs } = data;
+                copyTo(form, self.form);
 
                 _this.importList(shippingdetails);
                 self.orderbranddetails = orderbranddetails;
 
-                self._setTitle(self._label("fahuodanruku") + ":" + self.form.orderno)
-            })
-        }
-    }
+                // 成本数据
+                if(costs) {
+                    self.costs = [];
+                    chain(costs).forEach(item=>{
+                        self.costs.push(item);
+                    });
+                }
 
-    return _this
+                self._setTitle(self._label('fahuodanruku') + ':' + self.form.orderno);
+            });
+        },
+    };
+
+    return _this;
 }
 
 export default result;

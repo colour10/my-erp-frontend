@@ -243,6 +243,11 @@ export default {
                 item.out_id = newvalue;
             });
         },
+        'form.wordcode': function() {
+            let self = this;
+            self.product = '';
+            self.options = [];
+        },
     },
 };
 </script>

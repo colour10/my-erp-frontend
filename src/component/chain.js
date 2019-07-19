@@ -75,6 +75,10 @@ const ArrayChain = function(target) {
     self.array = function() {
         return target;
     }
+
+    self.forEach = function(callback){
+        target.forEach(callback);
+    }
 }
 
 export default function(target) {
@@ -87,5 +91,5 @@ export default function(target) {
     else {
         throw "unknow Type"
     }
-    
+
 }

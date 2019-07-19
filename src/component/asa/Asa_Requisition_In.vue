@@ -245,5 +245,12 @@ export default {
             return result;
         },
     },
+    watch: {
+        'form.wordcode': function() {
+            let self = this;
+            self.product = '';
+            self.options = [];
+        },
+    },
 };
 </script>

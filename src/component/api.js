@@ -84,7 +84,7 @@ const API = {
     // 查询商品
     async getProductList(wordcode, goods_code) {
         let params = {
-            wordcode,
+            wordcode: wordcode.replace(/\s/g, ''),
             goods_code,
             page: 1,
             pageSize: 10,
@@ -144,6 +144,21 @@ const API = {
         }
         catch(e) {
             return '';
+        }
+    },
+
+    // 获得入库单上费用统计数据。
+    async getShippingFeeStat(shippingid) {
+        let params = {
+            shippingid,
+        };
+
+        try {
+            let result = await _fetch("/shipping/feesum", params);
+            return result.data;
+        }
+        catch(e) {
+            return {};
         }
     },
 }

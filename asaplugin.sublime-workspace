@@ -4,12 +4,40 @@
 		"selected_items":
 		[
 			[
-				"in",
-				"in_id"
+				"out",
+				"out_list"
+			],
+			[
+				"ta",
+				"tabledata"
+			],
+			[
+				"sto",
+				"stock_number"
 			],
 			[
 				"pro",
-				"product"
+				"productid"
+			],
+			[
+				"re",
+				"result"
+			],
+			[
+				"find",
+				"findFirst"
+			],
+			[
+				"Tb",
+				"TbProductcode"
+			],
+			[
+				"com",
+				"companyid"
+			],
+			[
+				"in",
+				"in_id"
 			],
 			[
 				"key",
@@ -104,14 +132,6 @@
 				"conditions"
 			],
 			[
-				"re",
-				"receive-dialog"
-			],
-			[
-				"out",
-				"out_number"
-			],
-			[
 				"res",
 				"reserve_number"
 			],
@@ -138,10 +158,6 @@
 			[
 				"pric",
 				"price"
-			],
-			[
-				"com",
-				"computeProductPrice"
 			],
 			[
 				"siz",
@@ -188,10 +204,6 @@
 				"TbProduct"
 			],
 			[
-				"Tb",
-				"TbProductstock"
-			],
-			[
 				"prod",
 				"product_array"
 			],
@@ -210,10 +222,6 @@
 			[
 				"h",
 				"helper"
-			],
-			[
-				"ta",
-				"tabledata"
 			],
 			[
 				"colu",
@@ -326,10 +334,6 @@
 			[
 				"orde",
 				"orderbranddetails"
-			],
-			[
-				"find",
-				"findFirstById"
 			],
 			[
 				"orderb",
@@ -510,10 +514,6 @@
 			[
 				"produc",
 				"productid\twarning"
-			],
-			[
-				"conf",
-				"confirm_total\twarning"
 			]
 		]
 	},
@@ -523,25 +523,25 @@
 			"file": "src/component/api.js",
 			"settings":
 			{
-				"buffer_size": 2719,
+				"buffer_size": 3376,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "/Z/erp/app/home/controllers/ProductstockController.php",
+			"file": "/Z/erp/app/models/erp/TbShipping.php",
 			"settings":
 			{
-				"buffer_size": 3000,
+				"buffer_size": 4144,
 				"encoding": "UTF-8",
-				"line_ending": "Unix"
+				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "/Z/erp/app/home/controllers/ProductController.php",
+			"file": "/Z/erp/app/home/controllers/ShippingController.php",
 			"settings":
 			{
-				"buffer_size": 22118,
+				"buffer_size": 24829,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -601,10 +601,28 @@
 			}
 		},
 		{
+			"file": "src/component/asa/Asa_Requisition_Select.vue",
+			"settings":
+			{
+				"buffer_size": 2212,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
 			"file": "src/component/asa/Asa_Requisition_Out.vue",
 			"settings":
 			{
-				"buffer_size": 6887,
+				"buffer_size": 9433,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/component/asa/Asa_Requisition_In.vue",
+			"settings":
+			{
+				"buffer_size": 9497,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -676,7 +694,7 @@
 			"file": "src/component/requisition/update.vue",
 			"settings":
 			{
-				"buffer_size": 7972,
+				"buffer_size": 7947,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -748,102 +766,9 @@
 			"file": "src/component/requisition/create.vue",
 			"settings":
 			{
-				"buffer_size": 6772,
+				"buffer_size": 7399,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "/Z/erp/app/home/controllers/RequisitionController.php",
-			"settings":
-			{
-				"buffer_size": 6311,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/Z/erp/app/models/erp/TbRequisition.php",
-			"settings":
-			{
-				"buffer_size": 12869,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/Z/erp/app/models/erp/TbProductstock.php",
-			"settings":
-			{
-				"buffer_size": 12530,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/Z/erp/app/home/controllers/ShippingController.php",
-			"settings":
-			{
-				"buffer_size": 24829,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/Z/erp/app/models/erp/TbShippingDetail.php",
-			"settings":
-			{
-				"buffer_size": 1492,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "/Z/erp/app/models/erp/TbSales.php",
-			"settings":
-			{
-				"buffer_size": 2349,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/Z/erp/app/models/erp/TbSaleport.php",
-			"settings":
-			{
-				"buffer_size": 1401,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/Z/erp/app/home/controllers/CommonController.php",
-			"settings":
-			{
-				"buffer_size": 11504,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/Z/erp/app/models/erp/TbWarehouse.php",
-			"settings":
-			{
-				"buffer_size": 2200,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"contents": "<?php\nreturn [\n    'system_name' => 'ERP管理系统',\n    'lang' => 'cn',\n    'language' => '简体中文',\n    1001 => '非法数据',\n    1002 => '操作失败',\n    1003 => '数据正在使用，无法删除',\n    1004 => '非法数据',\n    1100 => '没有设置倍率',\n    1101 => '汇率数据已经存在，不能重复添加。',\n    1102 => '数据没有变化，无需更改',\n    8000 => '不能为空',\n    'menu-1' => '组织架构',\n    'menu-1-1' => '员工信息',\n    'menu-1-2' => '权限组管理',\n    'menu-1-3' => '职能信息',\n    'menu-1-4' => '部门信息',\n    'xitongshezhi' => '系统设置',\n    'kaipiaoxinxi' => '开票信息',\n    'menu-2' => '基础数据',\n    'shouye' => '首页',\n    'menu-2-1-1' => '品牌维护',\n    'menu-2-1-2' => '品类维护',\n    'menu-2-1-3' => '款式年代',\n    'menu-2-1-4' => '颜色模板',\n    'menu-2-1-5' => '商品尺码模板',\n    'caizhiguanli' => '材质管理',\n    'menu-2-1-7' => '商品尺寸',\n    'menu-2-13' => '商品别名',\n    'kuanshi' => '款式',\n    'qubanma' => '去半码',\n    'fuzhuma' => '辅助码',\n    'shengxiaoshijian' => '生效时间',\n    'lishihuilv' => '历史汇率',\n    'jiezhishijian' => '截止时间',\n    'menu-2-1-15' => '洗涤说明',\n    'menu-2-1-16' => '防寒指数',\n    'menu-2-1-17' => '材质状态管理',\n    'menu-2-1-19' => '商品尺码描述',\n    'yinhangmingcheng' => '银行名称',\n    'gaojichaxun' => '高级查询',\n    'wenjianming' => '文件名',\n    'yinhangdizhi' => '银行地址',\n    'menu-2-3-1' => '仓库管理',\n    'menu-2-3-2' => '销售端口管理',\n    'menu-2-3-3' => '国家及地区信息维护',\n    'menu-2-3-4' => '费用名称',\n    'fenhangmingcheng' => '分行名称',\n    'menu-2-3-6' => '销售性质',\n    'menu-2-3-7' => '业务类型',\n    'kaihuhang' => '开户行',\n    'yinhangzhanghao' => '银行账号',\n    'zhuijia' => '追加一条',\n    'tongkuanduose' => '同款多色',\n    'fuzhidao' => '复制到',\n    'menu-3' => '商品管理',\n    'menu-3-1' => '商品信息',\n    'menu-3-2' => '图片管理',\n    'menu-3-3' => '图片上传',\n    'menu-4' => '客户管理',\n    'jiumingzi' => '旧名字',\n    'menu-4-2' => '供货商报价',\n    'menu-4-3' => '供货商级别',\n    'menu-5' => '供应链管理',\n    'menu-5-1' => '订单管理',\n    'menu-5-1-2' => '订单状态查询',\n    'shuxingdingyi' => '属性定义',\n    'menu-5-2' => '发货入库',\n    'menu-5-3' => '到货入库',\n    'menu-5-3-2' => '入库单查询',\n    'menu-6' => '库存管理',\n    'menu-6-1' => '调拨相关',\n    'fuzhishuxing' => '复制属性',\n    'gengxinren' => '更新人',\n    'gengxinshijian' => '更新时间',\n    'menu-6-4' => '库存查询',\n    'menu-7' => '销售管理',\n    'menu-7-1' => '商品零售/批发',\n    'chongfushezhi' => '重复设置',\n    'menu-7-5' => '销售统计',\n    'menu-8' => '结算',\n    'dingdanjiesuan' => '订单结算',\n    'xiaoshoujiesuan' => '销售结算',\n    'jiage' => '价格',\n    'menu-11' => '系统',\n    'menu-11-1' => '系统帮助',\n    'menu-11-2' => '修改密码',\n    'menu-11-3' => '退出',\n    'en' => '英',\n    'cn' => '中',\n    'button-save' => '保存',\n    'button-cancel' => '取消',\n    'button-add' => '添加',\n    'button-create' => '新建',\n    'button-modify' => '编辑',\n    'button-submit' => '提交',\n    'button-delete' => '删除',\n    'button-ok' => '确定',\n    'bumenmingcheng' => '部门名称',\n    'depart-parent' => '上级部门',\n    'depart-create' => '新建部门',\n    'description' => '说明',\n    'memo' => '备注',\n    'password' => '密码',\n    'depart' => '部门',\n    'bu' => '事业部',\n    'country' => '国家',\n    'gender' => '性别',\n    'user-setting' => '用户管理',\n    'user-loginname' => '登录名',\n    'user-join' => '入职时间',\n    'user-left' => '离职时间',\n    'user-realname' => '真实姓名',\n    'user-linkman' => '备用联系人',\n    'telephone' => '电话',\n    'mobile' => '手机',\n    'email' => 'E-mail',\n    'email-password' => '邮箱密码',\n    'sale-port' => '销售端口',\n    'group-info' => '组信息',\n    'jiesuandanwei' => '结算单位',\n    'cangku' => '仓库',\n    'jiagedan' => '价格单',\n    'gerenshezhi' => '个人设置',\n    'yuangongxinxi' => '用户信息',\n    'xinjianyonghu' => '新建用户',\n    'qingxuanze' => '请选择',\n    'xuanzeriqi' => '选择日期',\n    'man' => '男',\n    'woman' => '女',\n    'group-add' => '新建组',\n    'group-modify' => '编辑组信息',\n    'zumingcheng' => '组名称',\n    'zuxinxi' => '组信息',\n    'caozuo' => '操作',\n    'xinjian' => '新建',\n    'user-list' => '用户列表',\n    'pinpaishangbiao' => '品牌商标',\n    'yingwenmingcheng' => '英文名称',\n    'pinpaimingcheng' => '品牌名称',\n    'shifoushouquanpinpai' => '是否授权品牌',\n    'guishujituan' => '归属集团',\n    'guishuguojia' => '归属国家',\n    'guanwangdizhi' => '官网地址',\n    'duizhaodaima' => '对照代码',\n    'zhongwenmingcheng' => '中文名称',\n    'pinpaibianhao' => '品牌编号',\n    'pinpaifenlei' => '品牌分类',\n    'xinjianpinpai' => '新建品牌',\n    'yanse' => '颜色',\n    'jibenziliao' => '基本资料',\n    'pinlei' => '品类',\n    'jiagebili' => '价格比例',\n    'bieming' => '别名',\n    'xilie' => '系列',\n    'jiekoudaimaduizhao' => '接口代码对照',\n    'xiaoshouduankoudengji' => '销售端口等级',\n    'teshyanse' => '特殊颜色',\n    'gonghuoshangdengji' => '供货商等级',\n    'zhekoubili' => '折扣比例',\n    'niandai' => '年代',\n    'guojiadaima3' => '国家代码[3]',\n    'guojiadaima2' => '国家代码[2]',\n    'guojiamingcheng' => '国家名称',\n    'bizhong' => '币种',\n    'dianshangduizhaobiao' => '电商对照表',\n    'bianji' => '编辑',\n    'shanchu' => '删除',\n    'miaoshu' => '描述',\n    'xinjianxinxi' => '新建信息',\n    'yonghuxinxi' => '用户信息',\n    'xiugaixinxi' => '修改信息',\n    'yuzhong' => '语种',\n    'pinpaijieshao' => '品牌介绍',\n    'department-tip1' => '点击左侧部门树，添加或者修改部门信息。',\n    'zuneirenyuan' => '组内人员',\n    'quanxian' => '权限',\n    'delete_warning' => '此操作将删除该记录, 是否继续?',\n    'zuofei_warning' => '此操作将订单作废, 是否继续?',\n    'tijiao_warning' => '此操作将提交订单, 是否继续?',\n    'tip' => '提示',\n    'tianjiaxinxi' => '添加信息',\n    'xingming' => '姓名',\n    'baocun' => '保存',\n    'success' => '操作成功',\n    'delete_success' => '删除成功',\n    'error_tip' => '错误提示',\n    'ok' => '确定',\n    'cancel' => '取消',\n    'dengluming' => '登录名',\n    'zu' => '组',\n    'pinleimingcheng' => '品类名称',\n    'pinleibianma' => '品类编码',\n    'yuyan' => '语言',\n    'chakanziji' => '查看子集',\n    'zileimingcheng' => '子类名称',\n    'zileibianma' => '子类编码',\n    'chimamoban' => '尺码模板',\n    'maozhong' => '毛重',\n    'caizhidaima' => '材质代码',\n    'caizhimingcheng' => '材质名称',\n    'bianhao' => '编号',\n    'caizhibeizhu' => '材质备注',\n    'chima' => '尺码',\n    'jiegoumingcheng' => '结构名称',\n    'peijiandaima' => '配件代码',\n    'peijianmingcheng' => '配件名称',\n    'shifoubaozhuang' => '是否包装',\n    'yes' => '是',\n    'no' => '否',\n    'changhemingcheng' => '场合名称',\n    'changheshuoming' => '场合说明',\n    'bihefangshimingcheng' => '闭合方式名称',\n    'bihefangshishuoming' => '闭合方式说明',\n    'mingcheng' => '名称',\n    'shixiang' => '事项',\n    'beizhu' => '备注',\n    'xidimingcheng' => '洗涤名称',\n    'tupian' => '图片',\n    'shangchuan' => '上传',\n    'fanghanzhishu' => '防寒指数',\n    'mobanmingcheng' => '模板名称',\n    'biaoti' => '标题',\n    'xuhao' => '序号',\n    'neirong' => '内容',\n    'yanseseban' => '颜色色板',\n    'asabianhao' => '颜色编码',\n    'yansefenlei' => '颜色分类',\n    'guojiadaima' => '国家代码',\n    'biemingmingcheng' => '别名名称',\n    'biemingbianma' => '别名编码',\n    'gonghuoshangbianma' => '供货商编码',\n    'guojiachengshi' => '国家城市',\n    'leibiemingcheng' => '类别名称',\n    'zhuyishixiang' => '注意事项',\n    'fabuji' => '发布季',\n    'nianfen' => '年份',\n    'gonghuoshangmingcheng' => '供货商名称',\n    'dizhi' => '地址',\n    'wangzhi' => '网址',\n    'chuanzhen' => '传真',\n    'faren' => '法人',\n    'zhuceziben' => '注册资本',\n    'shuihao' => '税号',\n    'yingyezhizhaohao' => '营业执照号',\n    'zhuceshijian' => '注册时间',\n    'zhongzhishijian' => '终止时间',\n    'leixing' => '类型',\n    'dianhua' => '电话',\n    'lianxiren' => '联系人',\n    'pinpai' => '品牌',\n    'zipinlei' => '子品类',\n    'chandi' => '产地',\n    'pinpaiseban' => '品牌色板',\n    'caizhizhuangtai' => '材质状态',\n    'changhefengge' => '场合风格',\n    'shangpinchicun' => '商品尺寸',\n    'shangpinmiaoshu' => '商品描述',\n    'bihefangshi' => '闭合方式',\n    'shangpinbieming' => '商品别名',\n    'shangpinxilie' => '商品系列',\n    'shangpinzixilie' => '子系列',\n    'chengjiaojiage' => '成交价格',\n    'guojilingshoujia' => '国际零售价',\n    'chuchangjia' => '国际出厂价',\n    'benguolingshoujia' => '本国零售价',\n    'chicunbeizhu' => '尺寸备注',\n    'xingbie' => '性别',\n    'jijie' => '季节',\n    'chimaguige' => '尺码规格',\n    'anquanleibie' => '安全类别',\n    'zhixingbiaozhun' => '执行标准',\n    'jiandangren' => '建档人',\n    'jiandangshijian' => '建档时间',\n    'zuihouruku' => '最后入库',\n    'guigexinghao' => '规格型号',\n    'shangpinmingcheng' => '商品名称',\n    'shangpintiaoma' => '商品条码',\n    'shangpintupian' => '商品图片',\n    'zhutu' => '主图',\n    'futu' => '副图',\n    'guanlianxinxi' => '关联信息',\n    'xiliebianma' => '系列编码',\n    'xiliemingcheng' => '系列名称',\n    'zixilie' => '子系列',\n    'bianma' => '编码',\n    'cangkumingcheng' => '仓库名称',\n    'guojiadiqu' => '国家地区',\n    'shifoukeyong' => '是否可用',\n    'qitalianxifangshi' => '其他联系方式',\n    'yidongdianhua' => '移动电话',\n    'youbian' => '邮编',\n    'chengshi' => '城市',\n    'dingdanbianhao' => '订单编号',\n    'yewuleixing' => '业务类型',\n    'gonghuoshang' => '供货商',\n    'fahuodanwei' => '发货单位',\n    'niandaileixing' => '年代类型',\n    'nannvkuan' => '男/女款',\n    'dingdanriqi' => '订单日期',\n    'zongjine' => '总金额',\n    'huilv' => '汇率',\n    'zhekou' => '折扣',\n    'dingdanhao' => '订单号',\n    'haiwaidingdanhao' => '海外订单号',\n    'fapiaohao' => '发票号',\n    'zhidanren' => '制单人',\n    'shenheren' => '审核人',\n    'shuxing' => '采购类型',\n    'wofanglianxiren' => '我方联系人',\n    'dinghuokehu' => '订货客户',\n    'dinghuokehulianxiren' => '订货联系人',\n    'baocundingdan' => '保存订单',\n    'xuanzeshangpin' => '选择商品',\n    'zongshu' => '总数',\n    'zidonghuoqu' => '系统自动生成',\n    'dinggoushuliang' => '订购数量',\n    'guojima' => '国际码',\n    'huohao' => '货号',\n    'huiyuan' => '会员',\n    'xiaoshouren' => '销售人',\n    'waitudingdanhao' => '外部订单号',\n    'xiaoshoucangku' => '销售仓库',\n    'xiaoshouriqi' => '销售日期',\n    'duizhangdanhao' => '对账单号',\n    'zhidanriqi' => '制单日期',\n    'tihuofangshi' => '提货方式',\n    'kuaidifukuanfang' => '快递付款',\n    'kuaididanhao' => '快递单号',\n    'kuaidifeiyong' => '快递费用',\n    'shouhuodizhi' => '收货地址',\n    'tijiao' => '提交',\n    'yushou' => '预售',\n    'fujian' => '附件',\n    'shuliang' => '数量',\n    'tijiaoshenhe' => '提交审核',\n    'order_submit_confirm' => '订单是否确定提交审核？',\n    'huiyuanming' => '会员名',\n    'weixin' => '微信',\n    'weibo' => '微博',\n    'qq' => 'QQ',\n    'shengri' => '生日',\n    'shouji' => '手机',\n    'gonghuodanwei' => '发货商',\n    'daohuocangku' => '到货仓库',\n    'fahuodanhao' => '发货单号',\n    'niandaijijie' => '年代季节',\n    'fukuanshijian' => '付款时间',\n    'daidiandanwei' => '代垫单位',\n    'anpaitihuoshijian' => '安排提货时间',\n    'hangbanhao' => '航班号',\n    'hangbanriqi' => '航班日期',\n    'zhudanhao' => '主单号',\n    'zidanhao' => '子单号',\n    'fahuogang' => '发货港',\n    'daohuogang' => '到货港',\n    'xiangshu' => '箱数',\n    'zhongliang' => '重量',\n    'tiji' => '体积',\n    'jifeizhongliang' => '计费重量',\n    'kongyunshang' => '空运商',\n    'haiwaifapiaohao' => '海外发票号',\n    'daokushijian' => '到库时间',\n    'hetongmaifang' => '合同买方',\n    'hetongmaifang2' => '合同卖方',\n    'yunshufangshi' => '运输方式',\n    'zhifufangshi' => '支付方式',\n    'shengyushuliang' => '剩余数量',\n    'xuanze' => '选择',\n    'xitongdenglu' => '系统登录',\n    'denglu' => '登录',\n    'mima' => '密码',\n    'yonghuming' => '用户名',\n    'dengluchenggong' => '登录成功',\n    'chaxun' => '查询',\n    'querensuoxuan' => '确认所选',\n    'zuofei' => '作废',\n    'xiaoshoudanhao' => '销售单号',\n    'zhuangtai' => '状态',\n    'ruku' => '入库',\n    'shenhetongguo' => '审核通过',\n    'tuihui' => '退回',\n    'shengchengrukudan' => '生成入库单',\n    'quxiaoshenhe' => '取消审核',\n    'rukuriqi' => '入库日期',\n    'daohuoshuliang' => '到货数量',\n    'shuliangxiangfu' => '数量相符',\n    'tishi' => '提示',\n    'order-add-warning' => '商品条目已经添加过了。',\n    'confirm-order' => '是否确认审核订单？',\n    'confirm-order-cancel' => '是否确认取消订单的审核状态',\n    'dingdanwajie' => '订单完结',\n    'fahuoshuliang' => '发货数量',\n    'rukudanhao' => '入库单号',\n    'diaochuku' => '调出库',\n    'diaoruku' => '调入库',\n    'shenqingren' => '申请人',\n    'diaobocaozuo' => '调拨操作',\n    'shenqing' => '申请',\n    'kucunshuliang' => '库存数量',\n    'diaoboshuliang' => '调拨数量',\n    'chanpinmingcheng' => '产品名称',\n    'shenqingriqi' => '申请日期',\n    'chukuqueren' => '出库确认',\n    'chukushijian' => '出库时间',\n    'diaochucangku' => '调出仓库',\n    'diaorucangku' => '调入仓库',\n    'rukuqueren' => '入库确认',\n    'rukushijian' => '入库时间',\n    'quxiao' => '取消',\n    'chukushuliang' => '出库数量',\n    'rukushuliang' => '入库数量',\n    'requisition_1' => '请先选择调拨操作',\n    'operate_fail' => '操作失败',\n    'tongyidiaoru' => '统一调入',\n    'xiaoshouduankou' => '销售端口',\n    'zongjia' => '总价',\n    'chengjiaozongjia' => '成交总价',\n    'danjia' => '单价',\n    'zhehoujia' => '折后价',\n    'jiagepipei' => '价格匹配',\n    'choice_warehouse' => '请先选择仓库',\n    'xiaoshoushuliang' => '销售数量',\n    'chengjiaojia' => '成交价',\n    'dingdanzongjia' => '订单总价',\n    'chanpinguanli' => '产品管理',\n    'juese' => '角色',\n    'qingkong' => '清空',\n    'chaxunjieguo' => '查询结果',\n    'nicheng' => '昵称',\n    'tuichu' => '退出',\n    'pinleishuxing' => '品类属性',\n    'xiangshang' => '向上',\n    'xiangxia' => '向下',\n    'alipay' => '支付宝',\n    'fukuanleixing' => '付款类型',\n    'jine' => '金额',\n    'tianjiashoukuan' => '添加收款',\n    'fukuanriqi' => '付款日期',\n    'yiruzhang' => '已入账',\n    'querenfukuan' => '确认已付款',\n    'confirm-payment?' => '确认该笔费用已经支付吗？',\n    'queren' => '确认',\n    'xiangqing' => '详情',\n    'huobiguanli' => '货币管理',\n    'jiageshezhi' => '价格设置',\n    'tijiaoren' => '提交人',\n    'xishu' => '系数',\n    'dingbu' => '顶部',\n    'dibu' => '底部',\n    'chimazu' => '尺码组',\n    'chimamingxi' => '尺码明细',\n    'jiandang' => '建档',\n    'chun' => '春季',\n    'xia' => '夏季',\n    'qiu' => '秋季',\n    'dong' => '冬季',\n    'siji' => '四季',\n    'jiageleixing' => '价格类型',\n    'jiagedingyi' => '价格定义',\n    'jiagemingcheng' => '价格名称',\n    'xiaoshoushuxing' => '销售属性',\n    'huichuhuobi' => '汇出货币',\n    'huiruhuobi' => '汇入货币',\n    'huilvguanli' => '汇率管理',\n    'benguohuobi' => '本国货币',\n    'morenyuyan' => '默认语言',\n    'quzheng' => '取整',\n    'kucun' => '库存',\n    'zhiliang' => '质量',\n    'shoujihao' => '手机号',\n    'feiyong' => '费用',\n    'sexi' => '色系',\n    'yansemingcheng' => '颜色名称',\n    'paixu' => '排序',\n    'benguochuchangjia' => '本国出厂价',\n    'baifenbi' => '百分比',\n    'jiancheng' => '简称',\n    'beilv' => '倍率',\n    'xitongmoren' => '系统默认',\n    'dangqianshijian' => '当前时间',\n    'shangpin' => '商品',\n    'duoguoyuyanguanli' => '多国语言管理',\n    'name' => '名称',\n    'group' => '组',\n    'groupid' => '组编号',\n    'permission' => '权限',\n    'permissionid' => '权限编号',\n    'permission-name' => '权限名称',\n    'permission-pid' => '上级权限',\n    'permission-module' => '权限-模型关联表',\n    'companyid' => '公司编号',\n    'countryid' => '国家编号',\n    'storeid' => '仓库编号',\n    'user' => '用户',\n    'department' => '部门',\n    'bumen' => '部门',\n    'departmentid' => '部门编号',\n    'department-list' => '部门列表',\n    'user-status' => '用户个人状态',\n    'priceid' => '销售价格编号',\n    'spotid' => '销售端口编号',\n    'up_dp_id' => '上级部门编号',\n    'group_name' => '组名称',\n    'code' => '编码',\n    'brand-group' => '品类',\n    'child-product-group' => '子品类',\n    'ageseason-name' => '年代数字',\n    'ageseason-mark' => '年代英文标识',\n    'ageseason-name-mark' => '年代数字、英文标识',\n    'randid' => '随机标识',\n    'company' => '公司',\n    'order' => '订单',\n    'orderid' => '订单编号',\n    'orderdetail' => '订单详情',\n    'product' => '商品',\n    'sizecontent' => '尺码',\n    'sizecontent-content' => '尺码名称',\n    'sizecontent-memo' => '尺码简介',\n    'sizetop' => '尺码组',\n    'bussinesstype' => '订单类型',\n    'group-keys' => '组赋值参数',\n    'order-params' => '订单参数',\n    'makestaff' => '制单人',\n    'order-gurd-alert-message' => '您只能操作自己公司的订单',\n    'confirmorder-gurd-alert-message' => '您只能操作自己公司的发货单',\n    'supplierid' => '供货商编号',\n    'sale' => '销售单',\n    'saleid' => '销售单编号',\n    'saledetail' => '销售单详情',\n    'memberid' => '会员编号',\n    'salesstaff' => '销售者编号',\n    'sellspotid' => '销售端口编号',\n    'salesdetail' => '销售单详情',\n    'productid' => '商品编号',\n    'sizecontentid' => '尺码编号',\n    'number' => '数量',\n    'warehouse' => '仓库',\n    'productstock-productid-sizecontentid-warehouseid' => '商品、尺码、库存记录已存在',\n    'ageseason' => '年代季节',\n    'confirmorder-params' => '发货单参数',\n    'confirmorderdetail' => '发货单明细',\n    'confirmorder' => '发货单',\n    'confirmorderid' => '发货单编号 ',\n    'orderdetail-over-max-number' => '发货量超过了订单数量',\n    'supplier' => '供货商',\n    'warehouseid' => '仓库ID',\n    'member' => '会员',\n    'shoporder_common' => '订单',\n    'shoporder' => '子订单',\n    'brandgroup-list' => '品类列表',\n    'childproductgroup-list' => '子品类列表',\n    'caizhi' => '材质',\n    'url' => '网址',\n    'product-description' => '商品详情',\n    'out-of-stock' => '库存不足',\n    'buycar' => '购物车',\n    'payment-failed' => '付款失败',\n    'password-required' => '密码不能为空',\n    'password-not-equal' => '密码输入不一致',\n    'password-not-correct' => '密码输入不正确',\n    'fill-out-required-fields' => '请填写所有必填字段',\n    'address-exist' => '地址已经存在',\n    'address-doesnot-exist' => '地址不存在',\n    'mobile-invalid' => '手机号码不合法',\n    'params-invalid' => '非法操作',\n    'address' => '地址',\n    'member_id' => '会员编号',\n    'hasmany-foreign-message' => '正在使用，不能删除',\n    'belongsto-foreign-message' => '记录不存在',\n    'model-delete-message' => '请先登录',\n    \"yingwendizhi\" => \"英文地址\",\n    \"kehuleixing\" => \"客户类型\",\n    \"quedingshanchu\" => \"确定删除吗？\",\n    \"lingshoubi\" => \"零售比\",\n    \"cankaobeilv\" => \"参考倍率\",\n    \"qiye\" => \"企业\",\n    \"shouhuoren\" => \"收货人\",\n    \"dingdanguanli\" => \"客户订单\",\n    \"xinjiandingdan\" => \"新建客户订单\",\n    \"dingdan\" => \"订单\",\n    \"rukudanguanli\" => \"入库单管理\",\n    \"fahuoshang\" => \"发货商\",\n    \"dinghuoriqi\" => \"订货日期\",\n    \"zhekoulv\" => \"折扣率\",\n    \"tuishuilv\" => \"退税率\",\n    \"kehudingdanhao\" => \"客户订单号\",\n    \"gongsidingdanhao\" => \"公司订单号\",\n    \"nannv\" => \"男/女\",\n    \"shengfen\" => \"省份\",\n    \"zuoji\" => \"座机\",\n    \"piliangxuanze\" => \"批量选择\",\n    \"pinpaidingdan\" => \"品牌订单\",\n    \"shengchengpinpaidingdan\" => \"生成品牌订单\",\n    \"heji\" => \"合计\",\n    \"shengchengquerendan\" => \"生成确认单\",\n    \"querendan\" => \"确认单\",\n    \"waibudingdan\" => \"品牌订单\",\n    \"shengchengwaibudingdan\" => \"品牌订单编辑\",\n    \"querenwaibudingdan\" => \"确认品牌订单\",\n    \"fahuo\" => \"发货\",\n    \"chuchangjiaheji\" => \"出厂价合计\",\n    \"yujidaodariqi\" => \"预到达日\",\n    \"fahuodan\" => \"发货单\",\n    \"daorudingdan\" => \"导入订单\",\n    \"querenshuliang\" => \"确认数量\",\n    \"shengchengfahuodan\" => \"新建发货单\",\n    \"xiaoshoudan\" => \"销售单\",\n    \"xinjianxiaoshoudan\" => \"新建销售单\",\n    \"xinjiandiaobodan\" => \"新建调拨单\",\n    \"diaobodan\" => \"调拨单\",\n    \"shezhi\" => \"设置\",\n    \"xishuxianzhikuan\" => \"系数(限制款)\",\n    \"shuaxin\" => \"刷新\",\n    \"costplus\" => \"Cost+\",\n    \"maoli\" => \"毛利\",\n    \"xianliangkuan\" => \"限量款\",\n    \"guojiquhao\" => \"国际区号\",\n    \"fahuodanruku\" => \"发货单入库\",\n    \"guanbitishi\" => \"关闭提示\",\n    \"shangpinshuxing\" => \"商品属性\",\n    \"quxiaoruku\" => \"取消入库\",\n    \"quxiaorukutishi\" => \"当前操作将取消当前发货单的所有入库，是否确定？\",\n    \"cuowutishi\" => \"错误提示\",\n    \"chuangjianxinxilie\" => \"创建新系列\",\n    \"dingjiaxishu\" => \"定价系数\",\n    \"zengjiagonghuoshang\" => \"增加供货商\",\n    \"zengjia\" => \"增加\",\n    \"leibiezhanbi\" => \"类别占比\",\n    \"piliangfenpei\" => \"批量分配\",\n    \"fenpei\" => \"分配\",\n    \"piliangchongzhi\" => \"批量重置\",\n    \"qxzjghs\" => \"请先增加供货商！\",\n    \"zongjianshu\" => \"总件数\",\n    \"lingshouzongjia\" => \"零售总价\",\n    \"tip-tongyige\" => \"同一个供货商的两个品牌订单不能同时编辑。\",\n    \"edu\" => \"额度\",\n    \"shengyuedu\" => \"剩余额度\",\n    \"dinghuoshuliang\" => \"订货数量\",\n    \"fenpeishuliang\" => \"分配数量\",\n    \"fuzhi\" => \"复制\",\n    \"confirm-ruku\" => \"确定要进行入库操作吗？\",\n    \"tip-jiagebunengweikong\" => \"请设置价格。\",\n    \"quxiaoqueren\" => \"取消确认\",\n    \"tip-quxiaoqueren\" => \"是否要取消？\",\n    \"tip-queren\" => \"是否确认？\",\n    \"fahuoriqi\" => \"发货日期\",\n    \"tip-pinpai\" => \"请先选择品牌\",\n    \"queding\" => \"确定\",\n    \"jiaoyan\" => \"校验\",\n    \"tip-bunengshanchu\" => \"客户订单已经设置过数据，不能删除。\",\n    \"zaitushuliang\" => \"在途数量\",\n    \"suodingshuliang\" => \"锁定数量\",\n    \"feiyongmingcheng\" => \"费用名称\",\n    \"feiyongguanli\" => \"费用管理\",\n    \"shifoutanxiao\" => \"是否摊销\",\n    \"tanxiaofangshi\" => \"摊销方式\",\n    \"xiaoshou\" => \"销售\",\n    \"querentijiao\" => \"确认提交吗？\",\n    \"querenruku\" => \"确认入库\",\n    \"baocunxinxi\" => \"保存信息\",\n    \"feiyongshuqi\" => \"费用输齐\",\n    \"chengben\" => \"成本\",\n    \"canpin\" => \"残品\",\n    \"diaobofangshi\" => \"调拨方式\",\n    \"wancheng\" => \"完成\",\n    \"zaitushuliang\" => \"在途数量\",\n    \"zaitushuliang\" => \"在途数量\",\n    \"zaitushuliang\" => \"在途数量\",\n    \"zaitushuliang\" => \"在途数量\",\n    \"zaitushuliang\" => \"在途数量\",\n    \"zaitushuliang\" => \"在途数量\",\n    \"zaitushuliang\" => \"在途数量\",\n    \"zaitushuliang\" => \"在途数量\",\n    \"zaitushuliang\" => \"在途数量\",\n    \"zaitushuliang\" => \"在途数量\",\n    \"zaitushuliang\" => \"在途数量\",\n    \"zaitushuliang\" => \"在途数量\",\n    \"zaitushuliang\" => \"在途数量\",\n    \"zaitushuliang\" => \"在途数量\",\n    \"zaitushuliang\" => \"在途数量\",\n    \"zaitushuliang\" => \"在途数量\",\n    \"zaitushuliang\" => \"在途数量\",\n\n    // 新增配置项\n    'salesdate-required' => '销售时间条件不能为空',\n    'datetime-invalid' => '时间格式不正确',\n    'date-required' => '请选择日期',\n    'make-an-error' => '出错了',\n    'params-error' => '参数不正确',\n    'invitation-link-error' => '邀请链接不正确',\n    'do-not-re-register' => '请勿重复注册',\n    'member-exist' => '会员已存在',\n    'tips' => '友情提示',\n    'login-status-cannot-signup' => '必须退出登录才能注册',\n    'product-doesnot-exist' => '商品不存在',\n    'brandgroupchild-doesnot-exist' => '子品类不存在',\n    'add-to-cart' => '加入购物车',\n    'inoperable' => '不可操作',\n    'no-products' => '暂无商品',\n    'freight' => '运费',\n    'continue' => '继续',\n    'iknow' => '我知道了',\n    'please-wait' => '请稍候...',\n    '404-not-found' => '页面不存在',\n    'add-new-address' => '添加新地址',\n    'address-list' => '地址管理',\n    'address-resolution' => '地址智能解析',\n    'address-resolution-rule' => '粘贴地址后，鼠标点击空白处，即可自动解析',\n    'register' => '注册',\n    'old-password' => '原始密码',\n    'new-password' => '新密码',\n    'repeat-password' => '确认密码',\n    'reset-password' => '密码重置',\n    'confirm-default-adress' => '您真的要设置当前地址为默认吗？',\n    'confirm-delete-adress' => '您真的要删除这个地址吗？',\n    'confirm-apply-refund' => '您真的要申请退款吗？',\n    'confirm-cancle-order' => '您真的要取消这个订单吗？',\n    'no-saving-addresses' => '您没有保存任何收货地址',\n    'set-default' => '设为默认',\n    'default-address' => '默认地址',\n    'welcome' => '欢迎',\n    'welcome-to' => '欢迎光临',\n    'my-order' => '我的订单',\n    'buycar-empty' => '您的购物车空空如也',\n    'view-buycar' => '查看购物车',\n    'more' => '更多',\n    'member-center' => '会员中心',\n    'dear' => '尊敬的',\n    'unpaid' => '未支付',\n    'payment-not-completed' => '已支付未完成',\n    'completed' => '已完成',\n    'cancelled' => '已取消',\n    'refunding' => '退款中',\n    'refunded' => '已退款',\n    'order-cancel' => '取消订单',\n    'apply-for-refund' => '申请退款',\n    'order-failure' => '未在规定时间内支付，订单已失效！',\n    'order-empty' => '您的订单空空如也',\n    'pay' => '支付',\n    'to-pay' => '去支付',\n    'please-fill-in-your-address' => '填写您的收货信息',\n    'choose-payment-method' => '选择支付方式',\n    'remain-time' => '支付剩余时间',\n    'days' => '天',\n    'hours' => '时',\n    'minutes' => '分',\n    'seconds' => '秒',\n    'invitation-registration' => '邀请注册',\n    'invitation-registration-list' => '邀请注册名单',\n    'login-failed' => '登录失败',\n    'no-data' => '暂无资料',\n    'thank-you-for-register' => '感谢您注册本网站',\n    'default-password' => '您的初始密码为',\n    'modify-in-time' => '请及时修改',\n    'login-by-click-link' => '您可以点击以下链接进行登录',\n    'notice-for-success-register' => '注册成功通知',\n    'latest-promotion' => '最新促销',\n    'change-jiezhishijian' => '更改截止时间',\n    'system-error' => '程序内部错误',\n    'search' => '搜索',\n    'gongsi' => '公司',\n    'guojia' => '国家',\n    'payment-success' => '付款成功',\n    'payment-status' => '付款状态',\n    'order-unpaid' => '订单未付款',\n    'order-paid' => '订单已付款',\n    'order-cancled' => '订单被取消',\n    'order-closed' => '订单已关闭',\n    'order-not-closed' => '订单未关闭',\n    'refund_status_pending' => '未退款',\n    'refund_status_applied' => '已申请退款',\n    'refund_status_processing' => '退款中',\n    'refund_status_success' => '退款成功',\n    'refund_status_failed' => '退款失败',\n    'ship_status_pending' => '未发货',\n    'ship_status_delivered' => '已发货',\n    'ship_status_received' => '已收货',\n    'shoporder-status-error' => '订单状态不正确',\n    'is_lockstock' => '是否锁库存',\n    'refund' => '退款',\n    'close_or_not' => '是否关闭',\n    'unknown_payment_method' => '未知付款方式',\n    'unknown_refund_method' => '未知退款方式',\n    'order_has_been_paid' => '您于 %s 创建的订单已经成功支付',\n    'view-by-click-link' => '您可以点击以下链接进行查看',\n    'missing-params' => '缺少 %s 参数',\n    'gain-error' => '获取 %s 失败',\n    'fail-to-get-userinfo' => '获取用户信息失败',\n    'successful-authorization' => '授权成功',\n    'pay-authorization' => '支付授权',\n    'alipay-authorization' => '支付宝授权',\n    'illegal-source-request' => '非法来源请求',\n    'alipay-not-authorized' => '支付宝未授权',\n    'seller-alipay-not-authorized' => '卖家支付宝未授权，不能付款',\n    'wechat-not-authorized' => '微信未授权',\n    'input-refund-reason' => '请输入退款理由',\n    'paid-not-allowed-to-refund' => '订单已付款',\n    'order-has-been-refunded' => '该订单已经申请过退款',\n    'success-apply-refund' => '您已成功申请退款',\n    'refund-status' => '退款状态',\n    'order-people' => '下单人',\n    'logistics' => '物流',\n    'agree' => '同意',\n    'disagree' => '不同意',\n    'confirm-refund-agree' => '您真的要同意退款吗？',\n    'confirm-refund-disagree' => '您真的要拒绝退款吗？',\n    'input-refund-disagree-reason' => '请输入不同意退款理由',\n    'in-stock' => '在库',\n    'order-shipped' => '订单已发货',\n    'input-logistics-info' => '请输入物流信息',\n    'logistics-incomplete' => '物流信息不全',\n    'ship' => '发货',\n    'input' => '请输入...',\n    'reason' => '理由',\n    'disagree-reason' => '拒绝退款理由',\n    'express_status' => '物流状态',\n    'express_company' => '物流公司',\n    'express_no' => '物流单号',\n    'receive-order' => '确认收货',\n    'confirm-receive-order' => '您真的要确认收货吗？',\n    'incorrect-delivery-status' => '发货状态不正确？',\n\n    'template' =>\n        [\n            'uniqueness' => '%s不能重复',\n            'required' => '%s不能为空',\n            'numericality' => '%s必须是数字',\n            'invalid' => '%s不合法',\n            'digit' => '%s必须是整数',\n            'hasmany-foreign-message' => '正在使用，不能删除，因为有%s正在使用它',\n            'belongsto-foreign-message' => '%s上不存在',\n            'notexist' => '%s不存在',\n        ],\n    'db' =>\n        [\n            'add-failed' => '%s添加失败',\n            'save-failed' => '%s保存失败',\n            'edit-failed' => '%s编辑失败',\n            'delete-failed' => '%s删除失败',\n            'add-success' => '%s添加成功',\n            'save-success' => '%s保存成功',\n            'edit-success' => '%s编辑成功',\n            'delete-success' => '%s删除成功',\n        ],\n    'list' =>\n        [\n            'gender' =>\n                [\n                    '1' => '男士',\n                    '2' => '女士',\n                    '3' => '中性',\n                    '4' => '男童',\n                    '5' => '女童',\n                    '6' => '儿童',\n                ],\n            'gender2' =>\n                [\n                    1 => '男',\n                    0 => '女',\n                ],\n            'season' =>\n                [\n                    1 => '春季',\n                    2 => '夏季',\n                    3 => '秋季',\n                    4 => '冬季',\n                    5 => '四季',\n                ],\n            'bussinesstype' =>\n                [\n                    1 => '期货',\n                    2 => '现货',\n                ],\n            'formtype' =>\n                [\n                    1 => '男款',\n                    2 => '女款',\n                    3 => '男/女款',\n                ],\n            'orderproperty' =>\n                [\n                    1 => '自采',\n                    2 => '代销',\n                ],\n            'pickingtype' =>\n                [\n                    1 => '自提',\n                    2 => '快递',\n                    3 => '店铺直发',\n                ],\n            'expresspaidtype' =>\n                [\n                    1 => '预付',\n                    2 => '到付',\n                    3 => '第三方付费',\n                ],\n            'transporttype' =>\n                [\n                    1 => 'BY AIR',\n                    2 => '快递',\n                ],\n            'paytype' =>\n                [\n                    1 => 'T/T',\n                    2 => 'L/C',\n                ],\n            'salestatus' =>\n                [\n                    3 => '预售',\n                    1 => '已售',\n                    2 => '作废',\n                ],\n            'ordertatus' =>\n                [\n                    1 => '保存',\n                    2 => '待审核',\n                    3 => '审核',\n                    4 => '作废',\n                ],\n            'requisitiontype' =>\n                [\n                    1 => '统一调出',\n                    2 => '统一调入',\n                ],\n            'requisitionstatus' =>\n                [\n                    1 => '出库拒绝',\n                    2 => '出库待确认',\n                    3 => '在途',\n                    4 => '入库拒绝',\n                    5 => '完成',\n                ],\n            'warehouserole' =>\n                [\n                    1 => '管理员',\n                    2 => '销售',\n                ],\n            'suppliertype' =>\n                [\n                    4 => '供货商',\n                    1 => '物流',\n                    2 => '客户',\n                    5 => '品牌方',\n                    3 => '其他',\n                ],\n            'paymenttype' =>\n                [\n                    1 => '定金',\n                    2 => '货款',\n                ],\n            'pricetype' =>\n                [\n                    1 => '零售价',\n                    2 => '批发价',\n                    3 => '电商价',\n                    4 => '期货价',\n                    5 => '折扣价',\n                    6 => '清仓价',\n                ],\n            'pricefilter' =>\n                [\n                    1 => '个位取整',\n                    2 => '十位取整',\n                    3 => '不取整',\n                ],\n            'defectivelevel' =>\n                [\n                    1 => '合格',\n                    2 => '残次品',\n                ],\n\n            \"customtype\" => [\n                \"2\" => \"个人\",\n                \"1\" => \"企业\",\n            ],\n\n            \"shippingstatus\" => [\n                \"1\" => \"在途\",\n                \"2\" => \"待入库\",\n                \"3\" => \"已入库\"\n            ],\n\n            \"amortizetype\" => [\n                \"1\" => \"按数量摊销\",\n                \"2\" => \"按金额摊销\",\n            ],\n            \"salestatus\" => [\n                \"0\" => \"未保存\",\n                \"1\" => \"预售\",\n                \"2\" => \"已售\",\n                \"3\" => \"作废\",\n            ],\n        ],\n];\n",
-			"file": "/Z/erp/app/config/languages/cn.php",
-			"file_size": 36199,
-			"file_write_time": 132078408610000000,
-			"settings":
-			{
-				"buffer_size": 28937,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
 			}
 		},
 		{
@@ -896,15 +821,6 @@
 			"settings":
 			{
 				"buffer_size": 10261,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "/Z/erp/app/home/views/index.phtml",
-			"settings":
-			{
-				"buffer_size": 10192,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -1011,7 +927,7 @@
 			"file": "src/main.js",
 			"settings":
 			{
-				"buffer_size": 12230,
+				"buffer_size": 12212,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -1029,7 +945,7 @@
 			"file": "src/component/mixin.js",
 			"settings":
 			{
-				"buffer_size": 9013,
+				"buffer_size": 9150,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -1050,6 +966,14 @@
 			{
 				"buffer_size": 14198,
 				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/component/fetcher.js",
+			"settings":
+			{
+				"buffer_size": 3130,
 				"line_ending": "Windows"
 			}
 		},
@@ -1147,7 +1071,7 @@
 			"file": "src/component/Simple_Select.vue",
 			"settings":
 			{
-				"buffer_size": 10595,
+				"buffer_size": 10596,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -1162,10 +1086,19 @@
 			}
 		},
 		{
+			"file": "src/component/asa/Asa_Product_Code.vue",
+			"settings":
+			{
+				"buffer_size": 568,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
 			"file": "src/component/shipping/warehousing.vue",
 			"settings":
 			{
-				"buffer_size": 28880,
+				"buffer_size": 28925,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -1300,22 +1233,30 @@
 	],
 	"file_history":
 	[
+		"/Z/erp/app/home/views/index.phtml",
+		"/Z/erp/app/config/languages/cn.php",
+		"/Z/erp/app/models/erp/TbWarehouse.php",
+		"/Z/erp/app/home/controllers/CommonController.php",
+		"/Z/erp/app/models/erp/TbSaleport.php",
+		"/Z/erp/app/models/erp/TbSales.php",
+		"/Z/erp/app/models/erp/TbShippingDetail.php",
+		"/Z/erp/app/home/controllers/ShippingController.php",
+		"/Z/erp/app/models/erp/TbProductstock.php",
+		"/Z/erp/app/models/erp/TbRequisition.php",
+		"/Z/erp/app/home/controllers/RequisitionController.php",
+		"/Z/erp/app/models/erp/TbProduct.php",
+		"/Z/erp/app/home/controllers/ProductController.php",
+		"/Z/erp/app/home/controllers/ProductstockController.php",
 		"/D/code/vue/caicai/src/views/Charge.vue",
 		"/D/code/vue/caicai/src/App.vue",
-		"/Z/erp/app/home/views/index.phtml",
-		"/Z/erp/app/home/controllers/ProductController.php",
 		"/Z/erp/app/models/erp/TbOrder.php",
 		"/Z/erp/app/home/controllers/OrderController.php",
 		"/Z/erp/app/home/controllers/OrderbrandController.php",
 		"/Z/erp/app/models/erp/TbOrderBrand.php",
-		"/Z/erp/app/models/erp/TbRequisition.php",
-		"/Z/erp/app/config/languages/cn.php",
 		"/Z/erp/app/models/erp/TbShipping.php",
-		"/Z/erp/app/home/controllers/ShippingController.php",
 		"/C/Users/changwei/Documents/APowerLSSoft/UserInfoConfig/Servers.xml",
 		"/Z/erp/app/config/config.php",
 		"/Z/erp/app/home/controllers/SalesController.php",
-		"/Z/erp/app/home/controllers/RequisitionController.php",
 		"/D/code/vue/h5/vue.config.js",
 		"/D/code/vue/asa-plugin/src/component/helper.js",
 		"/D/code/vue/h5/src/views/Home.vue",
@@ -1344,15 +1285,9 @@
 		"/D/code/vue/vant/src/main.ts",
 		"/D/code/vue/vant/dist/css/app.66dd203c.css",
 		"/D/code/vue/vant-demo/base/vue.config.js",
-		"/Z/erp/app/models/erp/TbSales.php",
-		"/Z/erp/app/models/erp/TbWarehouse.php",
-		"/Z/erp/app/models/erp/TbProductstock.php",
 		"/Z/erp/app/models/erp/TbSalesdetails.php",
 		"/Z/erp/app/home/controllers/SalesreceiveController.php",
 		"/Z/erp/app/home/controllers/ShippingfeeController.php",
-		"/Z/erp/app/home/controllers/CommonController.php",
-		"/Z/erp/app/models/erp/TbProduct.php",
-		"/Z/erp/app/home/controllers/ProductstockController.php",
 		"/Z/erp/app/home/Module.php",
 		"/Z/erp/app/models/erp/TbRequisitionDetail.php",
 		"/Z/erp/app/models/erp/TbUserPrice.php",
@@ -1360,7 +1295,6 @@
 		"/D/code/vue/asa-plugin/src/component/array.js",
 		"/D/code/vue/tsvue/src/components/HelloWorld.vue",
 		"/Z/erp/app/models/erp/TbShippingFee.php",
-		"/Z/erp/app/models/erp/TbShippingDetail.php",
 		"/Z/erp/app/models/erp/TbExchangeRate.php",
 		"/Z/erp/app/models/erp/TbCompany.php",
 		"/D/code/opensourse/vue/src/core/util/next-tick.js",
@@ -1426,8 +1360,7 @@
 		"/C/Users/changwei/Downloads/vue-chartjs-develop/vue-chartjs-develop/src/BaseCharts.js",
 		"/D/code/vue/asa-plugin/src/component/asa/Asa_Order_Tip.vue",
 		"/Z/erp/app/config/config-dist.php",
-		"/Y/gamecenter/app/plugins/SecurityPlugin.php",
-		"/D/code/vue/asa-plugin/webpack.config.js"
+		"/Y/gamecenter/app/plugins/SecurityPlugin.php"
 	],
 	"find":
 	{
@@ -1445,6 +1378,18 @@
 		"case_sensitive": true,
 		"find_history":
 		[
+			"getCostList",
+			"3",
+			"stocks",
+			"请选择仓库",
+			"querentijiao",
+			"110504",
+			"110505",
+			"110503",
+			"确认提交",
+			"wordcode",
+			"row.type=",
+			"{row}",
 			"baocun",
 			"form.id",
 			"11090303",
@@ -1560,19 +1505,7 @@
 			"orderbrandDetailList",
 			"wordpri",
 			"stat",
-			"total_discount_price",
-			"listdata",
-			"orderbrandlist",
-			"listdata",
-			"self.details",
-			"tabledata",
-			"orderlist",
-			"currency",
-			"price",
-			"deepClone",
-			"details",
-			"getRowDealTotal",
-			"getRowFactoryTotal"
+			"total_discount_price"
 		],
 		"highlight": false,
 		"in_selection": false,
@@ -1580,6 +1513,8 @@
 		"regex": false,
 		"replace_history":
 		[
+			"type=",
+			"{{row, type}}",
 			" ",
 			"",
 			"orderbrandDetailList",
@@ -1705,9 +1640,7 @@
 			"globals.getLabel(\"$1\")",
 			"$ASAL[\"$1\"]",
 			"{{globals.getLabel(\"$1\")}}",
-			"><router-link to=\"$1\">{{globals.getLabel(\"$2\")}}</router-link>",
-			"\\n",
-			"$1:\"\","
+			"><router-link to=\"$1\">{{globals.getLabel(\"$2\")}}</router-link>"
 		],
 		"reverse": false,
 		"show_context": true,
@@ -1727,7 +1660,7 @@
 	"groups":
 	[
 		{
-			"selected": 35,
+			"selected": 1,
 			"sheets":
 			[
 				{
@@ -1736,21 +1669,21 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2719,
+						"buffer_size": 3376,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2472,
-								2472
+								3184,
+								3184
 							]
 						],
 						"settings":
 						{
 							"open_with_edit": true,
-							"sorttabs_lastactivated": 1563345929.49,
+							"sorttabs_lastactivated": 1563451550.03,
 							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true,
@@ -1763,32 +1696,32 @@
 							"use_tab_stops": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 630.0,
+						"translation.y": 1055.33333333,
 						"zoom_level": 1.0
 					},
-					"stack_index": 25,
+					"stack_index": 2,
 					"type": "text"
 				},
 				{
 					"buffer": 1,
-					"file": "/Z/erp/app/home/controllers/ProductstockController.php",
+					"file": "/Z/erp/app/models/erp/TbShipping.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3000,
+						"buffer_size": 4144,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								841,
-								841
+								2883,
+								2883
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1563335422.08,
+							"sorttabs_lastactivated": 1563454870.13,
 							"syntax": "Packages/PHP/PHP.sublime-syntax",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true,
@@ -1800,47 +1733,41 @@
 							}
 						},
 						"translation.x": 0.0,
-						"translation.y": 90.0,
+						"translation.y": 540.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 28,
+					"stack_index": 0,
 					"type": "text"
 				},
 				{
 					"buffer": 2,
-					"file": "/Z/erp/app/home/controllers/ProductController.php",
+					"file": "/Z/erp/app/home/controllers/ShippingController.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 22118,
+						"buffer_size": 24829,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								10629,
-								10637
+								15560,
+								15560
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1563329149.88,
+							"sorttabs_lastactivated": 1563453271.1,
 							"syntax": "Packages/PHP/PHP.sublime-syntax",
 							"tab_size": 4,
-							"translate_tabs_to_spaces": true,
-							"typescript_plugin_format_options":
-							{
-								"convertTabsToSpaces": true,
-								"indentSize": 2,
-								"tabSize": 2
-							}
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 2880.0,
+						"translation.y": 5136.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 31,
+					"stack_index": 1,
 					"type": "text"
 				},
 				{
@@ -1871,7 +1798,7 @@
 						"translation.y": 4056.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 10,
+					"stack_index": 25,
 					"type": "text"
 				},
 				{
@@ -1902,7 +1829,7 @@
 						"translation.y": 360.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 32,
+					"stack_index": 31,
 					"type": "text"
 				},
 				{
@@ -1933,7 +1860,7 @@
 						"translation.y": 1080.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 55,
+					"stack_index": 49,
 					"type": "text"
 				},
 				{
@@ -1964,7 +1891,7 @@
 						"translation.y": 240.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 33,
+					"stack_index": 32,
 					"type": "text"
 				},
 				{
@@ -1995,7 +1922,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 34,
+					"stack_index": 33,
 					"type": "text"
 				},
 				{
@@ -2017,7 +1944,7 @@
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1563366091.39,
+							"sorttabs_lastactivated": 1563434558.07,
 							"syntax": "Packages/Vue/vue.tmLanguage",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
@@ -2026,29 +1953,29 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 12,
+					"stack_index": 14,
 					"type": "text"
 				},
 				{
 					"buffer": 9,
-					"file": "src/component/asa/Asa_Requisition_Out.vue",
+					"file": "src/component/asa/Asa_Requisition_Select.vue",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 6887,
+						"buffer_size": 2212,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3398,
-								3398
+								1614,
+								1614
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1563367226.08,
+							"sorttabs_lastactivated": 1563438658.47,
 							"syntax": "Packages/Vue/vue.tmLanguage",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
@@ -2057,11 +1984,73 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 9,
 					"type": "text"
 				},
 				{
 					"buffer": 10,
+					"file": "src/component/asa/Asa_Requisition_Out.vue",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 9433,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								9419,
+								9419
+							]
+						],
+						"settings":
+						{
+							"sorttabs_lastactivated": 1563439143.66,
+							"syntax": "Packages/Vue/vue.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 2880.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
+					"type": "text"
+				},
+				{
+					"buffer": 11,
+					"file": "src/component/asa/Asa_Requisition_In.vue",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 9497,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								9328,
+								9483
+							]
+						],
+						"settings":
+						{
+							"sorttabs_lastactivated": 1563439083.14,
+							"syntax": "Packages/Vue/vue.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 2700.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 8,
+					"type": "text"
+				},
+				{
+					"buffer": 12,
 					"file": "src/component/asa/Asa_Productstock_Search.vue",
 					"semi_transient": false,
 					"settings":
@@ -2079,7 +2068,7 @@
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1563334335.51,
+							"sorttabs_lastactivated": 1563420399.31,
 							"syntax": "Packages/Vue/vue.tmLanguage",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true,
@@ -2091,14 +2080,14 @@
 							}
 						},
 						"translation.x": 0.0,
-						"translation.y": 150.0,
+						"translation.y": 15.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 29,
+					"stack_index": 22,
 					"type": "text"
 				},
 				{
-					"buffer": 11,
+					"buffer": 13,
 					"file": "src/component/asa/Asa_Select_Product_Dialog.vue",
 					"semi_transient": false,
 					"settings":
@@ -2125,11 +2114,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 72,
+					"stack_index": 65,
 					"type": "text"
 				},
 				{
-					"buffer": 12,
+					"buffer": 14,
 					"file": "src/component/asa/Asa_Sizecontent_Confirm2.vue",
 					"semi_transient": false,
 					"settings":
@@ -2153,14 +2142,14 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 3075.33333333,
+						"translation.y": 3075.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 24,
 					"type": "text"
 				},
 				{
-					"buffer": 13,
+					"buffer": 15,
 					"file": "src/component/asa/Asa_Sizecontent_Confirm3.vue",
 					"semi_transient": false,
 					"settings":
@@ -2187,11 +2176,11 @@
 						"translation.y": 1260.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 40,
+					"stack_index": 37,
 					"type": "text"
 				},
 				{
-					"buffer": 14,
+					"buffer": 16,
 					"file": "src/component/asa/Asa_Sizecontent_Confirm4.vue",
 					"semi_transient": false,
 					"settings":
@@ -2224,11 +2213,11 @@
 						"translation.y": 945.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 42,
+					"stack_index": 39,
 					"type": "text"
 				},
 				{
-					"buffer": 15,
+					"buffer": 17,
 					"file": "src/component/asa/Asa_Sizecontent_Input.vue",
 					"semi_transient": false,
 					"settings":
@@ -2255,11 +2244,11 @@
 						"translation.y": 180.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 64,
+					"stack_index": 58,
 					"type": "text"
 				},
 				{
-					"buffer": 16,
+					"buffer": 18,
 					"file": "src/component/cache.js",
 					"semi_transient": false,
 					"settings":
@@ -2293,42 +2282,42 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 63,
+					"stack_index": 57,
 					"type": "text"
 				},
 				{
-					"buffer": 17,
+					"buffer": 19,
 					"file": "src/component/requisition/update.vue",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 7972,
+						"buffer_size": 7947,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4789,
-								4789
+								5822,
+								5822
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1562663875.84,
+							"sorttabs_lastactivated": 1563430083.08,
 							"syntax": "Packages/Vue/vue.tmLanguage",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 508.0,
+						"translation.y": 1530.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 51,
+					"stack_index": 16,
 					"type": "text"
 				},
 				{
-					"buffer": 18,
+					"buffer": 20,
 					"file": "src/component/sales/index.vue",
 					"semi_transient": false,
 					"settings":
@@ -2355,11 +2344,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 50,
+					"stack_index": 46,
 					"type": "text"
 				},
 				{
-					"buffer": 19,
+					"buffer": 21,
 					"file": "src/component/requisition/index.vue",
 					"semi_transient": false,
 					"settings":
@@ -2386,11 +2375,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 13,
+					"stack_index": 26,
 					"type": "text"
 				},
 				{
-					"buffer": 20,
+					"buffer": 22,
 					"file": "src/component/orderbrand/confirm.vue",
 					"semi_transient": false,
 					"settings":
@@ -2417,11 +2406,11 @@
 						"translation.y": 2070.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 41,
+					"stack_index": 38,
 					"type": "text"
 				},
 				{
-					"buffer": 21,
+					"buffer": 23,
 					"file": "src/component/order/create.vue",
 					"semi_transient": false,
 					"settings":
@@ -2433,13 +2422,13 @@
 						"selection":
 						[
 							[
-								14553,
-								14553
+								62,
+								67
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1563366355.72,
+							"sorttabs_lastactivated": 1563449941.58,
 							"syntax": "Packages/Vue/vue.tmLanguage",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true,
@@ -2451,14 +2440,14 @@
 							}
 						},
 						"translation.x": 0.0,
-						"translation.y": 585.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 11,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
-					"buffer": 22,
+					"buffer": 24,
 					"file": "src/component/orderbrand/create.vue",
 					"semi_transient": false,
 					"settings":
@@ -2470,13 +2459,13 @@
 						"selection":
 						[
 							[
-								10528,
-								10528
+								27959,
+								28115
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1563366906.86,
+							"sorttabs_lastactivated": 1563436566.09,
 							"syntax": "Packages/Vue/vue.tmLanguage",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true,
@@ -2488,14 +2477,14 @@
 							}
 						},
 						"translation.x": 0.0,
-						"translation.y": 1971.33333333,
+						"translation.y": 8370.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 9,
+					"stack_index": 11,
 					"type": "text"
 				},
 				{
-					"buffer": 23,
+					"buffer": 25,
 					"file": "src/component/sales/create.vue",
 					"semi_transient": false,
 					"settings":
@@ -2522,11 +2511,11 @@
 						"translation.y": 1530.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 14,
+					"stack_index": 27,
 					"type": "text"
 				},
 				{
-					"buffer": 24,
+					"buffer": 26,
 					"file": "src/component/http.js",
 					"semi_transient": false,
 					"settings":
@@ -2560,352 +2549,42 @@
 						"translation.y": 180.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 46,
+					"stack_index": 42,
 					"type": "text"
 				},
 				{
-					"buffer": 25,
+					"buffer": 27,
 					"file": "src/component/requisition/create.vue",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 6772,
+						"buffer_size": 7399,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2325,
-								2392
+								4895,
+								4904
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1563366942.9,
+							"sorttabs_lastactivated": 1563438525.52,
 							"syntax": "Packages/Vue/vue.tmLanguage",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 2190.0,
+						"translation.y": 1620.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
-					"type": "text"
-				},
-				{
-					"buffer": 26,
-					"file": "/Z/erp/app/home/controllers/RequisitionController.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 6311,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								3117,
-								3117
-							]
-						],
-						"settings":
-						{
-							"sorttabs_lastactivated": 1563356239.93,
-							"syntax": "Packages/PHP/PHP.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 1350.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 16,
-					"type": "text"
-				},
-				{
-					"buffer": 27,
-					"file": "/Z/erp/app/models/erp/TbRequisition.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 12869,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								2958,
-								2958
-							]
-						],
-						"settings":
-						{
-							"sorttabs_lastactivated": 1563356059.43,
-							"syntax": "Packages/PHP/PHP.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 1080.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 17,
+					"stack_index": 10,
 					"type": "text"
 				},
 				{
 					"buffer": 28,
-					"file": "/Z/erp/app/models/erp/TbProductstock.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 12530,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								5330,
-								5338
-							]
-						],
-						"settings":
-						{
-							"sorttabs_lastactivated": 1563356958.65,
-							"syntax": "Packages/PHP/PHP.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 2181.33333333,
-						"zoom_level": 1.0
-					},
-					"stack_index": 15,
-					"type": "text"
-				},
-				{
-					"buffer": 29,
-					"file": "/Z/erp/app/home/controllers/ShippingController.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 24829,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								20884,
-								20899
-							]
-						],
-						"settings":
-						{
-							"sorttabs_lastactivated": 1563355473.51,
-							"syntax": "Packages/PHP/PHP.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 7470.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 19,
-					"type": "text"
-				},
-				{
-					"buffer": 30,
-					"file": "/Z/erp/app/models/erp/TbShippingDetail.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1492,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								987,
-								1002
-							]
-						],
-						"settings":
-						{
-							"sorttabs_lastactivated": 1563355578.07,
-							"syntax": "Packages/PHP/PHP.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 450.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 18,
-					"type": "text"
-				},
-				{
-					"buffer": 31,
-					"file": "/Z/erp/app/models/erp/TbSales.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 2349,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1049,
-								1050
-							]
-						],
-						"settings":
-						{
-							"sorttabs_lastactivated": 1563347998.43,
-							"syntax": "Packages/PHP/PHP.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 22,
-					"type": "text"
-				},
-				{
-					"buffer": 32,
-					"file": "/Z/erp/app/models/erp/TbSaleport.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1401,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1286,
-								1286
-							]
-						],
-						"settings":
-						{
-							"sorttabs_lastactivated": 1563348038.3,
-							"syntax": "Packages/PHP/PHP.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 21,
-					"type": "text"
-				},
-				{
-					"buffer": 33,
-					"file": "/Z/erp/app/home/controllers/CommonController.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 11504,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								8244,
-								8244
-							]
-						],
-						"settings":
-						{
-							"sorttabs_lastactivated": 1563347970.78,
-							"syntax": "Packages/PHP/PHP.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 2376.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 23,
-					"type": "text"
-				},
-				{
-					"buffer": 34,
-					"file": "/Z/erp/app/models/erp/TbWarehouse.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 2200,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"sorttabs_lastactivated": 1563347601.62,
-							"syntax": "Packages/PHP/PHP.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 24,
-					"type": "text"
-				},
-				{
-					"buffer": 35,
-					"file": "/Z/erp/app/config/languages/cn.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 28937,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								19061,
-								19061
-							]
-						],
-						"settings":
-						{
-							"sorttabs_lastactivated": 1563367925.78,
-							"syntax": "Packages/PHP/PHP.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 9291.33333333,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				},
-				{
-					"buffer": 36,
 					"file": "src/component/DataSource.js",
 					"semi_transient": false,
 					"settings":
@@ -2939,11 +2618,11 @@
 						"translation.y": 3531.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 56,
+					"stack_index": 50,
 					"type": "text"
 				},
 				{
-					"buffer": 37,
+					"buffer": 29,
 					"file": "src/component/shipping/detail.vue",
 					"semi_transient": false,
 					"settings":
@@ -2970,11 +2649,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 36,
+					"stack_index": 34,
 					"type": "text"
 				},
 				{
-					"buffer": 38,
+					"buffer": 30,
 					"file": "src/component/helper.js",
 					"semi_transient": false,
 					"settings":
@@ -2986,13 +2665,13 @@
 						"selection":
 						[
 							[
-								313,
-								313
+								50,
+								58
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1563268412.86,
+							"sorttabs_lastactivated": 1563436405.76,
 							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true,
@@ -3002,11 +2681,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 37,
+					"stack_index": 12,
 					"type": "text"
 				},
 				{
-					"buffer": 39,
+					"buffer": 31,
 					"file": "src/component/function.js",
 					"semi_transient": false,
 					"settings":
@@ -3040,11 +2719,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 69,
+					"stack_index": 63,
 					"type": "text"
 				},
 				{
-					"buffer": 40,
+					"buffer": 32,
 					"file": "src/component/globals.js",
 					"semi_transient": false,
 					"settings":
@@ -3082,7 +2761,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 41,
+					"buffer": 33,
 					"file": "index.html",
 					"semi_transient": false,
 					"settings":
@@ -3100,7 +2779,7 @@
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1563366937.68,
+							"sorttabs_lastactivated": 1563445963.31,
 							"syntax": "Packages/HTML/HTML.sublime-syntax",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true,
@@ -3112,45 +2791,14 @@
 							}
 						},
 						"translation.x": 0.0,
-						"translation.y": 5106.0,
+						"translation.y": 5211.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
-					"buffer": 42,
-					"file": "/Z/erp/app/home/views/index.phtml",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 10192,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								9446,
-								9446
-							]
-						],
-						"settings":
-						{
-							"sorttabs_lastactivated": 1563366921.88,
-							"syntax": "Packages/PHP/PHP.sublime-syntax",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 5136.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 7,
-					"type": "text"
-				},
-				{
-					"buffer": 43,
+					"buffer": 34,
 					"file": "src/component/supplier/index.vue",
 					"semi_transient": false,
 					"settings":
@@ -3177,11 +2825,11 @@
 						"translation.y": 2961.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 47,
+					"stack_index": 43,
 					"type": "text"
 				},
 				{
-					"buffer": 44,
+					"buffer": 35,
 					"file": "src/component/login/index.vue",
 					"semi_transient": false,
 					"settings":
@@ -3208,11 +2856,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 26,
+					"stack_index": 28,
 					"type": "text"
 				},
 				{
-					"buffer": 45,
+					"buffer": 36,
 					"file": "src/component/product/index.vue",
 					"semi_transient": false,
 					"settings":
@@ -3239,11 +2887,11 @@
 						"translation.y": 1260.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 59,
+					"stack_index": 53,
 					"type": "text"
 				},
 				{
-					"buffer": 46,
+					"buffer": 37,
 					"file": "src/component/home/index.vue",
 					"semi_transient": false,
 					"settings":
@@ -3270,11 +2918,11 @@
 						"translation.y": 855.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 23,
 					"type": "text"
 				},
 				{
-					"buffer": 47,
+					"buffer": 38,
 					"file": "/D/code/vue/caicai/src/bus.js",
 					"semi_transient": false,
 					"settings":
@@ -3306,11 +2954,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 45,
+					"stack_index": 41,
 					"type": "text"
 				},
 				{
-					"buffer": 48,
+					"buffer": 39,
 					"file": "src/component/orderbrand/index.vue",
 					"semi_transient": false,
 					"settings":
@@ -3343,11 +2991,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 39,
+					"stack_index": 36,
 					"type": "text"
 				},
 				{
-					"buffer": 49,
+					"buffer": 40,
 					"file": "src/component/shipping/index.vue",
 					"semi_transient": false,
 					"settings":
@@ -3380,11 +3028,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 38,
+					"stack_index": 35,
 					"type": "text"
 				},
 				{
-					"buffer": 50,
+					"buffer": 41,
 					"file": "src/component/department/index.vue",
 					"semi_transient": false,
 					"settings":
@@ -3411,11 +3059,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 62,
+					"stack_index": 56,
 					"type": "text"
 				},
 				{
-					"buffer": 51,
+					"buffer": 42,
 					"file": "src/component/productstock/index.vue",
 					"semi_transient": false,
 					"settings":
@@ -3442,11 +3090,11 @@
 						"translation.y": 780.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 54,
+					"stack_index": 48,
 					"type": "text"
 				},
 				{
-					"buffer": 52,
+					"buffer": 43,
 					"file": "src/component/brand/index.vue",
 					"semi_transient": false,
 					"settings":
@@ -3473,11 +3121,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 61,
+					"stack_index": 55,
 					"type": "text"
 				},
 				{
-					"buffer": 53,
+					"buffer": 44,
 					"file": "src/component/order/index.vue",
 					"semi_transient": false,
 					"settings":
@@ -3504,29 +3152,29 @@
 						"translation.y": 900.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 68,
+					"stack_index": 62,
 					"type": "text"
 				},
 				{
-					"buffer": 54,
+					"buffer": 45,
 					"file": "src/main.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 12230,
+						"buffer_size": 12212,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1632,
-								1632
+								2878,
+								2894
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1563367918.04,
+							"sorttabs_lastactivated": 1563432285.43,
 							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true,
@@ -3542,11 +3190,11 @@
 						"translation.y": 540.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 15,
 					"type": "text"
 				},
 				{
-					"buffer": 55,
+					"buffer": 46,
 					"file": "src/component/math.js",
 					"semi_transient": false,
 					"settings":
@@ -3580,29 +3228,29 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 66,
+					"stack_index": 60,
 					"type": "text"
 				},
 				{
-					"buffer": 56,
+					"buffer": 47,
 					"file": "src/component/mixin.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 9013,
+						"buffer_size": 9150,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								9011,
-								9011
+								1468,
+								1475
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1563179033.63,
+							"sorttabs_lastactivated": 1563429694.59,
 							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true,
@@ -3615,14 +3263,14 @@
 							"use_tab_stops": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 3616.0,
+						"translation.y": 450.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 44,
+					"stack_index": 17,
 					"type": "text"
 				},
 				{
-					"buffer": 57,
+					"buffer": 48,
 					"file": "src/component/mixins/cachecomponent.js",
 					"semi_transient": false,
 					"settings":
@@ -3657,11 +3305,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 43,
+					"stack_index": 40,
 					"type": "text"
 				},
 				{
-					"buffer": 58,
+					"buffer": 49,
 					"file": "src/component/model.js",
 					"semi_transient": false,
 					"settings":
@@ -3679,7 +3327,7 @@
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1562658931.6,
+							"sorttabs_lastactivated": 1563421208.04,
 							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true,
@@ -3692,14 +3340,46 @@
 							"use_tab_stops": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 3420.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 52,
+					"stack_index": 21,
 					"type": "text"
 				},
 				{
-					"buffer": 59,
+					"buffer": 50,
+					"file": "src/component/fetcher.js",
+					"semi_transient": true,
+					"settings":
+					{
+						"buffer_size": 3130,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"sorttabs_lastactivated": 1563421236.97,
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true,
+							"use_tab_stops": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 20,
+					"type": "text"
+				},
+				{
+					"buffer": 51,
 					"file": "src/component/object.js",
 					"semi_transient": false,
 					"settings":
@@ -3733,11 +3413,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 70,
+					"stack_index": 64,
 					"type": "text"
 				},
 				{
-					"buffer": 60,
+					"buffer": 52,
 					"file": "src/component/asa/order-detail.js",
 					"semi_transient": false,
 					"settings":
@@ -3771,11 +3451,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 67,
+					"stack_index": 61,
 					"type": "text"
 				},
 				{
-					"buffer": 61,
+					"buffer": 53,
 					"file": "src/component/mixins/order.js",
 					"semi_transient": false,
 					"settings":
@@ -3808,11 +3488,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 48,
+					"stack_index": 44,
 					"type": "text"
 				},
 				{
-					"buffer": 62,
+					"buffer": 54,
 					"file": "src/component/asa/product-search-form.vue",
 					"semi_transient": false,
 					"settings":
@@ -3839,11 +3519,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 60,
+					"stack_index": 54,
 					"type": "text"
 				},
 				{
-					"buffer": 63,
+					"buffer": 55,
 					"file": "src/component/asa/product.js",
 					"semi_transient": false,
 					"settings":
@@ -3877,11 +3557,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 65,
+					"stack_index": 59,
 					"type": "text"
 				},
 				{
-					"buffer": 64,
+					"buffer": 56,
 					"file": "src/component/prop.js",
 					"semi_transient": false,
 					"settings":
@@ -3915,11 +3595,11 @@
 						"translation.y": 6601.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 58,
+					"stack_index": 52,
 					"type": "text"
 				},
 				{
-					"buffer": 65,
+					"buffer": 57,
 					"file": "src/component/user/index.vue",
 					"semi_transient": false,
 					"settings":
@@ -3946,11 +3626,11 @@
 						"translation.y": 1710.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 57,
+					"stack_index": 51,
 					"type": "text"
 				},
 				{
-					"buffer": 66,
+					"buffer": 58,
 					"file": "src/component/resources.js",
 					"semi_transient": false,
 					"settings":
@@ -3984,11 +3664,11 @@
 						"translation.y": 2264.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 53,
+					"stack_index": 47,
 					"type": "text"
 				},
 				{
-					"buffer": 67,
+					"buffer": 59,
 					"file": "src/component/Simple_Admin_Page.vue",
 					"semi_transient": false,
 					"settings":
@@ -4015,11 +3695,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 27,
+					"stack_index": 29,
 					"type": "text"
 				},
 				{
-					"buffer": 68,
+					"buffer": 60,
 					"file": "src/component/Simple_Admin_TableList.vue",
 					"semi_transient": false,
 					"settings":
@@ -4046,42 +3726,42 @@
 						"translation.y": 816.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 49,
+					"stack_index": 45,
 					"type": "text"
 				},
 				{
-					"buffer": 69,
+					"buffer": 61,
 					"file": "src/component/Simple_Select.vue",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 10595,
+						"buffer_size": 10596,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								10015,
-								10015
+								2479,
+								2548
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1563353741.13,
+							"sorttabs_lastactivated": 1563435014.86,
 							"syntax": "Packages/Vue/vue.tmLanguage",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 4320.0,
+						"translation.y": 360.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 20,
+					"stack_index": 13,
 					"type": "text"
 				},
 				{
-					"buffer": 70,
+					"buffer": 62,
 					"file": "src/component/asa/sp-product-info.vue",
 					"semi_transient": false,
 					"settings":
@@ -4093,13 +3773,13 @@
 						"selection":
 						[
 							[
-								546,
-								546
+								0,
+								547
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1560994482.73,
+							"sorttabs_lastactivated": 1563421660.97,
 							"syntax": "Packages/Vue/vue.tmLanguage",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
@@ -4108,29 +3788,29 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 71,
+					"stack_index": 19,
 					"type": "text"
 				},
 				{
-					"buffer": 71,
-					"file": "src/component/shipping/warehousing.vue",
+					"buffer": 63,
+					"file": "src/component/asa/Asa_Product_Code.vue",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 28880,
+						"buffer_size": 568,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3863,
-								3863
+								478,
+								478
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1563327207.27,
+							"sorttabs_lastactivated": 1563421897.67,
 							"syntax": "Packages/Vue/vue.tmLanguage",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
@@ -4139,11 +3819,42 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 35,
+					"stack_index": 18,
 					"type": "text"
 				},
 				{
-					"buffer": 72,
+					"buffer": 64,
+					"file": "src/component/shipping/warehousing.vue",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 28925,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1306,
+								1324
+							]
+						],
+						"settings":
+						{
+							"sorttabs_lastactivated": 1563451414.07,
+							"syntax": "Packages/Vue/vue.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 65,
 					"file": "webpack.config.js",
 					"semi_transient": false,
 					"settings":
@@ -4155,13 +3866,13 @@
 						"selection":
 						[
 							[
-								78,
-								82
+								84,
+								84
 							]
 						],
 						"settings":
 						{
-							"sorttabs_lastactivated": 1563366910.48,
+							"sorttabs_lastactivated": 1563439510.63,
 							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true,
@@ -4177,7 +3888,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 8,
+					"stack_index": 6,
 					"type": "text"
 				}
 			]
