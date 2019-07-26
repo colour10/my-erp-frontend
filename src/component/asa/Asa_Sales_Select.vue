@@ -10,7 +10,7 @@
                 <el-table-column width="110" :label="_label('kucun')" prop="stock_number"></el-table-column>
                 <el-table-column width="110" :label="_label('shuliang')">
                     <template v-slot="{row}">
-                        <el-input size="mini" v-model="row.number" @change="onChange" />
+                        <el-input size="mini" :ref="row.warehouseid" v-model="row.number" @change="onChange" @focus="onFocus(row.warehouseid)" />
                     </template>
                 </el-table-column>
             </el-table>
@@ -21,10 +21,12 @@
 
 <script>
 export default {
-    name: 'sp-requisition-select',
+    name: 'sp-sales-select',
     props: {
         stocks: {},
         list: {},
+        warehouseid: {}, // 销售仓库
+        number: {}, //销售数量
         'is-dispatch': {}, // 是否已经分配了仓库
     },
     data() {
@@ -37,6 +39,10 @@ export default {
         event: 'change',
     },
     methods: {
+        onFocus(index) {
+            let self = this;
+            self.$refs[index].select();
+        },
         onChange() {
             let self = this;
             let list = self.tabledata.map(item=>{
@@ -65,6 +71,22 @@ export default {
                 }
                 self.tabledata.push(item);
             });
+
+            for(let i=0;i<self.tabledata.length;i++) {
+                if(self.tabledata[i].warehouseid==self.warehouseid) {
+                    // 把当前销售仓库的记录方到最前面
+                    let [row] = self.tabledata.splice(i,1);
+                    self.tabledata.unshift(row);
+
+                    // 默认选中当前销售仓库的销售数量
+                    if(row.number=='') {
+                        row.number = Math.min(row.stock_number, self.number);
+                    }
+                    break;
+                }
+            }
+
+            self.onChange();
         },
     },
     mounted() {

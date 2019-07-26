@@ -212,11 +212,11 @@ export default {
         getImageStyle(column) {
             let styles = "";
             if (column.image_width) {
-                styles += "width:" + column.image_width + 'px;'
+                styles += "max-width:" + column.image_width + 'px;'
             }
 
             if (column.image_height) {
-                styles += "height:" + column.image_height + 'px;'
+                styles += "max-height:" + column.image_height + 'px;'
             }
             return styles;
         },

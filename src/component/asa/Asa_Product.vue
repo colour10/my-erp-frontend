@@ -69,7 +69,6 @@
                             <el-form-item :label="_label('sexi')" prop="brandcolor">
                                 <colorselect v-model="form.brandcolor"></colorselect>
                             </el-form-item>
-
                         </el-col>
                         <el-col :span="8">
                             <el-form-item :label="_label('caizhi')">

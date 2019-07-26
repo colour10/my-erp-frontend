@@ -49,8 +49,14 @@ export default {
         }
     },
     methods: {
+        _newbox() {
+            return Object.create(null);
+        },
+        _left(string, length) {
+            return (string || '').substr(0, length);
+        },
         confirm() {
-            console.log(_label('querentijiao'));
+            //console.log(_label('querentijiao'));
             return confirm(this._label('querentijiao'));
         },
         initRules(callback){

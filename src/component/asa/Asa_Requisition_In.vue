@@ -53,7 +53,7 @@
 
             <el-table-column :label="_label('diaochucangku')" width="180" align="center">
                 <template v-slot="{row}">
-                    <sp-requisition-select v-model="row.data.out_list" :stocks="stocks[row.data.index]" v-if="row.type=='body'"></sp-requisition-select>
+                    <sp-requisition-select v-model="row.data.out_list" :stocks="stocks[row.data.index]" :is-dispatch="dispatches[row.data.index]==row.data.number" v-if="row.type=='body'"></sp-requisition-select>
                 </template>
             </el-table-column>
 
@@ -161,6 +161,7 @@ export default {
                 stock_number: '', // 库存数量
                 out_list: [],
             });
+            self.$emit("change",self.tabledata.length);
 
             self.index += 1;
 
@@ -197,7 +198,9 @@ export default {
             self.product = product;
         },
         deleteRow(index) {
-            this.tabledata.splice(index, 1);
+            const self = this;
+            self.tabledata.splice(index, 1);
+            self.$emit("change",self.tabledata.length);
         },
     },
     computed: {
@@ -224,10 +227,13 @@ export default {
             self.productstocks.forEach(item=>{
                 let key = [item.productid, item.sizecontentid, item.property, item.defective_level].join('-');
                 let target = helper.get(key);
-                target.push({
-                    warehouseid: item.warehouseid,
-                    stock_number: item.number-item.reserve_number,
-                });
+
+                if(item.warehouseid!=self.in_id) {
+                    target.push({
+                        warehouseid: item.warehouseid,
+                        stock_number: item.number-item.reserve_number,
+                    });
+                }
             });
 
             return helper;
@@ -240,6 +246,20 @@ export default {
             self.tabledata.forEach(item=>{
                 let key = [item.product.id, item.sizecontentid, item.property, item.defective_level].join('-');
                 result[item.index] = stat.get(key);
+            });
+
+            return result;
+        },
+        dispatches() {
+            let self = this;
+            let result = self._newbox();
+
+            self.tabledata.forEach(item=>{
+                let total = 0;
+                item.out_list.forEach(row=>{
+                    total += row.number*1;
+                });
+                result[item.index] = total;
             });
 
             return result;

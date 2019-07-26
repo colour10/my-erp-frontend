@@ -108,7 +108,7 @@ const API = {
         };
 
         try {
-            let result = await _fetch("/productstock/search", params);
+            let result = await _fetch("/productstock/searchstock", params);
             return result.data;
         }
         catch(e) {

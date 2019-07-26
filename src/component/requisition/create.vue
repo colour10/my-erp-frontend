@@ -7,17 +7,17 @@
             <el-row :gutter="0">
                 <el-col :span="6" style="width:300px">
                     <el-form-item :label="_label('diaobofangshi')">
-                        <simple-select v-model="form.requisitiontype" source="requisitiontype"></simple-select>
+                        <simple-select v-model="form.requisitiontype" source="requisitiontype" :disabled="counter>0"></simple-select>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" style="width:300px" v-if="form.requisitiontype=='1'">
                     <el-form-item :label="_label('diaochucangku')">
-                        <simple-select v-model="form.out_id" source="warehouse" @change="onOutChange"></simple-select>
+                        <simple-select v-model="form.out_id" source="warehouse"></simple-select>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" style="width:300px" v-if="form.requisitiontype=='2'">
                     <el-form-item :label="_label('diaorucangku')">
-                        <simple-select v-model="form.in_id" source="warehouse" @change="onInChange"></simple-select>
+                        <simple-select v-model="form.in_id" source="warehouse" :disabled="counter>0"></simple-select>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" style="width:300px"  v-if="form.requisitiontype>0">
@@ -35,8 +35,7 @@
         </el-row>
         <el-row v-if="form.requisitiontype=='2' && form.in_id>0">
             <el-col :span="24" class="product">
-                <sp-requisition-in ref="requisition" :in_id="form.in_id"> </sp-requisition-in>
-
+                <sp-requisition-in ref="requisition" :in_id="form.in_id" @change="onChange"> </sp-requisition-in>
             </el-col>
         </el-row>
     </div>
@@ -55,8 +54,6 @@ export default {
         [Asa_Requisition_In.name]: Asa_Requisition_In,
     },
     data() {
-        let self = this;
-
         return {
             form: {
                 requisitiontype: '',
@@ -64,74 +61,17 @@ export default {
                 in_id: "",
                 memo: "",
             },
-            index: 1,
-            tabledata: [],
-            productstocks: [],
-        }
+            counter: 0,
+        };
     },
     methods: {
-        onOutChange() {
-            const self = this;
-
-            if(self.form.out_id>0) {
-                self.tabledata.forEach(item=>{
-                    item.out_id = self.form.out_id;
-                });
-            }
-
-            let item = self.tabledata.pop();
-            if(item) {
-                self.tabledata.push(item);
-            }
-        },
-        onInChange() {
-            const self = this;
-
-            if(self.form.in_id>0) {
-                self.tabledata.forEach(item=>{
-                    item.in_id = self.form.in_id;
-                });
-            }
-        },
-        async onWarehouseChange(warehouseid, {product,sizecontentid}) {
-            let self = this;
-            let result = await API.getProductstock({
-                productid: product.id,
-                sizecontentid,
-            });
-            // self._log(result);
-        },
-        async onSelect({product, number, sizecontentid}) {
-            let self = this;
-
-            let result = await API.getProductstock({
-                productid: product.id,
-                sizecontentid,
-            });
-            //self._log(result);
-            result.forEach(item=>{
-                self.productstocks.push(item);
-            });
-
-            self.tabledata.push({
-                index: self.index,
-                product,
-                number,
-                sizecontentid,
-                property: 1,
-                defective_level: 1,
-                stock_number: '', // 库存数量
-                in_id: self.form.in_id,
-                out_id: self.form.out_id,
-            });
-
-            self.index += 1;
+        //统一调入的商品条数
+        onChange(length) {
+            this.counter = length;
         },
         saveOrder() {
             //保存订单
             let self = this;
-
-
 
             let params = { memo: self.form.memo };
             params.list = self.$refs.requisition.getList();
@@ -154,64 +94,27 @@ export default {
                 }
             }
 
+            // 验证调拨单明细列表不能为空
+            if(params.list.length==0) {
+                return alert(self._label('error-1000'));
+            }
+
             if (!confirm(self._label('order_submit_confirm'))) {
                 return;
             }
-            //self._log(JSON.stringify(params))
+            // self._log(JSON.stringify(params))
             self._submit("/requisition/save", { params: JSON.stringify(params) }).then(function(res) {
                 extend(self.form, {
                     out_id: "",
                     in_id: "",
                     memo: "",
                 });
-                self.tabledata = [];
-                self.productstocks = [];
             });
         },
     },
     mounted() {
         let self = this;
         self._setTitle(self._label("xinjiandiaobodan"));
-    },
-    computed: {
-        stockStat() {
-            let self = this;
-            let result = {};
-
-            self.productstocks.forEach(item=>{
-                let key = [item.productid, item.sizecontentid, item.property, item.defective_level, item.warehouseid].join('-');
-                result[key] = item.number-item.reserve_number;
-            });
-
-            return result;
-        },
-        stocks() {
-            let self = this;
-            let result = {};
-            let stat = self.stockStat;
-
-            self.tabledata.forEach(item=>{
-                let key = [item.product.id, item.sizecontentid, item.property, item.defective_level, item.out_id].join('-');
-                result[item.index] = stat[key] || 0;
-            });
-
-            return result;
-        },
-        filterMethods() {
-            let self = this;
-            let result = {};
-            let stat = self.stockStat;
-            //console.log("filterMethods change", new Date());
-            self.tabledata.forEach(item=>{
-                result[item.index] = function(keyword, option) {
-                    //console.log(item, option, self.form.out_id==option.id);
-                    let key = [item.product.id, item.sizecontentid, item.property, item.defective_level, option.id].join('-');
-                    return self.form.out_id==option.id || item.out_id==option.id || (stat[key] && stat[key]>0);
-                };
-            });
-
-            return result;
-        },
     },
 };
 </script>

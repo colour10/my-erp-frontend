@@ -4,7 +4,7 @@
             <el-col :span="10">
                 <as-button type="primary" @click="search">{{_label('chaxun')}}</as-button>
                 <auth auth="sales">
-                    <as-button type="primary" @click="toPage(0)">{{_label('xinjian')}}</as-button>
+                    <as-button type="primary" @click="$router.push('/sales/create')">{{_label('xinjian')}}</as-button>
                 </auth>
             </el-col>
         </el-row>

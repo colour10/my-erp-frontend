@@ -1,45 +1,87 @@
 <template>
-    <div style="width:100%">
+    <div style="width:100%" class="product">
         <as-button type="primary" @click="_showDialog('search')">{{_label("chaxun")}}</as-button>
-        <sp-table :data="searchresult" border style="width:100%;">
+        <sp-table :data="searchresult" border style="width:100%;" :row-style="getRowStyle">
+            <el-table-column :label="_label('zhutu')" align="center" width="60">
+                <template v-slot="{row}">
+                    <sp-product-icon :file="row.product.picture"></sp-product-icon>
+                </template>
+            </el-table-column>
+
             <el-table-column :label="_label('chanpinmingcheng')" align="center" sortable width="200">
                 <template v-slot="{row}">
                     {{row.product.getName()}}
                 </template>
             </el-table-column>
+
             <el-table-column :label="_label('guojima')" align="center" sortable width="200">
                 <template v-slot="{row}">
                     <sp-product-tip :product="row.product"/>
                 </template>
             </el-table-column>
-            <el-table-column prop="sizecontent_label" :label="_label('chima')" width="100" align="center" sortable>
-            </el-table-column>
+
             <el-table-column sortable :label="_label('cangku')" width="100" align="center">
                 <template v-slot="{row}">
                     {{row.warehouse.name}}
                 </template>
             </el-table-column>
-            <el-table-column :label="_label('kucunshuliang')" width="110" align="center">
+            <el-table-column :label="_label('kucunshuliang')" :width="width" align="left">
                 <template v-slot="{row}">
-                    {{row.number}}
+                    <sp-productstock-show :columns="row.product.sizecontents" :stocks="row.stocks"></sp-productstock-show>
                 </template>
             </el-table-column>
 
-            <el-table-column :label="_label('zaitushuliang')" width="110" align="center">
+            <el-table-column :label="_label('chuchangjia')" width="110" align="center">
                 <template v-slot="{row}">
-                    {{row.shipping_number}}
+                    {{row.product.factorypricecurrency_label +' '+ row.product.factoryprice}}
                 </template>
             </el-table-column>
 
-            <el-table-column :label="_label('suodingshuliang')" width="110" align="center">
+            <el-table-column :label="_label('guojilingshoujia')" width="110" align="center">
                 <template v-slot="{row}">
-                    {{row.reserve_number}}
+                    {{row.product.wordpricecurrency_label +' '+ row.product.wordprice}}
                 </template>
             </el-table-column>
 
+            <el-table-column :label="_label('chengben')" width="140" align="center">
+                <template v-slot="{row}">
+                    <sp-select-text :value="row.product.costcurrency" source="currency"></sp-select-text>
+                    {{row.product.cost}}
+                </template>
+            </el-table-column>
+
+            <el-table-column :label="_label('shuxing')" width="90" align="center">
+                <template v-slot="{row}">
+                    <sp-select-text :value="row.property" source="orderproperty"></sp-select-text>
+                </template>
+            </el-table-column>
+
+            <el-table-column :label="_label('canpin')" width="90" align="center">
+                <template v-slot="{row}">
+                    <sp-select-text :value="row.defective_level" source="defectivelevel"></sp-select-text>
+                </template>
+            </el-table-column>
+
+            <el-table-column :label="_label('xiaoshoushuxing')" width="90" align="center">
+                <template v-slot="{row}">
+                    <sp-select-text :value="row.saletypeid" source="saletype"></sp-select-text>
+                </template>
+            </el-table-column>
+
+            <el-table-column :label="_label('shangpinshuxing')" width="90" align="center">
+                <template v-slot="{row}">
+                    <sp-select-text :value="row.producttypeid" source="producttype"></sp-select-text>
+                </template>
+            </el-table-column>
+
+            <el-table-column :label="_label('zuihouruku')" width="100" align="center">
+                <template v-slot="{row}">
+                    {{_left(row.product.laststoragedate,10)}}
+                </template>
+            </el-table-column>
         </sp-table>
 
-        <sp-dialog ref="search" :width="600">
+        <sp-dialog ref="search" :width="900">
             <el-form class="order-form" :model="form" label-width="70px" :inline="false" style="width:100%;" size="mini" @submit.native.prevent>
                 <el-row :gutter="0">
                     <el-col :span="8" style="width:270px">
@@ -103,10 +145,14 @@
 </template>
 
 <script>
-import { Productstock } from "../model.js"
+import { ProductstockSearch } from "../model.js";
+import Asa_Productstock_Show from '../asa/Asa_Productstock_Show.vue';
 
 export default {
     name: 'sp-productstock',
+    components: {
+        [Asa_Productstock_Show.name]: Asa_Productstock_Show,
+    },
     data() {
         return {
             form: {
@@ -127,24 +173,47 @@ export default {
                 saletypeid: "",
                 producttypeid: ""
             },
-            searchresult: []
-        }
+            searchresult: [],
+            isLoading: false,
+        };
     },
     methods: {
         onSearch() {
             //查询库存商品
-            let self = this
+            let self = this;
+
+            if(self.isLoading) {
+                return ;
+            }
+            self.isLoading = true;
 
             self._fetch("/productstock/search", self.form).then(function(res) {
-                self._hideDialog("search")
-                self.searchresult = []
+                self._hideDialog("search");
+                self.searchresult = [];
                 res.data.forEach(function(item) {
-                    Productstock.get(item, function(result) {
-                        self.searchresult.push(result)
-                    }, 2)
-                })
-            })
-        }
-    }
-}
+                    ProductstockSearch.get(item, function(result) {
+                        self.searchresult.push(result);
+
+                        if(self.searchresult.length==res.data.length) {
+                            self.isLoading = false;
+                        }
+                    }, 2);
+                });
+            });
+        },
+        getRowStyle({row}) {
+            let {product} = row;
+            if(product && product.saletype && product.saletype.colortemplate){
+                return {
+                    color: product.saletype.colortemplate.row.name_en,
+                };
+            }
+        },
+    },
+    computed: {
+        width() {
+            return this.searchresult.reduce((max, { product }) => Math.max(max, product.sizecontents.length), 1) * 55;
+        },
+    },
+};
 </script>

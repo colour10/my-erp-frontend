@@ -4,11 +4,11 @@
             <el-row :gutter="0">
                 <el-col :span="24">
                     <el-form-item :label="_label('chaxun')" >
-                        <el-input v-model="form.wordcode" class="wordcode" :placeholder="_label('guojima')"></el-input>
+                        <el-input v-model="form.wordcode" class="wordcode" :placeholder="_label('guojima')" @blur="onBlur"></el-input>
                     </el-form-item>
                     <as-button type="primary" @click="search" v-if="option.isedit" size="mini">{{_label("chaxun")}}</as-button>
                     <as-button type="primary" @click="clear" v-if="option.isedit" size="mini">{{_label("qingkong")}}</as-button>
-                    <as-button type="primary" @click="onSelectMultiple" size="mini">{{_label("piliangxuanze")}}</as-button>
+                    <as-button type="primary" @click="onSelectMultiple" size="mini">{{_label("queding")}}</as-button>
                     <as-button type="primary" @click="onQuit" size="mini">{{_label("tuichu")}}</as-button>
                     <el-checkbox v-model="is_show">{{_label("gaojichaxun")}}</el-checkbox>
                 </el-col>
@@ -140,6 +140,9 @@ export default {
         }
     },
     methods: {
+        onBlur() {
+            this.form.wordcode = this.form.wordcode.replace(/[^-a-zA-Z0-9_\.]/g, '');
+        },
         onQuit(){
             this.$emit("close")
         },
