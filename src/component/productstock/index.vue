@@ -1,5 +1,5 @@
 <template>
-    <div style="width:100%" class="product">
+    <div style="width:100%" class="product clearpadding">
         <as-button type="primary" @click="_showDialog('search')">{{_label("chaxun")}}</as-button>
         <sp-table :data="searchresult" border style="width:100%;" :row-style="getRowStyle">
             <el-table-column :label="_label('zhutu')" align="center" width="60">
@@ -80,6 +80,8 @@
                 </template>
             </el-table-column>
         </sp-table>
+        <el-pagination v-if="searchresult.length<pagination.total" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pagination.current*1" :page-sizes="pagination.pageSizes" :page-size="pagination.pageSize*1" layout="total, sizes, prev, pager, next, jumper" :total="pagination.total*1">
+        </el-pagination>
 
         <sp-dialog ref="search" :width="900">
             <el-form class="order-form" :model="form" label-width="70px" :inline="false" style="width:100%;" size="mini" @submit.native.prevent>
@@ -147,6 +149,7 @@
 <script>
 import { ProductstockSearch } from "../model.js";
 import Asa_Productstock_Show from '../asa/Asa_Productstock_Show.vue';
+import {extend} from '../object.js';
 
 export default {
     name: 'sp-productstock',
@@ -171,7 +174,13 @@ export default {
                 ageseason: "",
                 productmemoids: "", //商品描述
                 saletypeid: "",
-                producttypeid: ""
+                producttypeid: "",
+            },
+            pagination: {
+                pageSizes: [10,15,30,50,100],
+                pageSize: 15,
+                total: 0,
+                current: 1
             },
             searchresult: [],
             isLoading: false,
@@ -179,6 +188,19 @@ export default {
     },
     methods: {
         onSearch() {
+            const self = this;
+            self.pagination.current = 1;
+            self.loadPage();
+        },
+        handleSizeChange(pageSize) {
+            this.pagination.pageSize = pageSize;
+            this.loadPage();
+        },
+        handleCurrentChange(current) {
+            this.pagination.current = current;
+            this.loadPage();
+        },
+        loadPage() {
             //查询库存商品
             let self = this;
 
@@ -187,18 +209,24 @@ export default {
             }
             self.isLoading = true;
 
-            self._fetch("/productstock/search", self.form).then(function(res) {
+            let params = extend({}, self.form);
+            params.pageSize = self.pagination.pageSize;
+            params.page = self.pagination.current;
+
+            self._fetch("/productstock/search", params).then(function({data}) {
                 self._hideDialog("search");
                 self.searchresult = [];
-                res.data.forEach(function(item) {
+                data.data.forEach(function(item) {
                     ProductstockSearch.get(item, function(result) {
                         self.searchresult.push(result);
 
-                        if(self.searchresult.length==res.data.length) {
+                        if(self.searchresult.length==data.data.length) {
                             self.isLoading = false;
                         }
                     }, 2);
                 });
+
+                extend(self.pagination, data.pagination)
             });
         },
         getRowStyle({row}) {
@@ -212,6 +240,9 @@ export default {
     },
     computed: {
         width() {
+            if(this.searchresult.length==0) {
+                return 100;
+            }
             return this.searchresult.reduce((max, { product }) => Math.max(max, product.sizecontents.length), 1) * 55;
         },
     },
