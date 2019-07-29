@@ -116,25 +116,25 @@ export default {
             }, 200)
         },
         onCreate() {
-            var self = this
+            var self = this;
             self._submit("/department/add", this.form_create).then(function() {
-                var newNode = {}
+                var newNode = {};
                 newNode.label = self.form_create.name;
                 newNode.remark = self.form_create.remark;
                 newNode.id = self.form_create.id;
-                newNode.children = []
-                self.node.data.children.push(newNode)
-                self.dialogTableVisible = false
-            })
-        }
+                newNode.children = [];
+                self.node.data.children.push(newNode);
+                self.dialogTableVisible = false;
+            });
+        },
     },
     mounted: function() {
-        const self = this
+        const self = this;
         self._fetch("/department/departments", {}).then(function(res) {
-            self.data = res.data
-        })
-    }
-}
+            self.data = res.data;
+        });
+    },
+};
 </script>
 
 <style>
