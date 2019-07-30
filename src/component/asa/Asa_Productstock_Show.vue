@@ -14,33 +14,53 @@ export default {
     name: 'sp-productstock-show',
     props: {
         columns: {
-            type: Array
+            type: Array,
         },
-        stocks:{
-            type:[Array],
-            require:true
+        stocks: {
+            type: [Array],
+            require: true,
+        },
+        type: {
+            type: Number,
         },
     },
     data() {
         let self = this;
 
-        let form = {}
-        self.stocks.forEach(item=>{
-            form[item.sizecontentid] = item.number;
+        let form = {};
+        self.columns.forEach(item => {
+            form[item.id] = '';
         });
 
         return {
             form,
-            tabledata:[[]]
-        }
+        };
     },
     methods: {
-        rowClassName({row, rowIndex}){
-            return ""
+        update(type) {
+            const self = this;
+            const form = self.form;
+
+            self.stocks.forEach(item => {
+                let number;
+                if (self.type == 3) {
+                    number = item.number;
+                } else if (self.type == 1) {
+                    number = item.number - item.reserve_number;
+                } else if (self.type == 2) {
+                    number = item.reserve_number;
+                }
+                form[item.sizecontentid] = number;
+            });
         },
-        cellClassName({row, column, rowIndex, columnIndex}) {
-            return "counter";
-        }
+    },
+    watch: {
+        type() {
+          this.update();
+        },
+    },
+    mounted() {
+      this.update();
     },
 };
 </script>

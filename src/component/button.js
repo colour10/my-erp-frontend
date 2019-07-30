@@ -5,7 +5,7 @@ export default extendComponent(Button, {
     name:"as-button",
     methods:{
         paramsPipe({props}) {
-            props.size = 'mini'
+            props.size = 'mini';
         }
     }
 })

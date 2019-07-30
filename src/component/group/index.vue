@@ -74,7 +74,7 @@ const props = {
 export default {
     name: 'sp-group',
     components: {
-        'simple-admin-tablelist': Simple_Admin_TableList
+        'simple-admin-tablelist': Simple_Admin_TableList,
     },
     data() {
         return {
@@ -98,7 +98,7 @@ export default {
     },
     methods: {
         onQuit() {
-            this.dialogVisible = false
+            this.dialogVisible = false;
         },
         handleDeleteUser(rowIndex, row) {
             var self = this;
@@ -164,7 +164,7 @@ export default {
             setTimeout(function(){
                 self.$refs.tree.setCheckedKeys(keys);
             },100)
-            
+
 
             self.showDialog();
         },

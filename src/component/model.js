@@ -305,11 +305,12 @@ const ProductstockSearch = Object.assign(createModel("productstocksearch"),{
 
         // 库存
         let stocks = row.sizecontent_data.split(';').map(item=>{
-            let [sizecontentid, number, reserve_number] = item.split(',');
+            let [sizecontentid, number, reserve_number, sales_number] = item.split(',');
             return {
                 sizecontentid,
                 number,
-                reserve_number
+                reserve_number,
+                sales_number,
             };
         });
         runner.push(stocks, "stocks");
