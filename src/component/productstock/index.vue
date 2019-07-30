@@ -181,9 +181,9 @@ export default {
       },
       searchresult: [],
       isLoading: false,
-      types: [],
-      properties: [],
-      defective_levels: [],
+      types: ['1'],
+      properties: ['1', '2'],
+      defective_levels: ['1'],
     };
   },
   methods: {
