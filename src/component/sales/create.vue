@@ -8,13 +8,13 @@
             <el-row :gutter="0">
                 <el-col :span="4" style="width:300px">
                     <el-form-item :label="_label('xiaoshouduankou')">
-                        <simple-select ref="saleportid" v-model="form.saleportid" source="usersaleport"></simple-select>
+                        <simple-select ref="saleportid" v-model="form.saleportid" source="usersaleport" :clearable="false"></simple-select>
                     </el-form-item>
                     <el-form-item :label="_label('jiage')">
-                        <simple-select ref="priceid" v-model="form.priceid" source="userprice" @change="onPriceChange" :disabled="form.status!=0"></simple-select>
+                        <simple-select ref="priceid" v-model="form.priceid" source="userprice" @change="onPriceChange" :disabled="form.status!=0" :clearable="false"></simple-select>
                     </el-form-item>
                     <el-form-item :label="_label('xiaoshoucangku')">
-                        <simple-select v-model="form.warehouseid" source="userwarehouse" :disabled="form.status!=0"></simple-select>
+                        <simple-select v-model="form.warehouseid" source="userwarehouse" :disabled="form.status!=0" :clearable="false"></simple-select>
                     </el-form-item>
                     <el-form-item :label="_label('xiaoshouriqi')" v-if="form.warehouseid>0">
                         <el-date-picker v-model="form.salesdate" type="date" value-format="yyyy-MM-dd"></el-date-picker>
@@ -343,22 +343,6 @@ export default {
 
             // 需要生成调拨单的数据列表
             params.requisitions = [];
-            // self.tabledata.forEach(item => {
-            //     item.warehouselist.forEach(warehouse => {
-            //         if(self.form.warehouseid!=warehouse.warehouseid) {
-            //             params.requisitions.push({
-            //                 productid: item.product.id,
-            //                 sizecontentid: item.sizecontentid,
-            //                 defective_level: item.defective_level,
-            //                 property: item.property,
-            //                 warehouseid: warehouse.warehouseid,
-            //                 number: warehouse.number,
-            //             });
-            //         }
-            //     });
-            // });
-
-            // 生成调拨单数据
             for(let item of self.tabledata) {
                 // 检查数量分配是否正确
                 if(self.dispatches[item.index]!=item.number) {
@@ -380,13 +364,10 @@ export default {
             }
 
             self._log(JSON.stringify(params));
-            // 验证数量是否合法
-
 
             if(!self.confirm()) {
                 return ;
             }
-            return ;
 
             self._submit("/sales/savesale", { params: JSON.stringify(params) }).then(function(res) {
                 //通知列表，数据变化了

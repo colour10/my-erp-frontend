@@ -47,7 +47,7 @@
                 <el-table ref="list" :data="tabledata" stripe border style="width:100%;">
                     <el-table-column prop="productname" :label="_label('guojima')" align="center">
                         <template v-slot="{row}">
-                            {{row.productstock.product.getGoodsCode()}}
+                            <sp-product-tip :product="row.productstock.product"/>
                         </template>
                     </el-table-column>
                     <el-table-column prop="productname" :label="_label('chanpinmingcheng')" align="center">
