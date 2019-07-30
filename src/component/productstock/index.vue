@@ -190,7 +190,7 @@ export default {
       },
       searchresult: [],
       isLoading: false,
-      types: ['1'],
+      types: ['1', '2'],
       properties: ['1', '2'],
       defective_levels: ['1'],
     };
