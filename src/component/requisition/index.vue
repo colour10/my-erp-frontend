@@ -18,14 +18,10 @@
 
 <script>
 import {_label} from '../globals.js'
-import Asa_Requisition_Dialog from '../asa/Asa_Requisition_Dialog.vue'
-import Asa_Requisition_Detail_Dialog from '../asa/Asa_Requisition_Detail_Dialog.vue'
 
 export default {
     name: "sp-requisition",
     components: {
-        'asa-requisition-dialog': Asa_Requisition_Dialog,
-        'asa-requisition-detail-dialog': Asa_Requisition_Detail_Dialog
     },
     props: {},
     data() {
