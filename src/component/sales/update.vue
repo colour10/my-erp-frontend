@@ -2,7 +2,7 @@
     <div>
         <el-form class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini">
             <el-row :gutter="0">
-                <au-button auth="sales" type="primary" @click="save">{{_label("baocun")}}</au-button>
+                <au-button auth="sales" type="primary" @click="save" v-if="form.status!='3'">{{_label("baocun")}}</au-button>
                 <au-button auth="sales" type="primary" @click="sale" v-if="form.status==1">{{_label("xiaoshou")}}</au-button>
                 <au-button auth="sales" type="primary" @click="cancel" v-if="form.status=='1'">{{_label("zuofei")}}</au-button>
                 <au-button auth="sales" type="primary" @click="addReceive" v-if="form.id>0 && form.status!=3">{{_label("tianjiashoukuan")}}</au-button>
