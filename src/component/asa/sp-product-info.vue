@@ -1,30 +1,30 @@
 <template>
-    <span><slot>{{text}}</slot></span>
+  <span><slot>{{text}}</slot></span>
 </template>
 
 <script>
 import { ProductDetail } from "../model.js"
 
 export default {
-    name: 'sp-product-info',
-    props: {
-        id: {
-            type: Number
-        },
-        column:{
-            type:String
-        }
+  name: 'sp-product-info',
+  props: {
+    id: {
+      type: Number,
     },
-    data:function(){
-        return {
-            text:""
-        }
+    column: {
+      type: String,
     },
-    mounted:function(){
-        let self = this
-        ProductDetail.load({data:self.id, depth:1}).then(detail=>{
-            self.text = detail[self.column]
-        })
-    }
-}
+  },
+  data: function() {
+    return {
+      text: "",
+    };
+  },
+  mounted: function() {
+    let self = this;
+    ProductDetail.load({ data: self.id, depth: 1 }).then(detail => {
+      self.text = detail[self.column];
+    })
+  },
+};
 </script>

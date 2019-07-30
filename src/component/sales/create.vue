@@ -8,13 +8,13 @@
             <el-row :gutter="0">
                 <el-col :span="4" style="width:300px">
                     <el-form-item :label="_label('xiaoshouduankou')">
-                        <simple-select ref="saleportid" v-model="form.saleportid" source="usersaleport"></simple-select>
+                        <simple-select ref="saleportid" v-model="form.saleportid" source="usersaleport" :clearable="false"></simple-select>
                     </el-form-item>
                     <el-form-item :label="_label('jiage')">
-                        <simple-select ref="priceid" v-model="form.priceid" source="userprice" @change="onPriceChange" :disabled="form.status!=0"></simple-select>
+                        <simple-select ref="priceid" v-model="form.priceid" source="userprice" @change="onPriceChange" :disabled="form.status!=0" :clearable="false"></simple-select>
                     </el-form-item>
                     <el-form-item :label="_label('xiaoshoucangku')">
-                        <simple-select v-model="form.warehouseid" source="userwarehouse" :disabled="form.status!=0"></simple-select>
+                        <simple-select v-model="form.warehouseid" source="userwarehouse" :disabled="form.status!=0" :clearable="false"></simple-select>
                     </el-form-item>
                     <el-form-item :label="_label('xiaoshouriqi')" v-if="form.warehouseid>0">
                         <el-date-picker v-model="form.salesdate" type="date" value-format="yyyy-MM-dd"></el-date-picker>
@@ -86,7 +86,7 @@
 
             <el-table-column :label="_label('shuliang')" width="70" align="left">
                 <template v-slot="{row}">
-                    <el-input v-model="row.number" size="mini" :disabled="form.status>=2" v-if="!row.type" class="number"></el-input>
+                    <el-input v-model="row.number" size="mini" :disabled="form.status>=2" v-if="!row.type" class="number" @focus="onFocus(row.index)" :ref="row.index"></el-input>
 
                     <el-input v-model="search.number" :placeholder="_label('shuliang')" v-if="row.type=='foot'" size="mini"></el-input>
                 </template>
@@ -236,6 +236,9 @@ export default {
         };
     },
     methods: {
+        onFocus(refname) {
+            this.$refs[refname].select();
+        },
         async onClick() {
             let self = this;
             let focusTarget = 'wordcode'; // 自动聚焦的对象
@@ -320,10 +323,6 @@ export default {
             //保存订单
             let self = this;
 
-            if(!self.confirm()) {
-                return ;
-            }
-
             let form = extend({}, self.form);
             form.status = status;
             let params = { form };
@@ -344,8 +343,13 @@ export default {
 
             // 需要生成调拨单的数据列表
             params.requisitions = [];
-            self.tabledata.forEach(item => {
-                item.warehouselist.forEach(warehouse => {
+            for(let item of self.tabledata) {
+                // 检查数量分配是否正确
+                if(self.dispatches[item.index]!=item.number) {
+                    return alert("kucunbuzu");
+                }
+
+                for(let warehouse of item.warehouselist) {
                     if(self.form.warehouseid!=warehouse.warehouseid) {
                         params.requisitions.push({
                             productid: item.product.id,
@@ -356,11 +360,14 @@ export default {
                             number: warehouse.number,
                         });
                     }
-                });
-            });
+                }
+            }
 
             self._log(JSON.stringify(params));
-            //return;
+
+            if(!self.confirm()) {
+                return ;
+            }
 
             self._submit("/sales/savesale", { params: JSON.stringify(params) }).then(function(res) {
                 //通知列表，数据变化了
@@ -450,7 +457,9 @@ export default {
             self.tabledata.forEach(item=>{
                 let total = 0;
                 item.warehouselist.forEach(row=>{
-                    total += row.number*1;
+                    if(row.number<=row.stock_number) {
+                        total += row.number*1;
+                    }
                 });
                 result[item.index] = total;
             });

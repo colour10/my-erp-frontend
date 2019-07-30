@@ -77,20 +77,40 @@ export default {
                     // 把当前销售仓库的记录方到最前面
                     let [row] = self.tabledata.splice(i,1);
                     self.tabledata.unshift(row);
-
-                    // 默认选中当前销售仓库的销售数量
-                    if(row.number=='') {
-                        row.number = Math.min(row.stock_number, self.number);
-                    }
-                    break;
                 }
             }
 
+            self.initLocalNumber();
+
             self.onChange();
+        },
+
+        // 默认给本次仓库分配初始数量
+        initLocalNumber() {
+            let self = this;
+            // 检查是否已经设置过了
+            for(let item of self.tabledata) {
+                if(item.warehouseid!=self.warehouseid && item.number>0) {
+                    return ;
+                }
+            }
+
+            for(let item of self.tabledata) {
+                if(item.warehouseid==self.warehouseid) {
+                    item.number = Math.min(item.stock_number, self.number);
+                    break;
+                }
+            }
         },
     },
     mounted() {
         this.init();
+    },
+    watch: {
+        number() {
+            this.initLocalNumber();
+            this.onChange();
+        },
     },
 };
 </script>
