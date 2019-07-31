@@ -129,6 +129,7 @@ const routes = [
             {path: '/requisition/create', name:"requisitioncreate", component: resolve=>require(['./component/requisition/create.vue'],resolve) },
             {path: '/requisition/edit/:id', name:"requisitionedit", component: resolve=>require(['./component/requisition/update.vue'],resolve) },
             {path: '/user/modifypassword', name:"modifypassword", component: resolve=>require(['./component/user/modify-password.vue'],resolve) },
+            {path: '/user/setting', name:"usersetting", component: resolve=>require(['./component/user/setting.vue'],resolve) },
             {path: '/orderpayment', name:"orderpayment", component: resolve=>require(['./component/orderpayment/index.vue'],resolve) },
             {path: '/salesreceive', name:"salesreceive", component: resolve=>require(['./component/salesreceive/index.vue'],resolve) },
             {path: '/system', name:"system", component: resolve=>require(['./component/system/index.vue'],resolve) },

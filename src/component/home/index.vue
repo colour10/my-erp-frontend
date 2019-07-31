@@ -58,7 +58,8 @@
         </el-submenu>
         <el-submenu index="11">
           <template #title>{{_label("menu-11")}}</template>
-          <el-menu-item index="user/modifypassword">{{_label("menu-11-2")}}</el-menu-item>
+          <el-menu-item index="user/modifypassword">{{_label("xiugaimima")}}</el-menu-item>
+          <el-menu-item index="user/setting">{{_label("gerenshezhi")}}</el-menu-item>
           <el-menu-item index="develop">生成器</el-menu-item>
           <el-menu-item index="login/logout">{{_label("menu-11-3")}}</el-menu-item>
         </el-submenu>

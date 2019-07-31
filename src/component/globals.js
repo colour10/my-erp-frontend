@@ -127,7 +127,7 @@ const config = function(){
             "sales":getLabel("menu-7-1"),
             "orderpayment":getLabel("dingdanjiesuan"),
             "salesreceive":getLabel("xiaoshoujiesuan"),
-            "user/modifypassword":getLabel("menu-11-2"),
+            "user/modifypassword":getLabel("xiugaimima"),
             "login/logout":getLabel("menu-11-3"),
             "saletype":getLabel('xiaoshoushuxing'),
             "producttype":getLabel('shangpinshuxing'),
@@ -137,6 +137,7 @@ const config = function(){
             "language":getLabel("duoguoyuyanguanli"),
             "winterproofing":getLabel("fanghanzhishu"),
             "feename":getLabel("feiyongguanli"),
+            "user/setting": getLabel("gerenshezhi"),
             "develop":"生成器"
         }
     }
