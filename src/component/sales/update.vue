@@ -14,7 +14,7 @@
             <el-row :gutter="0">
                 <el-col :span="4" style="width:300px">
                     <el-form-item :label="_label('xiaoshouduankou')">
-                        <simple-select ref="saleportid" v-model="form.saleportid" source="usersaleport"></simple-select>
+                        <simple-select ref="saleportid" v-model="form.saleportid" source="usersaleport" :clearable="false"></simple-select>
                     </el-form-item>
                     <el-form-item :label="_label('jiage')">
                         <simple-select ref="priceid" v-model="form.priceid" source="userprice" @change="onPriceChange" disabled></simple-select>

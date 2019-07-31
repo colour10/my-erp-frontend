@@ -161,6 +161,16 @@ const API = {
             return {};
         }
     },
+
+    async getSetting() {
+        try {
+            let result = await _fetch("/common/setting", {});
+            return result.data;
+        }
+        catch(e) {
+            return {};
+        }
+    },
 }
 
 export default API;

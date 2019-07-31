@@ -467,9 +467,13 @@ export default {
             return result;
         },
     },
-    mounted: function() {
+    async mounted() {
         let self = this;
         self._setTitle(self._label("xinjianxiaoshoudan"));
+        let setting = await API.getSetting();
+        self.form.saleportid = setting.saleportid;
+        self.form.warehouseid = setting.warehouseid;
+        self.form.priceid = setting.priceid;
     },
 };
 </script>
