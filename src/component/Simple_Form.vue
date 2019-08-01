@@ -1,9 +1,9 @@
 <template>
-    <el-dialog class="user-form" :title="formTitle" :visible.sync="dialogVisible" :center="true" :width="options.dialogWidth||'40%'" :modal="false">
+    <el-dialog class="user-form" :title="formTitle" :visible.sync="dialogVisible" :center="true" :width="width||'40%'" :modal="false">
         <el-row>
             <el-col :span="24">
-                <el-form ref="form" :model="form" label-width="100px" :inline="options.inline||false" :size="options.formSize||'medium'">
-                    <el-form-item :label="item.label" v-if="!item.is_edit_hide" v-for="item in prop.columns" :key="item.name" :class="item.class?item.class:''">
+                <el-form ref="form" :model="form" label-width="100px" :inline="inline||false" :size="size||'medium'">
+                    <el-form-item :label="item.label" v-if="!item.is_edit_hide" v-for="item in columns" :key="item.name" :class="item.class?item.class:''">
                         <el-input :ref="item.name" @keyup.enter.native="onSubmit" :type="item.type?item.type:'text'" v-if="!item.type||item.type=='input'||item.type=='textarea'" v-model="form[item.name]" :disabled="isDisabled(item)"></el-input>
                         <el-switch :ref="item.name" v-if="item.type=='switch'" v-model="form[item.name]" active-value="1" inactive-value="0" :disabled="isDisabled(item)"></el-switch>
                         <simple-select :ref="item.name" v-if="item.type=='select'" v-model="form[item.name]" :source="item.source" :lang="_label('lang')" :disabled="isDisabled(item)"></simple-select>
@@ -29,57 +29,51 @@ import { initObject, isArray } from "./array.js"
 
 export default {
     name: 'simple-form',
-    props: ['name', 'authname', 'title', "isEditable", 'disabled'],
-    components: {
-
-    },
+    props: ['name', 'authname', 'title', "isEditable", 'disabled', 'columns', 'width', 'inline', 'size'],
     data() {
-        let self = this
-        let form = {},
-            disableds = {}
+        let self = this;
+        let form = {};
+        let disableds = {};
 
-        let prop = getProp(self.name)
-            //self._log(self.name, prop)
+        //let prop = getProp(self.name);
 
-        for (let i = 0; i < prop.columns.length; i++) {
-            let name = prop.columns[i].name
-            form[name] = ""
-            disableds[name] = ""
+        for (let i = 0; i < self.columns.length; i++) {
+            let name = self.columns[i].name;
+            form[name] = "";
+            disableds[name] = "";
         }
 
         return {
             setting: {
                 title: "",
-                submitButtonText: _label("baocun")
+                submitButtonText: _label("baocun"),
             },
             dialogVisible: false,
-            prop,
-            options: prop.options || {},
             form,
-            disableds
-        }
+            disableds,
+        };
     },
     methods: {
         onQuit() {
-            this.dialogVisible = false
+            this.dialogVisible = false;
         },
         onSubmit() {
             var self = this;
-            self.$emit("submit", extend({}, self.form))
+            self.$emit("submit", extend({}, self.form));
         },
         setInfo(info) {
-            let self = this
-            globals.empty(self.form)
-            extend(self.form, info)
-            return self
+            let self = this;
+            globals.empty(self.form);
+            extend(self.form, info);
+            return self;
         },
         show() {
             let self = this;
             self.dialogVisible = true;
             setTimeout(function() {
-                let columns = self.prop.columns;
+                let columns = self.columns;
                 for (let i = 0; i < columns.length; i++) {
-                    let column = columns[i]
+                    let column = columns[i];
                     if (column.type == 'label') {
                         continue;
                     }
@@ -93,36 +87,34 @@ export default {
                         }
                     }
                 }
-            }, 50)
+            }, 50);
         },
         isDisabled(column) {
-            let self = this
-            let config = self.disableds
+            let self = this;
+            let config = self.disableds;
 
             if (typeof(self.isEditable) == 'function' && self.isEditable(self.form) == false) {
-                return true
+                return true;
             }
             //this._log(config, column.name, config[column.name]===true, '=',config[column.name] && config[column.name]===true)
             return config[column.name] ? config[column.name] === true : false;
         },
         setDisabled(name, isDisabled) {
-            let self = this
+            let self = this;
 
-            extend(self.disableds, initObject(name, isDisabled))
-            return self
-        }
+            extend(self.disableds, initObject(name, isDisabled));
+            return self;
+        },
     },
-    watch: {},
     computed: {
         formTitle() {
-            let self = this
+            let self = this;
             if (self.setting.title.length > 0) {
-                return self.setting.title
+                return self.setting.title;
             } else {
-                return self.title ? self.title : ""
+                return self.title ? self.title : "";
             }
-        }
+        },
     },
-    mounted: function() {}
-}
+};
 </script>

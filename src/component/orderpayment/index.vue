@@ -32,7 +32,7 @@
         </sp-table>
         <el-pagination v-if="searchresult.length<pagination.total" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pagination.current*1" :page-sizes="pagination.pageSizes" :page-size="pagination.pageSize*1" layout="total, sizes, prev, pager, next, jumper" :total="pagination.total*1">
         </el-pagination>
-        <simpleform name="orderpayment" authname="payment-confirm" ref="orderpayment" :title="_label('querenfukuan')" @submit="onConfirm" :isEditable="(f)=>f.status==0"></simpleform>
+        <simple-form name="orderpayment" :columns="columns" authname="payment-confirm" ref="orderpayment" :title="_label('querenfukuan')" @submit="onConfirm" :isEditable="(f)=>f.status==0"></simple-form>
     </div>
 </template>
 
@@ -47,72 +47,75 @@ import Simple_Form from "../Simple_Form.vue"
 export default {
     name: 'sp-orderpayment',
     components: {
-        "simpleform": Simple_Form
+        [Simple_Form.name]: Simple_Form,
     },
-    props: {},
     data() {
         var self = this;
 
         return {
+            columns: [
+                { name: "feenameid", label: _label("feiyongmingcheng"), type: 'select', source: "feename", width:110 },
+                { name: "currencyid", label: _label("bizhong"), type: 'select', source: "currency", width:90 },
+                { name: "amount", label: _label("jine"), width:110 },
+                { name: "memo", label: _label("beizhu"), width:110 },
+                { name: "makestaff", label: _label("tijiaoren"), type: 'select', source: "user", is_edit_hide:true, width:110 },
+            ],
             form: {
-                warehouseid: ""
+                warehouseid: "",
             },
             searchresult: [],
             pagination: {
                 pageSizes: globals.pageSizes,
                 pageSize: 15,
                 total: 0,
-                current: 1
-            }
-        }
+                current: 1,
+            },
+        };
     },
     methods: {
         async search() {
             //查询库存商品
-            let self = this
+            let self = this;
 
-            let result = await self._fetch("/orderpayment/search", self.form)
+            let result = await self._fetch("/orderpayment/search", self.form);
                 //self._log(result)
-            self.searchresult = []
+            self.searchresult = [];
             result.data.forEach(async function(item) {
-                let row = await Orderpayment.load({ data: item, depth: 1 })
+                let row = await Orderpayment.load({ data: item, depth: 1 });
                     //self._log("Orderpayment Record", row)
-                self.searchresult.push(row)
-            })
+                self.searchresult.push(row);
+            });
 
-            extend(self.pagination, result.pagination)
+            extend(self.pagination, result.pagination);
         },
         confirmPayment({ $index, row }) {
             let self = this;
-            row.orderno = row.order.orderno
-            self.$refs['orderpayment'].setInfo(row).setDisabled(['payment_type', 'amount', 'currency'], true)._setting({ submitButtonText: _label('querenfukuan') }).show()
-            self.index = $index
+            row.orderno = row.order.orderno;
+            self.$refs['orderpayment'].setInfo(row).setDisabled(['payment_type', 'amount', 'currency'], true)._setting({ submitButtonText: _label('querenfukuan') }).show();
+            self.index = $index;
         },
         async onConfirm(form) {
             let self = this;
             //this._log("确认保存",form)
             self._confirm(_label("confirm-payment?"), async() => {
-                let result = await self._submit("/orderpayment/confirm", extract(form, ['id', 'paymentdate', 'memo']))
-                let info = extend(form, result.data)
-                self.$refs['orderpayment'].setInfo(info)
+                let result = await self._submit("/orderpayment/confirm", extract(form, ['id', 'paymentdate', 'memo']));
+                let info = extend(form, result.data);
+                self.$refs['orderpayment'].setInfo(info);
 
-                self.search()
+                self.search();
             })
         },
         handleSizeChange(pageSize) {
-            this.pagination.pageSize = pageSize
-            this.loadList()
+            this.pagination.pageSize = pageSize;
+            this.loadList();
         },
         handleCurrentChange(current) {
-            this.pagination.current = current
-            this.loadList()
-        }
+            this.pagination.current = current;
+            this.loadList();
+        },
     },
-    computed: {},
-    watch: {},
     mounted: function() {
         //this.$refs.product.show();
-
-    }
-}
+    },
+};
 </script>

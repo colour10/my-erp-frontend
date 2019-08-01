@@ -100,30 +100,26 @@ export default {
     },
     methods: {
         checkLogin() {
-            const self = this
-                //self._log(this.$route.path)
+            const self = this;
             if (!self.$store.getters.is_login) {
-                self.$router.push({ path: "/login/login", query: { back: this.$route.path } })
+                self.$router.push({ path: "/login/login", query: { back: this.$route.path } });
             }
         },
         onSelect(index, indexPath) {
             //this._log(index, indexPath)
-            this.$router.push('/' + index)
+            this.$router.push('/' + index);
         },
         onCloseTag(tag) {
             bus.$emit('close', tag.path);
             this.$store.commit("closeTag", {
                 tag
             });
-
-            console.log("close", tag.path)
         },
         onClickTag(tag) {
             this.$router.push(tag.path);
-
         },
         getType(key) {
-            return key == this.current.key ? 'success' : ''
+            return key == this.current.key ? 'success' : '';
         },
         fullScreen() {
             var el = document.documentElement;
@@ -164,34 +160,31 @@ export default {
         '$route' (newValue) {
             var self = this;
             //self._log("$route", this.$route)
-            self.checkLogin()
-        }
+            self.checkLogin();
+        },
     },
     computed: {
         moduleName() {
-            return config().menus[this.$route.path.substr(1)]
+            return config().menus[this.$route.path.substr(1)];
         },
         module() {
-            return this.$route.path.replace(/\//g, "")
+            return this.$route.path.replace(/\//g, "");
         },
         tags() {
             //this._log(this.$store.getters.getTags)
             //this._log(this.$store.getters.getTags.tags)
-            return this.$store.getters.getTags.tags
+            return this.$store.getters.getTags.tags;
         },
         current() {
             //this._log(this.$store.getters.getTags)
-            return this.$store.getters.getTags.current
+            return this.$store.getters.getTags.current;
         },
         includes() {
-            return this.$store.getters.getTags.tags.filter(item => item.name).map(item => "sp-" + item.name).join(',')
-        }
-    },
-    mounted: function() {
-
+            return this.$store.getters.getTags.tags.filter(item => item.name).map(item => "sp-" + item.name).join(',');
+        },
     },
     beforeMount: function() {
-        this.checkLogin()
-    }
+        this.checkLogin();
+    },
 };
 </script>

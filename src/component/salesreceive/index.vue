@@ -32,86 +32,89 @@
         </sp-table>
         <el-pagination v-if="searchresult.length<pagination.total" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pagination.current*1" :page-sizes="pagination.pageSizes" :page-size="pagination.pageSize*1" layout="total, sizes, prev, pager, next, jumper" :total="pagination.total*1">
         </el-pagination>
-        <simpleform name="salesreceive" authname="receive-confirm" ref="salesreceive" :title="_label('querenfukuan')" @submit="onConfirm" :isEditable="(f)=>f.status==0"></simpleform>
+        <simple-form name="salesreceive" :columns="columns" authname="receive-confirm" ref="salesreceive" :title="_label('querenfukuan')" @submit="onConfirm" :isEditable="(f)=>f.status==0"></simple-form>
     </div>
 </template>
 
 <script>
-import globals, { _label } from '../globals.js'
-import { extract, extend } from '../object.js'
-import { Salesreceive } from "../model.js"
-import Simple_Form from "../Simple_Form.vue"
+import globals, { _label } from '../globals.js';
+import { extract, extend } from '../object.js';
+import { Salesreceive } from "../model.js";
+import Simple_Form from "../Simple_Form.vue";
 
 
 export default {
     name: 'sp-salesreceive',
     components: {
-        "simpleform": Simple_Form
+        [Simple_Form.name]: Simple_Form,
     },
-    props: {},
     data() {
         var self = this;
 
         return {
+            columns: [
+                { name: "orderno", label: _label("dingdanhao"), type: 'label'},
+                { name: "payment_type", label: _label("fukuanleixing"), type: 'select', source: "paymenttype" },
+                { name: "currency", label: _label("bizhong"), type: 'select', source: "currency" },
+                { name: "amount", label: _label("jine") },
+                { name: "paymentdate", label: _label("fukuanriqi"), type:"date" },
+                { name: "memo", label: _label("beizhu") },
+                { name: "makestaff", label: _label("tijiaoren"),  type: 'select', source: "user", is_edit_hide:true },
+                { name: "status", label: _label("yiruzhang"), type:"switch", is_edit_hide:true },
+            ],
             form: {
-                warehouseid: ""
+                warehouseid: "",
             },
             searchresult: [],
             pagination: {
                 pageSizes: globals.pageSizes,
                 pageSize: 15,
                 total: 0,
-                current: 1
-            }
-        }
+                current: 1,
+            },
+        };
     },
     methods: {
         async search() {
             //查询库存商品
-            let self = this
+            let self = this;
 
-            let result = await self._fetch("/salesreceive/search", self.form)
+            let result = await self._fetch("/salesreceive/search", self.form);
                 //self._log(result)
-            self.searchresult = []
+            self.searchresult = [];
             result.data.forEach(async function(item) {
-                let row = await Salesreceive.load({ data: item, depth: 1 })
+                let row = await Salesreceive.load({ data: item, depth: 1 });
                     //self._log("Orderpayment Record", row)
-                self.searchresult.push(row)
-            })
+                self.searchresult.push(row);
+            });
 
-            extend(self.pagination, result.pagination)
+            extend(self.pagination, result.pagination);
         },
         confirmPayment({ $index, row }) {
             let self = this;
-            row.orderno = row.sales.orderno
-            self.$refs['salesreceive'].setInfo(row).setDisabled(['payment_type', 'amount', 'currency'], true)._setting({ submitButtonText: _label('querenfukuan') }).show()
-            self.index = $index
+            row.orderno = row.sales.orderno;
+            self.$refs['salesreceive'].setInfo(row).setDisabled(['payment_type', 'amount', 'currency'], true)._setting({ submitButtonText: _label('querenfukuan') }).show();
+            self.index = $index;
         },
         async onConfirm(form) {
             let self = this;
             //this._log("确认保存",form)
             self._confirm(_label("confirm-payment?"), async() => {
-                let result = await self._submit("/salesreceive/confirm", extract(form, ['id', 'paymentdate', 'memo']))
-                let info = extend(form, result.data)
-                self.$refs['salesreceive'].setInfo(info)
+                let result = await self._submit("/salesreceive/confirm", extract(form, ['id', 'paymentdate', 'memo']));
+                let info = extend(form, result.data);
+                self.$refs['salesreceive'].setInfo(info);
 
-                self.search()
-            })
+                self.search();
+            });
         },
         handleSizeChange(pageSize) {
-            this.pagination.pageSize = pageSize
-            this.loadList()
+            this.pagination.pageSize = pageSize;
+            this.loadList();
         },
         handleCurrentChange(current) {
-            this.pagination.current = current
-            this.loadList()
-        }
+            this.pagination.current = current;
+            this.loadList();
+        },
     },
-    computed: {},
-    watch: {},
-    mounted: function() {
-        //this.$refs.product.show();
-
-    }
-}
+};
 </script>
