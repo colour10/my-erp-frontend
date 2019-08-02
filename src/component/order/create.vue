@@ -9,7 +9,7 @@
                 <au-button auth="order-submit" :type="canSubmitPayment?'primary':'info'" @click="addPayment" v-if="form.id>0">{{_label("feiyong")}}</au-button>
                 <as-button v-if="isEditable" :type="buttontype" @click="showProduct()">{{_label("xuanzeshangpin")}}</as-button>
                 <au-button auth="order-submit" type="primary" @click="$router.push('/orderbrand/0?id='+form.id)" v-if="form.id>0">{{_label("shengchengpinpaidingdan")}}</au-button>
-                <as-button v-if="form.id>0" type="primary" @click="loadOrderbrand()">{{_label("houcha")}}</as-button>
+                <as-button v-if="form.id>0" type="primary" @click="$refs.houcha.show()">{{_label("houcha")}}</as-button>
             </el-row>
             <el-row :gutter="0">
                 <el-col :span="4" style="width:230px">
@@ -146,62 +146,9 @@
                 </el-table>
             </el-col>
         </el-row>
-        <!-- <el-row>
-            <simple-admin-page v-bind="props" ref="payment" :hide-create="true" :hide-form="true" v-if="form.id>0"></simple-admin-page>
-        </el-row> -->
-
 
         <asa-select-product-dialog :visible.sync="pro" @select="onSelect" />
-
-        <sp-dialog ref="houcha" width="1000" class="product clearpadding">
-            <el-table :data="orderbrandlist" stripe border style="width:100%;">
-                <el-table-column :label="_label('gongsidingdanhao')" align="center" width="130">
-                    <template v-slot="{row}">
-                        <el-button @click="openOrderbrand(row.id)">{{row.orderno}}</el-button>
-                    </template>
-                </el-table-column>
-                <el-table-column :label="_label('gonghuoshang')" align="center" width="100">
-                    <template v-slot="{row, $index}">
-                        <sp-select-text :value="row.supplierid" source="supplier" />
-                    </template>
-                </el-table-column>
-                <el-table-column :label="_label('niandaijijie')" width="100" align="center">
-                    <template v-slot="{row}">
-                        <sp-select-text :value="row.ageseason" source="ageseason" />
-                    </template>
-                </el-table-column>
-                <el-table-column :label="_label('yewuleixing')" width="80" align="center">
-                    <template v-slot="{row}">
-                        <sp-select-text :value="row.bussinesstype" source="bussinesstype" />
-                    </template>
-                </el-table-column>
-
-                <el-table-column :label="_label('bizhong')" width="80" align="center">
-                    <template v-slot="{row}">
-                        <sp-select-text :value="row.currency" source="currency" />
-                    </template>
-                </el-table-column>
-
-                <el-table-column :label="_label('zongjine')" width="80" align="center" prop="total_discount_price" />
-                <el-table-column :label="_label('zongjianshu')" width="80" align="center" prop="total_number" />
-                <el-table-column :label="_label('zhekoulv')" width="80" align="center" prop="discount" />
-                <el-table-column :label="_label('tuishuilv')" width="80" align="center" prop="taxrebate" />
-                <el-table-column :label="_label('edu')" width="80" align="center" prop="quantum" />
-                <!-- <el-table-column :label="_label('beizhu')" width="80" align="center" prop="memo" /> -->
-
-                <el-table-column :label="_label('dingdanriqi')" width="100" align="center" v-if="isEditable">
-                    <template v-slot="{row}">
-                        {{row.maketime && row.maketime.length>0?row.maketime.substr(0,10):""}}
-                    </template>
-                </el-table-column>
-
-                <el-table-column :label="_label('pinpai')" width="150">
-                    <template v-slot="{row}">
-                        <sp-select-text :value="row.brandid" source="brand" />
-                    </template>
-                </el-table-column>
-            </el-table>
-        </sp-dialog>
+        <sp-orderbrand-list ref="houcha" :orderid="form.id"></sp-orderbrand-list>
     </div>
 </template>
 
@@ -214,7 +161,7 @@ import { extend, copyTo } from "../object.js"
 import detailConvert from "../asa/order-detail.js"
 import orderMixin from "../mixins/order.js"
 import { statHelper } from "../helper.js"
-
+import Asa_Orderbrand_List from '../asa/Asa_Orderbrand_List.vue';
 
 const props = {
     columns: [
@@ -240,7 +187,9 @@ const props = {
 
 export default {
     name: 'sp-orderform',
-    components: {},
+    components: {
+        [Asa_Orderbrand_List.name]: Asa_Orderbrand_List,
+    },
     mixins: [orderMixin],
     data() {
         let self = this;
@@ -277,25 +226,9 @@ export default {
             formid: '',
             props,
             discounts: {},
-            orderbrandlist: [],
         };
     },
     methods: {
-        // 点击后查的时候，加载品牌订单数据
-        async loadOrderbrand() {
-            const self = this;
-
-            let { data } = await self._fetch("/order/orderbrandlist", { id: self.form.id });
-            self.orderbrandlist = [];
-            self.orderbrandlist.push(...data);
-            self._showDialog('houcha');
-        },
-        openOrderbrand(id) {
-            this._open('/orderbrand/' + id);
-        },
-        onQuit() {
-            this.dialogVisible = false;
-        },
         addPayment() {
             let self = this;
             if (self.canSubmitPayment()) {

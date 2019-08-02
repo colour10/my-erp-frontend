@@ -9,6 +9,7 @@
                 <as-button type="danger" @click="warehousing()" v-if="form.status=='2'">{{_label("feiyongshuqi")}}</as-button>
                 <as-button type="danger" @click="cancelWarehousing()" v-if="form.status=='3'">{{_label("quxiao")}}</as-button>
                 <as-button type="primary" @click="showPayment()" v-if="form.status>0">{{_label("feiyong")}}</as-button>
+                <as-button v-if="form.id>0" type="primary" @click="$refs.qiancha.show()">{{_label("qiancha")}}</as-button>
             </el-row>
             <el-row :gutter="0">
                 <el-col :span="8" style="width:600px">
@@ -216,6 +217,8 @@
                 </template>
             </simple-admin-page>
         </sp-dialog>
+
+        <sp-orderbrand-list ref="qiancha" :shippingid="form.id"></sp-orderbrand-list>
     </div>
 </template>
 
@@ -228,9 +231,13 @@ import orderMixin from "../mixins/order.js";
 import { Order, ProductDetail, promiseRunner } from "../model.js";
 import { debounce } from "../function.js";
 import { statHelper } from "../helper.js";
+import Asa_Orderbrand_List from '../asa/Asa_Orderbrand_List.vue';
 
 const result = {
     name: 'sp-warehousing',
+    components: {
+        [Asa_Orderbrand_List.name]: Asa_Orderbrand_List,
+    },
     mixins: [orderMixin],
     data() {
         let self = this;
