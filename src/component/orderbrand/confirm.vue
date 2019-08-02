@@ -4,6 +4,8 @@
             <el-row :gutter="0">
                 <au-button auth="confirmorder-submit" type="primary" @click="saveOrder" v-if="form.status!=2">{{_label("querenwaibudingdan")}}</au-button>
                 <au-button auth="confirmorder-submit" type="danger" @click="cancel" v-if="form.status==2">{{_label("quxiaoqueren")}}</au-button>
+                <as-button type="primary" @click="$refs.qiancha.show()">{{_label("qiancha")}}</as-button>
+                <as-button type="primary" @click="$refs.houcha.show()">{{_label("houcha")}}</as-button>
             </el-row>
             <el-row :gutter="0">
                 <el-col :span="4" style="width:300px">
@@ -124,6 +126,9 @@
                 </el-table>
             </el-col>
         </el-row>
+
+        <sp-order-list ref="qiancha" :orderbrandid="form.id"></sp-order-list>
+        <sp-shipping-list ref="houcha" :orderbrandid="form.id"></sp-shipping-list>
     </div>
 </template>
 
@@ -132,10 +137,16 @@ import { extend, copyTo,extract } from "../object.js"
 import chain from "../chain.js"
 import orderMixin from "../mixins/order.js"
 import { Order, ProductDetail, promiseRunner } from "../model.js"
-import { statHelper } from "../helper.js"
+import { statHelper } from "../helper.js";
+import Asa_Order_List from '../asa/Asa_Order_List.vue';
+import Asa_Shipping_List from '../asa/Asa_Shipping_List.vue';
 
 export default {
     name: 'sp-orderconfirmdetail',
+    components: {
+        [Asa_Order_List.name]: Asa_Order_List,
+        [Asa_Shipping_List.name]: Asa_Shipping_List,
+    },
     mixins: [orderMixin],
     data() {
         let self = this;
