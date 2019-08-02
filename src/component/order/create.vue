@@ -8,6 +8,7 @@
                 <au-button auth="order-submit" :type="canSubmitPayment?'primary':'info'" @click="addPayment" v-if="form.id>0">{{_label("fujian")}}</au-button>
                 <au-button auth="order-submit" :type="canSubmitPayment?'primary':'info'" @click="addPayment" v-if="form.id>0">{{_label("feiyong")}}</au-button>
                 <as-button v-if="isEditable" :type="buttontype" @click="showProduct()">{{_label("xuanzeshangpin")}}</as-button>
+                <au-button auth="order-submit" type="primary" @click="$router.push('/orderbrand/0?id='+form.id)" v-if="form.id>0">{{_label("shengchengpinpaidingdan")}}</au-button>
             </el-row>
             <el-row :gutter="0">
                 <el-col :span="4" style="width:230px">

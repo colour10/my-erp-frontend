@@ -378,19 +378,23 @@ const result = {
         },
         onSelect() {
             let self = this;
-            self._fetch("/order/import", self.form).then(result => {
-                //已经导入过的订单不重复导入。
-                let table = chain(self.orders).toObject(item => [item.id, 1]).object()
-
-                let func = _private(self)
-                func.importOrders(result.data.orders.filter(item => !table[item.id]))
-                func.importDetails(result.data.details.filter(item => !table[item.orderid]))
-
+            self.doImport(self.form).then(() => {
                 self.form.ageseasonid = '';
                 self.form.bookingid = '';
                 self.form.brandid = '';
-                self._hideDialog('order-dialog')
-            })
+                self._hideDialog('order-dialog');
+            });
+        },
+        async doImport(params) {
+            let self = this;
+            let result = await self._fetch("/order/import", params);
+
+            //已经导入过的订单不重复导入。
+            let table = chain(self.orders).toObject(item => [item.id, 1]).object();
+
+            let func = _private(self);
+            func.importOrders(result.data.orders.filter(item => !table[item.id]));
+            func.importDetails(result.data.details.filter(item => !table[item.orderid]));
         },
         getInit(row) {
             let result = []
@@ -669,7 +673,7 @@ const result = {
             this.copySuppliercodeDebounce()
         }
     },
-    mounted: function() {
+    async mounted() {
         let self = this;
         self._setTitle(self._label("shengchengwaibudingdan"))
 
@@ -683,6 +687,20 @@ const result = {
 
 
         _private(self).loadInfo();
+        self._log(self.$route);
+
+        // 自动加载客户订单数据
+        if(self.$route.query.id && self.$route.query.id>0) {
+            console.log(self.$route.query.id)
+            await self.doImport({
+                orderid: self.$route.query.id,
+            });
+
+            // 选中
+            if(self.orders.length>0) {
+                self.$refs.table.toggleRowSelection(self.orders[0]);
+            }
+        }
     }
 }
 
@@ -772,10 +790,17 @@ const _private = function(self) {
         },
 
         //导入订单列表
-        importOrders(orders) {
-            orders.forEach(item => {
-                self.orders.push(item)
-            })
+        async importOrders(orders) {
+            for(let item of orders) {
+                self.orders.push(item);
+
+                // 如果客户订单中已经设置过供货商，则自动导入该供货商
+                if(item.supplierid>0) {
+                    let rows = await self._dataSource("supplier_3").getRows(item.supplierid);
+                    let suppliers = rows.map(item => item.row);
+                    _this.importSupplier(suppliers);
+                }
+            };
         },
 
         //导入订单明细列表
