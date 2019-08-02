@@ -277,6 +277,10 @@ export default {
             }, 100)
         },
 
+        _open(path) {
+            this.$router.push(path)
+        },
+
         _dataSource(name) {
             return DataSource.getDataSource(name, this._label('lang'))
         },

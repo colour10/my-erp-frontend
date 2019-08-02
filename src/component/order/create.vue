@@ -9,64 +9,65 @@
                 <au-button auth="order-submit" :type="canSubmitPayment?'primary':'info'" @click="addPayment" v-if="form.id>0">{{_label("feiyong")}}</au-button>
                 <as-button v-if="isEditable" :type="buttontype" @click="showProduct()">{{_label("xuanzeshangpin")}}</as-button>
                 <au-button auth="order-submit" type="primary" @click="$router.push('/orderbrand/0?id='+form.id)" v-if="form.id>0">{{_label("shengchengpinpaidingdan")}}</au-button>
+                <as-button v-if="form.id>0" type="primary" @click="loadOrderbrand()">{{_label("houcha")}}</as-button>
             </el-row>
             <el-row :gutter="0">
                 <el-col :span="4" style="width:230px">
                     <el-form-item :label="_label('dinghuokehu')" prop="bookingid">
-                        <simple-select v-model="form.bookingid" source="supplier_2"/>
+                        <simple-select v-model="form.bookingid" source="supplier_2" />
                     </el-form-item>
                     <el-form-item :label="_label('lianxiren')">
-                        <simple-select v-model="form.linkmanid" source="supplierlinkman" :parentid="form.bookingid"/>
+                        <simple-select v-model="form.linkmanid" source="supplierlinkman" :parentid="form.bookingid" />
                     </el-form-item>
                     <el-form-item :label="_label('gonghuoshang')">
-                        <simple-select v-model="form.supplierid" source="supplier_3" :clearable="true"/>
+                        <simple-select v-model="form.supplierid" source="supplier_3" :clearable="true" />
                     </el-form-item>
                     <el-form-item :label="_label('fahuoshang')">
-                        <simple-select v-model="form.finalsupplierid" source="supplier_3" :clearable="true"/>
+                        <simple-select v-model="form.finalsupplierid" source="supplier_3" :clearable="true" />
                     </el-form-item>
                 </el-col>
                 <el-col :span="4" style="width:230px">
                     <el-form-item :label="_label('niandai')" prop="ageseason">
-                        <simple-select v-model="form.ageseason" source="ageseason"/>
+                        <simple-select v-model="form.ageseason" source="ageseason" />
                     </el-form-item>
                     <el-form-item :label="_label('jijie')">
-                        <simple-select v-model="form.seasontype" source="seasontype"/>
+                        <simple-select v-model="form.seasontype" source="seasontype" />
                     </el-form-item>
                     <el-form-item :label="_label('yewuleixing')" prop="bussinesstype">
-                        <simple-select v-model="form.bussinesstype" source="bussinesstype"/>
+                        <simple-select v-model="form.bussinesstype" source="bussinesstype" />
                     </el-form-item>
                     <el-form-item :label="_label('shuxing')" prop="property">
-                        <simple-select v-model="form.property" source="orderproperty"/>
+                        <simple-select v-model="form.property" source="orderproperty" />
                     </el-form-item>
                 </el-col>
                 <el-col :span="4" style="width:230px">
                     <el-form-item :label="_label('jine')">
                         <el-input placeholder="" v-model="total_price" class="productcurrency">
-                            <simple-select source="currency" :clearable="false" v-model="form.currency" slot="prepend"/>
+                            <simple-select source="currency" :clearable="false" v-model="form.currency" slot="prepend" />
                         </el-input>
                     </el-form-item>
                     <el-form-item :label="_label('zhekoulv')">
-                        <sp-float-input v-model="form.discount" @change="onDiscountChange"/>
+                        <sp-float-input v-model="form.discount" @change="onDiscountChange" />
                     </el-form-item>
                     <el-form-item :label="_label('tuishuilv')">
-                        <sp-float-input v-model="form.taxrebate"/>
+                        <sp-float-input v-model="form.taxrebate" />
                     </el-form-item>
                     <el-form-item :label="_label('beizhu')">
-                        <el-input v-model="form.memo"/>
+                        <el-input v-model="form.memo" />
                     </el-form-item>
                 </el-col>
                 <el-col :span="4" style="width:230px">
                     <el-form-item :label="_label('kehudingdanhao')">
-                        <el-input v-model="form.bookingorderno"/>
+                        <el-input v-model="form.bookingorderno" />
                     </el-form-item>
                     <el-form-item :label="_label('gongsidingdanhao')">
                         <el-input v-model="form.orderno" :placeholder="_label('zidonghuoqu')" disabled/>
                     </el-form-item>
                     <el-form-item :label="_label('zhidanren')">
-                        <sp-display-input :value="form.makestaff" source="user" :placeholder="_label('zidonghuoqu')"/>
+                        <sp-display-input :value="form.makestaff" source="user" :placeholder="_label('zidonghuoqu')" />
                     </el-form-item>
                     <el-form-item :label="_label('dinghuoriqi')">
-                        <el-date-picker v-model="form.orderdate" type="date" value-format="yyyy-MM-dd"/>
+                        <el-date-picker v-model="form.orderdate" type="date" value-format="yyyy-MM-dd" />
                     </el-form-item>
                 </el-col>
                 <el-col :span="4" style="width:230px">
@@ -89,7 +90,7 @@
                     </el-table-column>
                     <el-table-column :label="_label('guojima')" align="left" width="200">
                         <template v-slot="scope">
-                            <sp-product-tip :product="scope.row.product"/>
+                            <sp-product-tip :product="scope.row.product" />
                         </template>
                     </el-table-column>
                     <el-table-column prop="number" :label="_label('dinggoushuliang')" align="center" :width="width">
@@ -119,7 +120,7 @@
                     </el-table-column>
                     <el-table-column prop="label" :label="_label('zhekoulv')" width="100" align="center">
                         <template v-slot="{row}">
-                            <el-input v-model="row.discount" size="mini"/>
+                            <el-input v-model="row.discount" size="mini" />
                         </template>
                     </el-table-column>
                     <el-table-column prop="label" :label="_label('chengjiaojia')" width="130" align="center">
@@ -132,7 +133,6 @@
                             {{f(stat[row.product.id].dealPrice*stat[row.product.id].total)}}
                         </template>
                     </el-table-column>
-
                     <el-table-column :label="_label('chanpinmingcheng')" align="left" width="300">
                         <template v-slot="scope">
                             {{scope.row.product.getName()}}
@@ -149,7 +149,59 @@
         <!-- <el-row>
             <simple-admin-page v-bind="props" ref="payment" :hide-create="true" :hide-form="true" v-if="form.id>0"></simple-admin-page>
         </el-row> -->
-        <asa-select-product-dialog :visible.sync="pro" @select="onSelect"/>
+
+
+        <asa-select-product-dialog :visible.sync="pro" @select="onSelect" />
+
+        <sp-dialog ref="houcha" width="1000" class="product clearpadding">
+            <el-table :data="orderbrandlist" stripe border style="width:100%;">
+                <el-table-column :label="_label('gongsidingdanhao')" align="center" width="130">
+                    <template v-slot="{row}">
+                        <el-button @click="openOrderbrand(row.id)">{{row.orderno}}</el-button>
+                    </template>
+                </el-table-column>
+                <el-table-column :label="_label('gonghuoshang')" align="center" width="100">
+                    <template v-slot="{row, $index}">
+                        <sp-select-text :value="row.supplierid" source="supplier" />
+                    </template>
+                </el-table-column>
+                <el-table-column :label="_label('niandaijijie')" width="100" align="center">
+                    <template v-slot="{row}">
+                        <sp-select-text :value="row.ageseason" source="ageseason" />
+                    </template>
+                </el-table-column>
+                <el-table-column :label="_label('yewuleixing')" width="80" align="center">
+                    <template v-slot="{row}">
+                        <sp-select-text :value="row.bussinesstype" source="bussinesstype" />
+                    </template>
+                </el-table-column>
+
+                <el-table-column :label="_label('bizhong')" width="80" align="center">
+                    <template v-slot="{row}">
+                        <sp-select-text :value="row.currency" source="currency" />
+                    </template>
+                </el-table-column>
+
+                <el-table-column :label="_label('zongjine')" width="80" align="center" prop="total_discount_price" />
+                <el-table-column :label="_label('zongjianshu')" width="80" align="center" prop="total_number" />
+                <el-table-column :label="_label('zhekoulv')" width="80" align="center" prop="discount" />
+                <el-table-column :label="_label('tuishuilv')" width="80" align="center" prop="taxrebate" />
+                <el-table-column :label="_label('edu')" width="80" align="center" prop="quantum" />
+                <!-- <el-table-column :label="_label('beizhu')" width="80" align="center" prop="memo" /> -->
+
+                <el-table-column :label="_label('dingdanriqi')" width="100" align="center" v-if="isEditable">
+                    <template v-slot="{row}">
+                        {{row.maketime && row.maketime.length>0?row.maketime.substr(0,10):""}}
+                    </template>
+                </el-table-column>
+
+                <el-table-column :label="_label('pinpai')" width="150">
+                    <template v-slot="{row}">
+                        <sp-select-text :value="row.brandid" source="brand" />
+                    </template>
+                </el-table-column>
+            </el-table>
+        </sp-dialog>
     </div>
 </template>
 
@@ -217,30 +269,43 @@ export default {
                 id: ""
             },
             tabledata: [],
-            listdata:[],
-            details:[],
+            listdata: [],
+            details: [],
             title: "",
             lang: "",
             pro: false,
             formid: '',
             props,
-            discounts: {}
-        }
+            discounts: {},
+            orderbrandlist: [],
+        };
     },
     methods: {
+        // 点击后查的时候，加载品牌订单数据
+        async loadOrderbrand() {
+            const self = this;
+
+            let { data } = await self._fetch("/order/orderbrandlist", { id: self.form.id });
+            self.orderbrandlist = [];
+            self.orderbrandlist.push(...data);
+            self._showDialog('houcha');
+        },
+        openOrderbrand(id) {
+            this._open('/orderbrand/' + id);
+        },
         onQuit() {
-            this.dialogVisible = false
+            this.dialogVisible = false;
         },
         addPayment() {
             let self = this;
             if (self.canSubmitPayment()) {
-                props.base.orderid = self.form.id
+                props.base.orderid = self.form.id;
                 self.$refs.payment.showFormToCreate();
             }
         },
         focus(colIndex, index) {
             let target = this.$refs[index];
-            if(target) {
+            if (target) {
                 target.startFocus(colIndex);
             }
         },
@@ -253,58 +318,57 @@ export default {
                 id: "",
                 product: productDetail,
                 discount: self.form.discount,
-                total: 0
-            })
+                total: 0,
+            });
         },
         finish() {
             const self = this;
 
             self._submit("/order/finish", { id: self.form.id }).then(function(res) {
-                self._redirect("/order/"+ res.data.form.id);
+                self._redirect("/order/" + res.data.form.id);
             });
         },
         saveOrder(status) {
             //保存订单
-            let self = this
-
+            let self = this;
 
             let params = {
-                form: extend({}, self.form, { status })
-            }
-            params.form.genders = self.genders
-            params.form.total = self.total_price
-            params.form.brandids = self.brandids
+                form: extend({}, self.form, { status }),
+            };
+            params.form.genders = self.genders;
+            params.form.total = self.total_price;
+            params.form.brandids = self.brandids;
 
-            let list = []
-            self.tabledata.forEach(item => {
-                self._log("item", item)
-                self.listdata.forEach(row=>{
-                    if(row.productid===item.product.id && row.number>0) {
+            let list = [];
+            for(let item of self.tabledata) {
+                // self._log("item", item)
+                for(let row of self.listdata) {
+                    if (row.productid === item.product.id && row.number > 0) {
                         list.push({
                             productid: item.product.id,
                             discount: item.discount,
                             sizecontentid: row.sizecontentid,
                             number: row.number,
-                            id:self.getDetailId(item.product.id, row.sizecontentid)
+                            id: self.getDetailId(item.product.id, row.sizecontentid),
                         });
                     }
-                })
-            })
+                }
+            }
+
             params.list = list;
 
             self.validate().then(() => {
                 self._submit("/order/saveorder", { params: JSON.stringify(params) }).then(function(res) {
-                    self._log(res);
+                    //self._log(res);
                     let data = res.data;
                     self.$emit("change", data.form);
-                    self._redirect("/order/"+ res.data.form.id);
+                    self._redirect("/order/" + res.data.form.id);
                 });
-            })
-
+            });
         },
-        getDetailId(productid, sizecontentid){
-            let row = this.details.find(item=>item.productid===productid && item.sizecontentid===sizecontentid);
-            return row?row.id:0;
+        getDetailId(productid, sizecontentid) {
+            let row = this.details.find(item => item.productid === productid && item.sizecontentid === sizecontentid);
+            return row ? row.id : 0;
         },
         deleteRow(row) {
             var self = this;
@@ -323,67 +387,62 @@ export default {
                 self.form.currency = self.currencyid;
             }
         },
-        getInit(productid){
+        getInit(productid) {
             let self = this;
             let output = {};
-            self.listdata.forEach(item=>{
-                if(item.productid===productid) {
+
+            for(let item of self.listdata) {
+                if (item.productid === productid) {
                     output[item.sizecontentid] = item.number;
                 }
-            })
+            }
 
             return output;
         },
         onChange(list) {
-            let self = this
-            /*self._log(row)
-            row.form = form
-            row.total = chain(form).toArray().array().reduce((total, item) => total * 1 + item.value.number * 1, 0)
-            row.total = self.formatNumber(row.total)
-            self._log(row.total)*/
-            list.forEach(item=>{
-                let row = self.listdata.find(({sizecontentid,productid})=>sizecontentid==item.sizecontentid && productid==item.uniq);
-                if(row) {
-                    row.number = item.number
-                }
-                else {
+            let self = this;
+
+            for(let item of list) {
+                let row = self.listdata.find(({ sizecontentid, productid }) => sizecontentid == item.sizecontentid && productid == item.uniq);
+                if (row) {
+                    row.number = item.number;
+                } else {
                     self.listdata.push({
-                        sizecontentid:item.sizecontentid,
-                        number:item.number,
-                        productid:item.uniq
-                    })
+                        sizecontentid: item.sizecontentid,
+                        number: item.number,
+                        productid: item.uniq,
+                    });
                 }
-            })
+            }
         },
         onDiscountChange(newValue, oldValue) {
             let self = this
-            self.tabledata.forEach(item => {
-                if (item.discount == oldValue || item.discount*1<=0) {
-                    item.discount = newValue
+            for(let item of self.tabledata) {
+                if (item.discount == oldValue || item.discount * 1 <= 0) {
+                    item.discount = newValue;
                 }
-            })
+            }
         },
         getSummary({ columns, data }) {
-            const self = this
-            const sums = []
+            const self = this;
+            const sums = [];
             columns.forEach((column, index) => {
                 //self._log(column, index)
                 if (index == 0) {
-                    sums[index] = self._label("heji")
-                    return
+                    sums[index] = self._label("heji");
+                    return;
                 } else if (index == 6) {
-
-                    sums[index] = self.f(data.reduce((total, row) => total + self.stat[row.product.id].factoryprice*self.stat[row.product.id].total, 0))
+                    sums[index] = self.f(data.reduce((total, row) => total + self.stat[row.product.id].factoryprice * self.stat[row.product.id].total, 0));
                 } else if (index == 9) {
-                    sums[index] = self.f(data.reduce((total, row) => total + self.stat[row.product.id].dealPrice*self.stat[row.product.id].total, 0))
+                    sums[index] = self.f(data.reduce((total, row) => total + self.stat[row.product.id].dealPrice * self.stat[row.product.id].total, 0));
                 } else if (index == 3) {
-                    sums[index] = self.listdata.reduce((total, row) => total + row.number*1, 0)
+                    sums[index] = self.listdata.reduce((total, row) => total + row.number * 1, 0);
                 }
             })
 
-            sums[1] = data.length
+            sums[1] = data.length;
 
-            return sums
+            return sums;
         }
     },
     computed: {
@@ -440,49 +499,49 @@ export default {
             });
             return Object.keys(obj).join(",");
         },
-        stat(){
+        stat() {
             let self = this
 
             let helper = statHelper({
-                factoryprice:0,
-                currencyid:"",
-                total:0
+                factoryprice: 0,
+                currencyid: "",
+                total: 0
             })
 
-            self.tabledata.forEach(item=>{
+            self.tabledata.forEach(item => {
                 let row = helper.get(item.product.id)
 
                 row.factoryprice = item.product.factoryprice
 
                 //成交价
-                row.dealPrice = self.form.taxrebate==0?0:self.f(row.factoryprice * item.discount / self.form.taxrebate);
+                row.dealPrice = self.form.taxrebate == 0 ? 0 : self.f(row.factoryprice * item.discount / self.form.taxrebate);
             })
 
-            self.details.forEach(item=>{
+            self.details.forEach(item => {
                 let row = helper.get(item.productid);
-                if(item.factoryprice>0) {
+                if (item.factoryprice > 0) {
                     row.factoryprice = item.factoryprice
                 }
             })
 
-            self.listdata.forEach(({productid,number})=>{
+            self.listdata.forEach(({ productid, number }) => {
                 let row = helper.get(productid)
-                row.total += number*1
+                row.total += number * 1
             })
 
             return helper.result()
         },
         currencyid() {
             let self = this
-            if(self.form.currency>0) {
+            if (self.form.currency > 0) {
                 return self.form.currency
             }
 
-            for(let i=0;i<self.details.length;i++) {
+            for (let i = 0; i < self.details.length; i++) {
                 return self.details[i].currencyid
             }
 
-            for(let i=0;i<self.tabledata.length;i++) {
+            for (let i = 0; i < self.tabledata.length; i++) {
                 return self.tabledata[i].product.factorypricecurrency
             }
         }
@@ -504,11 +563,11 @@ export default {
                 copyTo(res.data.form, self.form)
                 if (res.data.list) {
                     self.details = res.data.list;
-                    res.data.list.forEach(item=>{
+                    res.data.list.forEach(item => {
                         self.listdata.push({
-                            productid:item.productid,
-                            sizecontentid:item.sizecontentid,
-                            number:item.number
+                            productid: item.productid,
+                            sizecontentid: item.sizecontentid,
+                            number: item.number
                         })
                     })
 
@@ -517,7 +576,7 @@ export default {
 
                     self.form.currency = self.currencyid
                 }
-                self._setTitle(self._label("dingdan") + ":" +self.form.orderno)
+                self._setTitle(self._label("dingdan") + ":" + self.form.orderno)
             })
             label = "loading..."
         }
@@ -530,7 +589,7 @@ export default {
                 bussinesstype: Rules.id({ required: true, message: _label("8000"), label: _label("yewuleixing") }),
                 ageseason: Rules.id({ required: true, message: _label("8000"), label: _label("niandai") }),
                 property: Rules.id({ required: true, message: _label("8000"), label: _label("shuxing") }),
-                bookingid:Rules.id({ required: true, message: _label("8000"), label: _label("dinghuokehu") })
+                bookingid: Rules.id({ required: true, message: _label("8000"), label: _label("dinghuokehu") })
             }
         })
     }
