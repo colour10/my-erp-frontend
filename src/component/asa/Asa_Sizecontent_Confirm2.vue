@@ -250,7 +250,7 @@ export default {
             })
 
             self.$emit("change", { row:self.row, list })
-            self._log(list)
+            //self._log(list)
         },
         rowClassName({row, rowIndex}){
             if(row.type=="foot") {
@@ -369,7 +369,7 @@ export default {
             })
 
             return result;
-        }
+        },
     },
     watch:{
         suppliers:{
@@ -377,7 +377,7 @@ export default {
                 let self = this;
 
                 self.initTableData();
-                console.log("change suppliers")
+                //console.log("change suppliers")
             },
             deep: true
         }
@@ -386,6 +386,6 @@ export default {
         let self = this
         //self.onChange({})
         self.initTableData();
-    }
-}
+    },
+};
 </script>

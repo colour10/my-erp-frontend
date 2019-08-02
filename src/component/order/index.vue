@@ -93,7 +93,8 @@ export default {
                     { name: "discount", label: _label('zhekoulv'), width: 100 },
                     { name: "genders", label: _label('xingbie') },
                     { name: "brandids", label: _label('pinpai') },
-                    { name: "bussinesstype", label: _label('yewuleixing'), type: 'select', source: "bussinesstype", width: 120 }, {
+                    { name: "bussinesstype", label: _label('yewuleixing'), type: 'select', source: "bussinesstype", width: 120 },
+                    {
                         name: "orderdate",
                         label: _label('dingdanriqi'),
                         width: 120,

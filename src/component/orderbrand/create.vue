@@ -6,6 +6,8 @@
                     <au-button auth="order-submit" type="primary" @click="saveOrder(1)" v-if="$route.params.ids=='0'">{{_label("baocun")}}</au-button>
                     <as-button type="primary" @click="_showDialog('order-dialog')" v-if="$route.params.ids=='0'">{{_label("daorudingdan")}}</as-button>
                     <as-button type="primary" @click="_showDialog('add-supplier');form2.supplierid=''" v-if="$route.params.ids=='0'">{{_label("zengjiagonghuoshang")}}</as-button>
+                    <as-button v-if="$route.params.ids!='0'" type="primary" @click="$refs.qiancha.show()">{{_label("qiancha")}}</as-button>
+                    <as-button v-if="$route.params.ids!='0'" type="primary" @click="$refs.houcha.show()">{{_label("houcha")}}</as-button>
                 </el-col>
                 <el-col :span="18">
                     <el-tag type="warning">
@@ -279,6 +281,9 @@
             </el-row>
         </sp-dialog>
         <sp-dialog ref="preview"/>
+
+        <sp-order-list ref="qiancha" :orderbrandid="$route.params.ids"></sp-order-list>
+        <sp-shipping-list ref="houcha" :orderbrandid="$route.params.ids"></sp-shipping-list>
     </div>
 </template>
 
@@ -292,9 +297,15 @@ import { group } from "../array.js"
 import { statHelper } from "../helper.js"
 import { removeFilter } from "../array.js"
 import cachecomponent from '../mixins/cachecomponent.js';
+import Asa_Order_List from '../asa/Asa_Order_List.vue';
+import Asa_Shipping_List from '../asa/Asa_Shipping_List.vue';
 
 const result = {
     name: 'sp-orderbrandcreate',
+    components: {
+        [Asa_Order_List.name]: Asa_Order_List,
+        [Asa_Shipping_List.name]: Asa_Shipping_List,
+    },
     mixins: [orderMixin, cachecomponent],
     data() {
         var self = this;
@@ -693,7 +704,7 @@ const result = {
     },
     async mounted() {
         let self = this;
-        self._setTitle(self._label("shengchengwaibudingdan"))
+        self._setTitle(self._label("pinpaidingdanbianji"));
 
         self.copyKeywordDebounce = debounce(function() {
             self.form2.keyword = self.form2.keyword1
@@ -730,13 +741,17 @@ const _private = function(self) {
             if (params.ids != '0') {
                 self._fetch("/orderbrand/load", { ids: params.ids }).then(async function({ data }) {
 
-                    _this.importOrders(data.orders)
+                    _this.importOrders(data.orders);
 
-                    await _this.importDetails(data.details)
-                    _this.importSupplier(data.suppliers, data.orderbrands)
-                    _this.importList(data.list)
-                    self.$refs.table.toggleAllSelection()
-                })
+                    await _this.importDetails(data.details);
+                    _this.importSupplier(data.suppliers, data.orderbrands);
+                    _this.importList(data.list);
+                    self.$refs.table.toggleAllSelection();
+
+                    if(data.orderbrands.length>0) {
+                        self._setTitle(self._label("pinpaidingdanbianji")+'：'+data.orderbrands[0].orderno);
+                    }
+                });
             }
         },
 
