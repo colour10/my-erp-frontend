@@ -98,6 +98,11 @@
                         <sp-select-text :value="row.brandid" source="brand"/>
                     </template>
                 </el-table-column>
+                <el-table-column :label="_label('caozuo')" width="100" align="center">
+                    <template v-slot="{row}">
+                        <el-button type="danger" round @click.stop="onDeleteSupplier(row.supplierid)" size="mini" v-if="$route.params.ids=='0'">{{_label("shanchu")}}</el-button>
+                    </template>
+                </el-table-column>
             </el-table>
             <el-col :span="24" class="product" style="margin-top:2px;">
                 <el-table ref="table" :data="orders" stripe border style="width:100%;" @selection-change="onSelectionChange" @row-click="onRowClick">
@@ -337,6 +342,16 @@ const result = {
                 removeFilter(self.listdata, item=>item.row.orderid===orderid);
             }
         },
+        //删除一个发货商
+        onDeleteSupplier(supplierid) {
+            let self = this;
+            if(!self.confirm()) {
+                return ;
+            }
+
+            removeFilter(self.suppliers, item=>item.supplierid==supplierid);
+            removeFilter(self.listdata, item=>item.supplierid==supplierid);
+        },
         setMap(rowIndex, productid, orderid){
             this.refsMap[rowIndex] = productid + '-' + orderid;
         },
@@ -397,17 +412,17 @@ const result = {
             func.importDetails(result.data.details.filter(item => !table[item.orderid]));
         },
         getInit(row) {
-            let result = []
-            this.listdata.forEach(item => {
+            let result = [];
+            for(let item of this.listdata) {
                 if (item.row === row && item.number > 0) {
                     result.push({
                         sizecontentid: item.sizecontentid,
                         supplierid: item.supplierid,
-                        number: item.number
-                    })
+                        number: item.number,
+                    });
                 }
-            })
-            return result
+            }
+            return result;
         },
         saveOrder() {
             //保存订单
@@ -800,23 +815,21 @@ const _private = function(self) {
                     let suppliers = rows.map(item => item.row);
                     _this.importSupplier(suppliers);
                 }
-            };
+            }
         },
 
         //导入订单明细列表
         async importDetails(details) {
             //所有的订单详情
-            details.forEach(item=>{
-                self.orderlist.push(item)
-            })
+            for(let item of details) {
+                self.orderlist.push(item);
+            }
 
-            let orders = await _this.convertListToProductList(details)
+            let orders = await _this.convertListToProductList(details);
 
-            orders.forEach(item => {
-                self.tabledata.push(item)
-            })
-
-            return "";
+            for(let item of orders) {
+                self.tabledata.push(item);
+            }
         },
         importSupplier(suppliers, orderbrands = []) {
             suppliers.forEach(supplier => {
@@ -832,22 +845,22 @@ const _private = function(self) {
                         memo: "",
                         orderno: "",
                         brandid: "",
-                        quantum:""
-                    }
-                    clone.discount = "" //折扣率
-                    clone.total_discount_price = 0 //总价
-                    clone.total_number = 0 //总件数
-                    clone.total_price = 0 //零售总价
-                    clone.orderbrandid = ""
-                    self.suppliers.push(clone)
+                        quantum: "",
+                    };
+                    clone.discount = ""; //折扣率
+                    clone.total_discount_price = 0; //总价
+                    clone.total_number = 0; //总件数
+                    clone.total_price = 0; //零售总价
+                    clone.orderbrandid = "";
+                    self.suppliers.push(clone);
                 }
-            })
+            });
 
             orderbrands.forEach(orderbrand => {
-                let supplier = self.suppliers.find(supplier => supplier.supplierid == orderbrand.supplierid)
+                let supplier = self.suppliers.find(supplier => supplier.supplierid == orderbrand.supplierid);
                 if (supplier) {
                     supplier.discount = orderbrand.discount;
-                    supplier.orderbrandid = orderbrand.id
+                    supplier.orderbrandid = orderbrand.id;
                     supplier.makestaff = orderbrand.makestaff;
                     supplier.maketime = orderbrand.maketime;
                     supplier.foreignorderno = orderbrand.foreignorderno;
@@ -858,7 +871,7 @@ const _private = function(self) {
                     supplier.brandid = orderbrand.brandid;
                     supplier.quantum = orderbrand.quantum;
                 }
-            })
+            });
         },
         importList(list) {
             self.orderbrandDetailList = list

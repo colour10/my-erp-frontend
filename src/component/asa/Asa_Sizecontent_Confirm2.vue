@@ -53,16 +53,18 @@ import orderMixin from "../mixins/order.js"
 const _private = function(self){
 
     return {
-        forEach(callback){
+        forEach(callback) {
             chain(self.form).forEach((number, key)=>{
-                let [sizecontentid, supplierid] = key.split("-")
+                let [sizecontentid, supplierid] = key.split("-");
 
                 let row = self.getTableRow(supplierid);
-                callback({number, sizecontentid, supplierid, discount:row.discount,price:self.dealPrice[supplierid] })
-            })
-        }
-    }
-}
+                if(row) {
+                    callback({number, sizecontentid, supplierid, discount:row.discount,price:self.dealPrice[supplierid] });
+                }
+            });
+        },
+    };
+};
 
 export default {
     name: 'sp-sizecontent-confirm2',
