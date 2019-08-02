@@ -524,7 +524,10 @@ const result = {
         },
         onSelectionChange2(vals) {
             this.selected2 = vals
-        }
+        },
+        isCreate() {
+            return this.$route.params.ids=='0';
+        },
     },
     computed: {
         orderdetails() {
@@ -810,7 +813,7 @@ const _private = function(self) {
                 self.orders.push(item);
 
                 // 如果客户订单中已经设置过供货商，则自动导入该供货商
-                if(item.supplierid>0) {
+                if(item.supplierid>0 && self.isCreate()) {
                     let rows = await self._dataSource("supplier_3").getRows(item.supplierid);
                     let suppliers = rows.map(item => item.row);
                     _this.importSupplier(suppliers);
