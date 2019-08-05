@@ -2,8 +2,8 @@
     <div>
         <el-form class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini">
             <el-row :gutter="0">
-                <au-button auth="sales" type="primary" @click="sale(1)">{{_label("yushou")}}</au-button>
-                <au-button auth="sales" type="primary" @click="sale(2)">{{_label("xiaoshou")}}</au-button>
+                <au-button auth="sales" :type="tabledata.length==0?'info':'primary'" @click="sale(1)">{{_label("yushou")}}</au-button>
+                <au-button auth="sales" :type="tabledata.length==0?'info':'primary'" @click="sale(2)">{{_label("xiaoshou")}}</au-button>
             </el-row>
             <el-row :gutter="0">
                 <el-col :span="4" style="width:300px">
@@ -145,9 +145,9 @@
 </template>
 
 <script>
-import globals, { _label, empty } from '../globals.js'
-import { Productstock, ProductDetail } from "../model.js"
-import { extend, copyTo } from "../object.js"
+import globals, { _label, empty } from '../globals.js';
+import { Productstock, ProductDetail } from "../model.js";
+import { extend, copyTo } from "../object.js";
 import API from "../api.js";
 import cachecomponent from '../mixins/cachecomponent.js';
 import Asa_Sales_Select from '../asa/Asa_Sales_Select.vue';
@@ -158,7 +158,7 @@ const _private = function(self) {
         async loadPrice(){
             //console.log("loadPrice", self.form)
             if(self.form.priceid=='') {
-                return
+                return;
             }
 
             let prices = self.computeProductPrice;
@@ -168,8 +168,8 @@ const _private = function(self) {
                 if(typeof(prices[productid])==="undefined") {
                     self.productPrices.push({
                         productid,
-                        priceid:self.form.priceid,
-                        price:""
+                        priceid: self.form.priceid,
+                        price: "",
                     })
 
                     productids.push(productid);
@@ -179,16 +179,16 @@ const _private = function(self) {
             if(productids.length>0) {
                 let result = await API.getPriceByProductIds("", productids.join(","));
                 //console.log(result)
-                result.forEach(item=>{
-                    self.productPrices.forEach(row=>{
+                for(let item of result) {
+                    for(let row of self.productPrices) {
                         if(item.productid==row.productid && item.id==row.priceid) {
                             row.price = item.price;
                         }
-                    })
-                })
+                    }
+                }
             }
         },
-    }
+    };
 
     return _this;
 }
@@ -322,6 +322,10 @@ export default {
         sale(status) {
             //保存订单
             let self = this;
+
+            if(self.tabledata.length==0) {
+                return;
+            }
 
             let form = extend({}, self.form);
             form.status = status;

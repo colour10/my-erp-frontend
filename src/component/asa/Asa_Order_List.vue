@@ -11,7 +11,6 @@
                     <sp-select-text :value="row.bookingid" source="supplier" />
                 </template>
             </el-table-column>
-
             <el-table-column :label="_label('gonghuoshang')" align="center" width="100">
                 <template v-slot="{row, $index}">
                     <sp-select-text :value="row.supplierid" source="supplier" />
@@ -55,27 +54,27 @@
 
 <script type="text/javascript">
 export default {
-  name: 'sp-order-list',
-  props: {
-    orderbrandid: {},
-  },
-  data() {
-    return {
-      tabledata: [],
-    };
-  },
-  methods: {
-    openit(id) {
-      this._open('/order/' + id);
+    name: 'sp-order-list',
+    props: {
+        orderbrandid: {},
     },
-    async show() {
-      const self = this;
+    data() {
+        return {
+            tabledata: [],
+        };
+    },
+    methods: {
+        openit(id) {
+            this._open('/order/' + id);
+        },
+        async show() {
+            const self = this;
 
-      let { data } = await self._fetch("/orderbrand/orderlist", { id: self.orderbrandid });
-      self.tabledata = [];
-      self.tabledata.push(...data);
-      self._showDialog('dialog');
+            let { data } = await self._fetch("/orderbrand/orderlist", { id: self.orderbrandid });
+            self.tabledata = [];
+            self.tabledata.push(...data);
+            self._showDialog('dialog');
+        },
     },
-  },
 };
 </script>
