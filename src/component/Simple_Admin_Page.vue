@@ -57,25 +57,22 @@ export default {
 
     },
     data() {
-        let self = this
+        let self = this;
         let form = {
-            id: ""
-        }
+            id: "",
+        };
 
-        //console.log(self)
-
-        let base = self.base || {}
-
+        let base = self.base || {};
         let opt = self.options || {};
         //self._log(opt,"opt")
         opt.isAutohide = typeof(opt.isAutohide)=='undefined' ? true : opt.isAutohide;
         opt.isAutoReload = typeof(opt.isAutoReload)=='undefined' ? false : opt.isAutoReload;
 
-        self.columns.forEach(column=>{
-            form[column.name] = ""
-        })
+        for(let column of self.columns) {
+            form[column.name] = "";
+        }
 
-        let authname = self.auth ? self.auth : self.controller
+        let authname = self.auth ? self.auth : self.controller;
 
         return {
             dialogVisible: false,
@@ -87,69 +84,92 @@ export default {
             authname: authname,
             searchform: {},
             action: "",
-            isSubmiting:false
-        }
+            isSubmiting: false,
+        };
     },
     methods: {
         onQuit() {
-            this.dialogVisible = false
+            this.dialogVisible = false;
         },
         onSearch() {
-            let self = this
+            let self = this;
                 //self._log(self.searchform)
-            self.$refs.tablelist.search(self.searchform)
+            self.$refs.tablelist.search(self.searchform);
         },
         onChange(column) {
             let self = this;
             //self._log(column)
 
             if (column.trigger) {
-                let value = self.form[column.name]
+                let value = self.form[column.name];
 
-                column.trigger.forEach(name => {
-                    //self._log(self.$refs[name])
-                    self.$refs[name][0].load(value)
-                })
+                for(let name of column.trigger) {
+                    self.$refs[name][0].load(value);
+                }
             }
+        },
+
+        //数据校验
+        doValidate() {
+            const self = this;
+            const messages = [];
+
+            for(let column of self.columns) {
+                if(column.required===true && self.form[column.name]=='') {
+                    messages.push(column.label+'不能为空');
+                }
+            }
+
+            if(messages.length>0) {
+                self.showErrors(messages);
+                return false;
+            }
+
+            return true;
         },
         onSubmit() {
             let self = this;
 
+            // 数据校验
+            if(self.doValidate()==false) {
+                return ;
+            }
+
             //self._log("是否正在提交",self.isSubmiting)
             if(self.isSubmiting==true) {
-                return
+                return;
             }
             self.isSubmiting = true;
 
-            let opt = self.opt
+            let opt = self.opt;
             let isSubmit = opt.isSubmit;
             let isAutoReload = opt.isAutoReload;
             let isAutohide = opt.isAutohide;
-            let tablelist = self.$refs.tablelist
+            let tablelist = self.$refs.tablelist;
 
             self.form.lang = self.lang;
             if (self.action == "add" && self.form.id=='') {
                 if (isSubmit == false) {
-                    tablelist.appendRow(globals.clone(self.form))
+                    tablelist.appendRow(globals.clone(self.form));
                     if (isAutohide) {
-                        self.dialogVisible = false
+                        self.dialogVisible = false;
                     } else {
-                        self.action = 'edit'
+                        self.action = 'edit';
                     }
                     self.isSubmiting = false;
                 } else {
                     self._submit("/" + self.controller + "/add", self.form).then(function() {
                         if (isAutoReload == true) {
-                            tablelist.loadList()
+                            tablelist.loadList();
                         } else {
-                            tablelist.appendRow(globals.clone(self.form))
+                            tablelist.appendRow(globals.clone(self.form));
                         }
 
                         if (isAutohide) {
-                            self.dialogVisible = false
+                            self.dialogVisible = false;
                         }
-                        self.$emit("after-add")
-                        self.$emit("after-update")
+                        self.$emit("after-add");
+                        self.$emit("after-update");
                         self.isSubmiting = false;
                     }).catch(()=>{
                         self.isSubmiting = false;
@@ -157,27 +177,27 @@ export default {
                 }
             } else {
                 if (isSubmit == false) {
-                    let row = tablelist.getRow(self.rowIndex)
-                    globals.copyTo(self.form, row)
+                    let row = tablelist.getRow(self.rowIndex);
+                    globals.copyTo(self.form, row);
 
                     if (isAutohide) {
-                        self.dialogVisible = false
+                        self.dialogVisible = false;
                     }
                     self.isSubmiting = false;
                 } else {
                     self._submit("/" + self.controller + "/edit", self.form).then(function() {
                         if (isAutoReload == true) {
-                            tablelist.loadList()
+                            tablelist.loadList();
                         } else {
-                            let row = tablelist.getRow(self.rowIndex)
-                            globals.copyTo(self.form, row)
+                            let row = tablelist.getRow(self.rowIndex);
+                            globals.copyTo(self.form, row);
                         }
 
                         if (isAutohide) {
-                            self.dialogVisible = false
+                            self.dialogVisible = false;
                         }
-                        self.$emit("after-edit")
-                        self.$emit("after-update")
+                        self.$emit("after-edit");
+                        self.$emit("after-update");
                         self.isSubmiting = false;
                     }).catch(()=>{
                         self.isSubmiting = false;
@@ -187,20 +207,20 @@ export default {
         },
         showFormToCreate() {
             let self = this;
-            globals.empty(self.form)
+            globals.empty(self.form);
 
             for (let i = 0; i < self.columns.length; i++) {
-                self.form[self.columns[i].name] = self.columns[i].default || ""
+                self.form[self.columns[i].name] = self.columns[i].default || "";
             }
 
             if (self.base) {
                 Object.keys(self.base).forEach(function(key) {
-                    self.form[key] = self.base[key]
+                    self.form[key] = self.base[key];
                 });
             }
 
-            self.action = "add"
-            self.$emit("before-add")
+            self.action = "add";
+            self.$emit("before-add");
 
             self.showDialog(self.getTitle(_label("tianjiaxinxi")));
         },
@@ -216,9 +236,9 @@ export default {
         },
         getTitle(defaultTitle, row) {
             let self = this;
-            let title = ""
+            let title = "";
             if (typeof(self.formTitle) == 'function') {
-                title = self.formTitle(row)
+                title = self.formTitle(row);
             }
 
             return title || defaultTitle;
@@ -229,9 +249,7 @@ export default {
             self.dialogVisible = true;
             setTimeout(function() {
                 //console.log(self.$refs)
-                let columns = self.columns;
-                for (let i = 0; i < columns.length; i++) {
-                    let column = columns[i]
+                for(let column of self.columns) {
                     if (column.is_edit_hide != true && self.$refs[column.name]) {
                         let ele = self.$refs[column.name][0];
 
@@ -264,20 +282,19 @@ export default {
             handler: function(newValue, oldValue) {
                 //console.log("change",newValue,oldValue)
             },
-            deep: true
-        }
+            deep: true,
+        },
     },
     computed: {
         isSubmit() {
-            return this.opt.issubmit || true
+            return this.opt.issubmit || true;
         },
         isAutohide() {
-            return this.opt.autohide || false
+            return this.opt.autohide || false;
         },
         isAutoReload() {
-            return this.opt.autoreload || true
+            return this.opt.autoreload || true;
         }
     },
-    mounted: function() {}
-}
+};
 </script>

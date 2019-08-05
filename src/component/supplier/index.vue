@@ -68,11 +68,11 @@ export default {
         return {
             supplier: {
                 columns: [
-                    { name: "nickname", label: _label("nicheng"), class: "width2" },
-                    { name: "suppliercode", label: _label("bianma"), class: "width2" },
-                    { name: "suppliertype", label: _label("leixing"), class: "width2", type: "select", source: "suppliertype", multiple: true },
+                    { name: "nickname", label: _label("nicheng"), class: "width2", required: true },
+                    { name: "suppliercode", label: _label("bianma"), class: "width2", required: true },
+                    { name: "suppliertype", label: _label("leixing"), class: "width2", type: "select", source: "suppliertype", multiple: true, required: true },
                     { name: "customtype", label: _label("kehuleixing"), class: "width2", type: "select", source: "customtype" },
-                    { name: "suppliername", label: _label("mingcheng"), class: "width1" },
+                    { name: "suppliername", label: _label("mingcheng"), class: "width1", required: true },
                     { name: "address", label: _label("dizhi"), class: "width1", is_hide: true },
                     { name: "englishname", label: _label("yingwenmingcheng"), class: "width1", is_hide: true },
                     { name: "englishaddress", label: _label("yingwendizhi"), class: "width1", is_hide: true },

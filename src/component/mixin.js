@@ -49,6 +49,20 @@ export default {
         }
     },
     methods: {
+        async showErrors(messages) {
+            const self = this;
+            const h = self.$createElement;
+            let list = messages.map(message=> {
+                return h("p", null, message);
+            });
+
+            await self.$msgbox({
+                title: self._label("error_tip"),
+                message: h('p', null, list),
+                showCancelButton: false,
+                confirmButtonText: self._label("button-ok"),
+            });
+        },
         _newbox() {
             return Object.create(null);
         },
