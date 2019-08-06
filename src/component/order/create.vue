@@ -5,10 +5,10 @@
                 <asa-button auth="order-submit" :enable="form.status!='2' && isList" @click="saveOrder(1)">{{_label("baocun")}}</asa-button>
                 <asa-button auth="order-submit" @click="finish()" :enable="form.id>0 && form.status!='2'">{{_label("wancheng")}}</asa-button>
                 <!-- <asa-button auth="order-submit" :type="canSubmitPayment?'primary':'info'" @click="addPayment">{{_label("shengchengfahuodan")}}</asa-button> -->
-                <asa-button auth="order-submit" @click="addPayment" :enable="form.id>0">{{_label("fujian")}}</asa-button>
-                <asa-button auth="order-submit" @click="addPayment" :enable="form.id>0">{{_label("feiyong")}}</asa-button>
+                <!-- <asa-button auth="order-submit" @click="addPayment" :enable="form.id>0">{{_label("fujian")}}</asa-button>
+                <asa-button auth="order-submit" @click="addPayment" :enable="form.id>0">{{_label("feiyong")}}</asa-button> -->
                 <asa-button :enable="isEditable" @click="showProduct()">{{_label("xuanzeshangpin")}}</asa-button>
-                <asa-button auth="order-submit" @click="$router.push('/orderbrand/0?id='+form.id)" :enable="form.id>0">{{_label("shengchengpinpaidingdan")}}</asa-button>
+                <asa-button auth="order-submit" @click="goToOrderbrand" :enable="form.id>0">{{_label("shengchengpinpaidingdan")}}</asa-button>
                 <asa-button :enable="form.id>0" @click="$refs.houcha.show()">{{_label("houcha")}}</asa-button>
             </el-row>
             <el-row :gutter="0">
@@ -153,6 +153,7 @@
 </template>
 
 <script>
+import API from '../api.js';
 import globals, { _label } from "../globals.js";
 import { extend, copyTo } from "../object.js";
 import detailConvert from "../asa/order-detail.js";
@@ -226,9 +227,22 @@ export default {
         };
     },
     methods: {
+        async goToOrderbrand() {
+            const self = this;
+            self._log('goToOrderbrand');
+            const {details} = await API.getOrderListToImport({orderid:self.form.id});
+
+            if(details.length>0) {
+                self.$router.push('/orderbrand/0?id='+self.form.id);
+            }
+            else {
+                // 所有商品已经加入品牌订单了。
+                alert(self._label('tip-001'));
+            }
+        },
         addPayment() {
             let self = this;
-            if (self.canSubmitPayment()) {
+            if (self.canSubmitPayment) {
                 props.base.orderid = self.form.id;
                 self.$refs.payment.showFormToCreate();
             }

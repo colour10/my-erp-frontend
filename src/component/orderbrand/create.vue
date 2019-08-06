@@ -288,6 +288,7 @@
 </template>
 
 <script>
+import API from '../api.js';
 import { extend, copyTo } from "../object.js"
 import orderMixin from "../mixins/order.js"
 import chain from "../chain.js"
@@ -413,14 +414,14 @@ const result = {
         },
         async doImport(params) {
             let self = this;
-            let result = await self._fetch("/order/import", params);
+            let result = await API.getOrderListToImport(params);
 
             //已经导入过的订单不重复导入。
             let table = chain(self.orders).toObject(item => [item.id, 1]).object();
 
             let func = _private(self);
-            await func.importOrders(result.data.orders.filter(item => !table[item.id]));
-            await func.importDetails(result.data.details.filter(item => !table[item.orderid]));
+            await func.importOrders(result.orders.filter(item => !table[item.id]));
+            await func.importDetails(result.details.filter(item => !table[item.orderid]));
         },
         getInit(row) {
             let result = [];

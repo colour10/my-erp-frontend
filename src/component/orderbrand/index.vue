@@ -87,6 +87,7 @@ export default {
                     { name: "taxrebate", label: _label('tuishuilv'), width:100 },
                     { name: "quantum", label: _label('edu'), width:100 },
                     { name: "memo", label: _label('beizhu'), width:100, sortable:false },
+                    { name: "status", label: _label('zhuangtai'), type: 'select', source: "orderbrandstatus", width: 90 },
                     { name: "makedate", label: _label('dingdanriqi'), width:110, convert:function(row){
                         if(row.maketime && row.maketime.length>0) {
                             return row.maketime.substr(0,10)

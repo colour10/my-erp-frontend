@@ -147,8 +147,8 @@ function getOption(name) {
     //订单状态
     options["orderstatus"] =  {hashtable:list.ordertatus}
 
-    //发货单状态
-    options["confirmstatusstatus"] =  {hashtable:list.confirmstatusstatus}
+    //品牌状态
+    options["orderbrandstatus"] =  {hashtable:list.orderbrandstatus}
 
     //调拨类型
     options["requisitiontype"] =  {hashtable:list.requisitiontype}

@@ -171,6 +171,19 @@ const API = {
             return {};
         }
     },
-}
+
+    async getOrderListToImport({ageseasonid, orderid, bookingid, brandid}) {
+        try {
+            let result = await _fetch("/order/import", {ageseasonid, orderid, bookingid, brandid});
+            return result.data;
+        }
+        catch(e) {
+            return {
+                orders: [],
+                details: [],
+            };
+        }
+    },
+};
 
 export default API;
