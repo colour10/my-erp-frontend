@@ -391,7 +391,7 @@ const result = {
             self.selected2.forEach(row => {
                 let key = row.product.id + '-' + row.order.id
                 self.$refs[key].distributeTo(supplierid)
-            })
+            });
             self._hideDialog('supplier-dialog')
         },
         resetDistribute() {
@@ -419,8 +419,8 @@ const result = {
             let table = chain(self.orders).toObject(item => [item.id, 1]).object();
 
             let func = _private(self);
-            func.importOrders(result.data.orders.filter(item => !table[item.id]));
-            func.importDetails(result.data.details.filter(item => !table[item.orderid]));
+            await func.importOrders(result.data.orders.filter(item => !table[item.id]));
+            await func.importDetails(result.data.details.filter(item => !table[item.orderid]));
         },
         getInit(row) {
             let result = [];
@@ -728,6 +728,17 @@ const result = {
             // 选中
             if(self.orders.length>0) {
                 self.$refs.table.toggleRowSelection(self.orders[0]);
+
+                // 默认分配所有商品
+                if(self.suppliers.length>0) {
+                    let {supplierid} = self.suppliers[0];
+                    for(let row of self.tabledata) {
+                        let key = row.product.id + '-' + row.order.id
+                        setTimeout(function() {
+                            self.$refs[key].distributeTo(supplierid);
+                        }, 5);
+                    }
+                }
             }
         }
     }
@@ -761,8 +772,8 @@ const _private = function(self) {
 
         //将发货单明细转化成商品、订单、列表
         async convertListToProductList(list) {
-            let result = {}
-            list.forEach(item => {
+            let result = {};
+            for(let item of list) {
                 //console.log("SSSSSSSS",item)
                 let key = item.productid + '-' + item.orderid;
 
@@ -784,7 +795,7 @@ const _private = function(self) {
                         form
                     }
                 }
-            })
+            }
 
             let promises = []
             chain(result).forEach(item => {
@@ -850,7 +861,7 @@ const _private = function(self) {
             }
         },
         importSupplier(suppliers, orderbrands = []) {
-            suppliers.forEach(supplier => {
+            for(let supplier of suppliers) {
                 if (!self.suppliers.find(item => item.supplierid == supplier.id)) {
                     let clone = {
                         suppliercode: supplier.suppliercode,
@@ -872,9 +883,9 @@ const _private = function(self) {
                     clone.orderbrandid = "";
                     self.suppliers.push(clone);
                 }
-            });
+            }
 
-            orderbrands.forEach(orderbrand => {
+            for(let orderbrand of orderbrands) {
                 let supplier = self.suppliers.find(supplier => supplier.supplierid == orderbrand.supplierid);
                 if (supplier) {
                     supplier.discount = orderbrand.discount;
@@ -889,13 +900,13 @@ const _private = function(self) {
                     supplier.brandid = orderbrand.brandid;
                     supplier.quantum = orderbrand.quantum;
                 }
-            });
+            }
         },
         importList(list) {
             self.orderbrandDetailList = list
-            list.forEach(detail => {
-                let row = self.tabledata.find(item => item.orderid == detail.orderid && item.productid == detail.productid)
-                let supplier = self.suppliers.find(supplier => supplier.orderbrandid == detail.orderbrandid)
+            for(let detail of list) {
+                let row = self.tabledata.find(item => item.orderid == detail.orderid && item.productid == detail.productid);
+                let supplier = self.suppliers.find(supplier => supplier.orderbrandid == detail.orderbrandid);
 
                 //self._log(row, supplier, 'xxx', detail)
                 if (row && supplier) {
@@ -904,18 +915,18 @@ const _private = function(self) {
                         number: detail.number,
                         sizecontentid: detail.sizecontentid,
                         supplierid: supplier.supplierid,
-                        discount: detail.discount
+                        discount: detail.discount,
                     });
                 }
 
                 if (row) {
-                    row.form[detail.sizecontentid] += detail.number * 1
+                    row.form[detail.sizecontentid] += detail.number * 1;
                 }
-            })
+            }
         }
     }
 
-    return _this
+    return _this;
 }
 
 export default result;

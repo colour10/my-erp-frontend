@@ -122,26 +122,27 @@ export default {
             })
         },
         async _submit(path, form, options) {
-            const self = this
-            options = options || {}
-            options.showMessage = true
-            options.isReject = true
+            const self = this;
+            options = options || {};
+            options.showMessage = true;
+            options.isReject = true;
 
             const loading = self.$loading({
                 lock: true,
                 text: 'Loading',
                 spinner: 'el-icon-loading',
-                background: 'rgba(0, 0, 0, 0.7)'
+                background: 'rgba(0, 0, 0, 0.7)',
             });
 
-            return new Promise(resolve=>{
+            return new Promise((resolve, reject)=>{
                 self._fetch(path, form, options).then(result=>{
                     loading.close();
-                    resolve(result)
+                    resolve(result);
                 }).catch(()=>{
                     loading.close();
-                })
-            })
+                    reject();
+                });
+            });
         },
         _confirm(message, callback) {
             var self = this;
@@ -192,11 +193,11 @@ export default {
             }
         },
         _info(message) {
-            let self = this
+            let self = this;
             self.$notify({
                 type: 'warning',
                 title: self._label("tishi"),
-                message: message
+                message: message,
             });
         },
         clearValidate(delay) {

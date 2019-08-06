@@ -101,13 +101,13 @@ export default {
             },
             "supplierinvoice": {
                 columns: [
-                    { name: "name", label: _label("mingcheng"), class: "width1" },
-                    { name: "address", label: _label("dizhi"), class: "width1", is_hide: true },
-                    { name: "tax_number", label: _label("shuihao"), class: "width2" },
-                    { name: "telephone", label: _label("dianhua"), class: "width2" },
+                    { name: "name", label: _label("mingcheng"), class: "width1", required: true },
+                    { name: "address", label: _label("dizhi"), class: "width1", is_hide: true, required: true },
+                    { name: "tax_number", label: _label("shuihao"), class: "width2", required: true },
+                    { name: "telephone", label: _label("dianhua"), class: "width2", required: true },
 
-                    { name: "bank", label: _label("kaihuhang"), class: "width2", is_hide: true },
-                    { name: "bank_account", label: _label("yinhangzhanghao"), class: "width2", is_hide: true }
+                    { name: "bank", label: _label("kaihuhang"), class: "width2", is_hide: true, required: true },
+                    { name: "bank_account", label: _label("yinhangzhanghao"), class: "width2", is_hide: true, required: true }
                 ],
                 controller: "supplierinvoice",
                 auth: "supplier",
