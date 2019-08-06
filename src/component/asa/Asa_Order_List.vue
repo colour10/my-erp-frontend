@@ -1,5 +1,5 @@
 <template>
-    <sp-dialog ref="dialog" width="1000" class="product clearpadding">
+    <sp-dialog ref="dialog" width="1200" class="product clearpadding">
         <el-table :data="tabledata" stripe border style="width:100%;">
             <el-table-column :label="_label('dingdanbianhao')" align="center" width="130">
                 <template v-slot="{row}">

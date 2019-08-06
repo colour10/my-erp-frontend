@@ -56,6 +56,7 @@ import SpProductInfo from './component/asa/sp-product-info.vue';
 import ProductSearchForm from './component/asa/product-search-form.vue';
 import Asa_Product_Code from './component/asa/Asa_Product_Code.vue';
 import Asa_Product_Icon from './component/asa/Asa_Product_Icon.vue';
+import AsaButton from './component/Button.vue';
 
 const components = [
     Simple_Admin_Page,
@@ -97,6 +98,7 @@ const components = [
     ProductSearchForm,
     Asa_Product_Code,
     Asa_Product_Icon,
+    AsaButton,
 ]
 
 components.forEach(component => {

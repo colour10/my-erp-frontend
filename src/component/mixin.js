@@ -49,6 +49,9 @@ export default {
         }
     },
     methods: {
+        _buttonType(enable=true) {
+            return enable===true?'primary':'info';
+        },
         async showErrors(messages) {
             const self = this;
             const h = self.$createElement;

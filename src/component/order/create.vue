@@ -2,14 +2,14 @@
     <div>
         <el-form ref="order-form" class="formx" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini" :rules="formRules" :inline-message="false" :show-message="false">
             <el-row :gutter="0">
-                <au-button auth="order-submit" type="primary" @click="saveOrder(1)" v-if="form.status!='2'">{{_label("baocun")}}</au-button>
-                <au-button auth="order-submit" type="primary" @click="finish()" v-if="form.id>0 && form.status!='2'">{{_label("wancheng")}}</au-button>
-                <!-- <au-button auth="order-submit" :type="canSubmitPayment?'primary':'info'" @click="addPayment">{{_label("shengchengfahuodan")}}</au-button> -->
-                <au-button auth="order-submit" :type="canSubmitPayment?'primary':'info'" @click="addPayment" v-if="form.id>0">{{_label("fujian")}}</au-button>
-                <au-button auth="order-submit" :type="canSubmitPayment?'primary':'info'" @click="addPayment" v-if="form.id>0">{{_label("feiyong")}}</au-button>
-                <as-button v-if="isEditable" :type="buttontype" @click="showProduct()">{{_label("xuanzeshangpin")}}</as-button>
-                <au-button auth="order-submit" type="primary" @click="$router.push('/orderbrand/0?id='+form.id)" v-if="form.id>0">{{_label("shengchengpinpaidingdan")}}</au-button>
-                <as-button v-if="form.id>0" type="primary" @click="$refs.houcha.show()">{{_label("houcha")}}</as-button>
+                <asa-button auth="order-submit" :enable="form.status!='2' && isList" @click="saveOrder(1)">{{_label("baocun")}}</asa-button>
+                <asa-button auth="order-submit" @click="finish()" :enable="form.id>0 && form.status!='2'">{{_label("wancheng")}}</asa-button>
+                <!-- <asa-button auth="order-submit" :type="canSubmitPayment?'primary':'info'" @click="addPayment">{{_label("shengchengfahuodan")}}</asa-button> -->
+                <asa-button auth="order-submit" @click="addPayment" :enable="form.id>0">{{_label("fujian")}}</asa-button>
+                <asa-button auth="order-submit" @click="addPayment" :enable="form.id>0">{{_label("feiyong")}}</asa-button>
+                <asa-button :enable="isEditable" @click="showProduct()">{{_label("xuanzeshangpin")}}</asa-button>
+                <asa-button auth="order-submit" @click="$router.push('/orderbrand/0?id='+form.id)" :enable="form.id>0">{{_label("shengchengpinpaidingdan")}}</asa-button>
+                <asa-button :enable="form.id>0" @click="$refs.houcha.show()">{{_label("houcha")}}</asa-button>
             </el-row>
             <el-row :gutter="0">
                 <el-col :span="4" style="width:230px">
@@ -153,14 +153,11 @@
 </template>
 
 <script>
-import DataSource from '../DataSource.js'
-import globals, { _label } from "../globals.js"
-import { ProductDetail } from "../model.js"
-import chain from "../chain.js"
-import { extend, copyTo } from "../object.js"
-import detailConvert from "../asa/order-detail.js"
-import orderMixin from "../mixins/order.js"
-import { statHelper } from "../helper.js"
+import globals, { _label } from "../globals.js";
+import { extend, copyTo } from "../object.js";
+import detailConvert from "../asa/order-detail.js";
+import orderMixin from "../mixins/order.js";
+import { statHelper } from "../helper.js";
 import Asa_Orderbrand_List from '../asa/Asa_Orderbrand_List.vue';
 
 const props = {
@@ -171,19 +168,19 @@ const props = {
         { name: "paymentdate", label: _label("fukuanriqi"), type: "date" },
         { name: "memo", label: _label("beizhu") },
         { name: "makestaff", label: _label("tijiaoren"), type: 'select', source: "user", is_edit_hide: true },
-        { name: "status", label: _label("yiruzhang"), type: "switch", is_edit_hide: true }
+        { name: "status", label: _label("yiruzhang"), type: "switch", is_edit_hide: true },
     ],
     controller: "orderpayment",
     auth: "order-submit",
     base: {
-        orderid: ''
+        orderid: '',
     },
     options: {
         isedit: (item) => item.status == 0,
         isdelete: (item) => item.status == 0,
-        autoreload: true
-    }
-}
+        autoreload: true,
+    },
+};
 
 export default {
     name: 'sp-orderform',
@@ -215,7 +212,7 @@ export default {
                 memo: "",
                 orderno: "",
                 status: "", //状态，1=保存；2=送审；3=审核完成
-                id: ""
+                id: "",
             },
             tabledata: [],
             listdata: [],
@@ -313,7 +310,7 @@ export default {
 
             let is_exist = self.tabledata.some(rowData => {
                 return rowData.product.id == row.product.id;
-            })
+            });
 
             if (!is_exist) {
                 self.tabledata.unshift(row);
@@ -349,7 +346,7 @@ export default {
             }
         },
         onDiscountChange(newValue, oldValue) {
-            let self = this
+            let self = this;
             for(let item of self.tabledata) {
                 if (item.discount == oldValue || item.discount * 1 <= 0) {
                     item.discount = newValue;
@@ -379,43 +376,43 @@ export default {
         }
     },
     computed: {
-        buttontype() {
-            var status = this.form.status;
-            return status == '1' || status == '' || !status ? 'primary' : 'info'
+        isList() {
+            for(let item of this.listdata) {
+                if(item.number>0) {
+                    return true;
+                }
+            }
+            return false;
         },
         isEditable() {
             var status = this.form.status;
             return status == '1' || status == '' || !status
         },
         width() {
-            return this.tabledata.reduce((max, { product }) => Math.max(max, product.sizecontents.length), 1) * 50 + 21
-        },
-        canSubmit() {
-            var status = this.form.status;
-            return status != 2 && status != 3
+            return this.tabledata.reduce((max, { product }) => Math.max(max, product.sizecontents.length), 1) * 50 + 21;
         },
         canSubmitPayment() {
-            return this.form.id > 0
+            return this.form.id > 0;
         },
         total_price() {
-            let self = this
+            let self = this;
             let total = self.tabledata.reduce(function(total, row) {
                 return total + self.stat[row.product.id].total * self.stat[row.product.id].dealPrice;
-            }, 0)
-            return this.formatNumber(total)
+            }, 0);
+            return this.formatNumber(total);
         },
         brands() {
-            let obj = {}
+            let obj = {};
             this.tabledata.forEach(item => obj[item.product.brand_label] = 1);
             return Object.keys(obj).join(",");
         },
         brandids() {
-            let obj = {}
+            let obj = {};
             this.tabledata.forEach(item => obj[item.product.brandid] = 1);
             return Object.keys(obj).join(",");
         },
         genderlabels() {
-            let obj = {}
+            let obj = {};
             this.tabledata.forEach(item => {
                 if (item.product.gender_label.length > 0) {
                     obj[item.product.gender_label] = 1
@@ -465,66 +462,68 @@ export default {
             return helper.result()
         },
         currencyid() {
-            let self = this
+            let self = this;
             if (self.form.currency > 0) {
-                return self.form.currency
+                return self.form.currency;
             }
 
             for (let i = 0; i < self.details.length; i++) {
-                return self.details[i].currencyid
+                return self.details[i].currencyid;
             }
 
             for (let i = 0; i < self.tabledata.length; i++) {
-                return self.tabledata[i].product.factorypricecurrency
+                return self.tabledata[i].product.factorypricecurrency;
             }
-        }
+        },
     },
-    mounted: function() {
-        var self = this;
+    mounted() {
+        const self = this;
         //self._log("mounted Order")
         //copyTo(self.data, this.form)
         let route = self.$route;
-        let label // = route.params.id == 0 ? self._label("xinjiandingdan") : "订单信息"
+        let label;
         if (route.params.id == 0) {
-            label = self._label("xinjiandingdan")
+            label = self._label("xinjiandingdan");
         } else {
-            self.tabledata = []
-                //加载数据
+            //加载数据
             self._fetch("/order/loadorder", { id: route.params.id }).then(async function(res) {
                 //self._log("加载订单信息", res)
 
-                copyTo(res.data.form, self.form)
+                copyTo(res.data.form, self.form);
+
+                self.tabledata = [];
                 if (res.data.list) {
                     self.details = res.data.list;
-                    res.data.list.forEach(item => {
+
+                    for(let item of res.data.list) {
                         self.listdata.push({
                             productid: item.productid,
                             sizecontentid: item.sizecontentid,
-                            number: item.number
-                        })
-                    })
+                            number: item.number,
+                        });
+                    }
 
                     let results = await detailConvert(res.data.list);
                     results.forEach(item => self.appendRow(item));
 
-                    self.form.currency = self.currencyid
+                    self.form.currency = self.currencyid;
                 }
-                self._setTitle(self._label("dingdan") + ":" + self.form.orderno)
+                self._setTitle(self._label("dingdan") + ":" + self.form.orderno);
             })
-            label = "loading..."
+            label = "loading...";
         }
-        self._setTitle(label)
+        self._setTitle(label);
 
 
         self.initRules(Rules => {
-            let _label = self._label
+            let _label = self._label;
             return {
                 bussinesstype: Rules.id({ required: true, message: _label("8000"), label: _label("yewuleixing") }),
                 ageseason: Rules.id({ required: true, message: _label("8000"), label: _label("niandai") }),
                 property: Rules.id({ required: true, message: _label("8000"), label: _label("shuxing") }),
-                bookingid: Rules.id({ required: true, message: _label("8000"), label: _label("dinghuokehu") })
-            }
-        })
-    }
-}
+                bookingid: Rules.id({ required: true, message: _label("8000"), label: _label("dinghuokehu") }),
+            };
+        });
+    },
+};
 </script>
