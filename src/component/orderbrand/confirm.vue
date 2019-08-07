@@ -6,6 +6,7 @@
                 <asa-button @click="cancel" :enable="form.status==2">{{_label("quxiaoqueren")}}</asa-button>
                 <asa-button @click="$refs.qiancha.show()">{{_label("qiancha")}}</asa-button>
                 <asa-button @click="$refs.houcha.show()">{{_label("houcha")}}</asa-button>
+                <asa-button @click="goToShipping" :enable="form.status==2">{{_label("shengchengfahuodan")}}</asa-button>
             </el-row>
             <el-row :gutter="0">
                 <el-col :span="4" style="width:300px">
@@ -186,9 +187,8 @@ export default {
         }
     },
     methods: {
-        onSelect(row) {
-            let self = this;
-            self.appendRow(row)
+        goToShipping() {
+            this._open('/shipping/0?id='+this.form.id);
         },
         focus(colIndex, rowIndex) {
             let self = this;
@@ -198,27 +198,27 @@ export default {
         },
         saveOrder() {
             //保存订单
-            let self = this
+            let self = this;
 
             if(!confirm(self._label('tip-queren'))) {
-                return
+                return;
             }
 
-            let func = _private(self)
+            let func = _private(self);
 
             let params = {
-                form: extend({}, self.form)
-            }
+                form: extend({}, self.form),
+            };
 
             let list = []
-            self.listdata.forEach(item => {
+            for(let item of self.listdata) {
                 if(item.number>0) {
                     list.push({
                         id:func.getOrderbrandDetailId(item.productid, item.orderid, item.sizecontentid),
-                        number:item.number
-                    })
+                        number:item.number,
+                    });
                 }
-            })
+            }
             params.list = list;
 
             self._log(params)
@@ -228,29 +228,29 @@ export default {
         },
         cancel() {
             //取消确认
-            let self = this
+            let self = this;
 
             if(!confirm(self._label('tip-quxiaoqueren'))) {
-                return
+                return;
             }
 
             self._submit("/orderbrand/cancel", { id: self.form.id }).then(function(res) {
-                _private(self).loadDetail()
+                _private(self).loadDetail();
             }).catch(()=>{});
         },
         appendRow(row) {
             const self = this;
 
             //row.source.confirm_total = 0;
-            self._log("append",  row)
-            self.tabledata.unshift(row)
+            self._log("append",  row);
+            self.tabledata.unshift(row);
 
-            self.form.currency = row.product.factorypricecurrency
+            self.form.currency = row.product.factorypricecurrency;
         },
         onChange(list) {
             let self = this
 
-            list.forEach(item=>{
+            for(let item of list) {
                 let row = self.listdata.find(detail=>detail.orderid==item.order.id && detail.productid==item.product.id && detail.sizecontentid==item.sizecontentid)
                 if(row) {
                     row.number = item.number
@@ -265,7 +265,7 @@ export default {
                         discount:item.discount
                     })
                 }
-            })
+            }
         },
         getSummary({columns, data}){
             const self = this
@@ -300,21 +300,22 @@ export default {
         },
         genders() {
             let obj = {}
-            this.tabledata.forEach(item => {
+            for(let item of this.tabledata) {
                 if (item.product.gender_label.length > 0) {
-                    obj[item.product.gender_label] = 1
+                    obj[item.product.gender_label] = 1;
                 }
-            });
+            }
             return Object.keys(obj).join(",");
         },
         stat(){
             let self = this
             let result = {
-                total_count:0,
-                total_discount_price:0,
-                group:{}
-            }
-            self.listdata.forEach(item=>{
+                total_count: 0,
+                total_discount_price: 0,
+                group: {},
+            };
+
+            for(let item of self.listdata) {
                 if(item.number>0) {
                     let number = item.number*1;
 
@@ -322,11 +323,11 @@ export default {
                     result.total_discount_price = self.f(result.total_discount_price + self.productStat[item.productid].factoryprice * item.discount * number);
                     //console.log(item.product.factoryprice , item.discount , number)
 
-                    let row = result.group[item.product.id] || 0
-                    result.group[item.product.id] = row + number
+                    let row = result.group[item.product.id] || 0;
+                    result.group[item.product.id] = row + number;
                 }
-            })
-            return result
+            }
+            return result;
         },
         productStat(){
             let self = this

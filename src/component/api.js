@@ -184,6 +184,19 @@ const API = {
             };
         }
     },
+
+    async getOrderbrandListToImport({supplierid, ageseason, orderbrandid}) {
+        try {
+            let result = await _fetch("/orderbrand/searchorder", {supplierid, ageseason, orderbrandid});
+            return result.data;
+        }
+        catch(e) {
+            return {
+                orderbrands: [],
+                orderbranddetails: [],
+            };
+        }
+    },
 };
 
 export default API;

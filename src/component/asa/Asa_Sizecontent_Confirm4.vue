@@ -23,7 +23,6 @@ import { toArray,extend } from '../object.js'
 import chain from '../chain.js'
 
 const _private = function(self){
-
     return {
         forEach(callback){
             chain(self.form).forEach((number, sizecontentid)=>{
@@ -116,7 +115,7 @@ export default {
             })
 
             self.$emit("change", list)
-            self._log(list)
+            //self._log(list)
         },
         rowClassName({row, rowIndex}){
             if(row.type=="foot") {
@@ -136,7 +135,12 @@ export default {
             else {
                 return "counter"
             }
-        }
+        },
+        selectAll() {
+            const self = this;
+            extend(self.form, self.head);
+            self.onChange();
+        },
     },
     computed:{
         rows:function(){
@@ -162,5 +166,5 @@ export default {
             return results
         }
     }
-}
+};
 </script>

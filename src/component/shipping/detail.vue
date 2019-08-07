@@ -283,6 +283,7 @@
 </template>
 
 <script>
+import API from '../api.js';
 import { StringFunc } from "../globals.js"
 import { extend, copyTo, extendu } from "../object.js"
 import chain from "../chain.js"
@@ -450,19 +451,16 @@ export default {
             })
             return result
         },
-        onSelect(row) {
+        async onSelect(row) {
             let self = this;
-            self._fetch("/orderbrand/searchorder", self.formimport).then(function({ data }) {
-                //self._log(data);
-                let { orderbrands, orderbranddetails } = data;
-                if (orderbrands) {
-                    let func = _private(self);
-                    func.importOrderbrands(orderbrands);
-                    func.importList(orderbranddetails);
-                }
+            let { orderbrands, orderbranddetails } = await API.getOrderbrandListToImport(self.formimport);
+            if (orderbrands) {
+                let func = _private(self);
+                func.importOrderbrands(orderbrands);
+                func.importList(orderbranddetails);
+            }
 
-                self._hideDialog("order-dialog");
-            });
+            self._hideDialog("order-dialog");
         },
         getSummary({ columns, data }) {
             const self = this;
@@ -639,7 +637,7 @@ export default {
             this.copySuppliercodeDebounce()
         }
     },
-    mounted: function() {
+    async mounted() {
         let self = this;
         let route = self.$route;
         self._log(route.params)
@@ -665,8 +663,29 @@ export default {
                 self._setTitle(self._label("fahuodan") + ":" + self.form.orderno)
                 self.$refs.table.toggleAllSelection()
             })
-        } else {
+        }
+        else {
             self._setTitle(self._label("shengchengfahuodan"))
+        }
+
+        // 自动加载品牌订单数据
+        if(self.$route.query.id && self.$route.query.id>0) {
+            let { orderbrands, orderbranddetails } = await API.getOrderbrandListToImport({orderbrandid: self.$route.query.id});
+            if (orderbrands.length>0) {
+                let func = _private(self);
+                func.importOrderbrands(orderbrands);
+                func.importList(orderbranddetails);
+
+                // 默认分配所有的数量
+                let [orderbrand] = self.orderbrands;
+                self.$refs.table.toggleRowSelection(orderbrand);
+                for(let item of orderbranddetails) {
+                    let key = item.productid+'-'+item.orderid;
+                    setTimeout(function() {
+                        self.$refs[key].selectAll();
+                    }, 50);
+                }
+            }
         }
 
         self.initRules(Rules => {
