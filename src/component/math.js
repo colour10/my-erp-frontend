@@ -1,6 +1,6 @@
 const round = function(num, length) {
-    var l = Math.pow(10, length)
-        return Math.round(num * l) / l
+    let number = new Number(num);
+    return number.toFixed(length);
 }
 export {round}
 

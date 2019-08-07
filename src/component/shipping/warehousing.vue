@@ -2,7 +2,7 @@
     <div>
         <el-form class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini">
             <el-row :gutter="0">
-                <asa-button @click="saveInfo()" :enable="form.status=='1'">{{_label("baocunxinxi")}}</asa-button>
+                <asa-button @click="saveInfo()" :enable="form.status>0">{{_label("baocunxinxi")}}</asa-button>
                 <asa-button @click="confirmShipping()" :enable="form.status=='1'">{{_label("querenruku")}}</asa-button>
                 <asa-button @click="pro=true" :enable="form.status=='1'">{{_label("xuanzeshangpin")}}</asa-button>
                 <asa-button @click="cancelConfirm()" :enable="form.status=='2'">{{_label("quxiaoqueren")}}</asa-button>
@@ -53,8 +53,8 @@
                                 <el-input v-model="form.invoiceno"></el-input>
                             </el-form-item>
                             <el-form-item :label="_label('zongjine')">
-                                <sp-float-input placeholder="" :select_value="total_price" class="input-with-select">
-                                    <simple-select source="currency" :clearable="false" v-model="form.currency">
+                                <sp-float-input placeholder="" :select_value="total_price" class="input-with-select" disabled>
+                                    <simple-select source="currency" :clearable="false" v-model="form.currency" disabled>
                                     </simple-select>
                                 </sp-float-input>
                             </el-form-item>
@@ -478,10 +478,10 @@ const result = {
                 if (index == 0) {
                     sums[index] = self._label("heji")
                     return
-                } else if (index == 5 || index == 8) {
+                } else if (index == 5 || index == 9) {
                     sums[index] = data.reduce((total, row) => total + self.count[row.key], 0)
-                } else if (index == 9) {
-                    sums[index] = data.reduce((total, row) => self.f(total + self.count[row.key] * row.price), 0)
+                } else if (index == 10) {
+                    sums[index] = self.total_price;
                 }
             })
 
@@ -522,7 +522,7 @@ const result = {
 
                 total += row.price * number;
             })
-            return total
+            return self.f(total);
         },
         productStat(){
             let self = this
