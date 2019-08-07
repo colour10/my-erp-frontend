@@ -17,11 +17,6 @@
           <sp-product-tip :product="row.product" />
         </template>
       </el-table-column>
-      <el-table-column sortable :label="_label('cangku')" width="100" align="center">
-        <template v-slot="{row}">
-          {{row.warehouse.name}}
-        </template>
-      </el-table-column>
       <el-table-column :label="_label('kucunshuliang')" :width="width" align="left">
         <template v-slot="{row}">
           <sp-productstock-show :columns="row.product.sizecontents" :stocks="row.stocks" :type="typeSum"></sp-productstock-show>
@@ -75,9 +70,9 @@
       <el-form class="order-form" :model="form" label-width="70px" :inline="false" style="width:100%;" size="mini" @submit.native.prevent>
         <el-row :gutter="0">
           <el-col :span="8" style="width:270px">
-            <el-form-item :label="_label('cangku')">
+            <!-- <el-form-item :label="_label('cangku')">
               <simple-select v-model="form.warehouseid" source="warehouse" :placeholder="_label('cangku')" :clearable="true"></simple-select>
-            </el-form-item>
+            </el-form-item> -->
             <el-form-item :label="_label('guojima')" prop="ageseason">
               <el-input v-model="form.wordcode" class="width2" />
             </el-form-item>
@@ -96,11 +91,12 @@
             <el-form-item :label="_label('chandi')" prop="countries">
               <simple-select v-model="form.countries" source="country" />
             </el-form-item>
-          </el-col>
-          <el-col :span="8" style="width:270px">
             <el-form-item :label="_label('shangpinchicun')">
               <simple-select v-model="form.ulnarinch" source="ulnarinch" :multiple="true" />
             </el-form-item>
+          </el-col>
+          <el-col :span="8" style="width:270px">
+
             <el-form-item :label="_label('shangpinmiaoshu')">
               <simple-select v-model="form.productmemoids" source="productmemo" :multiple="true" />
             </el-form-item>

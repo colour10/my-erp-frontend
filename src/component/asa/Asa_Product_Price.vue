@@ -34,7 +34,7 @@
 
             <el-table-column :label="_label('caozuo')" align="center" width="150">
                 <template v-slot="scope">
-                    <as-button size="mini" @click="onClickUpdate(scope.$index, scope.row)">{{_label('bianji')}}</as-button>
+                    <as-button size="mini" @click="onClickUpdate(scope.row)">{{_label('bianji')}}</as-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -42,86 +42,120 @@
             <as-button type="primary" @click="onFresh">{{_label("shuaxin")}}</as-button>
             <as-button type="primary" @click="onQuit">{{_label("tuichu")}}</as-button>
         </el-col>
-        <simpleform name="productprice" authname="product" ref="productprice" :title="_label('querenfukuan')" @submit="onSubmit" :isEditable="(f)=>true"></simpleform>
+
+        <sp-dialog ref="productprice">
+            <el-form :model="form" label-width="85px" :inline="false" style="width:100%;" size="mini">
+                <el-row :gutter="0">
+                    <el-form-item :label="_label('mingcheng')">
+                        <el-input v-model="form.pricename" size="mini" disabled></el-input>
+                    </el-form-item>
+                </el-row>
+                <el-row :gutter="0">
+                    <el-form-item :label="_label('bizhong')">
+                        <simple-select v-model="form.currencyid" source="currency" disabled></simple-select>
+                    </el-form-item>
+                </el-row>
+                <el-row :gutter="0">
+                    <el-form-item :label="_label('jiage')">
+                        <el-input v-model="form.price" size="mini"></el-input>
+                    </el-form-item>
+                </el-row>
+                <el-row :gutter="0">
+                    <el-col align="center">
+                        <as-button auth="product" type="primary" @click="onSubmit">{{_label("queding")}}</as-button>
+                        <as-button type="primary" @click="_hideDialog('productprice')">{{_label("tuichu")}}</as-button>
+                    </el-col>
+                </el-row>
+            </el-form>
+        </sp-dialog>
     </div>
 </template>
 
 <script>
 import globals, { _label } from '../globals.js';
 import DataSource from '../DataSource.js';
-import simpleform from '../Simple_Form.vue';
 import { extract, extend } from '../object.js';
-import API from "../api.js"
+import API from "../api.js";
 
 export default {
     name: 'asa-product-price',
-    components: {
-        simpleform
-    },
     props: ["option", "productid"],
     data() {
         var self = this;
 
         return {
+            form: {
+                price: '',
+                pricename: '',
+                priceid: '',
+                currencyid: '',
+            },
             data: [],
-            loaded: false
-        }
+            loaded: false,
+        };
     },
     methods: {
         onQuit() {
-            this.$emit('quit')
+            this.$emit('quit');
         },
         onFresh() {
-            let self = this
-            self.clear()
-            self.load()
-        },
-        async onSubmit(form) {
             let self = this;
-            //this._log("确认保存",form)
-            let params = extract(form, ['price', 'currencyid'])
-            params.productid = self.productid
-            params.priceid = form.id
-            let result = await self._submit("/product/saveprice", params)
-            self.clear().load()
+            self.clear();
+            self.load();
         },
-        onClickUpdate(rowIndex, row) {
+        async onSubmit() {
             let self = this;
-            row.pricename = row.name
-            self.$refs['productprice'].setInfo(row)._setting({ submitButtonText: _label('baocun') }).show()
+            let params = {
+                priceid: self.form.priceid,
+                currencyid: self.form.currencyid,
+                price: self.form.price,
+                productid: self.productid,
+            };
+            let result = await self._submit("/product/saveprice", params);
+            self.onFresh();
+            self._hideDialog('productprice');
+        },
+        onClickUpdate(row) {
+            let self = this;
+            console.log(row);
+            self.form.price = row.price;
+            self.form.pricename = row.name;
+            self.form.currencyid = row.currencyid;
+            self.form.priceid = row.id;
+            self._showDialog('productprice');
         },
         clear() {
             let self = this;
-            self.loaded = false
+            self.loaded = false;
             self.data = [];
 
-            return self
+            return self;
         },
         async load() {
-            let self = this
+            let self = this;
             if (self.loaded) {
-                return
+                return;
             }
 
             //加载数据
             let result = await API.getPriceByProductIds("", self.productid);
-            self._log(result)
+            self._log(result);
 
-            let source = DataSource.getDataSource("currency")
+            let source = DataSource.getDataSource("currency");
             self.data = result.map(item => {
-                item.currency = ""
-                source.getRow(item.currencyid, row => item.currency = row.row.code)
-                return item
-            })
-            self.loaded = true
-            self._log(self.data)
+                item.currency = "";
+                source.getRow(item.currencyid, row => item.currency = row.row.code);
+                return item;
+            });
+            self.loaded = true;
+            self._log(self.data);
             return self;
-        }
+        },
     },
     watch: {
         productid(newValue) {
-            this.clear()
-        }
-    }
-}
+            this.clear();
+        },
+    },
+};
 </script>

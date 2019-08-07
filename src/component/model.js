@@ -299,7 +299,7 @@ const ProductstockSearch = Object.assign(createModel("productstocksearch"),{
 
         let runner = promiseAll(row);
         runner.push(ProductDetail.load({data:row.productid, depth:depth}), 'product');
-        runner.push(Warehouse.load({data:row.warehouseid, depth:depth-1}), 'warehouse');
+        //runner.push(Warehouse.load({data:row.warehouseid, depth:depth-1}), 'warehouse');
         runner.push(getDataSource("orderproperty").getRowLabel(row.property), 'property_label');
         runner.push(getDataSource("defectivelevel").getRowLabel(row.defective_level), 'defectivelevel_label');
 
