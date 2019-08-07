@@ -2,7 +2,7 @@
     <div>
         <el-form ref="order-form" class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini" :rules="formRules" :inline-message="false" :show-message="false">
             <el-row :gutter="0">
-                <asa-button @click="saveOrder(1)" :enable="form.status!='2'">{{_label("baocun")}}</asa-button>
+                <asa-button @click="saveOrder(1)" :enable="canSave">{{_label("baocun")}}</asa-button>
                 <asa-button @click="_showDialog('order-dialog')" :enable="form.status!='2'">{{_label("daorudingdan")}}</asa-button>
             </el-row>
             <el-row :gutter="0">
@@ -334,18 +334,18 @@ export default {
                 maketime: "",
                 makestaff: "",
                 id: "",
-                status: ""
+                status: '',
             },
             formimport: {
-                supplierid: "",
-                ageseason: ""
+                supplierid: '',
+                ageseason: '',
             },
             form2: {
-                supplierid: "",
-                keyword: "",
-                keyword1: "",
-                suppliercode1: "",
-                suppliercode: ""
+                supplierid: '',
+                keyword: '',
+                keyword1: '',
+                suppliercode1: '',
+                suppliercode: '',
             },
             tabledata: [],
             orderbrands: [],
@@ -355,8 +355,8 @@ export default {
             selected: [],
             selected2: [],
 
-            uniqkey: 1
-        }
+            uniqkey: 1,
+        };
     },
     methods: {
         saveOrder() {
@@ -451,58 +451,70 @@ export default {
             return result
         },
         onSelect(row) {
-            let self = this
+            let self = this;
             self._fetch("/orderbrand/searchorder", self.formimport).then(function({ data }) {
-                self._log(data)
+                //self._log(data);
                 let { orderbrands, orderbranddetails } = data;
                 if (orderbrands) {
-                    let func = _private(self)
-                    func.importOrderbrands(orderbrands)
-                    func.importList(orderbranddetails)
+                    let func = _private(self);
+                    func.importOrderbrands(orderbrands);
+                    func.importList(orderbranddetails);
                 }
 
-                self._hideDialog("order-dialog")
+                self._hideDialog("order-dialog");
             });
         },
         getSummary({ columns, data }) {
-            const self = this
-            const sums = []
+            const self = this;
+            const sums = [];
 
-            data = self.orderdetails
+            data = self.orderdetails;
             columns.forEach((column, index) => {
                 //self._log(column, index)
                 if (index == 1) {
-                    sums[index] = self._label("heji")
-                    return
+                    sums[index] = self._label("heji");
+                    return;
                 } else if (index == 7) {
                     sums[index] = data.reduce((total, row) => {
-                        let count = self.count[row.key] || 0
-                        return self.f(total + row.price * count)
-                    }, 0)
+                        let count = self.count[row.key] || 0;
+                        return self.f(total + row.price * count);
+                    }, 0);
                 } else if (index == 9) {
                     sums[index] = data.reduce((total, row) => {
-                        let count = self.count[row.key] || 0
-                        return total + count
-                    }, 0)
+                        let count = self.count[row.key] || 0;
+                        return total + count;
+                    }, 0);
                 }
-            })
+            });
 
-            sums[2] = data.length
+            sums[2] = data.length;
 
-            return sums
+            return sums;
         },
         onSelectionChange(vals) {
-            let self = this
-            this.selected = vals
+            let self = this;
+            this.selected = vals;
         },
         onRowClick(row) {
-            this.$refs.table.toggleRowSelection(row)
+            this.$refs.table.toggleRowSelection(row);
         },
         onSelectionChange2(vals) {
-            this.selected2 = vals
-        }
+            this.selected2 = vals;
+        },
     },
     computed: {
+        canSave() {
+            const self = this;
+            if(self.form.status=='2') {
+                return false;
+            }
+
+            let length = self.listdata.filter(item=>item.number>0).length;
+            if(length==0) {
+                return false;
+            }
+            return true;
+        },
         orderdetails() {
             let self = this
             let selected = {}

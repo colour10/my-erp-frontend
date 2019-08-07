@@ -2,14 +2,14 @@
     <div>
         <el-form class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini">
             <el-row :gutter="0">
-                <au-button auth="confirmorder-submit" type="danger" @click="saveInfo()" v-if="form.status=='1'">{{_label("baocunxinxi")}}</au-button>
-                <au-button auth="confirmorder-submit" type="danger" @click="confirmShipping()" v-if="form.status=='1'">{{_label("querenruku")}}</au-button>
-                <as-button type="primary" @click="pro=true" v-if="form.status=='1'">{{_label("xuanzeshangpin")}}</as-button>
-                <as-button type="danger" @click="cancelConfirm()" v-if="form.status=='2'">{{_label("quxiaoqueren")}}</as-button>
-                <as-button type="danger" @click="warehousing()" v-if="form.status=='2'">{{_label("feiyongshuqi")}}</as-button>
-                <as-button type="danger" @click="cancelWarehousing()" v-if="form.status=='3'">{{_label("quxiao")}}</as-button>
-                <as-button type="primary" @click="showPayment()" v-if="form.status>0">{{_label("feiyong")}}</as-button>
-                <as-button v-if="form.id>0" type="primary" @click="$refs.qiancha.show()">{{_label("qiancha")}}</as-button>
+                <asa-button @click="saveInfo()" :enable="form.status=='1'">{{_label("baocunxinxi")}}</asa-button>
+                <asa-button @click="confirmShipping()" :enable="form.status=='1'">{{_label("querenruku")}}</asa-button>
+                <asa-button @click="pro=true" :enable="form.status=='1'">{{_label("xuanzeshangpin")}}</asa-button>
+                <asa-button @click="cancelConfirm()" :enable="form.status=='2'">{{_label("quxiaoqueren")}}</asa-button>
+                <asa-button @click="warehousing()" :enable="form.status=='2'">{{_label("feiyongshuqi")}}</asa-button>
+                <asa-button @click="cancelWarehousing()" :enable="form.status=='3'">{{_label("quxiao")}}</asa-button>
+                <asa-button @click="showPayment()" :enable="form.status>0">{{_label("feiyong")}}</asa-button>
+                <asa-button @click="$refs.qiancha.show()" :enable="form.id>0">{{_label("qiancha")}}</asa-button>
             </el-row>
             <el-row :gutter="0">
                 <el-col :span="8" style="width:600px">
