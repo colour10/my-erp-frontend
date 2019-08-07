@@ -2,21 +2,20 @@
     <div>
         <el-form ref="order-form" class="order-form" :model="form" label-width="85px" style="width:100%;" size="mini" :inline-message="false" :show-message="false">
             <el-row :gutter="0">
-                <el-col :span="6" style="width:300px">
-                    <au-button auth="order-submit" type="primary" @click="saveOrder(1)" v-if="$route.params.ids=='0'">{{_label("baocun")}}</au-button>
-                    <as-button type="primary" @click="_showDialog('order-dialog')" v-if="$route.params.ids=='0'">{{_label("daorudingdan")}}</as-button>
-                    <as-button type="primary" @click="_showDialog('add-supplier');form2.supplierid=''" v-if="$route.params.ids=='0'">{{_label("zengjiagonghuoshang")}}</as-button>
-                    <as-button v-if="$route.params.ids!='0'" type="primary" @click="$refs.qiancha.show()">{{_label("qiancha")}}</as-button>
-                    <as-button v-if="$route.params.ids!='0'" type="primary" @click="$refs.houcha.show()">{{_label("houcha")}}</as-button>
-                </el-col>
-                <el-col :span="18">
-                    <el-tag type="warning">
+                <el-col :span="24">
+                    <asa-button @click="saveOrder(1)" :enable="canSave">{{_label("baocun")}}</asa-button>
+                    <asa-button @click="_showDialog('order-dialog')" :enable="$route.params.ids=='0'">{{_label("daorudingdan")}}</asa-button>
+                    <asa-button @click="_showDialog('add-supplier');form2.supplierid=''" :enable="$route.params.ids=='0'">{{_label("zengjiagonghuoshang")}}</asa-button>
+                    <asa-button @click="$refs.qiancha.show()" :enable="$route.params.ids!='0'">{{_label("qiancha")}}</asa-button>
+                    <asa-button @click="$refs.houcha.show()" :enable="$route.params.ids!='0'">{{_label("houcha")}}</asa-button>
+
+                    <el-tag type="warning" v-if="order.ageseason>0">
                         <sp-select-text :value="order.ageseason" source="ageseason"/>
                     </el-tag>
                     <el-tag type="warning" v-if="order.seasontype>0">
                         <sp-select-text :value="order.seasontype" source="seasontype"/>
                     </el-tag>
-                    <el-tag type="warning">
+                    <el-tag type="warning" v-if="order.bussinesstype>0">
                         <sp-select-text :value="order.bussinesstype" source="bussinesstype"/>
                     </el-tag>
                 </el-col>
@@ -438,14 +437,14 @@ const result = {
         },
         saveOrder() {
             //保存订单
-            let self = this
+            let self = this;
 
             let func = _private(self);
-            let list = []
-            self.listdata.forEach(item => {
+            let list = [];
+            for(let item of self.listdata) {
                 if (item.number > 0) {
                     let orderdetailid = func.getOrderDetaiId(item.row.productid, item.row.orderid, item.sizecontentid);
-                    let id = func.getOrderbrandDetailId(item.row.productid, item.row.orderid, item.sizecontentid, item.supplierid)
+                    let id = func.getOrderbrandDetailId(item.row.productid, item.row.orderid, item.sizecontentid, item.supplierid);
                     list.push({
                         productid: item.row.productid,
                         factoryprice:self.stat[item.row.productid].factoryprice,
@@ -457,10 +456,10 @@ const result = {
                         number: item.number,
                         discount: item.discount,
                         orderdetailid,
-                        id
-                    })
+                        id,
+                    });
                 }
-            })
+            }
 
             let suppliers = self.suppliers.filter(item=>{
                 return self.supplierStat[item.supplierid].total_number>0;
@@ -482,13 +481,13 @@ const result = {
                     bussinesstype:self.order.bussinesstype,
                     ageseason:self.order.ageseason,
                     seasontype:self.order.seasontype,
-                    currency:self.order.currency
-                }
-            }
+                    currency:self.order.currency,
+                },
+            };
 
             //self._log(params)
             self._submit("/orderbrand/add", { params: JSON.stringify(params) }).then(function(res) {
-                self._redirect("/orderbrand/"+ res.data.join(','))
+                self._redirect("/orderbrand/"+ res.data.join(','));
             });
         },
         onNumberChange({ row, list }) {
@@ -542,6 +541,27 @@ const result = {
         },
     },
     computed: {
+        // 判断当前编辑的内容是否可以保存，品牌订单只能做新增，不能修改。
+        canSave() {
+            const self = this;
+            if(self.$route.params.ids!='0') {
+                return false;
+            }
+
+            // 明细列表为空，不能保存
+            let length = self.listdata.filter(item=>item.number>0).length;
+            if(length==0) {
+                return false;
+            }
+
+            // 发货商列表为空，不能保存
+            length = self.suppliers.filter(item=>self.supplierStat[item.supplierid].total_number>0).length;
+            if(length==0) {
+                return false;
+            }
+
+            return true;
+        },
         orderdetails() {
             let self = this
             let selected = {}

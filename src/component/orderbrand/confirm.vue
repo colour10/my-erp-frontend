@@ -2,10 +2,10 @@
     <div>
         <el-form class="order-form" :model="form" label-width="82px" :inline="true" style="width:100%;" size="mini">
             <el-row :gutter="0">
-                <au-button auth="confirmorder-submit" type="primary" @click="saveOrder" v-if="form.status!=2">{{_label("querenwaibudingdan")}}</au-button>
-                <au-button auth="confirmorder-submit" type="danger" @click="cancel" v-if="form.status==2">{{_label("quxiaoqueren")}}</au-button>
-                <as-button type="primary" @click="$refs.qiancha.show()">{{_label("qiancha")}}</as-button>
-                <as-button type="primary" @click="$refs.houcha.show()">{{_label("houcha")}}</as-button>
+                <asa-button @click="saveOrder" :enable="form.status!=2">{{_label("querenwaibudingdan")}}</asa-button>
+                <asa-button @click="cancel" :enable="form.status==2">{{_label("quxiaoqueren")}}</asa-button>
+                <asa-button @click="$refs.qiancha.show()">{{_label("qiancha")}}</asa-button>
+                <asa-button @click="$refs.houcha.show()">{{_label("houcha")}}</asa-button>
             </el-row>
             <el-row :gutter="0">
                 <el-col :span="4" style="width:300px">

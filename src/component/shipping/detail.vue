@@ -2,8 +2,8 @@
     <div>
         <el-form ref="order-form" class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini" :rules="formRules" :inline-message="false" :show-message="false">
             <el-row :gutter="0">
-                <au-button auth="confirmorder-submit" type="primary" @click="saveOrder(1)" v-if="form.status!='2'">{{_label("baocun")}}</au-button>
-                <as-button type="primary" @click="_showDialog('order-dialog')" v-if="form.status!='2'">{{_label("daorudingdan")}}</as-button>
+                <asa-button @click="saveOrder(1)" :enable="form.status!='2'">{{_label("baocun")}}</asa-button>
+                <asa-button @click="_showDialog('order-dialog')" :enable="form.status!='2'">{{_label("daorudingdan")}}</asa-button>
             </el-row>
             <el-row :gutter="0">
                 <el-col :span="8" style="width:600px">
@@ -359,7 +359,7 @@ export default {
         }
     },
     methods: {
-        saveOrder(status) {
+        saveOrder() {
             //保存订单
             let self = this
 
@@ -367,21 +367,23 @@ export default {
 
             let list = []
             let uniques = {};
-            let check_result = true;
-            self.listdata.forEach(({ key, sizecontentid, number }) => {
-                if (!check_result || number <= 0) {
-                    return
+            //self.listdata.forEach(({ key, sizecontentid, number }) => {
+            for(let { key, sizecontentid, number } of self.listdata) {
+                if (number <= 0) {
+                    continue;
                 }
 
                 let row = self.tabledata.find(item => item.key == key);
                 console.log(">>>", row, sizecontentid)
-                let orderbranddetail = self.orderbranddetails.find(item => item.orderbrandid == row.orderbrandid && item.sizecontentid == sizecontentid && item.productid == row.product.id && item.orderid == row.order.id)
-
+                let orderbranddetail = self.orderbranddetails.find(item => item.orderbrandid == row.orderbrandid && item.sizecontentid == sizecontentid && item.productid == row.product.id && item.orderid == row.order.id);
+                if(!orderbranddetail) {
+                    // 商品没有在品牌订单上。
+                    return ;
+                }
 
                 let check_key = [row.price, row.product.id, row.orderbrandid, sizecontentid].join('-')
                 if (uniques[check_key]) {
-                    check_result = false
-                    alert(self._label("chongfushezhi") + ":" + row.product.getGoodsCode())
+                    return alert(self._label("chongfushezhi") + ":" + row.product.getGoodsCode())
                 } else {
                     list.push({
                         orderid: row.order.id,
@@ -393,17 +395,14 @@ export default {
                         orderdetailid: orderbranddetail.orderdetailid,
                         orderbrandid: row.orderbrandid,
                         orderbranddetailid: orderbranddetail.id,
-                        id: ""
+                        id: '',
                     });
 
                     uniques[check_key] = 1
                 }
-            })
+            }
             params.list = list;
 
-            if (!check_result) {
-                return
-            }
             self._log(JSON.stringify(params))
             self.validate().then(async () => {
                 self._log(JSON.stringify(params));
@@ -420,19 +419,19 @@ export default {
         },
         onNumberChange(list) {
             let self = this
-            list.forEach(({ number, key, sizecontentid }) => {
-                let target = self.listdata.find(item => item.key == key && item.sizecontentid == sizecontentid)
+            for(let { number, key, sizecontentid } of list) {
+                let target = self.listdata.find(item => item.key == key && item.sizecontentid == sizecontentid);
 
                 if (target) {
-                    target.number = number
+                    target.number = number;
                 } else {
                     self.listdata.push({
                         key,
                         number,
-                        sizecontentid
+                        sizecontentid,
                     });
                 }
-            })
+            }
         },
         copyit(row) {
             let self = this
@@ -670,19 +669,19 @@ export default {
 const _private = function(self) {
     const _this = {
         isMatch(keyword, search) {
-            return keyword.length > 0 ? search.toUpperCase().indexOf(keyword) >= 0 : true
+            return keyword.length > 0 ? search.toUpperCase().indexOf(keyword) >= 0 : true;
         },
         async convert(list) {
-            let result = {}
-            list.forEach(item => {
+            let result = {};
+            for(let item of list) {
                 //console.log("SSSSSSSS",item)
-                let key = item.productid + '-' + item.orderbrandid
+                let key = item.productid + '-' + item.orderbrandid;
                 if (result[key]) {
-                    result[key]['form'][item.sizecontentid] = item.confirm_number - item.shipping_number
-                    result[key].total += item.confirm_number - item.shipping_number
+                    result[key]['form'][item.sizecontentid] = item.confirm_number - item.shipping_number;
+                    result[key].total += item.confirm_number - item.shipping_number;
                 } else {
-                    let form = {}
-                    form[item.sizecontentid] = item.confirm_number - item.shipping_number
+                    let form = {};
+                    form[item.sizecontentid] = item.confirm_number - item.shipping_number;
 
                     result[key] = {
                         key,
@@ -692,11 +691,11 @@ const _private = function(self) {
                         total: item.number * 1,
                         form,
                         orderbrandid: item.orderbrandid,
-                        price: "",
-                        is_auto: true
-                    }
+                        price: '',
+                        is_auto: true,
+                    };
                 }
-            })
+            }
 
             let promises = []
             chain(result).forEach(item => {
@@ -723,7 +722,7 @@ const _private = function(self) {
         },
         async importList(list) {
             let newlist = []
-            list.forEach(detail => {
+            for(let detail of list) {
                 let target = self.orderbranddetails.find(item => item.id == detail.id)
                 if (!target) {
                     self.orderbranddetails.push(detail)
@@ -734,15 +733,16 @@ const _private = function(self) {
                 if(self.form.currency=='' && detail.currencyid>0) {
                     self.form.currency = detail.currencyid;
                 }
-            })
+            }
+
             let result = await _this.convert(newlist)
-            result.forEach(item => {
+            for(let item of result) {
                 item.price = self.f(self.productStat[item.productid].factoryprice * item.discount)
                 _this.appendRow(item)
-            })
+            }
         },
         importOrderbrands(orderbrands) {
-            orderbrands.forEach(orderbrand => {
+            for(let orderbrand of orderbrands) {
                 let row = self.orderbrands.find(item => item.id == orderbrand.id)
                 if (!row) {
                     self.orderbrands.push(orderbrand)
@@ -752,60 +752,58 @@ const _private = function(self) {
                         return value && target[key] == "" && (key == 'supplierid' || key == 'ageseason' || key == 'seasontype' || key == 'bussinesstype' || key == 'currency')
                     })
                 }
-
-            })
+            }
         },
         importShippingList(list) {
-            let hash = {}
+            let hash = {};
             let table = {};
             list.forEach(item => {
                 //不显示入库操作时候，新追加的无订单的商品
                 if(item.orderid<=0) {
-                    return
+                    return;
                 }
-                self.shippingdetails.push(item)
+                self.shippingdetails.push(item);
 
                 let row = self.tabledata.find(row => {
-                    return row.orderbrandid == item.orderbrandid && row.product.id == item.productid && row.order.id == item.orderid
+                    return row.orderbrandid == item.orderbrandid && row.product.id == item.productid && row.order.id == item.orderid;
                 });
 
-                let key = item.productid + "-" + item.orderbrandid + '-' + item.price
+                let key = item.productid + "-" + item.orderbrandid + '-' + item.price;
                 if (table[key]) {
-
                     self.listdata.push({
                         key: table[key],
                         sizecontentid: item.sizecontentid,
-                        number: item.number
-                    })
+                        number: item.number,
+                    });
                 } else {
                     if(hash[item.productid + "-" + item.orderbrandid]) {
-                        let newrow = self.copyit(row)
-                        newrow.price = item.price
-                        newrow.discount = item.discount
+                        let newrow = self.copyit(row);
+                        newrow.price = item.price;
+                        newrow.discount = item.discount;
                         self.listdata.push({
                             key: newrow.key,
                             sizecontentid: item.sizecontentid,
-                            number: item.number
-                        })
-                        table[key] = newrow.key
+                            number: item.number,
+                        });
+                        table[key] = newrow.key;
                     }
                     else {
-                        row.price = item.price
-                        row.discount = item.discount
+                        row.price = item.price;
+                        row.discount = item.discount;
                         self.listdata.push({
                             key: row.key,
                             sizecontentid: item.sizecontentid,
-                            number: item.number
-                        })
+                            number: item.number,
+                        });
 
                         table[key] = row.key;
                         hash[item.productid + "-" + item.orderbrandid] = 1;
                     }
                 }
             });
-        }
+        },
     }
 
-    return _this
-}
+    return _this;
+};
 </script>
