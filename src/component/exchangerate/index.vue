@@ -27,74 +27,78 @@
 </template>
 
 <script>
-import { _label } from '../globals.js'
+import API from '../api.js';
 
 export default {
     name: 'sp-exchangerate',
-    props: {},
     data() {
-        let self = this
+        let self = this;
+        let _label = self._label;
+
         return {
             props: {
                 columns: [
                     { name: "currency_from", label: _label("huichuhuobi"), type:"select", source:"currency"},
-                    { name: "currency_to", label: _label("huiruhuobi"), type:"select", source:"currency", default:_label("_currencyid")},
+                    { name: "currency_to", label: _label("huiruhuobi"), type:"select", source:"currency", default:''},
                     { name: "rate", label: _label("huilv")},
                     { name: "begin_time", label: _label("shengxiaoshijian")},
                 ],
-                buttons:[{
+                buttons: [{
                     name: "rate",
                     label: _label('lishihuilv'),
                     width: 150,
                     disable_change: true,
                     handler: function(rowIndex, row) {
-                        //console.log(rowIndex, row)   
+                        //console.log(rowIndex, row)
                         //props2.base.brandgroupid = row.id;
                         //必须加这个，为了触发强制更新
-                        self.props2.base.currency_from = ""
+                        self.props2.base.currency_from = '';
 
-                        self.props2.base.currency_from = row.currency_from
-                        self.props2.base.currency_to = row.currency_to
+                        self.props2.base.currency_from = row.currency_from;
+                        self.props2.base.currency_to = row.currency_to;
                         self.dialogVisible = true;
-                        self.title = row.currency_from__label + '/' + row.currency_to__label
+                        self.title = row.currency_from__label + '/' + row.currency_to__label;
                     }
                 }],
                 controller: "exchangerate",
                 auth: "exchangerate",
                 options:{
-                    dialogWidth:"400px", 
-                    autoreload:true,
-                    autohide:true
+                    dialogWidth: "400px",
+                    autoreload: true,
+                    autohide: true
                 },
-                formTitle:function(row){
+                formTitle:function(row) {
                     if(row && row.id>0) {
                         return row.currency_from__label + '/' + row.currency_to__label
                     }
                 }
             },
-            props2:{
-                columns:[
+            props2: {
+                columns: [
                     { name: "begin_time", label: _label("shengxiaoshijian")},
                     { name: "end_time", label: _label("jiezhishijian")},
                     { name: "rate", label: _label("huilv"),width:100}
                 ],
                 controller: "exchangerate",
                 auth: "exchangerate",
-                options:{
-                    dialogWidth:"400px", 
-                    autoreload:true,
-                    isaction:false,
-                    actionNameOfLoad:'history'
+                options: {
+                    dialogWidth: "400px",
+                    autoreload: true,
+                    isaction: false,
+                    actionNameOfLoad: 'history',
                 },
-                base:{
-                    currency_from:"",
-                    currency_to:""
+                base: {
+                    currency_from: '',
+                    currency_to: '',
                 }
             },
-            dialogVisible:false,
-            title:""
-        }
+            dialogVisible: false,
+            title: '',
+        };
     },
-    methods: {}
-}
+    async mounted() {
+        let setting = await API.getSetting();
+        this.props.columns[1].default = setting._currencyid;
+    },
+};
 </script>
