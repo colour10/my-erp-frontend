@@ -645,37 +645,40 @@ const result = {
             return result
         },
         stat(){
-            let self = this
+            let self = this;
 
             let helper = statHelper({
-                factoryprice:0,
-                wordprice:0,
-                currencyid:"",
-                total:0
-            })
+                factoryprice: 0,
+                wordprice: 0,
+                currencyid: "",
+                total: 0,
+            });
 
-            self.tabledata.forEach(item=>{
+            for(let item of self.tabledata) {
                 let row = helper.get(item.product.id)
 
                 row.factoryprice = item.product.factoryprice;
                 row.currencyid = item.product.factorypricecurrency;
                 row.wordprice = item.product.wordprice;
-            })
+            }
 
-            self.orderlist.forEach(item=>{
+            for(let item of self.orderlist) {
+                let row = helper.get(item.productid);
                 if(item.factoryprice>0) {
-                    let row = helper.get(item.productid);
                     row.factoryprice = item.factoryprice;
                     row.currencyid = item.currencyid;
+                }
+
+                if(item.wordprice>0) {
                     row.wordprice = item.wordprice;
                 }
-            })
+            }
 
-            self.listdata.forEach(detail=>{
-                let row = helper.get(detail.row.product.id)
+            for(let detail of self.listdata) {
+                let row = helper.get(detail.row.product.id);
 
                 row.total += detail.number*1;
-            })
+            }
 
             return helper.result()
         },
@@ -688,26 +691,26 @@ const result = {
                 total_discount_price: 0,
                 total_number: 0,
                 total_price: 0,
-                brandid:""
-            })
+                brandid: "",
+            });
 
-            self.listdata.forEach(item => {
+            for(let item of self.listdata) {
                 let target = helper.get(item.supplierid);
 
                 if (item.number > 0) {
-                    target.total_number += item.number * 1
-                    target.total_price += item.number * self.stat[item.row.productid].wordprice
+                    target.total_number += item.number * 1;
+                    target.total_price += item.number * self.stat[item.row.productid].wordprice;
                     target.total_discount_price += item.priceTotal;
 
-                    brands.push(item.supplierid, item.row.product.brandid)
+                    brands.push(item.supplierid, item.row.product.brandid);
                 }
-            })
+            }
 
             let result = brands.getResult()
-            self.suppliers.forEach(supplier => {
+            for(let supplier of self.suppliers) {
                 let target = helper.get(supplier.supplierid);
                 target.brandid = result[supplier.supplierid];
-            })
+            }
 
             return helper.result();
         }

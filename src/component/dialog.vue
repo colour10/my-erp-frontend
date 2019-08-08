@@ -1,42 +1,53 @@
 <template>
-    <el-dialog :title="dialogTitle" :visible.sync="visible" :center="true" :width="dialogWidth+'px'" :modal="false">
-        <slot name="default"></slot>
-    </el-dialog>
+  <el-dialog :title="dialogTitle" :visible.sync="visible" :center="true" :width="dialogWidth+'px'" :modal="false">
+    <div :style="style()">
+      <slot name="default"></slot>
+    </div>
+  </el-dialog>
 </template>
 
 <script>
 export default {
-    name: 'sp-dialog',
-    props:{
-        title:{
-            default:""
-        },
-        width:{}
+  name: 'sp-dialog',
+  props: {
+    title: {
+      default: '',
     },
-    data() {
-        return {
-            visible:false,
-            dialogTitle:this.title,
-            dialogWidth:this.width || 500
-        };
+    width: {},
+    minHeight: {
+      type: Number,
+      default: 200,
     },
-    methods: {
-        show(option={}) {
-            let self = this;
-            if(option.title) {
-                self.dialogTitle = option.title
-            }
+  },
+  data() {
+    return {
+      visible: false,
+      dialogTitle: this.title,
+      dialogWidth: this.width || 500,
+    };
+  },
+  methods: {
+    show(option = {}) {
+      let self = this;
+      if (option.title) {
+        self.dialogTitle = option.title;
+      }
 
-            if(option.width) {
-                self.dialogWidth = option.width
-            } 
+      if (option.width) {
+        self.dialogWidth = option.width;
+      }
 
-            self.visible = true
-        },
-        hide() {
-            let self = this
-            self.visible = false
-        }
-    }
-}
+      self.visible = true;
+    },
+    hide() {
+      let self = this;
+      self.visible = false;
+    },
+    style() {
+      return {
+        minHeight: this.minHeight+'px',
+      };
+    },
+  },
+};
 </script>

@@ -298,6 +298,28 @@ const ProductstockSearch = Object.assign(createModel("productstocksearch"),{
         let self = this;
 
         let runner = promiseAll(row);
+        // 库存
+        let stocks = row.sizecontent_data.split(';').map(item=>{
+            let [sizecontentid, number, reserve_number, sales_number] = item.split(',');
+            return {
+                sizecontentid,
+                number,
+                reserve_number,
+                sales_number,
+            };
+        });
+        runner.push(stocks, "stocks");
+
+        runner.all().then(callback)
+    }
+});
+export {ProductstockSearch};
+
+const ProductstockSummary = Object.assign(createModel("productstocksummary"),{
+    init:function(depth, row, callback) {
+        let self = this;
+
+        let runner = promiseAll(row);
         runner.push(ProductDetail.load({data:row.productid, depth:depth}), 'product');
         //runner.push(Warehouse.load({data:row.warehouseid, depth:depth-1}), 'warehouse');
         runner.push(getDataSource("orderproperty").getRowLabel(row.property), 'property_label');
@@ -318,7 +340,7 @@ const ProductstockSearch = Object.assign(createModel("productstocksearch"),{
         runner.all().then(callback)
     }
 });
-export {ProductstockSearch};
+export {ProductstockSummary};
 
 
 const OrderDetails = Object.assign(createModel("orderdetails"),{

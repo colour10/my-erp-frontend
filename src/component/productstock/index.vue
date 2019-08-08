@@ -1,7 +1,7 @@
 <template>
   <div style="width:100%" class="product">
     <as-button type="primary" @click="_showDialog('search')">{{_label("chaxun")}}</as-button>
-    <sp-table :data="searchresult" border style="width:100%;" :row-style="getRowStyle">
+    <sp-table :data="searchresult" border style="width:100%;" :row-style="getRowStyle" @row-dblclick="showDetail">
       <el-table-column :label="_label('zhutu')" align="center" width="60">
         <template v-slot="{row}">
           <sp-product-icon :file="row.product.picture"></sp-product-icon>
@@ -66,6 +66,7 @@
     </sp-table>
     <el-pagination v-if="searchresult.length<pagination.total" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pagination.current*1" :page-sizes="pagination.pageSizes" :page-size="pagination.pageSize*1" layout="total, sizes, prev, pager, next, jumper" :total="pagination.total*1">
     </el-pagination>
+
     <sp-dialog ref="search" :width="900">
       <el-form class="order-form" :model="form" label-width="70px" :inline="false" style="width:100%;" size="mini" @submit.native.prevent>
         <el-row :gutter="0">
@@ -145,11 +146,31 @@
         </el-row>
       </el-form>
     </sp-dialog>
+
+    <sp-dialog ref="product-detail" :width="900">
+      <sp-table :data="productresult" border style="width:100%;" :row-style="getRowStyle">
+        <el-table-column :label="_label('cangku')" width="160" align="center">
+          <template v-slot="{row}">
+            <sp-select-text :value="row.warehouseid" source="warehouse"></sp-select-text>
+          </template>
+        </el-table-column>
+        <el-table-column :label="_label('guojima')" align="center" sortable width="200">
+          <template v-slot="{row}">
+            <sp-product-tip :product="product.product" />
+          </template>
+        </el-table-column>
+        <el-table-column :label="_label('kucunshuliang')" width="498" align="left">
+          <template v-slot="{row}">
+            <sp-productstock-show :columns="product.product.sizecontents" :stocks="row.stocks" :type="typeSum"></sp-productstock-show>
+          </template>
+        </el-table-column>
+      </sp-table>
+    </sp-dialog>
   </div>
 </template>
 
 <script>
-import { ProductstockSearch } from "../model.js";
+import { ProductstockSearch, ProductstockSummary } from "../model.js";
 import Asa_Productstock_Show from '../asa/Asa_Productstock_Show.vue';
 import globals, { extend } from '../globals.js';
 
@@ -189,9 +210,31 @@ export default {
       types: ['1', '2'],
       properties: ['1', '2'],
       defective_levels: ['1'],
+      productresult: [],
+      product: '',
     };
   },
   methods: {
+    async showDetail(row) {
+      console.log(row)
+      const self = this;
+      self.product = row;
+
+      let {data} = await self._fetch("/productstock/searchproduct", {
+        productid: row.productid,
+        defective_level: row.defective_level,
+        property: row.property,
+      });
+
+      self.productresult = [];
+      for(let row of data) {
+        let result = await ProductstockSearch.load({data:row, depth:2});
+        self.productresult.push(result);
+      }
+      self._showDialog('product-detail', {
+        title: row.product.getName(),
+      });
+    },
     handleSizeChange(pageSize) {
       this.pagination.pageSize = pageSize
       this.loadList();
@@ -227,7 +270,7 @@ export default {
         self.searchresult = [];
         console.log(res);
         res.data.data.forEach(function(item) {
-          ProductstockSearch.get(item, function(result) {
+          ProductstockSummary.get(item, function(result) {
             self.searchresult.push(result);
 
             if (self.searchresult.length == res.data.data.length) {
