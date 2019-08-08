@@ -187,14 +187,24 @@
                             <span v-if="row.order">{{costPrice[row.product.id]}}</span>
                         </template>
                     </el-table-column>
-                    <el-table-column :label="_label('heji')" width="70" align="center" class="counter">
+                    <el-table-column :label="_label('rukuheji')" width="90" align="center" class="counter">
                         <template v-slot="{row}">
                             {{count[row.key]}}
                         </template>
                     </el-table-column>
-                    <el-table-column prop="label" :label="_label('zongjia')" width="80" align="center">
+                    <el-table-column prop="label" :label="_label('rukuzongjia')" width="80" align="center">
                         <template v-slot="{row}">
                             {{f(count[row.key]*row.price)}}
+                        </template>
+                    </el-table-column>
+                    <el-table-column :label="_label('fahuoheji')" width="90" align="center" class="counter">
+                        <template v-slot="{row}">
+                            {{shippingCount[row.key]}}
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="label" :label="_label('fahuozongjia')" width="80" align="center">
+                        <template v-slot="{row}">
+                            {{f(shippingCount[row.key]*row.price)}}
                         </template>
                     </el-table-column>
                     <el-table-column :label="_label('chanpinmingcheng')" align="center" width="200">
@@ -480,8 +490,16 @@ const result = {
                     return
                 } else if (index == 5 || index == 9) {
                     sums[index] = data.reduce((total, row) => total + self.count[row.key], 0)
-                } else if (index == 10) {
+                }
+                else if (index == 10) {
                     sums[index] = self.total_price;
+                }
+                else if (index == 11) {
+                    sums[index] = self.shippingdetails.reduce((total, row) => total + row.number*1, 0)
+                }
+                else if (index == 12) {
+                    sums[index] = self.shippingdetails.reduce((total, row) => total + row.number*row.price, 0);
+                    sums[index] = self.f(sums[index]);
                 }
             })
 
@@ -507,12 +525,25 @@ const result = {
         },
         count() {
             let self = this;
-            let result = {}
-            self.tabledata.forEach(item => result[item.key] = 0)
+            let result = {};
+            self.tabledata.forEach(item => result[item.key] = 0);
             self.listdata.forEach(({ key, number }) => {
                 result[key] += number * 1;
             })
             return result
+        },
+        // 统计各个商品的发货总数量
+        shippingCount() {
+            let self = this;
+            let result = self._newbox();
+            for(let item of self.tabledata) {
+                result[item.key] = 0;
+                for(let key of Object.keys(item.form)) {
+                    result[item.key] += item.form[key]*1;
+                }
+            }
+
+            return result;
         },
         total_price() {
             let self = this;
@@ -653,29 +684,25 @@ const _private = function(self) {
             self.uniqkey++;
         },
         async importList(list) {
+            self.shippingdetails = [];
+            self.tabledata = [];
+            self.listdata = [];
 
-            self.shippingdetails = []
-            self.tabledata = []
-            self.listdata = []
-
-            let newlist = []
-            list.forEach(detail => {
-                self.shippingdetails.push(detail)
-            })
+            self.shippingdetails.push(...list);
 
             let result = await _this.convert(list)
-            result.forEach(item => {
-                _this.appendRow(item)
-            })
+            for(let item of result) {
+                _this.appendRow(item);
+            }
 
-            list.forEach(detail => {
-                let row = self.tabledata.find(item => item.productid == detail.productid && item.price == detail.price && item.orderid == detail.orderid)
+            for(let detail of list) {
+                let row = self.tabledata.find(item => item.productid == detail.productid && item.price == detail.price && item.orderid == detail.orderid);
                 self.listdata.push({
                     key: row.key,
                     sizecontentid: detail.sizecontentid,
-                    number: detail.warehousingnumber
-                })
-            })
+                    number: detail.warehousingnumber,
+                });
+            }
         },
         loadDetail(id) {
             self._setTitle("Loading...");
