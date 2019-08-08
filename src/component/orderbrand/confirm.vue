@@ -78,7 +78,7 @@
                         </template>
                     </el-table-column>
 
-                    <el-table-column :label="_label('guojima')" align="center" width="150">
+                    <el-table-column :label="_label('guojima')" align="center" width="180">
                         <template v-slot="{row}">
                             <sp-product-tip :product="row.product"></sp-product-tip>
                         </template>
@@ -276,10 +276,10 @@ export default {
                     sums[index] = self._label("heji")
                     return
                 }
-                else if(index==6) {
+                else if(index==8) {
                     sums[index] = self.stat.total_count
                 }
-                else if(index==9) {
+                else if(index==6) {
                     sums[index] = self.stat.total_discount_price
                 }
             })
@@ -320,7 +320,10 @@ export default {
                     let number = item.number*1;
 
                     result.total_count += number;
-                    result.total_discount_price = self.f(result.total_discount_price + self.productStat[item.productid].factoryprice * item.discount * number);
+
+                    console.log(result.total_discount_price , self.productStat[item.productid].factoryprice , item.discount , number, result.total_discount_price+self.productStat[item.productid].factoryprice * item.discount * number)
+                    result.total_discount_price = self.f(Number(result.total_discount_price) + self.productStat[item.productid].factoryprice * item.discount * number);
+
                     //console.log(item.product.factoryprice , item.discount , number)
 
                     let row = result.group[item.product.id] || 0;

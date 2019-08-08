@@ -11,14 +11,14 @@
             <template v-slot="{row}">
                 <el-input v-model="row.form[column.id]" style="width:50px" size="mini" :disabled="true" class="linetop" v-if="row.order.id>0"></el-input>
                 <el-input v-model="form[column.id+'-'+row.order.id]" ref="field" style="width:50px" size="mini" @keyup.native="onKeyUp($event, row, colindex)" @focus="focus(colindex)" v-if="row.order.id>0" :disabled="disabled"></el-input>
-                <el-input :value="getTotal({sizecontentid:column.id})" style="width:50px" size="mini" :disabled="disabled" class="linetop" v-if="row.order.id==0"></el-input>
+                <el-input :value="getTotal({sizecontentid:column.id})" style="width:50px" size="mini" :disabled="disabled" class="footer" v-if="row.order.id==0"></el-input>
             </template>
         </el-table-column>
         <el-table-column :label="_label('heji')" align="right" width="53" v-if="hideInput==false">
             <template v-slot="{row}">
                 <el-input :value="getLineTotal(row.form)" style="width:50px" size="mini" :disabled="true" class="linetop" v-if="row.order.id>0"></el-input>
                 <el-input :value="getTotal({orderid:row.order.id})" style="width:50px" size="mini":disabled="true" class="inputsum" v-if="row.order.id>0"></el-input>
-                <el-input :value="getTotal()" style="width:50px" size="mini":disabled="true" class="inputsum" v-if="row.order.id==0"></el-input>
+                <el-input :value="getTotal()" style="width:50px;" size="mini":disabled="true" class="footer" v-if="row.order.id==0"></el-input>
             </template>
         </el-table-column><!--
         <el-table-column prop="discount" :label="_label('zhekoulv')" align="center" width="80">

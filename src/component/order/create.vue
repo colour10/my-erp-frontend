@@ -413,7 +413,7 @@ export default {
             let total = self.tabledata.reduce(function(total, row) {
                 return total + self.stat[row.product.id].total * self.stat[row.product.id].dealPrice;
             }, 0);
-            return this.formatNumber(total);
+            return this.f(total);
         },
         brands() {
             let obj = {};

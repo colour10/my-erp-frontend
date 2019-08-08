@@ -503,7 +503,7 @@ const result = {
                 }
             })
 
-            sums[1] = data.length
+            sums[2] = data.length;
 
             return sums
         }
