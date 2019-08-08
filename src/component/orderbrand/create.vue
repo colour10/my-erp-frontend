@@ -127,7 +127,7 @@
 
                     <el-table-column :label="_label('fenpeishuliang')" width="120" align="center">
                         <template v-slot="{row}">
-                            {{orderstat[row.id].totalCount-orderstat[row.id].leftCount + ordercurrent[row.id].totalCount}}
+                            {{orderstat[row.id].totalCount-orderstat[row.id].leftCount + ordercurrent[row.id]}}
                         </template>
                     </el-table-column>
 
@@ -567,11 +567,11 @@ const result = {
             let selected = {}
 
             if (self.suppliers.length == 0) {
-                return []
+                return [];
             }
 
             self.selected.forEach(item => {
-                selected[item.id] = 1
+                selected[item.id] = 1;
             })
 
             let keyword = self.form2.keyword.toUpperCase()
@@ -628,21 +628,19 @@ const result = {
 
             return result
         },
+
+        //统计每个客户订单上的已经分配的商品总数
         ordercurrent(){
             let self = this;
-            let result = {};
-            self.orders.forEach(item=>{
-                result[item.id] = {
-                    totalCount:0
-                }
-            })
+            let result = self._newbox();
+            for(let order of self.orders) {
+                result[order.id] = 0;
+            }
 
-            self.listdata.forEach(detail=>{
-                let row = result[detail.row.orderid]
-
-                row.totalCount += detail.number*1;
-            })
-            return result
+            for(let detail of self.listdata) {
+                result[detail.row.orderid] += Number(detail.number);
+            }
+            return result;
         },
         stat(){
             let self = this;
@@ -677,10 +675,10 @@ const result = {
             for(let detail of self.listdata) {
                 let row = helper.get(detail.row.product.id);
 
-                row.total += detail.number*1;
+                row.total += Number(detail.number);
             }
 
-            return helper.result()
+            return helper.result();
         },
         supplierStat() {
             let self = this;
@@ -698,9 +696,9 @@ const result = {
                 let target = helper.get(item.supplierid);
 
                 if (item.number > 0) {
-                    target.total_number += item.number * 1;
+                    target.total_number += Number(item.number);
                     target.total_price += item.number * self.stat[item.row.productid].wordprice;
-                    target.total_discount_price += item.priceTotal;
+                    target.total_discount_price += Number(item.priceTotal);
 
                     brands.push(item.supplierid, item.row.product.brandid);
                 }
@@ -718,25 +716,25 @@ const result = {
     watch: {
         'form2.keyword1': function(newvalue) {
             //console.log(newvalue)
-            this.copyKeywordDebounce()
+            this.copyKeywordDebounce();
         },
 
         'form2.suppliercode1': function(newvalue) {
             //console.log(newvalue)
-            this.copySuppliercodeDebounce()
-        }
+            this.copySuppliercodeDebounce();
+        },
     },
     async mounted() {
         let self = this;
         self._setTitle(self._label("pinpaidingdanbianji"));
 
         self.copyKeywordDebounce = debounce(function() {
-            self.form2.keyword = self.form2.keyword1
-        }, 1000, false)
+            self.form2.keyword = self.form2.keyword1;
+        }, 1000, false);
 
         self.copySuppliercodeDebounce = debounce(function() {
-            self.form2.suppliercode = self.form2.suppliercode1
-        }, 1000, false)
+            self.form2.suppliercode = self.form2.suppliercode1;
+        }, 1000, false);
 
 
         _private(self).loadInfo();
@@ -757,7 +755,7 @@ const result = {
                 if(self.suppliers.length>0) {
                     let {supplierid} = self.suppliers[0];
                     for(let row of self.tabledata) {
-                        let key = row.product.id + '-' + row.order.id
+                        let key = row.product.id + '-' + row.order.id;
                         setTimeout(function() {
                             self.$refs[key].distributeTo(supplierid);
                         }, 5);
@@ -874,15 +872,11 @@ const _private = function(self) {
         //导入订单明细列表
         async importDetails(details) {
             //所有的订单详情
-            for(let item of details) {
-                self.orderlist.push(item);
-            }
+            self.orderlist.push(...details);
 
             let orders = await _this.convertListToProductList(details);
 
-            for(let item of orders) {
-                self.tabledata.push(item);
-            }
+            self.tabledata.push(...orders);
         },
         importSupplier(suppliers, orderbrands = []) {
             for(let supplier of suppliers) {
@@ -892,7 +886,7 @@ const _private = function(self) {
                         supplierid: supplier.id,
                         foreignorderno: "",
                         finalsupplierid: "",
-                        taxrebate: "",
+                        taxrebate: "1",
                         makestaff: "",
                         maketime: "",
                         memo: "",
@@ -900,7 +894,7 @@ const _private = function(self) {
                         brandid: "",
                         quantum: "",
                     };
-                    clone.discount = ""; //折扣率
+                    clone.discount = "1"; //折扣率
                     clone.total_discount_price = 0; //总价
                     clone.total_number = 0; //总件数
                     clone.total_price = 0; //零售总价
