@@ -47,8 +47,8 @@
                                 <el-input v-model="form.invoiceno"></el-input>
                             </el-form-item>
                             <el-form-item :label="_label('zongjine')">
-                                <sp-float-input placeholder="" :select_value="total_price" class="input-with-select">
-                                    <simple-select source="currency" :clearable="false" v-model="form.currency"></simple-select>
+                                <sp-float-input :select_value="total_price" class="input-with-select" disabled>
+                                    <simple-select source="currency" :clearable="false" v-model="form.currency" disabled></simple-select>
                                 </sp-float-input>
                             </el-form-item>
                             <el-form-item :label="_label('huilv')">
@@ -115,9 +115,7 @@
                     <el-form-item :label="_label('zidanhao')">
                         <el-input v-model="form.hblno"></el-input>
                     </el-form-item>
-                    <el-form-item :label="_label('beizhu')">
-                        <el-input v-model="form.memo"></el-input>
-                    </el-form-item>
+
                 </el-col>
             </el-row>
         </el-form>
@@ -261,7 +259,7 @@
                 </el-row>
             </el-col>
         </el-row>
-        <sp-dialog ref="order-dialog">
+        <sp-dialog ref="order-dialog" :min-height="50">
             <el-form :model="form" label-width="85px" :inline="false" style="width:100%;" size="mini">
                 <el-row :gutter="0">
                     <el-form-item :label="_label('niandai')">
@@ -475,12 +473,12 @@ export default {
                 } else if (index == 7) {
                     sums[index] = data.reduce((total, row) => {
                         let count = self.count[row.key] || 0;
-                        return self.f(total + row.price * count);
+                        return self.f(Number(total) + row.price * count);
                     }, 0);
                 } else if (index == 9) {
                     sums[index] = data.reduce((total, row) => {
                         let count = self.count[row.key] || 0;
-                        return total + count;
+                        return Number(total) + Number(count);
                     }, 0);
                 }
             });
@@ -535,8 +533,11 @@ export default {
             let self = this;
             let result = {}
             self.listdata.forEach(({ key, number }) => {
-                result[key] = result[key] || 0
-                result[key] += number * 1;
+                if(!result[key]) {
+                    result[key] = 0;
+                }
+                result[key] += Number(number);
+
             })
             return result
         },

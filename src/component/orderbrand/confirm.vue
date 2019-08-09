@@ -317,11 +317,11 @@ export default {
 
             for(let item of self.listdata) {
                 if(item.number>0) {
-                    let number = item.number*1;
+                    let number = Number(item.number);
 
                     result.total_count += number;
 
-                    console.log(result.total_discount_price , self.productStat[item.productid].factoryprice , item.discount , number, result.total_discount_price+self.productStat[item.productid].factoryprice * item.discount * number)
+                    //console.log(result.total_discount_price , self.productStat[item.productid].factoryprice , item.discount , number, result.total_discount_price+self.productStat[item.productid].factoryprice * item.discount * number)
                     result.total_discount_price = self.f(Number(result.total_discount_price) + self.productStat[item.productid].factoryprice * item.discount * number);
 
                     //console.log(item.product.factoryprice , item.discount , number)
@@ -373,9 +373,9 @@ export default {
     mounted: function() {
         let self = this;
 
-        _private(self).loadDetail()
-        self._setTitle(self._label("querenwaibudingdan"))
-    }
+        _private(self).loadDetail();
+        self._setTitle(self._label("querenwaibudingdan"));
+    },
 }
 
 const _private = function(self){
@@ -399,16 +399,16 @@ const _private = function(self){
             let result = {}
             list.forEach(item => {
                 //console.log("SSSSSSSS",item)
-                let key = item.productid + '-' + item.orderid
+                let key = item.productid + '-' + item.orderid;
                 if (result[key]) {
-                    result[key]['form'][item.sizecontentid] = item.number
-                    result[key]['confirm_form'][item.sizecontentid] = item.confirm_number
-                    result[key].total += item.number
+                    result[key]['form'][item.sizecontentid] = item.number;
+                    result[key]['confirm_form'][item.sizecontentid] = item.confirm_number;
+                    result[key].total += item.number;
                 } else {
-                    let form = {}
-                    form[item.sizecontentid] = item.number
-                    let confirm_form = {}
-                    confirm_form[item.sizecontentid] = item.confirm_number
+                    let form = {};
+                    form[item.sizecontentid] = item.number;
+                    let confirm_form = {};
+                    confirm_form[item.sizecontentid] = item.confirm_number;
                     result[key] = {
                         key,
                         productid: item.productid,
@@ -416,8 +416,8 @@ const _private = function(self){
                         discount: item.discount,
                         total: item.number * 1,
                         form,
-                        confirm_form
-                    }
+                        confirm_form,
+                    };
                 }
             })
 

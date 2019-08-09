@@ -65,19 +65,19 @@ export default {
                 options:{
                     dialogWidth: "400px",
                     autoreload: true,
-                    autohide: true
+                    autohide: true,
                 },
-                formTitle:function(row) {
+                formTitle: function(row) {
                     if(row && row.id>0) {
-                        return row.currency_from__label + '/' + row.currency_to__label
+                        return row.currency_from__label + '/' + row.currency_to__label;
                     }
-                }
+                },
             },
             props2: {
                 columns: [
                     { name: "begin_time", label: _label("shengxiaoshijian")},
                     { name: "end_time", label: _label("jiezhishijian")},
-                    { name: "rate", label: _label("huilv"),width:100}
+                    { name: "rate", label: _label("huilv"),width:100},
                 ],
                 controller: "exchangerate",
                 auth: "exchangerate",
@@ -90,7 +90,7 @@ export default {
                 base: {
                     currency_from: '',
                     currency_to: '',
-                }
+                },
             },
             dialogVisible: false,
             title: '',

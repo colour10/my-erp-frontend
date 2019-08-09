@@ -12,7 +12,7 @@
                 <sp-select-text :value="row.brandid" source="brand"></sp-select-text>
             </template>
             <template v-slot:orderno="{row}">
-                <router-link :to="'/orderbrand/'+row.id">{{row.orderno}}</router-link>
+                <router-link :to="'/orderbrand/confirm/'+row.id">{{row.orderno}}</router-link>
             </template>
         </simple-admin-tablelist>
 
@@ -122,7 +122,7 @@ export default {
             self.$refs.tablelist.search(self.form)
         },
         showFormToCreate() {
-            this.$router.push('/orderbrand/0')
+            this._open('/orderbrand/0')
         },
         showFormToEdit() {
             let self = this;
@@ -140,10 +140,10 @@ export default {
             }
         },
         toCreateConfirm({row, vm}){
-            this.$router.push('/orderbrand/confirm/' + row.id)
+            this._open('/orderbrand/confirm/' + row.id)
         },
         toShipping({row, vm}){
-            this.$router.push('/shipping/create/' + row.id)
+            this._open('/shipping/detail/' + row.id)
         }
     }
 }

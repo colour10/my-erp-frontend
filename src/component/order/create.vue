@@ -42,8 +42,8 @@
                 </el-col>
                 <el-col :span="4" style="width:230px">
                     <el-form-item :label="_label('jine')">
-                        <el-input placeholder="" v-model="total_price" class="productcurrency">
-                            <simple-select source="currency" :clearable="false" v-model="form.currency" slot="prepend" />
+                        <el-input v-model="total_price" class="productcurrency" disabled>
+                            <simple-select source="currency" :clearable="false" v-model="form.currency" slot="prepend" disabled />
                         </el-input>
                     </el-form-item>
                     <el-form-item :label="_label('zhekoulv')">
@@ -76,6 +76,9 @@
                     </el-form-item>
                     <el-form-item :label="_label('pinpai')">
                         <el-input v-model="brands" disabled/>
+                    </el-form-item>
+                    <el-form-item :label="_label('zhidanriqi')">
+                        <el-input :value="form.maketime" :placeholder="_label('zidonghuoqu')" disabled></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>

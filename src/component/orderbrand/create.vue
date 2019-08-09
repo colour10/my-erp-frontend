@@ -487,7 +487,7 @@ const result = {
 
             //self._log(params)
             self._submit("/orderbrand/add", { params: JSON.stringify(params) }).then(function(res) {
-                self._redirect("/orderbrand/"+ res.data.join(','));
+                self._redirect("/orderbrand/confirm/"+ res.data[0]);
             });
         },
         onNumberChange({ row, list }) {

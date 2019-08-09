@@ -141,6 +141,7 @@ const routes = [
             {path: '/order/:id', name:"orderform", component: resolve=>require(['./component/order/create.vue'],resolve)},
             {path: '/orderbrand', name:"orderbrand", component: resolve=>require(['./component/orderbrand/index.vue'],resolve)},
             {path: '/orderbrand/:ids', name:"orderbrandcreate", component: resolve=>require(['./component/orderbrand/create.vue'],resolve)},
+            //{path: '/orderbrand/detail/:id', name:"orderbranddetail", component: resolve=>require(['./component/orderbrand/detail.vue'],resolve) },
             {path: '/orderbrand/confirm/:id', name:"orderbrandconfirm", component: resolve=>require(['./component/orderbrand/confirm.vue'],resolve) },
 
             {path:'/ageseason', name:"ageseason", component:getComponentSimple("ageseason")},
