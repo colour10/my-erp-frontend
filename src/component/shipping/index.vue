@@ -7,9 +7,9 @@
             </el-col>
         </el-row>
         <simple-admin-tablelist ref="tablelist" v-bind="props" :onclickupdate="showFormToEdit" :isdelete="false" :isedit="false">
-            <template v-slot:orderno="{row}">
+            <!-- <template v-slot:orderno="{row}">
                 <router-link :to="'/shipping/warehousing/'+row.id">{{row.orderno}}</router-link>
-            </template>
+            </template> -->
         </simple-admin-tablelist>
 
         <sp-dialog ref="search" width="600">
@@ -97,7 +97,7 @@ export default {
                 ],
                 controller: "shipping",
                 actions:[
-                    { label:_label("ruku"), handler:function({row}){
+                    { label:_label("xiangqing"), handler:function({row}){
                         self.$router.push('/shipping/warehousing/' + row.id)
                     }},
                     { label:_label("shanchu"), type:"danger", handler:function({row}){

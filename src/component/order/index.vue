@@ -8,7 +8,7 @@
         </auth>
       </el-col>
     </el-row>
-    <simple-admin-tablelist ref="tablelist" v-bind="props" :onclickupdate="toEdit" :isdelete="false">
+    <simple-admin-tablelist ref="tablelist" v-bind="props" :isedit="false" :isdelete="false">
       <template v-slot:orderno="{row}">
         <sp-order-tip column="orderno" :order="row"></sp-order-tip>
       </template>
@@ -107,17 +107,20 @@ export default {
           },
         ],
         controller: "order",
-        actions: [{
-          label: _label("shanchu"),
-          type: "danger",
-          handler: function({ row }) {
-            self._remove("/order/delete", { id: row.id }).then(function(result) {
-              if (result) {
-                self.$refs.tablelist.search(self.searchform);
-              }
-            });
-          },
-        }],
+        actions: [
+          { label: _label("xiangqing"), handler:self.toEdit },
+          {
+            label: _label("shanchu"),
+            type: "danger",
+            handler: function({ row }) {
+              self._remove("/order/delete", { id: row.id }).then(function(result) {
+                if (result) {
+                  self.$refs.tablelist.search(self.searchform);
+                }
+              });
+            },
+          }
+        ],
         options: {
           rowStyle({ row, rowIndex }) {
             return {
@@ -137,7 +140,7 @@ export default {
     toPage(id) {
       this.$router.push('/order/' + id);
     },
-    toEdit(rowIndex, row) {
+    toEdit({row, vm}) {
       this.toPage(row.id);
     },
   },

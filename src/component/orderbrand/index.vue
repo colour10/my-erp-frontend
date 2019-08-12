@@ -11,9 +11,7 @@
             <template v-slot:brandid="{row}">
                 <sp-select-text :value="row.brandid" source="brand"></sp-select-text>
             </template>
-            <template v-slot:orderno="{row}">
-                <router-link :to="'/orderbrand/confirm/'+row.id">{{row.orderno}}</router-link>
-            </template>
+
         </simple-admin-tablelist>
 
         <sp-dialog ref="search" width="600">
@@ -96,7 +94,7 @@ export default {
                     { name: "brandid", label: _label('品牌'), width:150, sortable:false }
                 ],
                 actions:[
-                    { label: _label("queren"), handler:self.toCreateConfirm, type:({row})=>row.status==1 ? "" : "info" },
+                    { label: _label("xiangqing"), handler:self.toCreateConfirm },
                     { label:_label("shanchu"), type:"danger", handler:function({row}){
                         self._remove("/orderbrand/delete", { id: row.id }).then(function(result) {
                             if(result){
