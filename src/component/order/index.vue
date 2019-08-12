@@ -138,7 +138,7 @@ export default {
       self._hideDialog("search");
     },
     toPage(id) {
-      this.$router.push('/order/' + id);
+      this._open('/order/' + id);
     },
     toEdit({row, vm}) {
       this.toPage(row.id);
