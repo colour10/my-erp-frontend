@@ -165,6 +165,9 @@ const routes = [
             {path:'/language', name:"language", component:getComponent("language")},
             {path:'/winterproofing', name:"winterproofing", component:getComponent("winterproofing")},
             {path:'/feename', name:"feename", component:getComponent("feename")},
+            {path: '/permission', name:"permission", component: resolve=>require(['./component/permission/index.vue'],resolve) },
+            //开发工具
+
         ]
     },
     {path: '/login/:action', name:"login", component: Login},

@@ -441,7 +441,7 @@ export default {
 
         },
         searchProductFilter(product) {
-            return product.product_group=='' && this.colors.findIndex(item => item.id == product.id) < 0
+            return product.product_group.indexOf('|')<0 && this.colors.findIndex(item => item.id == product.id) < 0
         },
         onSubmit() {
             var self = this;

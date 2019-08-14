@@ -198,7 +198,7 @@ function getOption(name) {
     //供货商
     options["supplier_3"] = {callback:function(DataSource){
             return DataSource.getDataSource("supplier", _label('lang')).filter(item=>{
-                return StringFunc.include(item.row.suppliertype, '4')
+                return StringFunc.include(item.row.suppliertype, '4') || StringFunc.include(item.row.suppliertype, '5')
             })
         },
         dependencies:['supplier']

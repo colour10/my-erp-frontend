@@ -137,6 +137,7 @@ const config = function(){
             "language":getLabel("duoguoyuyanguanli"),
             "winterproofing":getLabel("fanghanzhishu"),
             "feename":getLabel("feiyongguanli"),
+            "permission": getLabel("quanxianguanli"),
             "user/setting": getLabel("gerenshezhi"),
             "develop":"生成器"
         }

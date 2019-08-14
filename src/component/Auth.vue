@@ -1,18 +1,17 @@
-<script type="text/javascript">
+
+<script>
 export default {
     name: 'auth',
     render(h) {
-        let self = this
+        let self = this;
         if (self.$store.getters.allow(self.auth)) {
-            return self.$slots.default
+            return self.$slots.default;
         } else {
-            return null
+            return null;
         }
     },
     props: {
-        auth: String
+        auth: String,
     },
-    computed: {
-    }
-}
+};
 </script>

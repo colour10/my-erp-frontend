@@ -160,7 +160,7 @@ export default {
 
             self._fetch("/product/search", form).then(function(res) {
                 self.searchresult = []
-                    //self._log(res)
+                self._log(res)
                 if (res.data.length == 0) {
                     if(self.isCreate==true) {
                         self.$confirm('商品信息不存在，是否新建商品?', '提示', {
@@ -177,7 +177,7 @@ export default {
                 } else {
                     res.data.filter(item => typeof(self.filter) == 'function' ? self.filter(item) : true).forEach(function(item) {
                         ProductDetail.get(item, function(result) {
-                            //self._log(result)
+                            self._log(result)
                             self.searchresult.push(result)
                         }, 1)
                     })

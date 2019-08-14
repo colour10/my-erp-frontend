@@ -66,7 +66,9 @@ export default {
             self.$store.commit({
               type: "login",
               auth: res.auth
-            })
+            });
+
+            console.log('Auth', res.auth);
 
             ASAP.$session_id = res.session_id;
             self.goToPage()
@@ -98,7 +100,7 @@ export default {
               self.$store.commit({
                 type: "login",
                 auth: res.auth
-              })
+              });
 
               self.goToPage()
             } else {
@@ -112,11 +114,11 @@ export default {
     goToPage() {
       let self = this
         //登录成功后进入下一页
-      let url = "/"
+      let url = "/";
       if (self.back && self.back.length > 0) {
-        url = self.back
+        url = self.back;
       }
-      self.$router.push(url)
+      self.$router.push(url);
     },
     onChange() {
       let self = this

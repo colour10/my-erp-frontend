@@ -1,7 +1,7 @@
 var path = require('path')
 var webpack = require('webpack')
 
-const version = "1030";
+const version = "1032";
 
 module.exports = {
   /*entry: './src/main.js',
@@ -94,6 +94,6 @@ if (process.env.NODE_ENV === 'production') {
     }),
     new webpack.LoaderOptionsPlugin({
       minimize: true
-    }),new webpack.ProvidePlugin({jQuery: "jquery",$: "jquery"})
+    }),new webpack.ProvidePlugin({jQuery: "jquery", $: "jquery"})
   ])
 }

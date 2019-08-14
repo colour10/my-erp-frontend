@@ -33,6 +33,7 @@
                     <el-menu-item index="language">{{_label("duoguoyuyanguanli")}}</el-menu-item>
                     <el-menu-item index="winterproofing">{{_label("fanghanzhishu")}}</el-menu-item>
                     <el-menu-item index="feename">{{_label("feiyongguanli")}}</el-menu-item>
+                    <el-menu-item index="permission">{{_label("quanxianguanli")}}</el-menu-item>
                 </el-submenu>
                 <el-menu-item index="product">{{_label("menu-3-1")}}</el-menu-item>
                 <el-menu-item index="supplier">{{_label("menu-4")}}</el-menu-item>
