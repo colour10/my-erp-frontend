@@ -113,12 +113,12 @@
                     </el-table-column>
                     <el-table-column prop="label" :label="_label('chuchangjia')" width="100" align="center">
                         <template v-slot="{row}">
-                            {{stat[row.product.id].factoryprice}}
+                            <el-input v-model="row.factoryprice" size="mini" />
                         </template>
                     </el-table-column>
                     <el-table-column prop="label" :label="_label('chuchangjiaheji')" width="100" align="center">
                         <template v-slot="{row}">
-                            {{f(stat[row.product.id].factoryprice*stat[row.product.id].total)}}
+                            {{f(row.factoryprice*stat[row.product.id].total)}}
                         </template>
                     </el-table-column>
                     <el-table-column prop="label" :label="_label('zhekoulv')" width="100" align="center">
@@ -265,6 +265,7 @@ export default {
                 id: "",
                 product: productDetail,
                 discount: self.form.discount,
+                factoryprice: self.f(productDetail.factoryprice),
                 total: 0,
             });
         },
@@ -296,6 +297,7 @@ export default {
                             discount: item.discount,
                             sizecontentid: row.sizecontentid,
                             number: row.number,
+                            factoryprice: item.factoryprice,
                             id: self.getDetailId(item.product.id, row.sizecontentid),
                         });
                     }
@@ -308,7 +310,6 @@ export default {
                 self._submit("/order/saveorder", { params: JSON.stringify(params) }).then(function(res) {
                     //self._log(res);
                     let data = res.data;
-                    self.$emit("change", data.form);
                     self._redirect("/order/" + res.data.form.id);
                 });
             });
@@ -318,7 +319,7 @@ export default {
             return row ? row.id : 0;
         },
         deleteRow(row) {
-            var self = this;
+            const self = this;
             let index = self.tabledata.findIndex(item => item == row);
             self.$delete(self.tabledata, index);
         },
@@ -379,15 +380,14 @@ export default {
                     sums[index] = self._label("heji");
                     return;
                 } else if (index == 6) {
-                    sums[index] = self.f(data.reduce((total, row) => total + self.stat[row.product.id].factoryprice * self.stat[row.product.id].total, 0));
-                } else if (index == 9) {
-                    sums[index] = self.f(data.reduce((total, row) => total + self.stat[row.product.id].dealPrice * self.stat[row.product.id].total, 0));
+                    sums[index] = self.f(data.reduce((total, row) => total + row.factoryprice * self.stat[row.product.id].total, 0));
                 } else if (index == 3) {
-                    sums[index] = self.listdata.reduce((total, row) => total + row.number * 1, 0);
+                    sums[index] = self.listdata.reduce((total, row) => total + Number(row.number), 0);
                 }
             })
 
             sums[1] = data.length;
+            sums[9] = self.total_price;
 
             return sums;
         }
@@ -447,34 +447,24 @@ export default {
             return Object.keys(obj).join(",");
         },
         stat() {
-            let self = this
+            let self = this;
 
             let helper = statHelper({
-                factoryprice: 0,
-                currencyid: "",
-                total: 0
-            })
+                dealPrice: 0,
+                total: 0,
+            });
 
-            self.tabledata.forEach(item => {
-                let row = helper.get(item.product.id)
-
-                row.factoryprice = item.product.factoryprice
+            for(let item of self.tabledata) {
+                let row = helper.get(item.product.id);
 
                 //成交价
-                row.dealPrice = self.form.taxrebate == 0 ? 0 : self.f(row.factoryprice * item.discount / self.form.taxrebate);
-            })
+                row.dealPrice = self.form.taxrebate>0 ? self.f(item.factoryprice * item.discount / self.form.taxrebate) : 0;
+            }
 
-            self.details.forEach(item => {
-                let row = helper.get(item.productid);
-                if (item.factoryprice > 0) {
-                    row.factoryprice = item.factoryprice
-                }
-            })
-
-            self.listdata.forEach(({ productid, number }) => {
+            for(let {productid, number} of self.listdata) {
                 let row = helper.get(productid)
-                row.total += number * 1
-            })
+                row.total += Number(number);
+            }
 
             return helper.result()
         },

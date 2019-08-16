@@ -67,13 +67,23 @@ function poll(fn, callback, errback, timeout, interval) {
     })();
 }
 
+function autoCall(fn, ...args) {
+    if(typeof(fn)=='function') {
+        return fn(...args);
+    }
+    else {
+        return fn;
+    }
+}
+
 
 export {
     ffalse,
     fture,
     debounce,
     once,
-    poll
+    poll,
+    autoCall,
 }
 
 export default {
@@ -81,5 +91,6 @@ export default {
     fture,
     debounce,
     once,
-    poll
+    poll,
+    autoCall,
 }

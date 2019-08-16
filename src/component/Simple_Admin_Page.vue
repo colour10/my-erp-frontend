@@ -7,16 +7,16 @@
                         <el-form-item class="searchitem">
                             <el-input v-model="searchform.keyword" width="250" style="width:250px;" @keyup.enter.native="onSearch" v-if="isSubmit"></el-input>
                             <as-button type="primary" @click="onSearch" size="mini" v-if="isSubmit" icon="el-icon-search">{{_label("chaxun")}}</as-button>
-                            <au-button :auth="authname" type="primary" @click="showFormToCreate()" v-if="opt.isAdd!==false">{{_label("xinjian")}}</au-button>
+                            <au-button :auth="authname" type="primary" @click="showFormToCreate()" v-if="isAdd()!==false">{{_label("xinjian")}}</au-button>
                         </el-form-item>
                     </el-form>
-                    <au-button :auth="authname" type="primary" @click="showFormToCreate()" v-if="opt.isAdd!==false && opt.isSearch===false">{{_label("xinjian")}}</au-button>
+                    <au-button :auth="authname" type="primary" @click="showFormToCreate()" v-if="isAdd()!==false && opt.isSearch===false">{{_label("xinjian")}}</au-button>
                 </slot>
             </el-col>
         </el-row>
         <el-row :gutter="20">
             <el-col :span="24">
-                <simple-admin-tablelist ref="tablelist" v-bind="$options.propsData" :isedit="opt.isedit" :isdelete="opt.isdelete" :onclickupdate="showFormToEdit">
+                <simple-admin-tablelist ref="tablelist" v-bind="$options.propsData" :isedit="opt.isedit" :isdelete="opt.isdelete" :onclickupdate="showFormToEdit" @after-delete="$emit('after-delete')">
                     <template v-if="isExpand" v-slot:expand="scope">
                         <slot name="expand" v-bind="scope"></slot>
                     </template>
@@ -49,6 +49,7 @@
 
 <script>
 import globals, { _label } from './globals.js'
+import {autoCall} from './function.js';
 
 export default {
     name: 'simple-admin-page',
@@ -88,6 +89,9 @@ export default {
         };
     },
     methods: {
+        isAdd() {
+            return autoCall(this.opt.isAdd);
+        },
         onQuit() {
             this.dialogVisible = false;
         },

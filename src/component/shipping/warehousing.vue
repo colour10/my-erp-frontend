@@ -59,7 +59,7 @@
                                 </sp-float-input>
                             </el-form-item>
                             <el-form-item :label="_label('huilv')">
-                                <sp-float-input v-model="form.exchangerate"></sp-float-input>
+                                <sp-float-input v-model="form.exchangerate" :disabled="form.status=='3'"></sp-float-input>
                             </el-form-item>
                             <el-form-item :label="_label('zhidanriqi')">
                                 <el-input :value="form.maketime" :placeholder="_label('zidonghuoqu')" disabled></el-input>
@@ -221,9 +221,25 @@
         </sp-dialog>
 
         <sp-dialog ref="orderpayment" :width="900">
-            <simple-admin-page v-bind="orderpayment">
-                <template v-slot="scope">
-
+            <simple-admin-page v-bind="orderpayment" @after-update="loadDetail" @after-delete="loadDetail">
+                <template v-slot="{form}">
+                    <el-form class="user-form" ref="form" :model="form" label-width="100px" :inline="true" size="mini">
+                        <el-form-item :label="_label('feiyongmingcheng')">
+                            <simple-select v-model="form.feenameid" source="feename" class="width2"></simple-select>
+                        </el-form-item>
+                        <el-form-item :label="_label('bizhong')">
+                            <simple-select v-model="form.currencyid" source="currency" class="width2" @change="loadExchangerate(form, $event)"></simple-select>
+                        </el-form-item>
+                        <el-form-item :label="_label('jine')">
+                            <el-input v-model="form.amount" size="mini" class="width2"></el-input>
+                        </el-form-item>
+                        <el-form-item :label="_label('huilv')">
+                            <el-input v-model="form.exchangerate" size="mini" class="width2"></el-input>
+                        </el-form-item>
+                        <el-form-item :label="_label('beizhu')">
+                            <el-input v-model="form.memo" size="mini" class="width2"></el-input>
+                        </el-form-item>
+                    </el-form>
                 </template>
             </simple-admin-page>
         </sp-dialog>
@@ -312,6 +328,7 @@ const result = {
                     { name: "feenameid", label: _label("feiyongmingcheng"), type: 'select', source: "feename", width:110 },
                     { name: "currencyid", label: _label("bizhong"), type: 'select', source: "currency", width:90 },
                     { name: "amount", label: _label("jine"), width:110 },
+                    { name: "exchangerate", label: _label("huilv"), width:110 },
                     { name: "memo", label: _label("beizhu"), width:110 },
                     { name: "makestaff", label: _label("tijiaoren"), type: 'select', source: "user", is_edit_hide:true, width:110 }
                 ],
@@ -323,14 +340,28 @@ const result = {
                 options:{
                     isedit: (item)=>self.form.status>0 && self.form.status!='3',
                     isdelete: (item)=>self.form.status>0 && self.form.status!='3',
-                    isAdd:true,
-                    isSearch:false,
-                    isAutoReload:true
+                    isAdd: ()=>self.form.status>0 && self.form.status!='3',
+                    isSearch: false,
+                    isAutoReload: true,
                 }
             }
         }
     },
     methods: {
+        loadDetail() {
+            const self = this;
+            _private(self).loadDetail(self.$route.params.id);
+        },
+        async loadExchangerate(form, event) {
+            const self = this;
+            console.log(form, event)
+            form.exchangerate = '';
+            let exchangerate = await API.getExchange(form.currencyid, self.form.currency);
+
+            if(form.exchangerate=='') {
+                form.exchangerate = exchangerate;
+            }
+        },
         showPayment(){
             let self = this;
             self.orderpayment.base.shippingid = self.form.id;
@@ -424,7 +455,7 @@ const result = {
                 return
             }
 
-            self._submit("/shipping/warehousing", { id: self.form.id }).then(function(res) {
+            self._submit("/shipping/warehousing", self.form).then(function(res) {
                 _private(self).loadDetail(self.$route.params.id)
             });
         },
@@ -509,6 +540,9 @@ const result = {
         }
     },
     computed: {
+        isAddFee() {
+            return this.form.status!='3';
+        },
         orderdetails() {
             let self = this
 

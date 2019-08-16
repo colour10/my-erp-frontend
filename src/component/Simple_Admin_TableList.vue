@@ -188,11 +188,13 @@ export default {
             if(self.localOptions.issubmit) {
                 let result = await self._remove("/" + self.controller + "/delete", { id: row.id })
                 if (result == true) {
-                    self.$delete(self.tableData, rowIndex)
+                    self.$delete(self.tableData, rowIndex);
+                    self.$emit("after-delete");
                 }
             }
             else {
-                self.$delete(self.tableData, rowIndex)
+                self.$delete(self.tableData, rowIndex);
+                self.$emit("after-delete");
             }
         },
         handleClickUpdate(rowIndex, row) {

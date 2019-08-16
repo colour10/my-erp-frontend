@@ -83,7 +83,7 @@ const httpPost = async function(url, params) {
         }
     }
 
-    throw "http post error."
+    throw "http post error:" +url;
 }
 
 export { httpGet, httpPost, host}
