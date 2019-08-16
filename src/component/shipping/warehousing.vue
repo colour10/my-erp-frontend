@@ -163,7 +163,7 @@
                     </el-table-column>
                     <el-table-column prop="label" :label="_label('chuchangjia')" width="100" align="center">
                         <template v-slot="{row}">
-                            {{productStat[row.product.id].factoryprice}}
+                            {{row.factoryprice}}
                         </template>
                     </el-table-column>
                     <el-table-column prop="number" :label="_label('dinggoushuliang')" align="center" :width="width">
@@ -590,30 +590,18 @@ const result = {
             return self.f(total);
         },
         productStat(){
-            let self = this
+            let self = this;
 
             let helper = statHelper({
-                factoryprice:0,
-                wordprice:0,
                 currencyid:"",
-                total:0
-            })
+            });
 
             self.tabledata.forEach(({product})=>{
-                let row = helper.get(product.id)
-                row.factoryprice = product.factoryprice;
-                row.wordprice = product.wordprice;
+                let row = helper.get(product.id);
                 row.currencyid = product.factorypricecurrency;
-            })
+            });
 
-            self.orderbranddetails.forEach(detail => {
-                let row = helper.get(detail.productid)
-                row.factoryprice = detail.factoryprice;
-                row.wordprice = detail.wordprice;
-                row.currencyid = detail.currencyid;
-            })
-
-            return helper.result()
+            return helper.result();
         },
         isDisabled(){
             return  this.form.status!='1'
@@ -689,6 +677,7 @@ const _private = function(self) {
                         orderbrandid: item.orderbrandid,
                         orderid: item.orderid,
                         discount: item.discount,
+                        factoryprice: item.factoryprice,
                         total: item.number * 1,
                         form,
                         price: item.price

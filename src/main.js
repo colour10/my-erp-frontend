@@ -57,6 +57,7 @@ import ProductSearchForm from './component/asa/product-search-form.vue';
 import Asa_Product_Code from './component/asa/Asa_Product_Code.vue';
 import Asa_Product_Icon from './component/asa/Asa_Product_Icon.vue';
 import AsaButton from './component/Button.vue';
+import OrderInput from './component/order-input.vue';
 
 const components = [
     Simple_Admin_Page,
@@ -99,6 +100,7 @@ const components = [
     Asa_Product_Code,
     Asa_Product_Icon,
     AsaButton,
+    OrderInput
 ]
 
 components.forEach(component => {
@@ -113,7 +115,7 @@ const routes = [
         children:[
             {path: '/order', name:"order", component: resolve=>require(['./component/order/index.vue'],resolve) },
             {path: '/shipping', name:"shipping", component:resolve=>require(['./component/shipping/index.vue'],resolve) },
-            {path: '/shipping/:id', name:"shippingdetail", component:resolve=>require(['./component/shipping/detail.vue'],resolve) },
+            {path: '/shipping/:id', name:"shippingdetail", component:resolve=>require(['./component/shipping/create.vue'],resolve) },
             {path: '/shipping/warehousing/:id', name:"shippingwarehousing", component:resolve=>require(['./component/shipping/warehousing.vue'],resolve) },
             {path: '/sales', name:"sales", component: resolve=>require(['./component/sales/index.vue'],resolve)},
             {path: '/sales/create', name:"salescreate", component: resolve=>require(['./component/sales/create.vue'],resolve)},

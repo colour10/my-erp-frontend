@@ -224,12 +224,12 @@
                         </el-table-column>
                         <el-table-column prop="label" :label="_label('chuchangjia')" width="100" align="center">
                             <template v-slot="{row}">
-                                {{productStat[row.product.id].factoryprice}}
+                                <asa-order-input v-model="row.factoryprice" size="mini" @change="changeDetail(row, 'price')"></asa-order-input>
                             </template>
                         </el-table-column>
                         <el-table-column prop="label" :label="_label('chengjiaojia')" width="80" align="center">
                             <template v-slot="{row}">
-                                <el-input v-model="row.price" size="mini"></el-input>
+                                <asa-order-input v-model="row.price" size="mini" @change="changeDetail(row, 'discount')"></asa-order-input>
                             </template>
                         </el-table-column>
                         <el-table-column prop="label" :label="_label('zongjia')" width="80" align="center">
@@ -239,7 +239,7 @@
                         </el-table-column>
                         <el-table-column :label="_label('zhekoulv')" width="80" align="center">
                             <template v-slot="{row}">
-                                <el-input v-model="row.discount" size="mini" />
+                                <asa-order-input v-model="row.discount" size="mini" @change="changeDetail(row, 'price')"></asa-order-input>
                             </template>
                         </el-table-column>
                         <el-table-column prop="number" :label="_label('dinggoushuliang')" align="center" :width="width">
@@ -358,6 +358,16 @@ export default {
         };
     },
     methods: {
+        changeDetail(row, column) {
+            const self = this;
+            //console.log(row, column)
+            if(column=='discount') {
+                row.discount = row.factoryprice>0 ? self.f(row.price/row.factoryprice): '';
+            }
+            else if(column=='price') {
+                row.price = self.f(row.factoryprice*row.discount);
+            }
+        },
         saveOrder() {
             //保存订单
             let self = this
@@ -391,7 +401,9 @@ export default {
                         productid: row.product.id,
                         discount: row.discount,
                         price: row.price,
+                        factoryprice: row.factoryprice,
                         orderdetailid: orderbranddetail.orderdetailid,
+                        currencyid: orderbranddetail.currencyid,
                         orderbrandid: row.orderbrandid,
                         orderbranddetailid: orderbranddetail.id,
                         id: '',
@@ -402,7 +414,8 @@ export default {
             }
             params.list = list;
 
-            self._log(JSON.stringify(params))
+            self._log(JSON.stringify(params), params);
+            //return;
             self.validate().then(async () => {
                 self._log(JSON.stringify(params));
                 let {data} = await self._submit("/shipping/save", { params: JSON.stringify(params) });
@@ -605,27 +618,22 @@ export default {
                 result[row.orderbrandid] += number*1
             })
 
-            return result
+            return result;
         },
         productStat(){
-            let self = this
+            let self = this;
 
             let helper = statHelper({
-                factoryprice:0,
-                wordprice:0,
                 currencyid:"",
-                total:0
             })
 
-            self.orderbranddetails.forEach(detail => {
-                let row = helper.get(detail.productid)
-                row.factoryprice = detail.factoryprice;
-                row.wordprice = detail.wordprice;
+            for(let detail of self.orderbranddetails) {
+                let row = helper.get(detail.productid);
                 row.currencyid = detail.currencyid;
-            })
+            }
 
-            return helper.result()
-        }
+            return helper.result();
+        },
     },
     watch: {
         'form2.keyword1': function(newvalue) {
@@ -723,6 +731,7 @@ const _private = function(self) {
                         total: item.number * 1,
                         form,
                         orderbrandid: item.orderbrandid,
+                        factoryprice: item.factoryprice,
                         price: '',
                         is_auto: true,
                     };
@@ -769,7 +778,7 @@ const _private = function(self) {
 
             let result = await _this.convert(newlist)
             for(let item of result) {
-                item.price = self.f(self.productStat[item.productid].factoryprice * item.discount)
+                item.price = self.f(item.factoryprice * item.discount)
                 _this.appendRow(item)
             }
         },
