@@ -219,13 +219,13 @@
                     </el-table-column>
                     <el-table-column prop="label" :label="_label('chuchangjia')" width="100" align="center">
                         <template v-slot="{row}">
-                            {{ stat[row.product.id].factoryprice }}
+                            <el-input v-model="row.factoryprice" size="mini" />
                         </template>
                     </el-table-column>
                     <el-table-column prop="discount" :label="_label('zhekoulv')" width="80" align="center"/>
                     <el-table-column prop="number" :label="_label('dinggoushuliang')" align="center" :width="width">
                         <template v-slot="{row, $index}">
-                            <sp-sizecontent-confirm2 :ref="row.product.id+'-'+row.order.id" :columns="row.product.sizecontents" :row="row" :suppliers="suppliers" :initData="getInit(row)" :factoryprice="stat[row.product.id].factoryprice" :key="row.product.id+'-'+row.order.id" @change="onNumberChange" :setMap="setMap($index, row.product.id, row.order.id)" @up="focus($event, 'up', $index-1)" @down="focus($event, 'down', $index+1)"></sp-sizecontent-confirm2>
+                            <sp-sizecontent-confirm2 :ref="row.product.id+'-'+row.order.id" :columns="row.product.sizecontents" :row="row" :suppliers="suppliers" :initData="getInit(row)" :factoryprice="row.factoryprice" :key="row.product.id+'-'+row.order.id" @change="onNumberChange" :setMap="setMap($index, row.product.id, row.order.id)" @up="focus($event, 'up', $index-1)" @down="focus($event, 'down', $index+1)"></sp-sizecontent-confirm2>
                         </template>
                     </el-table-column>
                     <el-table-column :label="_label('chanpinmingcheng')" align="center" width="200">
@@ -447,9 +447,9 @@ const result = {
                     let id = func.getOrderbrandDetailId(item.row.productid, item.row.orderid, item.sizecontentid, item.supplierid);
                     list.push({
                         productid: item.row.productid,
-                        factoryprice:self.stat[item.row.productid].factoryprice,
-                        wordprice:self.stat[item.row.productid].wordprice,
-                        currencyid:self.stat[item.row.productid].currencyid,
+                        factoryprice: item.factoryprice,
+                        wordprice: self.stat[item.row.productid].wordprice,
+                        currencyid: self.stat[item.row.productid].currencyid,
                         orderid: item.row.orderid,
                         sizecontentid: item.sizecontentid,
                         supplierid: item.supplierid,
@@ -485,19 +485,21 @@ const result = {
                 },
             };
 
-            //self._log(params)
+            self._log(params)
+            //return ;
             self._submit("/orderbrand/add", { params: JSON.stringify(params) }).then(function(res) {
                 self._redirect("/orderbrand/confirm/"+ res.data[0]);
             });
         },
         onNumberChange({ row, list }) {
             let self = this
-            list.forEach(({ number, sizecontentid, supplierid, discount, price }) => {
+            list.forEach(({ number, sizecontentid, supplierid, discount, price, factoryprice }) => {
                 let target = self.listdata.find(item => item.sizecontentid == sizecontentid && item.supplierid == supplierid && row.product.id == item.row.product.id && row.orderid == item.row.orderid)
                 if (target) {
                     target.number = number;
                     target.discount = discount;
                     target.price = price;
+                    target.factoryprice = factoryprice;
                     target.priceTotal = self.f(price*number);
                 } else {
 
@@ -508,6 +510,7 @@ const result = {
                         supplierid,
                         discount,
                         price,
+                        factoryprice,
                         priceTotal:self.f(price*number)
                     });
                 }
@@ -646,7 +649,6 @@ const result = {
             let self = this;
 
             let helper = statHelper({
-                factoryprice: 0,
                 wordprice: 0,
                 currencyid: "",
                 total: 0,
@@ -655,15 +657,13 @@ const result = {
             for(let item of self.tabledata) {
                 let row = helper.get(item.product.id)
 
-                row.factoryprice = item.product.factoryprice;
                 row.currencyid = item.product.factorypricecurrency;
                 row.wordprice = item.product.wordprice;
             }
 
             for(let item of self.orderlist) {
                 let row = helper.get(item.productid);
-                if(item.factoryprice>0) {
-                    row.factoryprice = item.factoryprice;
+                if(item.currencyid>0) {
                     row.currencyid = item.currencyid;
                 }
 
@@ -814,7 +814,8 @@ const _private = function(self) {
                         orderid: item.orderid,
                         discount: item.discount,
                         total: item.number-number,
-                        form
+                        factoryprice: item.factoryprice,
+                        form,
                     }
                 }
             }

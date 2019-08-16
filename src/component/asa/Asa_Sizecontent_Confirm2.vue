@@ -59,7 +59,14 @@ const _private = function(self){
 
                 let row = self.getTableRow(supplierid);
                 if(row) {
-                    callback({number, sizecontentid, supplierid, discount:row.discount,price:self.dealPrice[supplierid] });
+                    callback({
+                        number,
+                        sizecontentid,
+                        supplierid,
+                        discount: row.discount,
+                        factoryprice: self.factoryprice,
+                        price: self.dealPrice[supplierid]
+                    });
                 }
             });
         },
@@ -380,7 +387,10 @@ export default {
                 //console.log("change suppliers")
             },
             deep: true
-        }
+        },
+        factoryprice() {
+            this.onChange();
+        },
     },
     mounted:function(){
         let self = this

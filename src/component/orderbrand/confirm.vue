@@ -90,7 +90,7 @@
                     </el-table-column>
                     <el-table-column prop="label" :label="_label('chuchangjia')" width="100" align="center">
                         <template v-slot="{row}">
-                            {{f(productStat[row.productid].factoryprice)}}
+                            {{row.factoryprice}}
                         </template>
                     </el-table-column>
                     <el-table-column prop="label" :label="_label('zhekoulv')" width="70" align="center" class="counter">
@@ -100,12 +100,12 @@
                     </el-table-column>
                     <el-table-column prop="label" :label="_label('chengjiaojia')" width="70" align="center">
                         <template v-slot="{row}">
-                            {{f(row.discount*productStat[row.productid].factoryprice)}}
+                            {{f(row.discount*row.factoryprice)}}
                         </template>
                     </el-table-column>
                     <el-table-column prop="confirm_total_price" :label="_label('zongjia')" width="80" align="center">
                         <template v-slot="{row}">
-                            {{ f(row.discount*productStat[row.productid].factoryprice*productStat[row.productid].total) }}
+                            {{ f(row.discount*row.factoryprice*productStat[row.productid].total) }}
                         </template>
                     </el-table-column>
                     <el-table-column prop="number" :label="_label('querenshuliang')" align="center" :width="width">
@@ -321,10 +321,7 @@ export default {
 
                     result.total_count += number;
 
-                    //console.log(result.total_discount_price , self.productStat[item.productid].factoryprice , item.discount , number, result.total_discount_price+self.productStat[item.productid].factoryprice * item.discount * number)
                     result.total_discount_price = self.f(Number(result.total_discount_price) + self.productStat[item.productid].factoryprice * item.discount * number);
-
-                    //console.log(item.product.factoryprice , item.discount , number)
 
                     let row = result.group[item.product.id] || 0;
                     result.group[item.product.id] = row + number;
@@ -332,42 +329,41 @@ export default {
             }
             return result;
         },
+
+        // 计算每个商品的，国际出厂价、国际零售价、确认总数、货币单位
         productStat(){
-            let self = this
+            let self = this;
 
             let helper = statHelper({
-                factoryprice:0,
-                wordprice:0,
-                currencyid:"",
-                total:0
-            })
+                factoryprice: 0,
+                wordprice: 0,
+                currencyid: "",
+                total: 0,
+            });
 
-            self.tabledata.forEach(item=>{
-                let row = helper.get(item.product.id)
-
-                row.factoryprice = item.product.factoryprice;
-                row.currencyid = item.product.factorypricecurrency;
-                row.wordprice = item.product.wordprice;
-            })
-
-            self.orderDetailList.forEach(item=>{
-                if(item.factoryprice>0) {
-                    let row = helper.get(item.productid);
+            // 获得商品的国际出厂价、国际零售价和货币单位
+            for(let item of self.details) {
+                let row = helper.get(item.productid);
+                if(row.factoryprice>0) {
+                    continue;
+                }
+                else {
                     row.factoryprice = item.factoryprice;
                     row.currencyid = item.currencyid;
                     row.wordprice = item.wordprice;
                 }
-            })
+            }
 
-            self.listdata.forEach(detail=>{
+            //计算商品的总确认数
+            for(let detail of self.listdata) {
                 let row = helper.get(detail.productid)
 
                 if(detail.number>0) {
                     row.total += detail.number*1;
                 }
-            })
+            }
 
-            return helper.result()
+            return helper.result();
         }
     },
     mounted: function() {
@@ -415,6 +411,7 @@ const _private = function(self){
                         orderid: item.orderid,
                         discount: item.discount,
                         total: item.number * 1,
+                        factoryprice: item.factoryprice,
                         form,
                         confirm_form,
                     };
@@ -449,7 +446,8 @@ const _private = function(self){
                     hashtable[key] = {
                         productid: row.productid,
                         product: row.product,
-                        discount:row.discount,
+                        discount: row.discount,
+                        factoryprice: row.factoryprice,
                         orders: [obj]
                     }
                 }
