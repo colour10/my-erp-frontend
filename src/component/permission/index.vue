@@ -1,6 +1,6 @@
 <template>
   <div style="width:99%">
-    <multiple-admin-page v-bind="props" ref="page" class="product" @before-edit="onBeforeEdit" @before-add="onBeforeAdd"></multiple-admin-page>
+    <multiple-admin-page v-bind="props" ref="page" class="product"></multiple-admin-page>
     <sp-dialog ref="detail" width="800" :min-height="150">
       <simple-admin-page v-bind="props2"></simple-admin-page>
     </sp-dialog>
@@ -20,6 +20,7 @@ export default {
     return {
       props: {
         columns: [
+          { name: "id", label: _label("ID"), is_edit_hide: true },
           { name: "memo", label: _label("mingcheng"), is_multiple: true, is_focus: true },
           { name: "pid", label: _label("pid") },
           { name: "name", label: _label("bianma") },
