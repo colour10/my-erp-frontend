@@ -3,7 +3,7 @@
         <el-row>
             <el-col :span="24">
                 <as-button type="primary" @click="_showDialog('search')" size="mini" icon="el-icon-search">{{_label("chaxun")}}</as-button>
-                <auth auth="confirmorder-submit"><as-button type="primary" @click="showFormToCreate()">{{_label('xinjian')}}</as-button></auth>
+                <asa-button type="primary" @click="showFormToCreate()" :enable="_isAllowed('shipping-add')">{{_label('xinjian')}}</asa-button>
             </el-col>
         </el-row>
         <simple-admin-tablelist ref="tablelist" v-bind="props" :onclickupdate="showFormToEdit" :isdelete="false" :isedit="false">
@@ -48,7 +48,7 @@
                 </el-row>
                 <el-row :gutter="0">
                     <el-col align="center">
-                        <as-button auth="product" type="primary" @click="onSearch(form)" native-type="submit">{{_label("chaxun")}}</as-button>
+                        <as-button type="primary" @click="onSearch(form)" native-type="submit">{{_label("chaxun")}}</as-button>
                         <as-button type="primary" @click="_hideDialog('search')">{{_label("tuichu")}}</as-button>
                     </el-col>
                 </el-row>
@@ -97,7 +97,7 @@ export default {
                 ],
                 controller: "shipping",
                 actions:[
-                    { label:_label("xiangqing"), handler:function({row}){
+                    { label:_label("xiangqing"), type: '', handler:function({row}){
                         self.$router.push('/shipping/warehousing/' + row.id)
                     }},
                     { label:_label("shanchu"), type:"danger", handler:function({row}){

@@ -33,15 +33,15 @@
                     <el-menu-item index="language">{{_label("duoguoyuyanguanli")}}</el-menu-item>
                     <el-menu-item index="winterproofing">{{_label("fanghanzhishu")}}</el-menu-item>
                     <el-menu-item index="feename">{{_label("feiyongguanli")}}</el-menu-item>
-                    <el-menu-item index="permission">{{_label("quanxianguanli")}}</el-menu-item>
+                    <el-menu-item index="permission" v-if="_isAllowed('permission')">{{_label("quanxianguanli")}}</el-menu-item>
                 </el-submenu>
                 <el-menu-item index="product">{{_label("menu-3-1")}}</el-menu-item>
                 <el-menu-item index="supplier">{{_label("menu-4")}}</el-menu-item>
-                <el-submenu index="5">
+                <el-submenu index="5" v-if="_isAllowed('order-page,orderbrand-page,shipping-page')">
                     <template #title>{{_label("menu-5")}}</template>
-                    <el-menu-item index="order">{{_label("dingdanguanli")}}</el-menu-item>
-                    <el-menu-item index="orderbrand">{{_label("waibudingdan")}}</el-menu-item>
-                    <el-menu-item index="shipping">{{_label("menu-5-2")}}</el-menu-item>
+                    <el-menu-item index="order" v-if="_isAllowed('order-page')">{{_label("dingdanguanli")}}</el-menu-item>
+                    <el-menu-item index="orderbrand" v-if="_isAllowed('orderbrand-page')">{{_label("waibudingdan")}}</el-menu-item>
+                    <el-menu-item index="shipping" v-if="_isAllowed('shipping-page')">{{_label("menu-5-2")}}</el-menu-item>
                 </el-submenu>
                 <el-submenu index="6">
                     <template #title>{{_label("menu-6")}}</template>

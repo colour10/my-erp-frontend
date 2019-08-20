@@ -49,6 +49,26 @@ export default {
         }
     },
     methods: {
+        _isAllowed(authname, behavier='any') {
+            const self = this;
+
+            let auths = authname.split(',');
+            // console.log(authname, auths)
+            for(let auth of auths) {
+                if(behavier=='any') {
+                    if(self.$store.getters.allow(auth)) {
+                        return true;
+                    }
+                }
+                else {
+                    if(!self.$store.getters.allow(auth)) {
+                        return false;
+                    }
+                }
+            }
+
+            return behavier=='all';
+        },
         _buttonType(enable=true) {
             return enable===true?'primary':'info';
         },

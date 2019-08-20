@@ -219,7 +219,7 @@
                     </el-table-column>
                     <el-table-column prop="label" :label="_label('chuchangjia')" width="100" align="center">
                         <template v-slot="{row}">
-                            <el-input v-model="row.factoryprice" size="mini" />
+                            <asa-order-input v-model="row.factoryprice" size="mini" />
                         </template>
                     </el-table-column>
                     <el-table-column prop="discount" :label="_label('zhekoulv')" width="80" align="center"/>

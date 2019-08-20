@@ -3,7 +3,7 @@
         <el-row>
             <el-col :span="24">
                 <as-button type="primary" @click="_showDialog('search')" size="mini" icon="el-icon-search">{{_label("chaxun")}}</as-button>
-                <auth auth="order-submit"><as-button type="primary" @click="showFormToCreate">{{_label('xinjian')}}</as-button></auth>
+                <asa-button type="primary" @click="showFormToCreate" :enable="_isAllowed('orderbrand-add')">{{_label('xinjian')}}</asa-button>
                 <!-- <auth auth="order-submit"><as-button type="primary" @click="showFormToEdit">{{_label('bianji')}}</as-button></auth> -->
             </el-col>
         </el-row>
@@ -46,7 +46,7 @@
                 </el-row>
                 <el-row :gutter="0">
                     <el-col align="center">
-                        <as-button auth="product" type="primary" @click="onSearch(form)" native-type="submit">{{_label("chaxun")}}</as-button>
+                        <as-button type="primary" @click="onSearch(form)" native-type="submit">{{_label("chaxun")}}</as-button>
                         <as-button type="primary" @click="_hideDialog('search')">{{_label("tuichu")}}</as-button>
                     </el-col>
                 </el-row>
@@ -94,8 +94,8 @@ export default {
                     { name: "brandid", label: _label('品牌'), width:150, sortable:false }
                 ],
                 actions:[
-                    { label: _label("xiangqing"), handler:self.toCreateConfirm },
-                    { label:_label("shanchu"), type:"danger", handler:function({row}){
+                    { label: _label("xiangqing"), handler:self.toCreateConfirm, type: '' },
+                    { label:_label("shanchu"), type:"danger", enable: self._isAllowed('orderbrand-delete'), handler:function({row}){
                         self._remove("/orderbrand/delete", { id: row.id }).then(function(result) {
                             if(result){
                                 self.$refs.tablelist.search(self.searchform)
@@ -106,7 +106,8 @@ export default {
                 controller: "orderbrand",
                 options:{
                     action_width:160
-                }
+                },
+                authname: 'orderbrand-delete',
             },
             pro: false,
             info: {},

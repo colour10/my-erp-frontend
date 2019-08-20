@@ -215,8 +215,16 @@ const store = new Vuex.Store({
       },
       allow(state) {
           return permission=>{
-              return true;
-              //return state.auth && state.auth.permissions && state.auth.permissions.findIndex(item=>item.name==permission)>=0
+              //return true;
+              if(state.auth) {
+                if(state.auth.is_super=='1') {
+                  return true;
+                }
+                else {
+                  return state.auth.permissions && state.auth.permissions.findIndex(item=>item.name==permission)>=0;
+                }
+              }
+              return false;
           }
       },
       getTags(state) {

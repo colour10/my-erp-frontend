@@ -1,5 +1,5 @@
 <template>
-  <el-button size="mini" :label="label" @click="onClick" :type="enable?'primary':'info'"><slot></slot></el-button>
+  <el-button size="mini" :label="label" @click="onClick" :type="enable?type:'info'"><slot></slot></el-button>
 </template>
 
 <script>
@@ -12,6 +12,9 @@ export default {
     enable: {
       type: Boolean,
       default: true,
+    },
+    type: {
+      default: 'primary',
     },
   },
   data() {

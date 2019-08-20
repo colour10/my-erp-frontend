@@ -85,17 +85,23 @@
         </el-form>
         <el-row>
             <el-col :span="24" class="product">
-                <el-table :data="tabledata" stripe border style="width:100%;" :show-summary="true" :summary-method="getSummary">
+                <el-table :data="orderdetails" stripe border style="width:100%;" :show-summary="true" :summary-method="getSummary">
                     <el-table-column align="center" width="60">
                         <template v-slot="scope">
                             <img :src="_fileLink(scope.row.product.picture)" style="width:50px;height:50px;" />
                         </template>
                     </el-table-column>
-                    <el-table-column :label="_label('guojima')" align="left" width="200">
-                        <template v-slot="scope">
-                            <sp-product-tip :product="scope.row.product" />
-                        </template>
+                    <el-table-column :label="_label('guojima')" align="center" width="200">
+                        <el-table-column :label="_label('guojima')" align="center" width="200">
+                            <template v-slot="scope">
+                                <sp-product-tip :product="scope.row.product"/>
+                            </template>
+                            <template v-slot:header="{row}">
+                                <el-input v-model="form2.keyword" size="mini" />
+                            </template>
+                        </el-table-column>
                     </el-table-column>
+
                     <el-table-column prop="number" :label="_label('dinggoushuliang')" align="center" :width="width">
                         <template v-slot="{row, $index}">
                             <sp-sizecontent-input :ref="$index" :columns="row.product.sizecontents" :uniq="row.product.id" :disabled="!isEditable" @change="onChange" :init="getInit(row.product.id)" :key="row.product.id" @up="focus($event, $index-1)" @down="focus($event, $index+1)" />
@@ -113,7 +119,7 @@
                     </el-table-column>
                     <el-table-column prop="label" :label="_label('chuchangjia')" width="100" align="center">
                         <template v-slot="{row}">
-                            <el-input v-model="row.factoryprice" size="mini" />
+                            <asa-order-input v-model="row.factoryprice" size="mini" />
                         </template>
                     </el-table-column>
                     <el-table-column prop="label" :label="_label('chuchangjiaheji')" width="100" align="center">
@@ -123,7 +129,7 @@
                     </el-table-column>
                     <el-table-column prop="label" :label="_label('zhekoulv')" width="100" align="center">
                         <template v-slot="{row}">
-                            <el-input v-model="row.discount" size="mini" />
+                            <asa-order-input v-model="row.discount" size="mini" />
                         </template>
                     </el-table-column>
                     <el-table-column prop="label" :label="_label('chengjiaojia')" width="130" align="center">
@@ -217,6 +223,9 @@ export default {
                 orderno: "",
                 status: "", //状态，1=保存；2=送审；3=审核完成
                 id: "",
+            },
+            form2: {
+                keyword: '',
             },
             tabledata: [],
             listdata: [],
@@ -390,7 +399,10 @@ export default {
             sums[9] = self.total_price;
 
             return sums;
-        }
+        },
+        isMatch(keyword, search) {
+            return keyword.length > 0 ? search.toUpperCase().indexOf(keyword) >= 0 : true
+        },
     },
     computed: {
         isList() {
@@ -481,6 +493,14 @@ export default {
             for (let i = 0; i < self.tabledata.length; i++) {
                 return self.tabledata[i].product.factorypricecurrency;
             }
+        },
+        orderdetails() {
+            let self = this;
+
+            let keyword = self.form2.keyword.toUpperCase();
+            return self.tabledata.filter(item => {
+                return self.isMatch(keyword, item.product.getGoodsCode(''));
+            })
         },
     },
     mounted() {

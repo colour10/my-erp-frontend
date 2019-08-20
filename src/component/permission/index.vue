@@ -20,12 +20,12 @@ export default {
     return {
       props: {
         columns: [
-          { name: "id", label: _label("ID"), is_edit_hide: true },
+          { name: "id", label: _label("ID"), is_edit_hide: true, width:60 },
           { name: "memo", label: _label("mingcheng"), is_multiple: true, is_focus: true },
-          { name: "pid", label: _label("pid") },
+          { name: "pid", label: _label("pid"), width:60 },
           { name: "name", label: _label("bianma") },
           { name: "display_index", label: _label("xuhao") },
-          { name: "is_only_superadmin", label: _label("pingtaiquanxian"), type: "switch" },
+          //{ name: "is_only_superadmin", label: _label("pingtaiquanxian"), type: "switch" },
         ],
         controller: "permission",
         key_column: "memo",

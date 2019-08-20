@@ -3,9 +3,7 @@
     <el-row>
       <el-col :span="24">
         <as-button type="primary" @click="_showDialog('search')" size="mini" icon="el-icon-search">{{_label("chaxun")}}</as-button>
-        <auth auth="order-submit">
-          <as-button type="primary" @click="toPage(0)">{{_label('xinjian')}}</as-button>
-        </auth>
+        <asa-button type="primary" @click="toPage(0)" :enable="_isAllowed('order-add')">{{_label('xinjian')}}</asa-button>
       </el-col>
     </el-row>
     <simple-admin-tablelist ref="tablelist" v-bind="props" :isedit="false" :isdelete="false">
@@ -53,7 +51,7 @@
         </el-row>
         <el-row :gutter="0">
           <el-col align="center">
-            <as-button auth="product" type="primary" @click="onSearch(form)" native-type="submit">{{_label("chaxun")}}</as-button>
+            <as-button type="primary" @click="onSearch(form)" native-type="submit">{{_label("chaxun")}}</as-button>
             <as-button type="primary" @click="_hideDialog('search')">{{_label("tuichu")}}</as-button>
           </el-col>
         </el-row>
@@ -94,8 +92,7 @@ export default {
           { name: "genders", label: _label('xingbie') },
           { name: "brandids", label: _label('pinpai') },
           { name: "bussinesstype", label: _label('yewuleixing'), type: 'select', source: "bussinesstype", width: 120 },
-          { name: "status", label: _label('zhuangtai'), type: 'select', source: "orderstatus", width: 90 },
-          {
+          { name: "status", label: _label('zhuangtai'), type: 'select', source: "orderstatus", width: 90 }, {
             name: "orderdate",
             label: _label('dingdanriqi'),
             width: 120,
@@ -108,18 +105,17 @@ export default {
         ],
         controller: "order",
         actions: [
-          { label: _label("xiangqing"), handler:self.toEdit },
-          {
+          { label: _label("xiangqing"), handler: self.toEdit, type: '' }, {
             label: _label("shanchu"),
             type: "danger",
             handler: function({ row }) {
               self._remove("/order/delete", { id: row.id }).then(function(result) {
                 if (result) {
-                  self.$refs.tablelist.search(self.searchform);
+                  self.$refs.tablelist.search(self.searchform)
                 }
-              });
-            },
-          }
+              })
+            }
+          },
         ],
         options: {
           rowStyle({ row, rowIndex }) {
@@ -140,9 +136,12 @@ export default {
     toPage(id) {
       this._open('/order/' + id);
     },
-    toEdit({row, vm}) {
+    toEdit({ row, vm }) {
       this.toPage(row.id);
     },
+  },
+  mounted() {
+    console.log(this._isAllowed('order-delete'))
   },
 };
 </script>
