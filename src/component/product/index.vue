@@ -11,7 +11,12 @@
         </el-row>
         <el-row :gutter="20" class="product">
             <el-col :span="24">
-                <simple-admin-tablelist ref="tablelist" v-bind="props" :onclickupdate="showFormToEdit" @preview="onPreview">
+                <simple-admin-tablelist ref="tablelist" v-bind="props" :onclickupdate="showFormToEdit" @preview="onPreview" :is-select="true">
+                    <template v-slot:wordcode_2="{row}">
+                        <div class="color-group" v-for="item in row.colors" :key="item.id">
+                            <div class="box" :style="getColorStyle(item)" @click.stop="showFormToEdit('click', item.id)"></div>
+                        </div>
+                    </template>
                     <template v-slot:belv="{row}">
                         <sp-product-bl :product="row"></sp-product-bl>
                     </template>
@@ -19,7 +24,7 @@
                         <sp-product-lsb :product="row"></sp-product-lsb>
                     </template>
                     <template v-slot:productname="{row}">
-                        <el-link type="primary" @click="showFormToEdit(0, row)">{{row.getName()}}</el-link>
+                        <el-link type="primary" @click.stop="showFormToEdit(0, row)">{{row.getName()}}</el-link>
                     </template>
                     <template v-slot:series="{row}">
                         <sp-select-text :value="row.series" source="series" />
@@ -52,11 +57,13 @@ export default {
     },
     data() {
         return {
+            colorsLength: 1, // 当前列表中最多的同款多色，款数
             form:{},
             props: {
                 columns: [
                     { name: "picture", label: _label("zhutu"), is_image: true, image_width: 50, image_height: 50, width: 60, className: 'picture' },
                     { name: "picture2", label: _label("futu"), is_image: true, image_width: 50, image_height: 50, width: 60, className: 'picture' },
+                    { name: "wordcode_2", label: _label("futu"), className: 'nopadding', width: self.colorsWidth },
                     {
                         name: "productname",
                         label: _label("shangpinmingcheng"),
@@ -119,33 +126,35 @@ export default {
         }
     },
     beforeCreate() {
-        //console.log("beforeCreate", ASAP)
-        ASAP.resources = {}
-        ASAP.caches = {}
-            //console.log("Product","clear cache")
+        ASAP.resources = {};
+        ASAP.caches = {};
     },
     methods: {
-        onSearch(form){
-            this.form = form
-            this.search()
+        getColorStyle(item, row) {
+            return {
+                width: '20px',
+                height: '20px',
+                background: 'url("' + this._fileLink(item.picture) + '") no-repeat center',
+            };
         },
-        search(){
-            let self = this
-            self.$refs.tablelist.search(self.form)
-            self._hideDialog("search")
+        onSearch(form) {
+            this.form = form;
+            this.search();
+        },
+        search() {
+            let self = this;
+            self.$refs.tablelist.search(self.form);
+            self._hideDialog("search");
         },
         showFormToEdit(rowIndex, row) {
-            this.$refs.product.setInfo(row).then(product => product.edit(true).show())
+            this.$refs.product.setInfo(row).then(product => product.edit(true).show());
         },
         showFormToCreate() {
-            this.$refs.productadd.show()
+            this.$refs.productadd.show();
         },
         onPreview(url) {
-            ImagePreview.show({ url })
-        }
+            ImagePreview.show({ url });
+        },
     },
-    mounted() {
-        this._log("mounted xxx")
-    }
-}
+};
 </script>

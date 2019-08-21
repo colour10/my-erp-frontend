@@ -11,21 +11,21 @@ import Product from '../asa/Asa_Product.vue'
 export default {
     name: 'sp-product-tip',
     components: {
-        "product": Product
+        "product": Product,
     },
     props: {
         product: {
-            type: Object
-        }
-    },
-    methods:{
-        onClick:function(){
-            let self = this
-            self.$refs.product.edit(true).setInfo(self.product).then(product => product.show(false))
+            type: Object,
         },
-        onChange(form){
-            this.$emit("change", form)
-        }
-    }
-}
+    },
+    methods: {
+        onClick() {
+            let self = this;
+            self.$refs.product.edit(true).setInfo(self.product).then(product => product.show(false));
+        },
+        onChange(form) {
+            this.$emit("change", form);
+        },
+    },
+};
 </script>

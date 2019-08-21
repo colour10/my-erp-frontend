@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-table ref="table" :data="tableData" border style="width: 100%;" :height="tableHeight" :cell-class-name="getCellClassName" :cell-style="getCellStyle" :rowClassName="tableRowClassName" :row-style="getRowStyle" @selection-change="onSelectionChange" @row-click="onRowClick">
+        <el-table ref="table" :data="tableData" border style="width: 100%;" :height="tableHeight" :cell-class-name="getCellClassName" :cell-style="cellStyle" :rowClassName="tableRowClassName" :row-style="getRowStyle" @selection-change="onSelectionChange" @row-click="onRowClick">
             <el-table-column type="selection" :width="60" v-if="isSelect==true">
             </el-table-column>
             <el-table-column type="expand" v-if="isExpand">
@@ -57,7 +57,7 @@ let getBaseObject = function(columns) {
 
 export default {
     name: 'simple-admin-tablelist',
-    props: ['columns', "buttons", "controller", "base", "onclickupdate", 'isedit', 'isdelete', "options", "authname", "tableHeight", 'actions', 'model', 'isExpand', 'isSelect'],
+    props: ['columns', "buttons", "controller", "base", "onclickupdate", 'isedit', 'isdelete', "options", "authname", "tableHeight", 'actions', 'model', 'isExpand', 'isSelect', 'cell-style'],
     components: {
 
     },
@@ -105,13 +105,6 @@ export default {
                     return self.cellClasses[column.property]
                 }
             }
-        },
-        getCellStyle({row, column, rowIndex, columnIndex}) {
-            //if()
-            return {
-                //fontWeight:"bolder"
-            }
-
         },
         getRowStyle(info){
             let self = this

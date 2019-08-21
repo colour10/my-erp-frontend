@@ -43,10 +43,10 @@
                     <el-menu-item index="orderbrand" v-if="_isAllowed('orderbrand-page')">{{_label("waibudingdan")}}</el-menu-item>
                     <el-menu-item index="shipping" v-if="_isAllowed('shipping-page')">{{_label("menu-5-2")}}</el-menu-item>
                 </el-submenu>
-                <el-submenu index="6">
+                <el-submenu index="6" v-if="_isAllowed('requisition-page,productstock-search')">
                     <template #title>{{_label("menu-6")}}</template>
-                    <el-menu-item index="requisition">{{_label("menu-6-1")}}</el-menu-item>
-                    <el-menu-item index="productstock">{{_label("menu-6-4")}}</el-menu-item>
+                    <el-menu-item index="requisition" v-if="_isAllowed('requisition-page')">{{_label("menu-6-1")}}</el-menu-item>
+                    <el-menu-item index="productstock" v-if="_isAllowed('productstock-search')">{{_label("menu-6-4")}}</el-menu-item>
                 </el-submenu>
                 <el-submenu index="7">
                     <template #title>{{_label("menu-7")}}</template>

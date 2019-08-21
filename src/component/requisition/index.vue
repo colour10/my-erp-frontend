@@ -3,9 +3,7 @@
     <el-row>
       <el-col :span="6">
         <as-button type="primary" @click="_showDialog('search')">{{_label('chaxun')}}</as-button>
-        <auth auth="requisition">
-          <as-button type="primary" @click="showFormToCreate()">{{_label('xinjian')}}</as-button>
-        </auth>
+        <asa-button :enable="_isAllowed('requisition-save')" @click="showFormToCreate()">{{_label('xinjian')}}</asa-button>
       </el-col>
     </el-row>
     <el-row :gutter="20">
@@ -30,7 +28,7 @@
         </el-row>
         <el-row :gutter="0">
           <el-col align="center">
-            <as-button auth="product" type="primary" @click="onSearch(form)" native-type="submit">{{_label("chaxun")}}</as-button>
+            <as-button type="primary" @click="onSearch(form)" native-type="submit">{{_label("chaxun")}}</as-button>
             <as-button type="primary" @click="_hideDialog('search')">{{_label("tuichu")}}</as-button>
           </el-col>
         </el-row>

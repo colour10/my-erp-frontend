@@ -100,7 +100,7 @@ export default {
                     { label:_label("xiangqing"), type: '', handler:function({row}){
                         self.$router.push('/shipping/warehousing/' + row.id)
                     }},
-                    { label:_label("shanchu"), type:"danger", handler:function({row}){
+                    { label:_label("shanchu"), type:"danger", enable: self._isAllowed('shipping-delete'), handler:function({row}){
                         self._remove("/shipping/delete", { id: row.id }).then(function(result) {
                             if(result){
                                 self.$refs.tablelist.search(self.searchform)

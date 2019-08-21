@@ -30,15 +30,13 @@
                                 </div>
                             </el-tooltip>
                         </el-col>
-                        <auth auth="product">
-                            <el-col :span="4">
-                                <div class="color-group" @click="onClickColorToEdit">
-                                    <div class="box" style="width:36px;">
-                                        <i class="el-icon-plus color-group-icon"></i>
-                                    </div>
+                        <el-col :span="4" v-if="_isAllowed('product')">
+                            <div class="color-group" @click="onClickColorToEdit">
+                                <div class="box" style="width:36px;">
+                                    <i class="el-icon-plus color-group-icon"></i>
                                 </div>
-                            </el-col>
-                        </auth>
+                            </div>
+                        </el-col>
                     </el-col>
                 </el-row>
                 <el-form ref="order-form" class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini" :rules="formRules" :inline-message="false" :show-message="false">
