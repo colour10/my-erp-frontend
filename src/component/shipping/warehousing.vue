@@ -258,11 +258,15 @@ import { Order, ProductDetail, promiseRunner } from "../model.js";
 import { debounce } from "../function.js";
 import { statHelper } from "../helper.js";
 import Asa_Orderbrand_List from '../asa/Asa_Orderbrand_List.vue';
+import Asa_Sizecontent_Confirm4 from '../asa/Asa_Sizecontent_Confirm4.vue';
+import Asa_Select_Product_Dialog from '../asa/Asa_Select_Product_Dialog.vue'
 
 const result = {
     name: 'sp-warehousing',
     components: {
         [Asa_Orderbrand_List.name]: Asa_Orderbrand_List,
+        [Asa_Sizecontent_Confirm4.name]: Asa_Sizecontent_Confirm4,
+        [Asa_Select_Product_Dialog.name]: Asa_Select_Product_Dialog,
     },
     mixins: [orderMixin],
     data() {

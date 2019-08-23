@@ -341,7 +341,8 @@ export default {
             return true
         },
         onSelectionChange(vals) {
-            this.selected = vals
+            this.selected = vals;
+            this.$emit('selection-change', vals);
         },
         getSelectValues() {
             return this.selected.map(item=>item.id)

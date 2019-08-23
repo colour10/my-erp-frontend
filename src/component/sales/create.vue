@@ -2,8 +2,8 @@
     <div>
         <el-form class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini">
             <el-row :gutter="0">
-                <au-button auth="sales" :type="tabledata.length==0?'info':'primary'" @click="sale(1)">{{_label("yushou")}}</au-button>
-                <au-button auth="sales" :type="tabledata.length==0?'info':'primary'" @click="sale(2)">{{_label("xiaoshou")}}</au-button>
+                <asa-button @click="sale(1)" :enable="_isAllowed('sales-add') && tabledata.length>0">{{_label("yushou")}}</asa-button>
+                <asa-button @click="sale(2)" :enable="_isAllowed('sales-add') && tabledata.length>0">{{_label("xiaoshou")}}</asa-button>
             </el-row>
             <el-row :gutter="0">
                 <el-col :span="4" style="width:300px">

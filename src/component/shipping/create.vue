@@ -289,10 +289,13 @@ import orderMixin from "../mixins/order.js"
 import { Order, ProductDetail, promiseRunner } from "../model.js"
 import { debounce } from "../function.js"
 import { statHelper } from "../helper.js"
+import Asa_Sizecontent_Confirm4 from '../asa/Asa_Sizecontent_Confirm4.vue';
 
 export default {
     name: 'sp-shippingdetail',
-    components: {},
+    components: {
+        [Asa_Sizecontent_Confirm4.name]: Asa_Sizecontent_Confirm4,
+    },
     mixins: [orderMixin],
     data() {
         let self = this;

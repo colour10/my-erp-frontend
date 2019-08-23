@@ -169,6 +169,8 @@ import detailConvert from "../asa/order-detail.js";
 import orderMixin from "../mixins/order.js";
 import { statHelper } from "../helper.js";
 import Asa_Orderbrand_List from '../asa/Asa_Orderbrand_List.vue';
+import Asa_Sizecontent_Input from '../asa/Asa_Sizecontent_Input.vue';
+import Asa_Select_Product_Dialog from '../asa/Asa_Select_Product_Dialog.vue'
 
 const props = {
     columns: [
@@ -196,6 +198,8 @@ export default {
     name: 'sp-orderform',
     components: {
         [Asa_Orderbrand_List.name]: Asa_Orderbrand_List,
+        [Asa_Sizecontent_Input.name]: Asa_Sizecontent_Input,
+        [Asa_Select_Product_Dialog.name]: Asa_Select_Product_Dialog,
     },
     mixins: [orderMixin],
     data() {

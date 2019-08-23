@@ -54,7 +54,7 @@
                     <el-table-column :label="_label('caozuo')" width="159" align="center">
                         <template v-slot="scope">
                             <as-button type="danger" @click="onDeleteColorGroup(scope, scope.row)" v-if="scope.$index>0">{{_label("shanchu")}}</as-button>
-                            <au-button auth="product" type="primary" @click="onAppendColor"v-if="scope.$index==0">{{_label("zhuijia")}}</au-button>
+                            <asa-button :enable="_isAllowed('product')" @click="onAppendColor" v-if="scope.$index==0">{{_label("zhuijia")}}</asa-button>
                         </template>
                     </el-table-column>
                 </el-table>

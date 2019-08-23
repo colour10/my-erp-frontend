@@ -1,17 +1,16 @@
 <template>
     <div>
         <el-row>
-            <el-col :span="2">
+            <el-col :span="10">
                 <as-button type="primary" @click="_showDialog('search',{width:600})">{{_label("chaxun")}}</as-button>
 
-                <auth auth="product">
-                    <as-button type="primary" @click="showFormToCreate()">{{_label("button-create")}}</as-button>
-                </auth>
+                <asa-button type="primary" @click="showFormToCreate()" :enable="_isAllowed('product')">{{_label("button-create")}}</asa-button>
+                <asa-button type="primary" @click="showFormToModifyPrice()" :enable="_isAllowed('product') && selected.length>0">{{_label("xiugaijiage")}}</asa-button>
             </el-col>
         </el-row>
         <el-row :gutter="20" class="product">
             <el-col :span="24">
-                <simple-admin-tablelist ref="tablelist" v-bind="props" :onclickupdate="showFormToEdit" @preview="onPreview" :is-select="true">
+                <simple-admin-tablelist ref="tablelist" v-bind="props" :onclickupdate="showFormToEdit" @preview="onPreview" :is-select="true" @selection-change="onSelectionChange">
                     <template v-slot:wordcode_2="{row}">
                         <div class="color-group" v-for="item in row.colors" :key="item.id">
                             <div class="box" :style="getColorStyle(item)" @click.stop="showFormToEdit('click', item.id)"></div>
@@ -39,6 +38,8 @@
         <sp-dialog ref="search">
             <sp-product-search-form @search="onSearch" @close="_hideDialog('search')"></sp-product-search-form>
         </sp-dialog>
+
+        <asa-product-modify-price ref="modifyprice"></asa-product-modify-price>
     </div>
 </template>
 
@@ -48,16 +49,18 @@ import Asa_Product from '../asa/Asa_Product.vue'
 import Asa_Product_Add from '../asa/Asa_Product_Add.vue'
 import ImagePreview from '../image-preview.js'
 import {ProductDetail} from "../model.js"
+import Asa_Product_Modify_Price from '../asa/Asa_Product_Modify_Price.vue';
 
 export default {
     name: 'sp-product',
     components: {
         "product": Asa_Product,
-        "productadd":Asa_Product_Add
+        "productadd":Asa_Product_Add,
+        [Asa_Product_Modify_Price.name]: Asa_Product_Modify_Price,
     },
     data() {
         return {
-            colorsLength: 1, // 当前列表中最多的同款多色，款数
+            selected: [],
             form:{},
             props: {
                 columns: [
@@ -154,6 +157,16 @@ export default {
         },
         onPreview(url) {
             ImagePreview.show({ url });
+        },
+        showFormToModifyPrice() {
+            const self = this;
+            let rows = self.$refs.tablelist.getSelectRows();
+            console.log(rows);
+            let products = rows.map(item=>item.id);
+            self.$refs.modifyprice.show(products);
+        },
+        onSelectionChange(vals) {
+            this.selected = vals;
         },
     },
 };

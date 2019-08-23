@@ -2,10 +2,10 @@
     <div>
         <el-form class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini">
             <el-row :gutter="0">
-                <au-button auth="sales" type="primary" @click="save" v-if="form.status!='3'">{{_label("baocun")}}</au-button>
-                <au-button auth="sales" type="primary" @click="sale" v-if="form.status==1">{{_label("xiaoshou")}}</au-button>
-                <au-button auth="sales" type="primary" @click="cancel" v-if="form.status=='1'">{{_label("zuofei")}}</au-button>
-                <au-button auth="sales" type="primary" @click="addReceive" v-if="form.id>0 && form.status!=3">{{_label("tianjiashoukuan")}}</au-button>
+                <asa-button @click="save" :enable="_isAllowed('sales-add') && form.status!='3'">{{_label("baocun")}}</asa-button>
+                <asa-button @click="sale" :enable="_isAllowed('sales-add') && form.status==1">{{_label("xiaoshou")}}</asa-button>
+                <asa-button @click="cancel" :enable="_isAllowed('sales-add') && form.status=='1'">{{_label("zuofei")}}</asa-button>
+                <asa-button @click="addReceive" :enable="_isAllowed('sales-add') && form.id>0 && form.status!=3">{{_label("tianjiashoukuan")}}</asa-button>
 
                 <el-tag type="warning" v-if="form.status>0">
                         <sp-select-text :value="form.status" source="salestatus"/>
@@ -231,7 +231,7 @@ export default {
                     { name: "status", label: _label("yiruzhang"), type: "switch", is_edit_hide: true,width:90 }
                 ],
                 controller: "salesreceive",
-                auth: "sales",
+                auth: "sales-salesreceive",
                 base: {
                     salesid: ''
                 },

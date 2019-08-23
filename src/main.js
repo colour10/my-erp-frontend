@@ -20,25 +20,16 @@ import Simple_Avatar from './component/Simple_Avatar.vue'
 import Simple_Album from './component/Simple_Album.vue'
 import globals,{config} from './component/globals.js'
 
-import Asa_Select_Product_Dialog from './component/asa/Asa_Select_Product_Dialog.vue'
 import Simple_Display_Input from './component/Simple_Display_Input.vue'
 import Simple_Float_Input from './component/Simple_Float_Input.vue'
-import Asa_Productstock_Search from './component/asa/Asa_Productstock_Search.vue'
 import Asa_Product from './component/asa/Asa_Product.vue'
-import Asa_Brandgroupchild_Select from './component/asa/Asa_Brandgroupchild_Select.vue'
 import CheckboxGroup from './component/CheckboxGroup.vue'
 import Auth from './component/Auth.vue'
-import Table from './component/table.js'
 import Checkbox from './component/checkbox.js'
-import Authbutton from './component/authbutton.js'
 import Button from './component/button.js'
 import RadioGroup from './component/radio-group.vue'
 import Multiple_Admin_Page from './component/multiple_admin_page.js'
 import Asa_Color_Select from './component/asa/Asa_Color_Select.vue';
-import Asa_Sizecontent_Input from './component/asa/Asa_Sizecontent_Input.vue';
-import Asa_Sizecontent_Confirm2 from './component/asa/Asa_Sizecontent_Confirm2.vue';
-import Asa_Sizecontent_Confirm3 from './component/asa/Asa_Sizecontent_Confirm3.vue';
-import Asa_Sizecontent_Confirm4 from './component/asa/Asa_Sizecontent_Confirm4.vue';
 import Asa_Order_Tip from './component/asa/Asa_Order_Tip.vue';
 import Asa_Product_Tip from './component/asa/Asa_Product_Tip.vue';
 import SelectText from './component/select-text.js';
@@ -64,28 +55,21 @@ const components = [
     Multiple_Admin_Page,
     Simple_Admin_TableList,
     Simple_Select,
-    //Select_Currency,
     Simple_Avatar,
     Simple_Album,
     Asa_Color_Select,
-    Asa_Sizecontent_Input,
     Asa_Order_Tip,
     Asa_Product_Tip,
-    Asa_Select_Product_Dialog,
     Simple_Display_Input,
     Simple_Float_Input,
-    Asa_Productstock_Search,
     Asa_Product,
-    Asa_Brandgroupchild_Select,
     Asa_Product_BL,
     Asa_Product_LSB,
     Auth,
     SelectText,
     CheckboxGroup,
-    Table,
     Checkbox,
     Button,
-    Authbutton,
     RadioGroup,
     ImagePreview,
     Dialog,
@@ -93,9 +77,6 @@ const components = [
     Asa_PriceSetting_Cell,
     Toggle_Input,
     SpProductInfo,
-    Asa_Sizecontent_Confirm2,
-    Asa_Sizecontent_Confirm3,
-    Asa_Sizecontent_Confirm4,
     ProductSearchForm,
     Asa_Product_Code,
     Asa_Product_Icon,

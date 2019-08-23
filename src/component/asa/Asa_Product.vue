@@ -205,9 +205,7 @@
                 </el-col>
             </el-tab-pane>
             <el-tab-pane :label="_label('tongkuanduose')" name="colorgroup" :disabled="form.id==''">
-                <auth auth="product">
-                    <searchpanel ref="searchpanel" @select="onSelectProduct" :filter="searchProductFilter" :isCreate="false"></searchpanel>
-                </auth>
+                <searchpanel ref="searchpanel" @select="onSelectProduct" :filter="searchProductFilter" :isCreate="false" v-if="_isAllowed('product')"></searchpanel>
 
                 <el-table :data="colors" border style="width:100%;">
                     <el-table-column width="80" align="center">
@@ -258,13 +256,12 @@
                     <el-table-column :label="_label('caozuo')" width="130" align="center">
                         <template v-slot="scope">
                             <as-button type="danger" @click="onDeleteColorGroup(scope, scope.row)" v-if="option.isedit && form.id!=scope.row.id">{{_label("shanchu")}}</as-button>
-                            <!-- <au-button auth="product" type="primary" @click="onAppendColor"v-if="!(option.isedit && form.id!=scope.row.id)">{{_label("zhuijia")}}</au-button> -->
                         </template>
                     </el-table-column>
                 </el-table>
                 <el-col :offset="8" :span="8" style="padding-top:5px">
-                    <au-button auth="product" type="primary" @click="onSaveColorGroup" v-if="option.isedit">{{_label("baocun")}}</au-button>
-                    <au-button auth="product" type="primary" @click="onAppendColor" v-if="option.isedit">{{_label("zhuijia")}}</au-button>
+                    <asa-button :enable="_isAllowed('product')" @click="onSaveColorGroup" v-if="option.isedit">{{_label("baocun")}}</asa-button>
+                    <asa-button :enable="_isAllowed('product')" @click="onAppendColor" v-if="option.isedit">{{_label("zhuijia")}}</asa-button>
                     <as-button type="primary" @click="onQuit">{{_label("tuichu")}}</as-button>
                 </el-col>
             </el-tab-pane>

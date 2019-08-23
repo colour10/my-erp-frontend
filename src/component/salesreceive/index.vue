@@ -6,7 +6,7 @@
                 <as-button type="primary" @click="search()">{{_label("chaxun")}}</as-button>
             </el-form-item>
         </el-form>
-        <sp-table :data="searchresult" border style="width:100%;">
+        <el-table :data="searchresult" border style="width:100%;">
             <el-table-column prop="orderno" :label="_label('dingdanhao')" align="center" sortable>
                 <template v-slot="scope">
                     {{scope.row.sales.orderno}}
@@ -29,7 +29,7 @@
                     </auth>
                 </template>
             </el-table-column>
-        </sp-table>
+        </el-table>
         <el-pagination v-if="searchresult.length<pagination.total" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pagination.current*1" :page-sizes="pagination.pageSizes" :page-size="pagination.pageSize*1" layout="total, sizes, prev, pager, next, jumper" :total="pagination.total*1">
         </el-pagination>
         <simple-form name="salesreceive" :columns="columns" authname="receive-confirm" ref="salesreceive" :title="_label('querenfukuan')" @submit="onConfirm" :isEditable="(f)=>f.status==0"></simple-form>

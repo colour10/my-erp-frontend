@@ -141,12 +141,14 @@ import { Order, ProductDetail, promiseRunner } from "../model.js"
 import { statHelper } from "../helper.js";
 import Asa_Order_List from '../asa/Asa_Order_List.vue';
 import Asa_Shipping_List from '../asa/Asa_Shipping_List.vue';
+import Asa_Sizecontent_Confirm3 from '../asa/Asa_Sizecontent_Confirm3.vue';
 
 export default {
     name: 'sp-orderconfirmdetail',
     components: {
         [Asa_Order_List.name]: Asa_Order_List,
         [Asa_Shipping_List.name]: Asa_Shipping_List,
+        [Asa_Sizecontent_Confirm3.name]: Asa_Sizecontent_Confirm3,
     },
     mixins: [orderMixin],
     data() {

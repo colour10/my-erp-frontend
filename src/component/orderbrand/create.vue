@@ -299,12 +299,14 @@ import { removeFilter } from "../array.js"
 import cachecomponent from '../mixins/cachecomponent.js';
 import Asa_Order_List from '../asa/Asa_Order_List.vue';
 import Asa_Shipping_List from '../asa/Asa_Shipping_List.vue';
+import Asa_Sizecontent_Confirm2 from '../asa/Asa_Sizecontent_Confirm2.vue';
 
 const result = {
     name: 'sp-orderbrandcreate',
     components: {
         [Asa_Order_List.name]: Asa_Order_List,
         [Asa_Shipping_List.name]: Asa_Shipping_List,
+        [Asa_Sizecontent_Confirm2.name]: Asa_Sizecontent_Confirm2,
     },
     mixins: [orderMixin, cachecomponent],
     data() {

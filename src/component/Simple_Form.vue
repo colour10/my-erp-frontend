@@ -15,7 +15,7 @@
         </el-row>
         <el-row>
             <el-col :span="24" style="text-align:center;">
-                <au-button :auth="authname" type="primary" @click="onSubmit" style="margin:auto;" v-if="isEditable && isEditable(form)">{{setting.submitButtonText}}</au-button>
+                <asa-button :enable="_isAllowed(authname)" @click="onSubmit" style="margin:auto;" v-if="isEditable && isEditable(form)">{{setting.submitButtonText}}</asa-button>
                 <as-button type="primary" @click="onQuit">{{_label("tuichu")}}</as-button>
             </el-col>
         </el-row>

@@ -7,10 +7,10 @@
                         <el-form-item class="searchitem">
                             <el-input v-model="searchform.keyword" width="250" style="width:250px;" @keyup.enter.native="onSearch" v-if="isSubmit"></el-input>
                             <as-button type="primary" @click="onSearch" size="mini" v-if="isSubmit" icon="el-icon-search">{{_label("chaxun")}}</as-button>
-                            <au-button :auth="authname" type="primary" @click="showFormToCreate()" v-if="isAdd()!==false">{{_label("xinjian")}}</au-button>
+                            <asa-button :enable="_isAllowed(authname)" @click="showFormToCreate()" v-if="isAdd()!==false">{{_label("xinjian")}}</asa-button>
                         </el-form-item>
                     </el-form>
-                    <au-button :auth="authname" type="primary" @click="showFormToCreate()" v-if="isAdd()!==false && opt.isSearch===false">{{_label("xinjian")}}</au-button>
+                    <asa-button :enable="_isAllowed(authname)" @click="showFormToCreate()" v-if="isAdd()!==false && opt.isSearch===false">{{_label("xinjian")}}</asa-button>
                 </slot>
             </el-col>
         </el-row>
@@ -39,7 +39,7 @@
             </slot>
             <el-row>
                 <el-col :span="24" style="text-align:center;">
-                    <au-button :auth="authname" type="primary" @click="onSubmit" style="margin:auto;" v-if="opt.isShowSubmit!==false">{{_label("baocun")}}</au-button>
+                    <asa-button :enable="_isAllowed(authname)" @click="onSubmit" style="margin:auto;" v-if="opt.isShowSubmit!==false">{{_label("baocun")}}</asa-button>
                     <as-button type="primary" @click="onQuit">{{_label("tuichu")}}</as-button>
                 </el-col>
             </el-row>
@@ -73,7 +73,7 @@ export default {
             form[column.name] = "";
         }
 
-        let authname = self.auth ? self.auth : self.controller;
+        let authname = self.auth || self.controller;
 
         return {
             dialogVisible: false,
@@ -82,7 +82,7 @@ export default {
             title: "",
             lang: _label("lang"),
             opt,
-            authname: authname,
+            authname,
             searchform: {},
             action: "",
             isSubmiting: false,

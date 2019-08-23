@@ -5,7 +5,7 @@
                 <el-tree ref="tree" :data="data" node-key="id" :props="defaultProps" default-expand-all :expand-on-click-node="false" @node-click="onNodeClick"></el-tree>
             </el-col>
             <el-col :span="7" v-if="form.id>0">
-                <auth auth="department"><as-button type="primary" @click="showDepartCreate" style="margin-bottom:30px;">{{_label('depart-create')}}</as-button></auth>
+                <asa-button :enable="_isAllowed('department')" @click="showDepartCreate" style="margin-bottom:30px;">{{_label('depart-create')}}</asa-button>
                 <el-form ref="form" :model="form" label-width="80px">
                     <el-form-item :label="_label('bumenmingcheng')">
                         <el-input v-model="form.name"></el-input>
@@ -14,8 +14,8 @@
                         <el-input type="textarea" v-model="form.remark"></el-input>
                     </el-form-item>
                     <el-form-item>
-                        <au-button auth="department" type="primary" @click="onEdit" :disabled="is_save_disabled">{{_label('button-save')}}</au-button>
-                        <au-button auth="department" type="danger" @click="deleteDepart" :disabled="is_save_disabled">{{_label('button-delete')}}</au-button>
+                        <asa-button :enable="_isAllowed('department') && !is_save_disabled" @click="onEdit">{{_label('button-save')}}</asa-button>
+                        <asa-button :enable="_isAllowed('department') && !is_save_disabled" @click="deleteDepart">{{_label('button-delete')}}</asa-button>
                     </el-form-item>
                 </el-form>
             </el-col>

@@ -1,72 +1,75 @@
 <template>
-  <div style="width:100%" class="product">
+  <div style="width:100%">
     <as-button type="primary" @click="_showDialog('search')">{{_label("chaxun")}}</as-button>
-    <sp-table :data="searchresult" border style="width:100%;" :row-style="getRowStyle" @row-dblclick="showDetail">
-      <el-table-column :label="_label('zhutu')" align="center" width="60">
-        <template v-slot="{row}">
-          <sp-product-icon :file="row.product.picture"></sp-product-icon>
-        </template>
-      </el-table-column>
-      <el-table-column :label="_label('chanpinmingcheng')" align="center" sortable width="200">
-        <template v-slot="{row}">
-          {{row.product.getName()}}
-        </template>
-      </el-table-column>
-      <el-table-column :label="_label('guojima')" align="center" sortable width="200">
-        <template v-slot="{row}">
-          <sp-product-tip :product="row.product" />
-        </template>
-      </el-table-column>
-      <el-table-column :label="_label('kucunshuliang')" :width="width" align="left">
-        <template v-slot="{row}">
-          <sp-productstock-show :columns="row.product.sizecontents" :stocks="row.stocks" :type="typeSum"></sp-productstock-show>
-        </template>
-      </el-table-column>
-      <el-table-column :label="_label('chuchangjia')" width="110" align="center">
-        <template v-slot="{row}">
-          {{row.product.factorypricecurrency_label +' '+ row.product.factoryprice}}
-        </template>
-      </el-table-column>
-      <el-table-column :label="_label('guojilingshoujia')" width="110" align="center">
-        <template v-slot="{row}">
-          {{row.product.wordpricecurrency_label +' '+ row.product.wordprice}}
-        </template>
-      </el-table-column>
-      <el-table-column :label="_label('chengben')" width="140" align="center">
-        <template v-slot="{row}">
-          <sp-select-text :value="row.product.costcurrency" source="currency"></sp-select-text>
-          {{row.product.cost}}
-        </template>
-      </el-table-column>
-      <el-table-column :label="_label('shuxing')" width="90" align="center">
-        <template v-slot="{row}">
-          <sp-select-text :value="row.property" source="orderproperty"></sp-select-text>
-        </template>
-      </el-table-column>
-      <el-table-column :label="_label('canpin')" width="90" align="center">
-        <template v-slot="{row}">
-          <sp-select-text :value="row.defective_level" source="defectivelevel"></sp-select-text>
-        </template>
-      </el-table-column>
-      <el-table-column :label="_label('xiaoshoushuxing')" width="90" align="center">
-        <template v-slot="{row}">
-          <sp-select-text :value="row.saletypeid" source="saletype"></sp-select-text>
-        </template>
-      </el-table-column>
-      <el-table-column :label="_label('shangpinshuxing')" width="90" align="center">
-        <template v-slot="{row}">
-          <sp-select-text :value="row.producttypeid" source="producttype"></sp-select-text>
-        </template>
-      </el-table-column>
-      <el-table-column :label="_label('zuihouruku')" width="100" align="center">
-        <template v-slot="{row}">
-          {{_left(row.product.laststoragedate,10)}}
-        </template>
-      </el-table-column>
-    </sp-table>
-    <el-pagination v-if="searchresult.length<pagination.total" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pagination.current*1" :page-sizes="pagination.pageSizes" :page-size="pagination.pageSize*1" layout="total, sizes, prev, pager, next, jumper" :total="pagination.total*1">
-    </el-pagination>
-
+    <asa-button type="primary" @click="showFormToModifyPrice()" :enable="_isAllowed('product') && selected.length>0">{{_label("xiugaijiage")}}</asa-button>
+    <div class="product">
+      <el-table ref="table" :data="searchresult" border style="width:100%;" :row-style="getRowStyle" @row-dblclick="showDetail" @selection-change="onSelectionChange" @row-click="onRowClick" :rowClassName="tableRowClassName">
+        <el-table-column type="selection" :width="60"></el-table-column>
+        <el-table-column :label="_label('zhutu')" align="center" width="60">
+          <template v-slot="{row}">
+            <sp-product-icon :file="row.product.picture"></sp-product-icon>
+          </template>
+        </el-table-column>
+        <el-table-column :label="_label('chanpinmingcheng')" align="center" sortable width="200">
+          <template v-slot="{row}">
+            {{row.product.getName()}}
+          </template>
+        </el-table-column>
+        <el-table-column :label="_label('guojima')" align="center" sortable width="200">
+          <template v-slot="{row}">
+            <sp-product-tip :product="row.product" />
+          </template>
+        </el-table-column>
+        <el-table-column :label="_label('kucunshuliang')" :width="width" align="left">
+          <template v-slot="{row}">
+            <sp-productstock-show :columns="row.product.sizecontents" :stocks="row.stocks" :type="typeSum"></sp-productstock-show>
+          </template>
+        </el-table-column>
+        <el-table-column :label="_label('chuchangjia')" width="110" align="center">
+          <template v-slot="{row}">
+            {{row.product.factorypricecurrency_label +' '+ row.product.factoryprice}}
+          </template>
+        </el-table-column>
+        <el-table-column :label="_label('guojilingshoujia')" width="110" align="center">
+          <template v-slot="{row}">
+            {{row.product.wordpricecurrency_label +' '+ row.product.wordprice}}
+          </template>
+        </el-table-column>
+        <el-table-column :label="_label('chengben')" width="140" align="center">
+          <template v-slot="{row}">
+            <sp-select-text :value="row.product.costcurrency" source="currency"></sp-select-text>
+            {{row.product.cost}}
+          </template>
+        </el-table-column>
+        <el-table-column :label="_label('shuxing')" width="90" align="center">
+          <template v-slot="{row}">
+            <sp-select-text :value="row.property" source="orderproperty"></sp-select-text>
+          </template>
+        </el-table-column>
+        <el-table-column :label="_label('canpin')" width="90" align="center">
+          <template v-slot="{row}">
+            <sp-select-text :value="row.defective_level" source="defectivelevel"></sp-select-text>
+          </template>
+        </el-table-column>
+        <el-table-column :label="_label('xiaoshoushuxing')" width="90" align="center">
+          <template v-slot="{row}">
+            <sp-select-text :value="row.saletypeid" source="saletype"></sp-select-text>
+          </template>
+        </el-table-column>
+        <el-table-column :label="_label('shangpinshuxing')" width="90" align="center">
+          <template v-slot="{row}">
+            <sp-select-text :value="row.producttypeid" source="producttype"></sp-select-text>
+          </template>
+        </el-table-column>
+        <el-table-column :label="_label('zuihouruku')" width="100" align="center">
+          <template v-slot="{row}">
+            {{_left(row.product.laststoragedate,10)}}
+          </template>
+        </el-table-column>
+      </el-table>
+      <el-pagination v-if="searchresult.length<pagination.total" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pagination.current*1" :page-sizes="pagination.pageSizes" :page-size="pagination.pageSize*1" layout="total, sizes, prev, pager, next, jumper" :total="pagination.total*1">
+      </el-pagination>
+    </div>
     <sp-dialog ref="search" :width="900">
       <el-form class="order-form" :model="form" label-width="70px" :inline="false" style="width:100%;" size="mini" @submit.native.prevent>
         <el-row :gutter="0">
@@ -97,7 +100,6 @@
             </el-form-item>
           </el-col>
           <el-col :span="8" style="width:270px">
-
             <el-form-item :label="_label('shangpinmiaoshu')">
               <simple-select v-model="form.productmemoids" source="productmemo" :multiple="true" />
             </el-form-item>
@@ -120,9 +122,9 @@
           <el-col :span="8" style="width:270px">
             <el-form-item :label="_label('kucunzhuangtai')">
               <el-checkbox-group v-model="types">
-                    <el-checkbox label="1">{{_label('daishou')}}</el-checkbox>
-                    <el-checkbox label="2">{{_label('yushou')}}</el-checkbox>
-                </el-checkbox-group>
+                <el-checkbox label="1">{{_label('daishou')}}</el-checkbox>
+                <el-checkbox label="2">{{_label('yushou')}}</el-checkbox>
+              </el-checkbox-group>
             </el-form-item>
             <el-form-item :label="_label('shuxing')">
               <el-checkbox-group v-model="properties">
@@ -146,9 +148,8 @@
         </el-row>
       </el-form>
     </sp-dialog>
-
     <sp-dialog ref="product-detail" :width="900">
-      <sp-table :data="productresult" border style="width:100%;" :row-style="getRowStyle">
+      <el-table :data="productresult" border style="width:100%;" :row-style="getRowStyle" :rowClassName="tableRowClassName">
         <el-table-column :label="_label('cangku')" width="160" align="center">
           <template v-slot="{row}">
             <sp-select-text :value="row.warehouseid" source="warehouse"></sp-select-text>
@@ -164,8 +165,9 @@
             <sp-productstock-show :columns="product.product.sizecontents" :stocks="row.stocks" :type="typeSum"></sp-productstock-show>
           </template>
         </el-table-column>
-      </sp-table>
+      </el-table>
     </sp-dialog>
+    <asa-product-modify-price ref="modifyprice"></asa-product-modify-price>
   </div>
 </template>
 
@@ -173,14 +175,17 @@
 import { ProductstockSearch, ProductstockSummary } from "../model.js";
 import Asa_Productstock_Show from '../asa/Asa_Productstock_Show.vue';
 import globals, { extend } from '../globals.js';
+import Asa_Product_Modify_Price from '../asa/Asa_Product_Modify_Price.vue';
 
 export default {
   name: 'sp-productstock',
   components: {
     [Asa_Productstock_Show.name]: Asa_Productstock_Show,
+    [Asa_Product_Modify_Price.name]: Asa_Product_Modify_Price,
   },
   data() {
     return {
+      selected: [],
       form: {
         wordcode: "",
         brandid: '',
@@ -220,15 +225,15 @@ export default {
       const self = this;
       self.product = row;
 
-      let {data} = await self._fetch("/productstock/searchproduct", {
+      let { data } = await self._fetch("/productstock/searchproduct", {
         productid: row.productid,
         defective_level: row.defective_level,
         property: row.property,
       });
 
       self.productresult = [];
-      for(let row of data) {
-        let result = await ProductstockSearch.load({data:row, depth:2});
+      for (let row of data) {
+        let result = await ProductstockSearch.load({ data: row, depth: 2 });
         self.productresult.push(result);
       }
       self._showDialog('product-detail', {
@@ -293,6 +298,24 @@ export default {
           color: product.saletype.colortemplate.row.name_en,
         };
       }
+    },
+    onSelectionChange(vals) {
+      this.selected = vals;
+    },
+    onRowClick(row) {
+      this.$refs.table.toggleRowSelection(row);
+      console.log(this.$refs.table, 'row click')
+    },
+    showFormToModifyPrice() {
+      const self = this;
+      let products = self.selected.map(item => item.product.id);
+      self.$refs.modifyprice.show(products);
+    },
+    tableRowClassName({ row, rowIndex }) {
+      if (rowIndex % 2 === 0) {
+        return 'stripe1';
+      }
+      return '';
     },
   },
   computed: {
