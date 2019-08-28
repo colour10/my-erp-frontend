@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="dialogTitle" :visible.sync="visible" :center="true" :width="dialogWidth+'px'" :modal="false">
+  <el-dialog :title="dialogTitle" :visible.sync="visible" :center="true" :width="dialogWidth+'px'" :modal="false" @close="$emit('close')">
     <div :style="style()">
       <slot name="default"></slot>
     </div>

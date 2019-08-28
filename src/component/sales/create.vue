@@ -27,7 +27,7 @@
                     <el-form-item :label="_label('xiaoshouren')">
                         <simple-select v-model="form.salesstaff" source="user"></simple-select>
                     </el-form-item>
-                    <el-form-item :label="_label('waitudingdanhao')">
+                    <el-form-item :label="_label('waibudingdanhao')">
                         <el-input v-model="form.externalno"></el-input>
                     </el-form-item>
                     <el-form-item :label="_label('duizhangdanhao')">

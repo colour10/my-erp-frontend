@@ -53,7 +53,7 @@ import {autoCall} from './function.js';
 
 export default {
     name: 'simple-admin-page',
-    props: ['columns', 'buttons', "options", "controller", "base", "auth", "hideCreate", 'actions', "formTitle", "isExpand"],
+    props: ['columns', 'buttons', "options", "controller", "base", "auth", "hideCreate", 'actions', "formTitle", "isExpand", "isDisabled"],
     components: {
 
     },

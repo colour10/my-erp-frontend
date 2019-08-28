@@ -114,6 +114,7 @@ function getOption(name) {
     options["supplierlinkman"] = {url:'/l/supplierlinkman',oplabel:'name', opvalue:'id', parent:"supplierid"}
     options["winterproofing"] = {url:'/l/winterproofing',oplabel:'name', opvalue:'id'}
     options["feename"] = {url:'/l/feename',oplabel:'name', opvalue:'id'}
+    options["paymentway"] = {url:'/l/paymentway',oplabel:'name', opvalue:'id'}
 
     options["gender"] = {hashtable:list.gender}
     options["gender2"] = {hashtable:list.gender2}
@@ -185,6 +186,12 @@ function getOption(name) {
 
     //销售单状态
     options["salestatus"] =  {hashtable:list.salestatus}
+
+    //对账单的收/付费
+    options["billtype"] =  {hashtable:list.billtype}
+
+    //对账单的回款状态
+    options["billstatus"] =  {hashtable: list.billstatus}
 
     //客户列表
     options["supplier_2"] = {callback:function(DataSource){

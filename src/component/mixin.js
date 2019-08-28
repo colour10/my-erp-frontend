@@ -4,6 +4,7 @@ import {isArray, initObject} from './array.js'
 import chain from "./chain.js"
 import { Rules } from './rules.js'
 import { DataSource } from "./DataSource.js"
+import { getFetcherPromise } from './fetcher.js';
 
 const _private = function(self){
     const _this = {
@@ -49,6 +50,9 @@ export default {
         }
     },
     methods: {
+        _getRow(table, id) {
+            return getFetcherPromise(table)(id);
+        },
         _isAllowed(authname, behavier='any') {
             const self = this;
 

@@ -138,6 +138,9 @@ const config = function(){
             "winterproofing":getLabel("fanghanzhishu"),
             "feename":getLabel("feiyongguanli"),
             "permission": getLabel("quanxianguanli"),
+            'bill': getLabel('xiaoshouduizhang'),
+            billcreate: getLabel('xinjianduizhangdan'),
+            paymentway: getLabel('fukuanfangshi'),
             "user/setting": getLabel("gerenshezhi"),
             "develop":"生成器"
         }

@@ -34,6 +34,7 @@
                     <el-menu-item index="winterproofing">{{_label("fanghanzhishu")}}</el-menu-item>
                     <el-menu-item index="feename">{{_label("feiyongguanli")}}</el-menu-item>
                     <el-menu-item index="permission" v-if="_isAllowed('permission')">{{_label("quanxianguanli")}}</el-menu-item>
+                    <el-menu-item index="paymentway">{{_label("fukuanfangshi")}}</el-menu-item>
                 </el-submenu>
                 <el-menu-item index="product">{{_label("menu-3-1")}}</el-menu-item>
                 <el-menu-item index="supplier">{{_label("menu-4")}}</el-menu-item>
@@ -51,6 +52,7 @@
                 <el-submenu index="7">
                     <template #title>{{_label("menu-7")}}</template>
                     <el-menu-item index="sales">{{_label("menu-7-1")}}</el-menu-item>
+                    <el-menu-item index="bill">{{_label("xiaoshouduizhang")}}</el-menu-item>
                 </el-submenu>
                 <el-submenu index="8">
                     <template #title>{{_label("menu-8")}}</template>

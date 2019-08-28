@@ -229,6 +229,7 @@ const props = function(){
             columns: [
                 { name: "orderno", label: _label("dingdanhao"), type: 'label'},
                 { name: "payment_type", label: _label("fukuanleixing"), type: 'select', source: "paymenttype" },
+                { name: "paymentwayid", label: _label("fukuanfangshi"), type: 'select', source: "paymentway" },
                 { name: "currency", label: _label("bizhong"), type: 'select', source: "currency" },
                 { name: "amount", label: _label("jine") },
                 { name: "paymentdate", label: _label("fukuanriqi"), type:"date" },
@@ -497,6 +498,23 @@ const props = function(){
             on:{
                 "after-update":function(){
                     clearCache("feename")
+                }
+            }
+        },
+        "paymentway":{
+            columns: [
+                { name: "name", label: _label("mingcheng"), is_focus:true},
+                { name: "displayindex", label: _label("paixu"), sortMethod:sort_method_digit }
+            ],
+            controller: "paymentway",
+            auth: "paymentway",
+            options:{
+                dialogWidth:"400px",
+                isAutoReload:true
+            },
+            on:{
+                "after-update":function(){
+                    clearCache("paymentway")
                 }
             }
         },

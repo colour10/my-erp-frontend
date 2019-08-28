@@ -197,6 +197,20 @@ const API = {
             };
         }
     },
+
+    async getSupplierInvoiceList(supplierid) {
+        let params = {
+            supplierid,
+        };
+
+        try {
+            let result = await _fetch("/supplierinvoice/getlist", params);
+            return result.data;
+        }
+        catch(e) {
+            return [];
+        }
+    },
 };
 
 export default API;

@@ -49,6 +49,7 @@ import Asa_Product_Code from './component/asa/Asa_Product_Code.vue';
 import Asa_Product_Icon from './component/asa/Asa_Product_Icon.vue';
 import AsaButton from './component/Button.vue';
 import OrderInput from './component/order-input.vue';
+import FetchText from './component/fetch-text.js';
 
 const components = [
     Simple_Admin_Page,
@@ -81,7 +82,8 @@ const components = [
     Asa_Product_Code,
     Asa_Product_Icon,
     AsaButton,
-    OrderInput
+    OrderInput,
+    FetchText,
 ]
 
 components.forEach(component => {
@@ -127,6 +129,11 @@ const routes = [
             //{path: '/orderbrand/detail/:id', name:"orderbranddetail", component: resolve=>require(['./component/orderbrand/detail.vue'],resolve) },
             {path: '/orderbrand/confirm/:id', name:"orderbrandconfirm", component: resolve=>require(['./component/orderbrand/confirm.vue'],resolve) },
 
+            //对账单相关
+            {path: '/bill', name:"bill", component: resolve=>require(['./component/bill/index.vue'], resolve)},
+            {path: '/bill/create', name:"billcreate", component: resolve=>require(['./component/bill/create.vue'], resolve)},
+            {path: '/bill/:id', name:"billedit", component: resolve=>require(['./component/bill/update.vue'],resolve)},
+
             {path:'/ageseason', name:"ageseason", component:getComponentSimple("ageseason")},
             {path:'/ulnarinch', name:"ulnarinch", component:getComponent("ulnarinch")},
             {path:'/currency', name:"currency", component:getComponent("currency")},
@@ -148,6 +155,7 @@ const routes = [
             {path:'/language', name:"language", component:getComponent("language")},
             {path:'/winterproofing', name:"winterproofing", component:getComponent("winterproofing")},
             {path:'/feename', name:"feename", component:getComponent("feename")},
+            {path:'/paymentway', name:"paymentway", component:getComponent("paymentway")},
             {path: '/permission', name:"permission", component: resolve=>require(['./component/permission/index.vue'],resolve) },
             //开发工具
 

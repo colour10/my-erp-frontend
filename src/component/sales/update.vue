@@ -33,7 +33,7 @@
                     <el-form-item :label="_label('xiaoshouren')">
                         <simple-select v-model="form.salesstaff" source="user"></simple-select>
                     </el-form-item>
-                    <el-form-item :label="_label('waitudingdanhao')">
+                    <el-form-item :label="_label('waibudingdanhao')">
                         <el-input v-model="form.externalno"></el-input>
                     </el-form-item>
                     <el-form-item :label="_label('duizhangdanhao')">
@@ -133,7 +133,7 @@
         </el-table>
         </el-form>
 
-        <sp-dialog ref="receive-dialog" :title="_label('qingxuanze')" :width="1050" class="product">
+        <sp-dialog ref="receive-dialog" :title="_label('qingxuanze')" :width="1250" class="product">
             <simple-admin-page v-bind="props" ref="receive" :hide-create="true" :hide-form="true" v-if="form.id>0"></simple-admin-page>
         </sp-dialog>
     </div>
@@ -223,6 +223,7 @@ export default {
             props: {
                 columns: [
                     { name: "payment_type", label: _label("fukuanleixing"), type: 'select', source: "paymenttype",width:110 },
+                    { name: "paymentwayid", label: _label("fukuanfangshi"), type: 'select', source: "paymentway" },
                     { name: "currency", label: _label("bizhong"), type: 'select', source: "currency",width:90 },
                     { name: "amount", label: _label("jine"),width:110 },
                     { name: "paymentdate", label: _label("fukuanriqi"), type: "date",width:110 },
