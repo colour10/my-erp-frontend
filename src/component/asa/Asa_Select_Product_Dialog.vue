@@ -1,6 +1,6 @@
 <template>
   <el-dialog :visible.sync="dialogVisible" :center="true" :fullscreen="false" :modal="false" width="1200px">
-    <searchpanel ref="panel" @select="onSelect" @close="onClose"></searchpanel>
+    <asa-search-panel ref="panel" @select="onSelect" @close="onClose" :brandids="brandids" :genders="genders"></asa-search-panel>
   </el-dialog>
 </template>
 
@@ -10,11 +10,19 @@ import Asa_Product_Search_Panel from './Asa_Product_Search_Panel.vue'
 export default {
   name: 'asa-select-product-dialog',
   components: {
-    searchpanel: Asa_Product_Search_Panel,
+    [Asa_Product_Search_Panel.name]: Asa_Product_Search_Panel,
   },
   props: {
     visible: {
       type: Boolean,
+    },
+    brandids: {
+      type: String,
+      default: '',
+    },
+    genders: {
+      type: String,
+      default: '',
     },
   },
   data() {

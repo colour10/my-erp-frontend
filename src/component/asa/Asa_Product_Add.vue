@@ -1,5 +1,5 @@
 <template>
-    <el-dialog :title="_label('chanpinguanli')" :visible.sync="dialogVisible" :center="true" width="1200px" :modal="modal">
+    <el-dialog :title="_label('chanpinguanli')" :visible.sync="dialogVisible" :center="true" width="1200px" :modal="true">
         <el-row class="product">
             <el-col :span="24">
                 <el-table :data="colors" border style="width:100%;">
@@ -17,10 +17,21 @@
                             </el-upload>
                         </template>
                     </el-table-column>
-
                     <el-table-column :label="_label('kuanshi')" width="140" align="center">
                         <template v-slot="{row,$index}">
-                            <el-input v-model="row.wordcode_1" size="mini" @focus="onFocus(1)" @blur="onBlur(1)" @keyup.native="onKeyInput(row,'wordcode_1')" @keyup.native.up="onKeyMove(1, $index, 'up')" @keyup.native.down="onKeyMove(1, $index, 'down')" @keyup.native.left="onKeyMove(1, $index, 'left')" @keyup.native.right="onKeyMove(1, $index, 'right')" :ref="'word1-'+$index"/>
+                            <el-autocomplete v-model="row.wordcode_1" popper-class="my-autocomplete" :fetch-suggestions="createQueryFunction(row)" @select="handleSelect($event, row)" size="mini" @focus="onFocus(1)" @blur="onBlur(1)" @keyup.native="onKeyInput(row,'wordcode_1')" @keyup.native.up="onKeyMove(1, $index, 'up')" @keyup.native.down="onKeyMove(1, $index, 'down')" @keyup.native.left="onKeyMove(1, $index, 'left')" @keyup.native.right="onKeyMove(1, $index, 'right')" :ref="'word1-'+$index" >
+                                <template slot-scope="{ item }">
+                                <el-row :gutter="0" style="height:37px;">
+                                    <el-col :span="8">
+                                        <img :src="_fileLink(item.picture)" style="width:35px; height:35px;" />
+                                        <img :src="_fileLink(item.picture2)" style="width:35px; height:35px;" />
+                                    </el-col>
+                                    <el-col :span="8"><span class="addr">{{ item.wordcode }}</span></el-col>
+                                </el-row>
+
+
+                                </template>
+                            </el-autocomplete>
                         </template>
                     </el-table-column>
                     <el-table-column :label="_label('caizhi')" width="140" align="center">
@@ -86,7 +97,7 @@
                 </el-col>
                 <el-col :span="8">
                     <el-form-item :label="_label('caizhi')">
-                        <productmaterial v-model="materials" :brandgroupid="form.brandgroupid"></productmaterial>
+                        <product-material v-model="materials" :brandgroupid="form.brandgroupid"></product-material>
                     </el-form-item>
 
                     <el-form-item :label="_label('chandi')" prop="countries">
@@ -191,6 +202,33 @@
                 </el-col>
             </el-row>
         </el-form>
+
+        <sp-dialog ref="selet-product" width="600">
+            <el-form class="order-form" :model="form" label-width="70px" :inline="false" style="width:100%;" size="mini" @submit.native.prevent>
+                <el-row :gutter="0">
+                    <el-col :span="8" style="width:270px">
+                        <el-form-item :label="_label('dingdanhao')">
+                            <el-input v-model="form.orderno" class="width2"/>
+                        </el-form-item>
+                        <el-form-item :label="_label('gonghuoshang')">
+                            <simple-select v-model="form.supplierid" source="supplier_3" :multiple="true"/>
+                        </el-form-item>
+                        <el-form-item :label="_label('niandai')">
+                            <simple-select v-model="form.ageseason" source="ageseason" :multiple="true"/>
+                        </el-form-item>
+                        <el-form-item :label="_label('daohuocangku')">
+                            <simple-select v-model="form.warehouseid" source="warehouse" :multiple="true"/>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row :gutter="0">
+                    <el-col align="center">
+                        <as-button type="primary" @click="onSearch(form)" native-type="submit">{{_label("zengjia")}}</as-button>
+                        <as-button type="primary" @click="_hideDialog('selet-product')">{{_label("tuichu")}}</as-button>
+                    </el-col>
+                </el-row>
+            </el-form>
+        </sp-dialog>
     </el-dialog>
 </template>
 
@@ -199,7 +237,6 @@ import { extract, _label, config,math,empty } from '../globals.js'
 import { initObject } from "../array.js"
 import { extend } from "../object.js"
 import { loadSetting } from '../setting.js'
-import DataSource from '../DataSource.js'
 import watcher from "../watch.js"
 import Material from '../product/material.vue'
 import chain from "../chain.js"
@@ -208,11 +245,12 @@ import { host } from '../http.js'
 import productMixin from "../mixins/product.js"
 import _Product from "./product.js"
 import { roundFormat } from "../math.js"
+import {ProductDetail} from '../model.js'
 
 export default {
     name: 'asa-product-add',
     components: {
-        productmaterial: Material
+        [Material.name]: Material
     },
     mixins:[productMixin],
     data() {
@@ -225,10 +263,8 @@ export default {
                 brandid: '',
                 brandgroupid: "",
                 childbrand: "",
-                productsize: "",
                 countries: "",
                 material: "",
-                productparst: "",
                 laststoragedate: "",
                 series: "",
                 ulnarinch: "",
@@ -264,18 +300,83 @@ export default {
                 rate:""
             }, //当前的汇率信息；零售比=本国零售价/国际零售价
             siji: "", //控制四季全选
-            modal:true,
             host
         }
     },
     methods: {
+        createQueryFunction(row) {
+            const self = this;
+            return function(keyword, callback) {
+                // console.log(row)
+                if(keyword.length<4 || row.wordcode_2.length>0 ||  row.wordcode_3.length>0) {
+                    callback([])
+                }
+                else {
+                    self._fetch("/productbase/suggest", {keyword}).then(result=>{
+                        // console.log(result)
+                        callback(result.data)
+                    });
+                }
+            };
+        },
+        handleSelect(select, row) {
+            const self = this
+            // console.log(select,row)
+            row.brandcolor = select.brandcolor
+            row.colorname = select.colorname
+            row.picture = select.picture
+            row.picture2 = select.picture2
+            row.wordcode_1 = select.wordcode_1
+            row.wordcode_2 = select.wordcode_2
+            row.wordcode_3 = select.wordcode_3
+            row.wordcode_4 = select.wordcode_4
+
+            for(let key of Object.keys(self.form)) {
+                if(key=='nationalpricecurrency' || key=='nationalprice' || key=='nationalfactoryprice') {
+                    continue;
+                }
+                self.form[key] = select[key]
+            }
+
+            ProductDetail.load({ data: select, depth: 1, isCache: false }).then(function(info) {
+                info.getMaterialList().then((res) => {
+                    self.materials = res.data || []
+                });
+
+                //判断是否有同款多色
+                if(info.colors.length>1) {
+                    setTimeout(async function() {
+                        if(confirm('是否添加同款的其他颜色？')) {
+                            for(let item of await info.getProductList()) {
+                                if(item.id==select.id) {
+                                    continue;
+                                }
+
+                                self.colors.push({
+                                    brandcolor: item.brandcolor,
+                                    wordcode_1: item.wordcode_1,
+                                    wordcode_2: item.wordcode_2,
+                                    wordcode_3: item.wordcode_3,
+                                    wordcode_4: item.wordcode_4,
+                                    picture: item.picture,
+                                    picture2: item.picture2,
+                                    colorname: item.colorname,
+                                });
+                            }
+                        }
+                    }, 0)
+                }
+            })
+
+
+        },
         onPriceFocus(name){
             this.$refs[name].select()
         },
         handleAvatarSuccess(response, file, fileList) {
             let self = this
             let picture2 = response["files"][file.name]
-            this._log(file)
+            // this._log(file)
 
             if(self.colors[0].picture2=="") {
                 self.colors[0].picture2 = picture2
@@ -299,8 +400,10 @@ export default {
         onQuit() {
             this.dialogVisible = false
         },
-        onKeyInput(target, columnName){
-            target[columnName] = target[columnName].toUpperCase()
+        onKeyInput(target, columnName) {
+            if(typeof(target[columnName])=='string') {
+                target[columnName] = target[columnName].toUpperCase()
+            }
         },
         onOptionChange(options) {
             let self = this
@@ -387,7 +490,7 @@ export default {
         },
         onTrimSize() {
             let self = this
-            let source = DataSource.getDataSource("sizecontent", self._label("lang"))
+            let source = self._dataSource("sizecontent")
             source.getRows(self.form.sizecontentids).then(results=>{
                 self.form.sizecontentids = results.filter(item=>item.name.indexOf('.')<0).map(item=>item.id).join(',')
             })
@@ -460,9 +563,8 @@ export default {
             self._log(self.form, info)
             return self
         },
-        show(modal=true) {
-            let self = this;
-            self.modal = modal
+        show() {
+            let self = this
             self.dialogVisible = true;
         },
         hide(){

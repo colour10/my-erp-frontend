@@ -72,10 +72,10 @@
                 </el-col>
                 <el-col :span="4" style="width:230px">
                     <el-form-item :label="_label('xingbie')">
-                        <el-input v-model="genderlabels" disabled/>
+                        <simple-select source="gender" :multiple="true" v-model="form.genders" />
                     </el-form-item>
                     <el-form-item :label="_label('pinpai')">
-                        <el-input v-model="brands" disabled/>
+                        <simple-select source="brand" :multiple="true" v-model="form.brandids" />
                     </el-form-item>
                     <el-form-item :label="_label('zhidanriqi')">
                         <el-input :value="form.maketime" :placeholder="_label('zidonghuoqu')" disabled></el-input>
@@ -156,8 +156,8 @@
             </el-col>
         </el-row>
 
-        <asa-select-product-dialog :visible.sync="pro" @select="onSelect" />
-        <sp-orderbrand-list ref="houcha" :orderid="form.id"></sp-orderbrand-list>
+        <asa-select-product-dialog :visible.sync="pro" :brandids="form.brandids" :genders="form.genders" @select="onSelect" />
+        <sp-orderbrand-list ref="houcha" :orderid="form.id" />
     </div>
 </template>
 
@@ -227,6 +227,8 @@ export default {
                 orderno: "",
                 status: "", //状态，1=保存；2=送审；3=审核完成
                 id: "",
+                brandids: '',
+                genders: '',
             },
             form2: {
                 keyword: '',
@@ -234,12 +236,8 @@ export default {
             tabledata: [],
             listdata: [],
             details: [],
-            title: "",
-            lang: "",
             pro: false,
-            formid: '',
             props,
-            discounts: {},
         };
     },
     methods: {
@@ -296,9 +294,7 @@ export default {
             let params = {
                 form: extend({}, self.form, { status }),
             };
-            params.form.genders = self.genders;
             params.form.total = self.total_price;
-            params.form.brandids = self.brandids;
 
             let list = [];
             for(let item of self.tabledata) {
@@ -434,30 +430,11 @@ export default {
             }, 0);
             return this.f(total);
         },
-        brands() {
-            let obj = {};
-            this.tabledata.forEach(item => obj[item.product.brand_label] = 1);
-            return Object.keys(obj).join(",");
-        },
-        brandids() {
-            let obj = {};
-            this.tabledata.forEach(item => obj[item.product.brandid] = 1);
-            return Object.keys(obj).join(",");
-        },
         genderlabels() {
             let obj = {};
             this.tabledata.forEach(item => {
                 if (item.product.gender_label.length > 0) {
                     obj[item.product.gender_label] = 1
-                }
-            });
-            return Object.keys(obj).join(",");
-        },
-        genders() {
-            let obj = {}
-            this.tabledata.forEach(item => {
-                if (item.product.gender_label.length > 0) {
-                    obj[item.product.gender] = 1
                 }
             });
             return Object.keys(obj).join(",");

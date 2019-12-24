@@ -1,7 +1,7 @@
 <template>
     <el-upload class="avatar-uploader" :action="host+'/common/upload?category=product'" :show-file-list="false" :on-success="handleAvatarSuccess" :disabled="disabled">
         <img v-if="imageurl" :src="_fileLink(imageurl)" class="avatar" :style="imageStyle()">
-        <as-button v-if="imageurl" style="position:absolute;bottom:0px;right:0px;width:10px;height:10px;padding:0px" @click.stop="onDelete" type="danger" circle siz="mini">X</as-button>
+        <as-button v-if="imageurl && disabled==false" style="position:absolute;bottom:0px;right:0px;width:10px;height:10px;padding:0px" @click.stop="onDelete" type="danger" circle siz="mini">X</as-button>
         <i v-if="!imageurl" class="el-icon-plus avatar-uploader-icon" :style="imageStyle()"></i>
     </el-upload>
 </template>

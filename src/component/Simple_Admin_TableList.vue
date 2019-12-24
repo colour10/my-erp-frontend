@@ -15,7 +15,7 @@
                     <asa-button size="mini" @click="handleAction(scope,item)" v-for="item in actions" :key="item.label" :type="buttonType(item, scope.row)" :enable="item.enable" v-if="isShow(item,scope.row)" style="margin-right:3px">{{item.label}}</asa-button>
                 </template>
             </el-table-column>
-            <el-table-column :prop="item.name" :label="item.label" :width="item.width||180" v-if="!item.is_hide" v-for="item in columns" :key="item.name" :sortable="isSortable(item)">
+            <el-table-column :prop="item.name" :label="item.label" :width="item.width||180" v-if="!item.is_hide" v-for="item in columns" :key="item.name" :sortable="isSortable(item)" :sort-method="item.sortMethod">
                 <template v-slot="scope">
                     <slot :name="item.slotName || item.name" v-bind:row="scope.row">
                     <img v-if="item.type=='avatar'||item.is_image" :src="getImageSrc(scope.row, item)" :style="getImageStyle(item)" @click="onClickImage(scope.row, item)">
@@ -368,18 +368,17 @@ export default {
             deep: true
         }
     },
-    computed: {},
     mounted: function() {
         let self = this
         if(self.localOptions.isSubmit) {
             self.loadList()
         }
 
-        self.columns.forEach(item=>{
+        for(let item of self.columns) {
             if(item.className) {
-                self.cellClasses[item.name] = item.className
+                self.cellClasses[item.name] = item.className;
             }
-        })
+        }
     }
 };
 </script>

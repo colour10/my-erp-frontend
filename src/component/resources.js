@@ -115,6 +115,8 @@ function getOption(name) {
     options["winterproofing"] = {url:'/l/winterproofing',oplabel:'name', opvalue:'id'}
     options["feename"] = {url:'/l/feename',oplabel:'name', opvalue:'id'}
     options["paymentway"] = {url:'/l/paymentway',oplabel:'name', opvalue:'id'}
+    options["customsunit"] = {url:'/l/customsunit',oplabel:'name', opvalue:'id'}
+    options["customswrap"] = {url:'/l/customswrap',oplabel:'name', opvalue:'id'}
 
     options["gender"] = {hashtable:list.gender}
     options["gender2"] = {hashtable:list.gender2}
@@ -192,6 +194,15 @@ function getOption(name) {
 
     //对账单的回款状态
     options["billstatus"] =  {hashtable: list.billstatus}
+
+    //OMS上新，
+    options["publishtype"] =  {hashtable: list.publishtype}
+
+    //OMS上新，贸易类型
+    options["tradetype"] =  {hashtable: list.tradetype}
+
+    //OMS上新，上传类别
+    options["uploadtype"] =  {hashtable: list.uploadtype}
 
     //客户列表
     options["supplier_2"] = {callback:function(DataSource){

@@ -87,7 +87,7 @@ export default {
           { name: "supplierid", label: _label('gonghuoshang'), type: 'select', source: "supplier" },
           { name: "ageseason", label: _label('niandai'), type: 'select', source: "ageseason", width: 100 },
           { name: "currency", label: _label('bizhong'), type: 'select', source: "currency", width: 80 },
-          { name: "total", label: _label('jine'), width: 100 },
+          { name: "total", label: _label('jine'), width: 100, sortMethod:self.sortMethodAmount},
           { name: "discount", label: _label('zhekoulv'), width: 100 },
           { name: "genders", label: _label('xingbie') },
           { name: "brandids", label: _label('pinpai') },
@@ -128,6 +128,9 @@ export default {
     };
   },
   methods: {
+    sortMethodAmount(a, b) {
+      return a.total-b.total>=0?1:-1;
+    },
     onSearch(form) {
       let self = this;
       self.$refs.tablelist.search(form);

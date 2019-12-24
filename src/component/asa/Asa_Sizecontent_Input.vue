@@ -3,7 +3,7 @@
     <el-table :data="tabledata" style="width:100%;" :cell-class-name="getCellClass" :border="false">
         <el-table-column :label="column.name" align="center" v-for="(column, index) in columns" :key="column.id" width="50">
             <template v-slot="{$index}">
-                <el-input v-model="form[column.id]" :ref="index" style="width:50px" size="mini" @keyup.native="onChange($event, index)" @focus="onFocus(index)" :disabled="disabled"></el-input>
+                <el-input v-model="form[column.id]" :ref="index" style="width:50px" size="mini" @keyup.native="onChange($event, index)" @focus="onFocus(index)" @input="onInputChange($event, index)" :disabled="disabled"></el-input>
             </template>
         </el-table-column>
     </el-table>
@@ -46,6 +46,18 @@ export default {
     methods: {
         getCellClass() {
             return "counter"
+        },
+        onInputChange(value, index) {
+            const self = this;
+            //console.log(index, value);
+            let array = value.split(/\s+/);
+            //console.log(array)
+            if(array.length>1) {
+                for(let i=index; i<self.columns.length && i<index+array.length; i++) {
+                    let columnid = self.columns[i].id;
+                    self.form[columnid] = array[i-index];
+                }
+            }
         },
         onChange(event, index) {
             let self = this

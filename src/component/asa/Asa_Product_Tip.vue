@@ -1,17 +1,17 @@
 <template>
     <div>
         <el-link type="primary" @click="onClick" size="mini">{{ product.getGoodsCode() }}</el-link>
-        <product ref="product" @change="onChange"></product>
+        <asa-product ref="product" @change="onChange"></asa-product>
     </div>
 </template>
 
 <script>
-import Product from '../asa/Asa_Product.vue'
+import Asa_Product from './Asa_Product.vue'
 
 export default {
     name: 'sp-product-tip',
     components: {
-        "product": Product,
+        [Asa_Product.name]: Asa_Product,
     },
     props: {
         product: {

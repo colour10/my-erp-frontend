@@ -85,6 +85,8 @@ import { Productstock } from "../model.js";
 
 export default {
   name: 'asa-requisition-detail-dialog',
+  components: {
+  },
   data() {
     let self = this;
 

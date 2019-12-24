@@ -88,7 +88,7 @@ export default {
                         }
                     }},
 
-                    { name: "warehousingtime", label: _label('rukuriqi'), width:110, convert:function(row){
+                    { name: "warehousingtime", label: _label('rukuriqi'), width:110, sortMethod: self.sortMethod, convert:function(row){
                         if(row.warehousingtime && row.warehousingtime.length>0) {
                             return row.warehousingtime.substr(0,10)
                         }
@@ -115,6 +115,21 @@ export default {
         }
     },
     methods: {
+        sortMethod(a, b) {
+            if(!a.warehousingtime) {
+                //console.log(a.warehousingtime, b.warehousingtime, -1)
+                return -1;
+            }
+            else if (!b.warehousingtime) {
+                //console.log(a.warehousingtime, b.warehousingtime, 1)
+                return 1
+            }
+            else {
+                //console.log(a.warehousingtime, b.warehousingtime, a.warehousingtime>=b.warehousingtime?1:-1)
+                return a.warehousingtime>=b.warehousingtime?1:-1;
+            }
+
+        },
         onSearch() {
             let self = this
                 //self._log(self.searchform)

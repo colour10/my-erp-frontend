@@ -15,11 +15,21 @@ export default {
             text:""
         }
     },
+    methods: {
+        load() {
+            const self = this
+            self.product.getLSB().then(result=>{
+                self.text = result
+            })
+        }
+    },
     mounted:function(){
-        let self = this
-        self.product.getLSB().then(result=>{
-            self.text = result
-        })
+        this.load()
+    },
+    watch: {
+        product() {
+            this.load();
+        }
     }
 }
 </script>

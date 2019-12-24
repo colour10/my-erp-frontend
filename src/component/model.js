@@ -195,6 +195,13 @@ const ProductDetail = Object.assign(createModel("product"),{
             runner.push(SaleType.load({data:row.saletypeid, depth:1}), 'saletype')
         }
         //
+        runner.push(async function() {
+            return await getDataSource("brandgroup").getRow(row.brandgroupid);
+        }, 'getBrandgroup');
+
+        runner.push(async function() {
+            return await getDataSource("brandgroupchild").getRow(row.childbrand);
+        }, 'getBrandgroupchild')
 
         //颜色分组
         runner.push(new Promise(function(resolve){
@@ -228,9 +235,38 @@ const ProductDetail = Object.assign(createModel("product"),{
             })
         }), 'colors')
 
+
+        runner.push(async function() {
+            let product_group = row.product_group || "";
+            if(product_group=='') {
+                return [];
+            }
+
+            let list = product_group.split('|').map(item=>{
+                let [productid] = item.split(',');
+                return self.load({data:productid, depth:1});
+            });
+
+            return await Promise.all(list);
+        }, 'getProductList');
+
         runner.push(function(){
             return httpPost("/productmaterial/page", {productid:row.id})
         }, "getMaterialList");
+
+        runner.push(async function() {
+            let {data} = await httpPost("/productmaterial/page", {productid:row.id});
+            //console.log(ret);
+            let promises = data.map(async (item) =>{
+                let dataSource = DataSource.getDataSource("material", getLabel('lang'))
+                //self._log(item,dataSource)
+                let name = await dataSource.getRowLabel(item.materialid)
+                return name;
+            })
+
+            let results = await Promise.all(promises);
+            return results.join(',');
+        }, "getMaterial");
 
         runner.push(function(){
             let self = this
@@ -254,17 +290,25 @@ const ProductDetail = Object.assign(createModel("product"),{
 
         //商品零售比
         runner.push(async function(){
-            if(row.nationalpricecurrency=='' || row.wordpricecurrency=='') {
-                return ""
+            if(typeof(row.LSB)!='undefined') {
+                return row.LSB;
             }
 
-            if(row.wordprice > 0 && row.nationalprice > 0) {
-                let exchange = await API.getExchange(row.wordpricecurrency, row.nationalpricecurrency)
+            if(row.wordprice > 0 && row.nationalprice > 0 && row.nationalpricecurrency>0 && row.wordpricecurrency>0) {
+                let exchange = await API.getExchange(row.wordpricecurrency, row.nationalpricecurrency);
                 if(exchange>0) {
-                    return  math.round(row.nationalprice/exchange / row.wordprice, 2);
+                    row.LSB = math.round(row.nationalprice/exchange / row.wordprice, 2);
+                    //return row.LSB;
+                }
+                else {
+                    row.LSB = 0;
                 }
             }
-            return ""
+            else {
+                row.LSB = 0;
+            }
+
+            return row.LSB;
         }, "getLSB");
 
         runner.all().then(callback)
@@ -371,12 +415,7 @@ const ConfirmorderDetails = Object.assign(createModel("confirmorderdetails"),{
     }
 })
 
-const ProductCodeList = function(productid, callback){
-    httpPost("/product/codelist", {id:productid}).then(function(res){
-        callback(res.data)
-    });
-}
-export {ProductCodeList,ProductDetail}
+export {ProductDetail}
 
 const Order = Object.assign(createModel("order"),{
     init:function(depth, row, callback) {

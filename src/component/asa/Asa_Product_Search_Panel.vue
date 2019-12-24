@@ -10,29 +10,27 @@
                     <as-button type="primary" @click="clear" v-if="option.isedit" size="mini">{{_label("qingkong")}}</as-button>
                     <as-button type="primary" @click="onSelectMultiple" size="mini">{{_label("queding")}}</as-button>
                     <as-button type="primary" @click="onQuit" size="mini">{{_label("tuichu")}}</as-button>
-                    <el-checkbox v-model="is_show">{{_label("gaojichaxun")}}</el-checkbox>
                 </el-col>
             </el-row>
-            <el-row :gutter="0" v-show="is_show">
+            <el-row :gutter="0">
                 <el-col :span="24">
                     <el-form-item :label="_label('pinpai')" prop="brandid">
-                        <simple-select v-model="form.brandid" source="brand">
-                        </simple-select>
+                        <simple-select v-model="form.brandid" source="brand" multiple />
                     </el-form-item>
                     <el-form-item :label="_label('pinlei')" prop="brandgroupid">
-                        <simple-select v-model="form.brandgroupid" source="brandgroup">
-                        </simple-select>
+                        <simple-select v-model="form.brandgroupid" source="brandgroup" />
                     </el-form-item>
                     <el-form-item :label="_label('zipinlei')" prop="childbrand">
-                        <simple-select ref="childbrand" v-model="form.childbrand" source="brandgroupchild" :parentid="form.brandgroupid" :lazy="true">
-                        </simple-select>
+                        <simple-select ref="childbrand" v-model="form.childbrand" source="brandgroupchild" :parentid="form.brandgroupid" :lazy="true" />
                     </el-form-item>
                     <el-form-item :label="_label('chandi')" prop="countries">
-                        <simple-select v-model="form.countries" source="country" :multiple="true"></simple-select>
+                        <simple-select v-model="form.countries" source="country" :multiple="true" />
                     </el-form-item>
                     <el-form-item :label="_label('niandai')" prop="ageseason">
-                        <simple-select v-model="form.ageseason" source="ageseason" :multiple="true">
-                        </simple-select>
+                        <simple-select v-model="form.ageseason" source="ageseason" :multiple="true" />
+                    </el-form-item>
+                    <el-form-item :label="_label('xingbie')">
+                        <simple-select v-model="form.gender" source="gender" :multiple="true" />
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -92,39 +90,49 @@
             </el-collapse-item>
         </el-collapse>
 
-        <productadd ref="productadd" @change="onChange"></productadd>
+        <asa-product-add ref="productadd" @change="onChange"></asa-product-add>
     </div>
 </template>
 
 <script>
 import globals from '../globals.js'
 import { ProductDetail } from "../model.js"
-import Asa_Product_Add from '../asa/Asa_Product_Add.vue'
+import Asa_Product_Add from './Asa_Product_Add.vue'
 import {extend} from "../object.js"
 import chain from "../chain.js"
 
 export default {
-    name: "asa-search-panel",
+    name: "asa-product-search-panel",
     components:{
-        "productadd":Asa_Product_Add
+        [Asa_Product_Add.name]: Asa_Product_Add,
     },
     props: {
         filter:{},
         isCreate:{
-            default:true
-        }
+            default: true,
+        },
+        brandids: {
+            type: String,
+            default: '',
+        },
+        genders: {
+            type: String,
+            default: '',
+        },
     },
     data() {
+        const self = this;
+
         return {
-            is_show: false,
             is_collapse: "",
             form: {
                 wordcode: "",
-                brandid: "",
+                brandid: self.brandids,
                 brandgroupid: "",
                 childbrand: '',
                 countries: "",
-                ageseason: ""
+                ageseason: '',
+                gender: self.genders,
             },
             searchresult: [],
             option: {
@@ -138,6 +146,14 @@ export default {
                 current: 1
             }
         }
+    },
+    watch: {
+        brandids(newVale) {
+            this.form.brandid = newVale;
+        },
+        genders(newVale) {
+            this.form.gender = newVale;
+        },
     },
     methods: {
         onBlur() {
@@ -177,7 +193,7 @@ export default {
                 } else {
                     res.data.filter(item => typeof(self.filter) == 'function' ? self.filter(item) : true).forEach(function(item) {
                         ProductDetail.get(item, function(result) {
-                            self._log(result)
+                            //self._log(result)
                             self.searchresult.push(result)
                         }, 1)
                     })
@@ -189,60 +205,60 @@ export default {
             });
         },
         handleSizeChange(pageSize) {
-            this.pagination.pageSize = pageSize
-            this.reload()
+            this.pagination.pageSize = pageSize;
+            this.reload();
         },
         handleCurrentChange(current) {
-            this.pagination.current = current
-            this.reload()
+            this.pagination.current = current;
+            this.reload();
         },
         setParam(name, value) {
-            let self = this
+            let self = this;
 
-            return this
+            return this;
         },
         clear() {
-            let self = this
-            globals.empty(self.form)
-            self.searchresult = []
-            return self
+            let self = this;
+            globals.empty(self.form);
+            self.searchresult = [];
+            return self;
         },
         selectRow(row) {
             //this._log(row)
-            this.$emit("select", extend({}, row))
+            this.$emit("select", extend({}, row));
         },
         onBrandGroupChange(value) {
-            let self = this
+            let self = this;
 
             //self._log(value)
-            self.$refs.childbrand.load(item => item.row.brandgroupid == value)
-            self.form.childbrand = ''
+            self.$refs.childbrand.load(item => item.row.brandgroupid == value);
+            self.form.childbrand = '';
         },
         onChange(products) {
-            let self = this
+            let self = this;
             products.forEach(function(item) {
                 ProductDetail.get(item, function(result) {
                     //self._log(result)
-                     self.$emit("select", extend({}, result))
+                     self.$emit("select", extend({}, result));
                 }, 1)
-            })
+            });
 
-            self.$refs.productadd.hide()
+            self.$refs.productadd.hide();
         },
         onSelectionChange(vals) {
-            this.selected = vals
+            this.selected = vals;
         },
         onSelectMultiple() {
-            let self = this
+            let self = this;
             self.selected.forEach(item=>{
                 //self._log(item)
-                self.$emit("select", extend({}, item))
+                self.$emit("select", extend({}, item));
             })
-            self.$refs.table.clearSelection()
+            self.$refs.table.clearSelection();
         },
         onRowClick(row){
-            this.$refs.table.toggleRowSelection(row)
-        }
-    }
-}
+            this.$refs.table.toggleRowSelection(row);
+        },
+    },
+};
 </script>

@@ -1,7 +1,8 @@
 <template>
   <div style="width:100%">
     <as-button type="primary" @click="_showDialog('search')">{{_label("chaxun")}}</as-button>
-    <asa-button type="primary" @click="showFormToModifyPrice()" :enable="_isAllowed('product') && selected.length>0">{{_label("xiugaijiage")}}</asa-button>
+    <asa-button @click="showFormToModifyPrice()" :enable="_isAllowed('product') && selected.length>0">{{_label("xiugaijiage")}}</asa-button>
+    <asa-button @click="_showDialog('oms-add')" :enable="selected.length==1">{{_label("shangxin")}}</asa-button>
     <div class="product">
       <el-table ref="table" :data="searchresult" border style="width:100%;" :row-style="getRowStyle" @row-dblclick="showDetail" @selection-change="onSelectionChange" @row-click="onRowClick" :rowClassName="tableRowClassName">
         <el-table-column type="selection" :width="60"></el-table-column>
@@ -167,6 +168,10 @@
         </el-table-column>
       </el-table>
     </sp-dialog>
+
+    <sp-dialog ref="oms-add" :width="1040">
+      <asa-oms-add :product="selected.length>0?selected[0].product:undefined"></asa-oms-add>
+    </sp-dialog>
     <asa-product-modify-price ref="modifyprice"></asa-product-modify-price>
   </div>
 </template>
@@ -176,12 +181,14 @@ import { ProductstockSearch, ProductstockSummary } from "../model.js";
 import Asa_Productstock_Show from '../asa/Asa_Productstock_Show.vue';
 import globals, { extend } from '../globals.js';
 import Asa_Product_Modify_Price from '../asa/Asa_Product_Modify_Price.vue';
+import Asa_OMS_Add from '../asa/Asa_OMS_Add.vue'
 
 export default {
   name: 'sp-productstock',
   components: {
     [Asa_Productstock_Show.name]: Asa_Productstock_Show,
     [Asa_Product_Modify_Price.name]: Asa_Product_Modify_Price,
+    [Asa_OMS_Add.name]: Asa_OMS_Add
   },
   data() {
     return {
@@ -191,7 +198,6 @@ export default {
         brandid: '',
         brandgroupid: "",
         childbrand: "",
-        productsize: "",
         countries: "",
         brandcolor: "",
         productparst: "",

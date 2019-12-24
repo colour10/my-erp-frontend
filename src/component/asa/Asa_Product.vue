@@ -25,7 +25,7 @@
                         <el-col :span="3" v-for="item in colors2" :key="item.colortemplateid">
                             <el-tooltip class="item" effect="dark" :content="item.colorlabel" placement="top-start">
                                 <div class="color-group" @click="onClickColor(item.id)">
-                                    <div class="box" :style="getColorStyle(item)">
+                                    <div :class="form.id==item.id ? 'box active': 'box'" :style="getColorStyle(item)">
                                     </div>
                                 </div>
                             </el-tooltip>
@@ -205,7 +205,7 @@
                 </el-col>
             </el-tab-pane>
             <el-tab-pane :label="_label('tongkuanduose')" name="colorgroup" :disabled="form.id==''">
-                <searchpanel ref="searchpanel" @select="onSelectProduct" :filter="searchProductFilter" :isCreate="false" v-if="_isAllowed('product')"></searchpanel>
+                <asa-product-search-panel ref="searchpanel" @select="onSelectProduct" :filter="searchProductFilter" :isCreate="false" v-if="_isAllowed('product')"></asa-product-search-panel>
 
                 <el-table :data="colors" border style="width:100%;">
                     <el-table-column width="80" align="center">
@@ -280,7 +280,7 @@
 
 <script>
 import globals, { extract, _label, math } from '../globals.js';
-import { ProductCodeList, ProductDetail,ModelBus } from "../model.js";
+import { ProductDetail,ModelBus } from "../model.js";
 import { initObject } from "../array.js";
 import { extend } from "../object.js";
 import List from '../list.js';
@@ -301,7 +301,7 @@ export default {
     name: 'asa-product',
     mixins:[productMixin],
     components: {
-        searchpanel: Asa_Product_Search_Panel,
+        [Asa_Product_Search_Panel.name]: Asa_Product_Search_Panel,
         property: Asa_Product_Property,
         pricetab: Asa_Product_Price,
         productstock: Asa_Product_ProductStock,
@@ -322,10 +322,8 @@ export default {
                 brandid: '',
                 brandgroupid: "",
                 childbrand: "",
-                productsize: "",
                 countries: "",
                 brandcolor: "",
-                productparst: "",
                 picture: "",
                 picture2: "",
                 laststoragedate: "",
@@ -542,15 +540,15 @@ export default {
             const self = this
             if (tab.name == 'code' && self.sizecontents_loaded == false) {
                 let ntlist = new List(self.sizecontents)
-                new ProductCodeList(self.form.id, function(data) {
-                    //console.log(data)
+
+                API.getProductCodeList(self.form.id).then(data=> {
                     data.forEach(function(item) {
                         let index = ntlist.findIndex('id', item.sizecontentid)
                         if (index >= 0) {
                             self.sizecontents[index].goods_code = item.goods_code
                         }
                     })
-                })
+                });
                 self.sizecontents_loaded = true;
             } else if (tab.name == 'colorgroup' && self.colors_loaded == false) {
                 self.loadColorGroupList();

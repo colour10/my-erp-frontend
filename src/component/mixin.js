@@ -1,20 +1,48 @@
-import {_label,extend,config} from './globals.js'
-import {httpPost,httpGet, host} from './http.js'
-import {isArray, initObject} from './array.js'
-import chain from "./chain.js"
-import { Rules } from './rules.js'
-import { DataSource } from "./DataSource.js"
-import { getFetcherPromise } from './fetcher.js';
+import {
+    _label,
+    extend,
+    config
+} from './globals.js';
 
-const _private = function(self){
+import {
+    httpPost,
+    httpGet,
+    host
+} from './http.js';
+
+import {
+    isArray,
+    initObject
+} from './array.js';
+
+import chain from "./chain.js";
+
+import {
+    Rules
+} from './rules.js';
+
+import {
+    DataSource
+} from "./DataSource.js";
+
+import {
+    getFetcherPromise
+} from './fetcher.js';
+
+import {
+    entries
+} from './object.js';
+
+
+const _private = function(self) {
     const _this = {
         showErorMessage(object) {
             const h = self.$createElement;
             let list = []
-            chain(object).forEach(errors=>{
+            chain(object).forEach(errors => {
 
-                errors.forEach(row=>{
-                    self._log(row,"formRules")
+                errors.forEach(row => {
+                    self._log(row, "formRules")
                     let name = row.label || self.formRules[row.field].label
                     list.push(h("p", null, name + row.message))
                 })
@@ -24,17 +52,18 @@ const _private = function(self){
                 message: h('p', null, list),
                 showCancelButton: false,
                 confirmButtonText: self._label("button-ok")
-            }).then(action =>{})
+            }).then(action => {})
         },
         doUserCheck(usercheck, callback) {
-            if(usercheck) {
-                usercheck().then(()=>{
+            if (usercheck) {
+                usercheck().then(() => {
                     callback(true)
-                }).catch(object=>{
-                    callback(false, {x:[object]})
+                }).catch(object => {
+                    callback(false, {
+                        x: [object]
+                    })
                 })
-            }
-            else {
+            } else {
                 callback(true)
             }
         }
@@ -44,42 +73,70 @@ const _private = function(self){
 }
 
 export default {
-    data:function(){
+    data: function() {
         return {
-            formRules:{}
+            formRules: {}
         }
     },
     methods: {
+        doValidate(ref, rules, callback) {
+            const self = this;
+            self.$refs[ref].validate((valid, fields) => {
+                if (valid == true) {
+                    callback();
+                } else {
+                    const h = self.$createElement;
+                    let list = []
+                    for (let [errors] of entries(fields)) {
+                        for (let row of errors) {
+                            let name = rules[row.field].label;
+                            list.push(h("p", null, name + row.message))
+                        }
+                    }
+
+                    self.$msgbox({
+                        title: self._label("error_tip"),
+                        message: h('p', null, list),
+                        showCancelButton: false,
+                        confirmButtonText: self._label("button-ok")
+                    }).then(action => {})
+                }
+            });
+        },
+        async _getNameById(dataSource, id, column = 'name') {
+            let row = await this._dataSource(dataSource).getRow(id);
+
+            return row ? row.row[column] : undefined;
+        },
         _getRow(table, id) {
             return getFetcherPromise(table)(id);
         },
-        _isAllowed(authname, behavier='any') {
+        _isAllowed(authname, behavier = 'any') {
             const self = this;
 
             let auths = authname.split(',');
             // console.log(authname, auths)
-            for(let auth of auths) {
-                if(behavier=='any') {
-                    if(self.$store.getters.allow(auth)) {
+            for (let auth of auths) {
+                if (behavier == 'any') {
+                    if (self.$store.getters.allow(auth)) {
                         return true;
                     }
-                }
-                else {
-                    if(!self.$store.getters.allow(auth)) {
+                } else {
+                    if (!self.$store.getters.allow(auth)) {
                         return false;
                     }
                 }
             }
 
-            return behavier=='all';
+            return behavier == 'all';
         },
-        _buttonType(enable=true) {
-            return enable===true?'primary':'info';
+        _buttonType(enable = true) {
+            return enable === true ? 'primary' : 'info';
         },
         async showErrors(messages) {
             const self = this;
             const h = self.$createElement;
-            let list = messages.map(message=> {
+            let list = messages.map(message => {
                 return h("p", null, message);
             });
 
@@ -100,8 +157,11 @@ export default {
             //console.log(_label('querentijiao'));
             return confirm(this._label('querentijiao'));
         },
-        initRules(callback){
+        initRules(callback) {
             extend(this.formRules, callback(Rules))
+        },
+        setRules(callback) {
+            callback(Rules);
         },
         _log() {
             let arr = Array.prototype.slice.call(arguments)
@@ -109,11 +169,10 @@ export default {
             console.log.apply(console, arr);
         },
         _label,
-        _fetch(path, form, options={}) {
+        _fetch(path, form, options = {}) {
             const self = this
-            return new Promise((resolve,reject)=>{
+            return new Promise((resolve, reject) => {
                 httpPost(path, form).then(function(result) {
-                    //self._log(result)
                     if (result.messages.length > 0) {
                         //提示信息
                         if (options.showMessage == true) {
@@ -126,7 +185,7 @@ export default {
                                 confirmButtonText: _label("ok")
                             });
 
-                            if(options.isReject) {
+                            if (options.isReject) {
                                 reject()
                             }
                         }
@@ -142,7 +201,6 @@ export default {
                         if (result.is_add == "1") {
                             form.id = result.id;
                         }
-
                         resolve(result)
                     }
                 })
@@ -154,19 +212,19 @@ export default {
             options.showMessage = true;
             options.isReject = true;
 
-            const loading = self.$loading({
+            /*const loading = self.$loading({
                 lock: true,
                 text: 'Loading',
                 spinner: 'el-icon-loading',
                 background: 'rgba(0, 0, 0, 0.7)',
-            });
+            });*/
 
-            return new Promise((resolve, reject)=>{
-                self._fetch(path, form, options).then(result=>{
-                    loading.close();
+            return new Promise((resolve, reject) => {
+                self._fetch(path, form, options).then(result => {
+                    //loading.close();
                     resolve(result);
-                }).catch(()=>{
-                    loading.close();
+                }).catch(() => {
+                    //loading.close();
                     reject();
                 });
             });
@@ -204,8 +262,7 @@ export default {
                     });
 
                     return false;
-                }
-                else {
+                } else {
                     self.$message({
                         message: _label('delete_success'),
                         type: 'success'
@@ -213,8 +270,7 @@ export default {
 
                     return true;
                 }
-            }
-            catch(e) {
+            } catch (e) {
                 self._log("remove Exception", e)
                 return false
             }
@@ -231,14 +287,13 @@ export default {
             let form = this.$refs['order-form']
             //console.log(form)
 
-            if(form) {
-                if(delay && delay>0) {
-                    setTimeout(function(){
+            if (form) {
+                if (delay && delay > 0) {
+                    setTimeout(function() {
                         //console.log("clearValidate")
                         form.clearValidate()
-                    },delay)
-                }
-                else {
+                    }, delay)
+                } else {
                     form.clearValidate()
                 }
             }
@@ -247,44 +302,42 @@ export default {
             let self = this
             let func = _private(self)
 
-            return new Promise((resolve,reject)=>{
-                func.doUserCheck(usercheck, function(valid, object){
-                    if(valid) {
-                        self.$refs["order-form"].validate((valid, object)=>{
-                            if(valid) {
+            return new Promise((resolve, reject) => {
+                func.doUserCheck(usercheck, function(valid, object) {
+                    if (valid) {
+                        self.$refs["order-form"].validate((valid, object) => {
+                            if (valid) {
                                 resolve()
-                            }
-                            else {
-                                self._log(object)
+                            } else {
+                                //self._log(object)
                                 func.showErorMessage(object)
                             }
                         })
-                    }
-                    else {
+                    } else {
                         func.showErorMessage(object)
                     }
                 })
             })
         },
-        _showErorMessage(object){
-            return _private(this).showErorMessage({x:[object]})
+        _showErorMessage(object) {
+            return _private(this).showErorMessage({
+                x: [object]
+            })
         },
         _setting(name, value) {
             let self = this;
-            if(isArray(name)) {
-                extend(self.setting, initObject(name,value))
-            }
-            else if(typeof(name)=='object') {
+            if (isArray(name)) {
+                extend(self.setting, initObject(name, value))
+            } else if (typeof(name) == 'object') {
                 extend(self.setting, name)
-            }
-            else {
+            } else {
                 self.setting[name] = value;
             }
             return self
         },
-        _fileLink(file, size=40) {
-            if(!file) {
-                return host+'/imgs/none.png';
+        _fileLink(file, size = 40) {
+            if (!file) {
+                return host + '/imgs/none.png';
             }
             let arr = file.split('.')
 
@@ -301,11 +354,11 @@ export default {
         closeCurrent() {
             let store = this.$store
             store.commit("closeTag", {
-                tag:store.getters.getTags.current
+                tag: store.getters.getTags.current
             })
         },
 
-        _reload(){
+        _reload() {
             let self = this
             self._redirect(self.$route.path)
         },
@@ -314,7 +367,7 @@ export default {
             let self = this
 
             self.closeCurrent()
-            setTimeout(function(){
+            setTimeout(function() {
                 self.$router.push(path)
             }, 100)
         },
@@ -326,19 +379,19 @@ export default {
         _dataSource(name) {
             return DataSource.getDataSource(name, this._label('lang'))
         },
-        _showDialog(name, option){
+        _showDialog(name, option) {
             let dialog = this.$refs[name]
-            if(dialog) {
+            if (dialog) {
                 dialog.show(option)
             }
         },
-        _hideDialog(name){
+        _hideDialog(name) {
             let dialog = this.$refs[name]
-            if(dialog) {
+            if (dialog) {
                 dialog.hide()
             }
         },
-        _path(){
+        _path() {
             return this.$route.path;
         },
     },

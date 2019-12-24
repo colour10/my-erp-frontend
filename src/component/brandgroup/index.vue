@@ -1,8 +1,12 @@
 <template>
     <div>
         <multiple-admin-page v-bind="props" ref="page"></multiple-admin-page>
-        <el-dialog :title="dialogTitle" class="user-form" :visible.sync="dialogVisible" :center="true" width="900px">
-            <multiple-admin-page v-bind="props2" ref="page2"></multiple-admin-page>
+        <el-dialog :title="dialogTitle" class="user-form" :visible.sync="dialogVisible" :center="true" width="1000px">
+            <multiple-admin-page v-bind="props2" ref="page2">
+                <template v-slot:diagram="{row}">
+                    <el-button size="mini" @click="showDiagram(row)">{{_label('shiyitu')}}</el-button>
+                </template>
+            </multiple-admin-page>
         </el-dialog>
         <el-dialog :title="dialogTitle2" class="user-form" :visible.sync="dialogVisible2" :center="true">
             <multiple-admin-page v-bind="props3" ref="page3"></multiple-admin-page>
@@ -16,12 +20,10 @@
 
 <script>
 import globals, { _label } from '../globals.js'
+import ImagePreview from '../image-preview.js'
 
 export default {
     name: 'sp-brandgroup',
-    components: {
-    },
-    props: {},
     data() {
         var self = this;
 
@@ -37,7 +39,7 @@ export default {
                     width: 150,
                     disable_change: true,
                     handler: function(rowIndex, row) {
-                        //console.log(rowIndex, row)   
+                        //console.log(rowIndex, row)
                         self.props2.base.brandgroupid = row.id;
                         self.dialogVisible = true;
                         self.dialogTitle = row.name_cn;
@@ -49,6 +51,7 @@ export default {
             props2: {
                 columns: [
                     { name: "name", label: _label('zileimingcheng'), is_multiple: true, is_focus: true },
+                    { name: 'diagram', label: _label('shiyitu'), type: 'avatar', width: 100, sortable: false },
                     { name: "displayindex", label: _label('xuhao'), width:100, sortMethod:(a,b)=>a-b }
                 ],
                 buttons: [{
@@ -67,6 +70,7 @@ export default {
                     label: _label('fuzhidao'),
                     width: 150,
                     disable_change: true,
+                    enable: self._isAllowed('brandgroupchild'),
                     handler: function({row}) {
                         self.dialogVisible3 = true;
                         self.brandgroupchildid = row.id
@@ -114,6 +118,11 @@ export default {
         }
     },
     methods: {
+        showDiagram(row) {
+            const self = this
+            console.log(row)
+            ImagePreview.show({url: self._fileLink(row.diagram)})
+        },
         async loadNode(node, resolve) {
             let self = this
             self._log(node)

@@ -20,6 +20,10 @@
                     <template v-if="isExpand" v-slot:expand="scope">
                         <slot name="expand" v-bind="scope"></slot>
                     </template>
+
+                    <template v-slot:[item.name]="scope" v-for="item in columns">
+                        <slot :name="item.slotName || item.name" v-bind:row="scope.row"></slot>
+                    </template>
                 </simple-admin-tablelist>
             </el-col>
         </el-row>

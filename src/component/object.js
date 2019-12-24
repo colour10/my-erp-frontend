@@ -3,7 +3,7 @@ const extract = function(object, keys){
     keys.forEach(key=>{
         if(typeof(object[key])!='undefined') {
             obj[key] = object[key]
-        }        
+        }
     })
     return obj
 }
@@ -38,15 +38,21 @@ const extendu = function(target, source, callback){
             target[key] = source[key]
         }
     })
-    
 }
 
-export { isPromise, toArray, copyTo, extendu }
+function* entries(obj) {
+  for (let key of Object.keys(obj)) {
+    yield [obj[key], key];
+  }
+}
+
+export { isPromise, toArray, copyTo, extendu, entries }
 
 export default {
     extract,
     extend,
     toArray,
     copyTo,
-    extendu
+    extendu,
+    entries
 }

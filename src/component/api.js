@@ -30,6 +30,10 @@ const API = {
     //加载汇率
     async getExchange(currency_from, currency_to) {
         //console.log("Api.getExchange")
+        if(!(currency_from>0 && currency_to>0)) {
+            return 0;
+        }
+
         if(currency_from==currency_to) {
             return 1
         }
@@ -164,7 +168,15 @@ const API = {
 
     async getSetting() {
         try {
+            let key = "setting";
+            let cache = CacheContext.get(key)
+            if(cache) {
+                return cache;
+            }
+
             let result = await _fetch("/common/setting", {});
+            CacheContext.set(key, result.data, 60000)
+
             return result.data;
         }
         catch(e) {
@@ -205,6 +217,20 @@ const API = {
 
         try {
             let result = await _fetch("/supplierinvoice/getlist", params);
+            return result.data;
+        }
+        catch(e) {
+            return [];
+        }
+    },
+
+    async getProductCodeList(productid) {
+        let params = {
+            id: productid,
+        };
+
+        try {
+            let result = await _fetch("/product/codelist", params);
             return result.data;
         }
         catch(e) {
