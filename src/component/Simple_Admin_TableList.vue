@@ -1,8 +1,7 @@
 <template>
     <div>
         <el-table ref="table" :data="tableData" border style="width: 100%;" :height="tableHeight" :cell-class-name="getCellClassName" :cell-style="cellStyle" :rowClassName="tableRowClassName" :row-style="getRowStyle" @selection-change="onSelectionChange" @row-click="onRowClick">
-            <el-table-column type="selection" :width="60" v-if="isSelect==true">
-            </el-table-column>
+            <el-table-column type="selection" :width="40" v-if="isSelect==true"></el-table-column>
             <el-table-column type="expand" v-if="isExpand">
                 <template v-slot="{row, rowIndex}">
                     <slot name="expand" v-bind:row="row" v-bind:rowIndex="rowIndex"></slot>

@@ -24,7 +24,7 @@
                         <sp-product-lsb :product="row"></sp-product-lsb>
                     </template>
                     <template v-slot:productname="{row}">
-                        <el-link type="primary" @click.stop="showFormToEdit(0, row)">{{row.getName()}}</el-link>
+                        <el-link type="primary" @click.stop="showFormToEdit(row)">{{row.getName()}}</el-link>
                     </template>
                     <template v-slot:series="{row}">
                         <sp-select-text :value="row.series" source="series" />
@@ -33,7 +33,7 @@
             </el-col>
         </el-row>
         <asa-product ref="product" @change="search"></asa-product>
-        <asa-product-add ref="productadd" @change="search"></asa-product-add>
+        <asa-product-add ref="productadd" @change="search" @editExistProduct="showFormToEdit(arguments)"></asa-product-add>
         <sp-dialog ref="search">
             <sp-product-search-form @search="onSearch" @close="_hideDialog('search')"></sp-product-search-form>
         </sp-dialog>
@@ -163,7 +163,7 @@ export default {
             self.$refs.tablelist.search(self.form);
             self._hideDialog("search");
         },
-        showFormToEdit(rowIndex, row) {
+        showFormToEdit(row) {
             this.$refs.product.setInfo(row).then(product => product.edit(true).show());
         },
         showFormToCreate() {

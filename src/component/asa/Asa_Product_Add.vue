@@ -1,25 +1,41 @@
 <template>
     <el-dialog :title="_label('chanpinguanli')" :visible.sync="dialogVisible" :center="true" width="1200px" :modal="true">
+        <el-dialog title="已找到的商品" :visible.sync="existProductsDialogVisible" :center="true" width="50%" :modal="true" append-to-body>
+            <el-row>
+                <el-col :span="6" v-for="product in existProducts" :key="'exist-product-' + product.id">
+                    <el-card :body-style="{ padding: '0px' }">
+                        <img :src="_fileLink(product.picture)" class="image">
+                        <div style="padding: 14px;">
+                        <span>{{ product.getName() }}</span>
+                        <div class="bottom clearfix">
+                            <p>{{ product.getGoodsCode() }}</p>
+                            <asa-button type="primary" @click="editExistProduct(product)">编辑</asa-button>
+                        </div>
+                    </div>
+                    </el-card>
+                </el-col>
+            </el-row>
+        </el-dialog>
+
         <el-row class="product">
             <el-col :span="24">
                 <el-table :data="colors" border style="width:100%;">
-                    <el-table-column width="80" align="center">
-                        <template v-slot="scope">
-                            <simple-avatar v-model="scope.row.picture" font-size="14px" :size="35"></simple-avatar>
-                        </template>
-                    </el-table-column>
-                    <el-table-column width="80" align="center">
-                        <template v-slot="{row}">
-                            <simple-avatar v-model="row.picture2" font-size="14px" :size="35" v-if="row.picture2!=''"></simple-avatar>
-
-                            <el-upload class="avatar-uploader" :action="host+'/common/upload?category=product'" :show-file-list="false" :on-success="handleAvatarSuccess" v-if="row.picture2==''" :multiple="true">
-                                <i class="el-icon-plus avatar-uploader-icon" style="width:35px;height:35px;line-height:35px;font-size:14px"></i>
-                            </el-upload>
-                        </template>
-                    </el-table-column>
                     <el-table-column :label="_label('kuanshi')" width="140" align="center">
                         <template v-slot="{row,$index}">
-                            <el-autocomplete v-model="row.wordcode_1" popper-class="my-autocomplete" :fetch-suggestions="createQueryFunction(row)" @select="handleSelect($event, row)" size="mini" @focus="onFocus(1)" @blur="onBlur(1)" @keyup.native="onKeyInput(row,'wordcode_1')" @keyup.native.up="onKeyMove(1, $index, 'up')" @keyup.native.down="onKeyMove(1, $index, 'down')" @keyup.native.left="onKeyMove(1, $index, 'left')" @keyup.native.right="onKeyMove(1, $index, 'right')" :ref="'word1-'+$index" >
+                            <el-autocomplete v-model="row.wordcode_1"
+                                popper-class="my-autocomplete"
+                                size="mini"
+                                :fetch-suggestions="createQueryFunction(row)"
+                                @select="handleSelect($event, row)"
+                                @focus="onFocus(1)"
+                                @blur="onBlur(1, row)"
+                                @keyup.native="onKeyInput(row,'wordcode_1')"
+                                @keyup.native.up="onKeyMove(1, $index, 'up')"
+                                @keyup.native.down="onKeyMove(1, $index, 'down')"
+                                @keyup.native.left="onKeyMove(1, $index, 'left')"
+                                @keyup.native.right="onKeyMove(1, $index, 'right')"
+                                @keyup.native.enter="searchExistProductsByWordcode1(row)"
+                                :ref="'word1-'+$index" >
                                 <template slot-scope="{ item }">
                                 <el-row :gutter="0" style="height:37px;">
                                     <el-col :span="8">
@@ -59,6 +75,21 @@
                     <el-table-column :label="_label('fuzhuma')" width="130" align="center">
                         <template v-slot="scope">
                             <el-input v-model="scope.row.wordcode_4" size="mini"/>
+                        </template>
+                    </el-table-column>
+
+                    <el-table-column width="80" align="center" :label="_label('zhutu')">
+                        <template v-slot="scope">
+                            <simple-avatar v-model="scope.row.picture" font-size="14px" :size="35"></simple-avatar>
+                        </template>
+                    </el-table-column>
+                    <el-table-column width="80" align="center" :label="_label('futu')">
+                        <template v-slot="{row}">
+                            <simple-avatar v-model="row.picture2" font-size="14px" :size="35" v-if="row.picture2!=''"></simple-avatar>
+
+                            <el-upload class="avatar-uploader" :action="host+'/common/upload?category=product'" :show-file-list="false" :on-success="handleAvatarSuccess" v-if="row.picture2==''" :multiple="true">
+                                <i class="el-icon-plus avatar-uploader-icon" style="width:35px;height:35px;line-height:35px;font-size:14px"></i>
+                            </el-upload>
                         </template>
                     </el-table-column>
 
@@ -257,6 +288,8 @@ export default {
         let self = this
 
         return {
+            existProductsDialogVisible: false,
+            existProducts: [],
             dialogVisible: false,
             lang: _label("lang"),
             form: {
@@ -304,6 +337,27 @@ export default {
         }
     },
     methods: {
+        editExistProduct(product) {
+            this.dialogVisible = false
+            this.existProductsDialogVisible = false
+            this.$emit("editExistProduct", product)
+        },
+        searchExistProductsByWordcode1(row) {
+            let self = this
+            self.existProducts = []
+            self._fetch("/product/page", {wordcode: row.wordcode_1}).then(function(res) {
+                if (res.pagination.total) {
+                    self.existProductsDialogVisible = true
+                    res.data.forEach(item => {
+                        ProductDetail.load({data: item, depth: 1}).then(function(product) {
+                            self.existProducts.push(product)
+                        })
+                    })
+                }
+                return false
+            })
+            return false
+        },
         createQueryFunction(row) {
             const self = this;
             return function(keyword, callback) {
@@ -451,9 +505,10 @@ export default {
                 this.watcher2.start()
             }
         },
-        onBlur(index) {
+        onBlur(index, row = null) {
             if (index == 1) {
                 this.watcher1.stop()
+                this.searchExistProductsByWordcode1(row)
             } else {
                 this.watcher2.stop()
             }

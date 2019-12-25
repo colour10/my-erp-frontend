@@ -1,7 +1,7 @@
 <template>
     <div style="width:100%">
         <el-form :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini">
-            <el-form-item :label="_label('dingda')">
+            <el-form-item :label="_label('dingdan')">
                 <simple-select v-model="form.warehouseid" source="warehouse" :lang="_label('lang')"></simple-select>
                 <as-button type="primary" @click="search()">{{_label("chaxun")}}</as-button>
             </el-form-item>
