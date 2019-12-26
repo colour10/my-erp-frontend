@@ -1,5 +1,6 @@
 import {
     _label,
+    showLabel,
     extend,
     config
 } from './globals.js';
@@ -169,6 +170,7 @@ export default {
             console.log.apply(console, arr);
         },
         _label,
+        showLabel,
         _fetch(path, form, options = {}) {
             const self = this
             return new Promise((resolve, reject) => {

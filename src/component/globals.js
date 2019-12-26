@@ -37,8 +37,33 @@ const getLabel = function(name) {
     }
 }
 
-const extend = Object.assign;
+const showLabel = function(name, suffix='') {
+    let text = label(name)
+    let textSuffix = ''
+    if (suffix != '') {
+        textSuffix = '(' + label(suffix) + ')';
+    }
+    text = text + textSuffix
+    if(label('lang')=='en') {
+        return typeof(text)=='string' ? StringFunc.ucfirst(text) : text
+    }
+    else {
+        return text
+    }
+}
 
+const extend = Object.assign;
+const extendExt = function(...args) {
+    let [target,...lefts] = args;
+    let object = {};
+    extend(object, ...lefts);
+
+    for(let key of Object.keys(object)) {
+        if (typeof(target[key]) != "undefined") {
+            target[key] = object[key];
+        }
+    }
+}
 const logger = function(name) {
     return function() {
         var arr = Array.prototype.slice.call(arguments)
@@ -185,8 +210,10 @@ export {
     setLabel,
     getLabel,
     getLabel as _label,
+    showLabel,
     logger,
     extend,
+    extendExt,
     extract,
     getAvailableHeight,
     config,
@@ -197,6 +224,7 @@ export {
 }
 export default {
     getLabel,
+    showLabel,
     logger,
     extend,
     clone,
