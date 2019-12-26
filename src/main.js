@@ -47,7 +47,7 @@ import SpProductInfo from './component/asa/sp-product-info.vue';
 import ProductSearchForm from './component/asa/product-search-form.vue';
 import Asa_Product_Code from './component/asa/Asa_Product_Code.vue';
 import Asa_Product_Icon from './component/asa/Asa_Product_Icon.vue';
-import AsaButton from './component/Button.vue';
+import AsaButton from './component/button.vue';
 import OrderInput from './component/order-input.vue';
 import FetchText from './component/fetch-text.js';
 
@@ -145,8 +145,8 @@ const routes = [
             {path:'/material', name:"material", component:getComponent("material")},
             {path:'/property', name:"property", component:getComponent("property")},
             {path:'/member', name:"member", component:getComponentSimple("member")},
-            {path:'/colortemplate', name:"colortemplate", component:getComponent("colortemplate")},
-
+            {path: '/colortemplate', name:"colortemplate2", component: resolve=>require(['./component/colortemplate/index.vue'],resolve)},
+         
             {path:'/saleport', name:"saleport", component:getComponentSimple("saleport")},
             {path:'/productmemo', name:"productmemo", component:getComponent("productmemo")},
             {path:'/saletype', name:"saletype", component:getComponent("saletype")},
