@@ -1,0 +1,6 @@
+.el-table .el-table__row--striped {
+      background-color: oldlace;
+}
+.el-table--striped .el-table__body tr.el-table__row--striped td {
+    background-color: oldlace;
+}

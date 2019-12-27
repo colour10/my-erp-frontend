@@ -99,6 +99,7 @@
 
 <script>
 import { showLabel, StringFunc } from '../globals.js'
+import _ from 'lodash'
 
 const defaultForm = {
     id: undefined,

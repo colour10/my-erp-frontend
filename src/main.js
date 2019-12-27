@@ -145,10 +145,10 @@ const routes = [
             {path:'/material', name:"material", component:getComponent("material")},
             {path:'/property', name:"property", component:getComponent("property")},
             {path:'/member', name:"member", component:getComponentSimple("member")},
-            {path: '/colortemplate', name:"colortemplate2", component: resolve=>require(['./component/colortemplate/index.vue'],resolve)},
+            {path: '/colortemplate', name:"colortemplate", component: resolve=>require(['./component/colortemplate/index.vue'],resolve)},
          
             {path:'/saleport', name:"saleport", component:getComponentSimple("saleport")},
-            {path:'/productmemo', name:"productmemo", component:getComponent("productmemo")},
+            {path:'/productmemo', name:"productmemo", component: resolve=>require(['./component/productmemo/index.vue'],resolve)},
             {path:'/saletype', name:"saletype", component:getComponent("saletype")},
             {path:'/producttype', name:"producttype", component:getComponent("producttype")},
 
