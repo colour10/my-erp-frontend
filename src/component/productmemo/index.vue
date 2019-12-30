@@ -201,6 +201,14 @@ export default {
             this.resetDialogForm()
             this.showDialogForm()
         },
+        handleUpdate(row) {
+            Object.assign(this.postForm, row)
+            this.dialogStatus = 'update'
+            this.showDialogForm()
+        },
+        handleDelete(row) {
+            this.deleteData(row.id)
+        },
         handleSort(data) {
             this.listQuery.sort = data.prop
             this.listQuery.order = data.order
@@ -244,6 +252,23 @@ export default {
                         self.reloadList()
                     })
                 }
+            })
+        },
+        updateData() {
+            let self = this
+            this.$refs['dataForm'].validate((valid) => {
+                if (valid) {
+                    self._submit("/productmemo/edit", self.postForm).then(function() {
+                        self.hideDialogForm()
+                        self.reloadList()
+                    })
+                }
+            })
+        },
+        deleteData(id) {
+            let self = this
+            self._remove("/productmemo/delete", {id: id}).then(function() {
+                self.reloadList()
             })
         },
         resetDialogForm() {
