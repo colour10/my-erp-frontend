@@ -272,10 +272,7 @@ export default {
             })
         },
         resetDialogForm() {
-            this.postForm.name_cn = ''
-            this.postForm.name_en = ''
-            this.postForm.name_it = ''
-            this.postForm.displayindex = ''
+            this.postForm = Object.assign({}, defaultForm)
         },
         showDialogForm() {
             this.dialogFormVisible = true

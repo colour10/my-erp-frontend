@@ -169,10 +169,7 @@ export default {
             this.getColorSystemAndColor()
         },
         resetDialogForm() {
-            this.postForm.name_cn = ''
-            this.postForm.name_en = ''
-            this.postForm.name_it = ''
-            this.postForm.code    = ''
+            this.postForm = Object.assign({}, defaultForm)
         },
         createData() {
             let self = this
