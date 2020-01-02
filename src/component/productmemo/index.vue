@@ -10,7 +10,7 @@
             </el-button>
         </div>
         <el-table v-loading="listLoading" :data="list" @sort-change="handleSort" border stripe>
-            <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
+            <el-table-column :label="showLabel('caozuo')" align="center" width="230" class-name="small-padding fixed-width">
                 <template slot-scope="{row}">
                     <el-button type="default" size="mini" @click="handleUpdate(row)">{{ showLabel('bianji') }}</el-button>
                     <el-button type="danger" size="mini" @click="handleDelete(row)">{{ showLabel('shanchu') }}</el-button>
@@ -235,7 +235,7 @@ export default {
                 pageSize: self.pagination.pageSize
             }, self.listQuery)
             self._fetch("/productmemo/page", params).then(function(res) {
-                self.list = res.data;
+                self.list = res.data
                 self.pagination = res.pagination
                 self.listLoading = false
             })

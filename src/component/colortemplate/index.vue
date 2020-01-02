@@ -5,7 +5,7 @@
         <el-tabs v-model="activeTab">
             <el-tab-pane :label="item.title" :name="'color-' + item.id" v-for="item of colorsystems" :key="item.id">
                 <el-table :data="item.colors" border fit>
-                    <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
+                    <el-table-column :label="showLabel('caozuo')" align="center" width="230" class-name="small-padding fixed-width">
                         <template slot-scope="{row}">
                             <el-button type="default" size="mini" @click="handleUpdate(row)">{{ showLabel('bianji') }}</el-button>
                             <el-button type="danger" size="mini" @click="handleDelete(row)">{{ showLabel('shanchu') }}</el-button>
@@ -139,7 +139,7 @@ export default {
         getColorSystemAndColor() {
             let self = this
             self._fetch("/color/getColorSystemAndColor", {}).then(function(res) {
-                self.colorsystems = res.data;
+                self.colorsystems = res.data
             })
         },
         handleCreate() {
