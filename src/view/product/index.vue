@@ -256,12 +256,61 @@
                                 </el-select>
                                 <as-button @click="onTrimSize" class="trimhalf">{{showLabel("qubanma")}}</as-button>
                             </el-form-item>
+                            <el-row class="product">
+                                <el-table :data="product.materials" border style="width:90%;">
+                                    <el-table-column :label="showLabel('caizhiguanli')" align="center">
+                                        <el-table-column :label="showLabel('caizhi')" align="center">
+                                            <template slot-scope="scope">
+                                                <el-form-item
+                                                    :prop="'materials.' + scope.$index + '.materialid'"
+                                                    :rules="{required: true, trigger: 'change'}"
+                                                >
+                                                    <el-select v-model="scope.row.materialid" size="mini">
+                                                        <el-option
+                                                            v-for="item in materials" 
+                                                            :key="item.id + item.title"
+                                                            :label="item.title"
+                                                            :value="item.id">
+                                                        </el-option>
+                                                    </el-select>
+                                                </el-form-item>
+                                            </template>
+                                        </el-table-column>
+                                        <el-table-column :label="showLabel('baifenbi')" align="center" width="90">
+                                            <template slot-scope="scope">
+                                                <el-form-item
+                                                    :prop="'materials.' + scope.$index + '.percent'"
+                                                    :rules="{required: true, trigger: 'blur'}"
+                                                >
+                                                    <el-input v-model="scope.row.percent" size="mini"></el-input>
+                                                </el-form-item>
+                                            </template>
+                                        </el-table-column>
+                                        <el-table-column :label="showLabel('caizhibeizhu')" align="center">
+                                            <template slot-scope="scope">
+                                                <el-select v-model="scope.row.materialnoteid" size="mini">
+                                                    <el-option
+                                                        v-for="item in materialnotes" 
+                                                        :key="item.id + item.title"
+                                                        :label="item.title"
+                                                        :value="item.id">
+                                                    </el-option>
+                                                </el-select>
+                                            </template>
+                                        </el-table-column>
+                                    </el-table-column>
+                                    <el-table-column width="70">
+                                        <template slot="header">
+                                            <el-button type="success" icon="el-icon-plus" size="mini" @click.stop="handleAppendMaterial"></el-button>
+                                        </template>
+                                        <template slot-scope="scope">
+                                            <el-button type="danger" size="mini" icon="el-icon-delete" @click="handleRemoveMaterial(scope.$index)"></el-button>    
+                                        </template>    
+                                    </el-table-column>
+                                </el-table>
+                            </el-row>
                         </el-col>
                         <el-col :span="8">
-                            <el-form-item :label="showLabel('caizhi')">
-                                <product-material v-model="materials" :brandgroupid="product.form.brandgroupid"></product-material>
-                            </el-form-item>
-
                             <el-form-item :label="showLabel('chandi')" prop="countries">
                                 <simple-select v-model="product.form.countries" source="country"/>
                             </el-form-item>
@@ -357,23 +406,22 @@
                             </el-form-item>
                         </el-col>
                     </el-row>
-                    <el-row :gutter="0">
-                        <el-col :span="24" style="text-align:center;">
-                            <as-button auth="product" type="primary" @click="createProduct">{{showLabel("baocun")}}</as-button>
-                            <as-button type="primary" @click="hideDialogForm">{{showLabel("tuichu")}}</as-button>
-                        </el-col>
-                    </el-row>
                 </div>
+
+                <el-row :gutter="0">
+                    <el-col :span="24" style="text-align:center;">
+                        <as-button auth="product" type="primary" @click="createProduct">{{showLabel("baocun")}}</as-button>
+                        <as-button type="primary" @click="hideDialogForm">{{showLabel("tuichu")}}</as-button>
+                    </el-col>
+                </el-row>
             </el-form>
         </el-dialog>
-
     </div>
 </template>
 
 <script>
 import globals, { showLabel } from '../../component/globals.js'
 import '../../assets/table.css'
-import Material from '../../component/product/material.vue'
 
 const defaultColor = {
     brandcolor: "",
@@ -388,81 +436,90 @@ const defaultColor = {
 
 const defaultProduct = {
     colors: [],
+    materials: [],
     form: {
-        ageseason: [],
-        brandid: "",
-        brandgroupid: "",
-        childbrand: "",
-        sizetopid: "",
-        sizecontentids: [],
-        countrie: "",
-        ulnarinch: "",
-        productmemoids: "",
-        factoryprice: "",
-        wordprice: "",
-        wordpricecurrency: "",
-        nationalfactoryprice: "",
-        nationalprice: "",
-        nationalpricecurrency: "",
-        series: "",
-        saletypeid: "",
-        producttypeid: "",
-        winterproofingid: "",
-        gender: "",
-        spring: "",
-        summer: "",
-        fall: "",
-        winter: "",
-        memo: "",
-        countries: "",
-        colorId: "",
-        secondColorId: ""
+        ageseason            : [],
+        brandid              : "",
+        brandgroupid         : "",
+        childbrand           : "",
+        sizetopid            : "",
+        sizecontentids       : [],
+        countrie             : "",
+        ulnarinch            : "",
+        productmemoids       : "",
+        factoryprice         : "",
+        factorypricecurrency : 9,
+        wordprice            : "",
+        wordpricecurrency    : 9,
+        nationalfactoryprice : "",
+        nationalprice        : "",
+        nationalpricecurrency: 7,
+        series               : "",
+        saletypeid           : "",
+        producttypeid        : "",
+        winterproofingid     : "",
+        gender               : "",
+        spring               : "",
+        summer               : "",
+        fall                 : "",
+        winter               : "",
+        memo                 : "",
+        countries            : "",
+        colorId              : "",
+        secondColorId        : ""
     }
 }
 
 export default {
     name: 'product',
-    components: {
-        [Material.name]: Material
-    },
     data() {
         return {
-            materials: [],
-            colorSystems: [],
+            materialnotes    : [],
+            materials        : [],
+            colorSystems     : [],
             dialogFormVisible: false,
-            listLoading: true,
-            list: [],
-            listQuery: {},
+            listLoading      : true,
+            list             : [],
+            listQuery        : {},
             pagination: {
                 pageSizes: globals.pageSizes,
                 pageSize : 10,
                 total    : 0,
                 current  : 1
             },
-            product: Object.assign({}, defaultProduct),
-            ageseasons: [],
-            brands: [],
-            categories: [], // 品类 子品类
-            sizes: [],
+            product     : Object.assign({}, defaultProduct),
+            ageseasons  : [],
+            brands      : [],
+            categories  : [], // 品类 子品类
+            sizes       : [],
             sizecontents: [],
             rules: {
                 form: {
-                    ageseason: [{ required: true, message: showLabel('niandai') + showLabel('required') }],
-                    brandid: [{ required: true, message: showLabel('pinpai') + showLabel('required'), trigger: 'change' }],
-                    childbrand: [{ required: true, message: showLabel('pinlei') + showLabel('required'), trigger: 'change' }],
-                    sizetopid: [{ required: true, message: showLabel('chimazu') + showLabel('required'), trigger: 'change' }],
+                    ageseason     : [{ required: true, message: showLabel('niandai') + showLabel('required') }],
+                    brandid       : [{ required: true, message: showLabel('pinpai') + showLabel('required'), trigger: 'change' }],
+                    childbrand    : [{ required: true, message: showLabel('pinlei') + showLabel('required'), trigger: 'change' }],
+                    sizetopid     : [{ required: true, message: showLabel('chimazu') + showLabel('required'), trigger: 'change' }],
                     sizecontentids: [{ required: true, message: showLabel('chimamingxi') + showLabel('required') }]
                 }
-                
-            }
+            },
+            materialsDialogVisible: false,
         }
     },
     created() {
         this.getList()
         this.getProductRelatedOptions()
-
     },
     methods: {
+        handleRemoveMaterial(index) {
+            this.product.materials.splice(index, 1)
+        },
+        handleAppendMaterial() {
+            this.product.materials.push({
+                materialid: "",
+                percent: 100,
+                materialnoteid: ""
+            })
+        },
         handleAppendColors() {
             this.product.colors.push(Object.assign({}, defaultColor))
         },
@@ -496,35 +553,37 @@ export default {
         resetDialogForm() {
             this.product = {
                 colors: [],
+                materials: [],
                 form: {
-                    ageseason: [],
-                    brandid: "",
-                    brandgroupid: "",
-                    childbrand: "",
-                    sizetopid: "",
-                    sizecontentids: [],
-                    countrie: "",
-                    ulnarinch: "",
-                    productmemoids: "",
-                    factoryprice: "",
-                    wordprice: "",
-                    wordpricecurrency: "",
-                    nationalfactoryprice: "",
-                    nationalprice: "",
-                    nationalpricecurrency: "",
-                    series: "",
-                    saletypeid: "",
-                    producttypeid: "",
-                    winterproofingid: "",
-                    gender: "",
-                    spring: "",
-                    summer: "",
-                    fall: "",
-                    winter: "",
-                    memo: "",
-                    countries: "",
-                    colorId: "",
-                    secondColorId: ""
+                    ageseason            : [],
+                    brandid              : "",
+                    brandgroupid         : "",
+                    childbrand           : "",
+                    sizetopid            : "",
+                    sizecontentids       : [],
+                    countrie             : "",
+                    ulnarinch            : "",
+                    productmemoids       : "",
+                    factoryprice         : "",
+                    factorypricecurrency : 9,
+                    wordprice            : "",
+                    wordpricecurrency    : 9,
+                    nationalfactoryprice : "",
+                    nationalprice        : "",
+                    nationalpricecurrency: 7,
+                    series               : "",
+                    saletypeid           : "",
+                    producttypeid        : "",
+                    winterproofingid     : "",
+                    gender               : "",
+                    spring               : "",
+                    summer               : "",
+                    fall                 : "",
+                    winter               : "",
+                    memo                 : "",
+                    countries            : "",
+                    colorId              : "",
+                    secondColorId        : ""
                 }
             }
             this.product.colors.push(Object.assign({}, defaultColor))
@@ -533,10 +592,12 @@ export default {
         getProductRelatedOptions() {
             let self = this
             self._fetch("/product/getProductRelatedOptions", {}).then(function(res) {
-                self.ageseasons = res.data.ageseasons
-                self.brands = res.data.brands
-                self.categories = res.data.categories
-                self.sizes = res.data.sizes
+                self.ageseasons    = res.data.ageseasons
+                self.brands        = res.data.brands
+                self.categories    = res.data.categories
+                self.sizes         = res.data.sizes
+                self.materials     = res.data.materials
+                self.materialnotes = res.data.materialnotes
             })
         },
         getColorSystemAndColor() {
@@ -569,7 +630,6 @@ export default {
 
             let params = {}
             params = Object.assign({}, self.product)
-            params.materials = self.materials
 
             this.$refs['productForm'].validate((valid) => {
                 if (valid) {
@@ -579,7 +639,7 @@ export default {
                     })
                 }
             })
-            
+
         }
     }
 }
