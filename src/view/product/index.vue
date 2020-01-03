@@ -205,8 +205,8 @@
                 <div class="order-form" style="width:100%;margin-top:5px;" >
                     <el-row :gutter="0">
                         <el-col :span="8">
-                            <el-form-item :label="showLabel('niandai')" prop="ageseason">
-                                <el-select v-model="product.ageseason" multiple placeholder="">
+                            <el-form-item :label="showLabel('niandai')" prop="form.ageseason">
+                                <el-select v-model="product.form.ageseason" multiple placeholder="">
                                     <el-option
                                         v-for="item of ageseasons"
                                         :key="item.id + item.sessionmark + item.name"
@@ -215,8 +215,8 @@
                                     </el-option>
                                 </el-select>
                             </el-form-item>
-                            <el-form-item :label="showLabel('pinpai')" prop="brandid">
-                                <el-select v-model="product.brandid" placeholder="">
+                            <el-form-item :label="showLabel('pinpai')" prop="form.brandid">
+                                <el-select v-model="product.form.brandid" placeholder="">
                                     <el-option
                                         v-for="item of brands"
                                         :key="item.id + item.title"
@@ -225,18 +225,18 @@
                                     </el-option>
                                 </el-select>
                             </el-form-item>
-                            <el-form-item :label="showLabel('pinlei')" prop="childbrand">
+                            <el-form-item :label="showLabel('pinlei')" prop="form.childbrand">
                                 <el-cascader
                                     placeholder=""
-                                    v-model="product.childbrand"
+                                    v-model="product.form.childbrand"
                                     size="mini"
                                     :options="categories"
                                     :props="{ value: 'id', label: 'title' }"
                                     clearable>
                                 </el-cascader>
                             </el-form-item>
-                            <el-form-item :label="showLabel('chimazu')" prop="sizetopid">
-                                <el-select v-model="product.sizetopid" placeholder="" @change="handleChangeSizeTop">
+                            <el-form-item :label="showLabel('chimazu')" prop="form.sizetopid">
+                                <el-select v-model="product.form.sizetopid" placeholder="" @change="handleChangeSizeTop">
                                     <el-option
                                         v-for="item of sizes"
                                         :key="item.id + item.title"
@@ -245,8 +245,8 @@
                                     </el-option>
                                 </el-select>
                             </el-form-item>
-                            <el-form-item :label="showLabel('chimamingxi')" prop="sizecontentids">
-                                <el-select v-model="product.sizecontentids" placeholder="" multiple>
+                            <el-form-item :label="showLabel('chimamingxi')" prop="form.sizecontentids">
+                                <el-select v-model="product.form.sizecontentids" placeholder="" multiple>
                                     <el-option
                                         v-for="item of sizecontents"
                                         :key="item.id + item.title"
@@ -259,19 +259,19 @@
                         </el-col>
                         <el-col :span="8">
                             <el-form-item :label="showLabel('caizhi')">
-                                <product-material v-model="materials" :brandgroupid="product.brandgroupid"></product-material>
+                                <product-material v-model="materials" :brandgroupid="product.form.brandgroupid"></product-material>
                             </el-form-item>
 
                             <el-form-item :label="showLabel('chandi')" prop="countries">
-                                <simple-select v-model="product.countries" source="country"/>
+                                <simple-select v-model="product.form.countries" source="country"/>
                             </el-form-item>
 
                             <el-form-item :label="showLabel('shangpinchicun')">
-                                <simple-select v-model="product.ulnarinch" source="ulnarinch" :multiple="true"/>
+                                <simple-select v-model="product.form.ulnarinch" source="ulnarinch" :multiple="true"/>
                             </el-form-item>
 
                             <el-form-item :label="showLabel('shangpinmiaoshu')">
-                                <simple-select v-model="product.productmemoids" source="productmemo" :multiple="true"/>
+                                <simple-select v-model="product.form.productmemoids" source="productmemo" :multiple="true"/>
                             </el-form-item>
 
                             <el-form-item :label="showLabel('cankaobeilv')">
@@ -283,29 +283,29 @@
                             </el-form-item>
 
                             <el-form-item :label="showLabel('chuchangjia')">
-                                <el-input placeholder="" v-model="product.factoryprice" class="productcurrency" ref="factoryprice" @focus="onPriceFocus('factoryprice');watcherprice.start()" @blur="watcherprice.stop()">
-                                    <simple-select source="currency" :clearable="false" v-model="product.wordpricecurrency" slot="prepend">
+                                <el-input placeholder="" v-model="product.form.factoryprice" class="productcurrency" ref="factoryprice" @focus="onPriceFocus('factoryprice');watcherprice.start()" @blur="watcherprice.stop()">
+                                    <simple-select source="currency" :clearable="false" v-model="product.form.wordpricecurrency" slot="prepend">
                                     </simple-select>
                                     <span slot="append">{{getRate}}</span>
                                 </el-input>
                             </el-form-item>
                             <el-form-item :label="showLabel('guojilingshoujia')">
-                                <el-input placeholder="" v-model="product.wordprice" class="productcurrency" ref="wordprice" @focus="onPriceFocus('wordprice')">
-                                    <simple-select source="currency" :clearable="false" v-model="product.wordpricecurrency" slot="prepend">
+                                <el-input placeholder="" v-model="product.form.wordprice" class="productcurrency" ref="wordprice" @focus="onPriceFocus('wordprice')">
+                                    <simple-select source="currency" :clearable="false" v-model="product.form.wordpricecurrency" slot="prepend">
                                     </simple-select>
                                     <span slot="append">{{getReciprocalRate}}</span>
                                 </el-input>
                             </el-form-item>
                             <el-form-item :label="showLabel('benguochuchangjia')">
-                                <el-input placeholder="" v-model="product.nationalfactoryprice" class="productcurrency" ref="nationalfactoryprice" @focus="onPriceFocus('nationalfactoryprice')">
-                                    <simple-select source="currency" :clearable="false" v-model="product.nationalpricecurrency" slot="prepend">
+                                <el-input placeholder="" v-model="product.form.nationalfactoryprice" class="productcurrency" ref="nationalfactoryprice" @focus="onPriceFocus('nationalfactoryprice')">
+                                    <simple-select source="currency" :clearable="false" v-model="product.form.nationalpricecurrency" slot="prepend">
                                     </simple-select>
                                     <span slot="append">{{getRateNational}}</span>
                                 </el-input>
                             </el-form-item>
                             <el-form-item :label="showLabel('benguolingshoujia')">
-                                <el-input placeholder="" v-model="product.nationalprice" class="productcurrency" ref="nationalprice" @focus="onPriceFocus('nationalprice')">
-                                    <simple-select source="currency" :clearable="false" v-model="product.nationalpricecurrency" slot="prepend">
+                                <el-input placeholder="" v-model="product.form.nationalprice" class="productcurrency" ref="nationalprice" @focus="onPriceFocus('nationalprice')">
+                                    <simple-select source="currency" :clearable="false" v-model="product.form.nationalpricecurrency" slot="prepend">
                                     </simple-select>
                                     <span slot="append">{{getReciprocalRateNational}}</span>
                                 </el-input>
@@ -313,47 +313,47 @@
                         </el-col>
                         <el-col :span="8">
                             <el-form-item :label="showLabel('shangpinxilie')">
-                                <simple-select v-model="product.series" ref="series" source="series" :parentid="product.brandid"> </simple-select><as-button class="trimhalf" @click="onAddSeries">{{showLabel("xinjian")}}</as-button>
+                                <simple-select v-model="product.form.series" ref="series" source="series" :parentid="product.form.brandid"> </simple-select><as-button class="trimhalf" @click="onAddSeries">{{showLabel("xinjian")}}</as-button>
                             </el-form-item>
 
                             <el-form-item :label="showLabel('xiaoshoushuxing')">
-                                <simple-select v-model="product.saletypeid" source="saletype"/>
+                                <simple-select v-model="product.form.saletypeid" source="saletype"/>
                             </el-form-item>
 
                             <el-form-item :label="showLabel('shangpinshuxing')">
-                                <simple-select v-model="product.producttypeid" source="producttype"/>
+                                <simple-select v-model="product.form.producttypeid" source="producttype"/>
                             </el-form-item>
 
                             <el-form-item :label="showLabel('fanghanzhishu')">
-                                <simple-select v-model="product.winterproofingid" source="winterproofing"></simple-select>
+                                <simple-select v-model="product.form.winterproofingid" source="winterproofing"></simple-select>
                             </el-form-item>
 
                             <el-form-item :label="showLabel('xingbie')">
-                                <sp-radio-group v-model="product.gender" source="gender" :span="8" :lang="lang" class="supermini" style="width:270px">
+                                <sp-radio-group v-model="product.form.gender" source="gender" :span="8" :lang="lang" class="supermini" style="width:270px">
                                 </sp-radio-group>
                             </el-form-item>
                             <el-form-item :label="showLabel('jijie')">
                                 <div  style="width:270px">
                                 <el-col :span="8">
-                                    <sp-checkbox v-model="product.spring">{{showLabel("chun")}}</sp-checkbox>
+                                    <sp-checkbox v-model="product.form.spring">{{showLabel("chun")}}</sp-checkbox>
                                 </el-col>
                                 <el-col :span="8">
-                                    <sp-checkbox v-model="product.summer">{{showLabel("xia")}}</sp-checkbox>
+                                    <sp-checkbox v-model="product.form.summer">{{showLabel("xia")}}</sp-checkbox>
                                 </el-col>
                                 <el-col :span="8">
                                     <sp-checkbox v-model="siji">{{showLabel("siji")}}</sp-checkbox>
                                 </el-col>
                                 <el-col :span="8">
-                                    <sp-checkbox v-model="product.fall">{{showLabel("qiu")}}</sp-checkbox>
+                                    <sp-checkbox v-model="product.form.fall">{{showLabel("qiu")}}</sp-checkbox>
                                 </el-col>
                                 <el-col :span="8">
-                                    <sp-checkbox v-model="product.winter">{{showLabel("dong")}}</sp-checkbox>
+                                    <sp-checkbox v-model="product.form.winter">{{showLabel("dong")}}</sp-checkbox>
                                 </el-col>
                             </div>
                             </el-form-item>
 
                             <el-form-item :label="showLabel('beizhu')">
-                                <el-input v-model="product.memo"/>
+                                <el-input v-model="product.form.memo"/>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -376,7 +376,7 @@ import '../../assets/table.css'
 import Material from '../../component/product/material.vue'
 
 const defaultColor = {
-    brandcolor: "1",
+    brandcolor: "",
     wordcode_1: "",
     wordcode_2: "",
     wordcode_3: "",
@@ -388,34 +388,36 @@ const defaultColor = {
 
 const defaultProduct = {
     colors: [],
-    ageseason: [],
-    brandid: "",
-    brandgroupid: "",
-    childbrand: "",
-    sizetopid: "",
-    sizecontentids: [],
-    countrie: "",
-    ulnarinch: "",
-    productmemoids: "",
-    factoryprice: "",
-    wordprice: "",
-    wordpricecurrency: "",
-    nationalfactoryprice: "",
-    nationalprice: "",
-    nationalpricecurrency: "",
-    series: "",
-    saletypeid: "",
-    producttypeid: "",
-    winterproofingid: "",
-    gender: "",
-    spring: "",
-    summer: "",
-    fall: "",
-    winter: "",
-    memo: "",
-    countries: "",
-    colorId: "",
-    secondColorId: ""
+    form: {
+        ageseason: [],
+        brandid: "",
+        brandgroupid: "",
+        childbrand: "",
+        sizetopid: "",
+        sizecontentids: [],
+        countrie: "",
+        ulnarinch: "",
+        productmemoids: "",
+        factoryprice: "",
+        wordprice: "",
+        wordpricecurrency: "",
+        nationalfactoryprice: "",
+        nationalprice: "",
+        nationalpricecurrency: "",
+        series: "",
+        saletypeid: "",
+        producttypeid: "",
+        winterproofingid: "",
+        gender: "",
+        spring: "",
+        summer: "",
+        fall: "",
+        winter: "",
+        memo: "",
+        countries: "",
+        colorId: "",
+        secondColorId: ""
+    }
 }
 
 export default {
@@ -426,8 +428,6 @@ export default {
     data() {
         return {
             materials: [],
-            product: {},
-            // colors: [],
             colorSystems: [],
             dialogFormVisible: false,
             listLoading: true,
@@ -446,11 +446,14 @@ export default {
             sizes: [],
             sizecontents: [],
             rules: {
-                ageseason: [{ required: true, message: showLabel('niandai') + showLabel('required') }],
-                brandid: [{ required: true, message: showLabel('pinpai') + showLabel('required'), trigger: 'change' }],
-                childbrand: [{ required: true, message: showLabel('pinlei') + showLabel('required'), trigger: 'change' }],
-                sizetopid: [{ required: true, message: showLabel('chimazu') + showLabel('required'), trigger: 'change' }],
-                sizecontentids: [{ required: true, message: showLabel('chimamingxi') + showLabel('required') }]
+                form: {
+                    ageseason: [{ required: true, message: showLabel('niandai') + showLabel('required') }],
+                    brandid: [{ required: true, message: showLabel('pinpai') + showLabel('required'), trigger: 'change' }],
+                    childbrand: [{ required: true, message: showLabel('pinlei') + showLabel('required'), trigger: 'change' }],
+                    sizetopid: [{ required: true, message: showLabel('chimazu') + showLabel('required'), trigger: 'change' }],
+                    sizecontentids: [{ required: true, message: showLabel('chimamingxi') + showLabel('required') }]
+                }
+                
             }
         }
     },
@@ -466,8 +469,8 @@ export default {
         handleChangeSizeTop() {
             let self = this
             self.sizes.forEach(item => {
-                if (item.id == self.product.sizetopid) {
-                    self.product.sizecontentids = []
+                if (item.id == self.product.form.sizetopid) {
+                    self.product.form.sizecontentids = []
                     self.sizecontents = item.children
                 }
             })
@@ -491,18 +494,42 @@ export default {
             this.dialogFormVisible = false
         },
         resetDialogForm() {
-            // this.initColors()
-            this.product = Object.assign({}, defaultProduct)
+            this.product = {
+                colors: [],
+                form: {
+                    ageseason: [],
+                    brandid: "",
+                    brandgroupid: "",
+                    childbrand: "",
+                    sizetopid: "",
+                    sizecontentids: [],
+                    countrie: "",
+                    ulnarinch: "",
+                    productmemoids: "",
+                    factoryprice: "",
+                    wordprice: "",
+                    wordpricecurrency: "",
+                    nationalfactoryprice: "",
+                    nationalprice: "",
+                    nationalpricecurrency: "",
+                    series: "",
+                    saletypeid: "",
+                    producttypeid: "",
+                    winterproofingid: "",
+                    gender: "",
+                    spring: "",
+                    summer: "",
+                    fall: "",
+                    winter: "",
+                    memo: "",
+                    countries: "",
+                    colorId: "",
+                    secondColorId: ""
+                }
+            }
             this.product.colors.push(Object.assign({}, defaultColor))
             this.getColorSystemAndColor()
         },
-        // initColors() {
-        //     this.product.colors = []
-        //     this.product.colors.push(Object.assign({}, defaultColor))
-        //     console.log(this.product.colors.length)
-        //     this.getColorSystemAndColor()
-        //     // this.getProductRelatedOptions()
-        // },
         getProductRelatedOptions() {
             let self = this
             self._fetch("/product/getProductRelatedOptions", {}).then(function(res) {
@@ -541,22 +568,17 @@ export default {
             let self = this
 
             let params = {}
-            // params.form = Object.assign({}, self.product)
-            // params.colors = self.colors
-            // params.materials = self.materials
+            params = Object.assign({}, self.product)
+            params.materials = self.materials
 
-            // this.$refs['colorsForm'].validate((validC) => {
-            //     if (validC) {
-                    this.$refs['productForm'].validate((valid) => {
-                        if (valid) {
-                            self._submit("/product/add", { params: JSON.stringify(params) }).then(function(res) {
-                                self.hideDialogForm()
-                                self.reloadList()
-                            })
-                        }
+            this.$refs['productForm'].validate((valid) => {
+                if (valid) {
+                    self._submit("/product/add", { params: JSON.stringify(params) }).then(function(res) {
+                        self.hideDialogForm()
+                        self.reloadList()
                     })
-            //     }
-            // })
+                }
+            })
             
         }
     }
