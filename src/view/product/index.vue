@@ -1,13 +1,84 @@
 <template>
     <div>
         <div class="filter-container">
-            <el-input size="mini" v-model="listQuery.keyword" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-            <el-button class="filter-item" type="primary" size="mini" icon="el-icon-search" @click="handleFilter">
-                {{ showLabel('search') }}
-            </el-button>
-            <el-button class="filter-item" style="margin-left: 10px;" type="primary" size="mini" icon="el-icon-edit" @click="handleCreate">
-                {{ showLabel('button-create') }}
-            </el-button>
+            <el-form ref="searchForm" :inline="true" :model="listQuery" size="mini">
+                <el-form-item :label="showLabel('guojima')">
+                    <el-input size="mini" v-model="listQuery.wordcode" style="width: 200px;" @keyup.enter.native="handleFilter" />
+                </el-form-item>
+                <el-form-item :label="showLabel('niandai')">
+                    <el-select v-model="listQuery.ageseason" multiple placeholder="">
+                        <el-option
+                            v-for="item of ageseasons"
+                            :key="item.id + item.sessionmark + item.name"
+                            :label="item.sessionmark + item.name"
+                            :value="item.id">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item :label="showLabel('pinpai')">
+                    <el-select v-model="listQuery.brandid" multiple placeholder="" @change="handleChangeBrand">
+                        <el-option
+                            v-for="item of brands"
+                            :key="item.id + item.title"
+                            :label="item.title"
+                            :value="item.id">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item :label="showLabel('pinlei')">
+                    <el-select v-model="listQuery.brandgroupid" multiple placeholder="" @change="handleChangeBrandGroup">
+                        <el-option
+                            v-for="item of categories"
+                            :key="item.id + item.title"
+                            :label="item.title"
+                            :value="item.id">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item :label="showLabel('zipinlei')">
+                    <el-select v-model="listQuery.childbrand" multiple placeholder="">
+                        <el-option
+                            v-for="item of childrenBrand"
+                            :key="item.id + item.title"
+                            :label="item.title"
+                            :value="item.id">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item :label="showLabel('shangpinmiaoshu')">
+                    <el-select v-model="listQuery.productmemoids" multiple placeholder="">
+                        <el-option
+                            v-for="item of productMemos"
+                            :key="item.id + item.title"
+                            :label="item.title"
+                            :value="item.id">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item :label="showLabel('shangpinxilie')">
+                    <el-select v-model="listQuery.productmemoids" multiple placeholder="">
+                        <el-option
+                            v-for="item of series"
+                            :key="item.id + item.title"
+                            :label="item.title"
+                            :value="item.id">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item>
+                    <el-button class="filter-item" type="primary" size="mini" icon="el-icon-search" @click="handleFilter">
+                        {{ showLabel('search') }}
+                    </el-button>
+                </el-form-item>
+                <el-form-item>
+                    <el-button class="filter-item" style="margin-left: 10px;" type="primary" size="mini" icon="el-icon-edit" @click="handleCreate">
+                        {{ showLabel('button-create') }}
+                    </el-button>
+                </el-form-item>
+            </el-form>
+
+
+
         </div>
 
         <el-row :gutter="20" class="product">
@@ -267,7 +338,7 @@
                                                 >
                                                     <el-select v-model="scope.row.materialid" size="mini">
                                                         <el-option
-                                                            v-for="item in materials" 
+                                                            v-for="item in materials"
                                                             :key="item.id + item.title"
                                                             :label="item.title"
                                                             :value="item.id">
@@ -290,7 +361,7 @@
                                             <template slot-scope="scope">
                                                 <el-select v-model="scope.row.materialnoteid" size="mini">
                                                     <el-option
-                                                        v-for="item in materialnotes" 
+                                                        v-for="item in materialnotes"
                                                         :key="item.id + item.title"
                                                         :label="item.title"
                                                         :value="item.id">
@@ -304,8 +375,8 @@
                                             <el-button type="success" icon="el-icon-plus" size="mini" @click.stop="handleAppendMaterial"></el-button>
                                         </template>
                                         <template slot-scope="scope">
-                                            <el-button type="danger" size="mini" icon="el-icon-delete" @click="handleRemoveMaterial(scope.$index)"></el-button>    
-                                        </template>    
+                                            <el-button type="danger" size="mini" icon="el-icon-delete" @click="handleRemoveMaterial(scope.$index)"></el-button>
+                                        </template>
                                     </el-table-column>
                                 </el-table>
                             </el-row>
@@ -422,6 +493,7 @@
 <script>
 import globals, { showLabel } from '../../component/globals.js'
 import '../../assets/table.css'
+import '../../assets/search-form.css'
 
 const defaultColor = {
     brandcolor: "",
@@ -474,13 +546,23 @@ export default {
     name: 'product',
     data() {
         return {
+            series           : [],
+            productMemos     : [],
             materialnotes    : [],
             materials        : [],
             colorSystems     : [],
             dialogFormVisible: false,
             listLoading      : true,
             list             : [],
-            listQuery        : {},
+            listQuery : {
+                wordcode    : '',
+                ageseason   : [],
+                brandid     : [],
+                brandgroupid: [],
+                childbrand  : [],
+                series      : []
+            },
+            childrenBrand: [],
             pagination: {
                 pageSizes: globals.pageSizes,
                 pageSize : 10,
@@ -510,6 +592,24 @@ export default {
         this.getProductRelatedOptions()
     },
     methods: {
+        handleChangeBrand() {
+            let self = this
+        },
+        handleChangeBrandGroup() {
+            let self = this
+
+            self.listQuery.childbrand = []
+            self.childrenBrand = []
+
+            self.categories.forEach(item => {
+                if (self.listQuery.brandgroupid.indexOf(item.id) >= 0) {
+                    self.childrenBrand.push.apply(self.childrenBrand, item.children)
+                }
+            })
+        },
+        handleFilter() {
+            this.getList()
+        },
         handleRemoveMaterial(index) {
             this.product.materials.splice(index, 1)
         },
@@ -598,6 +698,13 @@ export default {
                 self.sizes         = res.data.sizes
                 self.materials     = res.data.materials
                 self.materialnotes = res.data.materialnotes
+                self.productMemos  = res.data.productMemos
+
+                self.series = []
+                res.data.brands.forEach(item => {
+                    self.series.push.apply(self.series, item.series)
+                })
+                console.log(self.series)
             })
         },
         getColorSystemAndColor() {
