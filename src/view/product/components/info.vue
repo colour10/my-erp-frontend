@@ -40,7 +40,7 @@
                         </el-form-item>
                     </el-form-item>
                     <el-form-item :label="showLabel('pinpai')" prop="form.brandid">
-                        <el-select v-model="product.form.brandid" placeholder="">
+                        <el-select v-model="product.form.brandid" placeholder="" @change="handleChangeBrand">
                             <el-option
                                 v-for="item of brands"
                                 :key="item.id + item.title"
@@ -174,7 +174,15 @@
                 </el-col>
                 <el-col :span="8">
                     <el-form-item :label="showLabel('shangpinxilie')">
-                        <simple-select v-model="product.form.series" ref="series" source="series" :parentid="product.form.brandid"> </simple-select><as-button class="trimhalf" @click="onAddSeries">{{_label("xinjian")}}</as-button>
+                        <el-select v-model="product.form.series" placeholder="">
+                            <el-option
+                                v-for="item of series"
+                                :key="item.id + item.title"
+                                :label="item.title"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
+                        <as-button class="trimhalf" @click="onAddSeries">{{_label("xinjian")}}</as-button>
                     </el-form-item>
 
                     <el-form-item :label="showLabel('xiaoshoushuxing')">
@@ -281,6 +289,18 @@ export default {
         this.getColorSystemAndColor()
     },
     methods: {
+        handleChangeBrand() {
+            let self = this
+            self.series = []
+            if (self.product.form.brandid) {
+                self.brands.forEach(item => {
+                    if (self.product.form.brandid == item.id) {
+                        console.log(item)
+                        self.series = item.series
+                    }
+                })
+            }
+        },
         getProduct(id) {
             let self = this
             self._fetch("/product/info", {id: id}).then(res=>{
@@ -336,6 +356,7 @@ export default {
                 }
 
                 self.product.form = res.data
+                self.handleChangeBrand()
             })
         },
         getProductRelatedOptions() {
