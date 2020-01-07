@@ -56,7 +56,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item :label="showLabel('shangpinxilie')">
-                    <el-select v-model="listQuery.productmemoids" multiple placeholder="">
+                    <el-select v-model="listQuery.series" multiple placeholder="">
                         <el-option
                             v-for="item of series"
                             :key="item.id + item.title"
@@ -66,19 +66,21 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item>
+                    <el-button class="filter-item" type="default" size="mini" icon="el-icon-refresh-right" @click="handleResetFilter">
+                        {{ showLabel('qingkong') }}
+                    </el-button>
+                </el-form-item>
+                <el-form-item>
                     <el-button class="filter-item" type="primary" size="mini" icon="el-icon-search" @click="handleFilter">
                         {{ showLabel('search') }}
                     </el-button>
                 </el-form-item>
                 <el-form-item>
-                    <el-button class="filter-item" style="margin-left: 10px;" type="primary" size="mini" icon="el-icon-edit" @click="handleCreate">
+                    <el-button class="filter-item" style="margin-left: 10px;" type="success" size="mini" icon="el-icon-edit" @click="handleCreate">
                         {{ showLabel('button-create') }}
                     </el-button>
                 </el-form-item>
             </el-form>
-
-
-
         </div>
 
         <el-row :gutter="20" class="product">
@@ -86,7 +88,9 @@
                 <el-table v-loading="listLoading" :data="list" border stripe>
                     <el-table-column :label="showLabel('caozuo')" align="center" width="150" class-name="small-padding fixed-width">
                         <template slot-scope="{row}">
-                            <el-button type="default" size="mini" @click="handleUpdate(row)">{{ showLabel('bianji') }}</el-button>
+                            <router-link :to="'/product/edit/' + row.id">
+                                <el-button type="default" size="mini">{{ showLabel('bianji') }}</el-button>
+                            </router-link>
                             <el-button type="danger" size="mini" @click="handleDelete(row)">{{ showLabel('shanchu') }}</el-button>
                         </template>
                     </el-table-column>
@@ -383,11 +387,25 @@
                         </el-col>
                         <el-col :span="8">
                             <el-form-item :label="showLabel('chandi')" prop="countries">
-                                <simple-select v-model="product.form.countries" source="country"/>
+                                <el-select v-model="product.form.countries" placeholder="" multiple>
+                                    <el-option
+                                        v-for="item of countries"
+                                        :key="item.id + item.title"
+                                        :label="item.title"
+                                        :value="item.id">
+                                    </el-option>
+                                </el-select>
                             </el-form-item>
 
                             <el-form-item :label="showLabel('shangpinchicun')">
-                                <simple-select v-model="product.form.ulnarinch" source="ulnarinch" :multiple="true"/>
+                                <el-select v-model="product.form.ulnarinch" placeholder="" multiple>
+                                    <el-option
+                                        v-for="item of ulnarinches"
+                                        :key="item.id + item.title"
+                                        :label="item.title"
+                                        :value="item.id">
+                                    </el-option>
+                                </el-select>
                             </el-form-item>
 
                             <el-form-item :label="showLabel('shangpinmiaoshu')">
@@ -494,6 +512,7 @@
 import globals, { showLabel } from '../../component/globals.js'
 import '../../assets/table.css'
 import '../../assets/search-form.css'
+import _ from 'lodash'
 
 const defaultColor = {
     brandcolor: "",
@@ -572,9 +591,11 @@ export default {
             product     : Object.assign({}, defaultProduct),
             ageseasons  : [],
             brands      : [],
-            categories  : [], // 品类 子品类
+            categories  : [],                                  // 品类 子品类
             sizes       : [],
             sizecontents: [],
+            countries   : [],
+            ulnarinches : [],
             rules: {
                 form: {
                     ageseason     : [{ required: true, message: showLabel('niandai') + showLabel('required') }],
@@ -592,8 +613,39 @@ export default {
         this.getProductRelatedOptions()
     },
     methods: {
+        handleDelete(row) {
+            let self = this
+            self._remove("/product/delete", {id: row.id}).then(function() {
+                self.reloadList()
+            })
+        },
+        handleResetFilter() {
+            this.listQuery = {
+                wordcode    : '',
+                ageseason   : [],
+                brandid     : [],
+                brandgroupid: [],
+                childbrand  : [],
+                series      : []
+            }
+        },
         handleChangeBrand() {
             let self = this
+            self.series = []
+            self.listQuery.series = []
+
+            if (self.listQuery.brandid.length > 0) {
+                self.brands.forEach(item => {
+                    if (self.listQuery.brandid.indexOf(item.id) >= 0) {
+                        self.series.push.apply(self.series, item.series)
+                    }
+                })
+            } else {
+                self.brands.forEach(item => {
+                    self.series.push.apply(self.series, item.series)
+                })
+            }
+           
         },
         handleChangeBrandGroup() {
             let self = this
@@ -699,12 +751,13 @@ export default {
                 self.materials     = res.data.materials
                 self.materialnotes = res.data.materialnotes
                 self.productMemos  = res.data.productMemos
+                self.countries     = res.data.countries
+                self.ulnarinches   = res.data.ulnarinches
 
                 self.series = []
                 res.data.brands.forEach(item => {
                     self.series.push.apply(self.series, item.series)
                 })
-                console.log(self.series)
             })
         },
         getColorSystemAndColor() {
@@ -746,7 +799,6 @@ export default {
                     })
                 }
             })
-
         }
     }
 }
