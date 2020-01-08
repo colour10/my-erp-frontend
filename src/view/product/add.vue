@@ -108,7 +108,7 @@
                         </el-select>
                     </el-form-item>
                     <el-form-item :label="showLabel('pinpai')" prop="form.brandid">
-                        <el-select v-model="product.form.brandid" placeholder="">
+                        <el-select v-model="product.form.brandid" placeholder="" @change="handleChangeBrand">
                             <el-option
                                 v-for="item of brands"
                                 :key="item.id + item.title"
@@ -226,7 +226,14 @@
                     </el-form-item>
 
                     <el-form-item :label="showLabel('shangpinmiaoshu')">
-                        <simple-select v-model="product.form.productmemoids" source="productmemo" :multiple="true"/>
+                        <el-select v-model="product.form.productmemoids" placeholder="" multiple>
+                            <el-option
+                                v-for="item of productMemos"
+                                :key="item.id + item.title"
+                                :label="item.title"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
                     </el-form-item>
 
                     <el-form-item :label="showLabel('cankaobeilv')">
@@ -239,45 +246,90 @@
 
                     <el-form-item :label="showLabel('chuchangjia')">
                         <el-input placeholder="" v-model="product.form.factoryprice" class="productcurrency" ref="factoryprice" @focus="onPriceFocus('factoryprice');watcherprice.start()" @blur="watcherprice.stop()">
-                            <simple-select source="currency" :clearable="false" v-model="product.form.wordpricecurrency" slot="prepend">
-                            </simple-select>
+                            <el-select v-model="product.form.wordpricecurrency" placeholder="" slot="prepend">
+                                <el-option
+                                    v-for="item of currencies"
+                                    :key="item.id + item.code"
+                                    :label="item.code"
+                                    :value="item.id">
+                                </el-option>
+                            </el-select>
                             <span slot="append">{{getRate}}</span>
                         </el-input>
                     </el-form-item>
                     <el-form-item :label="showLabel('guojilingshoujia')">
                         <el-input placeholder="" v-model="product.form.wordprice" class="productcurrency" ref="wordprice" @focus="onPriceFocus('wordprice')">
-                            <simple-select source="currency" :clearable="false" v-model="product.form.wordpricecurrency" slot="prepend">
-                            </simple-select>
+                            <el-select v-model="product.form.wordpricecurrency" placeholder="" slot="prepend">
+                                <el-option
+                                    v-for="item of currencies"
+                                    :key="item.id + item.code"
+                                    :label="item.code"
+                                    :value="item.id">
+                                </el-option>
+                            </el-select>
                             <span slot="append">{{getReciprocalRate}}</span>
                         </el-input>
                     </el-form-item>
                     <el-form-item :label="showLabel('benguochuchangjia')">
                         <el-input placeholder="" v-model="product.form.nationalfactoryprice" class="productcurrency" ref="nationalfactoryprice" @focus="onPriceFocus('nationalfactoryprice')">
-                            <simple-select source="currency" :clearable="false" v-model="product.form.nationalpricecurrency" slot="prepend">
-                            </simple-select>
+                            <el-select v-model="product.form.nationalpricecurrency" placeholder="" slot="prepend">
+                                <el-option
+                                    v-for="item of currencies"
+                                    :key="item.id + item.code"
+                                    :label="item.code"
+                                    :value="item.id">
+                                </el-option>
+                            </el-select>
                             <span slot="append">{{getRateNational}}</span>
                         </el-input>
                     </el-form-item>
                     <el-form-item :label="showLabel('benguolingshoujia')">
                         <el-input placeholder="" v-model="product.form.nationalprice" class="productcurrency" ref="nationalprice" @focus="onPriceFocus('nationalprice')">
-                            <simple-select source="currency" :clearable="false" v-model="product.form.nationalpricecurrency" slot="prepend">
-                            </simple-select>
+                            <el-select v-model="product.form.nationalpricecurrency" placeholder="" slot="prepend">
+                                <el-option
+                                    v-for="item of currencies"
+                                    :key="item.id + item.code"
+                                    :label="item.code"
+                                    :value="item.id">
+                                </el-option>
+                            </el-select>
                             <span slot="append">{{getReciprocalRateNational}}</span>
                         </el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
                     <el-form-item :label="showLabel('shangpinxilie')">
-                        <simple-select v-model="product.form.series" ref="series" source="series" :parentid="product.form.brandid"> </simple-select>
+                        <el-select v-model="product.form.series" placeholder="">
+                            <el-option
+                                v-for="item of series"
+                                :key="item.id + item.title"
+                                :label="item.title"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
                         <as-button class="trimhalf" @click="onAddSeries">{{showLabel("xinjian")}}</as-button>
                     </el-form-item>
 
                     <el-form-item :label="showLabel('xiaoshoushuxing')">
-                        <simple-select v-model="product.form.saletypeid" source="saletype"/>
+                        <el-select v-model="product.form.saletypeid" placeholder="">
+                            <el-option
+                                v-for="item of saletypes"
+                                :key="item.id + item.title"
+                                :label="item.title"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
                     </el-form-item>
 
                     <el-form-item :label="showLabel('shangpinshuxing')">
-                        <simple-select v-model="product.form.producttypeid" source="producttype"/>
+                        <el-select v-model="product.form.producttypeid" placeholder="">
+                            <el-option
+                                v-for="item of productTypes"
+                                :key="item.id + item.title"
+                                :label="item.title"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
                     </el-form-item>
 
                     <el-form-item :label="showLabel('fanghanzhishu')">
@@ -390,8 +442,11 @@ export default {
             ulnarinches  : [],
             series       : [],
             colorSystems : [],
+            currencies   : [],
+            saletypes    : [],
+            productTypes : [],
             product      : Object.assign({}, defaultProduct),
-            rules: {
+            rules        : {
                 form: {
                     ageseason     : [{ required: true, message: showLabel('niandai') + showLabel('required') }],
                     brandid       : [{ required: true, message: showLabel('pinpai') + showLabel('required'), trigger: 'change' }],
@@ -407,6 +462,19 @@ export default {
         this.getProductRelatedOptions()
     },
     methods: {
+        handleChangeBrand() {
+            let self = this
+            self.series = []
+            self.product.form.series = ''
+            if (self.product.form.brandid) {
+                self.brands.forEach(item => {
+                    if (self.product.form.brandid == item.id) {
+                        console.log(item)
+                        self.series = item.series
+                    }
+                })
+            }
+        },
         hideDialogForm() {
             this.$emit('hideDialogForm')
         },
@@ -455,11 +523,9 @@ export default {
                 self.productMemos  = res.data.productMemos
                 self.countries     = res.data.countries
                 self.ulnarinches   = res.data.ulnarinches
-
-                self.series = []
-                res.data.brands.forEach(item => {
-                    self.series.push.apply(self.series, item.series)
-                })
+                self.currencies    = res.data.currencies
+                self.saletypes     = res.data.saletypes
+                self.productTypes  = res.data.productTypes
             })
         },
         resetDialogForm() {

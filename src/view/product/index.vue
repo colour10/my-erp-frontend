@@ -104,6 +104,15 @@
                             <img :src="_fileLink(row.picture2)" style="max-width: 50px; max-height: 50px;">
                         </template>
                     </el-table-column>
+                    <el-table-column :label="showLabel('yanse')">
+                        <template slot-scope="{row}">
+                            <div class="color-group" v-for="item in row.colors" :key="item.id">
+                                <div class="box" style="'width: 20px; height: 20px;">
+                                    <img :src="_fileLink(item.picture)" style="max-width: 20px; max-height: 20px;">
+                                </div>
+                            </div>
+                        </template>
+                    </el-table-column>
                     <el-table-column :label="showLabel('shangpinmingcheng')" width="250">
                         <template slot-scope="{row}">
                             {{ row.name }}
