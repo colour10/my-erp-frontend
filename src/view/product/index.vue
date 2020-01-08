@@ -85,7 +85,7 @@
 
         <el-row :gutter="20" class="product">
             <el-col :span="24">
-                <el-table v-loading="listLoading" :data="list" border stripe>
+                <el-table v-loading="listLoading" :data="list" @sort-change="handleSort" border stripe>
                     <el-table-column :label="showLabel('caozuo')" align="center" width="150" class-name="small-padding fixed-width">
                         <template slot-scope="{row}">
                             <router-link :to="'/product/edit/' + row.id">
@@ -107,9 +107,11 @@
                     <el-table-column :label="showLabel('yanse')">
                         <template slot-scope="{row}">
                             <div class="color-group" v-for="item in row.colors" :key="item.id">
-                                <div class="box" style="'width: 20px; height: 20px;">
-                                    <img :src="_fileLink(item.picture)" style="max-width: 20px; max-height: 20px;">
-                                </div>
+                                <router-link :to="'/product/edit/' + item.id">
+                                    <div class="box" style="'width: 20px; height: 20px;">
+                                        <img :src="_fileLink(item.picture)" style="max-width: 20px; max-height: 20px;">
+                                    </div>
+                                </router-link>
                             </div>
                         </template>
                     </el-table-column>
@@ -118,12 +120,12 @@
                             {{ row.name }}
                         </template>
                     </el-table-column>
-                    <el-table-column :label="showLabel('niandai')">
+                    <el-table-column :label="showLabel('niandai')" sortable="customer" prop="ageseason">
                         <template slot-scope="{row}">
                             {{ row.season }}
                         </template>
                     </el-table-column>
-                    <el-table-column :label="showLabel('guojima')" width="200">
+                    <el-table-column :label="showLabel('guojima')" width="200" sortable="customer" prop="wordcode">
                         <template slot-scope="{row}">
                             {{ row.worldcode }}
                         </template>
@@ -232,6 +234,11 @@ export default {
         this.getList()
     },
     methods: {
+        handleSort(data) {
+            this.listQuery.sort = data.prop
+            this.listQuery.order = data.order
+            this.getList()
+        },
         handleDelete(row) {
             let self = this
             self._remove("/product/delete", {id: row.id}).then(function() {
@@ -240,6 +247,8 @@ export default {
         },
         handleResetFilter() {
             this.listQuery = {
+                sort        : undefined,
+                order       : undefined,
                 wordcode    : '',
                 ageseason   : [],
                 brandid     : [],

@@ -32,8 +32,8 @@
                         <el-select v-model="product.form.ageseason" multiple placeholder="">
                             <el-option
                                 v-for="item of ageseasons"
-                                :key="item.id + item.sessionmark + item.name"
-                                :label="item.sessionmark + item.name"
+                                :key="item.id + item.title"
+                                :label="item.title"
                                 :value="item.id">
                             </el-option>
                         </el-select>
@@ -145,29 +145,53 @@
 
                     <el-form-item :label="showLabel('chuchangjia')">
                         <el-input placeholder="" v-model="product.form.factoryprice" class="productcurrency">
-                            <simple-select source="currency" :clearable="false" v-model="product.form.wordpricecurrency" slot="prepend">
-                            </simple-select>
+                            <el-select v-model="product.form.wordpricecurrency" placeholder="" slot="prepend">
+                                <el-option
+                                    v-for="item of currencies"
+                                    :key="item.id + item.code"
+                                    :label="item.code"
+                                    :value="item.id">
+                                </el-option>
+                            </el-select>
                             <span slot="append">{{getRate}}</span>
                         </el-input>
                     </el-form-item>
                     <el-form-item :label="showLabel('guojilingshoujia')">
                         <el-input placeholder="" v-model="product.form.wordprice" class="productcurrency">
-                            <simple-select source="currency" :clearable="false" v-model="product.form.wordpricecurrency" slot="prepend">
-                            </simple-select>
+                            <el-select v-model="product.form.wordpricecurrency" placeholder="" slot="prepend">
+                                <el-option
+                                    v-for="item of currencies"
+                                    :key="item.id + item.code"
+                                    :label="item.code"
+                                    :value="item.id">
+                                </el-option>
+                            </el-select>
                             <span slot="append">{{getReciprocalRate}}</span>
                         </el-input>
                     </el-form-item>
                     <el-form-item :label="showLabel('benguochuchangjia')">
                         <el-input placeholder="" v-model="product.form.nationalfactoryprice" class="productcurrency">
-                            <simple-select source="currency" :clearable="false" v-model="product.form.nationalpricecurrency" slot="prepend">
-                            </simple-select>
+                            <el-select v-model="product.form.nationalpricecurrency" placeholder="" slot="prepend">
+                                <el-option
+                                    v-for="item of currencies"
+                                    :key="item.id + item.code"
+                                    :label="item.code"
+                                    :value="item.id">
+                                </el-option>
+                            </el-select>
                             <span slot="append">{{getRateNational}}</span>
                         </el-input>
                     </el-form-item>
                     <el-form-item :label="showLabel('benguolingshoujia')">
                         <el-input placeholder="" v-model="product.form.nationalprice" class="productcurrency">
-                            <simple-select source="currency" :clearable="false" v-model="product.form.nationalpricecurrency" slot="prepend">
-                            </simple-select>
+                            <el-select v-model="product.form.nationalpricecurrency" placeholder="" slot="prepend">
+                                <el-option
+                                    v-for="item of currencies"
+                                    :key="item.id + item.code"
+                                    :label="item.code"
+                                    :value="item.id">
+                                </el-option>
+                            </el-select>
                             <span slot="append">{{getReciprocalRateNational}}</span>
                         </el-input>
                     </el-form-item>
@@ -186,15 +210,36 @@
                     </el-form-item>
 
                     <el-form-item :label="showLabel('xiaoshoushuxing')">
-                        <simple-select v-model="product.form.saletypeid" source="saletype" style="color:red"></simple-select>
+                        <el-select v-model="product.form.saletypeid" placeholder="">
+                            <el-option
+                                v-for="item of saletypes"
+                                :key="item.id + item.title"
+                                :label="item.title"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
                     </el-form-item>
 
                     <el-form-item :label="showLabel('shangpinshuxing')">
-                        <simple-select v-model="product.form.producttypeid" source="producttype"></simple-select>
+                        <el-select v-model="product.form.producttypeid" placeholder="">
+                            <el-option
+                                v-for="item of productTypes"
+                                :key="item.id + item.title"
+                                :label="item.title"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
                     </el-form-item>
 
                     <el-form-item :label="showLabel('fanghanzhishu')">
-                        <simple-select v-model="product.form.winterproofingid" source="winterproofing"></simple-select>
+                        <el-select v-model="product.form.winterproofingid" placeholder="">
+                            <el-option
+                                v-for="item of winterProofings"
+                                :key="item.id + item.title"
+                                :label="item.title"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
                     </el-form-item>
 
                     <el-form-item :label="showLabel('xingbie')">
@@ -258,19 +303,23 @@ export default {
                 form: {},
                 materials: []
             },
-            ageseasons   : [],
-            brands       : [],
-            categories   : [],
-            sizes        : [],
-            materials    : [],
-            materialnotes: [],
-            productMemos : [],
-            series       : [],
-            colorSystems : [],
-            countries    : [],
-            ulnarinches  : [],
-            sizecontents : [],
-            rules: {
+            ageseasons     : [],
+            brands         : [],
+            categories     : [],
+            sizes          : [],
+            materials      : [],
+            materialnotes  : [],
+            productMemos   : [],
+            series         : [],
+            colorSystems   : [],
+            countries      : [],
+            ulnarinches    : [],
+            sizecontents   : [],
+            currencies     : [],
+            saletypes      : [],
+            productTypes   : [],
+            winterProofings: [],
+            rules          : {
                 form: {
                     wordcode_1    : [{ required: true, message: showLabel('kuanshi') + showLabel('required') }],
                     wordcode_2    : [{ required: true, message: showLabel('caizhi') + showLabel('required') }],
@@ -295,7 +344,6 @@ export default {
             if (self.product.form.brandid) {
                 self.brands.forEach(item => {
                     if (self.product.form.brandid == item.id) {
-                        console.log(item)
                         self.series = item.series
                     }
                 })
@@ -305,6 +353,13 @@ export default {
             let self = this
             self._fetch("/product/info", {id: id}).then(res=>{
                 res.data.ageseason = _.split(res.data.ageseason, ',')
+                if (res.data.ageseason.length) {
+                    let ageseasons = _.split(res.data.ageseason)
+                    res.data.ageseason = []
+                    ageseasons.forEach(item => {
+                        res.data.ageseason.push(parseInt(item))
+                    })
+                }
 
                 res.data.colorId = []
                 res.data.colorId.push(parseInt(res.data.color_system_id))
@@ -355,6 +410,15 @@ export default {
                     })
                 }
 
+                res.data.wordpricecurrency     = parseInt(res.data.wordpricecurrency)
+                res.data.nationalpricecurrency = parseInt(res.data.nationalpricecurrency)
+                res.data.saletypeid            = parseInt(res.data.saletypeid)
+                res.data.saletypeid            = (res.data.saletypeid == 0) ? '' : res.data.saletypeid
+                res.data.producttypeid         = parseInt(res.data.producttypeid)
+                res.data.producttypeid         = (res.data.producttypeid == 0) ? '' : res.data.producttypeid
+                res.data.winterproofingid      = parseInt(res.data.winterproofingid)
+                res.data.winterproofingid      = (res.data.winterproofingid == 0) ? '' : res.data.winterproofingid
+
                 self.product.form = res.data
                 self.handleChangeBrand()
             })
@@ -362,15 +426,19 @@ export default {
         getProductRelatedOptions() {
             let self = this
             self._fetch("/product/getProductRelatedOptions", {}).then(function(res) {
-                self.ageseasons    = res.data.ageseasons
-                self.brands        = res.data.brands
-                self.categories    = res.data.categories
-                self.sizes         = res.data.sizes
-                self.materials     = res.data.materials
-                self.materialnotes = res.data.materialnotes
-                self.productMemos  = res.data.productMemos
-                self.countries     = res.data.countries
-                self.ulnarinches   = res.data.ulnarinches
+                self.ageseasons      = res.data.ageseasons
+                self.brands          = res.data.brands
+                self.categories      = res.data.categories
+                self.sizes           = res.data.sizes
+                self.materials       = res.data.materials
+                self.materialnotes   = res.data.materialnotes
+                self.productMemos    = res.data.productMemos
+                self.countries       = res.data.countries
+                self.ulnarinches     = res.data.ulnarinches
+                self.currencies      = res.data.currencies
+                self.saletypes       = res.data.saletypes
+                self.productTypes    = res.data.productTypes
+                self.winterProofings = res.data.winterProofings
 
                 self.series = []
                 res.data.brands.forEach(item => {

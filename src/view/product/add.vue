@@ -101,8 +101,8 @@
                         <el-select v-model="product.form.ageseason" multiple placeholder="">
                             <el-option
                                 v-for="item of ageseasons"
-                                :key="item.id + item.sessionmark + item.name"
-                                :label="item.sessionmark + item.name"
+                                :key="item.id + item.title"
+                                :label="item.title"
                                 :value="item.id">
                             </el-option>
                         </el-select>
@@ -245,7 +245,7 @@
                     </el-form-item>
 
                     <el-form-item :label="showLabel('chuchangjia')">
-                        <el-input placeholder="" v-model="product.form.factoryprice" class="productcurrency" ref="factoryprice" @focus="onPriceFocus('factoryprice');watcherprice.start()" @blur="watcherprice.stop()">
+                        <el-input placeholder="" v-model="product.form.factoryprice" class="productcurrency">
                             <el-select v-model="product.form.wordpricecurrency" placeholder="" slot="prepend">
                                 <el-option
                                     v-for="item of currencies"
@@ -258,7 +258,7 @@
                         </el-input>
                     </el-form-item>
                     <el-form-item :label="showLabel('guojilingshoujia')">
-                        <el-input placeholder="" v-model="product.form.wordprice" class="productcurrency" ref="wordprice" @focus="onPriceFocus('wordprice')">
+                        <el-input placeholder="" v-model="product.form.wordprice" class="productcurrency">
                             <el-select v-model="product.form.wordpricecurrency" placeholder="" slot="prepend">
                                 <el-option
                                     v-for="item of currencies"
@@ -271,7 +271,7 @@
                         </el-input>
                     </el-form-item>
                     <el-form-item :label="showLabel('benguochuchangjia')">
-                        <el-input placeholder="" v-model="product.form.nationalfactoryprice" class="productcurrency" ref="nationalfactoryprice" @focus="onPriceFocus('nationalfactoryprice')">
+                        <el-input placeholder="" v-model="product.form.nationalfactoryprice" class="productcurrency">
                             <el-select v-model="product.form.nationalpricecurrency" placeholder="" slot="prepend">
                                 <el-option
                                     v-for="item of currencies"
@@ -284,7 +284,7 @@
                         </el-input>
                     </el-form-item>
                     <el-form-item :label="showLabel('benguolingshoujia')">
-                        <el-input placeholder="" v-model="product.form.nationalprice" class="productcurrency" ref="nationalprice" @focus="onPriceFocus('nationalprice')">
+                        <el-input placeholder="" v-model="product.form.nationalprice" class="productcurrency">
                             <el-select v-model="product.form.nationalpricecurrency" placeholder="" slot="prepend">
                                 <el-option
                                     v-for="item of currencies"
@@ -333,7 +333,14 @@
                     </el-form-item>
 
                     <el-form-item :label="showLabel('fanghanzhishu')">
-                        <simple-select v-model="product.form.winterproofingid" source="winterproofing"></simple-select>
+                        <el-select v-model="product.form.winterproofingid" placeholder="">
+                            <el-option
+                                v-for="item of winterProofings"
+                                :key="item.id + item.title"
+                                :label="item.title"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
                     </el-form-item>
 
                     <el-form-item :label="showLabel('xingbie')">
@@ -430,23 +437,24 @@ const defaultProduct = {
 export default {
     data() {
         return {
-            ageseasons   : [],
-            brands       : [],
-            categories   : [],                                  // 品类 子品类
-            sizes        : [],
-            sizecontents : [],
-            materials    : [],
-            materialnotes: [],
-            productMemos : [],
-            countries    : [],
-            ulnarinches  : [],
-            series       : [],
-            colorSystems : [],
-            currencies   : [],
-            saletypes    : [],
-            productTypes : [],
-            product      : Object.assign({}, defaultProduct),
-            rules        : {
+            ageseasons     : [],
+            brands         : [],
+            categories     : [],                                  // 品类 子品类
+            sizes          : [],
+            sizecontents   : [],
+            materials      : [],
+            materialnotes  : [],
+            productMemos   : [],
+            countries      : [],
+            ulnarinches    : [],
+            series         : [],
+            colorSystems   : [],
+            currencies     : [],
+            saletypes      : [],
+            productTypes   : [],
+            winterProofings: [],
+            product        : Object.assign({}, defaultProduct),
+            rules          : {
                 form: {
                     ageseason     : [{ required: true, message: showLabel('niandai') + showLabel('required') }],
                     brandid       : [{ required: true, message: showLabel('pinpai') + showLabel('required'), trigger: 'change' }],
@@ -492,8 +500,8 @@ export default {
         },
         handleAppendMaterial() {
             this.product.materials.push({
-                materialid: "",
-                percent: 100,
+                materialid    : "",
+                percent       : 100,
                 materialnoteid: ""
             })
         },
@@ -514,18 +522,19 @@ export default {
         getProductRelatedOptions() {
             let self = this
             self._fetch("/product/getProductRelatedOptions", {}).then(function(res) {
-                self.ageseasons    = res.data.ageseasons
-                self.brands        = res.data.brands
-                self.categories    = res.data.categories
-                self.sizes         = res.data.sizes
-                self.materials     = res.data.materials
-                self.materialnotes = res.data.materialnotes
-                self.productMemos  = res.data.productMemos
-                self.countries     = res.data.countries
-                self.ulnarinches   = res.data.ulnarinches
-                self.currencies    = res.data.currencies
-                self.saletypes     = res.data.saletypes
-                self.productTypes  = res.data.productTypes
+                self.ageseasons      = res.data.ageseasons
+                self.brands          = res.data.brands
+                self.categories      = res.data.categories
+                self.sizes           = res.data.sizes
+                self.materials       = res.data.materials
+                self.materialnotes   = res.data.materialnotes
+                self.productMemos    = res.data.productMemos
+                self.countries       = res.data.countries
+                self.ulnarinches     = res.data.ulnarinches
+                self.currencies      = res.data.currencies
+                self.saletypes       = res.data.saletypes
+                self.productTypes    = res.data.productTypes
+                self.winterProofings = res.data.winterProofings
             })
         },
         resetDialogForm() {
