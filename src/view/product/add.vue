@@ -146,7 +146,7 @@
                                 :value="item.id">
                             </el-option>
                         </el-select>
-                        <as-button @click="onTrimSize" class="trimhalf">{{showLabel("qubanma")}}</as-button>
+                        <as-button @click="handleTrimSize" class="trimhalf">{{showLabel("qubanma")}}</as-button>
                     </el-form-item>
                     <el-row class="product">
                         <el-table :data="product.materials" border style="width:90%;">
@@ -470,6 +470,20 @@ export default {
         this.getProductRelatedOptions()
     },
     methods: {
+        handleTrimSize() {
+            let self = this
+            let sizecontentids = []
+            self.product.form.sizecontentids.forEach(item => {
+                self.sizecontents.forEach(size => {
+                    if (size.id == item) {
+                        if (size.title.indexOf('.') < 0) {
+                            sizecontentids.push(item)
+                        }
+                    }
+                })
+            })
+            self.product.form.sizecontentids = sizecontentids
+        },
         handleChangeBrand() {
             let self = this
             self.series = []
@@ -477,7 +491,6 @@ export default {
             if (self.product.form.brandid) {
                 self.brands.forEach(item => {
                     if (self.product.form.brandid == item.id) {
-                        console.log(item)
                         self.series = item.series
                     }
                 })
@@ -549,8 +562,8 @@ export default {
                     sizetopid            : "",
                     sizecontentids       : [],
                     countrie             : "",
-                    ulnarinch            : "",
-                    productmemoids       : "",
+                    ulnarinch            : [],
+                    productmemoids       : [],
                     factoryprice         : "",
                     factorypricecurrency : 9,
                     wordprice            : "",
@@ -568,7 +581,7 @@ export default {
                     fall                 : "",
                     winter               : "",
                     memo                 : "",
-                    countries            : "",
+                    countries            : [],
                     colorId              : "",
                     secondColorId        : ""
                 }
@@ -579,12 +592,11 @@ export default {
         createProduct() {
             let self = this
 
-            self.product.form.countries = _.join(self.product.form.countries, ',')
-            let params = {}
-            params = Object.assign({}, self.product)
-
             this.$refs['productForm'].validate((valid) => {
                 if (valid) {
+                    let params = {}
+                    params = Object.assign({}, self.product)
+
                     self._submit("/product/add", { params: JSON.stringify(params) }).then(function(res) {
                         self.hideDialogForm()
                         self.reloadList()

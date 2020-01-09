@@ -78,7 +78,7 @@
                                 :value="item.id">
                             </el-option>
                         </el-select>
-                        <as-button class="trimhalf" @click="onTrimSize">{{_label("qubanma")}}</as-button>
+                        <as-button class="trimhalf" @click="handleTrimSize">{{showLabel("qubanma")}}</as-button>
                     </el-form-item>
                     <el-form-item :label="showLabel('sexi') + '/' + showLabel('color')" prop="brandcolor">
                         <el-cascader
@@ -101,6 +101,59 @@
                             clearable>
                         </el-cascader>
                     </el-form-item>
+                    <el-row class="product">
+                        <el-table :data="product.materials" border style="width:90%;">
+                            <el-table-column :label="showLabel('caizhiguanli')" align="center">
+                                <el-table-column :label="showLabel('caizhi')" align="center">
+                                    <template slot-scope="scope">
+                                        <el-form-item
+                                            :prop="'materials.' + scope.$index + '.materialid'"
+                                            :rules="{required: true, trigger: 'change'}"
+                                        >
+                                            <el-select v-model="scope.row.materialid" size="mini">
+                                                <el-option
+                                                    v-for="item in materials"
+                                                    :key="item.id + item.title"
+                                                    :label="item.title"
+                                                    :value="item.id">
+                                                </el-option>
+                                            </el-select>
+                                        </el-form-item>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column :label="showLabel('baifenbi')" align="center" width="90">
+                                    <template slot-scope="scope">
+                                        <el-form-item
+                                            :prop="'materials.' + scope.$index + '.percent'"
+                                            :rules="{required: true, trigger: 'blur'}"
+                                        >
+                                            <el-input v-model="scope.row.percent" size="mini"></el-input>
+                                        </el-form-item>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column :label="showLabel('caizhibeizhu')" align="center">
+                                    <template slot-scope="scope">
+                                        <el-select v-model="scope.row.materialnoteid" size="mini">
+                                            <el-option
+                                                v-for="item in materialnotes"
+                                                :key="item.id + item.title"
+                                                :label="item.title"
+                                                :value="item.id">
+                                            </el-option>
+                                        </el-select>
+                                    </template>
+                                </el-table-column>
+                            </el-table-column>
+                            <el-table-column width="70">
+                                <template slot="header">
+                                    <el-button type="success" icon="el-icon-plus" size="mini" @click.stop="handleAppendMaterial"></el-button>
+                                </template>
+                                <template slot-scope="scope">
+                                    <el-button type="danger" size="mini" icon="el-icon-delete" @click="handleRemoveMaterial(scope.$index)"></el-button>
+                                </template>
+                            </el-table-column>
+                        </el-table>
+                    </el-row>
                 </el-col>
                 <el-col :span="8">
                     <el-form-item :label="showLabel('chandi')" prop="countries">
@@ -338,6 +391,39 @@ export default {
         this.getColorSystemAndColor()
     },
     methods: {
+        handleChangeSizeTop() {
+            let self = this
+            self.sizes.forEach(item => {
+                if (item.id == self.product.form.sizetopid) {
+                    self.product.form.sizecontentids = []
+                    self.sizecontents = item.children
+                }
+            })
+        },
+        handleTrimSize() {
+            let self = this
+            let sizecontentids = []
+            self.product.form.sizecontentids.forEach(item => {
+                self.sizecontents.forEach(size => {
+                    if (size.id == item) {
+                        if (size.title.indexOf('.') < 0) {
+                            sizecontentids.push(item)
+                        }
+                    }
+                })
+            })
+            self.product.form.sizecontentids = sizecontentids
+        },
+        handleRemoveMaterial(index) {
+            this.product.materials.splice(index, 1)
+        },
+        handleAppendMaterial() {
+            this.product.materials.push({
+                materialid    : "",
+                percent       : 100,
+                materialnoteid: ""
+            })
+        },
         handleChangeBrand() {
             let self = this
             self.series = []
