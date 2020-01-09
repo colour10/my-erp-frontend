@@ -504,8 +504,16 @@ export default {
                 res.data.producttypeid         = (res.data.producttypeid == 0) ? '' : res.data.producttypeid
                 res.data.winterproofingid      = parseInt(res.data.winterproofingid)
                 res.data.winterproofingid      = (res.data.winterproofingid == 0) ? '' : res.data.winterproofingid
+                
+                if (res.data.materials.length) {
+                    res.data.materials.forEach(material => {
+                        material.materialid = parseInt(material.materialid)
+                        material.materialnoteid = parseInt(material.materialnoteid)
+                    })
+                }
 
                 self.product.form = res.data
+                self.product.materials = res.data.materials
                 self.handleChangeBrand()
             })
         },
