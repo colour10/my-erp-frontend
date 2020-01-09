@@ -98,14 +98,7 @@
             <el-row :gutter="0">
                 <el-col :span="8">
                     <el-form-item :label="showLabel('niandai')" prop="form.ageseason">
-                        <el-select v-model="product.form.ageseason" multiple placeholder="">
-                            <el-option
-                                v-for="item of ageseasons"
-                                :key="item.id + item.title"
-                                :label="item.title"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
+                        <ageseason v-model="product.form.ageseason" :dataList="ageseasons"></ageseason>
                     </el-form-item>
                     <el-form-item :label="showLabel('pinpai')" prop="form.brandid">
                         <el-select v-model="product.form.brandid" placeholder="" @change="handleChangeBrand">
@@ -386,6 +379,7 @@
 <script>
 import globals, { showLabel } from '@/component/globals.js'
 import _ from 'lodash'
+import ageseason from './components/ageseason.vue'
 
 const defaultColor = {
     brandcolor: "",
@@ -435,6 +429,7 @@ const defaultProduct = {
 }
 
 export default {
+    components: { ageseason },
     data() {
         return {
             ageseasons     : [],

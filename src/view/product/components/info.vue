@@ -29,15 +29,7 @@
             <el-row :gutter="0">
                 <el-col :span="8">
                     <el-form-item :label="showLabel('niandai')" prop="form.ageseason">
-                        <el-select v-model="product.form.ageseason" multiple placeholder="">
-                            <el-option
-                                v-for="item of ageseasons"
-                                :key="item.id + item.title"
-                                :label="item.title"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
-                        </el-form-item>
+                        <ageseason v-model="product.form.ageseason" :dataList="ageseasons"></ageseason>
                     </el-form-item>
                     <el-form-item :label="showLabel('pinpai')" prop="form.brandid">
                         <el-select v-model="product.form.brandid" placeholder="" @change="handleChangeBrand">
@@ -259,7 +251,6 @@
                                 :value="item.id">
                             </el-option>
                         </el-select>
-                        <as-button class="trimhalf" @click="onAddSeries">{{_label("xinjian")}}</as-button>
                     </el-form-item>
 
                     <el-form-item :label="showLabel('xiaoshoushuxing')">
@@ -348,8 +339,10 @@
 <script>
 import { showLabel } from '@/component/globals.js'
 import _ from 'lodash'
+import ageseason from './ageseason.vue'
 
 export default {
+    components: { ageseason },
     data() {
         return {
             product: {
@@ -438,9 +431,8 @@ export default {
         getProduct(id) {
             let self = this
             self._fetch("/product/info", {id: id}).then(res=>{
-                res.data.ageseason = _.split(res.data.ageseason, ',')
                 if (res.data.ageseason.length) {
-                    let ageseasons = _.split(res.data.ageseason)
+                    let ageseasons = _.split(res.data.ageseason, ',')
                     res.data.ageseason = []
                     ageseasons.forEach(item => {
                         res.data.ageseason.push(parseInt(item))
