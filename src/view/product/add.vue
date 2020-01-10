@@ -98,7 +98,7 @@
             <el-row :gutter="0">
                 <el-col :span="8">
                     <el-form-item :label="showLabel('niandai')" prop="form.ageseason">
-                        <ageseason v-model="product.form.ageseason" :dataList="ageseasons"></ageseason>
+                        <ageseason v-model="product.form.ageseason" :data-list="ageseasons"></ageseason>
                     </el-form-item>
                     <el-form-item :label="showLabel('pinpai')" prop="form.brandid">
                         <el-select v-model="product.form.brandid" placeholder="" @change="handleChangeBrand">
@@ -197,14 +197,7 @@
                 </el-col>
                 <el-col :span="8">
                     <el-form-item :label="showLabel('chandi')" prop="countries">
-                        <el-select v-model="product.form.countries" placeholder="" multiple>
-                            <el-option
-                                v-for="item of countries"
-                                :key="item.id + item.title"
-                                :label="item.title"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
+                        <country v-model="product.form.countries" :data-list="countries"></country>
                     </el-form-item>
 
                     <el-form-item :label="showLabel('shangpinchicun')">
@@ -380,6 +373,7 @@
 import globals, { showLabel } from '@/component/globals.js'
 import _ from 'lodash'
 import ageseason from './components/ageseason.vue'
+import country from './components/country.vue'
 
 const defaultColor = {
     brandcolor: "",
@@ -429,7 +423,7 @@ const defaultProduct = {
 }
 
 export default {
-    components: { ageseason },
+    components: { ageseason, country },
     data() {
         return {
             ageseasons     : [],
