@@ -3,29 +3,30 @@
         <el-input v-model="selectedString" readonly>
             <el-button slot="append" icon="el-icon-more" @click.stop="handleShowDialog"></el-button>
         </el-input>
+        <el-button @click="handleTrimSize" class="trimhalf" style="margin: 0;">{{showLabel("qubanma")}}</el-button>
         <el-dialog
             width="250px"
             class="asa-select-dialog"
-            :title="showLabel('niandai')"
+            :title="showLabel('chimamingxi')"
             :visible.sync="visible"
             :center="true"
             :close-on-click-modal="false"
             :close-on-press-escape="false"
             append-to-body>
 
+            <el-input v-model="keyword" :placeholder="showLabel('search')" />
+
             <el-table
                 ref="multipleTable"
-                :data="dataList"
+                :data="filterDataList"
                 tooltip-effect="dark"
                 style="width: 100%"
                 max-height="500"
                 @selection-change="handleSelectionChange"
                 @row-click="handleRowClick">
-                <el-table-column
-                    type="selection"
-                    width="50">
+                <el-table-column type="selection" width="50">
                 </el-table-column>
-                <el-table-column :label="showLabel('neirong')" width="150">
+                <el-table-column :label="showLabel('chima')" width="150">
                     <template slot-scope="scope">{{ scope.row.title }}</template>
                 </el-table-column>
             </el-table>
@@ -39,13 +40,13 @@
 </template>
 <script>
 export default {
-    name: 'ageseason',
     data() {
         return {
             visible: false,
             selectedDatas:[],
             selectedString: '',
             selectedIds: [],
+            keyword: ''
         }
     },
     props: {
@@ -60,7 +61,23 @@ export default {
         prop: 'selected',
         event: 'change'
     },
+    computed: {
+        filterDataList() {
+            let self = this
+            if (self.keyword.length > 0) {
+                return self.dataList.filter(function (row) {
+                    return (row.title.indexOf(self.keyword) >= 0)
+                })
+            }
+            return self.dataList
+        }
+    },
     methods: {
+        handleTrimSize() {
+            this.selectedDatas = this.selectedDatas.filter(data => data.title.indexOf('.') < 0)
+            this.convertSelectedDatas2Sting()
+            this.$emit('change', this.selectedIds)
+        },
         handleRowClick(row) {
             this.$refs.multipleTable.toggleRowSelection(row)
         },

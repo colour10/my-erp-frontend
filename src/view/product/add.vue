@@ -131,15 +131,8 @@
                         </el-select>
                     </el-form-item>
                     <el-form-item :label="showLabel('chimamingxi')" prop="form.sizecontentids">
-                        <el-select v-model="product.form.sizecontentids" placeholder="" multiple>
-                            <el-option
-                                v-for="item of sizecontents"
-                                :key="item.id + item.title"
-                                :label="item.title"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
-                        <as-button @click="handleTrimSize" class="trimhalf">{{showLabel("qubanma")}}</as-button>
+                        <size v-model="product.form.sizecontentids" :data-list="sizecontents"></size>
+                        <!-- <as-button @click="handleTrimSize" class="trimhalf">{{showLabel("qubanma")}}</as-button> -->
                     </el-form-item>
                     <el-row class="product">
                         <el-table :data="product.materials" border style="width:90%;">
@@ -201,25 +194,12 @@
                     </el-form-item>
 
                     <el-form-item :label="showLabel('shangpinchicun')">
-                        <el-select v-model="product.form.ulnarinch" placeholder="" multiple>
-                            <el-option
-                                v-for="item of ulnarinches"
-                                :key="item.id + item.title"
-                                :label="item.title"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
+                        <ulnarinch v-model="product.form.ulnarinch" :data-list="ulnarinches"></ulnarinch>
+                        <!-- <size v-model="product.form.ulnarinch" :data-list="ulnarinches"></size> -->
                     </el-form-item>
 
                     <el-form-item :label="showLabel('shangpinmiaoshu')">
-                        <el-select v-model="product.form.productmemoids" placeholder="" multiple>
-                            <el-option
-                                v-for="item of productMemos"
-                                :key="item.id + item.title"
-                                :label="item.title"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
+                        <product-memo v-model="product.form.productmemoids" :data-list="productMemos"></product-memo>
                     </el-form-item>
 
                     <el-form-item :label="showLabel('cankaobeilv')">
@@ -374,6 +354,9 @@ import globals, { showLabel } from '@/component/globals.js'
 import _ from 'lodash'
 import ageseason from './components/ageseason.vue'
 import country from './components/country.vue'
+import ulnarinch from './components/ulnarinch.vue'
+import size from './components/size.vue'
+import productMemo from './components/productMemo.vue'
 
 const defaultColor = {
     brandcolor: "",
@@ -423,7 +406,7 @@ const defaultProduct = {
 }
 
 export default {
-    components: { ageseason, country },
+    components: { ageseason, country, ulnarinch, size, productMemo },
     data() {
         return {
             ageseasons     : [],
@@ -459,20 +442,6 @@ export default {
         this.getProductRelatedOptions()
     },
     methods: {
-        handleTrimSize() {
-            let self = this
-            let sizecontentids = []
-            self.product.form.sizecontentids.forEach(item => {
-                self.sizecontents.forEach(size => {
-                    if (size.id == item) {
-                        if (size.title.indexOf('.') < 0) {
-                            sizecontentids.push(item)
-                        }
-                    }
-                })
-            })
-            self.product.form.sizecontentids = sizecontentids
-        },
         handleChangeBrand() {
             let self = this
             self.series = []

@@ -39,11 +39,12 @@
 </template>
 <script>
 export default {
+    name: 'country',
     data() {
         return {
             visible: false,
+            selectedDatas:[],
             selectedString: '',
-            selectedStringTmp: '',
             selectedIds: [],
             keyword: ''
         }
@@ -76,21 +77,10 @@ export default {
             this.$refs.multipleTable.toggleRowSelection(row)
         },
         handleSelectionChange(selectedRows) {
-            let self = this
-            self.selectedIds = []
-            self.selectedStringTmp = ''
-            if (selectedRows.length) {
-                let selectedStringArray = []
-                selectedRows.forEach(row => {
-                    selectedStringArray.push(row.title)
-                    self.selectedIds.push(row.id)
-                })
-
-                self.selectedStringTmp = selectedStringArray.join(',')
-            }
+            this.selectedDatas = selectedRows
         },
         handleSubmit() {
-            this.selectedString = this.selectedStringTmp
+            this.convertSelectedDatas2Sting()
             this.$emit('change', this.selectedIds)
             this.handleHideDialog()
         },
@@ -105,35 +95,40 @@ export default {
             self.visible = true
 
             setTimeout(()=>{
-                if (self.selectedIds.length) {
-                    self.selectedIds.forEach(selectedId => {
-                        self.dataList.forEach(row => {
-                            if (selectedId == row.id) {
-                                self.$refs.multipleTable.toggleRowSelection(row, true)
-                            }
-                        })
+                if (self.selectedDatas.length) {
+                    self.selectedDatas.forEach(data => {
+                        self.$refs.multipleTable.toggleRowSelection(data, true)
                     })
                 }
             },50)
+        },
+        convertSelectedDatas2Sting() {
+            let self = this
+
+            self.selectedIds = []
+            let selectedStringArray = []
+
+            self.selectedDatas.forEach(data => {
+                selectedStringArray.push(data.title)
+                self.selectedIds.push(data.id)
+            })
+                           
+            self.selectedString = selectedStringArray.join(',')
         }
     },
     watch: {
         selected(newValue) {
             let self = this
-            self.selectedIds = []
+            self.selectedDatas = []
             if (newValue.length) {
-                let selectedStringArray = []
                 newValue.forEach(item => {
                     self.dataList.forEach(row => {
                         if (item == row.id) {
-                            self.selectedIds.push(row.id)
-                            selectedStringArray.push(row.title)
-                            row.selected = true
+                            self.selectedDatas.push(row)
+                            self.convertSelectedDatas2Sting()
                         }
                     })
                 })
-                self.selectedString = selectedStringArray.join(',')
-
             }
         }
     }

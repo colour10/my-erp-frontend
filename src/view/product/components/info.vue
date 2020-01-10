@@ -62,15 +62,7 @@
                         </el-select>
                     </el-form-item>
                     <el-form-item :label="_label('chimamingxi')" prop="sizetopid">
-                        <el-select v-model="product.form.sizecontentids" placeholder="" multiple>
-                            <el-option
-                                v-for="item of sizecontents"
-                                :key="item.id + item.title"
-                                :label="item.title"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
-                        <as-button class="trimhalf" @click="handleTrimSize">{{showLabel("qubanma")}}</as-button>
+                        <size v-model="product.form.sizecontentids" :data-list="sizecontents"></size>
                     </el-form-item>
                     <el-form-item :label="showLabel('sexi') + '/' + showLabel('color')" prop="brandcolor">
                         <el-cascader
@@ -153,16 +145,10 @@
                     </el-form-item>
 
                     <el-form-item :label="showLabel('shangpinchicun')">
-                        <el-select v-model="product.form.ulnarinch" placeholder="" multiple>
-                            <el-option
-                                v-for="item of ulnarinches"
-                                :key="item.id + item.title"
-                                :label="item.title"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
+                        <ulnarinch v-model="product.form.ulnarinch" :data-list="ulnarinches"></ulnarinch>
                     </el-form-item>
                     <el-form-item :label="showLabel('shangpinmiaoshu')">
+                        <product-memo v-model="product.form.productmemoids" :data-list="productMemos"></product-memo>
                         <el-select v-model="product.form.productmemoids" placeholder="" multiple>
                             <el-option
                                 v-for="item of productMemos"
@@ -334,9 +320,12 @@ import { showLabel } from '@/component/globals.js'
 import _ from 'lodash'
 import ageseason from './ageseason.vue'
 import country from './country.vue'
+import ulnarinch from './ulnarinch.vue'
+import size from './size.vue'
+import productMemo from './productMemo.vue'
 
 export default {
-    components: { ageseason, country },
+    components: { ageseason, country, ulnarinch, size, productMemo },
     data() {
         return {
             product: {
@@ -386,20 +375,6 @@ export default {
                     self.sizecontents = item.children
                 }
             })
-        },
-        handleTrimSize() {
-            let self = this
-            let sizecontentids = []
-            self.product.form.sizecontentids.forEach(item => {
-                self.sizecontents.forEach(size => {
-                    if (size.id == item) {
-                        if (size.title.indexOf('.') < 0) {
-                            sizecontentids.push(item)
-                        }
-                    }
-                })
-            })
-            self.product.form.sizecontentids = sizecontentids
         },
         handleRemoveMaterial(index) {
             this.product.materials.splice(index, 1)

@@ -6,24 +6,24 @@
         <el-dialog
             width="250px"
             class="asa-select-dialog"
-            :title="showLabel('niandai')"
+            :title="showLabel('商品描述')"
             :visible.sync="visible"
             :center="true"
             :close-on-click-modal="false"
             :close-on-press-escape="false"
             append-to-body>
 
+            <el-input v-model="keyword" :placeholder="showLabel('search')" />
+
             <el-table
                 ref="multipleTable"
-                :data="dataList"
+                :data="filterDataList"
                 tooltip-effect="dark"
                 style="width: 100%"
                 max-height="500"
                 @selection-change="handleSelectionChange"
                 @row-click="handleRowClick">
-                <el-table-column
-                    type="selection"
-                    width="50">
+                <el-table-column type="selection" width="50">
                 </el-table-column>
                 <el-table-column :label="showLabel('neirong')" width="150">
                     <template slot-scope="scope">{{ scope.row.title }}</template>
@@ -39,13 +39,14 @@
 </template>
 <script>
 export default {
-    name: 'ageseason',
+    name: 'productMemo',
     data() {
         return {
             visible: false,
             selectedDatas:[],
             selectedString: '',
             selectedIds: [],
+            keyword: ''
         }
     },
     props: {
@@ -59,6 +60,17 @@ export default {
     model: {
         prop: 'selected',
         event: 'change'
+    },
+    computed: {
+        filterDataList() {
+            let self = this
+            if (self.keyword.length > 0) {
+                return self.dataList.filter(function (row) {
+                    return (row.title.indexOf(self.keyword) >= 0)
+                })
+            }
+            return self.dataList 
+        }
     },
     methods: {
         handleRowClick(row) {
