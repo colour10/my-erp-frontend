@@ -20,9 +20,10 @@
 </template>
 
 <script>
-import { showLabel } from '@/component/globals.js'
+import globals, { showLabel } from '@/component/globals.js'
 
 export default {
+    name: 'property',
     data() {
         return {
             properties: [],
@@ -34,7 +35,7 @@ export default {
         handleSaveProperties(){
             let self = this;
 
-            let params = {id:self.$$route.param.id}
+            let params = {id:self.$route.params.id}
             params.list = globals.extend({}, self.data)
 
             let options = {
@@ -43,7 +44,6 @@ export default {
             }
 
             let result = self._submit("/product/saveproperty", {params:JSON.stringify(params)})
-            //self._log(result)
         },
         async getProductSizeContents() {
             let self = this
