@@ -40,10 +40,14 @@ export default {
             switch (tab.name) {
                 case 'property':
                     self.$refs.property.getProductSizeContents()
-                    break;
+                    break
             
+                case 'code':
+                    self.$refs.barcode.getProductSizeContents()
+                    break
+
                 default:
-                    break;
+                    break
             }
         }
     }
