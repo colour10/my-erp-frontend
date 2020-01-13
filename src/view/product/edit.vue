@@ -10,6 +10,7 @@
             <barcode ref="barcode"></barcode>
         </el-tab-pane>
         <el-tab-pane :label="showLabel('tongkuanduose')" name="colorgroup">
+            <color-group ref="colorGroup"></color-group>
         </el-tab-pane>
         <el-tab-pane :label="showLabel('shangpintupian')" name="album">
         </el-tab-pane>
@@ -25,9 +26,10 @@ import globals, { showLabel } from '../../component/globals.js'
 import info from './components/info.vue'
 import property from './components/property.vue'
 import barcode from './components/barcode.vue'
+import colorGroup from './components/colorGroup.vue'
 
 export default {
-    components: { info, property, barcode },
+    components: { info, property, barcode, colorGroup },
     data() {
         return {
             currentTab: 'info'
@@ -44,6 +46,10 @@ export default {
             
                 case 'code':
                     self.$refs.barcode.getProductSizeContents()
+                    break
+                
+                case 'colorgroup':
+                    self.$refs.colorGroup.loadColorGroupList()
                     break
 
                 default:
