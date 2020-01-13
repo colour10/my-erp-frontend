@@ -56,6 +56,10 @@ export default {
                     break
             }
         }
+    },
+    async mounted() {
+        let res = await this._fetch("/product/title", {id: this.$route.params.id})
+        this._setTitle(res.data);
     }
 }
 </script>
