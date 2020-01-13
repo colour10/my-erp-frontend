@@ -24,7 +24,7 @@
             </el-table-column>
             <el-table-column :label="showLabel('yanse')" width="140" align="center">
                 <template v-slot="scope">
-                    <el-input v-model="scope.row.wordcode_3" size="mini" @keyup.native="handleColorcodeChange(scope.row, 'wordcode_3')"></el-input>
+                    <el-input v-model="scope.row.wordcode_3" size="mini" @keyup.native="handleKeyInput(scope.row, 'wordcode_3')"></el-input>
                 </template>
             </el-table-column>
             <el-table-column :label="showLabel('yansemingcheng')" width="150" align="center">

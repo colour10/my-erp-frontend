@@ -193,7 +193,7 @@
         </el-pagination>
 
         <el-dialog :title="showLabel('chanpinguanli')" :visible.sync="dialogFormVisible" :center="true" width="1400px" :close-on-click-modal="false" :close-on-press-escape="false">
-            <add @hideDialogForm="hideDialogForm"></add>
+            <add @hideDialogForm="hideDialogForm" @reloadList="reloadList"></add>
         </el-dialog>
     </div>
 </template>

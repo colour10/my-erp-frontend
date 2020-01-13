@@ -10,7 +10,9 @@
                                     :prop="'colors.' + scope.$index + '.wordcode_1'"
                                     :rules="{required: true, trigger: 'blur'}"
                                 >
-                                    <el-input v-model="scope.row.wordcode_1" size="mini"/>
+                                    <el-input v-model="scope.row.wordcode_1"
+                                        size="mini"
+                                        @keyup.native="handleKeyInput(scope.row, 'wordcode_1')" />
                                 </el-form-item>
                             </template>
                         </el-table-column>
@@ -20,7 +22,8 @@
                                     :prop="'colors.' + scope.$index + '.wordcode_2'"
                                     :rules="{required: true, trigger: 'blur'}"
                                 >
-                                    <el-input v-model="scope.row.wordcode_2" size="mini"/>
+                                    <el-input v-model="scope.row.wordcode_2" size="mini"
+                                        @keyup.native="handleKeyInput(scope.row, 'wordcode_2')"/>
                                 </el-form-item>
                             </template>
                         </el-table-column>
@@ -30,7 +33,8 @@
                                     :prop="'colors.' + scope.$index + '.wordcode_3'"
                                     :rules="{required: true, trigger: 'blur'}"
                                 >
-                                    <el-input v-model="scope.row.wordcode_3" size="mini"/>
+                                    <el-input v-model="scope.row.wordcode_3" size="mini"
+                                        @keyup.native="handleKeyInput(scope.row, 'wordcode_3')"/>
                                 </el-form-item>
                             </template>
                         </el-table-column>
@@ -442,6 +446,9 @@ export default {
         this.getProductRelatedOptions()
     },
     methods: {
+        handleKeyInput(target, columnName){
+            target[columnName] = target[columnName].toUpperCase();
+        },
         handleChangeBrand() {
             let self = this
             self.series = []
@@ -557,7 +564,7 @@ export default {
 
                     self._submit("/product/add", { params: JSON.stringify(params) }).then(function(res) {
                         self.hideDialogForm()
-                        self.reloadList()
+                        self.$emit('reloadList')
                     })
                 }
             })
