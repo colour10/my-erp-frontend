@@ -9,8 +9,8 @@
                     <el-select v-model="listQuery.ageseason" multiple placeholder="">
                         <el-option
                             v-for="item of ageseasons"
-                            :key="item.id + item.sessionmark + item.name"
-                            :label="item.sessionmark + item.name"
+                            :key="item.id + item.title"
+                            :label="item.title"
                             :value="item.id">
                         </el-option>
                     </el-select>
@@ -227,13 +227,27 @@ export default {
                 pageSize : 10,
                 total    : 0,
                 current  : 1
-            }
+            },
+            ageseasons: [],
+            brands: [],
+            categories: [],
+            productMemos: []
         }
     },
     created() {
         this.getList()
+        this.getProductRelatedOptions()
     },
     methods: {
+        getProductRelatedOptions() {
+            let self = this
+            self._fetch("/product/getProductRelatedOptions", {}).then(function(res) {
+                self.ageseasons      = res.data.ageseasons
+                self.brands          = res.data.brands
+                self.categories      = res.data.categories
+                self.productMemos    = res.data.productMemos
+            })
+        },
         handleSort(data) {
             this.listQuery.sort = data.prop
             this.listQuery.order = data.order
