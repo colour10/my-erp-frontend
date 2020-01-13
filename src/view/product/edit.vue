@@ -1,5 +1,5 @@
 <template>
-    <el-tabs type="border-card" @tab-click="handleTabClick" v-model="currentTab">
+    <el-tabs type="border-card" @tab-click="handleTabClick" v-model="currentTab" style="width: 1300px;">
         <el-tab-pane :label="showLabel('jibenziliao')" name="info">
             <info></info>
         </el-tab-pane>
@@ -13,6 +13,7 @@
             <color-group ref="colorGroup"></color-group>
         </el-tab-pane>
         <el-tab-pane :label="showLabel('shangpintupian')" name="album">
+            <album ref="album"></album>
         </el-tab-pane>
         <el-tab-pane :label="showLabel('jiage')" name="pricetab">
         </el-tab-pane>
@@ -22,14 +23,15 @@
 </template>
 
 <script>
-import globals, { showLabel } from '../../component/globals.js'
+import globals, { showLabel } from '@/component/globals.js'
 import info from './components/info.vue'
 import property from './components/property.vue'
 import barcode from './components/barcode.vue'
 import colorGroup from './components/colorGroup.vue'
+import album from './components/album.vue'
 
 export default {
-    components: { info, property, barcode, colorGroup },
+    components: { info, property, barcode, colorGroup, album },
     data() {
         return {
             currentTab: 'info'
@@ -50,6 +52,10 @@ export default {
                 
                 case 'colorgroup':
                     self.$refs.colorGroup.loadColorGroupList()
+                    break
+
+                case 'album':
+                    self.$refs.album.loadList()
                     break
 
                 default:
