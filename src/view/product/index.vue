@@ -170,7 +170,7 @@
                     </el-table-column>
                     <el-table-column :label="showLabel('xilie')">
                         <template slot-scope="{row}">
-                            {{ row.series }}
+                            {{ row.seriesTitle }}
                         </template>
                     </el-table-column>
                     <el-table-column :label="showLabel('zuihouruku')">
