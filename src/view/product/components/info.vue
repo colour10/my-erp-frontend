@@ -1,318 +1,347 @@
 <template>
-    <el-form ref="productForm" :model="product" :rules="rules" label-width="85px" :inline="true" size="mini" :inline-message="false" :show-message="false">
-        <el-row>
-            <el-col :span="4">
-                <simple-avatar v-model="product.form.picture" :disabled="!$store.getters.allow('product')"></simple-avatar>
-            </el-col>
-            <el-col :span="4">
-                <simple-avatar v-model="product.picture2" :disabled="!$store.getters.allow('product')"></simple-avatar>
-            </el-col>
-            <el-col :span="16">
-                    <el-form-item :label="showLabel('guojima')" prop="form.wordcode_1">
-                        <el-input v-model="product.form.wordcode_1" style="width:110px;" :placeholder="showLabel('kuanshi')"></el-input>
-                    </el-form-item>
-                    <el-form-item prop="form.wordcode_2">
-                        <el-input v-model="product.form.wordcode_2" style="width:110px;" :placeholder="showLabel('caizhi')"></el-input>
-                    </el-form-item>
-                    <el-form-item prop="form.wordcode_3">
-                        <el-input v-model="product.form.wordcode_3" style="width:110px;" :placeholder="showLabel('yanse')"></el-input>
-                    </el-form-item>
-                    <el-form-item>
-                        <el-input v-model="product.form.colorname" style="width:110px;" :placeholder="showLabel('yansemingcheng')"></el-input>
-                    </el-form-item>
-                    <el-form-item>
-                        <el-input v-model="product.form.wordcode_4" style="width:110px;" :placeholder="showLabel('fuzhuma')"></el-input>
-                    </el-form-item>
-            </el-col>
-        </el-row>
-        <div class="order-form" style="width:1200px;">
-            <el-row :gutter="0">
-                <el-col :span="8">
-                    <el-form-item :label="showLabel('niandai')" prop="form.ageseason">
-                        <ageseason v-model="product.form.ageseason" :data-list="ageseasons"></ageseason>
-                    </el-form-item>
-                    <el-form-item :label="showLabel('pinpai')" prop="form.brandid">
-                        <el-select v-model="product.form.brandid" placeholder="" @change="handleChangeBrand">
-                            <el-option
-                                v-for="item of brands"
-                                :key="item.id + item.title"
-                                :label="item.title"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item :label="showLabel('pinlei')" prop="form.childbrand">
-                        <el-cascader
-                            placeholder=""
-                            v-model="product.form.childbrand"
-                            size="mini"
-                            :options="categories"
-                            :props="{ value: 'id', label: 'title' }"
-                            clearable>
-                        </el-cascader>
-                    </el-form-item>
-                    <el-form-item :label="_label('chimazu')" prop="sizetopid">
-                        <el-select v-model="product.form.sizetopid" placeholder="" @change="handleChangeSizeTop">
-                            <el-option
-                                v-for="item of sizes"
-                                :key="item.id + item.title"
-                                :label="item.title"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item :label="_label('chimamingxi')" prop="sizetopid">
-                        <size v-model="product.form.sizecontentids" :data-list="sizecontents"></size>
-                    </el-form-item>
-                    <el-form-item :label="showLabel('sexi') + '/' + showLabel('color')" prop="brandcolor">
-                        <el-cascader
-                            placeholder=""
-                            v-model="product.form.colorId"
-                            size="mini"
-                            :options="colorSystems"
-                            :props="{ children: 'colors', value: 'id', label: 'title' }"
-                            clearable>
-                        </el-cascader>
-                    </el-form-item>
-                    <el-form-item :label="showLabel('second_color')">
-                        <el-cascader
-                            placeholder=""
-                            v-model="product.form.secondColorId"
-                            size="mini"
-                            :show-all-levels="false"
-                            :options="colorSystems"
-                            :props="{ children: 'colors', value: 'id', label: 'title' }"
-                            clearable>
-                        </el-cascader>
-                    </el-form-item>
-                    <el-row class="product">
-                        <el-table :data="product.materials" border style="width:90%;">
-                            <el-table-column :label="showLabel('caizhiguanli')" align="center">
-                                <el-table-column :label="showLabel('caizhi')" align="center">
-                                    <template slot-scope="scope">
-                                        <el-form-item
-                                            :prop="'materials.' + scope.$index + '.materialid'"
-                                            :rules="{required: true, trigger: 'change'}"
-                                        >
-                                            <el-select v-model="scope.row.materialid" size="mini">
+    <div>
+        <el-form ref="productForm" :model="product" :rules="rules" label-width="85px" :inline="true" size="mini" :inline-message="false" :show-message="false">
+            <el-row>
+                <el-col :span="4">
+                    <simple-avatar v-model="product.form.picture" :disabled="!$store.getters.allow('product')"></simple-avatar>
+                </el-col>
+                <el-col :span="4">
+                    <simple-avatar v-model="product.picture2" :disabled="!$store.getters.allow('product')"></simple-avatar>
+                </el-col>
+                <el-col :span="16">
+                        <el-form-item :label="showLabel('guojima')" prop="form.wordcode_1">
+                            <el-input v-model="product.form.wordcode_1" style="width:110px;" :placeholder="showLabel('kuanshi')"></el-input>
+                        </el-form-item>
+                        <el-form-item prop="form.wordcode_2">
+                            <el-input v-model="product.form.wordcode_2" style="width:110px;" :placeholder="showLabel('caizhi')"></el-input>
+                        </el-form-item>
+                        <el-form-item prop="form.wordcode_3">
+                            <el-input v-model="product.form.wordcode_3" style="width:110px;" :placeholder="showLabel('yanse')"></el-input>
+                        </el-form-item>
+                        <el-form-item>
+                            <el-input v-model="product.form.colorname" style="width:110px;" :placeholder="showLabel('yansemingcheng')"></el-input>
+                        </el-form-item>
+                        <el-form-item>
+                            <el-input v-model="product.form.wordcode_4" style="width:110px;" :placeholder="showLabel('fuzhuma')"></el-input>
+                        </el-form-item>
+                </el-col>
+            </el-row>
+            <div class="order-form" style="width:1200px;">
+                <el-row :gutter="0">
+                    <el-col :span="8">
+                        <el-form-item :label="showLabel('niandai')" prop="form.ageseason">
+                            <ageseason v-model="product.form.ageseason" :data-list="ageseasons"></ageseason>
+                        </el-form-item>
+                        <el-form-item :label="showLabel('pinpai')" prop="form.brandid">
+                            <el-select v-model="product.form.brandid" placeholder="" @change="handleChangeBrand">
+                                <el-option
+                                    v-for="item of brands"
+                                    :key="item.id + item.title"
+                                    :label="item.title"
+                                    :value="item.id">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item :label="showLabel('pinlei')" prop="form.childbrand">
+                            <el-cascader
+                                placeholder=""
+                                v-model="product.form.childbrand"
+                                size="mini"
+                                :options="categories"
+                                :props="{ value: 'id', label: 'title' }"
+                                clearable>
+                            </el-cascader>
+                        </el-form-item>
+                        <el-form-item :label="_label('chimazu')" prop="sizetopid">
+                            <el-select v-model="product.form.sizetopid" placeholder="" @change="handleChangeSizeTop">
+                                <el-option
+                                    v-for="item of sizes"
+                                    :key="item.id + item.title"
+                                    :label="item.title"
+                                    :value="item.id">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item :label="_label('chimamingxi')" prop="sizetopid">
+                            <size v-model="product.form.sizecontentids" :data-list="sizecontents"></size>
+                        </el-form-item>
+                        <el-form-item :label="showLabel('sexi') + '/' + showLabel('color')" prop="brandcolor">
+                            <el-cascader
+                                placeholder=""
+                                v-model="product.form.colorId"
+                                size="mini"
+                                :options="colorSystems"
+                                :props="{ children: 'colors', value: 'id', label: 'title' }"
+                                clearable>
+                            </el-cascader>
+                        </el-form-item>
+                        <el-form-item :label="showLabel('second_color')">
+                            <el-cascader
+                                placeholder=""
+                                v-model="product.form.secondColorId"
+                                size="mini"
+                                :show-all-levels="false"
+                                :options="colorSystems"
+                                :props="{ children: 'colors', value: 'id', label: 'title' }"
+                                clearable>
+                            </el-cascader>
+                        </el-form-item>
+                        <el-row class="product">
+                            <el-table :data="product.materials" border style="width:90%;">
+                                <el-table-column :label="showLabel('caizhiguanli')" align="center">
+                                    <el-table-column :label="showLabel('caizhi')" align="center">
+                                        <template slot-scope="scope">
+                                            <el-form-item
+                                                :prop="'materials.' + scope.$index + '.materialid'"
+                                                :rules="{required: true, trigger: 'change'}"
+                                            >
+                                                <el-select v-model="scope.row.materialid" size="mini">
+                                                    <el-option
+                                                        v-for="item in materials"
+                                                        :key="item.id + item.title"
+                                                        :label="item.title"
+                                                        :value="item.id">
+                                                    </el-option>
+                                                </el-select>
+                                            </el-form-item>
+                                        </template>
+                                    </el-table-column>
+                                    <el-table-column :label="showLabel('baifenbi')" align="center" width="90">
+                                        <template slot-scope="scope">
+                                            <el-form-item
+                                                :prop="'materials.' + scope.$index + '.percent'"
+                                                :rules="{required: true, trigger: 'blur'}"
+                                            >
+                                                <el-input v-model="scope.row.percent" size="mini"></el-input>
+                                            </el-form-item>
+                                        </template>
+                                    </el-table-column>
+                                    <el-table-column :label="showLabel('caizhibeizhu')" align="center">
+                                        <template slot-scope="scope">
+                                            <el-select v-model="scope.row.materialnoteid" size="mini">
                                                 <el-option
-                                                    v-for="item in materials"
+                                                    v-for="item in materialnotes"
                                                     :key="item.id + item.title"
                                                     :label="item.title"
                                                     :value="item.id">
                                                 </el-option>
                                             </el-select>
-                                        </el-form-item>
-                                    </template>
+                                        </template>
+                                    </el-table-column>
                                 </el-table-column>
-                                <el-table-column :label="showLabel('baifenbi')" align="center" width="90">
+                                <el-table-column width="70">
+                                    <template slot="header">
+                                        <el-button type="success" icon="el-icon-plus" size="mini" @click.stop="handleAppendMaterial"></el-button>
+                                    </template>
                                     <template slot-scope="scope">
-                                        <el-form-item
-                                            :prop="'materials.' + scope.$index + '.percent'"
-                                            :rules="{required: true, trigger: 'blur'}"
-                                        >
-                                            <el-input v-model="scope.row.percent" size="mini"></el-input>
-                                        </el-form-item>
+                                        <el-button type="danger" size="mini" icon="el-icon-delete" @click="handleRemoveMaterial(scope.$index)"></el-button>
                                     </template>
                                 </el-table-column>
-                                <el-table-column :label="showLabel('caizhibeizhu')" align="center">
-                                    <template slot-scope="scope">
-                                        <el-select v-model="scope.row.materialnoteid" size="mini">
-                                            <el-option
-                                                v-for="item in materialnotes"
-                                                :key="item.id + item.title"
-                                                :label="item.title"
-                                                :value="item.id">
-                                            </el-option>
-                                        </el-select>
-                                    </template>
-                                </el-table-column>
-                            </el-table-column>
-                            <el-table-column width="70">
-                                <template slot="header">
-                                    <el-button type="success" icon="el-icon-plus" size="mini" @click.stop="handleAppendMaterial"></el-button>
-                                </template>
-                                <template slot-scope="scope">
-                                    <el-button type="danger" size="mini" icon="el-icon-delete" @click="handleRemoveMaterial(scope.$index)"></el-button>
-                                </template>
-                            </el-table-column>
-                        </el-table>
-                    </el-row>
-                </el-col>
-                <el-col :span="8">
-                    <el-form-item :label="showLabel('chandi')" prop="countries">
-                        <country v-model="product.form.countries" :data-list="countries"></country>
-                    </el-form-item>
-
-                    <el-form-item :label="showLabel('shangpinchicun')">
-                        <ulnarinch v-model="product.form.ulnarinch" :data-list="ulnarinches"></ulnarinch>
-                    </el-form-item>
-                    <el-form-item :label="showLabel('shangpinmiaoshu')">
-                        <product-memo v-model="product.form.productmemoids" :data-list="productMemos"></product-memo>
-                        <el-select v-model="product.form.productmemoids" placeholder="" multiple>
-                            <el-option
-                                v-for="item of productMemos"
-                                :key="item.id + item.title"
-                                :label="item.title"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-
-                    <el-form-item :label="_label('cankaobeilv')">
-                        <el-row>
-                            <el-col :span="8" style="width:80px">{{rate>0?rate : '-' }}</el-col>
-                            <el-col :span="16" style="width:50px">{{_label('lingshoubi')}}</el-col>
-                            <el-col :span="8" style="width:50px">{{getPriceRate}}</el-col>
+                            </el-table>
                         </el-row>
-                    </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item :label="showLabel('chandi')" prop="countries">
+                            <country v-model="product.form.countries" :data-list="countries"></country>
+                        </el-form-item>
 
-                    <el-form-item :label="showLabel('chuchangjia')">
-                        <el-input placeholder="" v-model="product.form.factoryprice" class="productcurrency">
-                            <el-select v-model="product.form.wordpricecurrency" placeholder="" slot="prepend">
+                        <el-form-item :label="showLabel('shangpinchicun')">
+                            <ulnarinch v-model="product.form.ulnarinch" :data-list="ulnarinches"></ulnarinch>
+                        </el-form-item>
+                        <el-form-item :label="showLabel('shangpinmiaoshu')">
+                            <product-memo v-model="product.form.productmemoids" :data-list="productMemos"></product-memo>
+                            <el-select v-model="product.form.productmemoids" placeholder="" multiple>
                                 <el-option
-                                    v-for="item of currencies"
-                                    :key="item.id + item.code"
-                                    :label="item.code"
+                                    v-for="item of productMemos"
+                                    :key="item.id + item.title"
+                                    :label="item.title"
                                     :value="item.id">
                                 </el-option>
                             </el-select>
-                            <span slot="append">{{getRate}}</span>
-                        </el-input>
-                    </el-form-item>
-                    <el-form-item :label="showLabel('guojilingshoujia')">
-                        <el-input placeholder="" v-model="product.form.wordprice" class="productcurrency">
-                            <el-select v-model="product.form.wordpricecurrency" placeholder="" slot="prepend">
+                        </el-form-item>
+
+                        <el-form-item :label="_label('cankaobeilv')">
+                            <el-row>
+                                <el-col :span="8" style="width:80px">{{rate>0?rate : '-' }}</el-col>
+                                <el-col :span="16" style="width:50px">{{_label('lingshoubi')}}</el-col>
+                                <el-col :span="8" style="width:50px">{{getPriceRate}}</el-col>
+                            </el-row>
+                        </el-form-item>
+
+                        <el-form-item :label="showLabel('chuchangjia')">
+                            <el-input placeholder="" v-model="product.form.factoryprice" class="productcurrency">
+                                <el-select v-model="product.form.wordpricecurrency" placeholder="" slot="prepend">
+                                    <el-option
+                                        v-for="item of currencies"
+                                        :key="item.id + item.code"
+                                        :label="item.code"
+                                        :value="item.id">
+                                    </el-option>
+                                </el-select>
+                                <span slot="append">{{getRate}}</span>
+                            </el-input>
+                        </el-form-item>
+                        <el-form-item :label="showLabel('guojilingshoujia')">
+                            <el-input placeholder="" v-model="product.form.wordprice" class="productcurrency">
+                                <el-select v-model="product.form.wordpricecurrency" placeholder="" slot="prepend">
+                                    <el-option
+                                        v-for="item of currencies"
+                                        :key="item.id + item.code"
+                                        :label="item.code"
+                                        :value="item.id">
+                                    </el-option>
+                                </el-select>
+                                <span slot="append">{{getReciprocalRate}}</span>
+                            </el-input>
+                        </el-form-item>
+                        <el-form-item :label="showLabel('benguochuchangjia')">
+                            <el-input placeholder="" v-model="product.form.nationalfactoryprice" class="productcurrency">
+                                <el-select v-model="product.form.nationalpricecurrency" placeholder="" slot="prepend">
+                                    <el-option
+                                        v-for="item of currencies"
+                                        :key="item.id + item.code"
+                                        :label="item.code"
+                                        :value="item.id">
+                                    </el-option>
+                                </el-select>
+                                <span slot="append">{{getRateNational}}</span>
+                            </el-input>
+                        </el-form-item>
+                        <el-form-item :label="showLabel('benguolingshoujia')">
+                            <el-input placeholder="" v-model="product.form.nationalprice" class="productcurrency">
+                                <el-select v-model="product.form.nationalpricecurrency" placeholder="" slot="prepend">
+                                    <el-option
+                                        v-for="item of currencies"
+                                        :key="item.id + item.code"
+                                        :label="item.code"
+                                        :value="item.id">
+                                    </el-option>
+                                </el-select>
+                                <span slot="append">{{getReciprocalRateNational}}</span>
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item :label="showLabel('shangpinxilie')">
+                            <el-select v-model="product.form.series" placeholder="">
                                 <el-option
-                                    v-for="item of currencies"
-                                    :key="item.id + item.code"
-                                    :label="item.code"
+                                    v-for="item of series"
+                                    :key="item.id + item.title"
+                                    :label="item.title"
                                     :value="item.id">
                                 </el-option>
                             </el-select>
-                            <span slot="append">{{getReciprocalRate}}</span>
-                        </el-input>
-                    </el-form-item>
-                    <el-form-item :label="showLabel('benguochuchangjia')">
-                        <el-input placeholder="" v-model="product.form.nationalfactoryprice" class="productcurrency">
-                            <el-select v-model="product.form.nationalpricecurrency" placeholder="" slot="prepend">
+                            <as-button class="trimhalf" @click="handleAddSeries">{{showLabel("xinjian")}}</as-button>
+                        </el-form-item>
+
+                        <el-form-item :label="showLabel('xiaoshoushuxing')">
+                            <el-select v-model="product.form.saletypeid" placeholder="">
                                 <el-option
-                                    v-for="item of currencies"
-                                    :key="item.id + item.code"
-                                    :label="item.code"
+                                    v-for="item of saletypes"
+                                    :key="item.id + item.title"
+                                    :label="item.title"
                                     :value="item.id">
                                 </el-option>
                             </el-select>
-                            <span slot="append">{{getRateNational}}</span>
-                        </el-input>
-                    </el-form-item>
-                    <el-form-item :label="showLabel('benguolingshoujia')">
-                        <el-input placeholder="" v-model="product.form.nationalprice" class="productcurrency">
-                            <el-select v-model="product.form.nationalpricecurrency" placeholder="" slot="prepend">
+                        </el-form-item>
+
+                        <el-form-item :label="showLabel('shangpinshuxing')">
+                            <el-select v-model="product.form.producttypeid" placeholder="">
                                 <el-option
-                                    v-for="item of currencies"
-                                    :key="item.id + item.code"
-                                    :label="item.code"
+                                    v-for="item of productTypes"
+                                    :key="item.id + item.title"
+                                    :label="item.title"
                                     :value="item.id">
                                 </el-option>
                             </el-select>
-                            <span slot="append">{{getReciprocalRateNational}}</span>
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                    <el-form-item :label="showLabel('shangpinxilie')">
-                        <el-select v-model="product.form.series" placeholder="">
-                            <el-option
-                                v-for="item of series"
-                                :key="item.id + item.title"
-                                :label="item.title"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
+                        </el-form-item>
 
-                    <el-form-item :label="showLabel('xiaoshoushuxing')">
-                        <el-select v-model="product.form.saletypeid" placeholder="">
-                            <el-option
-                                v-for="item of saletypes"
-                                :key="item.id + item.title"
-                                :label="item.title"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
+                        <el-form-item :label="showLabel('fanghanzhishu')">
+                            <el-select v-model="product.form.winterproofingid" placeholder="">
+                                <el-option
+                                    v-for="item of winterProofings"
+                                    :key="item.id + item.title"
+                                    :label="item.title"
+                                    :value="item.id">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
 
-                    <el-form-item :label="showLabel('shangpinshuxing')">
-                        <el-select v-model="product.form.producttypeid" placeholder="">
-                            <el-option
-                                v-for="item of productTypes"
-                                :key="item.id + item.title"
-                                :label="item.title"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
+                        <el-form-item :label="showLabel('xingbie')">
+                            <sp-radio-group v-model="product.form.gender" source="gender" :span="8" :lang="lang" style="width:270px">
+                            </sp-radio-group>
+                        </el-form-item>
+                        <el-form-item :label="showLabel('jijie')">
+                            <div  style="width:270px">
+                            <el-col :span="8">
+                                <sp-checkbox v-model="product.form.spring">{{showLabel("chun")}}</sp-checkbox>
+                            </el-col>
+                            <el-col :span="8">
+                                <sp-checkbox v-model="product.form.summer">{{showLabel("xia")}}</sp-checkbox>
+                            </el-col>
+                            <el-col :span="8">
+                                <sp-checkbox v-model="siji">{{showLabel("siji")}}</sp-checkbox>
+                            </el-col>
+                            <el-col :span="8">
+                                <sp-checkbox v-model="product.form.fall">{{showLabel("qiu")}}</sp-checkbox>
+                            </el-col>
+                            <el-col :span="8">
+                                <sp-checkbox v-model="product.form.winter">{{showLabel("dong")}}</sp-checkbox>
+                            </el-col>
+                        </div>
+                        </el-form-item>
 
-                    <el-form-item :label="showLabel('fanghanzhishu')">
-                        <el-select v-model="product.form.winterproofingid" placeholder="">
-                            <el-option
-                                v-for="item of winterProofings"
-                                :key="item.id + item.title"
-                                :label="item.title"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
+                        <el-form-item :label="showLabel('beizhu')">
+                            <el-input v-model="product.form.memo"></el-input>
+                        </el-form-item>
 
-                    <el-form-item :label="showLabel('xingbie')">
-                        <sp-radio-group v-model="product.form.gender" source="gender" :span="8" :lang="lang" style="width:270px">
-                        </sp-radio-group>
-                    </el-form-item>
-                    <el-form-item :label="showLabel('jijie')">
-                        <div  style="width:270px">
-                        <el-col :span="8">
-                            <sp-checkbox v-model="product.form.spring">{{showLabel("chun")}}</sp-checkbox>
-                        </el-col>
-                        <el-col :span="8">
-                            <sp-checkbox v-model="product.form.summer">{{showLabel("xia")}}</sp-checkbox>
-                        </el-col>
-                        <el-col :span="8">
-                            <sp-checkbox v-model="siji">{{showLabel("siji")}}</sp-checkbox>
-                        </el-col>
-                        <el-col :span="8">
-                            <sp-checkbox v-model="product.form.fall">{{showLabel("qiu")}}</sp-checkbox>
-                        </el-col>
-                        <el-col :span="8">
-                            <sp-checkbox v-model="product.form.winter">{{showLabel("dong")}}</sp-checkbox>
-                        </el-col>
-                    </div>
-                    </el-form-item>
+                        <el-form-item :label="showLabel('zuihouruku')">
+                            <el-input v-model="product.form.laststoragedate"></el-input>
+                        </el-form-item>
 
-                    <el-form-item :label="showLabel('beizhu')">
-                        <el-input v-model="product.form.memo"></el-input>
-                    </el-form-item>
+                        <el-form-item :label="showLabel('jiandangren')">
+                            <sp-display-input :value="product.form.makestaff" source="user" disabled></sp-display-input>
+                        </el-form-item>
+                        <el-form-item :label="showLabel('jiandangshijian')">
+                            <el-input :value="product.form.maketime" disabled></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row :gutter="0">
+                    <el-col :span="6" :offset="9">
+                        <as-button auth="product" type="primary" @click="updateProduct">{{showLabel("baocun")}}</as-button>
+                        <as-button>{{showLabel("tuichu")}}</as-button>
+                    </el-col>
+                </el-row>
+            </div>
+        </el-form>
+        <el-dialog :title="showLabel('chuangjianxinxilie')"
+            :visible.sync="seriesDialogVisible"
+            :center="true" :append-to-body="true"
+            width="400px"
+        >
+            <el-form ref="seriesForm" :model="newSeries" :inline="true" :rules="newSeriesRules">
+              <el-form-item :label="showLabel('name', 'cn')" prop="name_cn">
+                  <el-input v-model="newSeries.name_cn"></el-input>
+              </el-form-item>
+              <el-form-item :label="showLabel('name', 'en')" prop="name_en">
+                  <el-input v-model="newSeries.name_en"></el-input>
+              </el-form-item>
+              <el-form-item :label="showLabel('name', 'it')" prop="name_it">
+                  <el-input v-model="newSeries.name_it"></el-input>
+              </el-form-item>
+            </el-form>
 
-                    <el-form-item :label="showLabel('zuihouruku')">
-                        <el-input v-model="product.form.laststoragedate"></el-input>
-                    </el-form-item>
-
-                    <el-form-item :label="showLabel('jiandangren')">
-                        <sp-display-input :value="product.form.makestaff" source="user" disabled></sp-display-input>
-                    </el-form-item>
-                    <el-form-item :label="showLabel('jiandangshijian')">
-                        <el-input :value="product.form.maketime" disabled></el-input>
-                    </el-form-item>
-                </el-col>
-            </el-row>
-            <el-row :gutter="0">
-                <el-col :span="6" :offset="9">
-                    <as-button auth="product" type="primary" @click="updateProduct">{{showLabel("baocun")}}</as-button>
-                    <as-button>{{showLabel("tuichu")}}</as-button>
-                </el-col>
-            </el-row>
-        </div>
-    </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="cancleAddSeries">
+                    {{ showLabel('quxiao') }}
+                </el-button>
+                <el-button type="primary" @click="saveSeries">
+                    {{ showLabel('baocun') }}
+                </el-button>
+            </div>
+        </el-dialog>
+    </div>
 </template>
 
 <script>
@@ -359,6 +388,18 @@ export default {
                     sizetopid     : [{ required: true, message: showLabel('chimazu') + showLabel('required'), trigger: 'change' }],
                     sizecontentids: [{ required: true, message: showLabel('chimamingxi') + showLabel('required') }]
                 }
+            },
+            seriesDialogVisible: false,
+            newSeries: {
+                brandid: '',
+                name_cn: '',
+                name_en: '',
+                name_it: ''
+            },
+            newSeriesRules: {
+                name_cn: [{ required: true, message: showLabel('name', 'cn') + showLabel('required'), trigger: 'blur' }],
+                name_en: [{ required: true, message: showLabel('name', 'en') + showLabel('required'), trigger: 'blur' }],
+                name_it: [{ required: true, message: showLabel('name', 'it') + showLabel('required'), trigger: 'blur' }]
             }
         }
     },
@@ -367,6 +408,40 @@ export default {
         this.getColorSystemAndColor()
     },
     methods: {
+        cancleAddSeries() {
+            this.seriesDialogVisible = false
+            this.newSeries = {
+                brandid: '',
+                name_cn: '',
+                name_en: '',
+                name_it: ''
+            }
+        },
+        saveSeries() {
+            let self = this
+
+            this.$refs['seriesForm'].validate((valid) => {
+                if (valid) {
+                    let params = {}
+                    self.newSeries.brandid = self.product.form.brandid
+                    params = Object.assign({}, self.newSeries)
+
+                    self._submit("/series/add", params).then(function(res) {
+                        self.getProductRelatedOptions()
+                        self.seriesDialogVisible = false
+                    })
+                }
+            })
+        },
+        handleAddSeries() {
+            let self = this
+
+            if (self.product.form.brandid > 0) {
+                this.seriesDialogVisible = true
+            } else {
+                self._info(self._label("tip-pinpai"))
+            }
+        },
         handleChangeSizeTop() {
             let self = this
             self.sizes.forEach(item => {

@@ -487,6 +487,15 @@ export default {
         this.getProductRelatedOptions()
     },
     methods: {
+        cancleAddSeries() {
+            this.seriesDialogVisible = false
+            this.newSeries = {
+                brandid: '',
+                name_cn: '',
+                name_en: '',
+                name_it: ''
+            }
+        },
         saveSeries() {
             let self = this
 
