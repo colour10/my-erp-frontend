@@ -11,9 +11,19 @@
                                         :prop="'colors.' + scope.$index + '.wordcode_1'"
                                         :rules="{required: true, trigger: 'blur'}"
                                     >
-                                        <el-input v-model="scope.row.wordcode_1"
-                                            size="mini"
-                                            @keyup.native="handleKeyInput(scope.row, 'wordcode_1')" />
+                                        <el-autocomplete
+                                            @keyup.native="handleKeyInput(scope.row, 'wordcode_1')"
+                                            v-model="scope.row.wordcode_1"
+                                            :fetch-suggestions="querySearchWordCode"
+                                            @select="handleSelect($event, scope.row)"
+                                            popper-class="wordcode-autocomplete"
+                                            :trigger-on-focus="false"
+                                        >
+                                            <template slot-scope="props">
+                                                <div class="wordcode">{{ props.item.worldcode }}</div>
+                                                <div class="name">{{ props.item.name }}</div>
+                                            </template>
+                                        </el-autocomplete>
                                     </el-form-item>
                                 </template>
                             </el-table-column>
@@ -479,7 +489,8 @@ export default {
                 name_cn: [{ required: true, message: showLabel('name', 'cn') + showLabel('required'), trigger: 'blur' }],
                 name_en: [{ required: true, message: showLabel('name', 'en') + showLabel('required'), trigger: 'blur' }],
                 name_it: [{ required: true, message: showLabel('name', 'it') + showLabel('required'), trigger: 'blur' }]
-            }
+            },
+            timeout: undefined
         }
     },
     mounted() {
@@ -487,6 +498,102 @@ export default {
         this.getProductRelatedOptions()
     },
     methods: {
+        querySearchWordCode(queryString, cb) {
+            let results = []
+            if (queryString.length > 2) {
+                let params = {
+                    page: 1,
+                    pageSize: 20,
+                    wordcode: queryString
+                }
+                this._fetch("/product/page", params).then(function(res) {
+                    results = res.data
+                })
+
+                clearTimeout(this.timeout)
+                this.timeout = setTimeout(() => {
+                    cb(results)
+                }, 3000 * Math.random())
+            }
+        },
+        handleSelect(select, row) {
+            let self = this
+            row.colorname = select.colorname
+            row.picture = select.picture
+            row.picture2 = select.picture2
+            row.wordcode_1 = select.wordcode_1
+            row.wordcode_2 = select.wordcode_2
+            row.wordcode_3 = select.wordcode_3
+            row.wordcode_4 = select.wordcode_4
+            
+            row.colorId = []
+            row.colorId.push(parseInt(select.color_system_id))
+            row.colorId.push(parseInt(select.color_id))
+            row.secondColorId = parseInt(select.second_color_id)
+
+            if (select.ageseason.length) {
+                let ageseasons = _.split(select.ageseason, ',')
+                self.product.form.ageseason = []
+                ageseasons.forEach(item => {
+                    self.product.form.ageseason.push(parseInt(item))
+                })
+            }
+
+            self.product.form.brandid = parseInt(select.brandid)
+
+            const childbrand = select.childbrand
+            self.product.form.childbrand = []
+            self.product.form.childbrand.push(parseInt(select.brandgroupid))
+            self.product.form.childbrand.push(parseInt(childbrand))
+            self.product.form.sizetopid = parseInt(select.sizetopid)
+            self.handleChangeSizeTop()
+            if (select.sizecontentids.length) {
+                let sizecontentids = _.split(select.sizecontentids, ',')
+                self.product.form.sizecontentids = []
+                sizecontentids.forEach(item => {
+                    self.product.form.sizecontentids.push(parseInt(item))
+                })
+            }
+
+            if (select.countries.length) {
+                let countries = _.split(select.countries, ',')
+                select.countries = []
+                countries.forEach(item => {
+                    self.product.form.countries.push(parseInt(item))
+                })
+            }
+
+            if (select.ulnarinch.length) {
+                let ulnarinches = _.split(select.ulnarinch, ',')
+                select.ulnarinch = []
+                ulnarinches.forEach(item => {
+                    self.product.form.ulnarinch.push(parseInt(item))
+                })
+            }
+
+            if (select.productmemoids.length) {
+                let productmemoids = _.split(select.productmemoids, ',')
+                select.productmemoids = []
+                productmemoids.forEach(item => {
+                    self.product.form.productmemoids.push(parseInt(item))
+                })
+            }
+
+            self.product.form.wordpricecurrency     = parseInt(select.wordpricecurrency)
+            self.product.form.nationalpricecurrency = parseInt(select.nationalpricecurrency)
+            self.product.form.saletypeid            = parseInt(select.saletypeid)
+            self.product.form.saletypeid            = (self.product.form.saletypeid == 0) ? '' : self.product.form.saletypeid
+            self.product.form.producttypeid         = parseInt(select.producttypeid)
+            self.product.form.producttypeid         = (self.product.form.producttypeid == 0) ? '' : self.product.form.producttypeid
+            self.product.form.winterproofingid      = parseInt(select.winterproofingid)
+            self.product.form.winterproofingid      = (self.product.form.winterproofingid == 0) ? '' : self.product.form.winterproofingid
+            self.product.form.gender                = select.gender
+            self.product.form.spring                = select.spring
+            self.product.form.summer                = select.summer
+            self.product.form.fall                  = select.fall
+            self.product.form.winter                = select.winter
+            self.product.form.memo                  = select.memo
+        },
         cancleAddSeries() {
             this.seriesDialogVisible = false
             this.newSeries = {
@@ -649,3 +756,27 @@ export default {
     }
 }
 </script>
+
+
+<style>
+.wordcode-autocomplete {
+    width: 500px !important;
+}
+.wordcode-autocomplete li{
+    line-height: normal;
+    padding: 7px;
+}
+
+.wordcode {
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.name {
+    font-size: 12px;
+    color: #b4b4b4;
+}
+
+.highlighted .name {
+    color: #ddd;
+}
+</style>

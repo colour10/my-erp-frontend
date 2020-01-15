@@ -510,11 +510,14 @@ export default {
                     })
                 }
 
-                let countries = _.split(res.data.countries, ',')
-                res.data.countries = []
-                countries.forEach(item => {
-                    res.data.countries.push(parseInt(item))
-                })
+                if (res.data.countries.length) {
+                    let countries = _.split(res.data.countries, ',')
+                    res.data.countries = []
+                    countries.forEach(item => {
+                        res.data.countries.push(parseInt(item))
+                    })
+                }
+                    
 
                 if (res.data.ulnarinch.length) {
                     let ulnarinches = _.split(res.data.ulnarinch, ',')
