@@ -100,6 +100,7 @@ export default {
             self.visible = true
 
             setTimeout(()=>{
+                self.$refs.multipleTable.clearSelection()
                 if (self.selectedDatas.length) {
                     self.selectedDatas.forEach(data => {
                         self.$refs.multipleTable.toggleRowSelection(data, true)

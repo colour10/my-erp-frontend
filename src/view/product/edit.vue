@@ -15,9 +15,11 @@
         <el-tab-pane :label="showLabel('shangpintupian')" name="album">
             <album ref="album"></album>
         </el-tab-pane>
-        <el-tab-pane :label="showLabel('jiage')" name="pricetab">
+        <el-tab-pane :label="showLabel('jiage')" name="price">
+            <price ref="price"></price>
         </el-tab-pane>
-        <el-tab-pane :label="showLabel('kucun')" name="productstock">
+        <el-tab-pane :label="showLabel('kucun')" name="stock">
+            <stock ref="stock"></stock>
         </el-tab-pane>
     </el-tabs>
 </template>
@@ -29,9 +31,11 @@ import property from './components/property.vue'
 import barcode from './components/barcode.vue'
 import colorGroup from './components/colorGroup.vue'
 import album from './components/album.vue'
+import price from './components/price.vue'
+import stock from './components/stock.vue'
 
 export default {
-    components: { info, property, barcode, colorGroup, album },
+    components: { info, property, barcode, colorGroup, album, price, stock },
     data() {
         return {
             currentTab: 'info'
@@ -58,7 +62,12 @@ export default {
                     self.$refs.album.loadList()
                     break
 
-                default:
+                case 'price':
+                    self.$refs.price.load()
+                    break
+                
+                case 'stock':
+                    self.$refs.stock.load()
                     break
             }
         }

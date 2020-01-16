@@ -214,7 +214,6 @@
 
                         <el-form-item :label="showLabel('shangpinchicun')">
                             <ulnarinch v-model="product.form.ulnarinch" :data-list="ulnarinches"></ulnarinch>
-                            <!-- <size v-model="product.form.ulnarinch" :data-list="ulnarinches"></size> -->
                         </el-form-item>
 
                         <el-form-item :label="showLabel('shangpinmiaoshu')">
@@ -418,9 +417,9 @@ const defaultProduct = {
         childbrand           : "",
         sizetopid            : "",
         sizecontentids       : [],
-        countrie             : "",
-        ulnarinch            : "",
-        productmemoids       : "",
+        countries            : "",
+        ulnarinch            : [],
+        productmemoids       : [],
         factoryprice         : "",
         factorypricecurrency : 9,
         wordprice            : "",
@@ -438,7 +437,7 @@ const defaultProduct = {
         fall                 : "",
         winter               : "",
         memo                 : "",
-        countries            : "",
+        countries            : [],
         colorId              : "",
         secondColorId        : ""
     }
@@ -735,7 +734,7 @@ export default {
             let summer    = this.product.form.summer
             let fall      = this.product.form.fall
             let winter    = this.product.form.winter
-            let countries = this.product.form.countrie
+            let countries = this.product.form.countries
 
             this.product = {
                 colors: [],
@@ -747,7 +746,7 @@ export default {
                     childbrand           : "",
                     sizetopid            : "",
                     sizecontentids       : [],
-                    countrie             : "",
+                    countries            : "",
                     ulnarinch            : [],
                     productmemoids       : [],
                     factoryprice         : "",
@@ -767,7 +766,7 @@ export default {
                     fall                 : fall,
                     winter               : winter,
                     memo                 : "",
-                    countries            : [],
+                    countries            : countries,
                     colorId              : "",
                     secondColorId        : ""
                 }
