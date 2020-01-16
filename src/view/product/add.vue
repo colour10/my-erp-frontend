@@ -1,6 +1,23 @@
 <template>
     <div>
         <el-form ref="productForm" :rules="rules" :model="product" label-width="85px" :inline="true" size="mini" :inline-message="false" :show-message="false">
+            <el-row class="product" style="margin-bottom: 20px;">
+                <el-col :span="24">
+                    <el-form-item :label="showLabel('pinpai')" prop="form.brandid">
+                        <el-select v-model="product.form.brandid" placeholder="" @change="handleChangeBrand" filterable size="small">
+                            <el-option
+                                v-for="item of brands"
+                                :key="item.id + item.title"
+                                :label="item.title"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item :label="showLabel('niandai')" prop="form.ageseason">
+                        <ageseason v-model="product.form.ageseason" :data-list="ageseasons" size="small"></ageseason>
+                    </el-form-item>
+                </el-col>
+            </el-row>
             <el-row class="product">
                 <el-col :span="24">
                     <el-table :data="product.colors" border style="width:100%;">
@@ -103,7 +120,7 @@
                         </el-table-column>
                         <el-table-column :label="showLabel('caozuo')" align="center">
                             <template v-slot="scope">
-                                <as-button type="danger" @click="handleRemoveColor(scope.$index)" v-if="scope.$index>0">{{showLabel("shanchu")}}</as-button>
+                                <as-button type="danger" @click="handleRemoveColor(scope.$index, scope.row)" v-if="scope.$index>0">{{showLabel("shanchu")}}</as-button>
                                 <asa-button :enable="_isAllowed('product')" @click="handleAppendColors" v-if="scope.$index==0">{{showLabel("zhuijia")}}</asa-button>
                             </template>
                         </el-table-column>
@@ -113,19 +130,6 @@
             <div class="order-form" style="width:100%;margin-top:5px;" >
                 <el-row :gutter="0">
                     <el-col :span="8">
-                        <el-form-item :label="showLabel('niandai')" prop="form.ageseason">
-                            <ageseason v-model="product.form.ageseason" :data-list="ageseasons"></ageseason>
-                        </el-form-item>
-                        <el-form-item :label="showLabel('pinpai')" prop="form.brandid">
-                            <el-select v-model="product.form.brandid" placeholder="" @change="handleChangeBrand" filterable >
-                                <el-option
-                                    v-for="item of brands"
-                                    :key="item.id + item.title"
-                                    :label="item.title"
-                                    :value="item.id">
-                                </el-option>
-                            </el-select>
-                        </el-form-item>
                         <el-form-item :label="showLabel('pinlei')" prop="form.childbrand">
                             <el-cascader
                                 placeholder=""
@@ -666,8 +670,19 @@ export default {
                 materialnoteid: ""
             })
         },
-        handleRemoveColor(index) {
-            this.product.colors.splice(index, 1)
+        handleRemoveColor(index, row) {
+            let self = this
+            if (!_.isEmpty(row.wordcode_1) || !_.isEmpty(row.wordcode_2) || !_.isEmpty(row.wordcode_3) ) {
+                self.$confirm(showLabel('quedingshanchu'), showLabel('tip'), {
+                    confirmButtonText: showLabel('queding'),
+                    cancelButtonText: showLabel('quxiao'),
+                    type: 'warning'
+                }).then(() => {
+                    self.product.colors.splice(index, 1)
+                }).catch(() => {});
+            } else {
+                self.product.colors.splice(index, 1)
+            }
         },
         handleAppendColors() {
             let wordcode_1 = this.product.colors[0].wordcode_1
@@ -800,5 +815,9 @@ export default {
 
 .highlighted .name {
     color: #ddd;
+}
+
+.el-cascader-menu__wrap {
+    height: 380px;
 }
 </style>

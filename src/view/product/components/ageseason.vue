@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-input v-model="selectedString" readonly>
+        <el-input v-model="selectedString" readonly :size="size">
             <el-button slot="append" icon="el-icon-more" @click.stop="handleShowDialog"></el-button>
         </el-input>
         <el-dialog
@@ -54,6 +54,9 @@ export default {
         },
         dataList: {
             type: Array
+        },
+        size: {
+            type: String
         }
     },
     model: {

@@ -192,7 +192,7 @@
             :total="pagination.total*1">
         </el-pagination>
 
-        <el-dialog :title="showLabel('chanpinguanli')" :visible.sync="dialogFormVisible" :center="true" width="1400px" :close-on-click-modal="false" :close-on-press-escape="false">
+        <el-dialog :title="showLabel('createProduct')" :visible.sync="dialogFormVisible" :center="true" width="1400px" :close-on-click-modal="false" :close-on-press-escape="false" custom-class="create-product-dialog">
             <add ref="productForm" @hideDialogForm="hideDialogForm" @reloadList="reloadList"></add>
         </el-dialog>
     </div>
@@ -343,3 +343,9 @@ export default {
     }
 }
 </script>
+
+<style>
+.create-product-dialog .el-dialog__header {
+    border-bottom: 1px solid #d3d3d3
+}
+</style>
