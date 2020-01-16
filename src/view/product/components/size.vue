@@ -134,6 +134,8 @@ export default {
                         }
                     })
                 })
+            } else {
+                self.selectedString = ''
             }
         }
     }

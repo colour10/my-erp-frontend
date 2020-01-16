@@ -56,15 +56,16 @@
                             </el-table-column>
                         </el-table-column>
                         <el-table-column :label="showLabel('yansemingcheng')" width="150" align="center">
-                            <template v-slot="{ row }">
-                                <el-input v-model="row.colorname" size="mini"/>
+                            <template slot-scope="scope">
+                                <el-input v-model="scope.row.colorname" size="mini"
+                                    @keyup.native="handleKeyInput(scope.row, 'colorname')"/>
                             </template>
                         </el-table-column>
                         <el-table-column prop="brandcolor" :label="showLabel('sexi') + '/' + showLabel('color')" width="200" align="center">
                             <template slot-scope="scope">
                                 <el-form-item
                                         :prop="'colors.' + scope.$index + '.colorId'"
-                                        :rules="{required: true, trigger: 'change'}"
+                                        :rules="{required: true, trigger: 'blur'}"
                                     >
                                     <el-cascader
                                         placeholder=""
@@ -116,7 +117,7 @@
                             <ageseason v-model="product.form.ageseason" :data-list="ageseasons"></ageseason>
                         </el-form-item>
                         <el-form-item :label="showLabel('pinpai')" prop="form.brandid">
-                            <el-select v-model="product.form.brandid" placeholder="" @change="handleChangeBrand">
+                            <el-select v-model="product.form.brandid" placeholder="" @change="handleChangeBrand" filterable >
                                 <el-option
                                     v-for="item of brands"
                                     :key="item.id + item.title"
@@ -147,7 +148,6 @@
                         </el-form-item>
                         <el-form-item :label="showLabel('chimamingxi')" prop="form.sizecontentids">
                             <size v-model="product.form.sizecontentids" :data-list="sizecontents"></size>
-                            <!-- <as-button @click="handleTrimSize" class="trimhalf">{{showLabel("qubanma")}}</as-button> -->
                         </el-form-item>
                         <el-row class="product">
                             <el-table :data="product.materials" border style="width:90%;">
@@ -215,14 +215,6 @@
 
                         <el-form-item :label="showLabel('shangpinmiaoshu')">
                             <product-memo v-model="product.form.productmemoids" :data-list="productMemos"></product-memo>
-                        </el-form-item>
-
-                        <el-form-item :label="showLabel('cankaobeilv')">
-                            <el-row>
-                                <el-col :span="8" style="width:80px">{{rate>0?rate : '-' }}</el-col>
-                                <el-col :span="16" style="width:50px">{{showLabel('lingshoubi')}}</el-col>
-                                <el-col :span="8" style="width:50px">{{getPriceRate}}</el-col>
-                            </el-row>
                         </el-form-item>
 
                         <el-form-item :label="showLabel('chuchangjia')">
@@ -471,11 +463,11 @@ export default {
             product        : Object.assign({}, defaultProduct),
             rules          : {
                 form: {
-                    ageseason     : [{ required: true, message: showLabel('niandai') + showLabel('required') }],
-                    brandid       : [{ required: true, message: showLabel('pinpai') + showLabel('required'), trigger: 'change' }],
-                    childbrand    : [{ required: true, message: showLabel('pinlei') + showLabel('required'), trigger: 'change' }],
-                    sizetopid     : [{ required: true, message: showLabel('chimazu') + showLabel('required'), trigger: 'change' }],
-                    sizecontentids: [{ required: true, message: showLabel('chimamingxi') + showLabel('required') }]
+                    ageseason     : [{ required: true, message: showLabel('niandai') + showLabel('required'), trigger: 'blur' }],
+                    brandid       : [{ required: true, message: showLabel('pinpai') + showLabel('required'), trigger: 'blur' }],
+                    childbrand    : [{ required: true, message: showLabel('pinlei') + showLabel('required'), trigger: 'blur' }],
+                    sizetopid     : [{ required: true, message: showLabel('chimazu') + showLabel('required'), trigger: 'blur' }],
+                    sizecontentids: [{ required: true, message: showLabel('chimamingxi') + showLabel('required'), trigger: 'blur' }]
                 }
             },
             seriesDialogVisible: false,
@@ -490,12 +482,21 @@ export default {
                 name_en: [{ required: true, message: showLabel('name', 'en') + showLabel('required'), trigger: 'blur' }],
                 name_it: [{ required: true, message: showLabel('name', 'it') + showLabel('required'), trigger: 'blur' }]
             },
-            timeout: undefined
+            timeout: undefined,
+            siji: ''
         }
     },
     mounted() {
         this.resetDialogForm()
         this.getProductRelatedOptions()
+    },
+    watch: {
+        siji: function(newValue) {
+            this.product.form.spring = newValue
+            this.product.form.summer = newValue
+            this.product.form.fall   = newValue
+            this.product.form.winter = newValue
+        },
     },
     methods: {
         querySearchWordCode(queryString, cb) {
@@ -669,7 +670,19 @@ export default {
             this.product.colors.splice(index, 1)
         },
         handleAppendColors() {
-            this.product.colors.push(Object.assign({}, defaultColor))
+            let wordcode_1 = this.product.colors[0].wordcode_1
+            let wordcode_2 = this.product.colors[0].wordcode_2
+            let color = {
+                brandcolor: "",
+                wordcode_1: wordcode_1,
+                wordcode_2: wordcode_2,
+                wordcode_3: "",
+                wordcode_4: "",
+                picture: "",
+                picture2: "",
+                colorname: ""
+            }
+            this.product.colors.push(color)
         },
         getColorSystemAndColor() {
             let self = this
@@ -700,12 +713,21 @@ export default {
             })
         },
         resetDialogForm() {
+            let ageseason = this.product.form.ageseason
+            let brandid   = this.product.form.brandid
+            let gender    = this.product.form.gender
+            let spring    = this.product.form.spring
+            let summer    = this.product.form.summer
+            let fall      = this.product.form.fall
+            let winter    = this.product.form.winter
+            let countries = this.product.form.countrie
+
             this.product = {
                 colors: [],
                 materials: [],
                 form: {
-                    ageseason            : [],
-                    brandid              : "",
+                    ageseason            : ageseason,
+                    brandid              : brandid,
                     brandgroupid         : "",
                     childbrand           : "",
                     sizetopid            : "",
@@ -724,11 +746,11 @@ export default {
                     saletypeid           : "",
                     producttypeid        : "",
                     winterproofingid     : "",
-                    gender               : "",
-                    spring               : "",
-                    summer               : "",
-                    fall                 : "",
-                    winter               : "",
+                    gender               : gender,
+                    spring               : spring,
+                    summer               : summer,
+                    fall                 : fall,
+                    winter               : winter,
                     memo                 : "",
                     countries            : [],
                     colorId              : "",

@@ -149,7 +149,6 @@
                             <ulnarinch v-model="product.form.ulnarinch" :data-list="ulnarinches"></ulnarinch>
                         </el-form-item>
                         <el-form-item :label="showLabel('shangpinmiaoshu')">
-                            <product-memo v-model="product.form.productmemoids" :data-list="productMemos"></product-memo>
                             <el-select v-model="product.form.productmemoids" placeholder="" multiple>
                                 <el-option
                                     v-for="item of productMemos"
@@ -158,14 +157,6 @@
                                     :value="item.id">
                                 </el-option>
                             </el-select>
-                        </el-form-item>
-
-                        <el-form-item :label="_label('cankaobeilv')">
-                            <el-row>
-                                <el-col :span="8" style="width:80px">{{rate>0?rate : '-' }}</el-col>
-                                <el-col :span="16" style="width:50px">{{_label('lingshoubi')}}</el-col>
-                                <el-col :span="8" style="width:50px">{{getPriceRate}}</el-col>
-                            </el-row>
                         </el-form-item>
 
                         <el-form-item :label="showLabel('chuchangjia')">
@@ -400,12 +391,21 @@ export default {
                 name_cn: [{ required: true, message: showLabel('name', 'cn') + showLabel('required'), trigger: 'blur' }],
                 name_en: [{ required: true, message: showLabel('name', 'en') + showLabel('required'), trigger: 'blur' }],
                 name_it: [{ required: true, message: showLabel('name', 'it') + showLabel('required'), trigger: 'blur' }]
-            }
+            },
+            siji: ''
         }
     },
     created() {
         this.getProductRelatedOptions()
         this.getColorSystemAndColor()
+    },
+    watch: {
+        siji: function(newValue) {
+            this.product.form.spring = newValue
+            this.product.form.summer = newValue
+            this.product.form.fall   = newValue
+            this.product.form.winter = newValue
+        },
     },
     methods: {
         cancleAddSeries() {

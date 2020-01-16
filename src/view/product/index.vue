@@ -193,7 +193,7 @@
         </el-pagination>
 
         <el-dialog :title="showLabel('chanpinguanli')" :visible.sync="dialogFormVisible" :center="true" width="1400px" :close-on-click-modal="false" :close-on-press-escape="false">
-            <add @hideDialogForm="hideDialogForm" @reloadList="reloadList"></add>
+            <add ref="productForm" @hideDialogForm="hideDialogForm" @reloadList="reloadList"></add>
         </el-dialog>
     </div>
 </template>
@@ -305,6 +305,9 @@ export default {
         },
         handleCreate() {
             this.showDialogForm()
+            if (typeof(this.$refs.productForm) != 'undefined') {
+                this.$refs.productForm.resetDialogForm()
+            }
         },
         handleSizeChange(pageSize) {
             this.pagination.pageSize = pageSize
