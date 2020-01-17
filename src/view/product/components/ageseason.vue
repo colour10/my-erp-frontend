@@ -1,8 +1,17 @@
 <template>
     <div>
-        <el-input v-model="selectedString" readonly :size="size">
+        <el-autocomplete
+            v-model="selectedString"
+            :fetch-suggestions="querySearch"
+            placeholder=""
+            @select="handleSelect"
+            :size = "size"
+        >
+            <template slot-scope="props">
+                {{ props.item.title }}
+            </template>
             <el-button slot="append" icon="el-icon-more" @click.stop="handleShowDialog"></el-button>
-        </el-input>
+        </el-autocomplete>
         <el-dialog
             width="250px"
             class="asa-select-dialog"
@@ -64,6 +73,22 @@ export default {
         event: 'change'
     },
     methods: {
+        handleSelect(item) {
+            this.selectedString = item.title
+            this.selectedIds = []
+            this.selectedIds.push(item.id)
+            this.$emit('change', this.selectedIds)
+        },
+        querySearch(queryString, cb) {
+            let dataList = this.dataList
+            let results = dataList ? dataList.filter(this.createFilter(queryString)) : dataList;
+            cb(results);
+        },
+        createFilter(queryString) {
+            return (dataList) => {
+                return (dataList.title.toLowerCase().indexOf(queryString.toLowerCase()) >= 0);
+            };
+        },
         handleRowClick(row) {
             this.$refs.multipleTable.toggleRowSelection(row)
         },
@@ -104,7 +129,7 @@ export default {
                 selectedStringArray.push(data.title)
                 self.selectedIds.push(data.id)
             })
-                           
+
             self.selectedString = selectedStringArray.join(',')
         }
     },

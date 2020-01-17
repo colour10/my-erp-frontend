@@ -24,7 +24,7 @@ import globals, { showLabel } from '@/component/globals.js'
 import { Productstock } from '@/component/model.js';
 
 export default {
-    name: 'asa-product-price',
+    name: 'stock',
     data() {
         return {
             data: [],

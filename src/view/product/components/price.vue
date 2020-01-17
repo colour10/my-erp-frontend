@@ -72,8 +72,7 @@ import { extract, extend } from '@/component/object.js';
 import API from "@/component/api.js";
 
 export default {
-    name: 'asa-product-price',
-    props: ["option"],
+    name: 'price',
     data() {
         var self = this;
 

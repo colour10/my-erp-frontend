@@ -1,10 +1,18 @@
 <template>
     <div>
-        <el-input v-model="selectedString" readonly>
+        <el-autocomplete
+            v-model="selectedString"
+            :fetch-suggestions="querySearch"
+            placeholder=""
+            @select="handleSelect"
+        >
+            <template slot-scope="props">
+                {{ props.item.title }}
+            </template>
             <el-button slot="append" icon="el-icon-more" @click.stop="handleShowDialog"></el-button>
-        </el-input>
+        </el-autocomplete>
         <el-dialog
-            width="250px"
+            width="500px"
             class="asa-select-dialog"
             :title="showLabel('chandi')"
             :visible.sync="visible"
@@ -25,7 +33,7 @@
                 @row-click="handleRowClick">
                 <el-table-column type="selection" width="50">
                 </el-table-column>
-                <el-table-column :label="showLabel('guojia')" width="150">
+                <el-table-column :label="showLabel('guojia')">
                     <template slot-scope="scope">{{ scope.row.title }}</template>
                 </el-table-column>
             </el-table>
@@ -66,13 +74,29 @@ export default {
             let self = this
             if (self.keyword.length > 0) {
                 return self.dataList.filter(function (row) {
-                    return (row.title.indexOf(self.keyword) >= 0)
+                    return (row.title.indexOf(self.keyword.toUpperCase()) >= 0)
                 })
             }
             return self.dataList 
         }
     },
     methods: {
+        handleSelect(item) {
+            this.selectedString = item.title
+            this.selectedIds = []
+            this.selectedIds.push(item.id)
+            this.$emit('change', this.selectedIds)
+        },
+        querySearch(queryString, cb) {
+            let dataList = this.dataList
+            let results = dataList ? dataList.filter(this.createFilter(queryString)) : dataList;
+            cb(results);
+        },
+        createFilter(queryString) {
+            return (row) => {
+                return (row.title.indexOf(queryString.toUpperCase()) >= 0);
+            };
+        },
         handleRowClick(row) {
             this.$refs.multipleTable.toggleRowSelection(row)
         },
