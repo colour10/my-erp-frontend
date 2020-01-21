@@ -156,6 +156,18 @@
                         <el-row class="product">
                             <el-table :data="product.materials" border style="width:90%;">
                                 <el-table-column :label="showLabel('caizhiguanli')" align="center">
+                                    <el-table-column :label="showLabel('caizhibeizhu')" align="center">
+                                        <template slot-scope="scope">
+                                            <el-select v-model="scope.row.materialnoteid" size="mini" @change="handleChangeMaterialnote(scope.$index)">
+                                                <el-option
+                                                    v-for="item in filtedMaterialnotes"
+                                                    :key="item.id + item.title"
+                                                    :label="item.title"
+                                                    :value="item.id">
+                                                </el-option>
+                                            </el-select>
+                                        </template>
+                                    </el-table-column>
                                     <el-table-column :label="showLabel('caizhi')" align="center">
                                         <template slot-scope="scope">
                                             <el-form-item
@@ -164,7 +176,7 @@
                                             >
                                                 <el-select v-model="scope.row.materialid" size="mini">
                                                     <el-option
-                                                        v-for="item in materials"
+                                                        v-for="item in filtedMaterials[scope.$index]"
                                                         :key="item.id + item.title"
                                                         :label="item.title"
                                                         :value="item.id">
@@ -181,18 +193,6 @@
                                             >
                                                 <el-input v-model="scope.row.percent" size="mini"></el-input>
                                             </el-form-item>
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column :label="showLabel('caizhibeizhu')" align="center">
-                                        <template slot-scope="scope">
-                                            <el-select v-model="scope.row.materialnoteid" size="mini">
-                                                <el-option
-                                                    v-for="item in materialnotes"
-                                                    :key="item.id + item.title"
-                                                    :label="item.title"
-                                                    :value="item.id">
-                                                </el-option>
-                                            </el-select>
                                         </template>
                                     </el-table-column>
                                 </el-table-column>
@@ -217,7 +217,7 @@
                         </el-form-item>
 
                         <el-form-item :label="showLabel('shangpinmiaoshu')">
-                            <product-memo v-model="product.form.productmemoids" :data-list="productMemos"></product-memo>
+                            <product-memo v-model="product.form.productmemoids" :data-list="filtedProductMemos"></product-memo>
                         </el-form-item>
 
                         <el-form-item :label="showLabel('chuchangjia')">
@@ -447,6 +447,7 @@ export default {
     components: { ageseason, country, ulnarinch, size, productMemo },
     data() {
         return {
+            filtedMaterials: [],
             ageseasons     : [],
             brands         : [],
             categories     : [],                                  // 品类 子品类
@@ -501,7 +502,42 @@ export default {
             this.product.form.winter = newValue
         },
     },
+    computed: {
+        filtedProductMemos() {
+            if (this.product.form.childbrand) {
+                let childbrandId = this.product.form.childbrand[1].toString()
+                return this.productMemos.filter(function (item) {
+                    return (_.indexOf(item.productMemoIds, childbrandId) === 0)
+                })
+            } else {
+                return this.productMemos
+            }
+        },
+        filtedMaterialnotes() {
+            this.product.materials.forEach(item => {
+                item.materialnoteid = ''
+            })
+
+            if (this.product.form.childbrand) {
+                let childbrandId = this.product.form.childbrand[0].toString()
+                return this.materialnotes.filter(function (item) {
+                    return (_.indexOf(item.brandgroupids, childbrandId) === 0)
+                })
+            } else {
+                return this.materialnotes
+            }
+        }
+    },
     methods: {
+        handleChangeMaterialnote(index) {
+            this.product.materials[index].materialid = ''
+
+            let noteId = this.product.materials[index].materialnoteid.toString()
+            this.filtedMaterials[index] = this.materials.filter(function(item) {
+                let materialnoteids = _.isEmpty(item.materialnoteids) ? [] : item.materialnoteids.split(',')
+                return (_.indexOf(materialnoteids, noteId) >= 0)
+            })
+        },
         querySearchWordCode(queryString, cb) {
             let results = []
             if (queryString.length > 2) {
@@ -529,7 +565,7 @@ export default {
             row.wordcode_2 = select.wordcode_2
             row.wordcode_3 = select.wordcode_3
             row.wordcode_4 = select.wordcode_4
-            
+
             row.colorId = []
             row.colorId.push(parseInt(select.color_system_id))
             row.colorId.push(parseInt(select.color_id))
@@ -661,6 +697,7 @@ export default {
         },
         handleRemoveMaterial(index) {
             this.product.materials.splice(index, 1)
+            this.filtedMaterials.splice(index, 1)
         },
         handleAppendMaterial() {
             this.product.materials.push({
@@ -668,6 +705,7 @@ export default {
                 percent       : 100,
                 materialnoteid: ""
             })
+            this.filtedMaterials.push(this.materials)
         },
         handleRemoveColor(index, row) {
             let self = this
@@ -773,6 +811,7 @@ export default {
             }
             this.product.colors.push(Object.assign({}, defaultColor))
             this.getColorSystemAndColor()
+            this.filtedMaterials = []
         },
         createProduct() {
             let self = this

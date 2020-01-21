@@ -111,6 +111,7 @@ export default {
             }
             this._submit("/material/saveMaterialnoteids", params).then(function() {
                 self.hideDialogMaterialnote()
+                self.reloadList()
             })
         },
         getMaterialnotes() {
@@ -138,9 +139,7 @@ export default {
 
             this.showDialogMaterialnote()
             this.getMaterialnotes()
-            console.log(row.materialnoteids)
             this.materialnoteids = _.isEmpty(row.materialnoteids) ? [] : row.materialnoteids.split(',')
-            console.log(this.materialnoteids)
 
             this.$refs.transfer.$children["0"]._data.query = ''
             this.$refs.transfer.$children["3"]._data.query = ''
