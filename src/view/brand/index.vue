@@ -46,7 +46,7 @@
                             <img :src="_fileLink(row.filename)" style="max-width: 50px; max-height: 50px;">
                         </template>
             </el-table-column>
-            <el-table-column :label="showLabel('pinpaimingcheng')" prop="name_en" sortable="customer" width="200"></el-table-column>
+            <el-table-column :label="showLabel('pinpaimingcheng')" prop="name_en" sortable="custom" width="200"></el-table-column>
             <el-table-column :label="showLabel('guishuguojia')" prop="country" width="200"></el-table-column>
         </el-table>
 
@@ -175,9 +175,9 @@ export default {
         handleFilter() {
             this.getList()
         },
-        handleDelete() {
+        handleDelete(row) {
             let self = this
-            self._remove("/brand/delete/", {id: self.id}).then(function() {
+            self._remove("/brand/delete/", {id: row.id}).then(function() {
                 self.reloadList()
             })
         },
