@@ -97,6 +97,9 @@
                 <el-tab-pane :label="_label('guojima')" name="worldcode" :disabled="id==0">
                     <worldcode :id="id" @cancel="hideDialogForm" ref="worldcode"></worldcode>
                 </el-tab-pane>
+                <el-tab-pane :label="showLabel('chimazu')" name="size" :disabled="id==0">
+                    <size :brandid="id"></size>
+                </el-tab-pane>
             </el-tabs>
         </el-dialog>
     </div>
@@ -107,10 +110,11 @@ import globals, { showLabel } from '../../component/globals.js'
 import { getProp } from "@/component/prop.js"
 import brandform from './form.vue'
 import worldcode from './worldcode.vue'
+import size from './size.vue'
 
 export default {
     name: 'brand',
-    components: { brandform, worldcode },
+    components: { brandform, worldcode, size },
     data() {
         return {
             countries: [],
