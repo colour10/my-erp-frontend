@@ -231,7 +231,8 @@ export default {
             ageseasons: [],
             brands: [],
             categories: [],
-            productMemos: []
+            productMemos: [],
+            series: []
         }
     },
     created() {

@@ -16,6 +16,10 @@
                     <el-form-item :label="showLabel('niandai')" prop="form.ageseason">
                         <ageseason v-model="product.form.ageseason" :data-list="ageseasons" size="small"></ageseason>
                     </el-form-item>
+                    <el-form-item :label="showLabel('xingbie')">
+                        <sp-radio-group v-model="product.form.gender" source="gender" :span="8" :lang="lang" class="supermini" style="width:270px">
+                        </sp-radio-group>
+                    </el-form-item>
                 </el-col>
             </el-row>
             <el-row class="product">
@@ -143,7 +147,7 @@
                         <el-form-item :label="showLabel('chimazu')" prop="form.sizetopid">
                             <el-select v-model="product.form.sizetopid" placeholder="" @change="handleChangeSizeTop">
                                 <el-option
-                                    v-for="item of sizes"
+                                    v-for="item of filterSizes"
                                     :key="item.id + item.title"
                                     :label="item.title"
                                     :value="item.id">
@@ -230,7 +234,6 @@
                                         :value="item.id">
                                     </el-option>
                                 </el-select>
-                                <span slot="append">{{getRate}}</span>
                             </el-input>
                         </el-form-item>
                         <el-form-item :label="showLabel('guojilingshoujia')">
@@ -243,7 +246,6 @@
                                         :value="item.id">
                                     </el-option>
                                 </el-select>
-                                <span slot="append">{{getReciprocalRate}}</span>
                             </el-input>
                         </el-form-item>
                         <el-form-item :label="showLabel('benguochuchangjia')">
@@ -256,7 +258,6 @@
                                         :value="item.id">
                                     </el-option>
                                 </el-select>
-                                <span slot="append">{{getRateNational}}</span>
                             </el-input>
                         </el-form-item>
                         <el-form-item :label="showLabel('benguolingshoujia')">
@@ -269,7 +270,6 @@
                                         :value="item.id">
                                     </el-option>
                                 </el-select>
-                                <span slot="append">{{getReciprocalRateNational}}</span>
                             </el-input>
                         </el-form-item>
                     </el-col>
@@ -319,10 +319,6 @@
                             </el-select>
                         </el-form-item>
 
-                        <el-form-item :label="showLabel('xingbie')">
-                            <sp-radio-group v-model="product.form.gender" source="gender" :span="8" :lang="lang" class="supermini" style="width:270px">
-                            </sp-radio-group>
-                        </el-form-item>
                         <el-form-item :label="showLabel('jijie')">
                             <div  style="width:270px">
                             <el-col :span="8">
@@ -487,7 +483,8 @@ export default {
                 name_it: [{ required: true, message: showLabel('name', 'it') + showLabel('required'), trigger: 'blur' }]
             },
             timeout: undefined,
-            siji: ''
+            siji: '',
+            lang: showLabel("lang")
         }
     },
     mounted() {
@@ -503,6 +500,50 @@ export default {
         },
     },
     computed: {
+        filterSizes() {
+            let self = this
+            if (this.product.form.brandid) {
+                let brand = this.brands.find(function (item) {
+                    return item.id == self.product.form.brandid
+                })
+
+                let sizetopIds = []
+                if (typeof(brand) != 'undefined') {
+                    brand.sizes.forEach(item => {
+                        if (_.isEmpty(self.product.form.gender) && _.isEmpty(self.product.form.childbrand)) {
+                            sizetopIds.push(item.sizetop_id)
+                        } else {
+                            let isMatched = true
+
+                            if (self.product.form.gender) {
+                                if (item.gender != self.product.form.gender) {
+                                    isMatched = false
+                                }
+                            }
+
+                            if (isMatched && self.product.form.childbrand) {
+                                let brandgroupchild_id = this.product.form.childbrand[1].toString()
+
+                                if (brandgroupchild_id != item.brandgroupchild_id) {
+                                    isMatched = false
+                                }
+                            }
+
+                            if (isMatched) {
+                                sizetopIds.push(item.sizetop_id)
+                            }
+                        }
+                    })
+                }
+
+                return this.sizes.filter(item => {
+                    let sizeId = item.id.toString()
+                    return (_.indexOf(sizetopIds, sizeId) === 0)
+                })
+            } else {
+                return this.sizes
+            }
+        },
         filtedProductMemos() {
             if (this.product.form.childbrand) {
                 let childbrandId = this.product.form.childbrand[1].toString()
@@ -765,6 +806,7 @@ export default {
             })
         },
         resetDialogForm() {
+            console.log(this.product)
             let ageseason = this.product.form.ageseason
             let brandid   = this.product.form.brandid
             let gender    = this.product.form.gender

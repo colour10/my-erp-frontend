@@ -149,6 +149,9 @@ export default {
                 self.listLoading = false
             })
         },
+        reloadList() {
+            this.getList()
+        },
         submit() {
             let self = this
             this.$refs.form.validate((valid) => {
@@ -165,7 +168,6 @@ export default {
             this.hideDialogForm()
         },
         handleCreate() {
-            console.log(this.brandgroups)
             this.id = 0
             this.dialogStatus = 'create'
             this.showDialogForm()
@@ -181,7 +183,6 @@ export default {
             this._fetch("/l/brandgroup", {}).then(function(res) {
                 let language = showLabel('lang')
                 let name = 'name_' + language
-                console.log(name)
 
                 res.data.forEach(item => {
                     let title = item[name]

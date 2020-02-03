@@ -186,7 +186,7 @@ export default {
             })
         },
         handleUpdate(row) {
-            this.id = row.id
+            this.id = parseInt(row.id)
             this.brandrate.base.brandid = row.id
             this.aliases.base.brandid = row.id
             this.series.base.brandid = row.id
