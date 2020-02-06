@@ -1,21 +1,32 @@
 <template>
     <div>
-        <el-button type="primary" size="mini" @click="handleCreate">{{ showLabel('button-create') }}</el-button>
-        <el-table v-loading="listLoading" :data="list" border stripe>
-            <el-table-column :label="showLabel('caozuo')" align="center" class-name="small-padding fixed-width" width="100">
-                <template slot-scope="{row}">
-                    <el-button type="default" size="mini" @click="handleUpdate(row)">{{ showLabel('bianji') }}</el-button>
-                    <el-button type="danger" size="mini" @click="handleDelete(row)">{{ showLabel('shanchu') }}</el-button>
-                </template>
-            </el-table-column>
-            <el-table-column :label="showLabel('pinlei')" prop="brandgroup" width="100"></el-table-column>
-            <el-table-column :label="showLabel('zipinlei')" prop="brandgroupchild" width="100"></el-table-column>
-            <el-table-column :label="showLabel('xingbie')" prop="gender" width="100"></el-table-column>
-            <el-table-column :label="showLabel('chimazu')" prop="sizetop"></el-table-column>
-        </el-table>
+        <el-select v-model="selected" filterable placeholder="" @change="handleChange">
+            <el-option-group
+                v-for="group in sizes"
+                :key="group.label"
+                :label="group.label">
+                <el-option
+                    v-for="item of group.options"
+                    :key="item.id + item.title"
+                    :label="item.title"
+                    :value="item.id">
+                </el-option>
+            </el-option-group>
+        </el-select>
+        <el-button @click="handleCreate" class="trimhalf" style="margin: 0;">{{showLabel("xinjian")}}</el-button>
 
-        <el-dialog :title="dialogTitleMap[dialogStatus]" :visible.sync="dialogFormVisible" :center="true" :modal="false" width="400px">
+        <el-dialog :title="showLabel('create-sizetop')" :visible.sync="dialogFormVisible" :center="true" :modal="false" width="510px">
             <el-form ref="form" :model="form" label-width="80px" size="mini" :rules="rules" :show-message="false">
+                <el-form-item :label="showLabel('pinpai')" prop="brand_id">
+                    <el-select v-model="form.brand_id" filterable placeholder="">
+                        <el-option
+                            v-for="item of brands"
+                            :key="item.id + item.title"
+                            :label="item.title"
+                            :value="item.id">
+                        </el-option> 
+                    </el-select>
+                </el-form-item>
                 <el-form-item :label="showLabel('pinlei')" prop="brandgroup_id">
                    <el-select v-model="form.brandgroup_id" placeholder="">
                        <el-option
@@ -46,15 +57,19 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item :label="showLabel('chimazu')" prop="sizetop_id">
-                    <el-select v-model="form.sizetop_id" placeholder="">
-                        <el-option
-                            v-for="item of sizetops"
-                            :key="item.id + item.title"
-                            :label="item.title"
-                            :value="item.id">
-                        </el-option>
-                    </el-select>
+                <hr>
+                <el-form-item :label="showLabel('chimazu')" prop="name_en">
+                    <el-input v-model="form.name_en"></el-input>
+                    <el-button type="success" class="trimhalf" style="margin: 0;" @click="appendSizeContent">add content</el-button>
+                </el-form-item>
+
+                <el-form-item :label="showLabel('chima')" 
+                    v-for="(sizecontent, index) in form.sizes" 
+                    :key="index"
+                    :prop="'sizes.' + index + '.name'"
+                    :rules="{required: true}">
+                    <el-input v-model="sizecontent.name"></el-input>
+                    <el-button type="danger" class="trimhalf" style="margin: 0;" @click="removeSizeContent(index)">remove</el-button>
                 </el-form-item>
                 <el-row>
                     <el-col :span="24" style="text-align:center;">
@@ -75,37 +90,27 @@ const defaultForm = {
     brandgroup_id: '',
     brandgroupchild_id: '',
     gender: '',
-    sizetop_id: ''
+    name_en: '',
+    sizes: []
 }
 
 export default {
-    name: 'size',
-    props: {
-        brandid: {
-            type: Number
-        }
-    },
     data() {
         return {
-            id: 0,
-            list: [],
-            listLoading: false,
+            selected: '',
             rules: {
+                'brand_id'          : [{required: true, message: showLabel('pinpai') + showLabel('required')}],
                 'brandgroup_id'     : [{required: true, message: showLabel('pinlei') + showLabel('required')}],
                 'brandgroupchild_id': [{required: true, message: showLabel('zipinlei') + showLabel('required')}],
                 'gender'            : [{required: true, message: showLabel('xingbie') + showLabel('required')}],
-                'sizetop_id'        : [{required: true, message: showLabel('chimazu') + showLabel('required')}]
+                'name_en'           : [{required: true, message: showLabel('chimazu') + showLabel('required')}]
             },
+            brands: [],
             sizetops: [],
             genders: [],
             brandgroupchildren: [],
             brandgroups: [],
             form: Object.assign({}, defaultForm),
-            dialogTitleMap: {
-                create: showLabel('xinjian') + showLabel('chimazu'),
-                update: showLabel('bianji') + showLabel('chimazu'),
-            },
-            dialogStatus: '',
             dialogFormVisible: false
         }
     },
@@ -124,42 +129,49 @@ export default {
             }
         }
     },
+    props: {
+        brand_id: {
+            type: String
+        },
+        category: {
+            type: Array
+        },
+        gender: {
+            type: String
+        },
+        sizetopid: {
+            type: String
+        },
+        sizes: {
+            type: Array
+        }
+    },
+    model: {
+        prop: 'sizetopid',
+        event: 'change'
+    },
     methods: {
-        getInfo() {
-            let self = this
-            this._fetch("/brand/sizeInfo", {id: this.id}).then(function(res) {
-                self.form.brandgroup_id = res.data.brandgroup_id
-                self.form.brandgroupchild_id = res.data.brandgroupchild_id
-                self.form.gender = parseInt(res.data.gender)
-                self.form.sizetop_id = res.data.sizetop_id
-            })
+        showDialogForm() {
+            this.dialogFormVisible = true
+            this.form.brand_id = this.brand_id
+            if (!_.isEmpty(this.category)) {
+                this.form.brandgroup_id = this.category[0].toString()
+                this.form.brandgroupchild_id = this.category[1].toString()
+            }
+            if (!_.isEmpty(this.gender)) {
+                this.form.gender = parseInt(this.gender)
+            }
         },
-        handleUpdate(row) {
-            this.id = row.id
-            this.dialogStatus = 'update'
-            this.getInfo()
-            this.showDialogForm()
-        },
-        getList() {
-            this.list = []
-            let self = this
-            this.listLoading = true
-            this._fetch("/brand/sizes", {brand_id: this.brandid}).then(function(res) {
-                self.list = res.data
-                self.listLoading = false
-            })
-        },
-        reloadList() {
-            this.getList()
+        hideDialogForm() {
+            this.dialogFormVisible = false
         },
         submit() {
             let self = this
             this.$refs.form.validate((valid) => {
                 if (valid) {
-                    self.form.brand_id = self.brandid
-                    self._submit("/brand/addSize", self.form).then(function(res) {
+                    self._submit("/product/addSize", self.form).then(function(res) {
                         self.hideDialogForm()
-                        self.reloadList()
+                        self.$emit('reloadSizetops')
                     })
                 }
             })
@@ -167,16 +179,33 @@ export default {
         cancel() {
             this.hideDialogForm()
         },
+        handleChange() {
+            this.$emit('change', this.selected)
+        },
         handleCreate() {
-            this.id = 0
-            this.dialogStatus = 'create'
+            this.appendSizeContent()
             this.showDialogForm()
         },
-        showDialogForm() {
-            this.dialogFormVisible = true
+        appendSizeContent() {
+            this.form.sizes.push({
+                name: ''
+            })
         },
-        hideDialogForm() {
-            this.dialogFormVisible = false
+        removeSizeContent(index) {
+            this.form.sizes.splice(index, 1)
+        },
+        getBrands() {
+            let self = this
+            this._fetch("/l/brand", {}).then(function(res) {
+                res.data.forEach(item => {
+                    let title = item.name_en
+
+                    self.brands.push({
+                        id   : item.id,
+                        title: title
+                    })
+                })
+            })
         },
         getBrandgroups() {
             let self = this
@@ -220,37 +249,22 @@ export default {
                         id   : index,
                         title: res.data[index]
                     })
-
                 }
             })
-        },
-        getSizetops() {
-            let self = this
-            this.sizetops = []
-            this._fetch("/l/sizetop", {}).then(function(res) {
-
-                res.data.forEach(item => {
-                    self.sizetops.push({
-                        id   : item.id,
-                        title: item.name_en
-                    })
-                })
-            })
-        }
-    },
-    watch: {
-        brandid (newValue) {
-            if (newValue > 0) {
-                this.getList()
-            }
         }
     },
     mounted() {
-        this.getList()
+        this.selected = this.sizetopid
+        this.getBrands()
         this.getBrandgroups()
         this.getBrandgroupchildren()
         this.getGenders()
-        this.getSizetops()
     }
 }
 </script>
+
+<style>
+.el-input {
+    width: 200px;
+}
+</style>

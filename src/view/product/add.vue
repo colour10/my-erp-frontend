@@ -145,17 +145,13 @@
                             </el-cascader>
                         </el-form-item>
                         <el-form-item :label="showLabel('chimazu')" prop="form.sizetopid">
-                            <el-select v-model="product.form.sizetopid" placeholder="" @change="handleChangeSizeTop">
-                                <el-option
-                                    v-for="item of filterSizes"
-                                    :key="item.id + item.title"
-                                    :label="item.title"
-                                    :value="item.id">
-                                </el-option>
-                            </el-select>
-                        </el-form-item>
-                        <el-form-item :label="showLabel('chimamingxi')" prop="form.sizecontentids">
-                            <size v-model="product.form.sizecontentids" :data-list="sizecontents"></size>
+                            <sizetop v-model="product.form.sizetopid"
+                                :sizes="filterSizes"
+                                :brand_id="product.form.brandid"
+                                :category="product.form.childbrand"
+                                :gender="product.form.gender"
+                                @reloadSizetops="reloadSizetops"
+                            ></sizetop>
                         </el-form-item>
                         <el-row class="product">
                             <el-table :data="product.materials" border style="width:90%;">
@@ -390,6 +386,7 @@ import ageseason from './components/ageseason.vue'
 import country from './components/country.vue'
 import ulnarinch from './components/ulnarinch.vue'
 import size from './components/size.vue'
+import sizetop from './components/sizetop.vue'
 import productMemo from './components/productMemo.vue'
 
 const defaultColor = {
@@ -410,7 +407,7 @@ const defaultProduct = {
         ageseason            : [],
         brandid              : "",
         brandgroupid         : "",
-        childbrand           : "",
+        childbrand           : [],
         sizetopid            : "",
         sizecontentids       : [],
         countries            : "",
@@ -440,7 +437,7 @@ const defaultProduct = {
 }
 
 export default {
-    components: { ageseason, country, ulnarinch, size, productMemo },
+    components: { ageseason, country, ulnarinch, size, productMemo, sizetop },
     data() {
         return {
             filtedMaterials: [],
@@ -501,6 +498,19 @@ export default {
     },
     computed: {
         filterSizes() {
+            let sizes  = [
+                {
+                    label: 'recomend',
+                    options: []
+                },
+                {
+                    label: 'others',
+                    options: []
+                }
+            ]
+
+            sizes[1].options = this.sizes
+
             let self = this
             if (this.product.form.brandid) {
                 let brand = this.brands.find(function (item) {
@@ -521,7 +531,7 @@ export default {
                                 }
                             }
 
-                            if (isMatched && self.product.form.childbrand) {
+                            if (isMatched && !_.isEmpty(self.product.form.childbrand)) {
                                 let brandgroupchild_id = this.product.form.childbrand[1].toString()
 
                                 if (brandgroupchild_id != item.brandgroupchild_id) {
@@ -536,16 +546,21 @@ export default {
                     })
                 }
 
-                return this.sizes.filter(item => {
+                sizes[0].options = this.sizes.filter(item => {
                     let sizeId = item.id.toString()
-                    return (_.indexOf(sizetopIds, sizeId) === 0)
+                    return (_.indexOf(sizetopIds, sizeId) >= 0)
                 })
-            } else {
-                return this.sizes
+
+                sizes[1].options = this.sizes.filter(item => {
+                    let sizeId = item.id.toString()
+                    return (_.indexOf(sizetopIds, sizeId) < 0)
+                })
             }
+
+            return sizes
         },
         filtedProductMemos() {
-            if (this.product.form.childbrand) {
+            if (!_.isEmpty(this.product.form.childbrand)) {
                 let childbrandId = this.product.form.childbrand[1].toString()
                 return this.productMemos.filter(function (item) {
                     return (_.indexOf(item.productMemoIds, childbrandId) === 0)
@@ -570,6 +585,9 @@ export default {
         }
     },
     methods: {
+        reloadSizetops() {
+            this.getProductRelatedOptions()
+        },
         handleChangeMaterialnote(index) {
             this.product.materials[index].materialid = ''
 
@@ -620,7 +638,7 @@ export default {
                 })
             }
 
-            self.product.form.brandid = parseInt(select.brandid)
+            self.product.form.brandid = select.brandid
 
             const childbrand = select.childbrand
             self.product.form.childbrand = []
@@ -823,7 +841,7 @@ export default {
                     ageseason            : ageseason,
                     brandid              : brandid,
                     brandgroupid         : "",
-                    childbrand           : "",
+                    childbrand           : [],
                     sizetopid            : "",
                     sizecontentids       : [],
                     countries            : "",
