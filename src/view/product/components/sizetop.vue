@@ -253,6 +253,11 @@ export default {
             })
         }
     },
+    watch: {
+        sizetopid(newValue) {
+            this.selected = newValue
+        }
+    },
     mounted() {
         this.selected = this.sizetopid
         this.getBrands()

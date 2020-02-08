@@ -232,7 +232,7 @@ export default {
                 res.data.forEach(item => {
                     self.sizetops.push({
                         id   : item.id,
-                        title: item.name_en
+                        title: item.name_cn
                     })
                 })
             })

@@ -33,7 +33,7 @@
                             <ageseason v-model="product.form.ageseason" :data-list="ageseasons"></ageseason>
                         </el-form-item>
                         <el-form-item :label="showLabel('pinpai')" prop="form.brandid">
-                            <el-select v-model="product.form.brandid" placeholder="" @change="handleChangeBrand">
+                            <el-select v-model="product.form.brandid" placeholder="" filterable @change="handleChangeBrand">
                                 <el-option
                                     v-for="item of brands"
                                     :key="item.id + item.title"
@@ -52,18 +52,14 @@
                                 clearable>
                             </el-cascader>
                         </el-form-item>
-                        <el-form-item :label="_label('chimazu')" prop="sizetopid">
-                            <el-select v-model="product.form.sizetopid" placeholder="" @change="handleChangeSizeTop">
-                                <el-option
-                                    v-for="item of sizes"
-                                    :key="item.id + item.title"
-                                    :label="item.title"
-                                    :value="item.id">
-                                </el-option>
-                            </el-select>
-                        </el-form-item>
-                        <el-form-item :label="_label('chimamingxi')" prop="sizetopid">
-                            <size v-model="product.form.sizecontentids" :data-list="sizecontents"></size>
+                        <el-form-item :label="showLabel('chimazu')" prop="sizetopid">
+                            <sizetop v-model="product.form.sizetopid"
+                                :sizes="filterSizes"
+                                :brand_id="product.form.brandid"
+                                :category="product.form.childbrand"
+                                :gender="product.form.gender"
+                                @reloadSizetops="reloadSizetops"
+                            ></sizetop>
                         </el-form-item>
                         <el-form-item :label="showLabel('sexi') + '/' + showLabel('color')" prop="brandcolor">
                             <el-cascader
@@ -169,7 +165,6 @@
                                         :value="item.id">
                                     </el-option>
                                 </el-select>
-                                <span slot="append">{{getRate}}</span>
                             </el-input>
                         </el-form-item>
                         <el-form-item :label="showLabel('guojilingshoujia')">
@@ -182,7 +177,6 @@
                                         :value="item.id">
                                     </el-option>
                                 </el-select>
-                                <span slot="append">{{getReciprocalRate}}</span>
                             </el-input>
                         </el-form-item>
                         <el-form-item :label="showLabel('benguochuchangjia')">
@@ -195,7 +189,6 @@
                                         :value="item.id">
                                     </el-option>
                                 </el-select>
-                                <span slot="append">{{getRateNational}}</span>
                             </el-input>
                         </el-form-item>
                         <el-form-item :label="showLabel('benguolingshoujia')">
@@ -208,7 +201,6 @@
                                         :value="item.id">
                                     </el-option>
                                 </el-select>
-                                <span slot="append">{{getReciprocalRateNational}}</span>
                             </el-input>
                         </el-form-item>
                     </el-col>
@@ -342,10 +334,11 @@ import ageseason from './ageseason.vue'
 import country from './country.vue'
 import ulnarinch from './ulnarinch.vue'
 import size from './size.vue'
+import sizetop from './sizetop.vue'
 import productMemo from './productMemo.vue'
 
 export default {
-    components: { ageseason, country, ulnarinch, size, productMemo },
+    components: { ageseason, country, ulnarinch, size, productMemo, sizetop },
     data() {
         return {
             product: {
@@ -363,7 +356,6 @@ export default {
             colorSystems   : [],
             countries      : [],
             ulnarinches    : [],
-            sizecontents   : [],
             currencies     : [],
             saletypes      : [],
             productTypes   : [],
@@ -392,12 +384,79 @@ export default {
                 name_en: [{ required: true, message: showLabel('name', 'en') + showLabel('required'), trigger: 'blur' }],
                 name_it: [{ required: true, message: showLabel('name', 'it') + showLabel('required'), trigger: 'blur' }]
             },
-            siji: ''
+            siji: '',
+            lang: showLabel("lang")
         }
     },
     created() {
         this.getProductRelatedOptions()
         this.getColorSystemAndColor()
+    },
+    computed: {
+        filterSizes() {
+            let sizes  = [
+                {
+                    label: 'recomend',
+                    options: []
+                },
+                {
+                    label: 'others',
+                    options: []
+                }
+            ]
+
+            sizes[1].options = this.sizes
+
+            let self = this
+            if (this.product.form.brandid) {
+                let brand = this.brands.find(function (item) {
+                    return item.id == self.product.form.brandid
+                })
+                console.log(brand.sizes)
+
+                let sizetopIds = []
+                if (typeof(brand) != 'undefined') {
+                    brand.sizes.forEach(item => {
+                        if (_.isEmpty(self.product.form.gender) && _.isEmpty(self.product.form.childbrand)) {
+                            sizetopIds.push(item.sizetop_id)
+                        } else {
+                            let isMatched = true
+
+                            if (self.product.form.gender) {
+                                if (item.gender != self.product.form.gender) {
+                                    isMatched = false
+                                }
+                            }
+
+                            if (isMatched && !_.isEmpty(self.product.form.childbrand)) {
+                                let brandgroupchild_id = this.product.form.childbrand[1].toString()
+
+                                if (brandgroupchild_id != item.brandgroupchild_id) {
+                                    isMatched = false
+                                }
+                            }
+
+                            if (isMatched) {
+                                sizetopIds.push(item.sizetop_id)
+                            }
+                        }
+                    })
+                }
+                console.log(sizetopIds)
+
+                sizes[0].options = this.sizes.filter(item => {
+                    let sizeId = item.id.toString()
+                    return (_.indexOf(sizetopIds, sizeId) >= 0)
+                })
+
+                sizes[1].options = this.sizes.filter(item => {
+                    let sizeId = item.id.toString()
+                    return (_.indexOf(sizetopIds, sizeId) < 0)
+                })
+            }
+
+            return sizes
+        },
     },
     watch: {
         siji: function(newValue) {
@@ -408,6 +467,9 @@ export default {
         },
     },
     methods: {
+        reloadSizetops() {
+            this.getProductRelatedOptions()
+        },
         cancleAddSeries() {
             this.seriesDialogVisible = false
             this.newSeries = {
@@ -441,15 +503,6 @@ export default {
             } else {
                 self._info(self._label("tip-pinpai"))
             }
-        },
-        handleChangeSizeTop() {
-            let self = this
-            self.sizes.forEach(item => {
-                if (item.id == self.product.form.sizetopid) {
-                    self.product.form.sizecontentids = []
-                    self.sizecontents = item.children
-                }
-            })
         },
         handleRemoveMaterial(index) {
             this.product.materials.splice(index, 1)
@@ -488,19 +541,13 @@ export default {
                 res.data.colorId.push(parseInt(res.data.color_id))
 
                 res.data.secondColorId = parseInt(res.data.second_color_id)
-                res.data.brandid = parseInt(res.data.brandid)
 
                 const childbrand = res.data.childbrand
                 res.data.childbrand = []
                 res.data.childbrand.push(parseInt(res.data.brandgroupid))
                 res.data.childbrand.push(parseInt(childbrand))
 
-                res.data.sizetopid = parseInt(res.data.sizetopid)
-                self.sizes.forEach(item => {
-                    if (item.id == res.data.sizetopid) {
-                        self.sizecontents = item.children
-                    }
-                })
+                res.data.sizetopid = res.data.sizetopid
 
                 if (res.data.sizecontentids.length) {
                     let sizecontentids = _.split(res.data.sizecontentids, ',')
@@ -516,8 +563,9 @@ export default {
                     countries.forEach(item => {
                         res.data.countries.push(parseInt(item))
                     })
+                } else {
+                    res.data.countries = []
                 }
-                    
 
                 if (res.data.ulnarinch.length) {
                     let ulnarinches = _.split(res.data.ulnarinch, ',')
@@ -525,6 +573,8 @@ export default {
                     ulnarinches.forEach(item => {
                         res.data.ulnarinch.push(parseInt(item))
                     })
+                } else {
+                    res.data.ulnarinch = []
                 }
 
                 if (res.data.productmemoids.length) {
@@ -543,7 +593,7 @@ export default {
                 res.data.producttypeid         = (res.data.producttypeid == 0) ? '' : res.data.producttypeid
                 res.data.winterproofingid      = parseInt(res.data.winterproofingid)
                 res.data.winterproofingid      = (res.data.winterproofingid == 0) ? '' : res.data.winterproofingid
-                
+
                 if (res.data.materials.length) {
                     res.data.materials.forEach(material => {
                         material.materialid = parseInt(material.materialid)

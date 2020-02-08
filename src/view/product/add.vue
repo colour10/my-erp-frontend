@@ -26,20 +26,32 @@
                 <el-col :span="24">
                     <el-table :data="product.colors" border style="width:100%;">
                         <el-table-column :label="showLabel('guojima')" align="center">
-                            <el-table-column :label="showLabel('kuanshi')" width="140" align="center">
+                            <el-table-column :label="showLabel('kuanshi')" width="140" align="center" v-if="!worldcode.one.disabled">
                                 <template slot-scope="scope">
                                     <el-form-item
                                         :prop="'colors.' + scope.$index + '.wordcode_1'"
-                                        :rules="{required: true, trigger: 'blur'}"
+                                        :rules="[{required: true, trigger: 'blur'}, {min: worldcode.one.minlength, max: worldcode.one.maxlength, triggger: 'blur'}]"
+                                    >
+                                        <el-input v-model="scope.row.wordcode_1" size="mini"
+                                            @keyup.native="handleKeyInput(scope.row, 'wordcode_1')"/>
+                                    </el-form-item>
+                                </template>
+                            </el-table-column>
+                            <el-table-column :label="showLabel('caizhi')" width="140" align="center" v-if="!worldcode.two.disabled">
+                                <template slot-scope="scope">
+                                    <el-form-item
+                                        :prop="'colors.' + scope.$index + '.wordcode_2'"
+                                        :rules="[{required: true, trigger: 'blur'}, {min: worldcode.two.minlength, max: worldcode.two.maxlength, triggger: 'blur'}]"
                                     >
                                         <el-autocomplete
-                                            @keyup.native="handleKeyInput(scope.row, 'wordcode_1')"
-                                            v-model="scope.row.wordcode_1"
-                                            :fetch-suggestions="querySearchWordCode"
+                                            :maxlength="worldcode.one.maxlength"
+                                            @keyup.native="handleKeyInput(scope.row, 'wordcode_2')"
+                                            v-model="scope.row.wordcode_2"
+                                            :fetch-suggestions="querySearchWordCode(scope.row)"
                                             @select="handleSelect($event, scope.row)"
                                             popper-class="wordcode-autocomplete"
                                             :trigger-on-focus="false"
-                                        >
+                                        > 
                                             <template slot-scope="props">
                                                 <div class="wordcode">{{ props.item.worldcode }}</div>
                                                 <div class="name">{{ props.item.name }}</div>
@@ -48,22 +60,11 @@
                                     </el-form-item>
                                 </template>
                             </el-table-column>
-                            <el-table-column :label="showLabel('caizhi')" width="140" align="center">
-                                <template slot-scope="scope">
-                                    <el-form-item
-                                        :prop="'colors.' + scope.$index + '.wordcode_2'"
-                                        :rules="{required: true, trigger: 'blur'}"
-                                    >
-                                        <el-input v-model="scope.row.wordcode_2" size="mini"
-                                            @keyup.native="handleKeyInput(scope.row, 'wordcode_2')"/>
-                                    </el-form-item>
-                                </template>
-                            </el-table-column>
-                            <el-table-column :label="showLabel('yanse')" width="140" align="center">
+                            <el-table-column :label="showLabel('yanse')" width="140" align="center" v-if="!worldcode.three.disabled">
                                 <template slot-scope="scope">
                                     <el-form-item
                                         :prop="'colors.' + scope.$index + '.wordcode_3'"
-                                        :rules="{required: true, trigger: 'blur'}"
+                                        :rules="[{required: true, trigger: 'blur'}, {min: worldcode.three.minlength, max: worldcode.three.maxlength, triggger: 'blur'}]"
                                     >
                                         <el-input v-model="scope.row.wordcode_3" size="mini"
                                             @keyup.native="handleKeyInput(scope.row, 'wordcode_3')"/>
@@ -401,6 +402,7 @@ const defaultColor = {
 }
 
 const defaultProduct = {
+    id: 0,
     colors: [],
     materials: [],
     form: {
@@ -582,6 +584,98 @@ export default {
             } else {
                 return this.materialnotes
             }
+        },
+        worldcode() {
+            let worldcode = {
+                one: {
+                    maxlength: 99,
+                    minlength: 0,
+                    disabled: false
+                },
+                two: {
+                    maxlength: 99,
+                    minlength: 0,
+                    disabled: false
+                },
+                three: {
+                    maxlength: 99,
+                    minlength: 0,
+                    disabled: false
+                }
+            }
+
+            let self = this
+            if (this.product.form.brandid) {
+                let brand = this.brands.find(function (item) {
+                    return item.id == self.product.form.brandid
+                })
+
+                if (brand.worldcode1 != null) {
+                    if (_.startsWith(brand.worldcode1, 'disabled')) {
+                        worldcode.one.disabled = true
+                    } else {
+                        let worldcode1 = brand.worldcode1.split(',')
+                        switch (worldcode1[0]) {
+                            case '<=':
+                                worldcode.one.maxlength = parseInt(worldcode1[1])
+                                break
+
+                            case '>=':
+                                worldcode.one.minlength = parseInt(worldcode1[1])
+                                break
+                        
+                            case '=':
+                                worldcode.one.maxlength = parseInt(worldcode1[1])
+                                worldcode.one.minlength = parseInt(worldcode1[1])
+                                break;
+                        }
+                    }
+                }
+                if (brand.worldcode2 != null) {
+                    if (_.startsWith(brand.worldcode2, 'disabled')) {
+                        worldcode.two.disabled = true
+                    } else {
+                        let worldcode2 = brand.worldcode2.split(',')
+                        switch (worldcode2[0]) {
+                            case '<=':
+                                worldcode.two.maxlength = parseInt(worldcode2[1])
+                                break
+
+                            case '>=':
+                                worldcode.two.minlength = parseInt(worldcode2[1])
+                                break
+                        
+                            case '=':
+                                worldcode.two.maxlength = parseInt(worldcode2[1])
+                                worldcode.two.minlength = parseInt(worldcode2[1])
+                                break;
+                        }
+                    }
+                }
+                if (brand.worldcode3 != null) {
+                    if (_.startsWith(brand.worldcode3, 'disabled')) {
+                        worldcode.three.disabled = true
+                    } else {
+                        let worldcode3 = brand.worldcode3.split(',')
+                        switch (worldcode3[0]) {
+                            case '<=':
+                                worldcode.three.maxlength = parseInt(worldcode3[1])
+                                break
+
+                            case '>=':
+                                worldcode.three.minlength = parseInt(worldcode3[1])
+                                break
+                        
+                            case '=':
+                                worldcode.three.maxlength = parseInt(worldcode3[1])
+                                worldcode.three.minlength = parseInt(worldcode3[1])
+                                break;
+                        }
+                    }
+                }
+            }
+
+            return worldcode
         }
     },
     methods: {
@@ -597,38 +691,48 @@ export default {
                 return (_.indexOf(materialnoteids, noteId) >= 0)
             })
         },
-        querySearchWordCode(queryString, cb) {
-            let results = []
-            if (queryString.length > 2) {
-                let params = {
-                    page: 1,
-                    pageSize: 20,
-                    wordcode: queryString
-                }
-                this._fetch("/product/page", params).then(function(res) {
-                    results = res.data
-                })
+        querySearchWordCode(row) {
+            let self = this
+            return function(queryString, cb) {
+                let results = []
+                if (queryString.length > 3) {
+                    let wordcode = row.wordcode_1 + queryString
+                    let params = {
+                        page: 1,
+                        pageSize: 20,
+                        wordcode: wordcode
+                    }
+                    self._fetch("/product/page", params).then(function(res) {
+                        results = res.data
+                    })
 
-                clearTimeout(this.timeout)
-                this.timeout = setTimeout(() => {
-                    cb(results)
-                }, 3000 * Math.random())
+                    clearTimeout(this.timeout)
+                    this.timeout = setTimeout(() => {
+                        cb(results)
+                    }, 3000 * Math.random())
+                }
             }
+            
         },
         handleSelect(select, row) {
             let self = this
-            row.colorname = select.colorname
-            row.picture = select.picture
-            row.picture2 = select.picture2
-            row.wordcode_1 = select.wordcode_1
-            row.wordcode_2 = select.wordcode_2
-            row.wordcode_3 = select.wordcode_3
-            row.wordcode_4 = select.wordcode_4
 
-            row.colorId = []
-            row.colorId.push(parseInt(select.color_system_id))
-            row.colorId.push(parseInt(select.color_id))
-            row.secondColorId = parseInt(select.second_color_id)
+            self._fetch("/product/getcolorgrouplist", { id: select.id }).then(function(res) {
+                self.product.colors = []
+                res.data.forEach(function(row, index) {
+                    if (_.isEmpty(row.color_system_id) || _.isEmpty(row.color_id)) {
+                        row.colorId = ''
+                    } else {
+                        row.colorId = []
+                        row.colorId.push(parseInt(row.color_system_id))
+                        row.colorId.push(parseInt(row.color_id))
+                    }
+
+                    row.secondColorId = parseInt(row.second_color_id)
+
+                    self.product.colors.push(row)
+                })
+            })
 
             if (select.ageseason.length) {
                 let ageseasons = _.split(select.ageseason, ',')
@@ -638,13 +742,14 @@ export default {
                 })
             }
 
+            self.product.id = select.id
             self.product.form.brandid = select.brandid
 
             const childbrand = select.childbrand
             self.product.form.childbrand = []
             self.product.form.childbrand.push(parseInt(select.brandgroupid))
             self.product.form.childbrand.push(parseInt(childbrand))
-            self.product.form.sizetopid = parseInt(select.sizetopid)
+            self.product.form.sizetopid = select.sizetopid
             self.handleChangeSizeTop()
             if (select.sizecontentids.length) {
                 let sizecontentids = _.split(select.sizecontentids, ',')
@@ -835,6 +940,7 @@ export default {
             let countries = this.product.form.countries
 
             this.product = {
+                id: 0,
                 colors: [],
                 materials: [],
                 form: {
