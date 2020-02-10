@@ -61,15 +61,25 @@
                                 @reloadSizetops="reloadSizetops"
                             ></sizetop>
                         </el-form-item>
-                        <el-form-item :label="showLabel('sexi') + '/' + showLabel('color')" prop="brandcolor">
-                            <el-cascader
-                                placeholder=""
-                                v-model="product.form.colorId"
-                                size="mini"
-                                :options="colorSystems"
-                                :props="{ children: 'colors', value: 'id', label: 'title' }"
-                                clearable>
-                            </el-cascader>
+                        <el-form-item :label="showLabel('sexi')">
+                            <el-select v-model="product.form.colorSystemId" placeholder="" size="mini">
+                                <el-option
+                                    v-for="item in colorSystems"
+                                    :key="item.id + item.title"
+                                    :label="item.title"
+                                    :value="item.id">
+                                </el-option>
+                            </el-select> 
+                        </el-form-item>
+                        <el-form-item :label="showLabel('yanse')">
+                            <el-select v-model="product.form.colorId" placeholder="" size="mini">
+                                <el-option
+                                    v-for="item in filterColors"
+                                    :key="item.id + item.title"
+                                    :label="item.title"
+                                    :value="item.id">
+                                </el-option>
+                            </el-select>
                         </el-form-item>
                         <el-form-item :label="showLabel('second_color')">
                             <el-cascader
@@ -393,6 +403,20 @@ export default {
         this.getColorSystemAndColor()
     },
     computed: {
+        filterColors() {
+            let self = this
+            if (this.product.form.colorSystemId) {
+                let colorSystem = this.colorSystems.find(item => {
+                    return item.id == self.product.form.colorSystemId
+                })
+
+                if (typeof(colorSystem) != 'undefined') {
+                    return colorSystem.colors
+                }
+            }
+
+            return []
+        },
         filterSizes() {
             let sizes  = [
                 {
@@ -412,7 +436,6 @@ export default {
                 let brand = this.brands.find(function (item) {
                     return item.id == self.product.form.brandid
                 })
-                console.log(brand.sizes)
 
                 let sizetopIds = []
                 if (typeof(brand) != 'undefined') {
@@ -442,7 +465,6 @@ export default {
                         }
                     })
                 }
-                console.log(sizetopIds)
 
                 sizes[0].options = this.sizes.filter(item => {
                     let sizeId = item.id.toString()
@@ -536,9 +558,8 @@ export default {
                     })
                 }
 
-                res.data.colorId = []
-                res.data.colorId.push(parseInt(res.data.color_system_id))
-                res.data.colorId.push(parseInt(res.data.color_id))
+                res.data.colorId = parseInt(res.data.color_id)
+                res.data.colorSystemId = parseInt(res.data.color_system_id)
 
                 res.data.secondColorId = parseInt(res.data.second_color_id)
 
