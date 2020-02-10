@@ -83,23 +83,40 @@
                                     @keyup.native="handleKeyInput(scope.row, 'colorname')"/>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="brandcolor" :label="showLabel('sexi') + '/' + showLabel('color')" width="200" align="center">
+                        <el-table-column :label="showLabel('sexi')">
                             <template slot-scope="scope">
                                 <el-form-item
-                                        :prop="'colors.' + scope.$index + '.colorId'"
-                                        :rules="{required: true, trigger: 'blur'}"
-                                    >
-                                    <el-cascader
-                                        placeholder=""
-                                        v-model="scope.row.colorId"
-                                        size="mini"
-                                        :options="colorSystems"
-                                        :props="{ children: 'colors', value: 'id', label: 'title' }"
-                                        clearable>
-                                    </el-cascader>
+                                    :prop="'colors.' + scope.$index + '.colorSystemId'"
+                                    :rules="{required: true, trigger: 'blur'}"
+                                >
+                                    <el-select v-model="scope.row.colorSystemId" placeholder="" size="mini">
+                                        <el-option
+                                            v-for="item in colorSystems"
+                                            :key="item.id + item.title"
+                                            :label="item.title"
+                                            :value="item.id">
+                                        </el-option>
+                                    </el-select>
                                 </el-form-item>
                             </template>
                         </el-table-column>
+                        <el-table-column :label="showLabel('yanse')">
+                            <template slot-scope="scope">
+                                <el-form-item
+                                    :prop="'colors.' + scope.$index + '.colorId'"
+                                    :rules="{required: true, trigger: 'blur'}"
+                                >
+                                    <el-select v-model="scope.row.colorId" placeholder="" size="mini">
+                                        <el-option
+                                            v-for="item in filterColors(scope.row)"
+                                            :key="item.id + item.title"
+                                            :label="item.title"
+                                            :value="item.id">
+                                        </el-option>
+                                    </el-select>
+                                </el-form-item>
+                            </template>
+                        </el-table-column> 
                         <el-table-column prop="brandcolor" :label="showLabel('second_color')" width="140" align="center">
                             <template v-slot="{ row }">
                                 <el-cascader
@@ -433,6 +450,7 @@ const defaultProduct = {
         winter               : "",
         memo                 : "",
         countries            : [],
+        colorSystemId        : "",
         colorId              : "",
         secondColorId        : ""
     }
@@ -679,6 +697,18 @@ export default {
         }
     },
     methods: {
+        filterColors(row) {
+            if (row.colorSystemId) {
+                let colorSystem = this.colorSystems.find(item => {
+                    return item.id == row.colorSystemId
+                })
+
+                if (typeof(colorSystem) != 'undefined') {
+                    return colorSystem.colors
+                }
+            }
+            return []
+        },
         reloadSizetops() {
             this.getProductRelatedOptions()
         },
@@ -929,7 +959,6 @@ export default {
             })
         },
         resetDialogForm() {
-            console.log(this.product)
             let ageseason = this.product.form.ageseason
             let brandid   = this.product.form.brandid
             let gender    = this.product.form.gender
@@ -971,6 +1000,7 @@ export default {
                     winter               : winter,
                     memo                 : "",
                     countries            : countries,
+                    colorSystemId        : "",
                     colorId              : "",
                     secondColorId        : ""
                 }
