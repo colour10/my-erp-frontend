@@ -864,6 +864,15 @@ export default {
         },
         handleKeyInput(target, columnName){
             target[columnName] = target[columnName].toUpperCase();
+            if (columnName == 'wordcode_3') {
+                let colors = this.suggestColorNames.filter(item => {
+                    return (item.wordcode_3 == target[columnName])
+                })
+
+                if (colors.length) {
+                    target.colorname = colors[0].colorname
+                }
+            }
         },
         handleChangeBrand() {
             let self = this
@@ -876,6 +885,14 @@ export default {
                     }
                 })
             }
+
+            this.getSuggestColorName()
+        },
+        getSuggestColorName() {
+            let self = this
+            this._fetch("/brand/getSuggestColorName", {brandid: this.product.form.brandid}).then(function(res) {
+                self.suggestColorNames = res.data
+            })
         },
         hideDialogForm() {
             this.$emit('hideDialogForm')
