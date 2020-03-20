@@ -12,8 +12,8 @@ module.exports = {
   },*/
   entry: {
     //asa:'./src/index.js',
-    shop:'./src/shop.js',
-    asa:'./src/main.js'
+    shop: './src/shop.js',
+    asa: './src/main.js'
   },
   output: {
     path: path.resolve(__dirname, './dist'),
@@ -28,12 +28,11 @@ module.exports = {
           'vue-style-loader',
           'css-loader'
         ],
-      },      {
+      }, {
         test: /\.vue$/,
         loader: 'vue-loader',
         options: {
-          loaders: {
-          }
+          loaders: {}
           // other vue-loader options go here
         }
       },
@@ -53,6 +52,7 @@ module.exports = {
   },
   resolve: {
     alias: {
+      '@': path.resolve('src'),
       'vue$': 'vue/dist/vue.esm.js'
     },
     extensions: ['*', '.js', '.vue', '.json']
@@ -71,9 +71,9 @@ module.exports = {
     'vue': 'Vue',
     'vue-router': 'VueRouter',
     'vuex': 'Vuex',
-    'element-ui/lib/theme-chalk/index.css':'element-ui/lib/theme-chalk/index.css',
+    'element-ui/lib/theme-chalk/index.css': 'element-ui/lib/theme-chalk/index.css',
     'element-ui': 'ELEMENT',
-    'vue-chartjs':'VueChartJs'
+    'vue-chartjs': 'VueChartJs'
   }
 }
 
@@ -94,6 +94,6 @@ if (process.env.NODE_ENV === 'production') {
     }),
     new webpack.LoaderOptionsPlugin({
       minimize: true
-    }),new webpack.ProvidePlugin({jQuery: "jquery", $: "jquery"})
+    }), new webpack.ProvidePlugin({jQuery: "jquery", $: "jquery"})
   ])
 }
