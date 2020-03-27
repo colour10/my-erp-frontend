@@ -35,8 +35,8 @@
             return {
                 logining: false,
                 ruleForm2: {
-                    username: '',
-                    password: '',
+                    username: 'admin',
+                    password: 'asa&123456',
                     language: window.localStorage.language
                 },
                 checked: true,
@@ -85,11 +85,12 @@
                     }
                 })
             },
+            // mouted 之后自动执行doAction
             doAction(action) {
                 var self = this
 
-                //self._log("action", action, self.$route)
-                if (action == 'logout') {
+                // self._log("action", action, self.$route)
+                if (action === 'logout') {
                     self._fetch("/login/logout", {}).then(function (res) {
                         self.$store.commit("logout")
                         self.$router.push({path: "/login/login"})
@@ -181,11 +182,15 @@
             }
         },
         mounted: function () {
+
             let self = this
 
+            // 一般来说首次进入 language 的值是 undefined
             if (localStorage && localStorage.language) {
                 self.ruleForm2.language = localStorage.language
             }
+
+            // 挂载完毕之后就执行 loadLanguage 函数，进行语言文字初始化的操作, 然后执行url地址栏中的action操作
             self.loadLanguage().then(() => {
                 self.doAction(self.$route.params.action)
             })

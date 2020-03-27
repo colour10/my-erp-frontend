@@ -1,12 +1,11 @@
 <template>
-  <div id="app">    
+  <div id="app">
     <router-view></router-view>
   </div>
 </template>
 
 <script>
-    import Vue from 'vue';
-//    import simple from './component/Simple_Admin_Page.vue'
+    //    import simple from './component/Simple_Admin_Page.vue'
 //    import selectdialog from './component/Select_Dialog.vue'
 //    import selectdialogsingle from './component/Select_Dialog_Single.vue'
 //    import avatar from './component/Simple_Avatar.vue'
@@ -14,11 +13,11 @@
 //    import selectcurrency from './component/Select_Currency.vue'
 //    import spalbum from './component/Simple_Album.vue'
 //    import orderdialog from './component/asa/Asa_Order_Dialog.vue'
-    
+
 export default {
   name: 'asa-app',
   components: {
-      
+
     },
   data () {
     return {
