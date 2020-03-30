@@ -312,40 +312,97 @@ $ASAL = {
   "department-list": "\u90e8\u95e8\u5217\u8868",
   "user-status": "\u7528\u6237\u4e2a\u4eba\u72b6\u6001",
   "model-delete-message": "\u8bf7\u5148\u767b\u5f55",
-  "template": {
-    "uniqueness": "%s\u4e0d\u80fd\u91cd\u590d",
-    "required": "\u8bf7\u586b\u5199%s",
-    "invalid": "%s\u4e0d\u5408\u6cd5",
-    "hasmany-foreign-message": "\u5f53\u524d\u6a21\u578b\u4e0d\u80fd\u88ab\u5220\u9664\uff0c\u56e0\u4e3a\u6709%s\u6a21\u5757\u6b63\u5728\u4f7f\u7528\u5b83",
-    "belongsto-foreign-message": "\u5f53\u524d\u6a21\u578b\u4e0d\u80fd\u88ab\u5220\u9664\uff0c\u56e0\u4e3a\u6709%s\u6a21\u5757\u6b63\u5728\u4f7f\u7528\u5b83",
-    "notexist": "%s\u4e0d\u5b58\u5728"
-  },
-  "list_currency": {
-    "CAD": "\u52a0\u5143",
-    "EUR": "\u6b27\u5143",
-    "HKD": "\u6e2f\u5e01",
-    "JPY": "\u65e5\u5143",
-    "RMB": "\u4eba\u6c11\u5e01",
-    "USD": "\u7f8e\u5143"
-  },
-  "list_gender": {
-    "1": "\u7537\u6027",
-    "2": "\u5973\u6027",
-    "3": "\u4e2d\u6027",
-    "4": "\u7537\u7ae5",
-    "5": "\u5973\u7ae5"
-  },
-  "list_season": {
-    "1": "\u6625\u5b63",
-    "2": "\u590f\u5b63",
-    "3": "\u79cb\u5b63",
-    "4": "\u51ac\u5b63",
-    "5": "\u56db\u5b63"
-  },
-  "_image_url_prex": "http:\/\/www.erp.test\/upload\/",
-  "list_languages": {
-    "cn": {"code": "cn", "name": "\u7b80\u4f53\u4e2d\u6587", "shortName": "\u7b80"},
-    "hk": {"code": "hk", "name": "\u7e41\u4f53\u4e2d\u6587", "shortName": "\u7e41"},
-    "en": {"code": "en", "name": "\u82f1\u6587", "shortName": "\u82f1"}
-  }
+  "permission-exceed": "\u5f53\u524d\u7528\u6237\u6743\u9650\u4e0d\u80fd\u8d85\u8fc7\u6240\u5c5e\u7528\u6237\u7ec4\u7684\u6743\u9650",
+  "checkAll": "\u5168\u9009",
+  "multiEdit": "\u6279\u91cf\u7f16\u8f91",
+  "multiquanxian": "\u6279\u91cf\u4fee\u6539\u6743\u9650",
+  "least-one-select": "\u8bf7\u81f3\u5c11\u9009\u62e9\u4e00\u4e2a\u8fdb\u884c\u64cd\u4f5c",
+  "template":
+    {
+      "uniqueness":
+        "%s\u4e0d\u80fd\u91cd\u590d",
+      "required":
+        "\u8bf7\u586b\u5199%s",
+      "invalid":
+        "%s\u4e0d\u5408\u6cd5",
+      "hasmany-foreign-message":
+        "\u5f53\u524d\u6a21\u578b\u4e0d\u80fd\u88ab\u5220\u9664\uff0c\u56e0\u4e3a\u6709%s\u6a21\u5757\u6b63\u5728\u4f7f\u7528\u5b83",
+      "belongsto-foreign-message":
+        "\u5f53\u524d\u6a21\u578b\u4e0d\u80fd\u88ab\u5220\u9664\uff0c\u56e0\u4e3a\u6709%s\u6a21\u5757\u6b63\u5728\u4f7f\u7528\u5b83",
+      "notexist":
+        "%s\u4e0d\u5b58\u5728"
+    }
+  ,
+  "list_currency":
+    {
+      "CAD":
+        "\u52a0\u5143",
+      "EUR":
+        "\u6b27\u5143",
+      "HKD":
+        "\u6e2f\u5e01",
+      "JPY":
+        "\u65e5\u5143",
+      "RMB":
+        "\u4eba\u6c11\u5e01",
+      "USD":
+        "\u7f8e\u5143"
+    }
+  ,
+  "list_gender":
+    {
+      "1":
+        "\u7537\u6027",
+      "2":
+        "\u5973\u6027",
+      "3":
+        "\u4e2d\u6027",
+      "4":
+        "\u7537\u7ae5",
+      "5":
+        "\u5973\u7ae5"
+    }
+  ,
+  "list_season":
+    {
+      "1":
+        "\u6625\u5b63",
+      "2":
+        "\u590f\u5b63",
+      "3":
+        "\u79cb\u5b63",
+      "4":
+        "\u51ac\u5b63",
+      "5":
+        "\u56db\u5b63"
+    }
+  ,
+  "_image_url_prex":
+    "http:\/\/www.erp.test\/upload\/",
+  "list_languages":
+    {
+      "cn":
+        {
+          "code":
+            "cn", "name":
+            "\u7b80\u4f53\u4e2d\u6587", "shortName":
+            "\u7b80"
+        }
+      ,
+      "hk":
+        {
+          "code":
+            "hk", "name":
+            "\u7e41\u4f53\u4e2d\u6587", "shortName":
+            "\u7e41"
+        }
+      ,
+      "en":
+        {
+          "code":
+            "en", "name":
+            "\u82f1\u6587", "shortName":
+            "\u82f1"
+        }
+    }
 }
