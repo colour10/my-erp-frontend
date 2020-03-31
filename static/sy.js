@@ -317,6 +317,7 @@ $ASAL = {
   "multiEdit": "\u6279\u91cf\u7f16\u8f91",
   "multiquanxian": "\u6279\u91cf\u4fee\u6539\u6743\u9650",
   "least-one-select": "\u8bf7\u81f3\u5c11\u9009\u62e9\u4e00\u4e2a\u8fdb\u884c\u64cd\u4f5c",
+  "select-childbrand": "\u003d\u003d\u8bf7\u9009\u62e9\u5b50\u54c1\u7c7b\u003d\u003d",
   "template":
     {
       "uniqueness":
