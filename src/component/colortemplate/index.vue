@@ -415,6 +415,12 @@
                         self.colors = item.colors
                     }
                 })
+            },
+            // 如果查看子集对话框关闭了，则搜索框清空
+            dialogColorsVisible(newVal) {
+                if (newVal === false) {
+                    this.searchKeyword = ''
+                }
             }
         }
     }
