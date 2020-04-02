@@ -319,6 +319,9 @@ $ASAL = {
   "least-one-select": "\u8bf7\u81f3\u5c11\u9009\u62e9\u4e00\u4e2a\u8fdb\u884c\u64cd\u4f5c",
   "select-childbrand": "\u003d\u003d\u8bf7\u9009\u62e9\u5b50\u54c1\u7c7b\u003d\u003d",
   "son-colors": "\u5b50\u989c\u8272",
+  "add-content": "\u6dfb\u52a0\u6761\u76ee",
+  "select-brandgroup": "\u003d\u003d\u8bf7\u9009\u62e9\u54c1\u7c7b\u003d\u003d",
+
   "template":
     {
       "uniqueness":
