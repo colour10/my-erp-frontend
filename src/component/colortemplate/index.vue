@@ -46,7 +46,7 @@
           {{ showLabel('quxiao') }}
         </el-button>
         <el-button type="primary"
-                   @click="dialogColorSystemStatus==='create'?createColorSystemData():updateColorSystemData()">
+                   @click="dialogColorSystemStatus==='createColorsystem'?createColorSystemData():updateColorSystemData()">
           {{ showLabel('baocun') }}
         </el-button>
       </div>
@@ -138,7 +138,7 @@
         <el-button @click="dialogFormVisible = false">
           {{ showLabel('quxiao') }}
         </el-button>
-        <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">
+        <el-button type="primary" @click="dialogStatus==='createColor'?createData():updateData()">
           {{ showLabel('baocun') }}
         </el-button>
       </div>
@@ -179,8 +179,12 @@
                 // 查看颜色系子集对话框
                 dialogColorsVisible: false,
                 textMap: {
+                    create: showLabel('tianjiaxinxi'),
                     update: showLabel('xiugaixinxi'),
-                    create: showLabel('tianjiaxinxi')
+                    createColor: showLabel('create-color'),
+                    updateColor: showLabel('edit-color'),
+                    createColorsystem: showLabel('create-colorsystem'),
+                    updateColorsystem: showLabel('edit-colorsystem')
                 },
                 postForm: Object.assign({}, defaultForm),
 
@@ -250,7 +254,7 @@
             },
             // 创建颜色
             handleCreate() {
-                this.dialogStatus = 'create'
+                this.dialogStatus = 'createColor'
                 this.resetDialogForm()
                 // 把 color_system_id 拿过来并赋值给当前窗口
                 this.postForm.color_system_id = this.currentColorSystem.id + ''
@@ -259,19 +263,19 @@
             // 更新颜色
             handleUpdate(row) {
                 Object.assign(this.postForm, row)
-                this.dialogStatus = 'update'
+                this.dialogStatus = 'updateColor'
                 this.showDialogForm()
             },
             // 添加色系
             handleColorSystemCreate() {
-                this.dialogColorSystemStatus = 'create'
+                this.dialogColorSystemStatus = 'createColorsystem'
                 this.resetColorSystemDialogForm()
                 this.showColorSystemDialogForm()
             },
             // 编辑色系
             handleColorSystemUpdate(row) {
                 Object.assign(this.colorSystemPostForm, row)
-                this.dialogColorSystemStatus = 'update'
+                this.dialogColorSystemStatus = 'updateColorsystem'
                 this.showColorSystemDialogForm()
             },
             // 显示编辑色系对话框
@@ -339,8 +343,6 @@
                         })
                     }
                 })
-                // 打印试试看
-                console.log(this.colorsystems)
             },
             // 删除颜色
             deleteData(id) {
