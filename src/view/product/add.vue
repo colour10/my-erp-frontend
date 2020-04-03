@@ -2,9 +2,6 @@
   <div>
     <el-form ref="productForm" :rules="rules" :model="product" label-width="85px" :inline="true" size="mini"
              :inline-message="false" :show-message="false">
-
-      {{product}}
-
       <el-row class="product" style="margin-bottom: 20px;">
         <el-col :span="24">
           <!-- 品牌 start -->
