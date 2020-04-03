@@ -203,7 +203,7 @@
                   v-for="item in categories"
                   :key="item.id + item.title"
                   :label="item.title"
-                  :value="item.id + ''">
+                  :value="item.id">
                 </el-option>
               </el-select>
             </el-form-item>
@@ -220,7 +220,7 @@
                   v-for="item in childbrandMenus"
                   :key="item.id + item.title"
                   :label="item.title"
-                  :value="item.id + ''">
+                  :value="item.id">
                 </el-option>
               </el-select>
             </el-form-item>
