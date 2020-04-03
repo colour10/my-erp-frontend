@@ -955,7 +955,7 @@
                         this.currentMaterialnotesIds.push(item.id)
                     }
                 })
-                // 新的材质材质备注列表
+                // 新的材质备注列表
                 // 然后监控 materials 变量内部是否符合要求
                 this.product.materials.forEach((item) => {
                     if (!this.currentMaterialnotesIds.includes(item.materialnoteid)) {

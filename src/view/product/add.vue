@@ -3,6 +3,7 @@
     <el-form ref="productForm" :rules="rules" :model="product" label-width="85px" :inline="true" size="mini"
              :inline-message="false" :show-message="false">
       <el-row class="product" style="margin-bottom: 20px;">
+
         <el-col :span="24">
           <!-- 品牌 start -->
           <el-form-item :label="showLabel('pinpai')" prop="form.brandid">
@@ -226,7 +227,6 @@
             </el-form-item>
             <!-- 子品类 end -->
 
-
             <!-- 尺码组 start -->
             <el-form-item :label="showLabel('chimazu')" prop="form.sizetopid">
               <sizetop v-model="product.form.sizetopid"
@@ -251,7 +251,10 @@
                         :prop="'materials.' + scope.$index + '.materialid'"
                         :rules="{required: true, trigger: 'change'}"
                       >
-                        <el-select v-model="scope.row.materialid" size="mini">
+                        <el-select
+                          v-model="scope.row.materialid"
+                          filterable
+                          size="mini">
                           <el-option
                             v-for="item in filtedMaterials[scope.$index]"
                             :key="item.id + item.title"
@@ -280,8 +283,11 @@
                   <!-- 材质备注 start -->
                   <el-table-column :label="showLabel('caizhibeizhu')" align="center">
                     <template slot-scope="scope">
-                      <el-select v-model="scope.row.materialnoteid" size="mini"
-                                 @change="handleChangeMaterialnote(scope.$index)">
+                      <el-select
+                        v-model="scope.row.materialnoteid"
+                        size="mini"
+                        filterable
+                        @change="handleChangeMaterialnote(scope.$index)">
                         <el-option
                           v-for="item in currentMaterialnotes"
                           :key="item.id + item.title"
@@ -562,7 +568,7 @@
             ageseason: [],
             brandid: "",
             brandgroupid: "",
-            childbrand: [],
+            childbrand: "",
             sizetopid: "",
             sizecontentids: [],
             countries: "",
@@ -696,7 +702,11 @@
                 this.product.form.fall = newValue
                 this.product.form.winter = newValue
             },
-            // 观测品类或者子品类的变化
+
+            /**
+             * 观测品类的变化
+             * @param newVal 传入数字类型，但是遍历 materialnotes 的时候要变成字符串
+             */
             'product.form.brandgroupid'(newVal) {
                 if (newVal) {
                     this.getChildbrandIds()
@@ -708,7 +718,7 @@
                 this.currentMaterialnotesIds = []
                 // 请求新的材质备注列表
                 this.materialnotes.forEach((item) => {
-                    if (item.brandgroupids.includes(newVal)) {
+                    if (item.brandgroupids.includes(String(newVal))) {
                         this.currentMaterialnotes.push({
                             id: item.id,
                             title: item.title
@@ -725,6 +735,11 @@
                     }
                 })
             },
+
+            /**
+             * 检测子品类的变化
+             * @param newVal
+             */
             'product.form.childbrand'(newVal) {
                 if (newVal) {
                     this.getChildbrandIds()
@@ -944,6 +959,9 @@
                 this.product.materials[index].materialid = ''
 
                 let noteId = this.product.materials[index].materialnoteid.toString()
+
+                console.log(this.materials)
+
                 this.filtedMaterials[index] = this.materials.filter(function (item) {
                     let materialnoteids = _.isEmpty(item.materialnoteids) ? [] : item.materialnoteids.split(',')
                     return (_.indexOf(materialnoteids, noteId) >= 0)
