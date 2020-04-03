@@ -2,12 +2,12 @@
   <div>
     <el-form ref="colorsForm" :model="colors" :inline-message="false" :show-message="false">
       <el-table :data="colors" border style="width:100%;">
-        <el-table-column :label="showLabel('zhutu')" width="80" align="center">
+        <el-table-column :label="showLabel('zhutu')" align="center">
           <template v-slot="scope">
             <simple-avatar v-model="scope.row.picture" font-size="14px" :size="35"></simple-avatar>
           </template>
         </el-table-column>
-        <el-table-column :label="showLabel('futu')" width="80" align="center">
+        <el-table-column :label="showLabel('futu')" align="center">
           <template v-slot="scope">
             <simple-avatar v-model="scope.row.picture2" font-size="14px" :size="35"></simple-avatar>
           </template>
@@ -198,6 +198,8 @@
     }
 </script>
 
-<style>
-
+<style scoped>
+  .el-form-item {
+    margin: 0;
+  }
 </style>
