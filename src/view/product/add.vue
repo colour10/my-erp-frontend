@@ -2,6 +2,9 @@
   <div>
     <el-form ref="productForm" :rules="rules" :model="product" label-width="85px" :inline="true" size="mini"
              :inline-message="false" :show-message="false">
+
+      {{product}}
+
       <el-row class="product" style="margin-bottom: 20px;">
         <el-col :span="24">
           <!-- 品牌 start -->
@@ -191,25 +194,48 @@
         <el-row :gutter="0">
 
           <el-col :span="8">
-            <!-- 品类 start -->
-            <el-form-item :label="showLabel('pinlei')" prop="form.childbrand">
-              <el-cascader
+            <!-- 品类 start，因为里面的id是数字类型的，所以要转成字符串 -->
+            <el-form-item :label="showLabel('pinlei')" prop="form.brandgroupid">
+              <el-select
+                v-model="product.form.brandgroupid"
                 placeholder=""
-                v-model="product.form.childbrand"
                 size="mini"
-                :options="categories"
-                :props="{ value: 'id', label: 'title' }"
-                clearable>
-              </el-cascader>
+                filterable
+                @change="handleChangeBrandgroupid">
+                <el-option
+                  v-for="item in categories"
+                  :key="item.id + item.title"
+                  :label="item.title"
+                  :value="item.id + ''">
+                </el-option>
+              </el-select>
             </el-form-item>
             <!-- 品类 end -->
+
+            <!-- 子品类 start -->
+            <el-form-item :label="showLabel('zipinlei')" prop="form.childbrand">
+              <el-select
+                v-model="product.form.childbrand"
+                placeholder=""
+                filterable
+                size="mini">
+                <el-option
+                  v-for="item in childbrandMenus"
+                  :key="item.id + item.title"
+                  :label="item.title"
+                  :value="item.id + ''">
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <!-- 子品类 end -->
+
 
             <!-- 尺码组 start -->
             <el-form-item :label="showLabel('chimazu')" prop="form.sizetopid">
               <sizetop v-model="product.form.sizetopid"
                        :sizes="filterSizes"
                        :brand_id="product.form.brandid"
-                       :category="product.form.childbrand"
+                       :category="product.form.childbrandIds"
                        :gender="product.form.gender"
                        @reloadSizetops="reloadSizetops"
               ></sizetop>
@@ -220,22 +246,6 @@
               <el-table :data="product.materials" border style="width:90%;">
                 <!-- 材质管理 start -->
                 <el-table-column :label="showLabel('caizhiguanli')" align="center">
-
-                  <!-- 材质备注 start -->
-                  <el-table-column :label="showLabel('caizhibeizhu')" align="center">
-                    <template slot-scope="scope">
-                      <el-select v-model="scope.row.materialnoteid" size="mini"
-                                 @change="handleChangeMaterialnote(scope.$index)">
-                        <el-option
-                          v-for="item in filtedMaterialnotes"
-                          :key="item.id + item.title"
-                          :label="item.title"
-                          :value="item.id">
-                        </el-option>
-                      </el-select>
-                    </template>
-                  </el-table-column>
-                  <!-- 材质备注 end -->
 
                   <!-- 材质 start -->
                   <el-table-column :label="showLabel('caizhi')" align="center">
@@ -269,6 +279,23 @@
                     </template>
                   </el-table-column>
                   <!-- 百分比 start -->
+
+                  <!-- 材质备注 start -->
+                  <el-table-column :label="showLabel('caizhibeizhu')" align="center">
+                    <template slot-scope="scope">
+                      <el-select v-model="scope.row.materialnoteid" size="mini"
+                                 @change="handleChangeMaterialnote(scope.$index)">
+                        <el-option
+                          v-for="item in currentMaterialnotes"
+                          :key="item.id + item.title"
+                          :label="item.title"
+                          :value="item.id">
+                        </el-option>
+                      </el-select>
+                    </template>
+                  </el-table-column>
+                  <!-- 材质备注 end -->
+
                 </el-table-column>
                 <!-- 材质管理 end -->
 
@@ -590,6 +617,14 @@
                 productTypes: [],
                 winterProofings: [],
                 product: Object.assign({}, defaultProduct),
+                // 新增 子品类id列表
+                childbrandIds: [],
+                // 子品类二级菜单列表
+                childbrandMenus: [],
+                // 当前品类的材质列表
+                currentMaterialnotes: [],
+                // 当前品类的材质列表id列表
+                currentMaterialnotesIds: [],
                 rules: {
                     form: {
                         ageseason: [{
@@ -602,9 +637,14 @@
                             message: showLabel('pinpai') + showLabel('required'),
                             trigger: 'blur'
                         }],
+                        brandgroupid: [{
+                            required: true,
+                            message: showLabel('pinpai') + showLabel('required'),
+                            trigger: 'blur'
+                        }],
                         childbrand: [{
                             required: true,
-                            message: showLabel('pinlei') + showLabel('required'),
+                            message: showLabel('zipinlei') + showLabel('required'),
                             trigger: 'blur'
                         }],
                         sizetopid: [{
@@ -658,6 +698,40 @@
                 this.product.form.summer = newValue
                 this.product.form.fall = newValue
                 this.product.form.winter = newValue
+            },
+            // 观测品类或者子品类的变化
+            'product.form.brandgroupid'(newVal) {
+                if (newVal) {
+                    this.getChildbrandIds()
+                }
+                // 重新请求二级子品类
+                this.getChildbrandMenus()
+                // 材质备注列表也要重新计算
+                this.currentMaterialnotes = []
+                this.currentMaterialnotesIds = []
+                // 请求新的材质备注列表
+                this.materialnotes.forEach((item) => {
+                    if (item.brandgroupids.includes(newVal)) {
+                        this.currentMaterialnotes.push({
+                            id: item.id,
+                            title: item.title
+                        })
+                        // ids
+                        this.currentMaterialnotesIds.push(item.id)
+                    }
+                })
+                // 新的材质材质备注列表
+                // 然后监控 materials 变量内部是否符合要求
+                this.product.materials.forEach((item) => {
+                    if (!this.currentMaterialnotesIds.includes(item.materialnoteid)) {
+                        item.materialnoteid = ''
+                    }
+                })
+            },
+            'product.form.childbrand'(newVal) {
+                if (newVal) {
+                    this.getChildbrandIds()
+                }
             },
         },
         computed: {
@@ -841,6 +915,19 @@
             }
         },
         methods: {
+            // 生成新的品类、子品类列表
+            getChildbrandIds() {
+                this.childbrandIds = []
+                if (this.product.form.brandgroupid) {
+                    this.product.form.brandgroupid = parseInt(this.product.form.brandgroupid)
+                }
+                if (this.product.form.childbrand) {
+                    this.product.form.childbrand = parseInt(this.product.form.childbrand)
+                }
+                this.childbrandIds.push(this.product.form.brandgroupid)
+                this.childbrandIds.push(this.product.form.childbrand)
+                this.product.form.childbrandIds = this.childbrandIds
+            },
             filterColors(row) {
                 if (row.colorSystemId) {
                     let colorSystem = this.colorSystems.find(item => {
@@ -1056,7 +1143,7 @@
             },
             handleAppendMaterial() {
                 // 如果没有选择品类，那么就报错
-                if (this.product.form.childbrand.length === 0) {
+                if (this.product.form.brandgroupid.length === 0) {
                     return this.$message.error(_label("select-brandgroup"))
                 }
 
@@ -1143,7 +1230,7 @@
                         ageseason: ageseason,
                         brandid: brandid,
                         brandgroupid: "",
-                        childbrand: [],
+                        childbrand: "",
                         sizetopid: "",
                         sizecontentids: [],
                         countries: "",
@@ -1190,7 +1277,22 @@
                         })
                     }
                 })
-            }
+            },
+            // select 切换判断
+            handleChangeBrandgroupid() {
+                // 修改下面的子品类为空
+                this.product.form.childbrand = ''
+                this.getChildbrandMenus()
+            },
+            // 调用下拉二级菜单
+            getChildbrandMenus() {
+                this.categories.forEach((item) => {
+                    // 防止类型不同，转换类型之后再进行比较
+                    if (String(item.id) === String(this.product.form.brandgroupid)) {
+                        this.childbrandMenus = item.children
+                    }
+                })
+            },
         }
     }
 </script>

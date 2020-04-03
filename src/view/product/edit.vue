@@ -3,24 +3,35 @@
     <el-tab-pane :label="showLabel('jibenziliao')" name="info">
       <info></info>
     </el-tab-pane>
+
     <el-tab-pane :label="showLabel('shangpinchicun')" name="property">
       <property ref="property"></property>
     </el-tab-pane>
+
     <el-tab-pane :label="showLabel('shangpintiaoma')" name="code">
       <barcode ref="barcode"></barcode>
     </el-tab-pane>
+
     <el-tab-pane :label="showLabel('tongkuanduose')" name="colorgroup">
       <color-group ref="colorGroup"></color-group>
     </el-tab-pane>
+
     <el-tab-pane :label="showLabel('shangpintupian')" name="album">
       <album ref="album"></album>
     </el-tab-pane>
+
     <el-tab-pane :label="showLabel('jiage')" name="price">
       <price ref="price"></price>
     </el-tab-pane>
+
     <el-tab-pane :label="showLabel('kucun')" name="stock">
       <stock ref="stock"></stock>
     </el-tab-pane>
+
+    <el-tab-pane :label="showLabel('arrive-record')" name="ArriveRecord">
+      <arrive-record ref="ArriveRecord"></arrive-record>
+    </el-tab-pane>
+
   </el-tabs>
 </template>
 
@@ -32,9 +43,10 @@
     import album from './components/album.vue'
     import price from './components/price.vue'
     import stock from './components/stock.vue'
+    import ArriveRecord from "@/view/product/components/ArriveRecord"
 
     export default {
-        components: {info, property, barcode, colorGroup, album, price, stock},
+        components: {ArriveRecord, info, property, barcode, colorGroup, album, price, stock},
         data() {
             return {
                 currentTab: 'info'

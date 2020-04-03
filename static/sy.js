@@ -321,6 +321,7 @@ $ASAL = {
   "son-colors": "\u5b50\u989c\u8272",
   "add-content": "\u6dfb\u52a0\u6761\u76ee",
   "select-brandgroup": "\u003d\u003d\u8bf7\u9009\u62e9\u54c1\u7c7b\u003d\u003d",
+  "arrive-record": "\u5230\u8d27\u8bb0\u5f55",
 
   "template":
     {

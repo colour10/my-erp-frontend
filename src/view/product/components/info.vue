@@ -338,7 +338,7 @@
           </el-col>
 
           <el-col :span="8">
-            <!-- 产品系列 start -->
+            <!-- 商品系列 start -->
             <el-form-item :label="showLabel('shangpinxilie')">
               <el-select v-model="product.form.series" placeholder="">
                 <el-option
@@ -350,7 +350,7 @@
               </el-select>
               <as-button class="trimhalf" @click="handleAddSeries">{{showLabel("xinjian")}}</as-button>
             </el-form-item>
-            <!-- 产品系列 end -->
+            <!-- 商品系列 end -->
 
             <!-- 销售属性 start -->
             <el-form-item :label="showLabel('xiaoshoushuxing')">
