@@ -1,750 +1,775 @@
 <template>
-    <el-dialog :title="_label('chanpinguanli')" :visible.sync="dialogVisible" :center="true" width="1200px" :modal="true">
-        <el-dialog title="已找到的商品" :visible.sync="existProductsDialogVisible" :center="true" width="50%" :modal="true" append-to-body>
-            <el-row>
-                <el-col :span="6" v-for="product in existProducts" :key="'exist-product-' + product.id">
-                    <el-card :body-style="{ padding: '0px' }">
-                        <img :src="_fileLink(product.picture)" class="image">
-                        <div style="padding: 14px;">
-                        <span>{{ product.getName() }}</span>
-                        <div class="bottom clearfix">
-                            <p>{{ product.getGoodsCode() }}</p>
-                            <asa-button type="primary" @click="editExistProduct(product)">编辑</asa-button>
-                        </div>
-                    </div>
-                    </el-card>
-                </el-col>
-            </el-row>
-        </el-dialog>
-
-        <el-row class="product">
-            <el-col :span="24">
-                <el-table :data="colors" border style="width:100%;">
-                    <el-table-column :label="_label('kuanshi')" width="140" align="center">
-                        <template v-slot="{row,$index}">
-                            <el-autocomplete v-model="row.wordcode_1"
-                                popper-class="my-autocomplete"
-                                size="mini"
-                                :fetch-suggestions="createQueryFunction(row)"
-                                @select="handleSelect($event, row)"
-                                @focus="onFocus(1)"
-                                @blur="onBlur(1, row)"
-                                @keyup.native="onKeyInput(row,'wordcode_1')"
-                                @keyup.native.up="onKeyMove(1, $index, 'up')"
-                                @keyup.native.down="onKeyMove(1, $index, 'down')"
-                                @keyup.native.left="onKeyMove(1, $index, 'left')"
-                                @keyup.native.right="onKeyMove(1, $index, 'right')"
-                                @keyup.native.enter="searchExistProductsByWordcode1(row)"
-                                :ref="'word1-'+$index" >
-                                <template slot-scope="{ item }">
-                                <el-row :gutter="0" style="height:37px;">
-                                    <el-col :span="8">
-                                        <img :src="_fileLink(item.picture)" style="width:35px; height:35px;" />
-                                        <img :src="_fileLink(item.picture2)" style="width:35px; height:35px;" />
-                                    </el-col>
-                                    <el-col :span="8"><span class="addr">{{ item.wordcode }}</span></el-col>
-                                </el-row>
-
-
-                                </template>
-                            </el-autocomplete>
-                        </template>
-                    </el-table-column>
-                    <el-table-column :label="_label('caizhi')" width="140" align="center">
-                        <template v-slot="{row,$index}">
-                            <el-input v-model="row.wordcode_2" size="mini" @focus="onFocus(2)" @blur="onBlur(2)" @keyup.native="onKeyInput(row,'wordcode_2')" @keyup.native.up="onKeyMove(2, $index, 'up')" @keyup.native.down="onKeyMove(2, $index, 'down')" @keyup.native.left="onKeyMove(2, $index, 'left')" @keyup.native.right="onKeyMove(2, $index, 'right')" :ref="'word2-'+$index"/>
-                        </template>
-                    </el-table-column>
-                    <el-table-column :label="_label('yanse')" width="140" align="center">
-                        <template v-slot="{row,$index}">
-                            <el-input v-model="row.wordcode_3" size="mini" @keyup.native="onWord3Change(row,'wordcode_3')" @keyup.native.up="onKeyMove(3, $index, 'up')" @keyup.native.down="onKeyMove(3, $index, 'down')" @keyup.native.left="onKeyMove(3, $index, 'left')" @keyup.native.right="onKeyMove(3, $index, 'right')" :ref="'word3-'+$index"/>
-                        </template>
-                    </el-table-column>
-                    <el-table-column :label="_label('yansemingcheng')" width="150" align="center">
-                        <template v-slot="{row,$index}">
-                            <el-input v-model="row.colorname" size="mini" @keyup.native.up="onKeyMove(4, $index, 'up')" @keyup.native.down="onKeyMove(4, $index, 'down')" @keyup.native.left="onKeyMove(4, $index, 'left')" @keyup.native.right="onKeyMove(4, $index, 'right')" :ref="'word4-'+$index"/>
-                        </template>
-                    </el-table-column>
-
-                    <el-table-column prop="brandcolor" :label="_label('sexi')" width="140" align="center">
-                        <template v-slot="scope">
-                            <colorselect v-model="scope.row.brandcolor" :disabled="scope.row.id>0"></colorselect>
-                        </template>
-                    </el-table-column>
-
-                    <el-table-column :label="_label('fuzhuma')" width="130" align="center">
-                        <template v-slot="scope">
-                            <el-input v-model="scope.row.wordcode_4" size="mini"/>
-                        </template>
-                    </el-table-column>
-
-                    <el-table-column width="80" align="center" :label="_label('zhutu')">
-                        <template v-slot="scope">
-                            <simple-avatar v-model="scope.row.picture" font-size="14px" :size="35"></simple-avatar>
-                        </template>
-                    </el-table-column>
-                    <el-table-column width="80" align="center" :label="_label('futu')">
-                        <template v-slot="{row}">
-                            <simple-avatar v-model="row.picture2" font-size="14px" :size="35" v-if="row.picture2!=''"></simple-avatar>
-
-                            <el-upload class="avatar-uploader" :action="host+'/common/upload?category=product'" :show-file-list="false" :on-success="handleAvatarSuccess" v-if="row.picture2==''" :multiple="true">
-                                <i class="el-icon-plus avatar-uploader-icon" style="width:35px;height:35px;line-height:35px;font-size:14px"></i>
-                            </el-upload>
-                        </template>
-                    </el-table-column>
-
-                    <el-table-column :label="_label('caozuo')" width="159" align="center">
-                        <template v-slot="scope">
-                            <as-button type="danger" @click="onDeleteColorGroup(scope, scope.row)" v-if="scope.$index>0">{{_label("shanchu")}}</as-button>
-                            <asa-button :enable="_isAllowed('product')" @click="onAppendColor" v-if="scope.$index==0">{{_label("zhuijia")}}</asa-button>
-                        </template>
-                    </el-table-column>
-                </el-table>
-                <!-- <div class="el-time-panel el-popper" style="width:900px;height:500px;">sdsd</div> -->
-            </el-col>
-        </el-row>
-        <el-form ref="order-form" class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;margin-top:5px;" :rules="formRules" size="mini" :inline-message="false" :show-message="false">
-            <el-row :gutter="0">
-                <el-col :span="8">
-                    <el-form-item :label="_label('niandai')" prop="ageseason">
-                        <simple-select v-model="form.ageseason" source="ageseason" :multiple="true" @change="loadRate"/>
-                    </el-form-item>
-                    <el-form-item :label="_label('pinpai')" prop="brandid">
-                        <simple-select v-model="form.brandid" source="brand" @change="onBrandChange"/>
-                    </el-form-item>
-                    <el-form-item :label="_label('pinlei')" prop="brandgroupid">
-                        <simple-select v-model="form.brandgroupid" source="brandgroup" @change="loadRate"/>
-                    </el-form-item>
-                    <el-form-item :label="_label('zipinlei')" prop="childbrand">
-                        <simple-select ref="childbrand" v-model="form.childbrand" source="brandgroupchild" :parentid="form.brandgroupid"/>
-                    </el-form-item>
-                    <el-form-item :label="_label('chimazu')" prop="sizetopid">
-                        <simple-select v-model="form.sizetopid" source="sizetop"/>
-                    </el-form-item>
-                    <el-form-item :label="_label('chimamingxi')" prop="sizecontentids">
-                        <simple-select v-model="form.sizecontentids" source="sizecontent" :parentid="form.sizetopid" :multiple="true" :isBatch="true" @option-change="onOptionChange"> </simple-select><as-button @click="onTrimSize" class="trimhalf">{{_label("qubanma")}}</as-button>
-                    </el-form-item>
-
-                </el-col>
-                <el-col :span="8">
-                    <el-form-item :label="_label('caizhi')">
-                        <product-material v-model="materials" :brandgroupid="form.brandgroupid"></product-material>
-                    </el-form-item>
-
-                    <el-form-item :label="_label('chandi')" prop="countries">
-                        <simple-select v-model="form.countries" source="country"/>
-                    </el-form-item>
-
-                    <el-form-item :label="_label('shangpinchicun')">
-                        <simple-select v-model="form.ulnarinch" source="ulnarinch" :multiple="true"/>
-                    </el-form-item>
-
-                    <el-form-item :label="_label('shangpinmiaoshu')">
-                        <simple-select v-model="form.productmemoids" source="productmemo" :multiple="true"/>
-                    </el-form-item>
-
-                    <el-form-item :label="_label('cankaobeilv')">
-                        <el-row>
-                            <el-col :span="8" style="width:80px">{{rate>0?rate : '-' }}</el-col>
-                            <el-col :span="16" style="width:50px">{{_label('lingshoubi')}}</el-col>
-                            <el-col :span="8" style="width:50px">{{getPriceRate}}</el-col>
-                        </el-row>
-                    </el-form-item>
-
-                    <el-form-item :label="_label('chuchangjia')">
-                        <el-input placeholder="" v-model="form.factoryprice" class="productcurrency" ref="factoryprice" @focus="onPriceFocus('factoryprice');watcherprice.start()" @blur="watcherprice.stop()">
-                            <simple-select source="currency" :clearable="false" v-model="form.wordpricecurrency" slot="prepend">
-                            </simple-select>
-                            <span slot="append">{{getRate}}</span>
-                        </el-input>
-                    </el-form-item>
-                    <el-form-item :label="_label('guojilingshoujia')">
-                        <el-input placeholder="" v-model="form.wordprice" class="productcurrency" ref="wordprice" @focus="onPriceFocus('wordprice')">
-                            <simple-select source="currency" :clearable="false" v-model="form.wordpricecurrency" slot="prepend">
-                            </simple-select>
-                            <span slot="append">{{getReciprocalRate}}</span>
-                        </el-input>
-                    </el-form-item>
-                    <el-form-item :label="_label('benguochuchangjia')">
-                        <el-input placeholder="" v-model="form.nationalfactoryprice" class="productcurrency" ref="nationalfactoryprice" @focus="onPriceFocus('nationalfactoryprice')">
-                            <simple-select source="currency" :clearable="false" v-model="form.nationalpricecurrency" slot="prepend">
-                            </simple-select>
-                            <span slot="append">{{getRateNational}}</span>
-                        </el-input>
-                    </el-form-item>
-                    <el-form-item :label="_label('benguolingshoujia')">
-                        <el-input placeholder="" v-model="form.nationalprice" class="productcurrency" ref="nationalprice" @focus="onPriceFocus('nationalprice')">
-                            <simple-select source="currency" :clearable="false" v-model="form.nationalpricecurrency" slot="prepend">
-                            </simple-select>
-                            <span slot="append">{{getReciprocalRateNational}}</span>
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                    <el-form-item :label="_label('shangpinxilie')">
-                        <simple-select v-model="form.series" ref="series" source="series" :parentid="form.brandid"> </simple-select><as-button class="trimhalf" @click="onAddSeries">{{_label("xinjian")}}</as-button>
-                    </el-form-item>
-
-                    <el-form-item :label="_label('xiaoshoushuxing')">
-                        <simple-select v-model="form.saletypeid" source="saletype"/>
-                    </el-form-item>
-
-                    <el-form-item :label="_label('shangpinshuxing')">
-                        <simple-select v-model="form.producttypeid" source="producttype"/>
-                    </el-form-item>
-
-                    <el-form-item :label="_label('fanghanzhishu')">
-                        <simple-select v-model="form.winterproofingid" source="winterproofing"></simple-select>
-                    </el-form-item>
-
-                    <el-form-item :label="_label('xingbie')">
-                        <sp-radio-group v-model="form.gender" source="gender" :span="8" :lang="lang" class="supermini" style="width:270px">
-                        </sp-radio-group>
-                    </el-form-item>
-                    <el-form-item :label="_label('jijie')">
-                        <div  style="width:270px">
-                        <el-col :span="8">
-                            <sp-checkbox v-model="form.spring">{{_label("chun")}}</sp-checkbox>
-                        </el-col>
-                        <el-col :span="8">
-                            <sp-checkbox v-model="form.summer">{{_label("xia")}}</sp-checkbox>
-                        </el-col>
-                        <el-col :span="8">
-                            <sp-checkbox v-model="siji">{{_label("siji")}}</sp-checkbox>
-                        </el-col>
-                        <el-col :span="8">
-                            <sp-checkbox v-model="form.fall">{{_label("qiu")}}</sp-checkbox>
-                        </el-col>
-                        <el-col :span="8">
-                            <sp-checkbox v-model="form.winter">{{_label("dong")}}</sp-checkbox>
-                        </el-col>
-                    </div>
-                    </el-form-item>
-
-                    <el-form-item :label="_label('beizhu')">
-                        <el-input v-model="form.memo"/>
-                    </el-form-item>
-                </el-col>
-            </el-row>
-            <el-row :gutter="0">
-                <el-col :span="24" style="text-align:center;">
-                    <as-button auth="product" type="primary" @click="onSubmit">{{_label("baocun")}}</as-button>
-                    <as-button type="primary" @click="onQuit">{{_label("tuichu")}}</as-button>
-                </el-col>
-            </el-row>
-        </el-form>
-
-        <sp-dialog ref="selet-product" width="600">
-            <el-form class="order-form" :model="form" label-width="70px" :inline="false" style="width:100%;" size="mini" @submit.native.prevent>
-                <el-row :gutter="0">
-                    <el-col :span="8" style="width:270px">
-                        <el-form-item :label="_label('dingdanhao')">
-                            <el-input v-model="form.orderno" class="width2"/>
-                        </el-form-item>
-                        <el-form-item :label="_label('gonghuoshang')">
-                            <simple-select v-model="form.supplierid" source="supplier_3" :multiple="true"/>
-                        </el-form-item>
-                        <el-form-item :label="_label('niandai')">
-                            <simple-select v-model="form.ageseason" source="ageseason" :multiple="true"/>
-                        </el-form-item>
-                        <el-form-item :label="_label('daohuocangku')">
-                            <simple-select v-model="form.warehouseid" source="warehouse" :multiple="true"/>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-                <el-row :gutter="0">
-                    <el-col align="center">
-                        <as-button type="primary" @click="onSearch(form)" native-type="submit">{{_label("zengjia")}}</as-button>
-                        <as-button type="primary" @click="_hideDialog('selet-product')">{{_label("tuichu")}}</as-button>
-                    </el-col>
-                </el-row>
-            </el-form>
-        </sp-dialog>
+  <el-dialog :title="_label('chanpinguanli')" :visible.sync="dialogVisible" :center="true" width="1200px" :modal="true">
+    <el-dialog title="已找到的商品" :visible.sync="existProductsDialogVisible" :center="true" width="50%" :modal="true"
+               append-to-body>
+      <el-row>
+        <el-col :span="6" v-for="product in existProducts" :key="'exist-product-' + product.id">
+          <el-card :body-style="{ padding: '0px' }">
+            <img :src="_fileLink(product.picture)" class="image">
+            <div style="padding: 14px;">
+              <span>{{ product.getName() }}</span>
+              <div class="bottom clearfix">
+                <p>{{ product.getGoodsCode() }}</p>
+                <asa-button type="primary" @click="editExistProduct(product)">编辑</asa-button>
+              </div>
+            </div>
+          </el-card>
+        </el-col>
+      </el-row>
     </el-dialog>
+
+    <el-row class="product">
+      <el-col :span="24">
+        <el-table :data="colors" border style="width:100%;">
+          <el-table-column :label="_label('kuanshi')" width="140" align="center">
+            <template v-slot="{row,$index}">
+              <el-autocomplete v-model="row.wordcode_1"
+                               popper-class="my-autocomplete"
+                               size="mini"
+                               :fetch-suggestions="createQueryFunction(row)"
+                               @select="handleSelect($event, row)"
+                               @focus="onFocus(1)"
+                               @blur="onBlur(1, row)"
+                               @keyup.native="onKeyInput(row,'wordcode_1')"
+                               @keyup.native.up="onKeyMove(1, $index, 'up')"
+                               @keyup.native.down="onKeyMove(1, $index, 'down')"
+                               @keyup.native.left="onKeyMove(1, $index, 'left')"
+                               @keyup.native.right="onKeyMove(1, $index, 'right')"
+                               @keyup.native.enter="searchExistProductsByWordcode1(row)"
+                               :ref="'word1-'+$index">
+                <template slot-scope="{ item }">
+                  <el-row :gutter="0" style="height:37px;">
+                    <el-col :span="8">
+                      <img :src="_fileLink(item.picture)" style="width:35px; height:35px;"/>
+                      <img :src="_fileLink(item.picture2)" style="width:35px; height:35px;"/>
+                    </el-col>
+                    <el-col :span="8"><span class="addr">{{ item.wordcode }}</span></el-col>
+                  </el-row>
+
+
+                </template>
+              </el-autocomplete>
+            </template>
+          </el-table-column>
+          <el-table-column :label="_label('caizhi')" width="140" align="center">
+            <template v-slot="{row,$index}">
+              <el-input v-model="row.wordcode_2" size="mini" @focus="onFocus(2)" @blur="onBlur(2)"
+                        @keyup.native="onKeyInput(row,'wordcode_2')" @keyup.native.up="onKeyMove(2, $index, 'up')"
+                        @keyup.native.down="onKeyMove(2, $index, 'down')"
+                        @keyup.native.left="onKeyMove(2, $index, 'left')"
+                        @keyup.native.right="onKeyMove(2, $index, 'right')" :ref="'word2-'+$index"/>
+            </template>
+          </el-table-column>
+          <el-table-column :label="_label('yanse')" width="140" align="center">
+            <template v-slot="{row,$index}">
+              <el-input v-model="row.wordcode_3" size="mini" @keyup.native="onWord3Change(row,'wordcode_3')"
+                        @keyup.native.up="onKeyMove(3, $index, 'up')" @keyup.native.down="onKeyMove(3, $index, 'down')"
+                        @keyup.native.left="onKeyMove(3, $index, 'left')"
+                        @keyup.native.right="onKeyMove(3, $index, 'right')" :ref="'word3-'+$index"/>
+            </template>
+          </el-table-column>
+          <el-table-column :label="_label('yansemingcheng')" width="150" align="center">
+            <template v-slot="{row,$index}">
+              <el-input v-model="row.colorname" size="mini" @keyup.native.up="onKeyMove(4, $index, 'up')"
+                        @keyup.native.down="onKeyMove(4, $index, 'down')"
+                        @keyup.native.left="onKeyMove(4, $index, 'left')"
+                        @keyup.native.right="onKeyMove(4, $index, 'right')" :ref="'word4-'+$index"/>
+            </template>
+          </el-table-column>
+
+          <el-table-column prop="brandcolor" :label="_label('sexi')" width="140" align="center">
+            <template v-slot="scope">
+              <colorselect v-model="scope.row.brandcolor" :disabled="scope.row.id>0"></colorselect>
+            </template>
+          </el-table-column>
+
+          <el-table-column :label="_label('fuzhuma')" width="130" align="center">
+            <template v-slot="scope">
+              <el-input v-model="scope.row.wordcode_4" size="mini"/>
+            </template>
+          </el-table-column>
+
+          <el-table-column width="80" align="center" :label="_label('zhutu')">
+            <template v-slot="scope">
+              <simple-avatar v-model="scope.row.picture" font-size="14px" :size="35"></simple-avatar>
+            </template>
+          </el-table-column>
+          <el-table-column width="80" align="center" :label="_label('futu')">
+            <template v-slot="{row}">
+              <simple-avatar v-model="row.picture2" font-size="14px" :size="35" v-if="row.picture2!=''"></simple-avatar>
+
+              <el-upload class="avatar-uploader" :action="host+'/common/upload?category=product'"
+                         :show-file-list="false" :on-success="handleAvatarSuccess" v-if="row.picture2==''"
+                         :multiple="true">
+                <i class="el-icon-plus avatar-uploader-icon"
+                   style="width:35px;height:35px;line-height:35px;font-size:14px"></i>
+              </el-upload>
+            </template>
+          </el-table-column>
+
+          <el-table-column :label="_label('caozuo')" width="159" align="center">
+            <template v-slot="scope">
+              <as-button type="danger" @click="onDeleteColorGroup(scope, scope.row)" v-if="scope.$index>0">
+                {{_label("shanchu")}}
+              </as-button>
+              <asa-button :enable="_isAllowed('product')" @click="onAppendColor" v-if="scope.$index==0">
+                {{_label("zhuijia")}}
+              </asa-button>
+            </template>
+          </el-table-column>
+        </el-table>
+        <!-- <div class="el-time-panel el-popper" style="width:900px;height:500px;">sdsd</div> -->
+      </el-col>
+    </el-row>
+    <el-form ref="order-form" class="order-form" :model="form" label-width="85px" :inline="true"
+             style="width:100%;margin-top:5px;" :rules="formRules" size="mini" :inline-message="false"
+             :show-message="false">
+      <el-row :gutter="0">
+        <el-col :span="8">
+          <el-form-item :label="_label('niandai')" prop="ageseason">
+            <simple-select v-model="form.ageseason" source="ageseason" :multiple="true" @change="loadRate"/>
+          </el-form-item>
+          <el-form-item :label="_label('pinpai')" prop="brandid">
+            <simple-select v-model="form.brandid" source="brand" @change="onBrandChange"/>
+          </el-form-item>
+          <el-form-item :label="_label('pinlei')" prop="brandgroupid">
+            <simple-select v-model="form.brandgroupid" source="brandgroup" @change="loadRate"/>
+          </el-form-item>
+          <el-form-item :label="_label('zipinlei')" prop="childbrand">
+            <simple-select ref="childbrand" v-model="form.childbrand" source="brandgroupchild"
+                           :parentid="form.brandgroupid"/>
+          </el-form-item>
+          <el-form-item :label="_label('chimazu')" prop="sizetopid">
+            <simple-select v-model="form.sizetopid" source="sizetop"/>
+          </el-form-item>
+          <el-form-item :label="_label('chimamingxi')" prop="sizecontentids">
+            <simple-select v-model="form.sizecontentids" source="sizecontent" :parentid="form.sizetopid"
+                           :multiple="true" :isBatch="true" @option-change="onOptionChange"></simple-select>
+            <as-button @click="onTrimSize" class="trimhalf">{{_label("qubanma")}}</as-button>
+          </el-form-item>
+
+        </el-col>
+        <el-col :span="8">
+          <el-form-item :label="_label('caizhi')">
+            <product-material v-model="materials" :brandgroupid="form.brandgroupid"></product-material>
+          </el-form-item>
+
+          <el-form-item :label="_label('chandi')" prop="countries">
+            <simple-select v-model="form.countries" source="country"/>
+          </el-form-item>
+
+          <el-form-item :label="_label('shangpinchicun')">
+            <simple-select v-model="form.ulnarinch" source="ulnarinch" :multiple="true"/>
+          </el-form-item>
+
+          <el-form-item :label="_label('shangpinmiaoshu')">
+            <simple-select v-model="form.productmemoids" source="productmemo" :multiple="true"/>
+          </el-form-item>
+
+          <el-form-item :label="_label('cankaobeilv')">
+            <el-row>
+              <el-col :span="8" style="width:80px">{{rate>0?rate : '-' }}</el-col>
+              <el-col :span="16" style="width:50px">{{_label('lingshoubi')}}</el-col>
+              <el-col :span="8" style="width:50px">{{getPriceRate}}</el-col>
+            </el-row>
+          </el-form-item>
+
+          <el-form-item :label="_label('chuchangjia')">
+            <el-input placeholder="" v-model="form.factoryprice" class="productcurrency" ref="factoryprice"
+                      @focus="onPriceFocus('factoryprice');watcherprice.start()" @blur="watcherprice.stop()">
+              <simple-select source="currency" :clearable="false" v-model="form.wordpricecurrency" slot="prepend">
+              </simple-select>
+              <span slot="append">{{getRate}}</span>
+            </el-input>
+          </el-form-item>
+          <el-form-item :label="_label('guojilingshoujia')">
+            <el-input placeholder="" v-model="form.wordprice" class="productcurrency" ref="wordprice"
+                      @focus="onPriceFocus('wordprice')">
+              <simple-select source="currency" :clearable="false" v-model="form.wordpricecurrency" slot="prepend">
+              </simple-select>
+              <span slot="append">{{getReciprocalRate}}</span>
+            </el-input>
+          </el-form-item>
+          <el-form-item :label="_label('benguochuchangjia')">
+            <el-input placeholder="" v-model="form.nationalfactoryprice" class="productcurrency"
+                      ref="nationalfactoryprice" @focus="onPriceFocus('nationalfactoryprice')">
+              <simple-select source="currency" :clearable="false" v-model="form.nationalpricecurrency" slot="prepend">
+              </simple-select>
+              <span slot="append">{{getRateNational}}</span>
+            </el-input>
+          </el-form-item>
+          <el-form-item :label="_label('benguolingshoujia')">
+            <el-input placeholder="" v-model="form.nationalprice" class="productcurrency" ref="nationalprice"
+                      @focus="onPriceFocus('nationalprice')">
+              <simple-select source="currency" :clearable="false" v-model="form.nationalpricecurrency" slot="prepend">
+              </simple-select>
+              <span slot="append">{{getReciprocalRateNational}}</span>
+            </el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item :label="_label('shangpinxilie')">
+            <simple-select v-model="form.series" ref="series" source="series" :parentid="form.brandid"></simple-select>
+            <as-button class="trimhalf" @click="onAddSeries">{{_label("xinjian")}}</as-button>
+          </el-form-item>
+
+          <el-form-item :label="_label('xiaoshoushuxing')">
+            <simple-select v-model="form.saletypeid" source="saletype"/>
+          </el-form-item>
+
+          <el-form-item :label="_label('shangpinshuxing')">
+            <simple-select v-model="form.producttypeid" source="producttype"/>
+          </el-form-item>
+
+          <el-form-item :label="_label('fanghanzhishu')">
+            <simple-select v-model="form.winterproofingid" source="winterproofing"></simple-select>
+          </el-form-item>
+
+          <el-form-item :label="_label('xingbie')">
+            <sp-radio-group v-model="form.gender" source="gender" :span="8" :lang="lang" class="supermini"
+                            style="width:270px">
+            </sp-radio-group>
+          </el-form-item>
+          <el-form-item :label="_label('jijie')">
+            <div style="width:270px">
+              <el-col :span="8">
+                <sp-checkbox v-model="form.spring">{{_label("chun")}}</sp-checkbox>
+              </el-col>
+              <el-col :span="8">
+                <sp-checkbox v-model="form.summer">{{_label("xia")}}</sp-checkbox>
+              </el-col>
+              <el-col :span="8">
+                <sp-checkbox v-model="siji">{{_label("siji")}}</sp-checkbox>
+              </el-col>
+              <el-col :span="8">
+                <sp-checkbox v-model="form.fall">{{_label("qiu")}}</sp-checkbox>
+              </el-col>
+              <el-col :span="8">
+                <sp-checkbox v-model="form.winter">{{_label("dong")}}</sp-checkbox>
+              </el-col>
+            </div>
+          </el-form-item>
+
+          <el-form-item :label="_label('beizhu')">
+            <el-input v-model="form.memo"/>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row :gutter="0">
+        <el-col :span="24" style="text-align:center;">
+          <as-button auth="product" type="primary" @click="onSubmit">{{_label("baocun")}}</as-button>
+          <as-button type="primary" @click="onQuit">{{_label("tuichu")}}</as-button>
+        </el-col>
+      </el-row>
+    </el-form>
+
+    <sp-dialog ref="selet-product" width="600">
+      <el-form class="order-form" :model="form" label-width="70px" :inline="false" style="width:100%;" size="mini"
+               @submit.native.prevent>
+        <el-row :gutter="0">
+          <el-col :span="8" style="width:270px">
+            <el-form-item :label="_label('dingdanhao')">
+              <el-input v-model="form.orderno" class="width2"/>
+            </el-form-item>
+            <el-form-item :label="_label('gonghuoshang')">
+              <simple-select v-model="form.supplierid" source="supplier_3" :multiple="true"/>
+            </el-form-item>
+            <el-form-item :label="_label('niandai')">
+              <simple-select v-model="form.ageseason" source="ageseason" :multiple="true"/>
+            </el-form-item>
+            <el-form-item :label="_label('daohuocangku')">
+              <simple-select v-model="form.warehouseid" source="warehouse" :multiple="true"/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="0">
+          <el-col align="center">
+            <as-button type="primary" @click="onSearch(form)" native-type="submit">{{_label("zengjia")}}</as-button>
+            <as-button type="primary" @click="_hideDialog('selet-product')">{{_label("tuichu")}}</as-button>
+          </el-col>
+        </el-row>
+      </el-form>
+    </sp-dialog>
+  </el-dialog>
 </template>
 
 <script>
-import { extract, _label, config,math,empty } from '../globals.js'
-import { initObject } from "../array.js"
-import { extend } from "../object.js"
-import { loadSetting } from '../setting.js'
-import watcher from "../watch.js"
-import Material from '../product/material.vue'
-import chain from "../chain.js"
-import API from "../api.js"
-import { host } from '../http.js'
-import productMixin from "../mixins/product.js"
-import _Product from "./product.js"
-import { roundFormat } from "../math.js"
-import {ProductDetail} from '../model.js'
+    import {_label, config, empty, extract, math} from '../globals.js'
+    import {initObject} from "../array.js"
+    import {extend} from "../object.js"
+    import {loadSetting} from '../setting.js'
+    import watcher from "../watch.js"
+    import Material from '../product/material.vue'
+    import chain from "../chain.js"
+    import API from "../api.js"
+    import {host} from '../http.js'
+    import productMixin from "../mixins/product.js"
+    import _Product from "./product.js"
+    import {roundFormat} from "../math.js"
+    import {ProductDetail} from '../model.js'
 
-export default {
-    name: 'asa-product-add',
-    components: {
-        [Material.name]: Material
-    },
-    mixins:[productMixin],
-    data() {
-        let self = this
-
-        return {
-            existProductsDialogVisible: false,
-            existProducts: [],
-            dialogVisible: false,
-            lang: _label("lang"),
-            form: {
-                brandid: '',
-                brandgroupid: "",
-                childbrand: "",
-                countries: "",
-                material: "",
-                laststoragedate: "",
-                series: "",
-                ulnarinch: "",
-                factoryprice: "",
-                factorypricecurrency: config().ouyuan,
-                nationalpricecurrency: '',
-                nationalprice: "",
-                nationalfactorypricecurrency: "",
-                nationalfactoryprice: "",
-                memo: "",
-                wordprice: "",
-                wordpricecurrency: config().ouyuan,
-                gender: "",
-                spring: "",
-                summer: "",
-                fall: "",
-                winter: "",
-                ageseason: "",
-                sizetopid: "",
-                sizecontentids: "",
-                saletypeid:"",
-                producttypeid:"",
-                winterproofingid:"",
-                productmemoids: "" //商品描述
-            },
-            materials: [],
-            colors: [],
-            colors_loaded: false,
-            rate: "", //参考倍率
-            exchange:{
-                currency_to:"",
-                currency_from:"",
-                rate:""
-            }, //当前的汇率信息；零售比=本国零售价/国际零售价
-            siji: "", //控制四季全选
-            host
-        }
-    },
-    methods: {
-        editExistProduct(product) {
-            this.dialogVisible = false
-            this.existProductsDialogVisible = false
-            this.$emit("editExistProduct", product)
+    export default {
+        name: 'asa-product-add',
+        components: {
+            [Material.name]: Material
         },
-        searchExistProductsByWordcode1(row) {
+        mixins: [productMixin],
+        data() {
             let self = this
-            self.existProducts = []
-            self._fetch("/product/page", {wordcode: row.wordcode_1}).then(function(res) {
-                if (res.pagination.total) {
-                    self.existProductsDialogVisible = true
-                    res.data.forEach(item => {
-                        ProductDetail.load({data: item, depth: 1}).then(function(product) {
-                            self.existProducts.push(product)
-                        })
-                    })
-                }
-                return false
-            })
-            return false
-        },
-        createQueryFunction(row) {
-            const self = this;
-            return function(keyword, callback) {
-                // console.log(row)
-                if(keyword.length<4 || row.wordcode_2.length>0 ||  row.wordcode_3.length>0) {
-                    callback([])
-                }
-                else {
-                    self._fetch("/productbase/suggest", {keyword}).then(result=>{
-                        // console.log(result)
-                        callback(result.data)
-                    });
-                }
-            };
-        },
-        handleSelect(select, row) {
-            const self = this
-            // console.log(select,row)
-            row.brandcolor = select.brandcolor
-            row.colorname = select.colorname
-            row.picture = select.picture
-            row.picture2 = select.picture2
-            row.wordcode_1 = select.wordcode_1
-            row.wordcode_2 = select.wordcode_2
-            row.wordcode_3 = select.wordcode_3
-            row.wordcode_4 = select.wordcode_4
 
-            for(let key of Object.keys(self.form)) {
-                if(key=='nationalpricecurrency' || key=='nationalprice' || key=='nationalfactoryprice') {
-                    continue;
-                }
-                self.form[key] = select[key]
+            return {
+                existProductsDialogVisible: false,
+                existProducts: [],
+                dialogVisible: false,
+                lang: _label("lang"),
+                form: {
+                    brandid: '',
+                    brandgroupid: "",
+                    childbrand: "",
+                    countries: "",
+                    material: "",
+                    laststoragedate: "",
+                    series: "",
+                    ulnarinch: "",
+                    factoryprice: "",
+                    factorypricecurrency: config().ouyuan,
+                    nationalpricecurrency: '',
+                    nationalprice: "",
+                    nationalfactorypricecurrency: "",
+                    nationalfactoryprice: "",
+                    memo: "",
+                    wordprice: "",
+                    wordpricecurrency: config().ouyuan,
+                    gender: "",
+                    spring: "",
+                    summer: "",
+                    fall: "",
+                    winter: "",
+                    ageseason: "",
+                    sizetopid: "",
+                    sizecontentids: "",
+                    saletypeid: "",
+                    producttypeid: "",
+                    winterproofingid: "",
+                    productmemoids: "" //商品描述
+                },
+                materials: [],
+                colors: [],
+                colors_loaded: false,
+                rate: "", //参考倍率
+                exchange: {
+                    currency_to: "",
+                    currency_from: "",
+                    rate: ""
+                }, //当前的汇率信息；零售比=本国零售价/国际零售价
+                siji: "", //控制四季全选
+                host
             }
+        },
+        methods: {
+            editExistProduct(product) {
+                this.dialogVisible = false
+                this.existProductsDialogVisible = false
+                this.$emit("editExistProduct", product)
+            },
+            searchExistProductsByWordcode1(row) {
+                let self = this
+                self.existProducts = []
+                self._fetch("/product/page", {wordcode: row.wordcode_1}).then(function (res) {
+                    if (res.pagination.total) {
+                        self.existProductsDialogVisible = true
+                        res.data.forEach(item => {
+                            ProductDetail.load({data: item, depth: 1}).then(function (product) {
+                                self.existProducts.push(product)
+                            })
+                        })
+                    }
+                    return false
+                })
+                return false
+            },
+            createQueryFunction(row) {
+                const self = this;
+                return function (keyword, callback) {
+                    // console.log(row)
+                    if (keyword.length < 4 || row.wordcode_2.length > 0 || row.wordcode_3.length > 0) {
+                        callback([])
+                    } else {
+                        self._fetch("/productbase/suggest", {keyword}).then(result => {
+                            // console.log(result)
+                            callback(result.data)
+                        });
+                    }
+                };
+            },
+            handleSelect(select, row) {
+                const self = this
+                // console.log(select,row)
+                row.brandcolor = select.brandcolor
+                row.colorname = select.colorname
+                row.picture = select.picture
+                row.picture2 = select.picture2
+                row.wordcode_1 = select.wordcode_1
+                row.wordcode_2 = select.wordcode_2
+                row.wordcode_3 = select.wordcode_3
+                row.wordcode_4 = select.wordcode_4
 
-            ProductDetail.load({ data: select, depth: 1, isCache: false }).then(function(info) {
-                info.getMaterialList().then((res) => {
-                    self.materials = res.data || []
-                });
+                for (let key of Object.keys(self.form)) {
+                    if (key == 'nationalpricecurrency' || key == 'nationalprice' || key == 'nationalfactoryprice') {
+                        continue;
+                    }
+                    self.form[key] = select[key]
+                }
 
-                //判断是否有同款多色
-                if(info.colors.length>1) {
-                    setTimeout(async function() {
-                        if(confirm('是否添加同款的其他颜色？')) {
-                            for(let item of await info.getProductList()) {
-                                if(item.id==select.id) {
-                                    continue;
+                ProductDetail.load({data: select, depth: 1, isCache: false}).then(function (info) {
+                    info.getMaterialList().then((res) => {
+                        self.materials = res.data || []
+                    });
+
+                    //判断是否有同款多色
+                    if (info.colors.length > 1) {
+                        setTimeout(async function () {
+                            if (confirm('是否添加同款的其他颜色？')) {
+                                for (let item of await info.getProductList()) {
+                                    if (item.id == select.id) {
+                                        continue;
+                                    }
+
+                                    self.colors.push({
+                                        brandcolor: item.brandcolor,
+                                        wordcode_1: item.wordcode_1,
+                                        wordcode_2: item.wordcode_2,
+                                        wordcode_3: item.wordcode_3,
+                                        wordcode_4: item.wordcode_4,
+                                        picture: item.picture,
+                                        picture2: item.picture2,
+                                        colorname: item.colorname,
+                                    });
                                 }
+                            }
+                        }, 0)
+                    }
+                })
 
-                                self.colors.push({
-                                    brandcolor: item.brandcolor,
-                                    wordcode_1: item.wordcode_1,
-                                    wordcode_2: item.wordcode_2,
-                                    wordcode_3: item.wordcode_3,
-                                    wordcode_4: item.wordcode_4,
-                                    picture: item.picture,
-                                    picture2: item.picture2,
-                                    colorname: item.colorname,
-                                });
+
+            },
+            onPriceFocus(name) {
+                this.$refs[name].select()
+            },
+            handleAvatarSuccess(response, file, fileList) {
+                let self = this
+                let picture2 = response["files"][file.name]
+                // this._log(file)
+
+                if (self.colors[0].picture2 == "") {
+                    self.colors[0].picture2 = picture2
+                } else {
+                    self.onAppendColor({picture2})
+                }
+
+            },
+            onAddSeries() {
+                _Product(this).addSeries();
+            },
+            onBrandChange() {
+                this.loadRate();
+                this.getBrandColorSuggest();
+            },
+            onWord3Change(row) {
+                this.onKeyInput(row, 'wordcode_3')
+                this.autoMatchSuggest(row)
+            },
+            onQuit() {
+                this.dialogVisible = false
+            },
+            onKeyInput(target, columnName) {
+                if (typeof (target[columnName]) == 'string') {
+                    target[columnName] = target[columnName].toUpperCase()
+                }
+            },
+            onOptionChange(options) {
+                let self = this
+                if (options.length == 1) {
+                    self.form.sizecontentids = options[0].id
+                }
+            },
+            onKeyMove(column, row, way) {
+                if (way == 'down') {
+                    row += 1
+                } else if (way == 'up') {
+                    row -= 1
+                } else if (way == 'left') {
+                    //column -= 1
+                } else if (way == 'right') {
+                    //column += 1
+                }
+
+                let target = this.$refs['word' + column + '-' + row]
+                if (target) {
+                    target.focus()
+                }
+            },
+            onKeyDown(index) {
+                //this._log(refname,index,this.$refs[refname])
+                let target = this.$refs['word' + (index + 1)]
+                if (target) {
+                    target.focus()
+                }
+            },
+            onKeyUp(index) {
+                //this._log(refname,index,this.$refs[refname])
+                let target = this.$refs['word' + (index - 1)]
+                if (target) {
+                    target.focus()
+                }
+            },
+            onFocus(index) {
+                if (index == 1) {
+                    this.watcher1.start()
+                } else {
+                    this.watcher2.start()
+                }
+            },
+            onBlur(index, row = null) {
+                if (index == 1) {
+                    this.watcher1.stop()
+                    this.searchExistProductsByWordcode1(row)
+                } else {
+                    this.watcher2.stop()
+                }
+            },
+            onWord1Change(newvalue, oldvalue) {
+                let self = this
+
+                self.colors.forEach(item => {
+                    if (item.wordcode_1 == '' || item.wordcode_1 == oldvalue) {
+                        item.wordcode_1 = newvalue
+                    }
+                })
+            },
+            onWord2Change(newvalue, oldvalue) {
+                let self = this
+
+                self.colors.forEach(item => {
+                    if (item.wordcode_2 == '' || item.wordcode_2 == oldvalue) {
+                        item.wordcode_2 = newvalue
+                    }
+                })
+            },
+            onPriceChange(newvalue, oldvalue) {
+                let self = this
+
+                if (self.rate == '') {
+                    return
+                }
+
+                let oldprice = roundFormat(oldvalue * self.rate)
+                if (self.form.wordprice == '' || self.form.wordprice == oldprice) {
+                    self.form.wordprice = roundFormat(newvalue * self.rate)
+                }
+            },
+            onTrimSize() {
+                let self = this
+                let source = self._dataSource("sizecontent")
+                source.getRows(self.form.sizecontentids).then(results => {
+                    self.form.sizecontentids = results.filter(item => item.name.indexOf('.') < 0).map(item => item.id).join(',')
+                })
+            },
+            onSubmit() {
+                let self = this;
+
+                let check = function () {
+                    return new Promise((resolve, reject) => {
+                        for (let i = 0; i < self.colors.length; i++) {
+                            let form = self.colors[i]
+                            if (form.wordcode_1 == "" && form.wordcode_2 == '' && form.wordcode_3 == '') {
+                                reject({message: self._label("8000"), label: self._label("guojima")})
+                                break;
+                            }
+
+                            if (form.brandcolor == "") {
+                                reject({message: self._label("8000"), label: self._label("sexi")})
+                                break;
                             }
                         }
-                    }, 0)
+                        resolve()
+                    })
                 }
-            })
 
+                self.validate(check).then(() => {
+                    let params = {};
+                    params.form = extend({}, self.form)
+                    params.colors = self.colors
+                    params.materials = self.materials
 
-        },
-        onPriceFocus(name){
-            this.$refs[name].select()
-        },
-        handleAvatarSuccess(response, file, fileList) {
-            let self = this
-            let picture2 = response["files"][file.name]
-            // this._log(file)
-
-            if(self.colors[0].picture2=="") {
-                self.colors[0].picture2 = picture2
-            }
-            else {
-                self.onAppendColor({picture2})
-            }
-
-        },
-        onAddSeries(){
-            _Product(this).addSeries();
-        },
-        onBrandChange(){
-            this.loadRate();
-            this.getBrandColorSuggest();
-        },
-        onWord3Change(row) {
-            this.onKeyInput(row,'wordcode_3')
-            this.autoMatchSuggest(row)
-        },
-        onQuit() {
-            this.dialogVisible = false
-        },
-        onKeyInput(target, columnName) {
-            if(typeof(target[columnName])=='string') {
-                target[columnName] = target[columnName].toUpperCase()
-            }
-        },
-        onOptionChange(options) {
-            let self = this
-            if(options.length==1) {
-                self.form.sizecontentids = options[0].id
-            }
-        },
-        onKeyMove(column, row, way) {
-            if(way=='down') {
-                row += 1
-            }
-            else if(way=='up') {
-                row -= 1
-            }
-            else if(way=='left') {
-                //column -= 1
-            }
-            else if(way=='right') {
-                //column += 1
-            }
-
-            let target = this.$refs['word'+column+'-'+row]
-            if (target) {
-                target.focus()
-            }
-        },
-        onKeyDown(index) {
-            //this._log(refname,index,this.$refs[refname])
-            let target = this.$refs['word' + (index + 1)]
-            if (target) {
-                target.focus()
-            }
-        },
-        onKeyUp(index) {
-            //this._log(refname,index,this.$refs[refname])
-            let target = this.$refs['word' + (index - 1)]
-            if (target) {
-                target.focus()
-            }
-        },
-        onFocus(index) {
-            if (index == 1) {
-                this.watcher1.start()
-            } else {
-                this.watcher2.start()
-            }
-        },
-        onBlur(index, row = null) {
-            if (index == 1) {
-                this.watcher1.stop()
-                this.searchExistProductsByWordcode1(row)
-            } else {
-                this.watcher2.stop()
-            }
-        },
-        onWord1Change(newvalue, oldvalue) {
-            let self = this
-
-            self.colors.forEach(item => {
-                if (item.wordcode_1 == '' || item.wordcode_1 == oldvalue) {
-                    item.wordcode_1 = newvalue
-                }
-            })
-        },
-        onWord2Change(newvalue, oldvalue) {
-            let self = this
-
-            self.colors.forEach(item => {
-                if (item.wordcode_2 == '' || item.wordcode_2 == oldvalue) {
-                    item.wordcode_2 = newvalue
-                }
-            })
-        },
-        onPriceChange(newvalue, oldvalue) {
-            let self = this
-
-            if(self.rate=='') {
-                return
-            }
-
-            let oldprice = roundFormat(oldvalue*self.rate)
-            if (self.form.wordprice == '' || self.form.wordprice == oldprice) {
-                self.form.wordprice = roundFormat(newvalue*self.rate)
-            }
-        },
-        onTrimSize() {
-            let self = this
-            let source = self._dataSource("sizecontent")
-            source.getRows(self.form.sizecontentids).then(results=>{
-                self.form.sizecontentids = results.filter(item=>item.name.indexOf('.')<0).map(item=>item.id).join(',')
-            })
-        },
-        onSubmit() {
-            let self = this;
-
-            let check = function() {
-                return new Promise((resolve,reject)=>{
-                    for(let i=0;i<self.colors.length;i++) {
-                        let form = self.colors[i]
-                        if(form.wordcode_1=="" && form.wordcode_2=='' && form.wordcode_3=='') {
-                            reject({message:self._label("8000"), label:self._label("guojima")})
-                            break;
-                        }
-
-                        if(form.brandcolor=="") {
-                            reject({message:self._label("8000"), label:self._label("sexi")})
-                            break;
-                        }
-                    }
-                    resolve()
-                })
-            }
-
-            self.validate(check).then(() => {
-                let params = {};
-                params.form = extend({}, self.form)
-                params.colors = self.colors
-                params.materials = self.materials
-
-                self._submit("/product/add", { params: JSON.stringify(params) }).then(function(res) {
-                    //self.$emit("change", Object.assign({}, self.form), "create")
-                    //self._log(res)
+                    self._submit("/product/add", {params: JSON.stringify(params)}).then(function (res) {
+                        //self.$emit("change", Object.assign({}, self.form), "create")
+                        //self._log(res)
                         //self.colors = []
-                    self.initColorList()
-                    self.$emit("change", res.data)
+                        self.initColorList()
+                        self.$emit("change", res.data)
+                    })
                 })
-            })
-        },
-        onAppendColor({picture2}={}) {
-            let self = this
-            let wordcode1_default = ""
-            let wordcode2_default = ""
-            let picture_default =""
-            if (self.colors.length > 0) {
-                wordcode1_default = self.colors[0].wordcode_1
-                wordcode2_default = self.colors[0].wordcode_2
-                picture_default = self.colors[0].picture
-            }
-            self.colors.push({
-                brandcolor: "",
-                wordcode_1: wordcode1_default,
-                wordcode_2: wordcode2_default,
-                wordcode_3: "",
-                wordcode_4: "",
-                picture: picture_default,
-                picture2: picture2 || "",
-                colorname: ""
-            })
-        },
-        onDeleteColorGroup({ $index, row }, rowIndex) {
-            let self = this
-            self.$delete(self.colors, $index)
-        },
-        setForm(info){
-            let self = this
-            extend(self.form, info)
-            extend(self.colors[0], chain(info).extract(['wordcode_1', 'wordcode_2', 'wordcode_3', 'wordcode_4']).map(item=>item.toUpperCase()).object())
-            self._log(self.form, info)
-            return self
-        },
-        show() {
-            let self = this
-            self.dialogVisible = true;
-        },
-        hide(){
-            this.dialogVisible = false;
-        },
-        initColorList() {
-            let self = this
-            let length = self.colors.length;
-            //length = length > 0 ? length : 1;
-            length = 1;
+            },
+            onAppendColor({picture2} = {}) {
+                let self = this
+                let wordcode1_default = ""
+                let wordcode2_default = ""
+                let picture_default = ""
+                if (self.colors.length > 0) {
+                    wordcode1_default = self.colors[0].wordcode_1
+                    wordcode2_default = self.colors[0].wordcode_2
+                    picture_default = self.colors[0].picture
+                }
+                self.colors.push({
+                    brandcolor: "",
+                    wordcode_1: wordcode1_default,
+                    wordcode_2: wordcode2_default,
+                    wordcode_3: "",
+                    wordcode_4: "",
+                    picture: picture_default,
+                    picture2: picture2 || "",
+                    colorname: ""
+                })
+            },
+            onDeleteColorGroup({$index, row}, rowIndex) {
+                let self = this
+                self.$delete(self.colors, $index)
+            },
+            setForm(info) {
+                let self = this
+                extend(self.form, info)
+                extend(self.colors[0], chain(info).extract(['wordcode_1', 'wordcode_2', 'wordcode_3', 'wordcode_4']).map(item => item.toUpperCase()).object())
+                self._log(self.form, info)
+                return self
+            },
+            show() {
+                let self = this
+                self.dialogVisible = true;
+            },
+            hide() {
+                this.dialogVisible = false;
+            },
+            initColorList() {
+                let self = this
+                let length = self.colors.length;
+                //length = length > 0 ? length : 1;
+                length = 1;
 
-            self.colors = []
-            for (let i = 0; i < length; i++) {
-                self.onAppendColor()
-            }
+                self.colors = []
+                for (let i = 0; i < length; i++) {
+                    self.onAppendColor()
+                }
 
-            self.watcher1 = watcher(self.colors[0], "wordcode_1", self.onWord1Change)
-            self.watcher2 = watcher(self.colors[0], "wordcode_2", self.onWord2Change)
+                self.watcher1 = watcher(self.colors[0], "wordcode_1", self.onWord1Change)
+                self.watcher2 = watcher(self.colors[0], "wordcode_2", self.onWord2Change)
+            },
+            loadRate() {
+                let self = this;
+
+                if (self.form.brandid == '' || self.form.ageseason == '' || self.form.brandgroupid == '') {
+                    return
+                }
+
+                self._fetch("/brandrate/getrate", extract(self.form, ['brandid', 'ageseason', 'brandgroupid'])).then(res => {
+                    self.rate = res.data;
+                })
+            },
+            loadExchangeRate() {
+                //加载汇率信息
+                let self = this;
+
+                empty(self.exchange)
+                API.getExchange(self.form.wordpricecurrency, self.form.nationalpricecurrency).then(result => {
+                    if (result > 0) {
+                        self._log("exchange=", result)
+                        extend(self.exchange, {
+                            currency_from: self.form.wordpricecurrency,
+                            currency_to: self.form.nationalpricecurrency,
+                            rate: result
+                        });
+                    }
+                })
+            }
         },
-        loadRate() {
+        watch: {
+            siji: function (newValue) {
+                let self = this
+                extend(self.form, initObject(['spring', 'summer', 'fall', 'winter'], newValue))
+            },
+            'form.wordpricecurrency': function () {
+                //this._log("wordpricecurrency change")
+                this.loadExchangeRate()
+            },
+            'form.nationalpricecurrency': function () {
+                //this._log("wordpricecurrency change")
+                this.loadExchangeRate()
+            }
+        },
+        computed: {
+            getPriceRate() {
+                let form = this.form
+                //this._log(form.wordprice, form.nationalprice, this.exchange, this.exchange.rate)
+                return form.wordprice > 0 && form.nationalprice > 0 && this.exchange && this.exchange.rate ? math.round(form.nationalprice / this.exchange.rate / form.wordprice, 2) : "";
+            },
+            getRate() {
+                let form = this.form
+                return form.wordprice > 0 && form.factoryprice > 0 ? math.round(form.wordprice / form.factoryprice, 2) : "";
+            },
+            getReciprocalRate() {
+                let form = this.form
+                return form.wordprice > 0 && form.factoryprice > 0 ? math.round(form.factoryprice / form.wordprice, 2) : "";
+            },
+            getRateNational() {
+                let form = this.form
+                return form.nationalprice > 0 && form.nationalfactoryprice > 0 ? math.round(form.nationalprice / form.nationalfactoryprice, 2) : "";
+            },
+            getReciprocalRateNational() {
+                let form = this.form
+                return form.nationalprice > 0 && form.nationalfactoryprice > 0 ? math.round(form.nationalfactoryprice / form.nationalprice, 2) : "";
+            }
+        },
+        mounted: function () {
             let self = this;
+            self.initColorList()
 
-            if(self.form.brandid=='' || self.form.ageseason=='' || self.form.brandgroupid=='') {
-                return
+            self.watcherprice = watcher(self.form, "factoryprice", self.onPriceChange)
+            self.clearValidate(1000)
+
+            loadSetting().then(config => {
+                //self._log(config)
+                self.form.nationalpricecurrency = config._currencyid
+                self.form.nationalfactorypricecurrency = config._currencyid
+                self.loadExchangeRate()
+            })
+
+            //关闭页面的时候提示
+            window.onbeforeunload = function (e) {
+                if (self.dialogVisible == true) {
+                    e = e || window.event;
+
+                    // 兼容IE8和Firefox 4之前的版本
+                    if (e) {
+                        e.returnValue = self._label("guanbitishi")
+                    }
+
+                    // Chrome, Safari, Firefox 4+, Opera 12+ , IE 9+
+                    return self._label("guanbitishi")
+                }
             }
 
-            self._fetch("/brandrate/getrate", extract(self.form, ['brandid', 'ageseason', 'brandgroupid'])).then(res=>{
-                self.rate = res.data;
-            })
-        },
-        loadExchangeRate() {
-            //加载汇率信息
-            let self = this;
-
-            empty(self.exchange)
-            API.getExchange(self.form.wordpricecurrency, self.form.nationalpricecurrency).then(result=>{
-                if(result>0) {
-                    self._log("exchange=",result)
-                    extend(self.exchange, {
-                        currency_from:self.form.wordpricecurrency,
-                        currency_to:self.form.nationalpricecurrency,
-                        rate:result
-                    });
+            self.initRules(Rules => {
+                let _label = self._label
+                return {
+                    sizetopid: Rules.id({required: true, message: _label("8000"), label: _label("chimazu")}),
+                    brandgroupid: Rules.id({required: true, message: _label("8000"), label: _label("pinlei")}),
+                    childbrand: Rules.id({required: true, message: _label("8000"), label: _label("zipinlei")}),
+                    brandid: Rules.id({required: true, message: _label("8000"), label: _label("pinpai")}),
+                    brandcolor: Rules.required({message: _label("8000"), label: _label("sexi")}),
+                    ageseason: Rules.required({message: _label("8000"), label: _label("niandai")}),
+                    sizecontentids: Rules.required({message: _label("8000"), label: _label("chimamingxi")})
                 }
             })
         }
-    },
-    watch: {
-        siji: function(newValue) {
-            let self = this
-            extend(self.form, initObject(['spring', 'summer', 'fall', 'winter'], newValue))
-        },
-        'form.wordpricecurrency':function(){
-            //this._log("wordpricecurrency change")
-            this.loadExchangeRate()
-        },
-        'form.nationalpricecurrency':function(){
-            //this._log("wordpricecurrency change")
-            this.loadExchangeRate()
-        }
-    },
-    computed: {
-        getPriceRate(){
-            let form = this.form
-            //this._log(form.wordprice, form.nationalprice, this.exchange, this.exchange.rate)
-            return form.wordprice > 0 && form.nationalprice > 0 && this.exchange && this.exchange.rate ? math.round(form.nationalprice/this.exchange.rate / form.wordprice, 2) : "";
-        },
-        getRate() {
-           let form = this.form
-            return form.wordprice > 0 && form.factoryprice > 0 ? math.round(form.wordprice / form.factoryprice, 2) : "";
-        },
-        getReciprocalRate() {
-            let form = this.form
-            return form.wordprice > 0 && form.factoryprice > 0 ? math.round(form.factoryprice / form.wordprice, 2) : "";
-        },
-        getRateNational() {
-            let form = this.form
-            return form.nationalprice > 0 && form.nationalfactoryprice > 0 ? math.round(form.nationalprice / form.nationalfactoryprice, 2) : "";
-        },
-        getReciprocalRateNational() {
-            let form = this.form
-            return form.nationalprice > 0 && form.nationalfactoryprice > 0 ? math.round(form.nationalfactoryprice / form.nationalprice, 2) : "";
-        }
-    },
-    mounted: function() {
-        let self = this;
-        self.initColorList()
-
-        self.watcherprice = watcher(self.form, "factoryprice", self.onPriceChange)
-        self.clearValidate(1000)
-
-        loadSetting().then(config=>{
-            //self._log(config)
-            self.form.nationalpricecurrency = config._currencyid
-            self.form.nationalfactorypricecurrency = config._currencyid
-            self.loadExchangeRate()
-        })
-
-        //关闭页面的时候提示
-        window.onbeforeunload = function (e) {
-            if(self.dialogVisible==true) {
-                e = e || window.event;
-
-                // 兼容IE8和Firefox 4之前的版本
-                if (e) {
-                    e.returnValue = self._label("guanbitishi")
-                }
-
-                // Chrome, Safari, Firefox 4+, Opera 12+ , IE 9+
-                return self._label("guanbitishi")
-            }
-        }
-
-        self.initRules(Rules=>{
-            let _label = self._label
-            return {
-                sizetopid: Rules.id({ required: true, message: _label("8000"), label:_label("chimazu") }),
-                brandgroupid: Rules.id({ required: true, message: _label("8000"), label:_label("pinlei") }),
-                childbrand: Rules.id({ required: true, message: _label("8000"), label:_label("zipinlei") }),
-                brandid: Rules.id({ required: true, message: _label("8000"), label:_label("pinpai") }),
-                brandcolor: Rules.required({ message: _label("8000"), label:_label("sexi") }),
-                ageseason: Rules.required({ message: _label("8000"), label:_label("niandai") }),
-                sizecontentids: Rules.required({ message: _label("8000"), label:_label("chimamingxi") })
-            }
-        })
     }
-}
 </script>

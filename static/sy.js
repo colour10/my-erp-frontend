@@ -322,6 +322,8 @@ $ASAL = {
   "add-content": "\u6dfb\u52a0\u6761\u76ee",
   "select-brandgroup": "\u003d\u003d\u8bf7\u9009\u62e9\u54c1\u7c7b\u003d\u003d",
   "arrive-record": "\u5230\u8d27\u8bb0\u5f55",
+  "nianfenjijie": "\u5e74\u4efd\u5b63\u8282",
+  "zuizhongbenweibi": "\u6700\u7ec8\u672c\u4f4d\u5e01",
 
   "template":
     {

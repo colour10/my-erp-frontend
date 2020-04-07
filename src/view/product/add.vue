@@ -968,9 +968,12 @@
                 })
             },
             querySearchWordCode(row) {
+                console.log('正在查询')
                 let self = this
+                // 下面的queryString代表的是国际码第二段
                 return function (queryString, cb) {
                     let results = []
+                    // 国际码第二段的长度必须大于3
                     if (queryString.length > 3) {
                         let wordcode = row.wordcode_1 + queryString
                         let params = {
@@ -1021,10 +1024,14 @@
                 self.product.id = select.id
                 self.product.form.brandid = select.brandid
 
-                const childbrand = select.childbrand
-                self.product.form.childbrand = []
-                self.product.form.childbrand.push(parseInt(select.brandgroupid))
-                self.product.form.childbrand.push(parseInt(childbrand))
+                // const childbrand = select.childbrand
+                // self.product.form.childbrand = []
+                // self.product.form.childbrand.push(parseInt(select.brandgroupid))
+                // self.product.form.childbrand.push(parseInt(childbrand))
+                // 直接赋值，不用上面的数组
+                self.product.form.brandgroupid = parseInt(select.brandgroupid)
+                self.product.form.childbrand = parseInt(select.childbrand)
+
                 self.product.form.sizetopid = select.sizetopid
                 self.handleChangeSizeTop()
                 if (select.sizecontentids.length) {
@@ -1073,6 +1080,10 @@
                 self.product.form.fall = select.fall
                 self.product.form.winter = select.winter
                 self.product.form.memo = select.memo
+                // 颜色重新赋值
+                // 0号为色系，1号为颜色
+                self.product.form.colorSystemId = parseInt(select.color_system_id)
+                self.product.form.colorId = parseInt(select.color_id)
             },
             cancleAddSeries() {
                 this.seriesDialogVisible = false

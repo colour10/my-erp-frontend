@@ -80,6 +80,10 @@
                     case 'stock':
                         self.$refs.stock.load()
                         break
+
+                    case 'ArriveRecord':
+                        self.$refs.ArriveRecord.load()
+                        break
                 }
             }
         },
