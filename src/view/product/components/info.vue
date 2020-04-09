@@ -543,11 +543,16 @@
                 sizes: [],
                 materials: [],
                 materialnotes: [],
+                // 产品描述
                 productMemos: [],
+                // 系列
                 series: [],
+                // 色系
                 colorSystems: [],
+                // 国家列表
                 countries: [],
                 ulnarinches: [],
+                // 币种列表
                 currencies: [],
                 saletypes: [],
                 productTypes: [],
@@ -560,6 +565,8 @@
                 currentMaterialnotes: [],
                 // 当前品类的材质列表id列表
                 currentMaterialnotesIds: [],
+                // 当前子品类的商品描述, 如果有需要根据子品类联动再打开
+                // currentProductMemos: [],
                 rules: {
                     form: {
                         wordcode_1: [{required: true, message: showLabel('kuanshi') + showLabel('required')}],
@@ -673,9 +680,9 @@
                                 }
 
                                 if (isMatched && !_.isEmpty(self.product.form.childbrand)) {
-                                    let brandgroupchild_id = this.product.form.childbrand[1].toString()
-
-                                    if (brandgroupchild_id != item.brandgroupchild_id) {
+                                    // 因为子品类已经改成字符串，重写验证逻辑
+                                    let brandgroupchild_id = this.product.form.childbrand.toString()
+                                    if (brandgroupchild_id !== item.brandgroupchild_id) {
                                         isMatched = false
                                     }
                                 }
@@ -784,7 +791,7 @@
                     res.data.colorSystemId = res.data.color_system_id ? parseInt(res.data.color_system_id) : ''
                     res.data.secondColorId = res.data.second_color_id ? parseInt(res.data.second_color_id) : ''
 
-                    // 需要把 childbrand 和 brandgroupid 合在一起组成 子品类列表
+                    // 需要把 childbrand 和 brandgroupid 合在一起组成 子品类列表，这个给尺码组使用
                     const childbrand = res.data.childbrand
                     res.data.childbrandIds = []
                     res.data.childbrandIds.push(parseInt(res.data.brandgroupid))
@@ -818,6 +825,7 @@
                         res.data.ulnarinch = []
                     }
 
+                    // 商品描述
                     if (res.data.productmemoids.length) {
                         let productmemoids = _.split(res.data.productmemoids, ',')
                         res.data.productmemoids = []
@@ -872,6 +880,8 @@
                     self.saletypes = res.data.saletypes
                     self.productTypes = res.data.productTypes
                     self.winterProofings = res.data.winterProofings
+                    // 商品描述
+                    self.productMemos = res.data.productMemos
 
                     self.series = []
                     res.data.brands.forEach(item => {
@@ -962,7 +972,16 @@
                         item.materialnoteid = ''
                     }
                 })
-            }
+            },
+            // // 检测子品类的变化，如果子品类发生变化，那么产品描述的列表也会发生改变
+            // 'product.form.childbrand'(newVal) {
+            //     // 重新生成新的商品描述
+            //     this.productMemos.forEach((response) => {
+            //         if (String(response.brandgroupchildid) === String(newVal)) {
+            //             this.currentProductMemos.push(response)
+            //         }
+            //     })
+            // }
         },
     }
 </script>

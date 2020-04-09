@@ -82,7 +82,7 @@
                         break
 
                     case 'ArriveRecord':
-                        self.$refs.ArriveRecord.load()
+                        self.$refs.ArriveRecord.getList()
                         break
                 }
             }

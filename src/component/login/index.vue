@@ -74,6 +74,8 @@
                             });
 
                             console.log('Auth', res.auth);
+                            // 把auth写入storage
+                            localStorage.setItem('auth', JSON.stringify(res.auth))
 
                             ASAP.$session_id = res.session_id;
                             self.goToPage()
