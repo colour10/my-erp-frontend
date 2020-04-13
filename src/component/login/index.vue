@@ -35,8 +35,8 @@
             return {
                 logining: false,
                 ruleForm2: {
-                    username: 'admin',
-                    password: 'asa&123456',
+                    username: '',
+                    password: '',
                     language: window.localStorage.language
                 },
                 checked: true,
