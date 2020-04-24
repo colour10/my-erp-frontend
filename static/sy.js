@@ -324,6 +324,9 @@ $ASAL = {
   "arrive-record": "\u5230\u8d27\u8bb0\u5f55",
   "nianfenjijie": "\u5e74\u4efd\u5b63\u8282",
   "zuizhongbenweibi": "\u6700\u7ec8\u672c\u4f4d\u5e01",
+  "zaituweiruku": "\u5728\u9014\u672a\u5165\u5e93",
+  "yibeihuoweifachu": "\u5df2\u5907\u8d27\u672a\u53d1\u51fa",
+  "xiaoshouzhuangtai": "\u9500\u552e\u72b6\u6001",
 
   "template":
     {
