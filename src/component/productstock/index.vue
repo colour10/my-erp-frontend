@@ -162,10 +162,10 @@
 
             <el-form-item :label="_label('kucunzhuangtai')">
               <el-checkbox-group v-model="types">
-                <el-checkbox label="9">{{_label('daishou')}}</el-checkbox>
-                <el-checkbox label="10">{{_label('yushou')}}</el-checkbox>
+                <el-checkbox label="1">{{_label('daishou')}}</el-checkbox>
+                <el-checkbox label="2">{{_label('yushou')}}</el-checkbox>
                 <!-- 添加在途状态检索 -->
-                <el-checkbox label="11">{{_label('zaitu')}}</el-checkbox>
+                <el-checkbox label="4">{{_label('zaitu')}}</el-checkbox>
               </el-checkbox-group>
             </el-form-item>
 
@@ -203,11 +203,13 @@
           </template>
         </el-table-column>
 
+        <!-- 国际码 start -->
         <el-table-column :label="_label('guojima')" align="center" sortable width="200">
           <template v-slot="{row}">
             <sp-product-tip :product="product.product"/>
           </template>
         </el-table-column>
+        <!-- 国际码 end -->
 
         <el-table-column :label="_label('kucunshuliang')" width="498" align="left">
           <template v-slot="{row}">

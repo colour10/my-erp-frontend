@@ -362,12 +362,14 @@ const ProductstockSummary = Object.assign(createModel("productstocksummary"), {
 
     // 库存
     let stocks = row.sizecontent_data.split(';').map(item => {
-      let [sizecontentid, number, reserve_number, sales_number] = item.split(',');
+      // 添加 shipping_number 在途，liuzongyang 2020/4/26 11:31
+      let [sizecontentid, number, reserve_number, sales_number, shipping_number] = item.split(',');
       return {
         sizecontentid,
         number,
         reserve_number,
         sales_number,
+        shipping_number,
       };
     });
     runner.push(stocks, "stocks");

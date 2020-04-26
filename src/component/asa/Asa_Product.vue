@@ -300,6 +300,16 @@
       <el-tab-pane :label="_label('kucun')" name="productstock" :disabled="form.id==''">
         <productstock :productid="form.id" ref="productstock" @quit="onQuit" :option="option"></productstock>
       </el-tab-pane>
+
+      <!-- 到货记录 start, liuzongyang 2020/4/26 15:25 -->
+      <el-tab-pane :label="_label('arrive-record')" name="ArriveRecord" :disabled="form.id==''">
+        <arrive-record ref="ArriveRecord"
+                       :productid="form.id"
+                       @quit="onQuit"
+                       :option="option"></arrive-record>
+      </el-tab-pane>
+      <!-- 到货记录 end -->
+
     </el-tabs>
   </el-dialog>
 </template>
@@ -319,6 +329,7 @@
     import API from "../api.js";
     import _Product from "./product.js";
     import productMixin from "../mixins/product.js";
+    import ArriveRecord from "@/view/product/components/ArriveRecord"
 
 
     const color_keys = ['id', 'brandcolor', 'wordcode_1', 'wordcode_2', 'wordcode_3', 'wordcode_4', 'colorname', 'picture', 'picture2']
@@ -327,6 +338,7 @@
         name: 'asa-product',
         mixins: [productMixin],
         components: {
+            ArriveRecord,
             [Asa_Product_Search_Panel.name]: Asa_Product_Search_Panel,
             property: Asa_Product_Property,
             pricetab: Asa_Product_Price,

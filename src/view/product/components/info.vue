@@ -438,7 +438,6 @@
             </el-form-item>
             <!-- 建档人 end -->
 
-
             <!-- 建档时间 start -->
             <el-form-item :label="showLabel('jiandangshijian')">
               <el-input :value="product.form.maketime" disabled></el-input>
@@ -826,7 +825,7 @@
                     }
 
                     // 商品描述
-                    if (res.data.productmemoids.length) {
+                    if (res.data.productmemoids && res.data.productmemoids.length) {
                         let productmemoids = _.split(res.data.productmemoids, ',')
                         res.data.productmemoids = []
                         productmemoids.forEach(item => {

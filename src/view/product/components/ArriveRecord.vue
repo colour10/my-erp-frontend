@@ -15,7 +15,7 @@
       <el-table-column :label="_label('daohuocangku')" prop="warehouse_name" align="center" sortable>
       </el-table-column>
 
-      <el-table-column :label="_label('chima')" prop="shippingDetail.sizecontentids" align="center" sortable>
+      <el-table-column :label="_label('chima')" prop="shippingDetail.sizecontentid_names" align="center" sortable>
       </el-table-column>
 
       <el-table-column :label="_label('shuliang')" prop="shippingDetail.sum" align="center" sortable>
