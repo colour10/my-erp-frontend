@@ -182,6 +182,28 @@
                 <el-checkbox label="2">{{_label('cancipin')}}</el-checkbox>
               </el-checkbox-group>
             </el-form-item>
+
+            <!-- 最后入库时间 start liuzongyang 2020/4/26 17:27 -->
+            <el-form-item :label="_label('zuihouruku')">
+              <el-date-picker
+                v-model="laststoragedate"
+                value-format="yyyy-MM-dd HH:mm:ss"
+                type="daterange"
+                range-separator="-"
+                :start-placeholder="_label('qishishijian')"
+                :end-placeholder="_label('jieshushijian')">
+              </el-date-picker>
+            </el-form-item>
+            <!-- 最后入库时间 end -->
+
+            <!-- 库存数量 start liuzongyang 2020/4/26 17:27 -->
+            <el-form-item :label="_label('kucunshuliang')" class="kucun_item">
+              <el-input v-model="start_number" style="width: 50px;"></el-input>
+              -
+              <el-input v-model="end_number" style="width: 50px;"></el-input>
+            </el-form-item>
+            <!-- 库存数量 end -->
+
           </el-col>
         </el-row>
         <el-row :gutter="0">
@@ -272,12 +294,17 @@
                 isLoading: false,
                 // 以前是1,2
                 // types: ['1', '2'],
-                // 更改为1,2,4三个没有加减乘除的对应关系
+                // 更改为1,2,4三个没有加减乘除的对应关系, liuzongyang 2020/4/26 17:32
                 types: ['1', '2', '4'],
                 properties: ['1', '2', '3'],
                 defective_levels: ['1'],
                 productresult: [],
                 product: '',
+                // 最后入库时间
+                laststoragedate: "",
+                // 库存数量
+                start_number: '',
+                end_number: '',
             };
         },
         methods: {
@@ -333,7 +360,14 @@
                 params.defective_level = self.defective_levels.join(',');
                 // 属性
                 params.property = self.properties.join(',');
+                // 添加新检索条件, liuzongyang 2020/4/27 17:00
+                // 入库日期
+                params.laststoragedate = self.laststoragedate
+                // 库存数量
+                params.start_number = self.start_number;
+                params.end_number = self.end_number;
 
+                // 开始查找
                 self._fetch("/productstock/search", params).then(function (res) {
                     self._hideDialog("search");
                     self.searchresult = [];
@@ -395,3 +429,9 @@
         },
     };
 </script>
+
+<style scoped>
+  .order-form >>> .kucun_item .el-input__inner {
+    width: 50px;
+  }
+</style>

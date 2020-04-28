@@ -327,6 +327,8 @@ $ASAL = {
   "zaituweiruku": "\u5728\u9014\u672a\u5165\u5e93",
   "yibeihuoweifachu": "\u5df2\u5907\u8d27\u672a\u53d1\u51fa",
   "xiaoshouzhuangtai": "\u9500\u552e\u72b6\u6001",
+  "qishishijian": "\u8d77\u59cb\u65f6\u95f4",
+  "jieshushijian": "\u7ed3\u675f\u65f6\u95f4",
 
   "template":
     {
