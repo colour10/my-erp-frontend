@@ -836,11 +836,11 @@
                     res.data.wordpricecurrency = parseInt(res.data.wordpricecurrency)
                     res.data.nationalpricecurrency = parseInt(res.data.nationalpricecurrency)
                     res.data.saletypeid = parseInt(res.data.saletypeid)
-                    res.data.saletypeid = (res.data.saletypeid == 0) ? '' : res.data.saletypeid
+                    res.data.saletypeid = (res.data.saletypeid == 0 || isNaN(res.data.saletypeid)) ? '' : res.data.saletypeid
                     res.data.producttypeid = parseInt(res.data.producttypeid)
-                    res.data.producttypeid = (res.data.producttypeid == 0) ? '' : res.data.producttypeid
+                    res.data.producttypeid = (res.data.producttypeid == 0 || isNaN(res.data.producttypeid)) ? '' : res.data.producttypeid
                     res.data.winterproofingid = parseInt(res.data.winterproofingid)
-                    res.data.winterproofingid = (res.data.winterproofingid == 0) ? '' : res.data.winterproofingid
+                    res.data.winterproofingid = (res.data.winterproofingid == 0 || isNaN(res.data.winterproofingid)) ? '' : res.data.winterproofingid
 
                     if (res.data.materials.length) {
                         res.data.materials.forEach(material => {
