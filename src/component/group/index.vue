@@ -188,7 +188,7 @@
             // 批量编辑权限
             async multiEdit() {
                 var self = this
-                // 获取 userIds 当亲选中列表
+                // 获取 userIds 当中选中列表
                 // 如果多选框为空，那么就给出提示
                 if (this.multipleSelection.length === 0) {
                     return this.$message.error(_label('least-one-select'));

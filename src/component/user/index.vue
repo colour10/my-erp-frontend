@@ -50,7 +50,7 @@
                 </el-radio-group>
               </el-form-item>
               <el-form-item :label="_label('zu')">
-                <simple-select v-model="form.groupid" source="group" style="width:150"></simple-select>
+                <simple-select v-model="form.groupid" source="group" style="width:150px"></simple-select>
               </el-form-item>
               <el-form-item :label="_label('email')">
                 <el-input v-model="form.e_mail"></el-input>
