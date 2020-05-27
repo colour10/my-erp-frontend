@@ -64,6 +64,7 @@
             <el-tabs type="border-card" v-model="activeName" @tab-click="handleTabClick">
                 <el-tab-pane :label="_label('jibenziliao')" name="info">
                     <brandform @cancel="hideDialogForm" @reloadList="reloadList" :id="id"></brandform>
+
                 </el-tab-pane>
                 <el-tab-pane :label="_label('bieming')" name="aliases" :disabled="id==0">
                     <multiple-admin-page v-bind="aliases"></multiple-admin-page>
