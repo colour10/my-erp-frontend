@@ -54,7 +54,7 @@
                 <template slot-scope="scope">
                   <el-form-item
                     :prop="'colors.' + scope.$index + '.wordcode_2'"
-                    :rules="[{required: true, trigger: 'blur'}, {min: worldcode.two.minlength, max: worldcode.two.maxlength, triggger: 'blur'}]"
+                    :rules="[{required: false, trigger: 'blur'}, {min: worldcode.two.minlength, max: worldcode.two.maxlength, triggger: 'blur'}]"
                   >
                     <el-autocomplete
                       :maxlength="worldcode.one.maxlength"
@@ -77,7 +77,7 @@
                 <template slot-scope="scope">
                   <el-form-item
                     :prop="'colors.' + scope.$index + '.wordcode_3'"
-                    :rules="[{required: true, trigger: 'blur'}, {min: worldcode.three.minlength, max: worldcode.three.maxlength, triggger: 'blur'}]"
+                    :rules="[{required: false, trigger: 'blur'}, {min: worldcode.three.minlength, max: worldcode.three.maxlength, triggger: 'blur'}]"
                   >
                     <el-input v-model="scope.row.wordcode_3" size="mini"
                               @keyup.native="handleKeyInput(scope.row, 'wordcode_3')"/>
