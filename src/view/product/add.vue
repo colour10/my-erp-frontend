@@ -624,9 +624,9 @@
                 childbrandIds: [],
                 // 子品类二级菜单列表
                 childbrandMenus: [],
-                // 当前品类的材质列表
+                // 当前品类的材质备注列表
                 currentMaterialnotes: [],
-                // 当前品类的材质列表id列表
+                // 当前品类的材质备注列表id列表
                 currentMaterialnotesIds: [],
                 rules: {
                     form: {
@@ -955,12 +955,11 @@
             reloadSizetops() {
                 this.getProductRelatedOptions()
             },
+            // 当修改材质备注的时候，材质也相应的发生变化
             handleChangeMaterialnote(index) {
                 this.product.materials[index].materialid = ''
 
                 let noteId = this.product.materials[index].materialnoteid.toString()
-
-                console.log(this.materials)
 
                 this.filtedMaterials[index] = this.materials.filter(function (item) {
                     let materialnoteids = _.isEmpty(item.materialnoteids) ? [] : item.materialnoteids.split(',')
@@ -968,7 +967,6 @@
                 })
             },
             querySearchWordCode(row) {
-                console.log('正在查询')
                 let self = this
                 // 下面的queryString代表的是国际码第二段
                 return function (queryString, cb) {
@@ -1324,7 +1322,7 @@
 </script>
 
 
-<style>
+<style scoped>
   .wordcode-autocomplete {
     width: 500px !important;
   }
@@ -1350,5 +1348,9 @@
 
   .el-cascader-menu__wrap {
     height: 380px;
+  }
+
+  .order-form >>> .el-input__inner {
+    width: inherit;
   }
 </style>

@@ -48,6 +48,72 @@
                       :placeholder="showLabel('fuzhuma')"></el-input>
           </el-form-item>
           <!-- 辅助码 end -->
+        </el-col>
+
+        <!-- 色系 start -->
+        <el-col :span="16">
+          <el-form-item :label="showLabel('sexi')" label-width="85px">
+            <el-select
+              v-model="product.form.colorSystemId"
+              placeholder=""
+              filterable
+              size="mini"
+              style="width: 100px;">
+              <el-option
+                v-for="item in colorSystems"
+                :key="item.id + item.title"
+                :label="item.title"
+                :value="item.id">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <!-- 色系 end -->
+
+          <!-- 颜色 start -->
+          <el-form-item :label="showLabel('yanse')" label-width="60px">
+            <el-select
+              v-model="product.form.colorId"
+              filterable
+              placeholder=""
+              size="mini"
+              style="width: 100px;">
+              <el-option
+                v-for="item in filterColors"
+                :key="item.id + item.title"
+                :label="item.title"
+                :value="item.id">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <!-- 颜色 end -->
+
+          <!-- 副颜色 start -->
+          <el-form-item :label="showLabel('second_color')" label-width="60px">
+            <el-cascader
+              placeholder=""
+              v-model="product.form.secondColorId"
+              size="mini"
+              :show-all-levels="false"
+              :options="colorSystems"
+              :props="{ children: 'colors', value: 'id', label: 'title' }"
+              clearable
+              style="width: 100px;">
+            </el-cascader>
+          </el-form-item>
+          <!-- 副颜色 end -->
+
+          <!-- 商品属性 start -->
+          <el-form-item :label="showLabel('shangpinshuxing')" label-width="85px">
+            <el-select v-model="product.form.producttypeid" placeholder="" style="width: 100px;">
+              <el-option
+                v-for="item of productTypes"
+                :key="item.id + item.title"
+                :label="item.title"
+                :value="item.id">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <!-- 商品属性 end -->
 
         </el-col>
       </el-row>
@@ -122,59 +188,11 @@
             </el-form-item>
             <!-- 尺码组 end -->
 
-            <!-- 色系 start -->
-            <el-form-item :label="showLabel('sexi')">
-              <el-select
-                v-model="product.form.colorSystemId"
-                placeholder=""
-                filterable
-                size="mini">
-                <el-option
-                  v-for="item in colorSystems"
-                  :key="item.id + item.title"
-                  :label="item.title"
-                  :value="item.id">
-                </el-option>
-              </el-select>
-            </el-form-item>
-            <!-- 色系 end -->
-
-            <!-- 颜色 start -->
-            <el-form-item :label="showLabel('yanse')">
-              <el-select
-                v-model="product.form.colorId"
-                filterable
-                placeholder=""
-                size="mini">
-                <el-option
-                  v-for="item in filterColors"
-                  :key="item.id + item.title"
-                  :label="item.title"
-                  :value="item.id">
-                </el-option>
-              </el-select>
-            </el-form-item>
-            <!-- 颜色 end -->
-
-            <!-- 副颜色 start -->
-            <el-form-item :label="showLabel('second_color')">
-              <el-cascader
-                placeholder=""
-                v-model="product.form.secondColorId"
-                size="mini"
-                :show-all-levels="false"
-                :options="colorSystems"
-                :props="{ children: 'colors', value: 'id', label: 'title' }"
-                clearable>
-              </el-cascader>
-            </el-form-item>
-            <!-- 副颜色 end -->
-
             <el-row class="product">
               <el-table :data="product.materials" border style="width:90%;">
                 <!-- 材质管理 start -->
                 <el-table-column :label="showLabel('caizhiguanli')" align="center">
-                  <!-- 材质 start -->
+                  <!-- 材质 start，本来循环的变量应该是  filtedMaterials[scope.$index]，但是因为页面载入的时候，右侧的材质备注用的是 change方法，所以左侧取不到值，所以这里循环变量改用 materials，后期找到了解决办法再修改 -->
                   <el-table-column :label="showLabel('caizhi')" align="center">
                     <template slot-scope="scope">
                       <el-form-item
@@ -216,6 +234,7 @@
                       <el-select
                         v-model="scope.row.materialnoteid"
                         filterable
+                        @change="handleChangeMaterialnote(scope.$index)"
                         size="mini">
                         <el-option
                           v-for="item in currentMaterialnotes"
@@ -365,19 +384,6 @@
             </el-form-item>
             <!-- 销售属性 end -->
 
-            <!-- 商品属性 start -->
-            <el-form-item :label="showLabel('shangpinshuxing')">
-              <el-select v-model="product.form.producttypeid" placeholder="">
-                <el-option
-                  v-for="item of productTypes"
-                  :key="item.id + item.title"
-                  :label="item.title"
-                  :value="item.id">
-                </el-option>
-              </el-select>
-            </el-form-item>
-            <!-- 商品属性 end -->
-
             <!-- 防寒指数 start -->
             <el-form-item :label="showLabel('fanghanzhishu')">
               <el-select v-model="product.form.winterproofingid" placeholder="">
@@ -444,6 +450,7 @@
             </el-form-item>
             <!-- 建档时间 end -->
           </el-col>
+
         </el-row>
 
         <el-row :gutter="0">
@@ -459,7 +466,7 @@
             <!-- 新增创建按钮 end -->
 
             <!-- 退出 start -->
-            <as-button>{{showLabel("tuichu")}}</as-button>
+            <!--<as-button>{{showLabel("tuichu")}}</as-button>-->
             <!-- 退出 end -->
           </el-col>
         </el-row>
@@ -527,6 +534,7 @@
     import sizetop from './sizetop.vue'
     import productMemo from './productMemo.vue'
     import Add from "@/view/product/add"
+    import {getLabel} from "@/component/globals"
 
     export default {
         components: {Add, ageseason, country, ulnarinch, size, productMemo, sizetop},
@@ -560,17 +568,23 @@
                 childbrandIds: [],
                 // 子品类二级菜单列表
                 childbrandMenus: [],
-                // 当前品类的材质列表
+                // 当前品类的材质备注列表
                 currentMaterialnotes: [],
-                // 当前品类的材质列表id列表
+                // 当前品类的材质备注列表id列表
                 currentMaterialnotesIds: [],
+                // 当前品类的材质列表
+                currentMaterials: [],
+                // 当前品类的材质id列表
+                currentMaterialIds: [],
                 // 当前子品类的商品描述, 如果有需要根据子品类联动再打开
                 // currentProductMemos: [],
+                filtedMaterials: [],
                 rules: {
                     form: {
                         wordcode_1: [{required: true, message: showLabel('kuanshi') + showLabel('required')}],
-                        wordcode_2: [{required: true, message: showLabel('caizhi') + showLabel('required')}],
-                        wordcode_3: [{required: true, message: showLabel('yanse') + showLabel('required')}],
+                        // 材质和颜色可以为空
+                        wordcode_2: [{required: false, message: showLabel('caizhi') + showLabel('required')}],
+                        wordcode_3: [{required: false, message: showLabel('yanse') + showLabel('required')}],
                         ageseason: [{required: true, message: showLabel('niandai') + showLabel('required')}],
                         brandid: [{
                             required: true,
@@ -628,6 +642,10 @@
         created() {
             this.getProductRelatedOptions()
             this.getColorSystemAndColor()
+
+
+            console.log("this.filtedMaterials=")
+            console.log(this.filtedMaterials)
         },
         computed: {
             filterColors() {
@@ -870,6 +888,7 @@
                     })
 
                     self.sizes = res.data.sizes
+                    // 所有的材质
                     self.materials = res.data.materials
                     // 所有的材质备注
                     self.materialnotes = res.data.materialnotes
@@ -899,6 +918,21 @@
                     })
                 }
             },
+            // 当修改材质备注的时候，材质也相应的发生变化
+            handleChangeMaterialnote(index) {
+                this.product.materials[index].materialid = ''
+
+                let noteId = this.product.materials[index].materialnoteid.toString()
+
+                this.filtedMaterials[index] = this.materials.filter(function (item) {
+                    let materialnoteids = _.isEmpty(item.materialnoteids) ? [] : item.materialnoteids.split(',')
+                    return (_.indexOf(materialnoteids, noteId) >= 0)
+                })
+
+                console.log("进到了handleChangeMaterialnote函数中，this.filtedMaterials=")
+                console.log(this.filtedMaterials)
+            },
+            // 更新商品逻辑
             updateProduct() {
                 let self = this
 
@@ -906,14 +940,21 @@
                 params = Object.assign({}, self.product)
 
                 this.$refs['productForm'].validate((valid) => {
+                    // 如果验证通过
                     if (valid) {
-                        let options = {
-                            successTip: "success",
-                            isReject: true
-                        }
-                        self._submit("/product/edit", {params: JSON.stringify(params)}, options).then(function (res) {
-                        })
+                        // 执行修改逻辑
+                        this.doEdit(params);
                     }
+                })
+            },
+            // 直接更新逻辑
+            doEdit(params) {
+                // 参数拼接
+                let options = {
+                    successTip: "success",
+                    isReject: true
+                }
+                this._submit("/product/edit", {params: JSON.stringify(params)}, options).then(function (res) {
                 })
             },
             // 创建商品
@@ -964,23 +1005,46 @@
                         this.currentMaterialnotesIds.push(item.id)
                     }
                 })
-                // 新的材质备注列表
-                // 然后监控 materials 变量内部是否符合要求
-                this.product.materials.forEach((item) => {
-                    if (!this.currentMaterialnotesIds.includes(item.materialnoteid)) {
-                        item.materialnoteid = ''
-                    }
-                })
             },
-            // // 检测子品类的变化，如果子品类发生变化，那么产品描述的列表也会发生改变
-            // 'product.form.childbrand'(newVal) {
-            //     // 重新生成新的商品描述
-            //     this.productMemos.forEach((response) => {
-            //         if (String(response.brandgroupchildid) === String(newVal)) {
-            //             this.currentProductMemos.push(response)
-            //         }
-            //     })
-            // }
+            // 监控商品属性，这个判断只执行1次
+            "product.form.producttypeid"(newVal, oldVal) {
+                // 如果是第一次进入，oldVal 的值就是 undefined
+                if (oldVal === undefined) {
+                    console.log('第一次进入，不执行任何方法')
+                    return
+                }
+
+                // 再判断 producttypeid_tootip 的值是不是 undefined, 如果是说明已经还没有询问过用户，否则就是问过了，不需要重复询问
+                if (this.product.form.producttypeid_tootip !== undefined) {
+                    console.log('已经询问过用户了，不需要再次询问！')
+                    return
+                }
+
+                // 接下来执行询问逻辑
+                this.$confirm(getLabel('shuxingtishi'), getLabel('tishi'), {
+                    confirmButtonText: getLabel('yes'),
+                    cancelButtonText: getLabel('no'),
+                    type: 'warning'
+                }).then(() => {
+                    // 如果选择是，则赋值为1
+                    this.product.form.producttypeid_tootip = 1
+                }).catch(() => {
+                    // 否则赋值为0
+                    this.product.form.producttypeid_tootip = 0
+                });
+            },
+            // 监控色系，一旦 colorSystemId 发生了变动，那么就需要重新选择下面的颜色
+            "product.form.colorSystemId"(newValue, oldValue) {
+                if (oldValue !== undefined) {
+                    this.product.form.colorId = '';
+                }
+            }
         },
     }
 </script>
+
+<style scoped>
+  .order-form >>> .el-input__inner {
+    width: inherit;
+  }
+</style>
