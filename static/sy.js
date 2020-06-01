@@ -331,6 +331,8 @@ $ASAL = {
   "jieshushijian": "\u7ed3\u675f\u65f6\u95f4",
   "shuxingtishi": "\u662f\u5426\u628a\u4fee\u6539\u540e\u7684\u5546\u54c1\u5c5e\u6027\u503c\u5e94\u7528\u5230\u5176\u4ed6\u540c\u6b3e\u4e0d\u540c\u8272\u5546\u54c1\uff1f",
   "tishi": "\u63d0\u793a",
+  "jianshu": "\u4ef6\u6570",
+  "kuanshu": "\u6b3e\u6570",
 
   "template":
     {
