@@ -333,6 +333,7 @@ $ASAL = {
   "tishi": "\u63d0\u793a",
   "jianshu": "\u4ef6\u6570",
   "kuanshu": "\u6b3e\u6570",
+  "zongkuanshu": "\u603b\u6b3e\u6570",
 
   "template":
     {
