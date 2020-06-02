@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="dialogVisible" :center="true" :fullscreen="false" :modal="false" width="1200px">
+  <el-dialog :visible.sync="dialogVisible" :center="true" :fullscreen="false" :modal="true" width="1200px">
     <!-- 选择商品 start，修复错误 liuzongyang 2020/4/29 16:15 -->
     <asa-product-search-panel
       ref="panel"

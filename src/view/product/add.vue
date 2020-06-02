@@ -3,7 +3,6 @@
     <el-form ref="productForm" :rules="rules" :model="product" label-width="85px" :inline="true" size="mini"
              :inline-message="false" :show-message="false">
       <el-row class="product" style="margin-bottom: 20px;">
-
         <el-col :span="24">
           <!-- 品牌 start -->
           <el-form-item :label="showLabel('pinpai')" prop="form.brandid">
@@ -571,7 +570,6 @@
             childbrand: "",
             sizetopid: "",
             sizecontentids: [],
-            countries: "",
             ulnarinch: [],
             productmemoids: [],
             factoryprice: "",
@@ -599,6 +597,8 @@
     }
 
     export default {
+        // 添加名称为 ErpProductAdd
+        name: "ErpProductAdd",
         components: {ageseason, country, ulnarinch, size, productMemo, sizetop},
         data() {
             return {
@@ -1257,7 +1257,7 @@
                         childbrand: "",
                         sizetopid: "",
                         sizecontentids: [],
-                        countries: "",
+                        countries: countries,
                         ulnarinch: [],
                         productmemoids: [],
                         factoryprice: "",
@@ -1277,7 +1277,6 @@
                         fall: fall,
                         winter: winter,
                         memo: "",
-                        countries: countries,
                         colorSystemId: "",
                         colorId: "",
                         secondColorId: ""
