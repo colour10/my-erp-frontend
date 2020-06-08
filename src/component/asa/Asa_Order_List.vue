@@ -38,12 +38,12 @@
           {{row.maketime && row.maketime.length>0?row.maketime.substr(0,10):""}}
         </template>
       </el-table-column>
-      <el-table-column :label="_label('xingbie')" width="150">
+      <el-table-column :label="_label('xingbie')" width="150" align="center">
         <template v-slot="{row}">
           <sp-select-text :value="row.genders" source="gender"/>
         </template>
       </el-table-column>
-      <el-table-column :label="_label('pinpai')" width="150">
+      <el-table-column :label="_label('pinpai')" align="center">
         <template v-slot="{row}">
           <sp-select-text :value="row.brandids" source="brand"/>
         </template>

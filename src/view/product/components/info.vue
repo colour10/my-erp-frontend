@@ -4,7 +4,6 @@
     <el-form ref="productForm" :model="product" :rules="rules" label-width="85px" :inline="true" size="mini"
              :inline-message="false" :show-message="false">
       <el-row>
-
         <!-- 主图 start -->
         <el-col :span="4">
           <simple-avatar v-model="product.form.picture" :disabled="!$store.getters.allow('product')"></simple-avatar>

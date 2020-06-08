@@ -39,7 +39,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column :label="_label('rukuriqi')" width="100" align="center">
+      <el-table-column :label="_label('rukuriqi')" align="center">
         <template v-slot="{row}">
           {{row.warehousingtime && row.warehousingtime.length>0?row.warehousingtime.substr(0,10):""}}
         </template>
