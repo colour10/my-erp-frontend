@@ -3,170 +3,299 @@
     <el-form ref="order-form" class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;"
              size="mini" :rules="formRules" :inline-message="false" :show-message="false">
       <el-row :gutter="0">
+        <!-- 保存 start -->
         <asa-button @click="saveOrder(1)" :enable="canSave">{{_label("baocun")}}</asa-button>
-        <asa-button @click="_showDialog('order-dialog')" :enable="form.status!='2'">{{_label("daorudingdan")}}
+        <!-- 保存 end -->
+
+        <!-- 导入订单 start -->
+        <asa-button @click="_showDialog('order-dialog')" :enable="form.status!='2'">
+          {{_label("daorudingdan")}}
         </asa-button>
+        <!-- 导入订单 end -->
       </el-row>
+
+      <!-- 表单部分 start -->
       <el-row :gutter="0">
         <el-col :span="8" style="width:600px">
           <el-row :gutter="0">
             <el-col :span="4" style="width:300px">
+              <!-- 发货单号 start -->
               <el-form-item :label="_label('fahuodanhao')">
                 <el-input v-model="form.orderno" :disabled="true"></el-input>
               </el-form-item>
+              <!-- 发货单号 end -->
+
+              <!-- 供货商 start -->
               <el-form-item :label="_label('gonghuoshang')">
                 <simple-select v-model="form.supplierid" source="supplier_3"></simple-select>
               </el-form-item>
+              <!-- 供货商 end -->
+
+              <!-- 供货单位 start -->
               <el-form-item :label="_label('gonghuodanwei')">
                 <simple-select v-model="form.finalsupplierid" source="supplier_3"></simple-select>
               </el-form-item>
+              <!-- 供货单位 end -->
+
+              <!-- 年代季节 start -->
               <el-form-item :label="_label('niandaijijie')">
                 <simple-select v-model="form.ageseason" source="ageseason"></simple-select>
               </el-form-item>
+              <!-- 年代季节 end -->
+
+              <!-- 年代类型 start -->
               <el-form-item :label="_label('niandaileixing')">
                 <simple-select v-model="form.seasontype" source="seasontype">
                 </simple-select>
               </el-form-item>
+              <!-- 年代类型 end -->
+
+              <!-- 业务类型 start -->
               <el-form-item :label="_label('yewuleixing')">
                 <simple-select v-model="form.bussinesstype" source="bussinesstype">
                 </simple-select>
               </el-form-item>
+              <!-- 业务类型 end -->
+
+              <!-- 制单人 start -->
               <el-form-item :label="_label('zhidanren')">
                 <sp-display-input :value="form.makestaff" source="user"></sp-display-input>
               </el-form-item>
+              <!-- 制单人 end -->
             </el-col>
+
             <el-col :span="4" style="width:300px">
+              <!-- 发货港 start -->
               <el-form-item :label="_label('fahuogang')">
                 <el-input v-model="form.dispatchport"></el-input>
               </el-form-item>
+              <!-- 发货港 end -->
+
+              <!-- 到货港 start -->
               <el-form-item :label="_label('daohuogang')">
                 <el-input v-model="form.deliveryport"></el-input>
               </el-form-item>
+              <!-- 到货港 end -->
+
+              <!-- 到货仓库 start -->
               <el-form-item :label="_label('daohuocangku')" prop="warehouseid">
                 <simple-select v-model="form.warehouseid" source="warehouse"></simple-select>
               </el-form-item>
+              <!-- 到货仓库 end -->
+
+              <!-- 海外发票号 start -->
               <el-form-item :label="_label('haiwaifapiaohao')">
                 <el-input v-model="form.invoiceno"></el-input>
               </el-form-item>
+              <!-- 海外发票号 end -->
+
+              <!-- 总金额 start -->
               <el-form-item :label="_label('zongjine')">
                 <sp-float-input :select_value="total_price" class="input-with-select" disabled>
                   <simple-select source="currency" :clearable="false" v-model="form.currency" disabled></simple-select>
                 </sp-float-input>
               </el-form-item>
+              <!-- 总金额 end -->
+
+              <!-- 汇率 start -->
               <el-form-item :label="_label('huilv')">
                 <sp-float-input v-model="form.exchangerate"></sp-float-input>
               </el-form-item>
+              <!-- 汇率 end -->
+
+              <!-- 制单日期 start -->
               <el-form-item :label="_label('zhidanriqi')">
                 <el-input :value="form.maketime" :placeholder="_label('zidonghuoqu')" disabled></el-input>
               </el-form-item>
+              <!-- 制单日期 end -->
             </el-col>
           </el-row>
+
           <el-row :gutter="0">
             <el-col :span="4" style="width:600px">
+              <!-- 备注 start -->
               <el-form-item :label="_label('beizhu')" class="twocols">
                 <el-input v-model="form.memo" style="width:400px"></el-input>
               </el-form-item>
+              <!-- 备注 end -->
             </el-col>
           </el-row>
         </el-col>
+
         <el-col :span="4" style="width:300px">
+          <!-- 付款时间 start -->
           <el-form-item :label="_label('fukuanshijian')">
             <el-date-picker v-model="form.paydate" type="date" value-format="yyyy-MM-dd"></el-date-picker>
           </el-form-item>
+          <!-- 付款时间 end -->
+
+          <!-- 支付方式 start -->
           <el-form-item :label="_label('zhifufangshi')">
             <simple-select v-model="form.paytype" source="paytype"></simple-select>
           </el-form-item>
+          <!-- 支付方式 end -->
+
+          <!-- 安排提货时间 start -->
           <el-form-item :label="_label('anpaitihuoshijian')" class="mini font12">
             <el-date-picker v-model="form.apickingdate" type="date" value-format="yyyy-MM-dd"></el-date-picker>
           </el-form-item>
+          <!-- 安排提货时间 end -->
+
+          <!-- 到库时间 start -->
           <el-form-item :label="_label('daokushijian')">
             <el-date-picker v-model="form.aarrivaldate" type="date" value-format="yyyy-MM-dd"></el-date-picker>
           </el-form-item>
+          <!-- 到库时间 end -->
+
+          <!-- 箱数 start -->
           <el-form-item :label="_label('xiangshu')">
             <el-input v-model="form.box_number"></el-input>
           </el-form-item>
+          <!-- 箱数 end -->
+
+          <!-- 重量 start -->
           <el-form-item :label="_label('zhongliang')">
             <el-input v-model="form.weight"></el-input>
           </el-form-item>
+          <!-- 重量 end -->
+
+          <!-- 体积 start -->
           <el-form-item :label="_label('tiji')">
             <el-input v-model="form.volume"></el-input>
           </el-form-item>
+          <!-- 体积 end -->
+
+          <!-- 计费重量 start -->
           <el-form-item :label="_label('jifeizhongliang')">
             <el-input v-model="form.chargedweight"></el-input>
           </el-form-item>
+          <!-- 计费重量 end -->
         </el-col>
+
         <el-col :span="4" style="width:300px">
+          <!-- 空运商 start -->
           <el-form-item :label="_label('kongyunshang')">
             <simple-select v-model="form.transcompany" source="supplier"></simple-select>
           </el-form-item>
+          <!-- 空运商 end -->
+
+          <!-- 运输方式 start -->
           <el-form-item :label="_label('yunshufangshi')">
             <simple-select v-model="form.transporttype" source="transporttype"></simple-select>
           </el-form-item>
+          <!-- 运输方式 end -->
+
+          <!-- 航班号 start -->
           <el-form-item :label="_label('hangbanhao')">
             <el-input v-model="form.flightno"></el-input>
           </el-form-item>
+          <!-- 航班号 end -->
+
+          <!-- 航班日期 start -->
           <el-form-item :label="_label('hangbanriqi')">
             <el-date-picker v-model="form.flightdate" type="date" value-format="yyyy-MM-dd"></el-date-picker>
           </el-form-item>
+          <!-- 航班日期 end -->
+
+          <!-- 预计到达日期 start -->
           <el-form-item :label="_label('yujidaodariqi')">
             <el-date-picker v-model="form.estimatedate" type="date" value-format="yyyy-MM-dd"></el-date-picker>
           </el-form-item>
+          <!-- 预计到达日期 end -->
+
+          <!-- 主单号 start -->
           <el-form-item :label="_label('zhudanhao')">
             <el-input v-model="form.mblno"></el-input>
           </el-form-item>
+          <!-- 主单号 end -->
+
+          <!-- 子单号 start -->
           <el-form-item :label="_label('zidanhao')">
             <el-input v-model="form.hblno"></el-input>
           </el-form-item>
-
+          <!-- 子单号 end -->
         </el-col>
       </el-row>
+      <!-- 表单部分 end -->
     </el-form>
+
     <el-row>
       <el-col :span="24" class="product" style="margin-top:2px;">
         <el-table ref="table" :data="orderbrands" stripe border style="width:100%;"
                   @selection-change="onSelectionChange" @row-click="onRowClick">
+
+          <!-- 多选按钮 start -->
           <el-table-column type="selection" :width="30" align="center"></el-table-column>
+          <!-- 多选按钮 start -->
+
+          <!-- 订单编号 start -->
           <el-table-column prop="orderno" :label="_label('dingdanbianhao')" width="90" align="center">
             <template v-slot="{row}">
               <sp-order-tip column="orderno" :order="row" trigger="hover"></sp-order-tip>
             </template>
           </el-table-column>
+          <!-- 订单编号 end -->
+
+          <!-- 供货商 start -->
           <el-table-column :label="_label('gonghuoshang')" width="120" align="center">
             <template v-slot="{row}">
               <sp-select-text :value="row.supplierid" source="supplier"></sp-select-text>
             </template>
           </el-table-column>
+          <!-- 供货商 end -->
+
+          <!-- 订货数量 start -->
           <el-table-column :label="_label('dinghuoshuliang')" width="120" align="center">
             <template v-slot="{row}">
               {{orderstat[row.id].totalCount}}
             </template>
           </el-table-column>
+          <!-- 订货数量 end -->
+
+          <!-- 发货单号 start -->
           <el-table-column :label="_label('querenshuliang')" width="120" align="center">
             <template v-slot="{row}">
               {{orderstat[row.id].totalConfirmCount}}
             </template>
           </el-table-column>
+          <!-- 发货单号 end -->
+
+          <!-- 剩余数量 start -->
           <el-table-column :label="_label('shengyushuliang')" width="120" align="center">
             <template v-slot="{row}">
               {{orderstat[row.id].leftCount-currentstat[row.id]}}
             </template>
           </el-table-column>
+          <!-- 剩余数量 end -->
+
+          <!-- 发货数量 start -->
           <el-table-column :label="_label('fahuoshuliang')" width="120" align="center">
             <template v-slot="{row}">
               {{currentstat[row.id]||0}}
             </template>
           </el-table-column>
+          <!-- 发货数量 end -->
+
+          <!-- 年代 start -->
           <el-table-column :label="_label('niandai')" width="90" align="center">
             <template v-slot="{row}">
               <sp-select-text :value="row.ageseason" source="ageseason"></sp-select-text>
             </template>
           </el-table-column>
+          <!-- 年代 end -->
+
+          <!-- 币种 start -->
           <el-table-column :label="_label('bizhong')" width="90" align="center">
             <template v-slot="{row}">
               <sp-select-text :value="row.currency" source="currency"></sp-select-text>
             </template>
           </el-table-column>
+          <!-- 币种 end -->
+
+          <!-- 折扣率 start -->
           <el-table-column prop="discount" :label="_label('zhekoulv')" width="90" align="center"></el-table-column>
+          <!-- 折扣率 end -->
+
           <!-- <el-table-column :label="_label('xingbie')" width="90" align="center">
               <template v-slot="{row}">
                   <sp-select-text :value="row.genders" source="gender"></sp-select-text>
@@ -177,30 +306,46 @@
                   <sp-select-text :value="row.brandids" source="brand"></sp-select-text>
               </template>
           </el-table-column> -->
+
+          <!-- 业务类型 start -->
           <el-table-column :label="_label('yewuleixing')" width="90" align="center">
             <template v-slot="{row}">
               <sp-select-text :value="row.bussinesstype" source="bussinesstype"></sp-select-text>
             </template>
           </el-table-column>
+          <!-- 业务类型 end -->
+
+          <!-- 订单日期 start -->
           <el-table-column :label="_label('dingdanriqi')" width="100" align="center">
             <template v-slot="{row}">
               {{row.maketime && row.maketime.length>0 ? row.maketime.substr(0,10) : ""}}
             </template>
           </el-table-column>
+          <!-- 订单日期 end -->
         </el-table>
+
         <el-row :gutter="0">
           <!-- <el-button type="warning" round @click="_showDialog('supplier-dialog')" size="mini">{{_label("piliangfenpei")}}</el-button> -->
-          <!--                     <el-button type="warning" round @click="resetDistribute" size="mini">{{_label("piliangchongzhi")}}</el-button>
---></el-row>
+          <!-- <el-button type="warning" round @click="resetDistribute" size="mini">{{_label("piliangchongzhi")}}</el-button> -->
+        </el-row>
+
         <el-row :gutter="0" class="product clearpadding" style="margin-top:3px">
           <el-table ref="tabledetail" :data="orderdetails" stripe border style="width:100%;"
                     @selection-change="onSelectionChange2" :show-summary="true" :summary-method="getSummary">
+
+            <!-- 多选按钮 start -->
             <el-table-column type="selection" :width="30" align="center"></el-table-column>
+            <!-- 多选按钮 end -->
+
+            <!-- 主图 start -->
             <el-table-column align="center" width="60">
               <template v-slot="scope">
                 <img :src="_fileLink(scope.row.product.picture)" style="width:50px;height:50px;"/>
               </template>
             </el-table-column>
+            <!-- 主图 end -->
+
+            <!-- 订货客户 start -->
             <el-table-column :label="_label('dinghuokehu')" align="center" width="150">
               <el-table-column :label="_label('dinghuokehu')" align="center" width="150">
                 <template v-slot="{row}">
@@ -211,6 +356,9 @@
                 </template>
               </el-table-column>
             </el-table-column>
+            <!-- 订货客户 end -->
+
+            <!-- 国际码 start -->
             <el-table-column :label="_label('guojima')" align="center" width="200">
               <el-table-column :label="_label('guojima')" align="center" width="200">
                 <template v-slot="scope">
@@ -221,34 +369,52 @@
                 </template>
               </el-table-column>
             </el-table-column>
+            <!-- 国际码 end -->
+
+            <!-- 币种 start -->
             <el-table-column prop="label" :label="_label('bizhong')" width="60" align="center">
               <template v-slot="{row}">
                 <sp-select-text :value="productStat[row.productid].currencyid" source="currency"/>
               </template>
             </el-table-column>
+            <!-- 币种 end -->
+
+            <!-- 出厂价 start -->
             <el-table-column prop="label" :label="_label('chuchangjia')" width="100" align="center">
               <template v-slot="{row}">
                 <asa-order-input v-model="row.factoryprice" size="mini"
                                  @change="changeDetail(row, 'price')"></asa-order-input>
               </template>
             </el-table-column>
+            <!-- 出厂价 end -->
+
+            <!-- 成交价 start -->
             <el-table-column prop="label" :label="_label('chengjiaojia')" width="80" align="center">
               <template v-slot="{row}">
                 <asa-order-input v-model="row.price" size="mini"
                                  @change="changeDetail(row, 'discount')"></asa-order-input>
               </template>
             </el-table-column>
+            <!-- 成交价 end -->
+
+            <!-- 总价 start -->
             <el-table-column prop="label" :label="_label('zongjia')" width="80" align="center">
               <template v-slot="{row}">
                 {{ f(row.price*(count[row.key]) || 0) }}
               </template>
             </el-table-column>
+            <!-- 总价 end -->
+
+            <!-- 折扣率 start -->
             <el-table-column :label="_label('zhekoulv')" width="80" align="center">
               <template v-slot="{row}">
                 <asa-order-input v-model="row.discount" size="mini"
                                  @change="changeDetail(row, 'price')"></asa-order-input>
               </template>
             </el-table-column>
+            <!-- 折扣率 end -->
+
+            <!-- 订货数量 start -->
             <el-table-column prop="number" :label="_label('dinggoushuliang')" align="center" :width="width">
               <template v-slot="{row}">
                 <sp-sizecontent-confirm4 :ref="row.product.id+'-'+row.order.id" :columns="row.product.sizecontents"
@@ -256,36 +422,56 @@
                                          @change="onNumberChange"></sp-sizecontent-confirm4>
               </template>
             </el-table-column>
+            <!-- 订货数量 end -->
+
+            <!-- 产品名称 start -->
             <el-table-column :label="_label('chanpinmingcheng')" align="center" width="200">
               <template v-slot="{row}">
                 <el-popover placement="right" width="60" trigger="hover">
+                  <!-- 隐藏功能复制 start -->
                   <el-button size="mini" type="primary" @click="copyit(row)">{{_label("fuzhi")}}</el-button>
+                  <!-- 隐藏功能复制 end -->
                   <span slot="reference">{{row.product.getName()}}</span>
                 </el-popover>
               </template>
             </el-table-column>
+            <!-- 产品名称 end -->
           </el-table>
         </el-row>
       </el-col>
     </el-row>
+
+    <!-- 导入订单对话框 start -->
     <sp-dialog ref="order-dialog" :min-height="50">
       <el-form :model="form" label-width="85px" :inline="false" style="width:100%;" size="mini">
         <el-row :gutter="0">
+          <!-- 年代 start -->
           <el-form-item :label="_label('niandai')">
             <simple-select v-model="formimport.ageseason" source="ageseason"></simple-select>
           </el-form-item>
+          <!-- 年代 end -->
+
+          <!-- 供货商 start -->
           <el-form-item :label="_label('gonghuoshang')">
             <simple-select v-model="formimport.supplierid" source="supplier_3"></simple-select>
           </el-form-item>
+          <!-- 供货商 end -->
         </el-row>
+
         <el-row :gutter="0">
           <el-col align="center">
+            <!-- 导入订单 start -->
             <as-button auth="product" type="primary" @click="onSelect">{{_label("daorudingdan")}}</as-button>
+            <!-- 导入订单 end -->
+
+            <!-- 退出 start -->
             <as-button type="primary" @click="_hideDialog('order-dialog')">{{_label("tuichu")}}</as-button>
+            <!-- 退出 end -->
           </el-col>
         </el-row>
       </el-form>
     </sp-dialog>
+    <!-- 导入订单对话框 end -->
   </div>
 </template>
 
@@ -378,6 +564,7 @@
                     row.price = self.f(row.factoryprice * row.discount);
                 }
             },
+            // 保存为发货单逻辑
             saveOrder() {
                 //保存订单
                 let self = this
@@ -454,6 +641,7 @@
                     }
                 }
             },
+            // 复制一个 orderdetail 到下面，也就是 copy 一个节点出来
             copyit(row) {
                 let self = this
                 let newrow = extend({}, row)
@@ -481,9 +669,6 @@
             async onSelect(row) {
                 let self = this;
                 let {orderbrands, orderbranddetails} = await API.getOrderbrandListToImport(self.formimport);
-
-                console.log(orderbrands)
-                console.log(orderbranddetails)
 
                 if (orderbrands) {
                     let func = _private(self);
@@ -533,16 +718,21 @@
             },
         },
         computed: {
+            // 发货单是否可以保存
             canSave() {
                 const self = this;
+                // 状态不能为2，也就是已入库状态的不能保存
                 if (self.form.status == '2') {
                     return false;
                 }
 
+                // 筛选剩余数量>0的记录
                 let length = self.listdata.filter(item => item.number > 0).length;
-                if (length == 0) {
+                if (length === 0) {
                     return false;
                 }
+
+                // 返回
                 return true;
             },
             orderdetails() {
@@ -684,6 +874,7 @@
 
 
             if (route.params.id > 0) {
+                // 请求 /shipping/load 接口
                 self._fetch("/shipping/load", {id: route.params.id, type: "shipping"}).then(async function ({data}) {
                     let {form, orderbrands, orderbranddetails, shippingdetails} = data;
                     let func = _private(self)

@@ -132,10 +132,19 @@
           <el-table-column :label="showLabel('caozuo')" align="center" width="150"
                            class-name="small-padding fixed-width">
             <template slot-scope="{row}">
+              <!-- 编辑 start，这里不用router-link了，因为要调用对话框 -->
+              <!--
               <router-link :to="'/product/edit/' + row.id">
                 <el-button type="default" size="mini">{{ showLabel('bianji') }}</el-button>
               </router-link>
+              -->
+
+              <sp-product-dialog :product="row"/>
+              <!-- 编辑 end -->
+
+              <!-- 删除 start -->
               <el-button type="danger" size="mini" @click="handleDelete(row)">{{ showLabel('shanchu') }}</el-button>
+              <!-- 删除 end -->
             </template>
           </el-table-column>
           <el-table-column :label="showLabel('zhutu')">
@@ -254,10 +263,14 @@
     import '../../assets/table.css'
     import '../../assets/search-form.css'
     import add from './add.vue'
+    import SpProductDialog from "@/component/asa/Asa_Product_Dialog"
 
     export default {
         name: 'product',
-        components: {add},
+        components: {
+            SpProductDialog,
+            add
+        },
         data() {
             return {
                 dialogFormVisible: false,

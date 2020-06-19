@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-link type="primary" @click="onClick" size="mini">{{ product.getGoodsCode() }}</el-link>
+    <el-button type="default" size="mini" @click="onClick">{{ showLabel('bianji') }}</el-button>
     <asa-product ref="product" @change="onChange"></asa-product>
   </div>
 </template>
@@ -9,7 +9,7 @@
     import Asa_Product from './Asa_Product.vue'
 
     export default {
-        name: 'sp-product-tip',
+        name: 'sp-product-dialog',
         components: {
             [Asa_Product.name]: Asa_Product,
         },
@@ -29,3 +29,9 @@
         },
     };
 </script>
+
+<style scoped>
+  div {
+    display: inline-block;
+  }
+</style>

@@ -1,19 +1,33 @@
 <template>
-  <el-dialog :title="title" :visible.sync="dialogVisible" :center="true" width="1200px" class="product" :modal="false">
+  <el-dialog
+    :title="title"
+    :visible.sync="dialogVisible"
+    :center="true"
+    width="1200px"
+    class="product"
+    :close-on-click-modal="false"
+    :close-on-press-escape="false"
+    :modal="false">
     <el-tabs type="border-card" @tab-click="onTabClick" v-model="currentTab">
       <el-tab-pane :label="_label('jibenziliao')" name="product">
+
         <el-row>
+          <!-- 主图 start -->
           <el-col :span="4">
             <simple-avatar v-model="form.picture" :disabled="!$store.getters.allow('product')"></simple-avatar>
           </el-col>
+          <!-- 主图 end -->
+
+          <!-- 附图 start -->
           <el-col :span="4">
             <simple-avatar v-model="form.picture2" :disabled="!$store.getters.allow('product')"></simple-avatar>
           </el-col>
+          <!-- 附图 end -->
+
           <el-col :span="16">
-            <el-form ref="form" :model="form" label-width="80px" size="mini">
-              <!-- <el-form-item :label="_label('shangpinmingcheng')">
-                  <el-input v-model="form.productname"></el-input>
-              </el-form-item> -->
+            <el-form ref="form" :model="form" label-width="80px" size="mini" :inline="true">
+
+              <!-- 国际码 start -->
               <el-form-item :label="_label('guojima')">
                 <el-input v-model="form.wordcode_1" style="width:110px;" :placeholder="_label('kuanshi')"
                           @keyup.native="onKeyInput(form, 'wordcode_1')"></el-input>
@@ -25,114 +39,313 @@
                           :placeholder="_label('yansemingcheng')"></el-input>
                 <el-input v-model="form.wordcode_4" style="width:110px;" :placeholder="_label('fuzhuma')"></el-input>
               </el-form-item>
+              <!-- 国际码 end -->
+
+              <!-- 色系 start -->
+              <el-form-item :label="showLabel('sexi')" label-width="85px">
+                <el-select
+                  v-model="form.colorSystemId"
+                  placeholder=""
+                  filterable
+                  size="mini"
+                  style="width: 100px;">
+                  <el-option
+                    v-for="item in colorSystems"
+                    :key="item.id + item.title"
+                    :label="item.title"
+                    :value="item.id">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+              <!-- 色系 end -->
+
+              <!-- 颜色 start -->
+              <el-form-item :label="showLabel('yanse')" label-width="40px">
+                <el-select
+                  v-model="form.colorId"
+                  filterable
+                  placeholder=""
+                  size="mini"
+                  style="width: 100px;">
+                  <el-option
+                    v-for="item in filterColors"
+                    :key="item.id + item.title"
+                    :label="item.title"
+                    :value="item.id">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+              <!-- 颜色 end -->
+
+              <!-- 副颜色 start -->
+              <el-form-item :label="showLabel('second_color')" label-width="60px">
+                <el-cascader
+                  placeholder=""
+                  v-model="form.secondColorId"
+                  size="mini"
+                  :show-all-levels="false"
+                  :options="colorSystems"
+                  :props="{ children: 'colors', value: 'id', label: 'title' }"
+                  clearable
+                  style="width: 100px;">
+                </el-cascader>
+              </el-form-item>
+              <!-- 副颜色 end -->
+
+              <!-- 商品属性 start -->
+              <el-form-item :label="showLabel('shangpinshuxing')" label-width="85px">
+                <el-select v-model="form.producttypeid" placeholder="" style="width: 100px;">
+                  <el-option
+                    v-for="item of productTypes"
+                    :key="item.id + item.title"
+                    :label="item.title"
+                    :value="item.id">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+              <!-- 商品属性 end -->
             </el-form>
-            <el-col :span="3" v-for="item in colors2" :key="item.colortemplateid">
-              <el-tooltip class="item" effect="dark" :content="item.colorlabel" placement="top-start">
-                <div class="color-group" @click="onClickColor(item.id)">
-                  <div :class="form.id==item.id ? 'box active': 'box'" :style="getColorStyle(item)">
-                  </div>
-                </div>
-              </el-tooltip>
-            </el-col>
-            <el-col :span="4" v-if="_isAllowed('product')">
-              <div class="color-group" @click="onClickColorToEdit">
-                <div class="box" style="width:36px;">
-                  <i class="el-icon-plus color-group-icon"></i>
-                </div>
-              </div>
-            </el-col>
           </el-col>
         </el-row>
+
         <el-form ref="order-form" class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;"
                  size="mini" :rules="formRules" :inline-message="false" :show-message="false">
           <el-row :gutter="0">
             <el-col :span="8">
-              <el-form-item :label="_label('niandai')" prop="ageseason">
-                <simple-select v-model="form.ageseason" source="ageseason" :multiple="true"
-                               @change="loadRate"></simple-select>
+
+              <!-- 年代 start -->
+              <el-form-item :label="showLabel('niandai')" prop="form.ageseason">
+                <ageseason v-model="form.ageseason" :data-list="ageseasons"></ageseason>
               </el-form-item>
-              <el-form-item :label="_label('pinpai')" prop="brandid">
-                <simple-select v-model="form.brandid" source="brand" @change="onBrandChange">
-                </simple-select>
+              <!-- 年代 end -->
+
+              <!-- 品牌 start -->
+              <el-form-item :label="showLabel('pinpai')" prop="form.brandid">
+                <el-select v-model="form.brandid" placeholder="" filterable @change="handleChangeBrand">
+                  <el-option
+                    v-for="item of brands"
+                    :key="item.id + item.title"
+                    :label="item.title"
+                    :value="item.id">
+                  </el-option>
+                </el-select>
               </el-form-item>
-              <el-form-item :label="_label('pinlei')" prop="brandgroupid">
-                <simple-select v-model="form.brandgroupid" source="brandgroup" @change="loadRate">
-                </simple-select>
+              <!-- 品牌 end -->
+
+              <!-- 品类 start -->
+              <el-form-item :label="showLabel('pinlei')" prop="form.brandgroupid">
+                <el-select
+                  v-model="form.brandgroupid"
+                  placeholder=""
+                  size="mini"
+                  filterable
+                  @change="handleChangeBrandgroupid">
+                  <el-option
+                    v-for="item in categories"
+                    :key="item.id + item.title"
+                    :label="item.title"
+                    :value="item.id">
+                  </el-option>
+                </el-select>
               </el-form-item>
-              <el-form-item :label="_label('zipinlei')" prop="childbrand">
-                <simple-select ref="childbrand" v-model="form.childbrand" source="brandgroupchild"
-                               :parentid="form.brandgroupid">
-                </simple-select>
+              <!-- 品类 end -->
+
+              <!-- 子品类 start -->
+              <el-form-item :label="showLabel('zipinlei')" prop="form.childbrand">
+                <el-select
+                  v-model="form.childbrand"
+                  placeholder=""
+                  filterable
+                  size="mini">
+                  <el-option
+                    v-for="item in childbrandMenus"
+                    :key="item.id + item.title"
+                    :label="item.title"
+                    :value="item.id + ''">
+                  </el-option>
+                </el-select>
               </el-form-item>
-              <el-form-item :label="_label('chimazu')" prop="sizetopid">
-                <simple-select v-model="form.sizetopid" source="sizetop">
-                </simple-select>
+              <!-- 子品类 end -->
+
+              <!-- 尺码组 start -->
+              <el-form-item :label="showLabel('chimazu')" prop="sizetopid">
+                <sizetop v-model="form.sizetopid"
+                         :sizes="filterSizes"
+                         :brand_id="form.brandid"
+                         :category="form.childbrandIds"
+                         :gender="form.gender"
+                         @reloadSizetops="reloadSizetops"
+                ></sizetop>
               </el-form-item>
-              <el-form-item :label="_label('chimamingxi')" prop="sizetopid">
-                <simple-select v-model="form.sizecontentids" ref="sizecontentids" source="sizecontent"
-                               :parentid="form.sizetopid" :multiple="true" :isBatch="true"
-                               @option-change="onOptionChange"></simple-select>
-                <as-button class="trimhalf" @click="onTrimSize">{{_label("qubanma")}}</as-button>
-              </el-form-item>
-              <el-form-item :label="_label('sexi')" prop="brandcolor">
-                <colorselect v-model="form.brandcolor"></colorselect>
-              </el-form-item>
+              <!-- 尺码组 end -->
+
+              <el-row class="product">
+                <el-table :data="materials" border style="width:90%;">
+                  <!-- 材质管理 start -->
+                  <el-table-column :label="showLabel('caizhiguanli')" align="center">
+                    <!-- 材质 start，本来循环的变量应该是  filtedMaterials[scope.$index]，但是因为页面载入的时候，右侧的材质备注用的是 change方法，所以左侧取不到值，所以这里循环变量改用 materials，后期找到了解决办法再修改 -->
+                    <el-table-column :label="showLabel('caizhi')" align="center">
+                      <template slot-scope="scope">
+                        <el-form-item
+                          :prop="'materials.' + scope.$index + '.materialid'"
+                          :rules="{required: true, trigger: 'change'}"
+                        >
+                          <el-select
+                            v-model="scope.row.materialid"
+                            filterable
+                            size="mini">
+                            <el-option
+                              v-for="item in allmaterials"
+                              :key="item.id + item.title"
+                              :label="item.title"
+                              :value="item.id">
+                            </el-option>
+                          </el-select>
+                        </el-form-item>
+                      </template>
+                    </el-table-column>
+                    <!-- 材质 end -->
+
+                    <!-- 百分比 start -->
+                    <el-table-column :label="showLabel('baifenbi')" align="center" width="90">
+                      <template slot-scope="scope">
+                        <el-form-item
+                          :prop="'materials.' + scope.$index + '.percent'"
+                          :rules="{required: true, trigger: 'blur'}">
+                          <el-input v-model="scope.row.percent" size="mini"></el-input>
+                        </el-form-item>
+                      </template>
+                    </el-table-column>
+                    <!-- 百分比 end -->
+
+                    <!-- 材质备注 start -->
+                    <el-table-column :label="showLabel('caizhibeizhu')" align="center">
+                      <template slot-scope="scope">
+                        <el-select
+                          v-model="scope.row.materialnoteid"
+                          filterable
+                          size="mini">
+                          <el-option
+                            v-for="item in currentMaterialnotes"
+                            :key="item.id + item.title"
+                            :label="item.title"
+                            :value="item.id">
+                          </el-option>
+                        </el-select>
+                      </template>
+                    </el-table-column>
+                    <!-- 材质备注 end -->
+                  </el-table-column>
+                  <!-- 材质管理 end -->
+
+                  <el-table-column width="70">
+                    <!-- 增加按钮 start -->
+                    <template slot="header">
+                      <el-button type="success" icon="el-icon-plus" size="mini"
+                                 @click.stop="handleAppendMaterial"></el-button>
+                    </template>
+                    <!-- 增加按钮 end -->
+
+                    <!-- 删除按钮 start -->
+                    <template slot-scope="scope">
+                      <el-button type="danger" size="mini" icon="el-icon-delete"
+                                 @click="handleRemoveMaterial(scope.$index)"></el-button>
+                    </template>
+                    <!-- 删除按钮 end -->
+                  </el-table-column>
+                </el-table>
+              </el-row>
+
             </el-col>
+
             <el-col :span="8">
-              <el-form-item :label="_label('caizhi')">
-                <productmaterial v-model="materials" :brandgroupid="form.brandgroupid"></productmaterial>
-              </el-form-item>
 
-              <el-form-item :label="_label('chandi')" prop="countries">
-                <simple-select v-model="form.countries" source="country" :multiple="true"></simple-select>
+              <!-- 产地 start -->
+              <el-form-item :label="showLabel('chandi')" prop="countries">
+                <country v-model="form.countries" :data-list="countries"></country>
               </el-form-item>
+              <!-- 产地 end -->
 
-              <el-form-item :label="_label('shangpinchicun')">
-                <simple-select v-model="form.ulnarinch" source="ulnarinch" :multiple="true"></simple-select>
+              <!-- 产品尺寸 start -->
+              <el-form-item :label="showLabel('shangpinchicun')">
+                <ulnarinch v-model="form.ulnarinch" :data-list="ulnarinches"></ulnarinch>
               </el-form-item>
-              <el-form-item :label="_label('shangpinmiaoshu')">
-                <simple-select v-model="form.productmemoids" source="productmemo" :multiple="true"></simple-select>
-              </el-form-item>
+              <!-- 产品尺寸 end -->
 
-              <el-form-item :label="_label('cankaobeilv')">
-                <el-row>
-                  <el-col :span="8" style="width:80px">{{rate>0?rate : '-' }}</el-col>
-                  <el-col :span="16" style="width:50px">{{_label('lingshoubi')}}</el-col>
-                  <el-col :span="8" style="width:50px">{{getPriceRate}}</el-col>
-                </el-row>
+              <!-- 产品描述 start -->
+              <el-form-item :label="showLabel('shangpinmiaoshu')">
+                <el-select v-model="form.productmemoids" placeholder="" multiple>
+                  <el-option
+                    v-for="item of productMemos"
+                    :key="item.id + item.title"
+                    :label="item.title"
+                    :value="item.id">
+                  </el-option>
+                </el-select>
               </el-form-item>
+              <!-- 产品描述 end -->
 
-              <el-form-item :label="_label('chuchangjia')">
+              <!-- 出厂价 start -->
+              <el-form-item :label="showLabel('chuchangjia')">
                 <el-input placeholder="" v-model="form.factoryprice" class="productcurrency">
-                  <simple-select source="currency" :clearable="false" v-model="form.wordpricecurrency" slot="prepend">
-                  </simple-select>
-                  <span slot="append">{{getRate}}</span>
+                  <el-select v-model="form.wordpricecurrency" placeholder="" slot="prepend">
+                    <el-option
+                      v-for="item of currencies"
+                      :key="item.id + item.code"
+                      :label="item.code"
+                      :value="item.id">
+                    </el-option>
+                  </el-select>
                 </el-input>
               </el-form-item>
-              <el-form-item :label="_label('guojilingshoujia')">
+              <!-- 出厂价 end -->
+
+              <!-- 国际零售价 start -->
+              <el-form-item :label="showLabel('guojilingshoujia')">
                 <el-input placeholder="" v-model="form.wordprice" class="productcurrency">
-                  <simple-select source="currency" :clearable="false" v-model="form.wordpricecurrency" slot="prepend">
-                  </simple-select>
-                  <span slot="append">{{getReciprocalRate}}</span>
+                  <el-select v-model="form.wordpricecurrency" placeholder="" slot="prepend">
+                    <el-option
+                      v-for="item of currencies"
+                      :key="item.id + item.code"
+                      :label="item.code"
+                      :value="item.id">
+                    </el-option>
+                  </el-select>
                 </el-input>
               </el-form-item>
-              <el-form-item :label="_label('benguochuchangjia')">
+              <!-- 国际零售价 end -->
+
+              <!-- 本国出厂价 start -->
+              <el-form-item :label="showLabel('benguochuchangjia')">
                 <el-input placeholder="" v-model="form.nationalfactoryprice" class="productcurrency">
-                  <simple-select source="currency" :clearable="false" v-model="form.nationalpricecurrency"
-                                 slot="prepend">
-                  </simple-select>
-                  <span slot="append">{{getRateNational}}</span>
+                  <el-select v-model="form.nationalpricecurrency" placeholder="" slot="prepend">
+                    <el-option
+                      v-for="item of currencies"
+                      :key="item.id + item.code"
+                      :label="item.code"
+                      :value="item.id">
+                    </el-option>
+                  </el-select>
                 </el-input>
               </el-form-item>
-              <el-form-item :label="_label('benguolingshoujia')">
+              <!-- 本国出厂价 end -->
+
+              <!-- 本国零售价 start -->
+              <el-form-item :label="showLabel('benguolingshoujia')">
                 <el-input placeholder="" v-model="form.nationalprice" class="productcurrency">
-                  <simple-select source="currency" :clearable="false" v-model="form.nationalpricecurrency"
-                                 slot="prepend">
-                  </simple-select>
-                  <span slot="append">{{getReciprocalRateNational}}</span>
+                  <el-select v-model="form.nationalpricecurrency" placeholder="" slot="prepend">
+                    <el-option
+                      v-for="item of currencies"
+                      :key="item.id + item.code"
+                      :label="item.code"
+                      :value="item.id">
+                    </el-option>
+                  </el-select>
                 </el-input>
               </el-form-item>
+              <!-- 本国零售价 end -->
             </el-col>
+
             <el-col :span="8">
               <el-form-item :label="_label('shangpinxilie')">
                 <simple-select v-model="form.series" ref="series" source="series"
@@ -144,10 +357,6 @@
                 <simple-select v-model="form.saletypeid" source="saletype" style="color:red"></simple-select>
               </el-form-item>
 
-              <el-form-item :label="_label('shangpinshuxing')">
-                <simple-select v-model="form.producttypeid" source="producttype"></simple-select>
-              </el-form-item>
-
               <el-form-item :label="_label('fanghanzhishu')">
                 <simple-select v-model="form.winterproofingid" source="winterproofing"></simple-select>
               </el-form-item>
@@ -156,20 +365,25 @@
                 <sp-radio-group v-model="form.gender" source="gender" :span="8" :lang="lang" style="width:270px">
                 </sp-radio-group>
               </el-form-item>
+
               <el-form-item :label="_label('jijie')">
                 <div style="width:270px">
                   <el-col :span="8">
                     <sp-checkbox v-model="form.spring">{{_label("chun")}}</sp-checkbox>
                   </el-col>
+
                   <el-col :span="8">
                     <sp-checkbox v-model="form.summer">{{_label("xia")}}</sp-checkbox>
                   </el-col>
+
                   <el-col :span="8">
                     <sp-checkbox v-model="siji">{{_label("siji")}}</sp-checkbox>
                   </el-col>
+
                   <el-col :span="8">
                     <sp-checkbox v-model="form.fall">{{_label("qiu")}}</sp-checkbox>
                   </el-col>
+
                   <el-col :span="8">
                     <sp-checkbox v-model="form.winter">{{_label("dong")}}</sp-checkbox>
                   </el-col>
@@ -187,11 +401,13 @@
               <el-form-item :label="_label('jiandangren')">
                 <sp-display-input :value="form.makestaff" source="user" disabled></sp-display-input>
               </el-form-item>
+
               <el-form-item :label="_label('jiandangshijian')">
                 <el-input :value="form.maketime" disabled></el-input>
               </el-form-item>
             </el-col>
           </el-row>
+
           <el-row :gutter="0">
             <el-col :span="6" :offset="9">
               <as-button auth="product" type="primary" @click="onSubmit" v-if="option.isedit">{{_label("baocun")}}
@@ -201,9 +417,11 @@
           </el-row>
         </el-form>
       </el-tab-pane>
+
       <el-tab-pane :label="_label('shangpinchicun')" name="property" :disabled="form.id==''">
         <property :productid="form.id" ref="property" @quit="onQuit" :option="option"></property>
       </el-tab-pane>
+
       <el-tab-pane :label="_label('shangpintiaoma')" name="code" :disabled="form.id==''">
         <el-table :data="sizecontents" border style="width:100%;">
           <el-table-column prop="name" :label="_label('chima')" align="left" width="100">
@@ -221,8 +439,12 @@
         </el-col>
       </el-tab-pane>
       <el-tab-pane :label="_label('tongkuanduose')" name="colorgroup" :disabled="form.id==''">
-        <asa-product-search-panel ref="searchpanel" @select="onSelectProduct" :filter="searchProductFilter"
-                                  :isCreate="false" v-if="_isAllowed('product')"></asa-product-search-panel>
+        <asa-product-search-panel
+          ref="searchpanel"
+          @select="onSelectProduct"
+          :filter="searchProductFilter"
+          :isCreate="false"
+          v-if="_isAllowed('product')"></asa-product-search-panel>
 
         <el-table :data="colors" border style="width:100%;">
           <el-table-column width="80" align="center">
@@ -281,22 +503,28 @@
             </template>
           </el-table-column>
         </el-table>
+
         <el-col :offset="8" :span="8" style="padding-top:5px">
           <asa-button :enable="_isAllowed('product')" @click="onSaveColorGroup" v-if="option.isedit">
             {{_label("baocun")}}
           </asa-button>
+
           <asa-button :enable="_isAllowed('product')" @click="onAppendColor" v-if="option.isedit">
             {{_label("zhuijia")}}
           </asa-button>
+
           <as-button type="primary" @click="onQuit">{{_label("tuichu")}}</as-button>
         </el-col>
       </el-tab-pane>
+
       <el-tab-pane :label="_label('shangpintupian')" name="album" :disabled="form.id==''">
         <sp-album :productid="form.id" ref="album" @quit="onQuit"></sp-album>
       </el-tab-pane>
+
       <el-tab-pane :label="_label('jiage')" name="pricetab" :disabled="form.id==''">
         <pricetab :productid="form.id" ref="pricetab" @quit="onQuit" :option="option"></pricetab>
       </el-tab-pane>
+
       <el-tab-pane :label="_label('kucun')" name="productstock" :disabled="form.id==''">
         <productstock :productid="form.id" ref="productstock" @quit="onQuit" :option="option"></productstock>
       </el-tab-pane>
@@ -315,7 +543,7 @@
 </template>
 
 <script>
-    import globals, {_label, extract, math} from '../globals.js';
+    import globals, {_label, extract} from '../globals.js';
     import {ModelBus, ProductDetail} from "../model.js";
     import {initObject} from "../array.js";
     import {extend} from "../object.js";
@@ -330,7 +558,11 @@
     import _Product from "./product.js";
     import productMixin from "../mixins/product.js";
     import ArriveRecord from "@/view/product/components/ArriveRecord"
-
+    import {getLabel} from "@/component/globals"
+    import ageseason from '@/view/product/components/ageseason'
+    import sizetop from '@/view/product/components/sizetop.vue'
+    import country from '@/view/product/components/country.vue'
+    import ulnarinch from '@/view/product/components/ulnarinch.vue'
 
     const color_keys = ['id', 'brandcolor', 'wordcode_1', 'wordcode_2', 'wordcode_3', 'wordcode_4', 'colorname', 'picture', 'picture2']
 
@@ -338,6 +570,10 @@
         name: 'asa-product',
         mixins: [productMixin],
         components: {
+            country,
+            ulnarinch,
+            sizetop,
+            ageseason,
             ArriveRecord,
             [Asa_Product_Search_Panel.name]: Asa_Product_Search_Panel,
             property: Asa_Product_Property,
@@ -346,58 +582,16 @@
             productmaterial: Material
         },
         data() {
-            let self = this
-
             return {
                 dialogVisible: false,
                 lang: _label("lang"),
                 search: {
                     is_show: false
                 },
-                form: {
-                    id: '',
-                    productname: "",
-                    brandid: '',
-                    brandgroupid: "",
-                    childbrand: "",
-                    countries: "",
-                    brandcolor: "",
-                    picture: "",
-                    picture2: "",
-                    laststoragedate: "",
-                    series: "",
-                    ulnarinch: "",
-                    factoryprice: "",
-                    factorypricecurrency: "",
-                    wordprice: "",
-                    wordpricecurrency: "",
-                    nationalpricecurrency: "",
-                    nationalprice: "",
-                    nationalfactorypricecurrency: "",
-                    nationalfactoryprice: "",
-                    memo: "",
-                    wordprice: "",
-                    wordpricecurrency: "",
-                    gender: "",
-                    spring: "",
-                    summer: "",
-                    fall: "",
-                    winter: "",
-                    ageseason: "",
-                    sizetopid: "",
-                    sizecontentids: "",
-                    productmemoids: "", //商品描述
-                    wordcode_1: "",
-                    wordcode_2: "",
-                    wordcode_3: "",
-                    wordcode_4: "",
-                    colorname: "",
-                    makestaff: "",
-                    maketime: '',
-                    saletypeid: "",
-                    producttypeid: "",
-                    winterproofingid: ""
-                },
+                form: {},
+                // 所有商品的材质列表
+                allmaterials: [],
+                // 当前的材质列表
                 materials: [],
                 sizecontents: [],
                 sizecontents_loaded: false,
@@ -410,7 +604,8 @@
                     isedit: false
                 },
                 currentTab: "product",
-                rate: "", //参考倍率
+                // 倍率暂时用不到了
+                // rate: "", //参考倍率
                 exchange: {
                     currency_to: "",
                     currency_from: "",
@@ -418,10 +613,127 @@
                 }, //当前的汇率信息；零售比=本国零售价/国际零售价
                 siji: "", //控制四季全选
                 title: "",
-                product: ""
+                // product模型，保存最终的数据
+                product: {},
+                // 色系
+                colorSystems: [],
+                // 商品属性
+                productTypes: [],
+                seriesDialogVisible: false,
+                // 当前品类的材质备注列表
+                currentMaterialnotes: [],
+                // 当前品类的材质备注列表id列表
+                currentMaterialnotesIds: [],
+                // 新增 子品类id列表
+                childbrandIds: [],
+                // 子品类二级菜单列表
+                childbrandMenus: [],
+                // 下级子分类
+                categories: [],
+                // 当前品类的材质列表
+                currentMaterials: [],
+                // 当前品类的材质id列表
+                currentMaterialIds: [],
+                // 匹配的材质列表
+                filtedMaterials: [],
+                ageseasons: [],
+                brands: [],
+                sizes: [],
+                materialnotes: [],
+                // 产品描述
+                productMemos: [],
+                // 系列
+                series: [],
+                // 国家列表
+                countries: [],
+                // 币种列表
+                currencies: [],
+                saletypes: [],
+                winterProofings: [],
+                // 子品类列表
+                brandgroupchild: [],
+                // 尺码组
+                sizetop: [],
+                ulnarinches: [],
             }
         },
         methods: {
+            // 重新请求尺码组
+            reloadSizetops() {
+                this.getProductRelatedOptions()
+            },
+            // 品类 select 切换判断
+            handleChangeBrandgroupid() {
+                // 修改下面的子品类为空
+                this.form.childbrand = ''
+                this.getChildbrandMenus()
+            },
+            cancleAddSeries() {
+                this.seriesDialogVisible = false
+                this.newSeries = {
+                    brandid: '',
+                    name_cn: '',
+                    name_en: '',
+                    name_it: ''
+                }
+            },
+            saveSeries() {
+                let self = this
+
+                this.$refs['seriesForm'].validate((valid) => {
+                    if (valid) {
+                        let params = {}
+                        self.newSeries.brandid = self.form.brandid
+                        params = Object.assign({}, self.newSeries)
+
+                        self._submit("/series/add", params).then(function (res) {
+                            self.getProductRelatedOptions()
+                            self.seriesDialogVisible = false
+                        })
+                    }
+                })
+            },
+            handleAddSeries() {
+                let self = this
+
+                if (self.form.brandid > 0) {
+                    this.seriesDialogVisible = true
+                } else {
+                    self._info(self._label("tip-pinpai"))
+                }
+            },
+            // 材质删除
+            handleRemoveMaterial(index) {
+                this.materials.splice(index, 1)
+            },
+            // 材质添加
+            handleAppendMaterial() {
+                this.materials.push({
+                    materialid: "",
+                    percent: 100,
+                    materialnoteid: ""
+                })
+            },
+            handleChangeBrand() {
+                let self = this
+                self.series = []
+                if (self.form.brandid) {
+                    self.brands.forEach(item => {
+                        if (self.form.brandid == item.id) {
+                            self.series = item.series
+                        }
+                    })
+                }
+            },
+            // 初始化色系
+            getColorSystemAndColor() {
+                let self = this
+                if (self.colorSystems.length === 0) {
+                    self._fetch("/color/getColorSystemAndColorForCascader", {}).then(function (res) {
+                        self.colorSystems = res.data
+                    })
+                }
+            },
             onBrandChange() {
                 this.loadRate();
                 this.getBrandColorSuggest();
@@ -453,8 +765,99 @@
             },
             onKeyInput(target, columnName) {
                 target[columnName] = target[columnName].toUpperCase();
+            },
+            // 获取商品信息，这个是核心功能，从info.vue复制而来
+            getProduct(id) {
+                let self = this
+                self._fetch("/product/info", {id: id}).then(res => {
+                    // 测试返回值
+                    self._log("/product/info请求的结果为：", res)
 
+                    // 年代季节
+                    if (res.data.ageseason && res.data.ageseason.length) {
+                        let ageseasons = _.split(res.data.ageseason, ',')
+                        res.data.ageseason = []
+                        ageseasons.forEach(item => {
+                            res.data.ageseason.push(parseInt(item))
+                        })
+                    }
 
+                    // 色系、颜色如果为空，则不强转为数字类型
+                    res.data.colorId = res.data.color_id ? parseInt(res.data.color_id) : ''
+                    res.data.colorSystemId = res.data.color_system_id ? parseInt(res.data.color_system_id) : ''
+                    res.data.secondColorId = res.data.second_color_id ? parseInt(res.data.second_color_id) : ''
+
+                    // 品类转换
+                    res.data.brandgroupid = res.data.brandgroupid ? parseInt(res.data.brandgroupid) : ''
+
+                    // 需要把 childbrand 和 brandgroupid 合在一起组成 子品类列表，这个给尺码组使用
+                    const childbrand = res.data.childbrand
+                    res.data.childbrandIds = []
+                    res.data.childbrandIds.push(parseInt(res.data.brandgroupid))
+                    res.data.childbrandIds.push(parseInt(childbrand))
+
+                    // 尺码组
+                    if (res.data.sizecontentids && res.data.sizecontentids.length) {
+                        let sizecontentids = _.split(res.data.sizecontentids, ',')
+                        res.data.sizecontentids = []
+                        sizecontentids.forEach(item => {
+                            res.data.sizecontentids.push(parseInt(item))
+                        })
+                    }
+
+                    // 国家和地区
+                    if (res.data.countries && res.data.countries.length) {
+                        let countries = _.split(res.data.countries, ',')
+                        res.data.countries = []
+                        countries.forEach(item => {
+                            res.data.countries.push(parseInt(item))
+                        })
+                    }
+
+                    // 商品尺寸
+                    if (res.data.ulnarinch && res.data.ulnarinch.length) {
+                        let ulnarinches = _.split(res.data.ulnarinch, ',')
+                        res.data.ulnarinch = []
+                        ulnarinches.forEach(item => {
+                            res.data.ulnarinch.push(parseInt(item))
+                        })
+                    }
+
+                    // 商品描述
+                    if (res.data.productmemoids && res.data.productmemoids.length) {
+                        let productmemoids = _.split(res.data.productmemoids, ',')
+                        res.data.productmemoids = []
+                        productmemoids.forEach(item => {
+                            res.data.productmemoids.push(parseInt(item))
+                        })
+                    }
+
+                    res.data.wordpricecurrency = parseInt(res.data.wordpricecurrency)
+                    res.data.nationalpricecurrency = parseInt(res.data.nationalpricecurrency)
+                    res.data.saletypeid = parseInt(res.data.saletypeid)
+                    res.data.saletypeid = (res.data.saletypeid == 0 || isNaN(res.data.saletypeid)) ? '' : res.data.saletypeid
+                    res.data.producttypeid = parseInt(res.data.producttypeid)
+                    res.data.producttypeid = (res.data.producttypeid == 0 || isNaN(res.data.producttypeid)) ? '' : res.data.producttypeid
+                    res.data.winterproofingid = parseInt(res.data.winterproofingid)
+                    res.data.winterproofingid = (res.data.winterproofingid == 0 || isNaN(res.data.winterproofingid)) ? '' : res.data.winterproofingid
+
+                    // 材质列表
+                    if (res.data.materials && res.data.materials.length) {
+                        res.data.materials.forEach(material => {
+                            material.materialid = parseInt(material.materialid)
+                            material.materialnoteid = parseInt(material.materialnoteid)
+                        })
+                    }
+                    // 表单赋值
+                    self.form = res.data
+                    // 材质赋值
+                    self.materials = res.data.materials
+
+                    // 打印 self 变量
+                    console.log("self=", self)
+
+                    self.handleChangeBrand()
+                })
             },
             onOptionChange(options) {
                 let self = this
@@ -473,6 +876,7 @@
             searchProductFilter(product) {
                 return product.product_group.indexOf('|') < 0 && this.colors.findIndex(item => item.id == product.id) < 0
             },
+            // 表单提交
             onSubmit() {
                 var self = this;
 
@@ -482,11 +886,13 @@
                         materials: self.materials
                     }
                     if (self.form.id == "") {
+                        // 新增
                         self._submit("/product/add", {params: JSON.stringify(params)}).then(function (res) {
                             self.$emit("change", Object.assign({}, self.form), "create")
                             self.setInfo(res.id)
                         })
                     } else {
+                        // 修改
                         self._submit("/product/edit", {params: JSON.stringify(params)}).then(function () {
                             self.$emit("change", Object.assign({}, self.form), "update")
                             ModelBus.emit("product-change", self.form.id)
@@ -631,6 +1037,7 @@
                 var self = this
                 self.setInfo(productid)
             },
+            // 编辑第一个标签
             setInfo(row) {
                 var self = this
                 self.colors_loaded = false;
@@ -638,49 +1045,87 @@
 
                 return new Promise((resolve, reject) => {
                     ProductDetail.load({data: row, depth: 1, isCache: false}).then(function (info) {
-                        //self._log(info)
-                        //设置默认值
-                        info = globals.extend({sizecontentids: ""}, info);
-                        //console.log(info,'----------')
+                        // 打印值
+                        self._log("原始的info=", info)
 
-                        self.colors2 = info.colors
-                        self.sizecontents = info.sizecontents.map(item => {
-                            return globals.extend({goods_code: ""}, item)
-                        })
-                        self.sizecontents_loaded = false;
-                        //self._log(self.sizecontents)
+                        // 取出当前品类的材质备注列表
+                        self.getCurrentMaterialnotes(info.brandgroupid)
 
-                        globals.copyTo(info, self.form)
-                        self.form.factoryprice = math.round(self.form.factoryprice, 2)
-                        self.form.wordprice = math.round(self.form.wordprice, 2)
-                        self.form.nationalprice = math.round(self.form.nationalprice, 2)
-                        self.form.nationalfactoryprice = math.round(self.form.nationalfactoryprice, 2)
+                        // 调用商品的信息
+                        self.getProduct(info.id)
 
-                        //
-                        info.getMaterialList().then((res) => {
-                            //self._log("==", res)
-                            self.materials = res.data || []
-                        })
-                        setTimeout(function () {
-                            if (self.$refs.searchpanel) {
-                                self.$refs.searchpanel.clear()
-                            }
-                            self.$refs.property.setProduct(info)
-                        }, 100)
-
-                        self.clearValidate(50)
-
-                        self.loadRate();
+                        // self.loadRate();
                         self.loadExchangeRate();
                         self.getBrandColorSuggest();
+
                         self._log("开始自动执行")
 
-
+                        // 第一个标签高亮
                         self.currentTab = 'product'
+                        // 标签的标题
                         self.title = info.getName() + ' ' + info.getGoodsCode()
 
                         self.product = info
                         resolve(self)
+                    })
+                })
+            },
+            // 获取当前品类的材质备注列表
+            getCurrentMaterialnotes(brandgroupid) {
+                let self = this
+                // 取出当前商品相关的材质备注列表
+                // 先清空
+                self.currentMaterialnotes = []
+                self.currentMaterialnotesIds = []
+                self.materialnotes.forEach((item) => {
+                    if (item.brandgroupids.includes(brandgroupid)) {
+                        self.currentMaterialnotes.push({
+                            id: item.id,
+                            title: item.title
+                        })
+                        // ids
+                        self.currentMaterialnotesIds.push(item.id)
+                    }
+                })
+            },
+            // 获取商品相关的所有属性
+            getProductRelatedOptions() {
+                let self = this
+                self._fetch("/product/getProductRelatedOptions", {}).then(function (res) {
+                    // 年代季节列表
+                    self.ageseasons = res.data.ageseasons
+                    // 品牌
+                    self.brands = res.data.brands
+                    // 品类
+                    self.categories = res.data.categories
+                    // 子品类
+                    self.categories.forEach((item) => {
+                        // 两者类型不同，先转换再进行比较
+                        if (String(item.id) === String(self.form.brandgroupid)) {
+                            self.childbrandMenus = item.children
+                        }
+                    })
+
+                    self.sizes = res.data.sizes
+                    // 所有的材质
+                    self.allmaterials = res.data.materials
+                    // 所有的材质备注
+                    self.materialnotes = res.data.materialnotes
+                    // 国家列表
+                    self.countries = res.data.countries
+                    self.ulnarinches = res.data.ulnarinches
+                    self.currencies = res.data.currencies
+                    // 销售类型列表
+                    self.saletypes = res.data.saletypes
+                    // 商品属性列表
+                    self.productTypes = res.data.productTypes
+                    self.winterProofings = res.data.winterProofings
+                    // 商品描述
+                    self.productMemos = res.data.productMemos
+
+                    self.series = []
+                    res.data.brands.forEach(item => {
+                        self.series.push.apply(self.series, item.series)
                     })
                 })
             },
@@ -704,13 +1149,6 @@
                 self.clearValidate(50)
                 return self
             },
-            loadRate() {
-                let self = this;
-
-                API.getBrandRate(extract(self.form, ['brandid', 'ageseason', 'brandgroupid'])).then(rate => {
-                    self.rate = rate;
-                })
-            },
             loadExchangeRate() {
                 //加载汇率信息
                 let self = this;
@@ -728,7 +1166,28 @@
                         });
                     }
                 })
-            }
+            },
+            // 当修改材质备注的时候，材质也相应的发生变化
+            handleChangeMaterialnote(index) {
+                let self = this
+                self.materials[index].materialid = ''
+
+                let noteId = self.materials[index].materialnoteid.toString()
+
+                self.filtedMaterials[index] = self.materials.filter(function (item) {
+                    let materialnoteids = _.isEmpty(item.materialnoteids) ? [] : item.materialnoteids.split(',')
+                    return (_.indexOf(materialnoteids, noteId) >= 0)
+                })
+            },
+            // 调用下拉二级菜单
+            getChildbrandMenus() {
+                this.categories.forEach((item) => {
+                    // 防止类型不同，转换类型之后再进行比较
+                    if (String(item.id) === String(this.form.brandgroupid)) {
+                        this.childbrandMenus = item.children
+                    }
+                })
+            },
         },
         watch: {
             siji: function (newValue) {
@@ -736,36 +1195,147 @@
                 extend(self.form, initObject(['spring', 'summer', 'fall', 'winter'], newValue))
             },
             'form.wordpricecurrency': function () {
-                //this._log("wordpricecurrency change")
                 this.loadExchangeRate()
             },
             'form.nationalpricecurrency': function () {
-                //this._log("wordpricecurrency change")
                 this.loadExchangeRate()
             },
+            // 监控色系，一旦 colorSystemId 发生了变动，那么就需要重新选择下面的颜色
+            "form.colorSystemId"(newValue, oldValue) {
+                if (oldValue !== undefined) {
+                    this.form.colorId = '';
+                }
+            },
+            // 检测品类值的变化，如果发生变化，就重新请求二级子品类
+            'form.brandgroupid'(newVal, oldValue) {
+                if (newVal) {
+                    // 重新请求二级子品类
+                    this.getChildbrandMenus()
+                    // 材质备注列表也要重新计算
+                    this.currentMaterialnotes = []
+                    this.currentMaterialnotesIds = []
+                    // 请求新的材质备注列表
+                    this.materialnotes.forEach((item) => {
+                        // 这里有个大坑，item.brandgroupids 数组中每个元素都是字符串，而 newVal 是数字，所以要先转成字符串
+                        if (item.brandgroupids.includes(newVal + '')) {
+                            this.currentMaterialnotes.push({
+                                id: item.id,
+                                title: item.title
+                            })
+                            // ids
+                            this.currentMaterialnotesIds.push(item.id)
+                        }
+                    })
+                }
+            },
+            // 监控商品属性，这个判断只执行1次
+            "form.producttypeid"(newVal, oldVal) {
+                // 如果是第一次进入，oldVal 的值就是 undefined
+                if (oldVal === undefined) {
+                    console.log('第一次进入，不执行任何方法')
+                    return
+                }
+
+                // 再判断 producttypeid_tootip 的值是不是 undefined, 如果是说明已经还没有询问过用户，否则就是问过了，不需要重复询问
+                if (this.form.producttypeid_tootip !== undefined) {
+                    console.log('已经询问过用户了，不需要再次询问！')
+                    return
+                }
+
+                // 接下来执行询问逻辑
+                this.$confirm(getLabel('shuxingtishi'), getLabel('tishi'), {
+                    confirmButtonText: getLabel('yes'),
+                    cancelButtonText: getLabel('no'),
+                    type: 'warning'
+                }).then(() => {
+                    // 如果选择是，则赋值为1
+                    this.form.producttypeid_tootip = 1
+                }).catch(() => {
+                    // 否则赋值为0
+                    this.form.producttypeid_tootip = 0
+                });
+            },
         },
+        // 需要计算的属性
         computed: {
-            getPriceRate() {
-                let form = this.form
-                //this._log(form.wordprice, form.nationalprice, this.exchange, this.exchange.rate)
-                return form.wordprice > 0 && form.nationalprice > 0 && this.exchange && this.exchange.rate ? math.round(form.nationalprice / this.exchange.rate / form.wordprice, 2) : "";
+            // 筛选尺码组
+            filterSizes() {
+                let sizes = [
+                    {
+                        label: 'recomend',
+                        options: []
+                    },
+                    {
+                        label: 'others',
+                        options: []
+                    }
+                ]
+
+                sizes[1].options = this.sizes
+
+                let self = this
+                if (this.form.brandid) {
+                    let brand = this.brands.find(function (item) {
+                        return item.id == self.form.brandid
+                    })
+
+                    let sizetopIds = []
+                    if (typeof (brand) != 'undefined') {
+                        brand.sizes.forEach(item => {
+                            if (_.isEmpty(self.form.gender) && _.isEmpty(self.form.childbrand)) {
+                                sizetopIds.push(item.sizetop_id)
+                            } else {
+                                let isMatched = true
+
+                                if (self.form.gender) {
+                                    if (item.gender != self.form.gender) {
+                                        isMatched = false
+                                    }
+                                }
+
+                                if (isMatched && !_.isEmpty(self.form.childbrand)) {
+                                    // 因为子品类已经改成字符串，重写验证逻辑
+                                    let brandgroupchild_id = this.form.childbrand.toString()
+                                    if (brandgroupchild_id !== item.brandgroupchild_id) {
+                                        isMatched = false
+                                    }
+                                }
+
+                                if (isMatched) {
+                                    sizetopIds.push(item.sizetop_id)
+                                }
+                            }
+                        })
+                    }
+
+                    sizes[0].options = this.sizes.filter(item => {
+                        let sizeId = item.id.toString()
+                        return (_.indexOf(sizetopIds, sizeId) >= 0)
+                    })
+
+                    sizes[1].options = this.sizes.filter(item => {
+                        let sizeId = item.id.toString()
+                        return (_.indexOf(sizetopIds, sizeId) < 0)
+                    })
+                }
+
+                return sizes
             },
-            getRate() {
-                let form = this.form
-                return form.wordprice > 0 && form.factoryprice > 0 ? math.round(form.wordprice / form.factoryprice, 2) : "";
+            // 匹配色系
+            filterColors() {
+                let self = this
+                if (this.form.colorSystemId) {
+                    let colorSystem = this.colorSystems.find(item => {
+                        return item.id == self.form.colorSystemId
+                    })
+
+                    if (typeof (colorSystem) != 'undefined') {
+                        return colorSystem.colors
+                    }
+                }
+
+                return []
             },
-            getReciprocalRate() {
-                let form = this.form
-                return form.wordprice > 0 && form.factoryprice > 0 ? math.round(form.factoryprice / form.wordprice, 2) : "";
-            },
-            getRateNational() {
-                let form = this.form
-                return form.nationalprice > 0 && form.nationalfactoryprice > 0 ? math.round(form.nationalprice / form.nationalfactoryprice, 2) : "";
-            },
-            getReciprocalRateNational() {
-                let form = this.form
-                return form.nationalprice > 0 && form.nationalfactoryprice > 0 ? math.round(form.nationalfactoryprice / form.nationalprice, 2) : "";
-            }
         },
         mounted() {
             let self = this;
@@ -781,6 +1351,13 @@
                     sizecontentids: Rules.required({message: _label("8000"), label: _label("chimamingxi")})
                 }
             })
+        },
+        // 初始化
+        created() {
+            // 初始化色系
+            this.getColorSystemAndColor()
+            // 取出相关信息，这个调用在前面，因为 getProduct 接口后面需要用到其数据
+            this.getProductRelatedOptions()
         }
     }
 </script>

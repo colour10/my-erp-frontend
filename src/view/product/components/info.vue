@@ -121,6 +121,7 @@
       <div class="order-form" style="width:1200px;">
         <el-row :gutter="0">
           <el-col :span="8">
+
             <!-- 年代 start -->
             <el-form-item :label="showLabel('niandai')" prop="form.ageseason">
               <ageseason v-model="product.form.ageseason" :data-list="ageseasons"></ageseason>
@@ -641,10 +642,6 @@
         created() {
             this.getProductRelatedOptions()
             this.getColorSystemAndColor()
-
-
-            console.log("this.filtedMaterials=")
-            console.log(this.filtedMaterials)
         },
         computed: {
             filterColors() {
@@ -795,13 +792,15 @@
             getProduct(id) {
                 let self = this
                 self._fetch("/product/info", {id: id}).then(res => {
-                    if (res.data.ageseason.length) {
+                    // 年代季节
+                    if (res.data.ageseason && res.data.ageseason.length) {
                         let ageseasons = _.split(res.data.ageseason, ',')
                         res.data.ageseason = []
                         ageseasons.forEach(item => {
                             res.data.ageseason.push(parseInt(item))
                         })
                     }
+
                     // 色系、颜色如果为空，则不强转为数字类型
                     res.data.colorId = res.data.color_id ? parseInt(res.data.color_id) : ''
                     res.data.colorSystemId = res.data.color_system_id ? parseInt(res.data.color_system_id) : ''
@@ -813,7 +812,8 @@
                     res.data.childbrandIds.push(parseInt(res.data.brandgroupid))
                     res.data.childbrandIds.push(parseInt(childbrand))
 
-                    if (res.data.sizecontentids.length) {
+                    // 尺码组
+                    if (res.data.sizecontentids && res.data.sizecontentids.length) {
                         let sizecontentids = _.split(res.data.sizecontentids, ',')
                         res.data.sizecontentids = []
                         sizecontentids.forEach(item => {
@@ -821,24 +821,22 @@
                         })
                     }
 
-                    if (res.data.countries.length) {
+                    // 国家和地区
+                    if (res.data.countries && res.data.countries.length) {
                         let countries = _.split(res.data.countries, ',')
                         res.data.countries = []
                         countries.forEach(item => {
                             res.data.countries.push(parseInt(item))
                         })
-                    } else {
-                        res.data.countries = []
                     }
 
-                    if (res.data.ulnarinch.length) {
+                    // 商品尺寸
+                    if (res.data.ulnarinch && res.data.ulnarinch.length) {
                         let ulnarinches = _.split(res.data.ulnarinch, ',')
                         res.data.ulnarinch = []
                         ulnarinches.forEach(item => {
                             res.data.ulnarinch.push(parseInt(item))
                         })
-                    } else {
-                        res.data.ulnarinch = []
                     }
 
                     // 商品描述
@@ -859,7 +857,8 @@
                     res.data.winterproofingid = parseInt(res.data.winterproofingid)
                     res.data.winterproofingid = (res.data.winterproofingid == 0 || isNaN(res.data.winterproofingid)) ? '' : res.data.winterproofingid
 
-                    if (res.data.materials.length) {
+                    // 材质列表
+                    if (res.data.materials && res.data.materials.length) {
                         res.data.materials.forEach(material => {
                             material.materialid = parseInt(material.materialid)
                             material.materialnoteid = parseInt(material.materialnoteid)
@@ -868,6 +867,10 @@
 
                     self.product.form = res.data
                     self.product.materials = res.data.materials
+
+                    // 打印 self 变量
+                    console.log("self=", self)
+
                     self.handleChangeBrand()
                 })
             },
@@ -927,9 +930,6 @@
                     let materialnoteids = _.isEmpty(item.materialnoteids) ? [] : item.materialnoteids.split(',')
                     return (_.indexOf(materialnoteids, noteId) >= 0)
                 })
-
-                console.log("进到了handleChangeMaterialnote函数中，this.filtedMaterials=")
-                console.log(this.filtedMaterials)
             },
             // 更新商品逻辑
             updateProduct() {
@@ -976,6 +976,22 @@
                 this.product.form.childbrand = ''
                 this.getChildbrandMenus()
             }
+        },
+        // 渲染前调用
+        mounted() {
+            let self = this;
+            self.initRules(Rules => {
+                let _label = self._label
+                return {
+                    sizetopid: Rules.id({required: true, message: _label("8000"), label: _label("chimazu")}),
+                    brandgroupid: Rules.id({required: true, message: _label("8000"), label: _label("pinlei")}),
+                    childbrand: Rules.id({required: true, message: _label("8000"), label: _label("zipinlei")}),
+                    brandid: Rules.id({required: true, message: _label("8000"), label: _label("pinpai")}),
+                    brandcolor: Rules.required({message: _label("8000"), label: _label("sexi")}),
+                    ageseason: Rules.required({message: _label("8000"), label: _label("niandai")}),
+                    sizecontentids: Rules.required({message: _label("8000"), label: _label("chimamingxi")})
+                }
+            })
         },
         // 监听变量
         watch: {

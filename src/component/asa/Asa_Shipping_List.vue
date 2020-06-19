@@ -28,7 +28,7 @@
           <sp-select-text :value="row.bussinesstype" source="bussinesstype"/>
         </template>
       </el-table-column>
-      <el-table-column :label="_label('bizhong')" width="80" align="center">
+      <el-table-column :label="_label('status')" width="80" align="center">
         <template v-slot="{row}">
           <sp-select-text :value="row.status" source="shippingstatus"/>
         </template>

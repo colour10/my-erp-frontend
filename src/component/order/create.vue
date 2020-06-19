@@ -187,7 +187,10 @@
 
     <asa-select-product-dialog :visible.sync="pro" :brandids="form.brandids" :genders="form.genders"
                                @select="onSelect"/>
+
+    <!-- 后查 - 品牌订单 start -->
     <sp-orderbrand-list ref="houcha" :orderid="form.id"/>
+    <!-- 后查 - 品牌订单 end -->
   </div>
 </template>
 
