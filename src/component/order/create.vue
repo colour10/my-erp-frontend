@@ -119,7 +119,14 @@
           <el-table-column :label="_label('guojima')" align="center" width="200">
             <el-table-column :label="_label('guojima')" align="center" width="200">
               <template v-slot="scope">
-                <sp-product-tip :product="scope.row.product"/>
+
+                <!-- 此标签替换掉，否则会调用多次，严重影响性能 -->
+                <!--                <sp-product-tip :product="scope.row.product"/>-->
+
+                <el-link type="primary" @click="onClick(scope.row.product)" size="mini">
+                  {{ scope.row.product.getGoodsCode() }}
+                </el-link>
+
               </template>
               <template v-slot:header="{row}">
                 <el-input v-model="form2.keyword" size="mini"/>
@@ -191,6 +198,10 @@
     <!-- 后查 - 品牌订单 start -->
     <sp-orderbrand-list ref="houcha" :orderid="form.id"/>
     <!-- 后查 - 品牌订单 end -->
+
+    <!-- 编辑商品对话框 start -->
+    <asa-product ref="product"></asa-product>
+    <!-- 编辑商品对话框 end -->
   </div>
 </template>
 
@@ -204,6 +215,7 @@
     import Asa_Orderbrand_List from '../asa/Asa_Orderbrand_List.vue';
     import Asa_Sizecontent_Input from '../asa/Asa_Sizecontent_Input.vue';
     import Asa_Select_Product_Dialog from '../asa/Asa_Select_Product_Dialog.vue'
+    import AsaProduct from "@/component/asa/Asa_Product"
 
     const props = {
         columns: [
@@ -230,6 +242,7 @@
     export default {
         name: 'sp-orderform',
         components: {
+            AsaProduct,
             [Asa_Orderbrand_List.name]: Asa_Orderbrand_List,
             [Asa_Sizecontent_Input.name]: Asa_Sizecontent_Input,
             [Asa_Select_Product_Dialog.name]: Asa_Select_Product_Dialog,
@@ -274,6 +287,11 @@
             };
         },
         methods: {
+            // 编辑当前商品
+            onClick(row) {
+                let self = this;
+                self.$refs.product.edit(true).setInfo(row).then(product => product.show(false));
+            },
             async goToOrderbrand() {
                 const self = this;
                 self._log('goToOrderbrand');

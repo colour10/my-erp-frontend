@@ -272,7 +272,12 @@
             <el-table-column :label="_label('guojima')" align="center" width="200">
               <!-- 国际码 start -->
               <template v-slot="scope">
-                <sp-product-tip :product="scope.row.product"></sp-product-tip>
+                <!-- 此标签替换掉，否则会调用多次，严重影响性能 -->
+                <!--                <sp-product-tip :product="scope.row.product"/>-->
+
+                <el-link type="primary" @click="onClick(scope.row.product)" size="mini">
+                  {{ scope.row.product.getGoodsCode() }}
+                </el-link>
               </template>
               <!-- 国际码 end -->
 
@@ -427,6 +432,10 @@
     <sp-orderbrand-list ref="qiancha" :shippingid="form.id"></sp-orderbrand-list>
     <!-- 前查 end -->
 
+    <!-- 编辑商品对话框 start -->
+    <asa-product ref="product"></asa-product>
+    <!-- 编辑商品对话框 end -->
+
   </div>
 </template>
 
@@ -442,10 +451,12 @@
     import Asa_Orderbrand_List from '../asa/Asa_Orderbrand_List.vue';
     import Asa_Sizecontent_Confirm4 from '../asa/Asa_Sizecontent_Confirm4.vue';
     import Asa_Select_Product_Dialog from '../asa/Asa_Select_Product_Dialog.vue'
+    import AsaProduct from "@/component/asa/Asa_Product"
 
     const result = {
         name: 'sp-warehousing',
         components: {
+            AsaProduct,
             [Asa_Orderbrand_List.name]: Asa_Orderbrand_List,
             [Asa_Sizecontent_Confirm4.name]: Asa_Sizecontent_Confirm4,
             [Asa_Select_Product_Dialog.name]: Asa_Select_Product_Dialog,
@@ -547,6 +558,11 @@
             }
         },
         methods: {
+            // 编辑当前商品
+            onClick(row) {
+                let self = this;
+                self.$refs.product.edit(true).setInfo(row).then(product => product.show(false));
+            },
             loadDetail() {
                 const self = this;
                 _private(self).loadDetail(self.$route.params.id);

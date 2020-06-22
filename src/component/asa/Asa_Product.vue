@@ -655,6 +655,8 @@
                 // 尺码组
                 sizetop: [],
                 ulnarinches: [],
+                // 保存最原始的数据
+                originProduct: {},
             }
         },
         methods: {
@@ -1045,8 +1047,11 @@
 
                 return new Promise((resolve, reject) => {
                     ProductDetail.load({data: row, depth: 1, isCache: false}).then(function (info) {
-                        // 打印值
-                        self._log("原始的info=", info)
+                        // 打印值，保存原始的row，如果用了info，那么其中的空值会被转换成0，这不是我们想要的
+                        self._log("原始的row=", row)
+
+                        // 赋值给 originProduct，保留一份原始的数据，方便对比
+                        self.originProduct = row
 
                         // 取出当前品类的材质备注列表
                         self.getCurrentMaterialnotes(info.brandgroupid)
@@ -1189,11 +1194,14 @@
                 })
             },
         },
+        // 变量监控
         watch: {
+            // 四季
             siji: function (newValue) {
                 let self = this
                 extend(self.form, initObject(['spring', 'summer', 'fall', 'winter'], newValue))
             },
+            // 国际零售价
             'form.wordpricecurrency': function () {
                 this.loadExchangeRate()
             },
@@ -1232,7 +1240,19 @@
             "form.producttypeid"(newVal, oldVal) {
                 // 如果是第一次进入，oldVal 的值就是 undefined
                 if (oldVal === undefined) {
-                    console.log('第一次进入，不执行任何方法')
+                    console.log('第一次进入，不给与提示')
+                    return
+                }
+
+                // 如果用户在切换的同时改变了商品属性 selected，那么就给出提示
+                if (String(this.form.producttypeid) === String(this.originProduct.producttypeid)) {
+                    console.log('用户没有改变 producttypeid 的值，也不会提示')
+                    return
+                }
+
+                // 很多情况是 this.form.producttypeid 是空，而 this.originProduct.producttypeid 是0，所以也要区别对待
+                if (this.form.producttypeid === '' && this.originProduct.producttypeid === '0') {
+                    console.log('特殊情况，用户也并没有改变 producttypeid 的值，不会提示')
                     return
                 }
 

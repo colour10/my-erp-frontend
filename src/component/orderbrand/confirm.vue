@@ -146,7 +146,14 @@
           <!-- 国际码 start -->
           <el-table-column :label="_label('guojima')" align="center" width="180">
             <template v-slot="{row}">
-              <sp-product-tip :product="row.product"></sp-product-tip>
+
+              <!-- 此标签替换掉，否则会调用多次，严重影响性能 -->
+              <!--                <sp-product-tip :product="scope.row.product"/>-->
+
+              <el-link type="primary" @click="onClick(row.product)" size="mini">
+                {{ row.product.getGoodsCode() }}
+              </el-link>
+
             </template>
           </el-table-column>
           <!-- 国际码 end -->
@@ -231,6 +238,10 @@
     <!-- 后查 start -->
     <sp-shipping-list ref="houcha" :orderbrandid="form.id"></sp-shipping-list>
     <!-- 后查 end -->
+
+    <!-- 编辑商品对话框 start -->
+    <asa-product ref="product"></asa-product>
+    <!-- 编辑商品对话框 end -->
   </div>
 </template>
 
@@ -243,10 +254,12 @@
     import Asa_Order_List from '../asa/Asa_Order_List.vue';
     import Asa_Shipping_List from '../asa/Asa_Shipping_List.vue';
     import Asa_Sizecontent_Confirm3 from '../asa/Asa_Sizecontent_Confirm3.vue';
+    import AsaProduct from "@/component/asa/Asa_Product"
 
     export default {
         name: 'sp-orderconfirmdetail',
         components: {
+            AsaProduct,
             [Asa_Order_List.name]: Asa_Order_List,
             [Asa_Shipping_List.name]: Asa_Shipping_List,
             [Asa_Sizecontent_Confirm3.name]: Asa_Sizecontent_Confirm3,
@@ -290,6 +303,11 @@
             }
         },
         methods: {
+            // 编辑当前商品
+            onClick(row) {
+                let self = this;
+                self.$refs.product.edit(true).setInfo(row).then(product => product.show(false));
+            },
             goToShipping() {
                 this._open('/shipping/0?id=' + this.form.id);
             },

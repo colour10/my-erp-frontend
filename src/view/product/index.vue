@@ -139,7 +139,7 @@
               </router-link>
               -->
 
-              <sp-product-dialog :product="row"/>
+              <el-button type="default" size="mini" @click="onClick(row)">{{ showLabel('bianji') }}</el-button>
               <!-- 编辑 end -->
 
               <!-- 删除 start -->
@@ -255,6 +255,10 @@
     </el-dialog>
     <!-- 新建商品对话框 end -->
 
+    <!-- 编辑商品对话框 start -->
+    <asa-product ref="product"></asa-product>
+    <!-- 编辑商品对话框 end -->
+
   </div>
 </template>
 
@@ -263,12 +267,12 @@
     import '../../assets/table.css'
     import '../../assets/search-form.css'
     import add from './add.vue'
-    import SpProductDialog from "@/component/asa/Asa_Product_Dialog"
+    import AsaProduct from "@/component/asa/Asa_Product"
 
     export default {
         name: 'product',
         components: {
-            SpProductDialog,
+            AsaProduct,
             add
         },
         data() {
@@ -303,6 +307,11 @@
             this.getProductRelatedOptions()
         },
         methods: {
+            // 编辑商品对话框
+            onClick(row) {
+                let self = this;
+                self.$refs.product.edit(true).setInfo(row).then(product => product.show(false));
+            },
             getProductRelatedOptions() {
                 let self = this
                 self._fetch("/product/getProductRelatedOptions", {}).then(function (res) {
