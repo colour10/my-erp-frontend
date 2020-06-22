@@ -408,13 +408,16 @@
             </el-col>
           </el-row>
 
+          <!-- 按钮组 start -->
           <el-row :gutter="0">
             <el-col :span="6" :offset="9">
+              <as-button type="primary" @click="handleCreate">{{_label("button-create")}}</as-button>
               <as-button auth="product" type="primary" @click="onSubmit" v-if="option.isedit">{{_label("baocun")}}
               </as-button>
               <as-button type="primary" @click="onQuit">{{_label("tuichu")}}</as-button>
             </el-col>
           </el-row>
+          <!-- 按钮组 end -->
         </el-form>
       </el-tab-pane>
 
@@ -538,6 +541,20 @@
       </el-tab-pane>
       <!-- 到货记录 end -->
 
+      <!-- 新建商品对话框 start -->
+      <el-dialog
+        :title="showLabel('createProduct')"
+        :visible.sync="dialogFormVisible"
+        :center="true"
+        width="1400px"
+        :close-on-click-modal="false"
+        :close-on-press-escape="false"
+        custom-class="create-product-dialog"
+        :append-to-body="true">
+        <erp-product-add ref="productForm" @hideDialogForm="hideDialogForm" @reloadList="reloadList"></erp-product-add>
+      </el-dialog>
+      <!-- 新建商品对话框 end -->
+
     </el-tabs>
   </el-dialog>
 </template>
@@ -563,6 +580,7 @@
     import sizetop from '@/view/product/components/sizetop.vue'
     import country from '@/view/product/components/country.vue'
     import ulnarinch from '@/view/product/components/ulnarinch.vue'
+    import ErpProductAdd from "@/view/product/add"
 
     const color_keys = ['id', 'brandcolor', 'wordcode_1', 'wordcode_2', 'wordcode_3', 'wordcode_4', 'colorname', 'picture', 'picture2']
 
@@ -570,6 +588,7 @@
         name: 'asa-product',
         mixins: [productMixin],
         components: {
+            ErpProductAdd,
             country,
             ulnarinch,
             sizetop,
@@ -583,6 +602,8 @@
         },
         data() {
             return {
+                // 新建商品对话框
+                dialogFormVisible: false,
                 dialogVisible: false,
                 lang: _label("lang"),
                 search: {
@@ -660,9 +681,28 @@
             }
         },
         methods: {
+            // 新建
+            handleCreate() {
+                this.showDialogForm()
+                if (typeof (this.$refs.productForm) != 'undefined') {
+                    this.$refs.productForm.resetDialogForm()
+                }
+            },
+            // 显示新建
+            showDialogForm() {
+                this.dialogFormVisible = true
+            },
+            // 隐藏新建
+            hideDialogForm() {
+                this.dialogFormVisible = false
+            },
             // 重新请求尺码组
             reloadSizetops() {
                 this.getProductRelatedOptions()
+            },
+            // 添加后的逻辑，再次交给上级处理
+            reloadList() {
+                this.$emit('reloadList')
             },
             // 品类 select 切换判断
             handleChangeBrandgroupid() {

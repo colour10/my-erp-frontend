@@ -255,8 +255,8 @@
     </el-dialog>
     <!-- 新建商品对话框 end -->
 
-    <!-- 编辑商品对话框 start -->
-    <asa-product ref="product"></asa-product>
+    <!-- 编辑商品对话框 start, 因为编辑功能也有添加的功能，所以也加上接收添加的逻辑 reloadList -->
+    <asa-product ref="product" @reloadList="reloadList"></asa-product>
     <!-- 编辑商品对话框 end -->
 
   </div>
