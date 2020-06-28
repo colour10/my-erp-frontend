@@ -604,6 +604,7 @@
             return {
                 // 新建商品对话框
                 dialogFormVisible: false,
+                // 是否显示对话框
                 dialogVisible: false,
                 lang: _label("lang"),
                 search: {
@@ -802,8 +803,11 @@
             onAddSeries() {
                 _Product(this).addSeries();
             },
+            // 关闭对话框
             onQuit() {
                 this.dialogVisible = false
+                // 因为关闭对话框会出现一个奇怪的bug，那就是商品列表中每一行数据颜色列表，将会被清空，这个问题暂时没有找到解决方法，只有强制关闭时执行一下重新加载列表了
+                this.reloadList()
             },
             onKeyInput(target, columnName) {
                 target[columnName] = target[columnName].toUpperCase();
