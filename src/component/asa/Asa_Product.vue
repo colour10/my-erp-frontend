@@ -1294,8 +1294,8 @@
                     return
                 }
 
-                // 很多情况是 this.form.producttypeid 是空，而 this.originProduct.producttypeid 是0，所以也要区别对待
-                if (this.form.producttypeid === '' && this.originProduct.producttypeid === '0') {
+                // 两个必须有值，才进行比较，否则一律算没有修改
+                if (!this.form.producttypeid && !this.originProduct.producttypeid) {
                     console.log('特殊情况，用户也并没有改变 producttypeid 的值，不会提示')
                     return
                 }
