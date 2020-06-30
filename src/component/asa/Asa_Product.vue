@@ -1282,6 +1282,12 @@
             },
             // 监控商品属性，这个判断只执行1次
             "form.producttypeid"(newVal, oldVal) {
+                // 测试变量，随着调试再打开
+                // this._log("newVal=", newVal)
+                // this._log("oldVal=", oldVal)
+                // this._log("this.form=", this.form)
+                // this._log("this.originProduct=", this.originProduct)
+
                 // 如果是第一次进入，oldVal 的值就是 undefined
                 if (oldVal === undefined) {
                     console.log('第一次进入，不给与提示')
@@ -1289,14 +1295,15 @@
                 }
 
                 // 如果用户在切换的同时改变了商品属性 selected，那么就给出提示
+                // 一般来说，页面上的 this.form.producttypeid 类型是数字，而 this.originProduct.producttypeid 类型是字符串
                 if (String(this.form.producttypeid) === String(this.originProduct.producttypeid)) {
                     console.log('用户没有改变 producttypeid 的值，也不会提示')
                     return
                 }
 
-                // 两个必须有值，才进行比较，否则一律算没有修改
-                if (!this.form.producttypeid && !this.originProduct.producttypeid) {
-                    console.log('特殊情况，用户也并没有改变 producttypeid 的值，不会提示')
+                // 下面涉及到脏数据的判断，数据库有时候 producttypeid 的值是 null 或者 0，那么这个时候 this.form.producttypeid 的值只能是空字符串
+                if (this.form.producttypeid === '') {
+                    console.log('数据库里保存的 producttypeid 的值是脏数据，不给于提示')
                     return
                 }
 
