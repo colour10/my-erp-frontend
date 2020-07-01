@@ -1,7 +1,7 @@
 var path = require('path')
 var webpack = require('webpack')
 
-const version = "2010";
+const version = "2011";
 
 module.exports = {
   /*entry: './src/main.js',
