@@ -134,7 +134,7 @@
             width: 200
         }, {
             name: "group_memo",
-            label: "备注",
+            label: _label("beizhu"),
             width: 200,
             is_focus: true
         }],
