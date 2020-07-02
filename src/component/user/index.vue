@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- 新增 start -->
     <el-row>
       <el-col :span="2">
         <auth auth="user">
@@ -7,14 +8,25 @@
         </auth>
       </el-col>
     </el-row>
+    <!-- 新增 end -->
+
+    <!-- 数据列表 start -->
     <el-row :gutter="20">
       <el-col :span="24">
         <simple-admin-tablelist ref="tablelist" v-bind="props" :onclickupdate="showFormToEdit"></simple-admin-tablelist>
       </el-col>
     </el-row>
-    <el-dialog class="user-form user-dialog" :title="_label('yonghuxinxi')" :visible.sync="dialogVisible" :center="true"
-               width="700px">
+    <!-- 数据列表 end -->
+
+    <!-- 修改对话框 start -->
+    <el-dialog
+      class="user-form user-dialog"
+      :title="_label('yonghuxinxi')"
+      :visible.sync="dialogVisible"
+      :center="true"
+      width="700px">
       <el-tabs type="border-card" @tab-click="onTabClick" activeName="user">
+        <!-- 用户管理 start -->
         <el-tab-pane :label="_label('user-setting')" name="user">
           <el-form ref="order-form" class="order-form" :model="form" label-width="85px" :inline="true"
                    style="width:700px;" size="small" :rules="formRules" :inline-message="false" :show-message="false">
@@ -65,6 +77,9 @@
             </el-col>
           </el-form>
         </el-tab-pane>
+        <!-- 用户管理 end -->
+
+        <!-- 销售端口 start -->
         <el-tab-pane :label="_label('sale-port')" name="saleport">
           <el-checkbox-group v-model="saleport">
             <el-col :span="6" v-for="item in saleport_list" :key="item.id">
@@ -72,12 +87,21 @@
             </el-col>
           </el-checkbox-group>
         </el-tab-pane>
+        <!-- 销售端口 end -->
+
+        <!-- 仓库 start -->
         <el-tab-pane :label="_label('cangku')" name="warehouse">
           <simple-admin-page v-bind="props2" ref="page2"></simple-admin-page>
         </el-tab-pane>
+        <!-- 仓库 end -->
+
+        <!-- 价格 start -->
         <el-tab-pane :label="_label('jiage')" name="userprice">
           <simple-admin-page v-bind="userprice" ref="userprice"></simple-admin-page>
         </el-tab-pane>
+        <!-- 价格 end -->
+
+        <!-- 默认设置 start -->
         <el-tab-pane :label="_label('morenshezhi')" name="setting">
           <el-form class="order-form" :model="form" label-width="85px" :inline="true" style="width:700px;" size="small">
             <el-form-item :label="_label('xiaoshouduankou')">
@@ -91,22 +115,29 @@
             </el-form-item>
           </el-form>
         </el-tab-pane>
+        <!-- 默认设置 end -->
       </el-tabs>
+
+      <!-- 按钮组 start -->
       <span slot="footer" class="dialog-footer">
         <auth auth="user">
           <as-button type="primary" @click="onSubmit">{{_label('baocun')}}</as-button>
         </auth>
         <as-button type="primary" @click="onQuit">{{_label("tuichu")}}</as-button>
       </span>
+      <!-- 按钮组 end -->
     </el-dialog>
+    <!-- 修改对话框 end -->
   </div>
 </template>
 
 <script>
     import globals, {_label} from '../globals.js';
+    import SimpleAdminTablelist from "@/component/Simple_Admin_TableList"
 
     export default {
         name: 'sp-user',
+        components: {SimpleAdminTablelist},
         data() {
             return {
                 dialogVisible: false,
@@ -134,6 +165,7 @@
                     priceid: '',
                     warehouseid: '',
                 },
+                // 当前用户已经选择的销售端口列表，如果未登录则默认为空数组
                 saleport: [],
                 warehouse: [],
                 currentTab: "user",
@@ -189,9 +221,11 @@
             };
         },
         methods: {
+            // 退出对话框
             onQuit() {
-                this.dialogVisible = false;
+                this.dialogVisible = false
             },
+            // 保存逻辑
             onSubmit() {
                 var self = this;
                 self.validate().then(() => {
@@ -208,24 +242,25 @@
                     }
                 });
             },
+            // 切换 tab 标签
             onTabClick(tab) {
                 let self = this;
-                // console.log(tab)
                 self.currentTab = tab.name;
                 if (tab.name == 'saleport' && self.saleport_loaded == false) {
                     self.saleport_loaded = true;
-                    //this._log("saleport")
+                    // 取出所有的销售端口列表
                     self._fetch("/l/saleport", {}).then(function (res) {
-                        //console.log(res)
                         self.saleport_list = res.data;
                     })
                 } else if (tab.name == 'warehouse' && self.warehouse_loaded == false) {
                     self.warehouse_loaded = true;
+                    // 取出所有的仓库列表
                     self._fetch("/l/warehouse", {}).then(function (res) {
                         self.warehouse_list = res.data;
                     });
                 }
             },
+            // 编辑逻辑
             showFormToEdit(rowIndex, row) {
                 var self = this;
                 self.rowIndex = rowIndex;
@@ -237,10 +272,20 @@
 
                 self.showDialog();
             },
+            // 显示对话框
             showDialog() {
                 var self = this;
                 self.dialogVisible = true;
+                // 清空原来的销售端口列表
+                self.saleport = [];
+                // 请求最新的销售端口，因为总是有缓存问题
+                self._fetch("/user/currentsaleportlist", {userId: self.form.id}).then(function (res) {
+                    res.data.forEach(item => {
+                        self.saleport.push(item.id)
+                    })
+                })
             },
+            // 新增逻辑
             showFormToCreate() {
                 var self = this;
                 globals.empty(self.form);
