@@ -84,7 +84,7 @@
             </el-table-column>
           </el-table>
           <el-row>
-            <el-col :span="24" style="text-align:center;">
+            <el-col :span="24" style="text-align:center; margin-top:1em;">
               <as-button type="default" @click="multiEdit">{{_label("multiEdit")}}</as-button>
               <as-button type="primary" @click="onQuit">{{_label("tuichu")}}</as-button>
             </el-col>
@@ -267,12 +267,12 @@
                 // 关闭对话框
                 this.onEditPermissionQuit()
             },
-
-
+            // 退出
             onQuit() {
                 this.dialogVisible = false
                 this.multipleSelection = []
             },
+            // 删除组内用户
             handleDeleteUser(rowIndex, row) {
                 var self = this;
                 self._remove("/user/deletegroup", {groupid: '', id: row.id}).then(function (response) {
@@ -281,12 +281,18 @@
                     }
                 })
             },
+            // 切换 tab 标签
             onTabClick(tab) {
+                this.getGroupList()
+            },
+            // 获取组内人员
+            getGroupList() {
                 var self = this;
                 self._fetch("/l/user", {groupid: self.form.id}).then(function (res) {
-                    self.user_list = res.data;
+                    self.user_list = res.data
                 })
             },
+            // 保存组权限
             onSavePermission() {
                 var self = this;
                 var keys = self.$refs.tree.getCheckedKeys(true)
@@ -294,6 +300,7 @@
                     self._log(res)
                 })
             },
+            // 提交
             onSubmit() {
                 var self = this;
                 if (self.form.id == "") {
@@ -308,6 +315,7 @@
                     })
                 }
             },
+            // 新增
             showFormToCreate() {
                 var self = this;
                 globals.empty(self.form)
@@ -322,6 +330,7 @@
                 self.activeName = "info"
                 self.showDialog();
             },
+            // 编辑
             async showFormToEdit(rowIndex, row) {
                 var self = this
                 self.rowIndex = rowIndex;
@@ -342,6 +351,7 @@
 
                 self.showDialog();
             },
+            // 显示对话框
             showDialog() {
                 var self = this;
                 self.dialogVisible = true;
@@ -359,6 +369,8 @@
                         }
                     }
                 }, 50)
+                // 因为存在缓存问题，所以需要重新获取标签的数据
+                self.getGroupList()
             },
             isFormDisabled(column) {
                 var form = this.form;
