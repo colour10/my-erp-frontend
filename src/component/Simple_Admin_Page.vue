@@ -2,6 +2,7 @@
   <div>
     <el-row>
       <el-col :span="24">
+        <!-- 搜索-查询-新建 按钮 start -->
         <slot name="form">
           <el-form class="searchform" ref="search-form" :model="form" label-width="80px" size="mini" :inline="true"
                    @submit.native.prevent v-if="opt.isSearch!==false">
@@ -20,9 +21,11 @@
                       v-if="isAdd()!==false && opt.isSearch===false">{{_label("xinjian")}}
           </asa-button>
         </slot>
+        <!-- 搜索-查询-新建 按钮 end -->
       </el-col>
     </el-row>
 
+    <!-- 数据列表 start -->
     <el-row :gutter="20">
       <el-col :span="24">
         <simple-admin-tablelist ref="tablelist" v-bind="$options.propsData" :isedit="opt.isedit"
@@ -38,7 +41,9 @@
         </simple-admin-tablelist>
       </el-col>
     </el-row>
+    <!-- 数据列表 end -->
 
+    <!-- 对话框 start -->
     <el-dialog
       :title="title"
       :visible.sync="dialogVisible"
@@ -70,6 +75,8 @@
           </el-form-item>
         </el-form>
       </slot>
+
+      <!-- 保存+退出 start -->
       <el-row>
         <el-col :span="24" style="text-align:center;">
           <asa-button :enable="_isAllowed(authname)" @click="onSubmit" style="margin:auto;"
@@ -78,7 +85,9 @@
           <as-button type="primary" @click="onQuit">{{_label("tuichu")}}</as-button>
         </el-col>
       </el-row>
+      <!-- 保存+退出 end -->
     </el-dialog>
+    <!-- 对话框 end -->
   </div>
 </template>
 
@@ -98,7 +107,6 @@
 
             let base = self.base || {};
             let opt = self.options || {};
-            // self._log(opt, "opt")
             opt.isAutohide = typeof (opt.isAutohide) == 'undefined' ? true : opt.isAutohide;
             opt.isAutoReload = typeof (opt.isAutoReload) == 'undefined' ? false : opt.isAutoReload;
 
@@ -130,12 +138,10 @@
             },
             onSearch() {
                 let self = this;
-                //self._log(self.searchform)
                 self.$refs.tablelist.search(self.searchform);
             },
             onChange(column) {
                 let self = this;
-                //self._log(column)
 
                 if (column.trigger) {
                     let value = self.form[column.name];
@@ -172,7 +178,6 @@
                     return;
                 }
 
-                //self._log("是否正在提交",self.isSubmiting)
                 if (self.isSubmiting == true) {
                     return;
                 }
@@ -267,7 +272,6 @@
                 globals.copyTo(row, this.form)
                 self.action = "edit"
                 self.$emit("before-edit", row)
-                //self._log("beforeedit")
 
                 self.showDialog(self.getTitle(_label("xiugaixinxi"), row));
             },
@@ -285,13 +289,11 @@
                 self.title = formTitle;
                 self.dialogVisible = true;
                 setTimeout(function () {
-                    //console.log(self.$refs)
                     for (let column of self.columns) {
                         if (column.is_edit_hide != true && self.$refs[column.name]) {
                             let ele = self.$refs[column.name][0];
 
                             if (column.is_focus && !ele.disabled) {
-                                //console.log(ele)
                                 ele.focus();
                                 break;
                             }
@@ -317,7 +319,6 @@
         watch: {
             base: {
                 handler: function (newValue, oldValue) {
-                    //console.log("change",newValue,oldValue)
                 },
                 deep: true,
             },

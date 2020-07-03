@@ -87,7 +87,6 @@
       :title="dialogTitleMap[dialogStatus]"
       :visible.sync="dialogFormVisible"
       :center="true"
-      width="500"
       :close-on-click-modal="false"
       :close-on-press-escape="false"
       :modal="false">
@@ -112,7 +111,7 @@
 
         <!-- 倍率 start -->
         <el-tab-pane :label="_label('beilv')" name="beilv" :disabled="id==0">
-          <!-- 数据从 prop.js 中的 brandrate 获取 -->
+          <!-- 表头数据从 prop.js 中的 brandrate 获取 -->
           <simple-admin-page v-bind="brandrate">
             <template v-slot="scope">
               <el-form class="user-form" :model="scope.form" label-width="100px" :inline="false" size="mini">
@@ -240,12 +239,14 @@
             handleFilter() {
                 this.getList()
             },
+            // 删除品牌
             handleDelete(row) {
                 let self = this
                 self._remove("/brand/delete/", {id: row.id}).then(function () {
                     self.reloadList()
                 })
             },
+            // 更新逻辑
             handleUpdate(row) {
                 this.id = parseInt(row.id)
                 this.brandrate.base.brandid = row.id
@@ -255,18 +256,22 @@
                 this.activeName = 'info'
                 this.showDialogForm()
             },
+            // 新建
             handleCreate() {
                 this.id = 0
                 this.dialogStatus = 'create'
                 this.activeName = 'info'
                 this.showDialogForm()
             },
+            // 显示对话框
             showDialogForm() {
                 this.dialogFormVisible = true
             },
+            // 隐藏对话框
             hideDialogForm() {
                 this.dialogFormVisible = false
             },
+            // 获取品牌列表
             getList() {
                 let self = this
                 self.listLoading = true
@@ -281,9 +286,12 @@
                     self.listLoading = false
                 })
             },
+            // 重新加载品牌列表
             reloadList() {
                 this.getList()
             },
+
+            // 下面两个方法是和分页有关的
             handleSizeChange(pageSize) {
                 this.pagination.pageSize = pageSize
                 this.getList()

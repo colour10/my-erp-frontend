@@ -46,11 +46,14 @@
       </el-table-column>
 
     </el-table>
-    <el-pagination v-if="tableData.length<pagination.total" @size-change="handleSizeChange"
+
+    <!-- 分页 start -->
+    <el-pagination style="margin-top: 1em;" v-if="tableData.length<pagination.total" @size-change="handleSizeChange"
                    @current-change="handleCurrentChange" :current-page="pagination.current*1"
                    :page-sizes="pagination.pageSizes" :page-size="pagination.pageSize*1"
                    layout="total, sizes, prev, pager, next, jumper" :total="pagination.total*1">
     </el-pagination>
+    <!-- 分页 end -->
   </div>
 </template>
 
@@ -84,15 +87,13 @@
             Mix.default(localOptions, 'actionNameOfLoad', 'page')
             Mix.default(localOptions, 'isSubmit', true)
 
-            //self._log("data")
-
             return {
                 rowIndex: "",
                 tableData: [],
                 isLoading: false,
                 pagination: extend({
                     pageSizes: globals.pageSizes,
-                    pageSize: 15,
+                    pageSize: 10,
                     total: 0,
                     current: 1
                 }, localOptions.pagination),
@@ -112,7 +113,6 @@
             },
             getCellClassName({row, column, rowIndex, columnIndex}) {
                 let self = this
-                //this._log(row, column, rowIndex, columnIndex)
                 if (column.property) {
                     if (self.cellClasses[column.property]) {
                         return self.cellClasses[column.property]
@@ -173,7 +173,6 @@
             },
             setTableData(data) {
                 let self = this
-                //let obj = getBaseObject(self.columns)
 
                 self.tableData = []
                 data.forEach(row => {
@@ -184,6 +183,7 @@
                 let self = this
                 return self.$delete(self.tableData, rowIndex)
             },
+            // 删除数据
             async onClickDelete(rowIndex, row) {
                 let self = this
                 self.rowIndex = rowIndex;
@@ -192,18 +192,21 @@
                     let result = await self._remove("/" + self.controller + "/delete", {id: row.id})
                     if (result == true) {
                         self.$delete(self.tableData, rowIndex);
+                        // 删除之后，执行父类的 after-delete
                         self.$emit("after-delete");
                     }
                 } else {
                     self.$delete(self.tableData, rowIndex);
                     self.$emit("after-delete");
                 }
+
+                // 然后重新取出数据列表，非常重要，否则永远显示删除前的数据分页条数，慢半拍
+                self.loadList()
             },
             handleClickUpdate(rowIndex, row) {
                 let self = this
                 if (self.onclickupdate) {
                     self.onclickupdate(rowIndex, row)
-                    //self._log("click edit")
                 }
             },
             getImageSrc(row, column) {
@@ -239,7 +242,6 @@
                 } else if (column.type == 'select' || column.type == 'colorselect') {
                     //
                     let dataSource = DataSource.getDataSource(column.source, _label("lang"));
-                    //self._log("init, dataSource", column.source)
 
                     if (row[column.name + "__columncopy"] != value && value) {
                         dataSource.getRowLabels(value, function (rowInfo) {
@@ -248,7 +250,6 @@
                             row[column.name + "__columncopy"] = value;
                             //row[column.name + "__style"] = rowInfo.getRow('style');
                         });
-                        //self._log('==================', value)
                     }
                     return row[column.name + "__label"]
                 } else if (column.type == 'select-dialog') {
@@ -261,7 +262,6 @@
                             row[column.name + "__label"] = label;
                             row[column.name + "__columncopy"] = value;
                         });
-                        //self._log('==================',column.name, value)
                     }
                     return row[column.name + "__label"]
                 } else {
@@ -275,6 +275,7 @@
                     return item.style
                 }
             },
+            // 重新获取数据列表
             loadList() {
                 var self = this;
                 if (self.isLoading) {
@@ -293,7 +294,6 @@
                 let obj = getBaseObject(self.columns)
 
                 self._fetch("/" + self.controller + "/" + self.localOptions.actionNameOfLoad, params).then(function (res) {
-                    //self._log("result=",res)
                     if (self.model) {
                         //记录自然的排序规则
                         let keyindexes = {}
@@ -303,9 +303,7 @@
 
                         let array = []
                         res.data.forEach(item => {
-                            //self._log("model begin load...", item)
                             self.model.load({data: Object.assign(item, obj), depth: 1}).then(rowinfo => {
-                                //self._log("xxxx", rowinfo)
                                 array.push(rowinfo)
 
                                 if (array.length == res.data.length) {
@@ -318,7 +316,6 @@
                             })
                         })
                     } else {
-                        //self._log(res.data)
                         res.data.forEach(item => self.tableData.push(Object.assign(item, obj)))
                     }
 
@@ -368,7 +365,6 @@
             base: {
                 handler: function (newValue, oldValue) {
                     let self = this
-                    //this._log("change", newValue, oldValue)
                     setTimeout(function () {
                         self.loadList()
                     }, 10)
@@ -376,15 +372,17 @@
                 deep: true
             }
         },
+        // 挂载前
         mounted: function () {
             let self = this
+            // 提交之后则重新获取列表
             if (self.localOptions.isSubmit) {
                 self.loadList()
             }
 
             for (let item of self.columns) {
                 if (item.className) {
-                    self.cellClasses[item.name] = item.className;
+                    self.cellClasses[item.name] = item.className
                 }
             }
         }
