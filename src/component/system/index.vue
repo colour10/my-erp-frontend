@@ -1,15 +1,24 @@
 <template>
   <div style="width:1100px">
     <el-tabs type="border-card" @tab-click="onTabClick" v-model="currentTab">
+      <!-- 基本资料 start -->
       <el-tab-pane :label="_label('jibenziliao')" name="info">
-        <myform name="company" ref="company" @submit="onSubmit" :inline="true" authname="company" :isEditable="fture" width="800px">
+        <myform name="company" ref="company" @submit="onSubmit" :inline="true" authname="company" :isEditable="fture"
+                width="800px">
         </myform>
       </el-tab-pane>
+      <!-- 基本资料 end -->
+
+      <!-- 开票信息 start -->
       <el-tab-pane :label="_label('kaipiaoxinxi')" name="companyinvoice">
         <simple-admin-page v-bind="props" ref="page2"></simple-admin-page>
       </el-tab-pane>
+      <!-- 开票信息 end -->
+
+      <!-- OMS 设置 start -->
       <el-tab-pane label="OMS Setting" name="price">
-        <el-form ref="order-form" class="formx2" :model="form" label-width="80px" :inline="true" style="width:100%;" size="mini" :inline-message="false" :show-message="false">
+        <el-form ref="order-form" class="formx2" :model="form" label-width="80px" :inline="true" style="width:100%;"
+                 size="mini" :inline-message="false" :show-message="false">
           <el-row :gutter="0">
             <el-col :span="6">
               <el-form-item :label="_label('xiangganggonghuojia')">
@@ -49,62 +58,72 @@
           </el-row>
         </el-form>
       </el-tab-pane>
+      <!-- OMS 设置 end -->
     </el-tabs>
   </div>
 </template>
 
 <script>
-import globals, { _label,extendExt } from '../globals.js'
-import form from '../form.vue'
-import { fture } from "../function.js"
-import { getProp } from "../prop.js"
+    import {extendExt} from '../globals.js'
+    import form from '../form.vue'
+    import {fture} from "../function.js"
+    import {getProp} from "../prop.js"
 
-const props = getProp('companyinvoice');
+    const props = getProp('companyinvoice');
 
-export default {
-  name: 'sp-system',
-  components: {
-    "myform": form
-  },
-  data() {
-    return {
-      form: {
-        hkgcost: '',
-        eurcost: '',
-        chncost: '',
-        bdacost: '',
-        oms_saleport: '',
-        oms_warehouseids: ''
-      },
-      currentTab: "info",
-      fture,
-      props: props
+    export default {
+        name: 'sp-system',
+        components: {
+            "myform": form
+        },
+        data() {
+            return {
+                form: {
+                    hkgcost: '',
+                    eurcost: '',
+                    chncost: '',
+                    bdacost: '',
+                    oms_saleport: '',
+                    oms_warehouseids: ''
+                },
+                currentTab: "info",
+                fture,
+                props: props
+            }
+        },
+        methods: {
+            submit() {
+                const self = this
+                self._submit("/company/update", self.form).then(function () {
+                })
+            },
+            onTabClick(tab) {
+                var self = this
+            },
+            onSubmit(form) {
+                var self = this
+                self._submit("/company/update", form).then(function () {
+                })
+            },
+            async loadInfo() {
+                var self = this;
+                let info = await self._fetch("/company/info", {})
+
+                extendExt(self.form, info.data)
+                self.$refs['company'].setInfo(info.data)
+                props.base.companyid = info.data.id
+            }
+        },
+        async mounted() {
+            const self = this
+            self.loadInfo()
+            self._log("props = ", props)
+        }
     }
-  },
-  methods: {
-    submit() {
-      const self = this
-      self._submit("/company/update", self.form).then(function() {})
-    },
-    onTabClick(tab) {
-      var self = this
-    },
-    onSubmit(form) {
-      var self = this
-      self._submit("/company/update", form).then(function() {})
-    },
-    async loadInfo() {
-      var self = this;
-      let info = await self._fetch("/company/info", {})
-
-      extendExt(self.form, info.data)
-      self.$refs['company'].setInfo(info.data)
-      props.base.companyid = info.data.id
-    }
-  },
-  async mounted() {
-    const self = this
-    self.loadInfo()
-  }
-}
 </script>
+
+<style scoped>
+  .user-form .width1 .el-input__inner {
+    width: inherit;
+  }
+</style>
