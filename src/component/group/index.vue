@@ -126,22 +126,6 @@
     import globals, {_label} from '../globals.js'
     import Simple_Admin_TableList from '../Simple_Admin_TableList.vue'
 
-    const props = {
-        columns: [{
-            name: "group_name",
-            label: _label("zumingcheng"),
-            is_focus: true,
-            width: 200
-        }, {
-            name: "group_memo",
-            label: _label("beizhu"),
-            width: 200,
-            is_focus: true
-        }],
-        controller: "group",
-        authname: "group"
-    }
-
     export default {
         name: 'sp-group',
         components: {
@@ -155,7 +139,21 @@
                     group_name: "",
                     group_memo: ""
                 },
-                props: props,
+                props: {
+                    columns: [{
+                        name: "group_name",
+                        label: _label("zumingcheng"),
+                        is_focus: true,
+                        width: 200
+                    }, {
+                        name: "group_memo",
+                        label: _label("beizhu"),
+                        width: 200,
+                        is_focus: true
+                    }],
+                    controller: "group",
+                    authname: "group"
+                },
                 dialogVisible: false,
                 formTitle: '',
                 rowIndex: '',
@@ -383,6 +381,7 @@
                 self.permission_data = result.data;
             }
         },
+        // 挂载前
         mounted: async function () {
             this.getPermissionData()
         }
