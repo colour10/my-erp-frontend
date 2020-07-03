@@ -68,7 +68,7 @@ function _initDependencies(dataSource, dependencies) {
   dataSource.options.dependencies.forEach(item => {
     DataSource.getDataSource(item).emitter.on("change", function () {
       dataSource.clear()
-      console.log("倚赖清空")
+      console.log("依赖清空")
     })
   })
   dataSource.isDependencies = true
@@ -80,7 +80,6 @@ DataSource.prototype.init = function () {
   if (options.url) {
     self.loadList()
   } else if (options.hashlist) {
-    //_log(options.hashlist)
     Object.keys(options.hashlist).forEach(function (key) {
       let row = DataRow.factory(options.hashlist[key], self)
       self.data.push(row)
@@ -89,7 +88,6 @@ DataSource.prototype.init = function () {
     self.is_loaded = true;
     _initDependencies(self)
   } else if (options.hashtable) {
-    //console.log(options.hashtable)
     Object.keys(options.hashtable).forEach(function (key) {
       let row = DataRow.factory({name: options.hashtable[key], value: key}, self);
       self.data.push(row)
@@ -100,7 +98,6 @@ DataSource.prototype.init = function () {
     self.is_loaded = true;
     _initDependencies(self)
   } else if (options.datalist) {
-    //_log(options.datalist.forEach,"options")
     options.datalist.forEach(function (item) {
       let row = DataRow.factory(item, self)
       self.hashtable[item[self.opvalue]] = row;
@@ -119,7 +116,6 @@ DataSource.prototype.init = function () {
         self.opvalue = dataSource.opvalue
         self.is_loaded = true;
         _initDependencies(self)
-        //console.log("设置倚赖关系")
       })
     })
   }
@@ -132,7 +128,6 @@ DataSource.prototype.loadList = function () {
   let self = this;
   let options = self.options;
   let params = options.params || {}
-  //console.log("DataSource loadurl")
   httpGet(options.url + "?" + Date.now(), {enableCache: false}).then(function ({data = []} = {}) {
     data.forEach(function (item) {
       let row = DataRow.factory(item, self)
@@ -237,11 +232,9 @@ DataSource.prototype.getRows = function (keyValues = '', callback) {
   keyValues = typeof (keyValues) == 'string' ? keyValues.split(",") : keyValues;
   let promise = new Promise(resolve => {
     self.getData(data => {
-      //console.log(keyValues, data, '+++++++')
       let list = keyValues.map(function (value) {
         return data.find(item => value == item.getValue())
       }).filter(item => item)
-      //console.log(keyValues, list, '+++++++')
       resolve(list)
     })
   });
@@ -256,7 +249,6 @@ DataSource.prototype.getSourceByParent = function (parent) {
   let parent_array = parent.split(",")
   return new Promise(resolve => {
     self.getData(data => {
-      //console.log(data, parent)
       let list = data.filter(function (value) {
         return parent_array.indexOf(value.row[self.parent]) >= 0 //value.row[self.parent] == parent
       })
@@ -272,11 +264,9 @@ DataSource.prototype.getRowLabels = function (keyValues, callback) {
   var self = this;
   let promise = new Promise((resolve) => {
     self.getRows(keyValues, function (list) {
-      //console.log(list, list.map(item=>item.getLabel()).join(","),"-----------")
       resolve(list.map(item => item.getLabel()).join(","))
     })
   });
-  //console.log(typeof(callback),keyValues)
   if (typeof (callback) == 'function') {
     promise.then(callback)
   } else {
@@ -304,14 +294,11 @@ DataSource.getDataSource = function (resourceName, lang) {
   } else {
     let create = function () {
       let res = getResource(resourceName)
-      //console.log("getDataSource",resourceName, lang, res)
       if (!res) {
-        //_log(resourceName,"未定义")
         throw "资源未定义:" + resourceName
       } else if (typeof (res) == 'function') {
         res = {callback: res}
       }
-      //console.log("getDatasource",resourceName, res)
       resources[resourceName] = new DataSource(res, lang)
       resources[resourceName].init()
       return resources[resourceName]
