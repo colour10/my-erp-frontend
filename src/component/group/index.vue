@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- 新建按钮 start -->
     <el-row>
       <el-col :span="2">
         <auth auth="group">
@@ -7,17 +8,25 @@
         </auth>
       </el-col>
     </el-row>
+    <!-- 新建按钮 end -->
+
+    <!-- 数据列表 start -->
     <el-row :gutter="20">
       <el-col :span="24">
         <simple-admin-tablelist ref="tablelist" v-bind="props" :onclickupdate="showFormToEdit"></simple-admin-tablelist>
       </el-col>
     </el-row>
+    <!-- 数据列表 end -->
+
+    <!-- 编辑对话框 start -->
     <el-dialog
       class="user-form"
       :title="formTitle"
       :visible.sync="dialogVisible"
       :center="true"
       :width="'60%'"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
       :modal="false">
       <el-tabs type="border-card" @tab-click="onTabClick" v-model="activeName">
 
@@ -94,10 +103,14 @@
 
       </el-tabs>
     </el-dialog>
+    <!-- 编辑对话框 end -->
 
     <!-- 编辑权限 对话框 start -->
-    <el-dialog :title="editPermissionTitle" :visible.sync="dialogEditVisible" :width="editPermissionWidth"
-               :currentUserId="currentUserId">
+    <el-dialog
+      :title="editPermissionTitle"
+      :visible.sync="dialogEditVisible"
+      :width="editPermissionWidth"
+      :currentUserId="currentUserId">
       <el-tree ref="tree" :data="permission_data" node-key="id" show-checkbox
                :expand-on-click-node="false"></el-tree>
       <auth auth="group">
@@ -108,8 +121,11 @@
     <!-- 编辑权限 对话框 end -->
 
     <!-- 批量编辑权限 对话框 start -->
-    <el-dialog :title="multiEditPermissionTitle" :visible.sync="dialogMultiEditVisible" :width="editPermissionWidth"
-               :currentUserIds="currentUserIds">
+    <el-dialog
+      :title="multiEditPermissionTitle"
+      :visible.sync="dialogMultiEditVisible"
+      :width="editPermissionWidth"
+      :currentUserIds="currentUserIds">
       <el-tree ref="tree" :data="permission_data" node-key="id" show-checkbox
                :expand-on-click-node="false"></el-tree>
       <auth auth="group">

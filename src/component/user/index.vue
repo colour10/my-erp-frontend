@@ -24,6 +24,8 @@
       :title="_label('yonghuxinxi')"
       :visible.sync="dialogVisible"
       :center="true"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
       width="700px">
       <el-tabs type="border-card" @tab-click="onTabClick" activeName="user">
         <!-- 用户管理 start -->

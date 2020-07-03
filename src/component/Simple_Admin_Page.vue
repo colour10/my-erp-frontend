@@ -39,8 +39,14 @@
       </el-col>
     </el-row>
 
-    <el-dialog :title="title" :visible.sync="dialogVisible" :center="true" :width="opt.dialogWidth||'450px'"
-               :modal="false">
+    <el-dialog
+      :title="title"
+      :visible.sync="dialogVisible"
+      :center="true"
+      :width="opt.dialogWidth||'450px'"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+      :modal="false">
       <slot v-bind:form="form" v-bind:action="action" v-bind:columns="columns" name="default">
         <el-form class="user-form" ref="form" :model="form" label-width="100px" :inline="opt.inline===true"
                  :size="opt.formSize||'mini'">

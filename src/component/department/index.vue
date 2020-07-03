@@ -47,8 +47,14 @@
     </el-row>
 
     <!-- 新建对话框 start -->
-    <el-dialog ref="dialog" :title="_label('depart-create')" :visible.sync="dialogTableVisible" :center="true"
-               width="35%">
+    <el-dialog
+      ref="dialog"
+      :title="_label('depart-create')"
+      :visible.sync="dialogTableVisible"
+      :center="true"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+      width="35%">
       <el-form :model="form_create" label-width="80px">
         <el-form-item :label="_label('bumenmingcheng')">
           <el-input ref="ddd" v-model="form_create.name"></el-input>
