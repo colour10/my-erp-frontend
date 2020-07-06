@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- 搜索+新建 start -->
     <div class="filter-container">
       <el-form :model="listQuery" size="mini" :inline="true">
         <el-form-item>
@@ -16,13 +17,16 @@
         </el-button>
       </el-form>
     </div>
+    <!-- 搜索+新建 end -->
+
+    <!-- 数据列表 start -->
     <el-table v-loading="listLoading" :data="list" border stripe @sort-change="handleSort">
       <el-table-column :label="showLabel('caozuo')" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
           <el-button type="default" size="mini" @click="handleUpdate(row)">{{ showLabel('bianji') }}</el-button>
           <el-button type="danger" size="mini" @click="handleDelete(row)">{{ showLabel('shanchu') }}</el-button>
-          <el-button type="primary" size="mini" @click="handlMaterialnote(row)">{{ showLabel('caizhibeizhu') }}
-          </el-button>
+          <!--          <el-button type="primary" size="mini" @click="handlMaterialnote(row)">{{ showLabel('caizhibeizhu') }}-->
+          <!--          </el-button>-->
         </template>
       </el-table-column>
       <el-table-column :label="showLabel('name', 'cn')" align="center" width="110" sortable="custom"
@@ -37,9 +41,19 @@
       </el-table-column>
       <!-- 添加 code end -->
 
-      <el-table-column :label="showLabel('caizhibeizhu')" prop="materialnotes"></el-table-column>
+      <!-- 材质备注 start -->
+      <el-table-column :label="showLabel('caizhibeizhu')" prop="materialnotes">
+        <template slot-scope="{row}">
+          <el-link style="font-size: 12px;" type="primary" :underline="false" @click="handlMaterialnote(row)">
+            {{_label('caizhibeizhu')}}
+          </el-link>
+        </template>
+      </el-table-column>
+      <!-- 材质备注 end -->
     </el-table>
+    <!-- 数据列表 end -->
 
+    <!-- 分页 start -->
     <el-pagination v-if="list.length<pagination.total"
                    @size-change="handleSizeChange"
                    @current-change="handleCurrentChange"
@@ -49,12 +63,16 @@
                    layout="total, sizes, prev, pager, next, jumper"
                    :total="pagination.total*1">
     </el-pagination>
+    <!-- 分页 end -->
 
+    <!-- 新建+编辑对话框 start -->
     <el-dialog :title="dialogTitleMap[dialogStatus]" :visible.sync="dialogFormVisible" :center="true" width="400px"
                :modal="false">
       <materialform @cancel="hideDialogForm" @reloadList="reloadList" :id="id"></materialform>
     </el-dialog>
+    <!-- 新建+编辑对话框 end -->
 
+    <!-- 材质备注对话框 start -->
     <el-dialog :title="dialogMaterialnoteTitle" :visible.sync="dialogMaterialnoteVisible" width="700px">
       <el-transfer ref="transfer"
                    filterable
@@ -72,6 +90,7 @@
         </el-button>
       </div>
     </el-dialog>
+    <!-- 材质备注对话框 end -->
   </div>
 </template>
 
@@ -115,6 +134,7 @@
             this.getList()
         },
         methods: {
+            // 保存材质备注关联
             saveMaterialnoteids() {
                 let self = this
                 let params = {
@@ -126,8 +146,9 @@
                     self.reloadList()
                 })
             },
+            // 获取材质备注列表
             getMaterialnotes() {
-                if (this.materialnotes.length == 0) {
+                if (this.materialnotes.length === 0) {
                     let self = this
                     this._fetch("/l/materialnote", {}).then(function (res) {
                         let language = showLabel('lang')
@@ -143,6 +164,7 @@
                     })
                 }
             },
+            // 点击材质备注逻辑
             handlMaterialnote(row) {
                 this.id = row.id
                 let language = showLabel('lang')
@@ -156,12 +178,15 @@
                 this.$refs.transfer.$children["0"]._data.query = ''
                 this.$refs.transfer.$children["3"]._data.query = ''
             },
+            // 显示材质备注对话框
             showDialogMaterialnote() {
                 this.dialogMaterialnoteVisible = true
             },
+            // 取消 - 隐藏材质备注对话框
             hideDialogMaterialnote() {
                 this.dialogMaterialnoteVisible = false
             },
+            // 删除逻辑
             handleDelete(row) {
                 let self = this
                 self._remove("/material/delete/", {id: row.id}).then(function () {
@@ -172,27 +197,33 @@
             handleFilter() {
                 this.getList()
             },
+            // 更新逻辑
             handleUpdate(row) {
                 this.id = row.id
                 this.dialogStatus = 'update'
                 this.showDialogForm()
             },
+            // 隐藏-新建+编辑对话框
             hideDialogForm() {
                 this.dialogFormVisible = false
             },
+            // 显示-新建+编辑对话框
             showDialogForm() {
                 this.dialogFormVisible = true
             },
+            // 新建逻辑
             handleCreate() {
                 this.id = 0
                 this.dialogStatus = 'create'
                 this.showDialogForm()
             },
+            // 排序逻辑
             handleSort(data) {
                 this.listQuery.sort = data.prop
                 this.listQuery.order = data.order
                 this.getList()
             },
+            // 获取数据列表
             getList() {
                 this.listLoading = true
 
@@ -207,13 +238,16 @@
                     self.listLoading = false
                 })
             },
+            // 重新获取数据列表
             reloadList() {
                 this.getList()
             },
+            // 分页相关，切换每页显示条数
             handleSizeChange(pageSize) {
                 this.pagination.pageSize = pageSize
                 this.getList()
             },
+            // 分页相关，切换当前页码
             handleCurrentChange(current) {
                 this.pagination.current = current
                 this.getList()
