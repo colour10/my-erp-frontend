@@ -26,7 +26,9 @@
       </el-table-column>
       <el-table-column :label="showLabel('son-colors')" width="110px" align="center">
         <template slot-scope="{row}">
-          <el-button type="info" size="mini" @click="handleColorsView(row)">{{_label('chakanziji')}}</el-button>
+          <el-link style="font-size: 12px;" type="primary" :underline="false" @click="handleColorsView(row)">
+            {{_label('chakanziji')}}
+          </el-link>
         </template>
       </el-table-column>
     </el-table>
