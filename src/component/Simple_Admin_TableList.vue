@@ -104,6 +104,7 @@
             }
         },
         methods: {
+            // 搜索
             search(params) {
                 this.searchform = extend({}, params)
                 this.loadList()
@@ -203,12 +204,14 @@
                 // 然后重新取出数据列表，非常重要，否则永远显示删除前的数据分页条数，慢半拍
                 self.loadList()
             },
+            // 编辑按钮
             handleClickUpdate(rowIndex, row) {
                 let self = this
                 if (self.onclickupdate) {
                     self.onclickupdate(rowIndex, row)
                 }
             },
+            // 查看缩略图
             getImageSrc(row, column) {
                 let picture = ""
                 if (row[column.name] && row[column.name].length > 0) {
@@ -217,6 +220,7 @@
 
                 return this._fileLink(picture)
             },
+            // 动态添加 css 样式
             getImageStyle(column) {
                 let styles = "";
                 if (column.image_width) {
@@ -228,6 +232,7 @@
                 }
                 return styles;
             },
+            // 表格斑马纹
             tableRowClassName({row, rowIndex}) {
                 if (rowIndex % 2 === 0) {
                     return 'stripe1';

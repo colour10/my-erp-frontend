@@ -25,6 +25,7 @@
         <template slot-scope="{row}">
           <el-button type="default" size="mini" @click="handleUpdate(row)">{{ showLabel('bianji') }}</el-button>
           <el-button type="danger" size="mini" @click="handleDelete(row)">{{ showLabel('shanchu') }}</el-button>
+          <!-- 下面的暂时注释，因为放在了最后一个字段上 -->
           <!--          <el-button type="primary" size="mini" @click="handlMaterialnote(row)">{{ showLabel('caizhibeizhu') }}-->
           <!--          </el-button>-->
         </template>
@@ -81,6 +82,7 @@
                    :titles="['未关联', '已关联']"
       ></el-transfer>
 
+      <!-- footer 底部 start -->
       <div slot="footer" class="dialog-footer">
         <el-button @click="hideDialogMaterialnote">
           {{ showLabel('quxiao') }}
@@ -89,6 +91,7 @@
           {{ showLabel('baocun') }}
         </el-button>
       </div>
+      <!-- footer 底部 end -->
     </el-dialog>
     <!-- 材质备注对话框 end -->
   </div>
@@ -175,8 +178,11 @@
                 this.getMaterialnotes()
                 this.materialnoteids = _.isEmpty(row.materialnoteids) ? [] : row.materialnoteids.split(',')
 
-                this.$refs.transfer.$children["0"]._data.query = ''
-                this.$refs.transfer.$children["3"]._data.query = ''
+                // $children 有可能是 undefined，这里要先做个判断
+                if (this.$refs.transfer !== undefined) {
+                    this.$refs.transfer.$children["0"]._data.query = ''
+                    this.$refs.transfer.$children["3"]._data.query = ''
+                }
             },
             // 显示材质备注对话框
             showDialogMaterialnote() {

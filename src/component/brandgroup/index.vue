@@ -53,7 +53,6 @@
                         width: 150,
                         disable_change: true,
                         handler: function (rowIndex, row) {
-                            //console.log(rowIndex, row)
                             self.props2.base.brandgroupid = row.id;
                             self.dialogVisible = true;
                             self.dialogTitle = row.name_cn;

@@ -130,12 +130,15 @@
             };
         },
         methods: {
+            // 是否允许新增
             isAdd() {
                 return autoCall(this.opt.isAdd);
             },
+            // 退出
             onQuit() {
                 this.dialogVisible = false;
             },
+            // 搜索逻辑
             onSearch() {
                 let self = this;
                 self.$refs.tablelist.search(self.searchform);
@@ -170,6 +173,7 @@
 
                 return true;
             },
+            // 提交逻辑
             onSubmit() {
                 let self = this;
 
@@ -247,6 +251,7 @@
                     }
                 }
             },
+            // 显示新增对话框
             showFormToCreate() {
                 let self = this;
                 globals.empty(self.form);
@@ -266,6 +271,7 @@
 
                 self.showDialog(self.getTitle(_label("tianjiaxinxi")));
             },
+            // 显示编辑对话框
             showFormToEdit(rowIndex, row) {
                 let self = this
                 self.rowIndex = row.id;
@@ -275,6 +281,7 @@
 
                 self.showDialog(self.getTitle(_label("xiugaixinxi"), row));
             },
+            // 获取标题名称
             getTitle(defaultTitle, row) {
                 let self = this;
                 let title = "";
@@ -284,6 +291,7 @@
 
                 return title || defaultTitle;
             },
+            // 显示对话框
             showDialog(formTitle) {
                 let self = this;
                 self.title = formTitle;
@@ -301,12 +309,15 @@
                     }
                 }, 50)
             },
+            // 获取列表数据
             getTableData() {
                 return this.$refs.tablelist.getTableData();
             },
+            // 设置列表数据
             setTableData(data) {
                 return this.$refs.tablelist.setTableData(data);
             },
+            // 是否禁用
             checkDisabled(column) {
                 let self = this
                 if (typeof (self.isDisabled) == 'function') {
@@ -316,6 +327,7 @@
                 }
             }
         },
+        // 监听属性
         watch: {
             base: {
                 handler: function (newValue, oldValue) {
@@ -323,16 +335,20 @@
                 deep: true,
             },
         },
+        // 计算属性
         computed: {
+            // 是否允许查询，如果允许的话，那么在头部会显示查询按钮工具集
             isSubmit() {
                 return this.opt.issubmit || true;
             },
+            // 是否自动隐藏
             isAutohide() {
                 return this.opt.autohide || false;
             },
+            // 是否自动载入新列表，允许的话，那么会在单条数据有所改变后自动通过外部接口的形式刷新列表
             isAutoReload() {
                 return this.opt.autoreload || true;
             }
-        },
+        }
     };
 </script>
