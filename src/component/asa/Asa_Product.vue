@@ -28,7 +28,7 @@
             <el-form ref="form" :model="form" label-width="80px" size="mini" :inline="true">
 
               <!-- 国际码 start -->
-              <el-form-item :label="_label('guojima')">
+              <el-form-item :label="_label('guojima')" prop="wordcode_1">
                 <el-input v-model="form.wordcode_1" style="width:110px;" :placeholder="_label('kuanshi')"
                           @keyup.native="onKeyInput(form, 'wordcode_1')"></el-input>
                 <el-input v-model="form.wordcode_2" style="width:110px;" :placeholder="_label('caizhi')"
@@ -42,7 +42,7 @@
               <!-- 国际码 end -->
 
               <!-- 色系 start -->
-              <el-form-item :label="showLabel('sexi')" label-width="85px">
+              <el-form-item :label="showLabel('sexi')" label-width="85px" prop="colorSystemId">
                 <el-select
                   v-model="form.colorSystemId"
                   placeholder=""
@@ -60,7 +60,7 @@
               <!-- 色系 end -->
 
               <!-- 颜色 start -->
-              <el-form-item :label="showLabel('yanse')" label-width="40px">
+              <el-form-item :label="showLabel('yanse')" label-width="40px" prop="colorId">
                 <el-select
                   v-model="form.colorId"
                   filterable
@@ -78,7 +78,7 @@
               <!-- 颜色 end -->
 
               <!-- 副颜色 start -->
-              <el-form-item :label="showLabel('second_color')" label-width="60px">
+              <el-form-item :label="showLabel('second_color')" label-width="60px" prop="secondColorId">
                 <el-cascader
                   placeholder=""
                   v-model="form.secondColorId"
@@ -93,7 +93,7 @@
               <!-- 副颜色 end -->
 
               <!-- 商品属性 start -->
-              <el-form-item :label="showLabel('shangpinshuxing')" label-width="85px">
+              <el-form-item :label="showLabel('shangpinshuxing')" label-width="85px" prop="producttypeid">
                 <el-select v-model="form.producttypeid" placeholder="" style="width: 100px;">
                   <el-option
                     v-for="item of productTypes"
@@ -108,19 +108,20 @@
           </el-col>
         </el-row>
 
-        <el-form ref="order-form" class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;"
+        <el-form ref="order-form" class="order-form" :model="form" label-width="85px" :inline="true"
+                 style="width:100%; margin-top: 0.8em"
                  size="mini" :rules="formRules" :inline-message="false" :show-message="false">
           <el-row :gutter="0">
             <el-col :span="8">
 
               <!-- 年代 start -->
-              <el-form-item :label="showLabel('niandai')" prop="form.ageseason">
+              <el-form-item :label="showLabel('niandai')" prop="ageseason">
                 <ageseason v-model="form.ageseason" :data-list="ageseasons"></ageseason>
               </el-form-item>
               <!-- 年代 end -->
 
               <!-- 品牌 start -->
-              <el-form-item :label="showLabel('pinpai')" prop="form.brandid">
+              <el-form-item :label="showLabel('pinpai')" prop="brandid">
                 <el-select v-model="form.brandid" placeholder="" filterable @change="handleChangeBrand">
                   <el-option
                     v-for="item of brands"
@@ -133,7 +134,7 @@
               <!-- 品牌 end -->
 
               <!-- 品类 start -->
-              <el-form-item :label="showLabel('pinlei')" prop="form.brandgroupid">
+              <el-form-item :label="showLabel('pinlei')" prop="brandgroupid">
                 <el-select
                   v-model="form.brandgroupid"
                   placeholder=""
@@ -151,7 +152,7 @@
               <!-- 品类 end -->
 
               <!-- 子品类 start -->
-              <el-form-item :label="showLabel('zipinlei')" prop="form.childbrand">
+              <el-form-item :label="showLabel('zipinlei')" prop="childbrand">
                 <el-select
                   v-model="form.childbrand"
                   placeholder=""
@@ -267,13 +268,13 @@
               <!-- 产地 end -->
 
               <!-- 产品尺寸 start -->
-              <el-form-item :label="showLabel('shangpinchicun')">
+              <el-form-item :label="showLabel('shangpinchicun')" prop="ulnarinch">
                 <ulnarinch v-model="form.ulnarinch" :data-list="ulnarinches"></ulnarinch>
               </el-form-item>
               <!-- 产品尺寸 end -->
 
               <!-- 产品描述 start -->
-              <el-form-item :label="showLabel('shangpinmiaoshu')">
+              <el-form-item :label="showLabel('shangpinmiaoshu')" prop="productmemoids">
                 <el-select v-model="form.productmemoids" placeholder="" multiple>
                   <el-option
                     v-for="item of productMemos"
@@ -286,7 +287,7 @@
               <!-- 产品描述 end -->
 
               <!-- 出厂价 start -->
-              <el-form-item :label="showLabel('chuchangjia')">
+              <el-form-item :label="showLabel('chuchangjia')" prop="factoryprice">
                 <el-input placeholder="" v-model="form.factoryprice" class="productcurrency">
                   <el-select v-model="form.wordpricecurrency" placeholder="" slot="prepend">
                     <el-option
@@ -301,7 +302,7 @@
               <!-- 出厂价 end -->
 
               <!-- 国际零售价 start -->
-              <el-form-item :label="showLabel('guojilingshoujia')">
+              <el-form-item :label="showLabel('guojilingshoujia')" prop="wordprice">
                 <el-input placeholder="" v-model="form.wordprice" class="productcurrency">
                   <el-select v-model="form.wordpricecurrency" placeholder="" slot="prepend">
                     <el-option
@@ -316,7 +317,7 @@
               <!-- 国际零售价 end -->
 
               <!-- 本国出厂价 start -->
-              <el-form-item :label="showLabel('benguochuchangjia')">
+              <el-form-item :label="showLabel('benguochuchangjia')" prop="nationalfactoryprice">
                 <el-input placeholder="" v-model="form.nationalfactoryprice" class="productcurrency">
                   <el-select v-model="form.nationalpricecurrency" placeholder="" slot="prepend">
                     <el-option
@@ -331,7 +332,7 @@
               <!-- 本国出厂价 end -->
 
               <!-- 本国零售价 start -->
-              <el-form-item :label="showLabel('benguolingshoujia')">
+              <el-form-item :label="showLabel('benguolingshoujia')" prop="nationalprice">
                 <el-input placeholder="" v-model="form.nationalprice" class="productcurrency">
                   <el-select v-model="form.nationalpricecurrency" placeholder="" slot="prepend">
                     <el-option
@@ -347,26 +348,26 @@
             </el-col>
 
             <el-col :span="8">
-              <el-form-item :label="_label('shangpinxilie')">
+              <el-form-item :label="_label('shangpinxilie')" prop="series">
                 <simple-select v-model="form.series" ref="series" source="series"
                                :parentid="form.brandid"></simple-select>
                 <as-button class="trimhalf" @click="onAddSeries">{{_label("xinjian")}}</as-button>
               </el-form-item>
 
-              <el-form-item :label="_label('xiaoshoushuxing')">
+              <el-form-item :label="_label('xiaoshoushuxing')" prop="saletypeid">
                 <simple-select v-model="form.saletypeid" source="saletype" style="color:red"></simple-select>
               </el-form-item>
 
-              <el-form-item :label="_label('fanghanzhishu')">
+              <el-form-item :label="_label('fanghanzhishu')" prop="winterproofingid">
                 <simple-select v-model="form.winterproofingid" source="winterproofing"></simple-select>
               </el-form-item>
 
-              <el-form-item :label="_label('xingbie')">
+              <el-form-item :label="_label('xingbie')" prop="gender">
                 <sp-radio-group v-model="form.gender" source="gender" :span="8" :lang="lang" style="width:270px">
                 </sp-radio-group>
               </el-form-item>
 
-              <el-form-item :label="_label('jijie')">
+              <el-form-item :label="_label('jijie')" prop="spring">
                 <div style="width:270px">
                   <el-col :span="8">
                     <sp-checkbox v-model="form.spring">{{_label("chun")}}</sp-checkbox>
@@ -390,15 +391,15 @@
                 </div>
               </el-form-item>
 
-              <el-form-item :label="_label('beizhu')">
+              <el-form-item :label="_label('beizhu')" prop="memo">
                 <el-input v-model="form.memo"></el-input>
               </el-form-item>
 
-              <el-form-item :label="_label('zuihouruku')">
+              <el-form-item :label="_label('zuihouruku')" prop="laststoragedate">
                 <el-input v-model="form.laststoragedate"></el-input>
               </el-form-item>
 
-              <el-form-item :label="_label('jiandangren')">
+              <el-form-item :label="_label('jiandangren')" prop="makestaff">
                 <sp-display-input :value="form.makestaff" source="user" disabled></sp-display-input>
               </el-form-item>
 
