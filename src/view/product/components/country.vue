@@ -59,7 +59,7 @@
         },
         props: {
             selected: {
-                type: Array
+                type: Array | String
             },
             dataList: {
                 type: Array
