@@ -157,7 +157,14 @@ export default {
       const self = this
       return new Promise((resolve, reject) => {
         httpPost(path, form).then(function (result) {
-          if (result.messages.length > 0) {
+          // 再加上一种情况，那就是 oms 的返回接口，都是 success = true/false的格式
+          if (result.success === false) {
+            let messages = []
+            messages.push(result.data.ErrorMsg)
+            result.messages = messages
+          }
+          // 如果出错了
+          if (result.messages && result.messages.length > 0) {
             //提示信息
             if (options.showMessage == true) {
               const h = self.$createElement;

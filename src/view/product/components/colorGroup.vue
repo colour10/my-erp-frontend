@@ -36,6 +36,7 @@
             </el-form-item>
           </template>
         </el-table-column>
+
         <el-table-column :label="showLabel('yanse')" width="140" align="center">
           <template slot-scope="scope">
             <el-form-item
@@ -47,12 +48,16 @@
             </el-form-item>
           </template>
         </el-table-column>
+
+        <!-- 颜色名称 start -->
         <el-table-column :label="showLabel('yansemingcheng')" width="150" align="center">
           <template v-slot="scope">
             <el-input v-model="scope.row.colorname" size="mini"></el-input>
           </template>
         </el-table-column>
+        <!-- 颜色名称 end -->
 
+        <!-- 色系 start -->
         <el-table-column :label="showLabel('sexi') + '/' + showLabel('color')" width="140" align="center">
           <template slot-scope="scope">
             <el-form-item
@@ -70,7 +75,9 @@
             </el-form-item>
           </template>
         </el-table-column>
+        <!-- 色系 end -->
 
+        <!-- 附颜色 id start -->
         <el-table-column prop="brandcolor" :label="showLabel('second_color')" width="140" align="center">
           <template v-slot="{ row }">
             <el-cascader
@@ -84,12 +91,15 @@
             </el-cascader>
           </template>
         </el-table-column>
+        <!-- 附颜色 id end -->
 
+        <!-- 辅助码 start -->
         <el-table-column :label="showLabel('fuzhuma')" width="120" align="center">
           <template v-slot="scope">
             <el-input v-model="scope.row.wordcode_4" size="mini"></el-input>
           </template>
         </el-table-column>
+        <!-- 辅助码 end -->
 
         <el-table-column :label="showLabel('caozuo')" width="130" align="center">
           <template v-slot="scope">

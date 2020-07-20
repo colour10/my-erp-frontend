@@ -17,39 +17,56 @@
 
       <!-- OMS 设置 start -->
       <el-tab-pane label="OMS Setting" name="price">
-        <el-form ref="order-form" class="formx2" :model="form" label-width="80px" :inline="true" style="width:100%;"
+        <el-form ref="order-form" class="formx2" :model="form" label-width="90px" :inline="true" style="width:100%;"
                  size="mini" :inline-message="false" :show-message="false">
           <el-row :gutter="0">
+            <!-- 香港供货价 start -->
             <el-col :span="6">
               <el-form-item :label="_label('xiangganggonghuojia')">
                 <simple-select v-model="form.hkgcost" source="price"></simple-select>
               </el-form-item>
             </el-col>
+            <!-- 香港供货价 end -->
+
+            <!-- 欧洲供货价 start -->
             <el-col :span="6">
               <el-form-item :label="_label('ouzhougonghuojia')">
                 <simple-select v-model="form.eurcost" source="price"></simple-select>
               </el-form-item>
             </el-col>
+            <!-- 欧洲供货价 end -->
+
+            <!-- 国内供货价 start -->
             <el-col :span="6">
               <el-form-item :label="_label('guoneigonghuojia')">
                 <simple-select v-model="form.chncost" source="price"></simple-select>
               </el-form-item>
             </el-col>
+            <!-- 国内供货价 end -->
+
+            <!-- 保税供货价 start -->
             <el-col :span="6">
               <el-form-item :label="_label('baoshuigonghuojia')">
                 <simple-select v-model="form.bdacost" source="price"></simple-select>
               </el-form-item>
             </el-col>
+            <!-- 保税供货价 end -->
+
+            <!-- 销售端口 start -->
             <el-col :span="6">
               <el-form-item :label="_label('xiaoshouduankou')">
                 <simple-select v-model="form.oms_saleport" source="saleport"></simple-select>
               </el-form-item>
             </el-col>
+            <!-- 销售端口 end -->
+
+            <!-- 销售仓库 start -->
             <el-col :span="6">
               <el-form-item :label="_label('xiaoshoucangku')">
                 <simple-select v-model="form.oms_warehouseids" source="warehouse" multiple></simple-select>
               </el-form-item>
             </el-col>
+            <!-- 销售仓库 end -->
           </el-row>
           <el-row :gutter="0">
             <el-col :span="24" align="center">

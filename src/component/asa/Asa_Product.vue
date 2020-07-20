@@ -8,6 +8,7 @@
     :close-on-click-modal="false"
     :close-on-press-escape="false"
     :modal="false">
+
     <el-tabs type="border-card" @tab-click="onTabClick" v-model="currentTab">
       <el-tab-pane :label="_label('jibenziliao')" name="product">
 
@@ -114,9 +115,10 @@
           <el-row :gutter="0">
             <el-col :span="8">
 
+
               <!-- 年代 start -->
               <el-form-item :label="showLabel('niandai')" prop="ageseason">
-                <ageseason v-model="form.ageseason" :data-list="ageseasons"></ageseason>
+                <my-ageseason v-model="form.ageseason" :data-list="ageseasons"></my-ageseason>
               </el-form-item>
               <!-- 年代 end -->
 
@@ -422,10 +424,13 @@
         </el-form>
       </el-tab-pane>
 
+      <!-- 商品尺寸 start -->
       <el-tab-pane :label="_label('shangpinchicun')" name="property" :disabled="form.id==''">
         <property :productid="form.id" ref="property" @quit="onQuit" :option="option"></property>
       </el-tab-pane>
+      <!-- 商品尺寸 end -->
 
+      <!-- 商品条码 start -->
       <el-tab-pane :label="_label('shangpintiaoma')" name="code" :disabled="form.id==''">
         <el-table :data="sizecontents" border style="width:100%;">
           <el-table-column prop="name" :label="_label('chima')" align="left" width="100">
@@ -442,6 +447,9 @@
           <as-button type="primary" @click="onQuit">{{_label("tuichu")}}</as-button>
         </el-col>
       </el-tab-pane>
+      <!-- 商品条码 end -->
+
+      <!-- 同款多色 start -->
       <el-tab-pane :label="_label('tongkuanduose')" name="colorgroup" :disabled="form.id==''">
         <asa-product-search-panel
           ref="searchpanel"
@@ -487,11 +495,12 @@
             </template>
           </el-table-column>
 
-          <el-table-column prop="brandcolor" :label="_label('sexi')" width="140" align="center">
+          <el-table-column prop="colorId" :label="_label('sexi')" width="140" align="center">
             <template v-slot="scope">
-              <colorselect v-model="scope.row.brandcolor"></colorselect>
+              <colorselect v-model="scope.row.colorId"></colorselect>
             </template>
           </el-table-column>
+
 
           <el-table-column :label="_label('fuzhuma')" width="120" align="center">
             <template v-slot="scope">
@@ -520,18 +529,25 @@
           <as-button type="primary" @click="onQuit">{{_label("tuichu")}}</as-button>
         </el-col>
       </el-tab-pane>
+      <!-- 同款多色 end -->
 
+      <!-- 产品图片 start -->
       <el-tab-pane :label="_label('shangpintupian')" name="album" :disabled="form.id==''">
         <sp-album :productid="form.id" ref="album" @quit="onQuit"></sp-album>
       </el-tab-pane>
+      <!-- 产品图片 end -->
 
+      <!-- 价格 start -->
       <el-tab-pane :label="_label('jiage')" name="pricetab" :disabled="form.id==''">
         <pricetab :productid="form.id" ref="pricetab" @quit="onQuit" :option="option"></pricetab>
       </el-tab-pane>
+      <!-- 价格 end -->
 
+      <!-- 库存 start -->
       <el-tab-pane :label="_label('kucun')" name="productstock" :disabled="form.id==''">
         <productstock :productid="form.id" ref="productstock" @quit="onQuit" :option="option"></productstock>
       </el-tab-pane>
+      <!-- 库存 end -->
 
       <!-- 到货记录 start, liuzongyang 2020/4/26 15:25 -->
       <el-tab-pane :label="_label('arrive-record')" name="ArriveRecord" :disabled="form.id==''">
@@ -577,7 +593,7 @@
     import productMixin from "../mixins/product.js";
     import ArriveRecord from "@/view/product/components/ArriveRecord"
     import {getLabel} from "@/component/globals"
-    import ageseason from '@/view/product/components/ageseason'
+    import myAgeseason from '@/view/product/components/ageseason'
     import sizetop from '@/view/product/components/sizetop.vue'
     import country from '@/view/product/components/country.vue'
     import ulnarinch from '@/view/product/components/ulnarinch.vue'
@@ -593,7 +609,7 @@
             country,
             ulnarinch,
             sizetop,
-            ageseason,
+            myAgeseason,
             ArriveRecord,
             [Asa_Product_Search_Panel.name]: Asa_Product_Search_Panel,
             property: Asa_Product_Property,
@@ -611,6 +627,7 @@
                 search: {
                     is_show: false
                 },
+                // 表单
                 form: {},
                 // 所有商品的材质列表
                 allmaterials: [],
@@ -1419,7 +1436,7 @@
                     childbrand: Rules.id({required: true, message: _label("8000"), label: _label("zipinlei")}),
                     brandid: Rules.id({required: true, message: _label("8000"), label: _label("pinpai")}),
                     brandcolor: Rules.required({message: _label("8000"), label: _label("sexi")}),
-                    ageseason: Rules.required({message: _label("8000"), label: _label("niandai")}),
+                    // ageseason: Rules.required({message: _label("8000"), label: _label("niandai")}),
                     sizecontentids: Rules.required({message: _label("8000"), label: _label("chimamingxi")})
                 }
             })

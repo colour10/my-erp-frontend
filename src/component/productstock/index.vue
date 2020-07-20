@@ -1,10 +1,20 @@
 <template>
   <div style="width:100%">
+    <!-- 查询 start -->
     <as-button type="primary" @click="_showDialog('search')">{{_label("chaxun")}}</as-button>
+    <!-- 查询 end -->
+
+    <!-- 修改价格 start -->
     <asa-button @click="showFormToModifyPrice()" :enable="_isAllowed('product') && selected.length>0">
       {{_label("xiugaijiage")}}
     </asa-button>
+    <!-- 修改价格 end -->
+
+    <!-- 上新 start -->
     <asa-button @click="_showDialog('oms-add')" :enable="selected.length==1">{{_label("shangxin")}}</asa-button>
+    <!-- 上新 end -->
+
+    <!-- 有库存的商品列表 start -->
     <div class="product">
       <el-table ref="table" :data="searchresult" border style="width:100%;" :row-style="getRowStyle"
                 @row-dblclick="showDetail" @selection-change="onSelectionChange" @row-click="onRowClick"
@@ -79,6 +89,9 @@
                      layout="total, sizes, prev, pager, next, jumper" :total="pagination.total*1">
       </el-pagination>
     </div>
+    <!-- 有库存的商品列表 end -->
+
+    <!-- 库存查询条件 start -->
     <sp-dialog ref="search" :width="900">
 
       <el-form class="order-form" :model="form" label-width="70px" :inline="false" style="width:100%;" size="mini"
@@ -215,15 +228,19 @@
         </el-row>
       </el-form>
     </sp-dialog>
+    <!-- 库存查询条件 end -->
 
+    <!-- 每个仓库的库存明细 start -->
     <sp-dialog ref="product-detail" :width="900">
       <el-table :data="productresult" border style="width:100%;" :row-style="getRowStyle"
                 :rowClassName="tableRowClassName">
+        <!-- 仓库 start -->
         <el-table-column :label="_label('cangku')" width="160" align="center">
           <template v-slot="{row}">
             <sp-select-text :value="row.warehouseid" source="warehouse"></sp-select-text>
           </template>
         </el-table-column>
+        <!-- 仓库 end -->
 
         <!-- 国际码 start -->
         <el-table-column :label="_label('guojima')" align="center" sortable width="200">
@@ -233,19 +250,27 @@
         </el-table-column>
         <!-- 国际码 end -->
 
+        <!-- 库存数量 start -->
         <el-table-column :label="_label('kucunshuliang')" width="498" align="left">
           <template v-slot="{row}">
             <sp-productstock-show :columns="product.product.sizecontents" :stocks="row.stocks"
                                   :type="typeSum"></sp-productstock-show>
           </template>
         </el-table-column>
+        <!-- 库存数量 end -->
       </el-table>
     </sp-dialog>
+    <!-- 每个仓库的库存明细 end -->
 
+    <!-- oms 上新 start -->
     <sp-dialog ref="oms-add" :width="1040">
       <asa-oms-add :product="selected.length>0?selected[0].product:undefined"></asa-oms-add>
     </sp-dialog>
+    <!-- oms 上新 end -->
+
+    <!-- 修改价格对话框 start -->
     <asa-product-modify-price ref="modifyprice"></asa-product-modify-price>
+    <!-- 修改价格对话框 end -->
   </div>
 </template>
 
@@ -309,7 +334,8 @@
         },
         methods: {
             async showDetail(row) {
-                console.log(row)
+                // 测试变量结果
+                this._log("showDetail-row=", row)
                 const self = this;
                 self.product = row;
 
@@ -336,12 +362,14 @@
                 this.pagination.current = current
                 this.loadList()
             },
+            // 查询逻辑
             onSearch() {
                 //查询库存商品
                 let self = this;
                 self.pagination.page = 1;
                 self.loadList();
             },
+            // 查询逻辑
             loadList() {
                 //查询库存商品
                 let self = this;
@@ -374,6 +402,8 @@
                     console.log(res);
                     res.data.data.forEach(function (item) {
                         ProductstockSummary.get(item, function (result) {
+                            // 测试 result 的值
+                            self._log("result = ", result)
                             self.searchresult.push(result);
 
                             if (self.searchresult.length == res.data.data.length) {
