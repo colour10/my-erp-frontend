@@ -14,7 +14,7 @@
       </el-row>
       <!-- 按钮组 end -->
 
-      <!-- 必填项目 start -->
+      <!-- 必填项目1 start -->
       <el-row :gutter="0">
         <el-col :span="16" style="width:750px">
           <!-- 商品名称 start -->
@@ -117,9 +117,9 @@
         <!-- 示意图 end -->
 
       </el-row>
-      <!-- 必填项目 end -->
+      <!-- 必填项目2 end -->
 
-      <!-- 必填项目 start -->
+      <!-- 必填项目2 start -->
       <el-row :gutter="0">
 
         <el-col :span="24" style="width:1000px">
@@ -204,7 +204,7 @@
         </el-col>
 
       </el-row>
-      <!-- 必填项目 end -->
+      <!-- 必填项目2 end -->
     </el-form>
 
     <!-- 主图列表 start -->

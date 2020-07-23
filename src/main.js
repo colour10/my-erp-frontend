@@ -131,6 +131,11 @@ const routes = [
         name: "productstock",
         component: resolve => require(['./component/productstock/index.vue'], resolve)
       },
+      {
+        path: '/omsorder',
+        name: "omsorder",
+        component: resolve => require(['./component/asa/Asa_OMS_Order.vue'], resolve)
+      },
       {path: '/brand', name: "brand", component: resolve => require(['./view/brand/index.vue'], resolve)},
       {
         path: '/brandgroup',

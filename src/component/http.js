@@ -6,7 +6,6 @@ import {ASAP} from "./globals.js"
 const host = ASAP.host;
 
 const doGet = function (url, {enableCache = true} = {}) {
-  //console.log(window.ASAP)
   if (ASAP.$session_id && ASAP.dev == true) {
     let session_id = ASAP.$session_id
     url = url.indexOf('?') >= 0 ? url + '&_session_id=' + session_id : url + '?_session_id=' + session_id

@@ -14,6 +14,10 @@
     <asa-button @click="_showDialog('oms-add')" :enable="selected.length==1">{{_label("shangxin")}}</asa-button>
     <!-- 上新 end -->
 
+    <!-- OMS 订单列表 start -->
+    <asa-button @click="_showDialog('oms-order')">{{_label("oms-order")}}</asa-button>
+    <!-- OMS 订单列表 end -->
+
     <!-- 有库存的商品列表 start -->
     <div class="product">
       <el-table ref="table" :data="searchresult" border style="width:100%;" :row-style="getRowStyle"
@@ -262,11 +266,17 @@
     </sp-dialog>
     <!-- 每个仓库的库存明细 end -->
 
-    <!-- oms 上新 start -->
+    <!-- oms 上新 对话框 start -->
     <sp-dialog ref="oms-add" :width="1040">
       <asa-oms-add :product="selected.length>0?selected[0].product:undefined"></asa-oms-add>
     </sp-dialog>
-    <!-- oms 上新 end -->
+    <!-- oms 上新 对话框 end -->
+
+    <!-- oms 订单 对话框 start -->
+    <sp-dialog ref="oms-order" :width="1400" :title="_label('oms-order')">
+      <asa-oms-order></asa-oms-order>
+    </sp-dialog>
+    <!-- oms 订单 对话框 end -->
 
     <!-- 修改价格对话框 start -->
     <asa-product-modify-price ref="modifyprice"></asa-product-modify-price>
@@ -280,13 +290,15 @@
     import globals, {extend} from '../globals.js';
     import Asa_Product_Modify_Price from '../asa/Asa_Product_Modify_Price.vue';
     import Asa_OMS_Add from '../asa/Asa_OMS_Add.vue'
+    import AsaOmsOrder from "@/component/asa/Asa_OMS_Order"
 
     export default {
         name: 'sp-productstock',
         components: {
+            AsaOmsOrder,
             [Asa_Productstock_Show.name]: Asa_Productstock_Show,
             [Asa_Product_Modify_Price.name]: Asa_Product_Modify_Price,
-            [Asa_OMS_Add.name]: Asa_OMS_Add
+            [Asa_OMS_Add.name]: Asa_OMS_Add,
         },
         data() {
             return {

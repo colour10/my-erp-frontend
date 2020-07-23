@@ -114,7 +114,7 @@ const getAvailableHeight = function () {
   return client.height - 200;
 }
 
-const pageSizes = [10, 15, 20, 30, 50, 100]
+const pageSizes = [5, 10, 15, 20, 30, 50, 100]
 
 const config = function () {
   return {

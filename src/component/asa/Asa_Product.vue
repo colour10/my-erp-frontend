@@ -1112,6 +1112,9 @@
                         // 打印值，保存原始的row，如果用了info，那么其中的空值会被转换成0，这不是我们想要的
                         self._log("原始的row=", row)
 
+                        // 打印值，info
+                        self._log("收到的info=", info)
+
                         // 赋值给 originProduct，保留一份原始的数据，方便对比
                         self.originProduct = row
 
@@ -1129,8 +1132,31 @@
 
                         // 第一个标签高亮
                         self.currentTab = 'product'
-                        // 标签的标题
-                        self.title = info.getName() + ' ' + info.getGoodsCode()
+                        // 标签的标题，如果函数出错，则替换为默认文本
+                        var myName
+                        var myGoodsCode
+                        // 判断 getName 函数和 getGoodsCode 函数是否存在
+                        try {
+                            if (typeof (eval(info.getName())) == "function") {
+                                myName = info.getName()
+                            }
+                        } catch (e) {
+                        }
+
+                        try {
+                            if (typeof (eval(info.getGoodsCode())) == "function") {
+                                myGoodsCode = info.getGoodsCode()
+                            }
+                        } catch (e) {
+                        }
+
+                        // 存在则调用，否则就显示商品详情的默认字样
+                        if (myName && myGoodsCode) {
+                            self.title = myName + ' ' + myGoodsCode
+                        } else {
+                            self.title = _label('product-description')
+                        }
+
 
                         self.product = info
                         resolve(self)

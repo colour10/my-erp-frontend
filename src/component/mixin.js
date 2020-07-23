@@ -153,10 +153,16 @@ export default {
     },
     _label,
     showLabel,
+
+    // 如果需要提示信息，就在 options 里面添加 showMessage: true
     _fetch(path, form, options = {}) {
       const self = this
       return new Promise((resolve, reject) => {
         httpPost(path, form).then(function (result) {
+
+          // 记录返回值
+          self._log("_fetch请求后返回的result=", result)
+
           // 再加上一种情况，那就是 oms 的返回接口，都是 success = true/false的格式
           if (result.success === false) {
             let messages = []
