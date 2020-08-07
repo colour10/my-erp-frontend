@@ -222,7 +222,7 @@
     <!-- 导入订单后的列表 start -->
     <el-row>
       <el-col :span="24" class="product" style="margin-top:2px;">
-        <el-table ref="table" :data="orderbrands" stripe border style="width:100%;"
+        <el-table ref="table" :data="orders" stripe border style="width:100%;"
                   @selection-change="onSelectionChange" @row-click="onRowClick">
 
           <!-- 多选按钮 start -->
@@ -546,8 +546,8 @@
                     suppliercode: '',
                 },
                 tabledata: [],
-                orderbrands: [],
-                orderbranddetails: [],
+                orders: [],
+                orderDetails: [],
                 shippingdetails: [],
                 listdata: [],
                 selected: [],
@@ -556,6 +556,7 @@
                 uniqkey: 1,
             };
         },
+        // 方法列表
         methods: {
             changeDetail(row, column) {
                 const self = this;
@@ -583,13 +584,13 @@
 
                     let row = self.tabledata.find(item => item.key == key);
                     console.log(">>>", row, sizecontentid)
-                    let orderbranddetail = self.orderbranddetails.find(item => item.orderbrandid == row.orderbrandid && item.sizecontentid == sizecontentid && item.productid == row.product.id && item.orderid == row.order.id);
-                    if (!orderbranddetail) {
-                        // 商品没有在品牌订单上。
+                    let orderDetail = self.orderDetails.find(item => item.orderid == row.orderid && item.sizecontentid == sizecontentid && item.productid == row.product.id && item.orderid == row.order.id);
+                    if (!orderDetail) {
+                        // 商品没有在普通订单上。
                         return;
                     }
 
-                    let check_key = [row.price, row.product.id, row.orderbrandid, sizecontentid].join('-')
+                    let check_key = [row.price, row.product.id, row.orderid, sizecontentid].join('-')
                     if (uniques[check_key]) {
                         return alert(self._label("chongfushezhi") + ":" + row.product.getGoodsCode())
                     } else {
@@ -601,10 +602,12 @@
                             discount: row.discount,
                             price: row.price,
                             factoryprice: row.factoryprice,
-                            orderdetailid: orderbranddetail.orderdetailid,
-                            currencyid: orderbranddetail.currencyid,
-                            orderbrandid: row.orderbrandid,
-                            orderbranddetailid: orderbranddetail.id,
+                            orderdetailid: orderDetail.id,
+                            currencyid: orderDetail.currencyid,
+                            // 品牌订单 id 为空
+                            orderbrandid: '',
+                            // orderbranddetailid 应该是空值，因为不涉及到品牌订单的计算
+                            orderbranddetailid: '',
                             id: '',
                         });
 
@@ -617,9 +620,9 @@
                 //return;
                 self.validate().then(async () => {
                     self._log(JSON.stringify(params));
-                    let {data} = await self._submit("/shipping/save", {params: JSON.stringify(params)});
+                    let {data} = await self._submit("/shippingsimple/simplesave", {params: JSON.stringify(params)});
                     // 已入库逻辑
-                    let path = '/shipping/warehousing/' + data.form.id;
+                    let path = '/shippingsimple/warehousing/' + data.form.id;
                     if (self._path() !== path) {
                         self._redirect(path);
                     } else {
@@ -663,21 +666,27 @@
             },
 
             /**
-             * 导入订单接口
+             * 导入订单
              *
              * @param row
              * @returns {Promise<void>}
              */
             async onSelect(row) {
                 let self = this;
-                let {orderbrands, orderbranddetails} = await API.getOrderbrandListToImport(self.formimport);
 
-                if (orderbrands) {
+                // 原来是调用品牌订单，这次简易版要改成调用普通订单，也就是客户订单
+                let {orders, orderDetails} = await API.getOrderSimpleListToImport(self.formimport);
+
+                // 如果存在订单列表
+                if (orders) {
                     let func = _private(self);
-                    func.importOrderbrands(orderbrands);
-                    func.importList(orderbranddetails);
+                    // 导入订单列表
+                    func.importorders(orders);
+                    // 导入订单详情列表
+                    func.importList(orderDetails);
                 }
 
+                // 隐藏对话框
                 self._hideDialog("order-dialog");
             },
 
@@ -719,6 +728,7 @@
                 this.selected2 = vals;
             },
         },
+        // 计算
         computed: {
             // 发货单是否可以保存
             canSave() {
@@ -749,10 +759,11 @@
                 let keyword = self.form2.keyword.toUpperCase()
                 let suppliercode = self.form2.suppliercode.toUpperCase()
                 let isMatch = _private(self).isMatch
-                return self.tabledata.filter(item => selected[item.orderbrandid] == 1).filter(item => {
+                return self.tabledata.filter(item => selected[item.orderid] == 1).filter(item => {
                     return isMatch(keyword, item.product.getGoodsCode('')) && isMatch(suppliercode, item.order.booking_label.toUpperCase())
                 })
             },
+            // 宽度
             width() {
                 return this.tabledata.reduce((max, {product}) => Math.max(max, product.sizecontents.length), 1) * 51 + 75
             },
@@ -773,7 +784,7 @@
                 let result = {}
                 self.listdata.forEach(({key, number}) => {
                     let row = self.tabledata.find(item => item.key == key);
-                    key = row.orderbrandid
+                    key = row.orderid
                     result[key] = result[key] || 0
                     result[key] += number * 1;
                 })
@@ -789,6 +800,7 @@
                 })
                 return total
             },
+            // 处理列表导入订单的各种数量
             orderstat() {
                 let self = this;
 
@@ -800,38 +812,44 @@
                     leftCount: 0,
                 });
 
-                self.orderbrands.forEach((item) => {
+                self.orders.forEach((item) => {
                     helper.get(item.id);
                 });
 
-                self.orderbranddetails.forEach(detail => {
-                    let row = helper.get(detail.orderbrandid);
+                // 计算数量逻辑
+                self.orderDetails.forEach(detail => {
+                    // 分别统计内部的各个数量
+                    let row = helper.get(detail.orderid);
 
                     row.totalCount += detail.number * 1; //客户定的总件数
                     row.totalConfirmCount += detail.confirm_number * 1; //确认的件数
                     row.totoaShippingCount += detail.shipping_number * 1; //发货的件数
                     row.leftCount = row.totalConfirmCount - row.totoaShippingCount; //剩余未发货的件数
+
+                    // 测试
+                    console.log('row=', row)
                 })
 
-                //如果是修改订单，剩余数量应该把当前订单的数量加上去。
+                // 如果是修改订单，剩余数量应该把当前订单的数量加上去。
                 self.shippingdetails.forEach(detail => {
-                    let row = helper.get(detail.orderbrandid);
+                    let row = helper.get(detail.orderid);
                     row.leftCount += detail.number * 1;
                 });
 
                 return helper.result();
             },
+            // 发货数量
             currentstat() {
                 let self = this
 
                 let result = {}
-                self.orderbrands.forEach(item => {
+                self.orders.forEach(item => {
                     result[item.id] = 0
                 })
 
                 self.listdata.forEach(({key, sizecontentid, number}) => {
                     let row = self.tabledata.find(item => item.key == key);
-                    result[row.orderbrandid] += number * 1
+                    result[row.orderid] += number * 1
                 })
 
                 return result;
@@ -843,7 +861,7 @@
                     currencyid: "",
                 })
 
-                for (let detail of self.orderbranddetails) {
+                for (let detail of self.orderDetails) {
                     let row = helper.get(detail.productid);
                     row.currencyid = detail.currencyid;
                 }
@@ -851,6 +869,7 @@
                 return helper.result();
             },
         },
+        // 监控
         watch: {
             'form2.keyword1': function (newvalue) {
                 console.log(newvalue)
@@ -862,6 +881,7 @@
                 this.copySuppliercodeDebounce()
             }
         },
+        // 渲染前调用
         async mounted() {
             let self = this;
             let route = self.$route;
@@ -878,13 +898,16 @@
 
             if (route.params.id > 0) {
                 // 请求 /shipping/load 接口
-                self._fetch("/shipping/load", {id: route.params.id, type: "shipping"}).then(async function ({data}) {
-                    let {form, orderbrands, orderbranddetails, shippingdetails} = data;
+                self._fetch("/shippingsimple/load", {
+                    id: route.params.id,
+                    type: "shipping"
+                }).then(async function ({data}) {
+                    let {form, orders, orderDetails, shippingdetails} = data;
                     let func = _private(self)
 
                     copyTo(form, self.form)
-                    func.importOrderbrands(orderbrands)
-                    await func.importList(orderbranddetails)
+                    func.importorders(orders)
+                    await func.importList(orderDetails)
                     func.importShippingList(shippingdetails)
                     self._setTitle(self._label("fahuodan") + ":" + self.form.orderno)
                     self.$refs.table.toggleAllSelection()
@@ -895,16 +918,16 @@
 
             // 自动加载品牌订单数据
             if (self.$route.query.id && self.$route.query.id > 0) {
-                let {orderbrands, orderbranddetails} = await API.getOrderbrandListToImport({orderbrandid: self.$route.query.id});
-                if (orderbrands.length > 0) {
+                let {orders, orderDetails} = await API.getOrderbrandListToImport({orderid: self.$route.query.id});
+                if (orders.length > 0) {
                     let func = _private(self);
-                    func.importOrderbrands(orderbrands);
-                    func.importList(orderbranddetails);
+                    func.importorders(orders);
+                    func.importList(orderDetails);
 
                     // 默认分配所有的数量
-                    let [orderbrand] = self.orderbrands;
+                    let [orderbrand] = self.orders;
                     self.$refs.table.toggleRowSelection(orderbrand);
-                    for (let item of orderbranddetails) {
+                    for (let item of orderDetails) {
                         let key = item.productid + '-' + item.orderid;
                         setTimeout(function () {
                             self.$refs[key].selectAll();
@@ -931,7 +954,7 @@
                 let result = {};
                 for (let item of list) {
                     //console.log("SSSSSSSS",item)
-                    let key = item.productid + '-' + item.orderbrandid;
+                    let key = item.productid + '-' + item.orderid;
                     if (result[key]) {
                         result[key]['form'][item.sizecontentid] = item.confirm_number - item.shipping_number;
                         result[key].total += item.confirm_number - item.shipping_number;
@@ -946,7 +969,7 @@
                             discount: item.discount,
                             total: item.number * 1,
                             form,
-                            orderbrandid: item.orderbrandid,
+                            orderid: item.orderid,
                             factoryprice: item.factoryprice,
                             price: '',
                             is_auto: true,
@@ -977,12 +1000,13 @@
                 self.tabledata.push(row)
                 self.uniqkey++;
             },
+            // 导入订单详情列表
             async importList(list) {
                 let newlist = []
                 for (let detail of list) {
-                    let target = self.orderbranddetails.find(item => item.id == detail.id)
+                    let target = self.orderDetails.find(item => item.id == detail.id)
                     if (!target) {
-                        self.orderbranddetails.push(detail)
+                        self.orderDetails.push(detail)
                         newlist.push(detail)
                     }
 
@@ -998,19 +1022,21 @@
                     _this.appendRow(item)
                 }
             },
-            importOrderbrands(orderbrands) {
-                for (let orderbrand of orderbrands) {
-                    let row = self.orderbrands.find(item => item.id == orderbrand.id)
+            // 导入普通订单列表
+            importorders(orders) {
+                for (let order of orders) {
+                    let row = self.orders.find(item => item.id == order.id)
                     if (!row) {
-                        self.orderbrands.push(orderbrand)
+                        self.orders.push(order)
 
-                        extendu(self.form, orderbrand, function ({target, key, value}) {
+                        extendu(self.form, order, function ({target, key, value}) {
                             //console.log(key, value)
                             return value && target[key] == "" && (key == 'supplierid' || key == 'ageseason' || key == 'seasontype' || key == 'bussinesstype' || key == 'currency')
                         })
                     }
                 }
             },
+            // 导入发货单列表
             importShippingList(list) {
                 let hash = {};
                 let table = {};
@@ -1022,10 +1048,10 @@
                     self.shippingdetails.push(item);
 
                     let row = self.tabledata.find(row => {
-                        return row.orderbrandid == item.orderbrandid && row.product.id == item.productid && row.order.id == item.orderid;
+                        return row.orderid == item.orderid && row.product.id == item.productid && row.order.id == item.orderid;
                     });
 
-                    let key = item.productid + "-" + item.orderbrandid + '-' + item.price;
+                    let key = item.productid + "-" + item.orderid + '-' + item.price;
                     if (table[key]) {
                         self.listdata.push({
                             key: table[key],
@@ -1033,7 +1059,7 @@
                             number: item.number,
                         });
                     } else {
-                        if (hash[item.productid + "-" + item.orderbrandid]) {
+                        if (hash[item.productid + "-" + item.orderid]) {
                             let newrow = self.copyit(row);
                             newrow.price = item.price;
                             newrow.discount = item.discount;
@@ -1053,7 +1079,7 @@
                             });
 
                             table[key] = row.key;
-                            hash[item.productid + "-" + item.orderbrandid] = 1;
+                            hash[item.productid + "-" + item.orderid] = 1;
                         }
                     }
                 });

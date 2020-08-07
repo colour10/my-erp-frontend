@@ -5,13 +5,21 @@
       <el-row :gutter="0">
         <el-col :span="24">
           <asa-button @click="saveOrder(1)" :enable="canSave">{{_label("baocun")}}</asa-button>
+          <!-- 导入订单按钮 start -->
           <asa-button @click="_showDialog('order-dialog')" :enable="$route.params.ids=='0'">{{_label("daorudingdan")}}
           </asa-button>
+          <!-- 导入订单按钮 end -->
+          <!-- 增加供货商 start -->
           <asa-button @click="_showDialog('add-supplier');form2.supplierid=''" :enable="$route.params.ids=='0'">
             {{_label("zengjiagonghuoshang")}}
           </asa-button>
+          <!-- 增加供货商 end -->
+          <!-- 前查 start -->
           <asa-button @click="$refs.qiancha.show()" :enable="$route.params.ids!='0'">{{_label("qiancha")}}</asa-button>
+          <!-- 前查 end -->
+          <!-- 后查 start -->
           <asa-button @click="$refs.houcha.show()" :enable="$route.params.ids!='0'">{{_label("houcha")}}</asa-button>
+          <!-- 后查 end -->
 
           <el-tag type="warning" v-if="order.ageseason>0">
             <sp-select-text :value="order.ageseason" source="ageseason"/>
@@ -253,6 +261,8 @@
         </el-table>
       </el-col>
     </el-row>
+
+    <!-- 导入订单 对话框 start -->
     <sp-dialog ref="order-dialog">
       <el-form :model="form" label-width="85px" :inline="false" style="width:100%;" size="mini">
         <el-row :gutter="0">
@@ -274,6 +284,7 @@
         </el-row>
       </el-form>
     </sp-dialog>
+    <!-- 导入订单 对话框 end -->
 
     <!-- 增加供货商 start -->
     <sp-dialog ref="add-supplier">
@@ -301,6 +312,7 @@
         </el-col>
       </el-row>
     </sp-dialog>
+
     <sp-dialog ref="preview"/>
 
     <!-- 前查 start -->
@@ -363,7 +375,7 @@
                 listdata: [],
                 orderlist: [],
                 orderbrandDetailList: [],
-                refsMap: {}
+                refsMap: {},
             }
         },
         methods: {
@@ -436,6 +448,7 @@
                     self.$refs[key].reset()
                 })
             },
+            // 导入订单
             onSelect() {
                 let self = this;
                 self.doImport(self.form).then(() => {
@@ -445,6 +458,7 @@
                     self._hideDialog('order-dialog');
                 });
             },
+            // 订单导入具体逻辑
             async doImport(params) {
                 let self = this;
                 let result = await API.getOrderListToImport(params);

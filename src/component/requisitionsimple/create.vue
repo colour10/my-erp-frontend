@@ -48,7 +48,7 @@
     import Asa_Requisition_In from '../asa/Asa_Requisition_In.vue';
 
     export default {
-        name: 'sp-requisitioncreate',
+        name: 'sp-requisitionsimplecreate',
         components: {
             [Asa_Requisition_Out.name]: Asa_Requisition_Out,
             [Asa_Requisition_In.name]: Asa_Requisition_In,
@@ -69,12 +69,13 @@
             onChange(length) {
                 this.counter = length;
             },
+            // 保存订单
             saveOrder() {
-                //保存订单
+                // 保存订单
                 let self = this;
-
-                let params = {memo: self.form.memo};
-
+                let params = {
+                    memo: self.form.memo
+                };
                 // 判断如果是 undefined，则退出
                 if (self.$refs.requisition === undefined) {
                     self.$message.error(self._label('operate_fail'))
@@ -108,15 +109,18 @@
                     return;
                 }
                 // self._log(JSON.stringify(params))
-                self._submit("/requisition/save", {params: JSON.stringify(params)}).then(function (res) {
+                self._submit("/requisitionsimple/save", {params: JSON.stringify(params)}).then(function (res) {
                     extend(self.form, {
                         out_id: "",
                         in_id: "",
                         memo: "",
                     });
+                    // counter清零，否则提交完无法继续下一次操作
+                    self.counter = 0
                 });
             },
         },
+        // 渲染前调用
         mounted() {
             let self = this;
             self._setTitle(self._label("xinjiandiaobodan"));

@@ -1,14 +1,11 @@
 <template>
   <div>
     <el-form class="order-form" :model="form" label-width="85px" :inline="true" style="width:100%;" size="mini">
-      <!-- 3个按钮，作废+出库确认+入库确认 start -->
       <el-row type="flex" justify="start">
         <as-button :type="form.status==2?'primary':'info'" @click="cancel">{{_label("zuofei")}}</as-button>
         <as-button :type="form.status==2?'primary':'info'" @click="confirmout">{{_label("chukuqueren")}}</as-button>
         <as-button :type="form.status==3?'primary':'info'" @click="confirmin">{{_label("rukuqueren")}}</as-button>
       </el-row>
-      <!-- 3个按钮，作废+出库确认+入库确认 end -->
-
       <el-row :gutter="0">
         <el-col :span="6" style="width:300px">
           <el-form-item :label="_label('shenqingren')">
@@ -90,7 +87,7 @@
     import {Productstock} from "../model.js";
 
     export default {
-        name: 'asa-requisition-detail-dialog',
+        name: 'asa-requisitionsimple-detail-dialog',
         components: {},
         data() {
             let self = this;
@@ -141,7 +138,7 @@
                 params.list = array;
 
                 self._log(JSON.stringify(params));
-                self._submit("/requisition/" + action, {params: JSON.stringify(params)}).then(function (res) {
+                self._submit("/requisitionsimple/" + action, {params: JSON.stringify(params)}).then(function (res) {
                     self.init(res);
                 });
             },

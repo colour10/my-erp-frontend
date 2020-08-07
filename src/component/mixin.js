@@ -94,6 +94,7 @@ export default {
     _getRow(table, id) {
       return getFetcherPromise(table)(id);
     },
+    // 权限是否允许与否判断
     _isAllowed(authname, behavier = 'any') {
       const self = this;
 
@@ -160,8 +161,8 @@ export default {
       return new Promise((resolve, reject) => {
         httpPost(path, form).then(function (result) {
 
-          // 记录返回值
-          self._log("_fetch请求后返回的result=", result)
+          // // 记录返回值，测试用，随时打开
+          // self._log("_fetch请求后返回的result=", result)
 
           // 再加上一种情况，那就是 oms 的返回接口，都是 success = true/false的格式
           if (result.success === false) {

@@ -203,6 +203,19 @@ const API = {
     }
   },
 
+  // 添加一个普通订单的导入，这个不需要品牌订单
+  async getOrderSimpleListToImport({supplierid, ageseason}) {
+    try {
+      let result = await _fetch("/ordersimple/searchorder", {supplierid, ageseason});
+      return result.data;
+    } catch (e) {
+      return {
+        orders: [],
+        orderDetails: [],
+      };
+    }
+  },
+
   async getSupplierInvoiceList(supplierid) {
     let params = {
       supplierid,

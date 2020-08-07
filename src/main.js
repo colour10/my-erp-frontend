@@ -90,12 +90,17 @@ components.forEach(component => {
   Vue.component(component.name, component);
 });
 
-
+// 路由列表
 const routes = [
   {
     path: '/', name: "index", component: Home,
     children: [
       {path: '/order', name: "order", component: resolve => require(['./component/order/index.vue'], resolve)},
+      {
+        path: '/ordersimple',
+        name: "ordersimple",
+        component: resolve => require(['./component/ordersimple/index.vue'], resolve)
+      },
       {path: '/shipping', name: "shipping", component: resolve => require(['./component/shipping/index.vue'], resolve)},
       {
         path: '/shipping/:id',
@@ -107,6 +112,23 @@ const routes = [
         name: "shippingwarehousing",
         component: resolve => require(['./component/shipping/warehousing.vue'], resolve)
       },
+
+      {
+        path: '/shippingsimple',
+        name: "shippingsimple",
+        component: resolve => require(['./component/shippingsimple/index.vue'], resolve)
+      },
+      {
+        path: '/shippingsimple/:id',
+        name: "shippingsimpledetail",
+        component: resolve => require(['./component/shippingsimple/create.vue'], resolve)
+      },
+      {
+        path: '/shippingsimple/warehousing/:id',
+        name: "shippingsimplewarehousing",
+        component: resolve => require(['./component/shippingsimple/warehousing.vue'], resolve)
+      },
+
       {path: '/sales', name: "sales", component: resolve => require(['./component/sales/index.vue'], resolve)},
       {
         path: '/sales/create',
@@ -164,6 +186,23 @@ const routes = [
         name: "requisitionedit",
         component: resolve => require(['./component/requisition/update.vue'], resolve)
       },
+
+      {
+        path: '/requisitionsimple',
+        name: "requisitionsimple",
+        component: resolve => require(['./component/requisitionsimple/index.vue'], resolve)
+      },
+      {
+        path: '/requisitionsimple/create',
+        name: "requisitionsimplecreate",
+        component: resolve => require(['./component/requisitionsimple/create.vue'], resolve)
+      },
+      {
+        path: '/requisitionsimple/edit/:id',
+        name: "requisitionsimpleedit",
+        component: resolve => require(['./component/requisitionsimple/update.vue'], resolve)
+      },
+
       {
         path: '/user/modifypassword',
         name: "modifypassword",
@@ -193,6 +232,11 @@ const routes = [
         component: resolve => require(['./component/exchangerate/index.vue'], resolve)
       },
       {path: '/order/:id', name: "orderform", component: resolve => require(['./component/order/create.vue'], resolve)},
+      {
+        path: '/ordersimple/:id',
+        name: "ordersimpleform",
+        component: resolve => require(['./component/ordersimple/create.vue'], resolve)
+      },
       {
         path: '/orderbrand',
         name: "orderbrand",

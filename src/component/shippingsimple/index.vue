@@ -1,34 +1,28 @@
 <template>
   <div>
+    <!-- 按钮组 start -->
     <el-row>
-      <!-- 查询+新建 start -->
       <el-col :span="24">
         <as-button type="primary" @click="_showDialog('search')" size="mini" icon="el-icon-search">
           {{_label("chaxun")}}
         </as-button>
-        <asa-button type="primary" @click="showFormToCreate" :enable="_isAllowed('orderbrand-add')">
+        <asa-button type="primary" @click="showFormToCreate()" :enable="_isAllowed('shipping-add')">
           {{_label('xinjian')}}
         </asa-button>
-        <!-- <auth auth="order-submit"><as-button type="primary" @click="showFormToEdit">{{_label('bianji')}}</as-button></auth> -->
       </el-col>
-      <!-- 查询+新建 end -->
     </el-row>
+    <!-- 按钮组 end -->
 
     <!-- 列表 start -->
-    <simple-admin-tablelist
-      ref="tablelist"
-      v-bind="props"
-      :onclickupdate="showFormToEdit"
-      :isedit="false"
-      :isdelete="false"
-      :isSelect="false">
-      <template v-slot:brandid="{row}">
-        <sp-select-text :value="row.brandid" source="brand"></sp-select-text>
-      </template>
+    <simple-admin-tablelist ref="tablelist" v-bind="props" :onclickupdate="showFormToEdit" :isdelete="false"
+                            :isedit="false">
+      <!-- <template v-slot:orderno="{row}">
+          <router-link :to="'/shipping/warehousing/'+row.id">{{row.orderno}}</router-link>
+      </template> -->
     </simple-admin-tablelist>
     <!-- 列表 end -->
 
-    <!-- 搜索条件 start -->
+    <!-- 查询条件 start -->
     <sp-dialog ref="search" width="600">
       <el-form class="order-form" :model="form" label-width="70px" :inline="false" style="width:100%;" size="mini"
                @submit.native.prevent>
@@ -43,16 +37,20 @@
             <el-form-item :label="_label('niandai')">
               <simple-select v-model="form.ageseason" source="ageseason" :multiple="true"/>
             </el-form-item>
-            <el-form-item :label="_label('pinpai')">
-              <simple-select v-model="form.brandid" source="brand" :multiple="true"/>
+            <el-form-item :label="_label('daohuocangku')">
+              <simple-select v-model="form.warehouseid" source="warehouse" :multiple="true"/>
             </el-form-item>
           </el-col>
           <el-col :span="8" style="width:270px">
             <el-form-item :label="_label('jijie')">
               <simple-select v-model="form.seasontype" source="seasontype"/>
             </el-form-item>
-            <el-form-item :label="_label('yewuleixing')" prop="bussinesstype">
+            <el-form-item :label="_label('yewuleixing')">
               <simple-select v-model="form.bussinesstype" source="bussinesstype"/>
+            </el-form-item>
+
+            <el-form-item :label="_label('zhuangtai')">
+              <simple-select v-model="form.status" source="shippingstatus"/>
             </el-form-item>
 
             <el-form-item :label="_label('beizhu')">
@@ -68,30 +66,39 @@
         </el-row>
       </el-form>
     </sp-dialog>
-    <!-- 搜索条件 end -->
+    <!-- 查询条件 end -->
   </div>
 </template>
 
 <script>
+    import {_label} from "@/component/globals"
+
     export default {
-        name: 'sp-orderbrand',
+        name: 'sp-shipping',
         data() {
-            var self = this;
+            let self = this;
             let _label = self._label
 
             return {
                 form: {
                     orderno: "",
-                    brandid: "",
+                    warehouseid: "",
                     supplierid: "",
                     ageseason: "",
                     seasontype: "",
                     bussinesstype: "",
-                    memo: ""
+                    status: ""
                 },
                 props: {
                     columns: [
-                        {name: "orderno", label: _label('gongsidingdanhao'), width: 120},
+                        {name: "orderno", label: _label('rukudanhao'), width: 120},
+                        {
+                            name: "warehouseid",
+                            label: _label('daohuocangku'),
+                            type: 'select',
+                            source: 'warehouse',
+                            width: 150
+                        },
                         {
                             name: "supplierid",
                             label: _label('gonghuoshang'),
@@ -113,43 +120,47 @@
                             source: "bussinesstype",
                             width: 110
                         },
-                        {name: "currency", label: _label('bizhong'), type: 'select', source: "currency", width: 80},
-                        {
-                            name: "total_discount_price",
-                            label: _label('zongjine'),
-                            width: 100,
-                            sortMethod: self.sortMethodAmount
-                        },
-                        {name: "total_number", label: _label('zongjianshu'), width: 100},
-                        {name: "sum_worldcode", label: _label('zongkuanshu'), width: 100},
-                        {name: "discount", label: _label('zhekoulv'), width: 100},
-                        {name: "taxrebate", label: _label('tuishuilv'), width: 100},
-                        {name: "quantum", label: _label('edu'), width: 100},
-                        {name: "memo", label: _label('beizhu'), width: 100, sortable: false},
                         {
                             name: "status",
                             label: _label('zhuangtai'),
                             type: 'select',
-                            source: "orderbrandstatus",
-                            width: 90
+                            source: "shippingstatus",
+                            width: 80
                         },
                         {
-                            name: "maketime", label: _label('dingdanriqi'), width: 110, convert: function (row) {
+                            name: "maketime", label: _label('fahuoriqi'), width: 110, convert: function (row) {
                                 if (row.maketime && row.maketime.length > 0) {
                                     return row.maketime.substr(0, 10)
                                 }
                             }
                         },
-                        {name: "brandid", label: _label('品牌'), width: 150, sortable: false}
+
+                        {
+                            name: "warehousingtime",
+                            label: _label('rukuriqi'),
+                            width: 110,
+                            sortMethod: self.sortMethod,
+                            convert: function (row) {
+                                if (row.warehousingtime && row.warehousingtime.length > 0) {
+                                    return row.warehousingtime.substr(0, 10)
+                                }
+                            }
+                        },
+                        {name: "makestaff", label: _label('zhidanren'), source: "user", type: "select", width: 150}
                     ],
+                    controller: "shippingsimple",
                     actions: [
-                        {label: _label("xiangqing"), handler: self.toCreateConfirm, type: ''},
+                        {
+                            label: _label("xiangqing"), type: '', handler: function ({row}) {
+                                self.$router.push('/shippingsimple/warehousing/' + row.id)
+                            }
+                        },
                         {
                             label: _label("shanchu"),
                             type: "danger",
-                            enable: self._isAllowed('orderbrand-delete'),
+                            enable: self._isAllowed('shipping-delete'),
                             handler: function ({row}) {
-                                self._remove("/orderbrand/delete", {id: row.id}).then(function (result) {
+                                self._remove("/shippingsimple/delete", {id: row.id}).then(function (result) {
                                     if (result) {
                                         self.$refs.tablelist.search(self.searchform)
                                     }
@@ -157,49 +168,39 @@
                             }
                         }
                     ],
-                    controller: "orderbrand",
                     options: {
-                        action_width: 160
-                    },
-                    authname: 'orderbrand-delete',
-                },
-                pro: false,
-                info: {},
-                rowIndex: -1
+                        action_width: 200
+                    }
+                }
             }
         },
         methods: {
-            sortMethodAmount(a, b) {
-                return a.total_discount_price - b.total_discount_price >= 0 ? 1 : -1;
+            sortMethod(a, b) {
+                if (!a.warehousingtime) {
+                    return -1;
+                } else if (!b.warehousingtime) {
+                    return 1
+                } else {
+                    return a.warehousingtime >= b.warehousingtime ? 1 : -1;
+                }
+
             },
             onSearch() {
                 let self = this
-                //self._log(self.searchform)
                 self.$refs.tablelist.search(self.form)
+                self._hideDialog("search")
             },
             showFormToCreate() {
-                this._open('/orderbrand/0')
+                this.$router.push('/shippingsimple/0')
             },
-            showFormToEdit() {
-                let self = this;
-                let rows = self.$refs.tablelist.getSelectRows()
-                let table = {}
-                rows.forEach(item => {
-                    table[item.supplierid] = 1
-                })
-
-                if (rows.length == Object.keys(table).length) {
-                    self.$router.push('/orderbrand/' + self.$refs.tablelist.getSelectValues())
-                } else {
-                    self._info(self._label("tip-tongyige"))
-                }
-            },
-            toCreateConfirm({row, vm}) {
-                this._open('/orderbrand/confirm/' + row.id)
-            },
-            toShipping({row, vm}) {
-                this._open('/shipping/detail/' + row.id)
+            showFormToEdit(rowIndex, row) {
+                this.$router.push('/shippingsimple/' + row.id)
             }
+        },
+        // 渲染前调用
+        created() {
+            // 发送标题
+            this._setTitle(_label('fahuodan'));
         }
     }
 </script>

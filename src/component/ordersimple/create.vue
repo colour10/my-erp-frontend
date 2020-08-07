@@ -3,35 +3,17 @@
     <el-form ref="order-form" class="formx" :model="form" label-width="85px" :inline="true" style="width:100%;"
              size="mini" :rules="formRules" :inline-message="false" :show-message="false">
       <el-row :gutter="0">
-
         <!-- 注：未完成的订单可以使用保存功能 -->
         <asa-button auth="order-submit" :enable="form.status!='2' && isList" @click="saveOrder(1)">
           {{_label("baocun")}}
         </asa-button>
 
-        <!-- 注：只有在编辑模式下，并且未完成的订单才能使用完成功能 -->
-        <asa-button auth="order-submit" @click="finish()" :enable="form.id>0 && form.status!='2'">
-          {{_label("wancheng")}}
-        </asa-button>
-
-        <!-- <asa-button auth="order-submit" :type="canSubmitPayment?'primary':'info'" @click="addPayment">{{_label("shengchengfahuodan")}}</asa-button> -->
-        <!-- <asa-button auth="order-submit" @click="addPayment" :enable="form.id>0">{{_label("fujian")}}</asa-button>
-        <asa-button auth="order-submit" @click="addPayment" :enable="form.id>0">{{_label("feiyong")}}</asa-button> -->
-
         <!-- 注：选择商品功能必须在未完成状态下才可以 -->
         <asa-button :enable="isEditable" @click="showProduct()">{{_label("xuanzeshangpin")}}</asa-button>
-
-        <!-- 注：编辑模式才能使用生成品牌订单 -->
-        <asa-button auth="order-submit" @click="goToOrderbrand" :enable="form.id>0">
-          {{_label("shengchengpinpaidingdan")}}
-        </asa-button>
-
-        <!-- 注：编辑模式才能使用后查 -->
-        <asa-button :enable="form.id>0" @click="$refs.houcha.show()">{{_label("houcha")}}</asa-button>
       </el-row>
 
       <!-- 订单查询条件 start -->
-      <el-row :gutter="0">
+      <el-row :gutter="0" style="margin-top: 10px;">
         <el-col :span="4" style="width:230px">
           <!-- 订货客户 start -->
           <el-form-item :label="_label('dinghuokehu')" prop="bookingid">
@@ -279,8 +261,11 @@
     <!-- 每个sku和对应的spu的订货量 end -->
 
     <!-- 选择商品对话框 start -->
-    <asa-select-product-dialog :visible.sync="pro" :brandids="form.brandids" :genders="form.genders"
-                               @select="onSelect"/>
+    <asa-select-product-dialog
+      :visible.sync="pro"
+      :brandids="form.brandids"
+      :genders="form.genders"
+      @select="onSelect"/>
     <!-- 选择商品对话框 end -->
 
     <!-- 后查 - 品牌订单 start -->
@@ -294,8 +279,6 @@
 </template>
 
 <script>
-    import API from '../api.js';
-    import {_label} from "../globals.js";
     import {copyTo, extend} from "../object.js";
     import detailConvert from "../asa/order-detail.js";
     import orderMixin from "../mixins/order.js";
@@ -304,28 +287,6 @@
     import Asa_Sizecontent_Input from '../asa/Asa_Sizecontent_Input.vue';
     import Asa_Select_Product_Dialog from '../asa/Asa_Select_Product_Dialog.vue'
     import AsaProduct from "@/component/asa/Asa_Product"
-
-    const props = {
-        columns: [
-            {name: "payment_type", label: _label("fukuanleixing"), type: 'select', source: "paymenttype"},
-            {name: "currency", label: _label("bizhong"), type: 'select', source: "currency"},
-            {name: "amount", label: _label("jine")},
-            {name: "paymentdate", label: _label("fukuanriqi"), type: "date"},
-            {name: "memo", label: _label("beizhu")},
-            {name: "makestaff", label: _label("tijiaoren"), type: 'select', source: "user", is_edit_hide: true},
-            {name: "status", label: _label("yiruzhang"), type: "switch", is_edit_hide: true},
-        ],
-        controller: "orderpayment",
-        auth: "order-submit",
-        base: {
-            orderid: '',
-        },
-        options: {
-            isedit: (item) => item.status == 0,
-            isdelete: (item) => item.status == 0,
-            autoreload: true,
-        },
-    };
 
     export default {
         name: 'sp-orderform',
@@ -371,7 +332,6 @@
                 listdata: [],
                 details: [],
                 pro: false,
-                props,
             };
         },
         // 方法列表
@@ -381,40 +341,18 @@
                 let self = this;
                 self.$refs.product.edit(true).setInfo(row).then(product => product.show(false));
             },
-            // 生成品牌订单
-            async goToOrderbrand() {
-                const self = this;
-                self._log('goToOrderbrand');
-
-                const {details} = await API.getOrderListToImport({orderid: self.form.id});
-
-                if (details && details.length > 0) {
-                    self.$router.push('/orderbrand/0?id=' + self.form.id);
-                } else {
-                    // 所有商品已经加入品牌订单了。
-                    this.$message({
-                        message: self._label('tip-001'),
-                        type: 'success'
-                    });
-                }
-            },
-            // 调用部分注释掉了
-            addPayment() {
-                let self = this;
-                if (self.canSubmitPayment) {
-                    props.base.orderid = self.form.id;
-                    self.$refs.payment.showFormToCreate();
-                }
-            },
+            // 修改订货数量
             focus(colIndex, index) {
                 let target = this.$refs[index];
                 if (target) {
                     target.startFocus(colIndex);
                 }
             },
+            // 选择商品对话框
             showProduct() {
                 this.pro = true;
             },
+            // 选择商品对话框的选择功能
             onSelect(productDetail) {
                 let self = this;
                 self.appendRow({
@@ -425,13 +363,7 @@
                     total: 0,
                 });
             },
-            finish() {
-                const self = this;
-
-                self._submit("/order/finish", {id: self.form.id}).then(function (res) {
-                    self._redirect("/order/" + res.data.form.id);
-                });
-            },
+            // 订单保存
             saveOrder(status) {
                 //保存订单
                 let self = this;
@@ -461,10 +393,10 @@
                 params.list = list;
 
                 self.validate().then(() => {
-                    self._submit("/order/saveorder", {params: JSON.stringify(params)}).then(function (res) {
-                        //self._log(res);
+                    // 这里使用 /ordersimple/saveorder 来处理
+                    self._submit("/ordersimple/saveorder", {params: JSON.stringify(params)}).then(function (res) {
                         let data = res.data;
-                        self._redirect("/order/" + res.data.form.id);
+                        self._redirect("/ordersimple");
                     });
                 });
             },
@@ -631,19 +563,16 @@
                 })
             },
         },
+        // 渲染前调用
         mounted() {
             const self = this;
-            //self._log("mounted Order")
-            //copyTo(self.data, this.form)
             let route = self.$route;
             let label;
             if (route.params.id == 0) {
                 label = self._label("xinjiandingdan");
             } else {
                 //加载数据
-                self._fetch("/order/loadorder", {id: route.params.id}).then(async function (res) {
-                    // self._log("加载订单信息", res)
-
+                self._fetch("/ordersimple/loadorder", {id: route.params.id}).then(async function (res) {
                     // 这个是属性赋值，把前面的值复制到后面的变量中(排除 undefined)，这样 form 就有值了
                     copyTo(res.data.form, self.form);
 
@@ -672,7 +601,7 @@
             }
             self._setTitle(label);
 
-
+            // 验证规则
             self.initRules(Rules => {
                 let _label = self._label;
                 return {

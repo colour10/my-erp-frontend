@@ -51,6 +51,7 @@
       <!-- 收件人信息 start -->
       <el-table-column
         prop="consignee"
+        align="center"
         :label="_label('consignee-info')"
         width="180">
         <template slot-scope="scope">
@@ -76,7 +77,7 @@
         align="center"
         sortable
         :label="_label('order-status')"
-        width="100"></el-table-column>
+        width="120"></el-table-column>
       <!-- 订单状态 end -->
 
       <!-- 付款状态 start -->
@@ -85,7 +86,7 @@
         align="center"
         sortable
         :label="_label('payment-status')"
-        width="100"></el-table-column>
+        width="120"></el-table-column>
       <!-- 付款状态 end -->
 
       <!-- 发货状态 start -->

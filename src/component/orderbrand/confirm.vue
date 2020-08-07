@@ -308,6 +308,7 @@
                 let self = this;
                 self.$refs.product.edit(true).setInfo(row).then(product => product.show(false));
             },
+            // 生成发货单
             goToShipping() {
                 this._open('/shipping/0?id=' + this.form.id);
             },
@@ -317,6 +318,7 @@
                     self.$refs[rowIndex].startFocus(colIndex);
                 }
             },
+            // 保存订单
             saveOrder() {
                 //保存订单
                 let self = this;
@@ -344,6 +346,7 @@
                 params.list = list;
 
                 self._log(params)
+                // 确认品牌订单
                 self._submit("/orderbrand/confirm", {params: JSON.stringify(params)}).then(function (res) {
                     _private(self).loadDetail()
                 }).catch(() => {
@@ -390,6 +393,7 @@
                     }
                 }
             },
+            // 合并计算
             getSummary({columns, data}) {
                 const self = this
                 const sums = []

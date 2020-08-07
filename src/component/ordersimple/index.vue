@@ -100,6 +100,7 @@
 
 <script>
     import config from '../config.js';
+    import {_label} from "@/component/globals"
 
     export default {
         name: 'sp-order',
@@ -155,7 +156,7 @@
                             },
                         },
                     ],
-                    controller: "order",
+                    controller: "ordersimple",
                     actions: [
                         {label: _label("xiangqing"), handler: self.toEdit, type: ''}, {
                             label: _label("shanchu"),
@@ -190,7 +191,7 @@
                 self._hideDialog("search");
             },
             toPage(id) {
-                this._open('/order/' + id);
+                this._open('/ordersimple/' + id);
             },
             toEdit({row, vm}) {
                 this.toPage(row.id);
@@ -199,6 +200,7 @@
         // 渲染前调用
         mounted() {
             console.log(this._isAllowed('order-delete'))
+            this._setTitle(_label('dingdanguanli'));
         },
     };
 </script>

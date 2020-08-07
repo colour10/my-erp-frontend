@@ -323,7 +323,7 @@
           </el-table-column>
           <!-- 折扣率 end -->
 
-          <!-- 成交价 start，这里的成交价就是零售价 -->
+          <!-- 成交价 start -->
           <el-table-column :label="_label('chengjiaojia')" width="100" align="center" prop="price">
             <template v-slot="{row}">
               <el-input v-model="row.price" size="mini" v-if="!row.order" :disabled="isDisabled"/>
@@ -429,7 +429,7 @@
     </sp-dialog>
 
     <!-- 前查 start -->
-    <sp-orderbrand-list ref="qiancha" :shippingid="form.id"></sp-orderbrand-list>
+    <sp-simple-order-list ref="qiancha" :shippingid="form.id"></sp-simple-order-list>
     <!-- 前查 end -->
 
     <!-- 编辑商品对话框 start -->
@@ -448,7 +448,7 @@
     import {Order, ProductDetail, promiseRunner} from "../model.js";
     import {debounce} from "../function.js";
     import {statHelper} from "../helper.js";
-    import Asa_Orderbrand_List from '../asa/Asa_Orderbrand_List.vue';
+    import Asa_Simple_Order_List from '../asa/Asa_Simple_Order_List.vue';
     import Asa_Sizecontent_Confirm4 from '../asa/Asa_Sizecontent_Confirm4.vue';
     import Asa_Select_Product_Dialog from '../asa/Asa_Select_Product_Dialog.vue'
     import AsaProduct from "@/component/asa/Asa_Product"
@@ -457,7 +457,7 @@
         name: 'sp-warehousing',
         components: {
             AsaProduct,
-            [Asa_Orderbrand_List.name]: Asa_Orderbrand_List,
+            [Asa_Simple_Order_List.name]: Asa_Simple_Order_List,
             [Asa_Sizecontent_Confirm4.name]: Asa_Sizecontent_Confirm4,
             [Asa_Select_Product_Dialog.name]: Asa_Select_Product_Dialog,
         },
