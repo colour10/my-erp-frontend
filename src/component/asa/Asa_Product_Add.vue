@@ -1028,11 +1028,11 @@
                 self._fetch("/product/getcolorgrouplist", {id: select.id}).then(function (res) {
                     self.product.colors = []
                     res.data.forEach(function (row, index) {
-                        if (_.isEmpty(row.color_system_id) || _.isEmpty(row.color_id)) {
+                        if (_.isEmpty(row.brandcolor) || _.isEmpty(row.color_id)) {
                             row.colorId = ''
                         } else {
                             row.colorId = []
-                            row.colorId.push(parseInt(row.color_system_id))
+                            row.colorId.push(parseInt(row.brandcolor))
                             row.colorId.push(parseInt(row.color_id))
                         }
 
@@ -1111,7 +1111,7 @@
                 self.product.form.memo = select.memo
                 // 颜色重新赋值
                 // 0号为色系，1号为颜色
-                self.product.form.colorSystemId = parseInt(select.color_system_id)
+                self.product.form.colorSystemId = parseInt(select.brandcolor)
                 self.product.form.colorId = parseInt(select.color_id)
             },
             cancleAddSeries() {

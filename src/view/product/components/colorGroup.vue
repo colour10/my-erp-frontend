@@ -188,11 +188,11 @@
                             self.wordcode_2 = row.wordcode_2
                         }
 
-                        if (_.isEmpty(row.color_system_id) || _.isEmpty(row.color_id)) {
+                        if (_.isEmpty(row.brandcolor) || _.isEmpty(row.color_id)) {
                             row.colorId = ''
                         } else {
                             row.colorId = []
-                            row.colorId.push(parseInt(row.color_system_id))
+                            row.colorId.push(parseInt(row.brandcolor))
                             row.colorId.push(parseInt(row.color_id))
                         }
 

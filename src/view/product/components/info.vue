@@ -803,7 +803,7 @@
 
                     // 色系、颜色如果为空，则不强转为数字类型
                     res.data.colorId = res.data.color_id ? parseInt(res.data.color_id) : ''
-                    res.data.colorSystemId = res.data.color_system_id ? parseInt(res.data.color_system_id) : ''
+                    res.data.colorSystemId = res.data.brandcolor ? parseInt(res.data.brandcolor) : ''
                     res.data.secondColorId = res.data.second_color_id ? parseInt(res.data.second_color_id) : ''
 
                     // 需要把 childbrand 和 brandgroupid 合在一起组成 子品类列表，这个给尺码组使用

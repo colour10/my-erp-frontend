@@ -94,19 +94,26 @@
       <i class="el-icon-rank" style="position:fixed;top:18px;right:50px;font-size:20px;color:white;cursor:pointer;"
          @click="toggleFullScreen"></i>
     </el-row>
+
+    <!-- tag 列表 start -->
     <el-row id="nav">
       <el-tag v-for="(tag,index) in tags" :key="index" :closable="tags.length>=1"
               style="margin-right:5px;cursor:pointer" @close="onCloseTag(tag)" @click="onClickTag(tag)"
               :type="getType(tag.key)">{{tag.label}}
       </el-tag>
     </el-row>
-    <section class="el-container" style="padding-top:60px">
+    <!-- tag 列表 end -->
+
+    <!-- 主要内容 start -->
+    <section class="el-container" id="mainContainer">
       <transition name="el-fade-in" mode="out-in">
         <keep-alive :include="includes">
           <router-view :key="module"></router-view>
         </keep-alive>
       </transition>
     </section>
+    <!-- 主要内容 end -->
+
     <div id="footer">
       <!--<el-footer class="el-footer"></el-footer>-->
     </div>
@@ -193,6 +200,17 @@
                 //self._log("$route", this.$route)
                 self.checkLogin();
             },
+            // 检测 tags 的变化，以便随时调整 与内容之间的间隙padding
+            'tags.length'(newVal, oldVal) {
+                // 记录变化值
+                console.log('tags.length发生变更 => ', newVal, oldVal)
+                this.$nextTick(() => {
+                    // 获取当前节点的实时高度
+                    let height = document.getElementById('nav').offsetHeight
+                    // 然后设置 paddingTop 的值
+                    document.getElementById('mainContainer').style.paddingTop = height + 'px'
+                })
+            }
         },
         computed: {
             moduleName() {

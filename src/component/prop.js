@@ -11,8 +11,10 @@ const clearCache = function (name) {
   DataSource.getDataSource(name, _label("lang")).clear()
 }
 
+// simple-admin-page 定义字段属性
 const props = function () {
   return {
+    // 款式年代
     "ageseason": {
       columns: [
         {name: "sessionmark", label: _label("fabuji"), is_hide: true, type: 'select', source: "sessionmark"},
@@ -547,6 +549,7 @@ const props = function () {
   }
 }
 
+// multiple-admin-page
 const getComponent = function (name) {
   return {
     name: "sp-" + name,
@@ -565,6 +568,7 @@ const getComponent = function (name) {
   }
 }
 
+// simple-admin-page
 const getComponentSimple = function (name) {
   return {
     name: "sp-" + name,

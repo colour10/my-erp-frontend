@@ -130,8 +130,8 @@
         <el-form-item :label="showLabel('asabianhao')" prop="code">
           <el-input v-model="postForm.code"/>
         </el-form-item>
-        <el-form-item :label="showLabel('sexi')" prop="color_system_id">
-          <el-select v-model="postForm.color_system_id" class="filter-item">
+        <el-form-item :label="showLabel('sexi')" prop="brandcolor">
+          <el-select v-model="postForm.brandcolor" class="filter-item">
             <el-option v-for="item in colorsystems" :key="item.id" :label="item.title" :value="item.id+''"/>
           </el-select>
         </el-form-item>
@@ -161,7 +161,7 @@
         name_it: '',
         picture: '',
         code: '',
-        color_system_id: ''
+        brandcolor: ''
     }
 
     // 修改色系字段
@@ -223,7 +223,7 @@
                             message: showLabel('asabianhao') + showLabel('required'),
                             trigger: 'blur'
                         }],
-                        color_system_id: [{
+                        brandcolor: [{
                             required: true,
                             message: showLabel('sexi') + showLabel('required'),
                             trigger: 'change'
@@ -258,8 +258,8 @@
             handleCreate() {
                 this.dialogStatus = 'createColor'
                 this.resetDialogForm()
-                // 把 color_system_id 拿过来并赋值给当前窗口
-                this.postForm.color_system_id = this.currentColorSystem.id + ''
+                // 把 brandcolor 拿过来并赋值给当前窗口
+                this.postForm.brandcolor = this.currentColorSystem.id + ''
                 this.showDialogForm()
             },
             // 更新颜色

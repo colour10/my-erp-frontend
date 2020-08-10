@@ -298,9 +298,9 @@
                                     obj.form.fall = ""
                                     obj.form.winter = ""
                                     obj.form.memo = ""
-                                    obj.form.colorSystemId = ""
-                                    obj.form.colorId = ""
-                                    obj.form.secondColorId = ""
+                                    obj.form.brandcolor = ""
+                                    obj.form.color_id = ""
+                                    obj.form.second_color_id = ""
                                     // 数据传递，把 obj 传递给子组件的 product
                                     self.$refs.productadd.setForm(obj).show(false)
                                 }, 100)

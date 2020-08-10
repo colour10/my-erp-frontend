@@ -10,6 +10,8 @@
     :modal="false">
 
     <el-tabs type="border-card" @tab-click="onTabClick" v-model="currentTab">
+
+      <!-- 基本资料 start -->
       <el-tab-pane :label="_label('jibenziliao')" name="product">
 
         <el-row>
@@ -43,9 +45,9 @@
               <!-- 国际码 end -->
 
               <!-- 色系 start -->
-              <el-form-item :label="showLabel('sexi')" label-width="85px" prop="colorSystemId">
+              <el-form-item :label="showLabel('sexi')" label-width="85px" prop="brandcolor">
                 <el-select
-                  v-model="form.colorSystemId"
+                  v-model="form.brandcolor"
                   placeholder=""
                   filterable
                   size="mini"
@@ -63,7 +65,7 @@
               <!-- 颜色 start -->
               <el-form-item :label="showLabel('yanse')" label-width="40px" prop="colorId">
                 <el-select
-                  v-model="form.colorId"
+                  v-model="form.color_id"
                   filterable
                   placeholder=""
                   size="mini"
@@ -79,10 +81,10 @@
               <!-- 颜色 end -->
 
               <!-- 副颜色 start -->
-              <el-form-item :label="showLabel('second_color')" label-width="60px" prop="secondColorId">
+              <el-form-item :label="showLabel('second_color')" label-width="60px" prop="second_color_id">
                 <el-cascader
                   placeholder=""
-                  v-model="form.secondColorId"
+                  v-model="form.second_color_id"
                   size="mini"
                   :show-all-levels="false"
                   :options="colorSystems"
@@ -423,6 +425,7 @@
           <!-- 按钮组 end -->
         </el-form>
       </el-tab-pane>
+      <!-- 基本资料 end -->
 
       <!-- 商品尺寸 start -->
       <el-tab-pane :label="_label('shangpinchicun')" name="property" :disabled="form.id==''">
@@ -458,30 +461,42 @@
           :isCreate="false"
           v-if="_isAllowed('product')"></asa-product-search-panel>
 
-        <el-table :data="colors" border style="width:100%;">
+        <el-table :data="colors" border style="width:100%;" class="myTable">
+          <!-- 主图 start -->
           <el-table-column width="80" align="center">
             <template v-slot="scope">
               <simple-avatar v-model="scope.row.picture" font-size="14px" :size="35"></simple-avatar>
             </template>
           </el-table-column>
+          <!-- 主图 end -->
+
+          <!-- 附图 start -->
           <el-table-column width="80" align="center">
             <template v-slot="scope">
               <simple-avatar v-model="scope.row.picture2" font-size="14px" :size="35"></simple-avatar>
             </template>
           </el-table-column>
+          <!-- 附图 end -->
 
+          <!-- 款式 start -->
           <el-table-column :label="_label('kuanshi')" width="140" align="center">
             <template v-slot="scope">
               <el-input v-model="scope.row.wordcode_1" size="mini"
                         @keyup.native="onKeyInput(scope.row, 'wordcode_1')"></el-input>
             </template>
           </el-table-column>
+          <!-- 款式 end -->
+
+          <!-- 材质 start -->
           <el-table-column :label="_label('caizhi')" width="140" align="center">
             <template v-slot="scope">
               <el-input v-model="scope.row.wordcode_2" size="mini"
                         @keyup.native="onKeyInput(scope.row, 'wordcode_2')"></el-input>
             </template>
           </el-table-column>
+          <!-- 材质 end -->
+
+          <!-- 颜色 start -->
           <el-table-column :label="_label('yanse')" width="140" align="center">
             <template v-slot="scope">
               <!--<el-input v-model="scope.row.wordcode_3" size="mini" @keyup.native.down="onKeyDown(scope.$index)" @keyup.native.up="onKeyUp(scope.$index)" :ref="'word'+scope.$index"></el-input>-->
@@ -489,34 +504,66 @@
                         @keyup.native="onColorcodeChange(scope.row, 'wordcode_3')"></el-input>
             </template>
           </el-table-column>
+          <!-- 颜色 end -->
+
+          <!-- 颜色名称 start -->
           <el-table-column :label="_label('yansemingcheng')" width="150" align="center">
             <template v-slot="scope">
               <el-input v-model="scope.row.colorname" size="mini"></el-input>
             </template>
           </el-table-column>
+          <!-- 颜色名称 end -->
 
-          <el-table-column prop="colorId" :label="_label('sexi')" width="140" align="center">
-            <template v-slot="scope">
-              <colorselect v-model="scope.row.colorId"></colorselect>
+          <!-- 色系 start -->
+          <el-table-column :label="showLabel('sexi')">
+            <template slot-scope="scope">
+              <el-select v-model="scope.row.brandcolor" placeholder="" size="mini">
+                <el-option
+                  v-for="item in colorSystems"
+                  :key="item.id + item.title"
+                  :label="item.title"
+                  :value="item.id + ''">
+                </el-option>
+              </el-select>
             </template>
           </el-table-column>
+          <!-- 色系 end -->
 
+          <!-- 颜色 start -->
+          <el-table-column :label="showLabel('yanse')">
+            <template slot-scope="scope">
+              <el-select v-model="scope.row.color_id" placeholder="" size="mini">
+                <el-option
+                  v-for="item in filterColorsInSkus(scope.row)"
+                  :key="item.id + item.title"
+                  :label="item.title"
+                  :value="item.id + ''">
+                </el-option>
+              </el-select>
+            </template>
+          </el-table-column>
+          <!-- 颜色 end -->
 
+          <!-- 辅助码 start -->
           <el-table-column :label="_label('fuzhuma')" width="120" align="center">
             <template v-slot="scope">
               <el-input v-model="scope.row.wordcode_4" size="mini"></el-input>
             </template>
           </el-table-column>
+          <!-- 辅助码 end -->
 
-          <el-table-column :label="_label('caozuo')" width="130" align="center">
+          <!-- 操作 start -->
+          <el-table-column :label="_label('caozuo')" align="center">
             <template v-slot="scope">
               <as-button type="danger" @click="onDeleteColorGroup(scope, scope.row)"
                          v-if="option.isedit && form.id!=scope.row.id">{{_label("shanchu")}}
               </as-button>
             </template>
           </el-table-column>
+          <!-- 操作 end -->
         </el-table>
 
+        <!-- 保存-追加-退出 button start -->
         <el-col :offset="8" :span="8" style="padding-top:5px">
           <asa-button :enable="_isAllowed('product')" @click="onSaveColorGroup" v-if="option.isedit">
             {{_label("baocun")}}
@@ -528,6 +575,8 @@
 
           <as-button type="primary" @click="onQuit">{{_label("tuichu")}}</as-button>
         </el-col>
+        <!-- 保存-追加-退出 button end -->
+
       </el-tab-pane>
       <!-- 同款多色 end -->
 
@@ -599,7 +648,8 @@
     import ulnarinch from '@/view/product/components/ulnarinch.vue'
     import ErpProductAdd from "@/view/product/add"
 
-    const color_keys = ['id', 'brandcolor', 'wordcode_1', 'wordcode_2', 'wordcode_3', 'wordcode_4', 'colorname', 'picture', 'picture2']
+    // 定义同款多色字段
+    const color_keys = ['id', 'brandcolor', 'wordcode_1', 'wordcode_2', 'wordcode_3', 'wordcode_4', 'colorname', 'picture', 'picture2', 'color_id']
 
     export default {
         name: 'asa-product',
@@ -635,6 +685,7 @@
                 materials: [],
                 sizecontents: [],
                 sizecontents_loaded: false,
+                // 同款多色数据
                 colors: [],
                 colors_loaded: false,
                 colors2: [], //仅仅用来显示多色
@@ -700,6 +751,20 @@
             }
         },
         methods: {
+            // 同款多色匹配数据
+            filterColorsInSkus(row) {
+                console.log('filterColorsInSkus => row', row)
+                if (row.brandcolor) {
+                    let colorSystem = this.colorSystems.find(item => {
+                        return item.id == row.brandcolor
+                    })
+
+                    if (typeof (colorSystem) != 'undefined') {
+                        return colorSystem.colors
+                    }
+                }
+                return []
+            },
             // 新建
             handleCreate() {
                 this.showDialogForm()
@@ -847,9 +912,9 @@
                     }
 
                     // 色系、颜色如果为空，则不强转为数字类型
-                    res.data.colorId = res.data.color_id ? parseInt(res.data.color_id) : ''
-                    res.data.colorSystemId = res.data.color_system_id ? parseInt(res.data.color_system_id) : ''
-                    res.data.secondColorId = res.data.second_color_id ? parseInt(res.data.second_color_id) : ''
+                    res.data.color_id = res.data.color_id ? parseInt(res.data.color_id) : ''
+                    res.data.brandcolor = res.data.brandcolor ? parseInt(res.data.brandcolor) : ''
+                    res.data.second_color_id = res.data.second_color_id ? parseInt(res.data.second_color_id) : ''
 
                     // 品类转换
                     res.data.brandgroupid = res.data.brandgroupid ? parseInt(res.data.brandgroupid) : ''
@@ -991,23 +1056,27 @@
                 self._submit("/product/savecode", {params: JSON.stringify(params)}).then(() => {
                 });
             },
+
+            // 保存同款多色逻辑
             onSaveColorGroup() {
                 //保存同款多色数据
                 let self = this;
                 let params = {productid: self.form.id}
                 params.list = self.colors.map(item => extract(item, color_keys))
+                // 记录下这个数值
+                console.log('Asa_Product => onSaveColorGroup => params的值是：', params)
 
                 for (let i = 0; i < params.list.length; i++) {
                     let row = params.list[i];
                     if (row.wordcode_1 == '' && row.wordcode_2 == '' && row.wordcode_3 == '') {
                         return self._showErorMessage({message: self._label("8000"), label: self._label("guojima")})
                     }
-
+                    // brandcolor 是色系，必填项
                     if (row.brandcolor == "") {
                         return self._showErorMessage({message: self._label("8000"), label: self._label("sexi")})
                     }
                 }
-
+                // 提交逻辑
                 self._submit("/product/savecolorgroup", {params: JSON.stringify(params)}).then(function (res) {
                     self.setInfo(self.form.id).then(() => {
                         res.data.list.forEach(function (item) {
@@ -1021,6 +1090,7 @@
                     })
                 });
             },
+            // 追加一条同款多色
             onAppendColor() {
                 let self = this
                 self.colors.push({
@@ -1028,6 +1098,7 @@
                     picture2: "",
                     colorname: "",
                     brandcolor: "",
+                    color_id: "",
                     wordcode_1: self.form.wordcode_1,
                     wordcode_2: self.form.wordcode_2,
                     wordcode_3: "",
@@ -1296,8 +1367,8 @@
             'form.nationalpricecurrency': function () {
                 this.loadExchangeRate()
             },
-            // 监控色系，一旦 colorSystemId 发生了变动，那么就需要重新选择下面的颜色
-            "form.colorSystemId"(newValue, oldValue) {
+            // 监控色系，一旦 brandcolor 发生了变动，那么就需要重新选择下面的颜色
+            "form.brandcolor"(newValue, oldValue) {
                 if (oldValue !== undefined) {
                     this.form.colorId = '';
                 }
@@ -1439,9 +1510,9 @@
             // 匹配色系
             filterColors() {
                 let self = this
-                if (this.form.colorSystemId) {
+                if (this.form.brandcolor) {
                     let colorSystem = this.colorSystems.find(item => {
-                        return item.id == self.form.colorSystemId
+                        return item.id == self.form.brandcolor
                     })
 
                     if (typeof (colorSystem) != 'undefined') {
@@ -1476,3 +1547,9 @@
         }
     }
 </script>
+
+<style scoped>
+  .myTable >>> .avatar-uploader {
+    margin-top: 8px;
+  }
+</style>
