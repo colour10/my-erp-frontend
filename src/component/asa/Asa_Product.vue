@@ -427,11 +427,11 @@
       </el-tab-pane>
       <!-- 基本资料 end -->
 
-      <!-- 商品尺寸 start -->
-      <el-tab-pane :label="_label('shangpinchicun')" name="property" :disabled="form.id==''">
+      <!-- 商品属性 start -->
+      <el-tab-pane :label="_label('shangpinshuxing')" name="property" :disabled="form.id==''">
         <property :productid="form.id" ref="property" @quit="onQuit" :option="option"></property>
       </el-tab-pane>
-      <!-- 商品尺寸 end -->
+      <!-- 商品属性 end -->
 
       <!-- 商品条码 start -->
       <el-tab-pane :label="_label('shangpintiaoma')" name="code" :disabled="form.id==''">
@@ -444,11 +444,13 @@
             </template>
           </el-table-column>
         </el-table>
+        <!-- 提交+退出按钮 start -->
         <el-col :offset="9" :span="6">
           <as-button auth="product" type="primary" @click="onSaveGoodsCode" v-if="option.isedit">{{_label("baocun")}}
           </as-button>
           <as-button type="primary" @click="onQuit">{{_label("tuichu")}}</as-button>
         </el-col>
+        <!-- 提交+退出按钮 end -->
       </el-tab-pane>
       <!-- 商品条码 end -->
 
@@ -890,7 +892,7 @@
             onQuit() {
                 this.dialogVisible = false
                 // 因为关闭对话框会出现一个奇怪的bug，那就是商品列表中每一行数据颜色列表，将会被清空，这个问题暂时没有找到解决方法，只有强制关闭时执行一下重新加载列表了
-                this.reloadList()
+                // this.reloadList()
             },
             onKeyInput(target, columnName) {
                 target[columnName] = target[columnName].toUpperCase();
@@ -1045,6 +1047,7 @@
                     self.colors.push(extract(info, color_keys))
                 }
             },
+            // 提交 - 保存商品条码逻辑
             onSaveGoodsCode() {
                 let self = this
 
@@ -1057,7 +1060,7 @@
                 });
             },
 
-            // 保存同款多色逻辑
+            // 提交 - 保存同款多色逻辑
             onSaveColorGroup() {
                 //保存同款多色数据
                 let self = this;
@@ -1115,6 +1118,7 @@
                     return {display: 'none'}
                 }
             },
+            // tab切换逻辑
             onTabClick(tab) {
                 const self = this
                 if (tab.name == 'code' && self.sizecontents_loaded == false) {
@@ -1149,16 +1153,15 @@
                     }, 50)
                 }
             },
+            // 获取同款多色的各个产品的产品数据
             loadColorGroupList() {
                 let self = this;
                 if (self.colors_loaded == true) {
                     return;
                 }
                 self._fetch("/product/getcolorgrouplist", {id: self.form.id}).then(function (res) {
-                    //console.log(res)
                     res.data.forEach(function (item) {
                         self.colors.push(extract(item, color_keys))
-                        ///self._log(item)
                     })
                     self.colors_loaded = true;
                 })
@@ -1313,6 +1316,7 @@
                 self.clearValidate(50)
                 return self
             },
+            // 加载汇率信息
             loadExchangeRate() {
                 //加载汇率信息
                 let self = this;
@@ -1364,6 +1368,7 @@
             'form.wordpricecurrency': function () {
                 this.loadExchangeRate()
             },
+            // 本国零售价
             'form.nationalpricecurrency': function () {
                 this.loadExchangeRate()
             },
