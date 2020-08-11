@@ -436,7 +436,7 @@
       <!-- 商品条码 start -->
       <el-tab-pane :label="_label('shangpintiaoma')" name="code" :disabled="form.id==''">
         <el-table :data="sizecontents" border style="width:100%;">
-          <el-table-column prop="name" :label="_label('chima')" align="left" width="100">
+          <el-table-column prop="sizecontent_name" :label="_label('chima')" align="left" width="100">
           </el-table-column>
           <el-table-column prop="goods_code" :label="_label('shangpintiaoma')" width="350" align="left">
             <template v-slot="scope">
@@ -632,7 +632,6 @@
     import {ModelBus, ProductDetail} from "../model.js";
     import {initObject} from "../array.js";
     import {extend} from "../object.js";
-    import List from '../list.js';
     import DataSource from '../DataSource.js';
     import Asa_Product_Search_Panel from './Asa_Product_Search_Panel.vue';
     import Asa_Product_Property from './Asa_Product_Property.vue';
@@ -685,6 +684,7 @@
                 allmaterials: [],
                 // 当前的材质列表
                 materials: [],
+                // 商品条码
                 sizecontents: [],
                 sizecontents_loaded: false,
                 // 同款多色数据
@@ -755,7 +755,6 @@
         methods: {
             // 同款多色匹配数据
             filterColorsInSkus(row) {
-                console.log('filterColorsInSkus => row', row)
                 if (row.brandcolor) {
                     let colorSystem = this.colorSystems.find(item => {
                         return item.id == row.brandcolor
@@ -1053,9 +1052,10 @@
 
                 let params = {productid: self.form.id}
                 params.list = self.sizecontents.map(function (item) {
-                    return {sizecontentid: item.id, goods_code: item.goods_code}
+                    return {sizecontentid: item.sizecontentid, goods_code: item.goods_code}
                 })
 
+                // 提交
                 self._submit("/product/savecode", {params: JSON.stringify(params)}).then(() => {
                 });
             },
@@ -1121,17 +1121,36 @@
             // tab切换逻辑
             onTabClick(tab) {
                 const self = this
-                if (tab.name == 'code' && self.sizecontents_loaded == false) {
-                    let ntlist = new List(self.sizecontents)
+                // 如果切换了商品条码
+                if (tab.name == 'code') {
+                    // 以前的方法注释掉，主要的思路是通过商品id去 tb_productcode 表查有没有 productid 的记录
+                    // let ntlist = new List(self.sizecontents)
+                    //
+                    // API.getProductCodeList(self.form.id).then(data => {
+                    //     data.forEach(function (item) {
+                    //         let index = ntlist.findIndex('id', item.sizecontentid)
+                    //         if (index >= 0) {
+                    //             self.sizecontents[index].goods_code = item.goods_code
+                    //         }
+                    //     })
+                    // });
+                    // self.sizecontents_loaded = true;
 
-                    API.getProductCodeList(self.form.id).then(data => {
-                        data.forEach(function (item) {
-                            let index = ntlist.findIndex('id', item.sizecontentid)
-                            if (index >= 0) {
-                                self.sizecontents[index].goods_code = item.goods_code
+                    // 主要逻辑
+                    // 每次都清空
+                    self.sizecontents_loaded = false;
+                    self.sizecontents = []
+                    self._fetch("/product/codelist", {id: self.form.id}).then(function (res) {
+                        // 需要向数组中添加对象作为 value, 这个时候用到 map 函数
+                        const myData = res.data.map(item => {
+                            return {
+                                sizecontentid: item.sizecontentid,
+                                sizecontent_name: item.sizecontent_name,
+                                goods_code: item.goods_code,
                             }
                         })
-                    });
+                        self.sizecontents = myData
+                    })
                     self.sizecontents_loaded = true;
                 } else if (tab.name == 'colorgroup' && self.colors_loaded == false) {
                     self.loadColorGroupList();
