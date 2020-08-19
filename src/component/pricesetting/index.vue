@@ -16,12 +16,16 @@
 
     <!-- 数据列表 start -->
     <el-table :data="settings" style="width:100%;" stripe>
+      <!-- 品类 start -->
       <el-table-column :label="_label('pinlei')" align="left" width="90">
         <template v-slot="{row}">
           <span v-if="row.brandgroupchildid=='0'">*</span>
           <sp-select-text :value="row.brandgroupid" source="brandgroup" v-if="row.brandgroupchildid>0"></sp-select-text>
         </template>
       </el-table-column>
+      <!-- 品类 end -->
+
+      <!-- 子品类 start -->
       <el-table-column :label="_label('zipinlei')" align="left" width="120">
         <template v-slot="{row}">
           <span v-if="row.brandgroupchildid=='0'">*</span>
@@ -29,13 +33,16 @@
                           v-if="row.brandgroupchildid>0"></sp-select-text>
         </template>
       </el-table-column>
+      <!-- 子品类 end -->
 
+      <!-- 商品属性 start -->
       <el-table-column :label="_label('shangpinshuxing')" align="left" width="120">
         <template v-slot="{row}">
           <span v-if="row.producttypeid=='0'">*</span>
           <sp-select-text :value="row.producttypeid" source="producttype" v-if="row.producttypeid>0"></sp-select-text>
         </template>
       </el-table-column>
+      <!-- 商品属性 end -->
 
       <el-table-column :label="column.name" align="center" v-for="column in prices" :key="column.id" width="90">
         <template v-slot="{row}">

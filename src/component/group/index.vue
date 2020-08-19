@@ -370,14 +370,12 @@
                 var self = this;
                 self.dialogVisible = true;
                 setTimeout(function () {
-                    //console.log(self.$refs)
                     var columns = props.columns;
                     for (var i = 0; i < columns.length; i++) {
                         var column = columns[i]
                         var ele = self.$refs[column.name][0];
 
                         if (column.is_focus && !ele.disabled) {
-                            //console.log(ele)
                             ele.focus();
                             break;
                         }

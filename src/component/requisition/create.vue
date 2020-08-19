@@ -5,40 +5,58 @@
         <as-button type="primary" @click="saveOrder">{{_label("shenqing")}}</as-button>
       </el-row>
       <el-row :gutter="0">
+        <!-- 调拨方式 start -->
         <el-col :span="6" style="width:300px">
           <el-form-item :label="_label('diaobofangshi')">
             <simple-select v-model="form.requisitiontype" source="requisitiontype"
                            :disabled="counter>0"></simple-select>
           </el-form-item>
         </el-col>
+        <!-- 调拨方式 end -->
+
+        <!-- 调出仓库 start -->
         <el-col :span="6" style="width:300px" v-if="form.requisitiontype=='1'">
           <el-form-item :label="_label('diaochucangku')">
             <simple-select v-model="form.out_id" source="warehouse"></simple-select>
           </el-form-item>
         </el-col>
+        <!-- 调出仓库 end -->
+
+        <!-- 调入仓库 start -->
         <el-col :span="6" style="width:300px" v-if="form.requisitiontype=='2'">
           <el-form-item :label="_label('diaorucangku')">
             <simple-select v-model="form.in_id" source="warehouse" :disabled="counter>0"></simple-select>
           </el-form-item>
         </el-col>
+        <!-- 调入仓库 end -->
+
+        <!-- 备注 start -->
         <el-col :span="6" style="width:300px" v-if="form.requisitiontype>0">
           <el-form-item :label="_label('beizhu')">
             <el-input v-model="form.memo"></el-input>
           </el-form-item>
         </el-col>
+        <!-- 备注 end -->
       </el-row>
     </el-form>
+
+    <!-- 调出 start -->
     <el-row v-if="form.requisitiontype=='1' && form.out_id>0">
       <el-col :span="24" class="product">
         <sp-requisition-out ref="requisition" :out_id="form.out_id"></sp-requisition-out>
 
       </el-col>
     </el-row>
+    <!-- 调出 end -->
+
+    <!-- 调入 start -->
     <el-row v-if="form.requisitiontype=='2' && form.in_id>0">
       <el-col :span="24" class="product">
         <sp-requisition-in ref="requisition" :in_id="form.in_id" @change="onChange"></sp-requisition-in>
       </el-col>
     </el-row>
+    <!-- 调入 end -->
+
   </div>
 </template>
 
