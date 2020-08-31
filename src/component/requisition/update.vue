@@ -86,105 +86,105 @@
 </template>
 
 <script>
-    import {copyTo} from "../object.js";
-    import {Productstock} from "../model.js";
+  import {copyTo} from "../object.js";
+  import {Productstock} from "../model.js";
 
-    export default {
-        name: 'asa-requisition-detail-dialog',
-        components: {},
-        data() {
-            let self = this;
+  export default {
+    name: 'asa-requisition-detail-dialog',
+    components: {},
+    data() {
+      let self = this;
 
-            return {
-                form: {
-                    apply_staff: "",
-                    apply_date: "",
-                    turnout_staff: "",
-                    turnout_date: "",
-                    turnin_staff: "",
-                    turnin_date: "",
-                    out_name: "",
-                    in_name: "",
-                    status: "",
-                    in_id: "",
-                    out_id: "",
-                    id: "",
-                },
-                tabledata: [],
-            };
+      return {
+        form: {
+          apply_staff: "",
+          apply_date: "",
+          turnout_staff: "",
+          turnout_date: "",
+          turnin_staff: "",
+          turnin_date: "",
+          out_name: "",
+          in_name: "",
+          status: "",
+          in_id: "",
+          out_id: "",
+          id: "",
         },
-        methods: {
-            doAction(action) {
-                //保存订单
-                let self = this;
+        tabledata: [],
+      };
+    },
+    methods: {
+      doAction(action) {
+        //保存订单
+        let self = this;
 
-                if (!self.confirm()) {
-                    return;
-                }
+        if (!self.confirm()) {
+          return;
+        }
 
-                let params = {id: self.form.id};
-                let array = {};
-                let total = 0;
-                let total_number = 0;
-                self.tabledata.forEach(item => {
-                    array[item.id] = item.select_number;
-                    total += item.select_number;
-                    total_number += item.number;
-                });
+        let params = {id: self.form.id};
+        let array = {};
+        let total = 0;
+        let total_number = 0;
+        self.tabledata.forEach(item => {
+          array[item.id] = item.select_number;
+          total += item.select_number;
+          total_number += item.number;
+        });
 
-                params.total = "";
-                if (total == 0) {
-                    params.total = 'deny';
-                } else if (total_number == total) {
-                    params.total = "allow";
-                }
-                params.list = array;
+        params.total = "";
+        if (total == 0) {
+          params.total = 'deny';
+        } else if (total_number == total) {
+          params.total = "allow";
+        }
+        params.list = array;
 
-                self._log(JSON.stringify(params));
-                self._submit("/requisition/" + action, {params: JSON.stringify(params)}).then(function (res) {
-                    self.init(res);
-                });
-            },
-            confirmout() {
-                this.doAction('confirmout');
-            },
-            confirmin() {
-                this.doAction('confirmin');
-            },
-            async cancel() {
-                let self = this;
-                self.tabledata.forEach(item => item.select_number = 0);
-                self.doAction("cancel");
-            },
-            init(result) {
-                let self = this;
-                //self._log("加载订单信息", result)
+        self._log(JSON.stringify(params));
+        self._submit("/requisition/" + action, {params: JSON.stringify(params)}).then(function (res) {
+          self.init(res);
+        });
+      },
+      confirmout() {
+        this.doAction('confirmout');
+      },
+      confirmin() {
+        this.doAction('confirmin');
+      },
+      async cancel() {
+        let self = this;
+        self.tabledata.forEach(item => item.select_number = 0);
+        self.doAction("cancel");
+      },
+      init(result) {
+        let self = this;
+        //self._log("加载订单信息", result)
 
-                copyTo(result.data.form, self.form);
+        copyTo(result.data.form, self.form);
 
-                self.tabledata = [];
-                result.data.list.forEach(item => {
-                    Productstock.load({data: item.out_productstockid, depth: 2}).then(productstock => {
-                        self._log(productstock);
-                        item.productstock = productstock;
-                        item.select_number = 0;
-                        self.tabledata.push(item);
-                    });
-                });
-            },
-        },
-        mounted: function () {
-            let self = this;
+        self.tabledata = [];
+        result.data.list.forEach(item => {
+          Productstock.load({data: item.out_productstockid, depth: 2}).then(productstock => {
+            self._log(productstock);
+            item.productstock = productstock;
+            item.select_number = 0;
+            self.tabledata.push(item);
+          });
+        });
+      },
+    },
+    mounted: function () {
+      let self = this;
 
-            let route = self.$route;
-            if (route.params.id > 0) {
-                self._setTitle(self._label("diaobodan") + ":" + route.params.id);
-                self._fetch("/requisition/load", {id: route.params.id}).then(function (res) {
-                    self.init(res);
-                });
-            } else {
-                self._setTitle(self._label("diaobodan"));
-            }
-        },
-    };
+      let route = self.$route;
+      if (route.params.id > 0) {
+        self._setTitle(self._label("diaobodan") + ":" + route.params.id);
+        self._fetch("/requisition/load", {id: route.params.id}).then(function (res) {
+          self.init(res);
+        });
+      } else {
+        self._setTitle(self._label("diaobodan"));
+      }
+    },
+  };
 </script>

@@ -121,119 +121,119 @@
 </template>
 
 <script>
-    import {config} from '../globals.js'
-    import bus from '../bus.js';
+  import {config} from '../globals.js'
+  import bus from '../bus.js';
 
-    export default {
-        name: 'sp-home',
-        data() {
-            return {
-                fullscreen: false,
-            };
-        },
-        provide() {
-            return {
-                bus,
-            };
-        },
-        methods: {
-            checkLogin() {
-                const self = this;
-                if (!self.$store.getters.is_login) {
-                    self.$router.push({path: "/login/login", query: {back: this.$route.path}});
-                }
-            },
-            onSelect(index, indexPath) {
-                //this._log(index, indexPath)
-                this.$router.push('/' + index);
-            },
-            onCloseTag(tag) {
-                bus.$emit('close', tag.path);
-                this.$store.commit("closeTag", {
-                    tag
-                });
-            },
-            onClickTag(tag) {
-                this.$router.push(tag.path);
-            },
-            getType(key) {
-                return key == this.current.key ? 'success' : '';
-            },
-            fullScreen() {
-                var el = document.documentElement;
-                var rfs = el.requestFullScreen || el.webkitRequestFullScreen || el.mozRequestFullScreen || el.msRequestFullscreen;
-                if (typeof rfs != "undefined" && rfs) {
-                    rfs.call(el);
-                }
-                ;
-                return;
-            },
-            //退出全屏
-            exitScreen() {
-                const doc = document;
-                if (doc.exitFullscreen) {
-                    doc.exitFullscreen();
-                } else if (doc.mozCancelFullScreen) {
-                    doc.mozCancelFullScreen();
-                } else if (doc.webkitCancelFullScreen) {
-                    doc.webkitCancelFullScreen();
-                } else if (doc.msExitFullscreen) {
-                    doc.msExitFullscreen();
-                }
-                if (typeof cfs != "undefined" && cfs) {
-                    cfs.call(el);
-                }
-            },
-            toggleFullScreen() {
-                const self = this;
-                if (self.fullscreen) {
-                    self.exitScreen();
-                } else {
-                    self.fullScreen();
-                }
-                self.fullscreen = !self.fullscreen;
-            },
-        },
-        watch: {
-            '$route'(newValue) {
-                var self = this;
-                //self._log("$route", this.$route)
-                self.checkLogin();
-            },
-            // 检测 tags 的变化，以便随时调整 与内容之间的间隙padding
-            'tags.length'(newVal, oldVal) {
-                // 记录变化值
-                console.log('tags.length发生变更 => ', newVal, oldVal)
-                this.$nextTick(() => {
-                    // 获取当前节点的实时高度
-                    let height = document.getElementById('nav').offsetHeight
-                    // 然后设置 paddingTop 的值
-                    document.getElementById('mainContainer').style.paddingTop = height + 'px'
-                })
-            }
-        },
-        computed: {
-            moduleName() {
-                return config().menus[this.$route.path.substr(1)];
-            },
-            module() {
-                return this.$route.path.replace(/\//g, "");
-            },
-            tags() {
-                //this._log(this.$store.getters.getTags)
-                //this._log(this.$store.getters.getTags.tags)
-                return this.$store.getters.getTags.tags;
-            },
-            current() {
-                //this._log(this.$store.getters.getTags)
-                return this.$store.getters.getTags.current;
-            },
-            includes() {
-                return this.$store.getters.getTags.tags.filter(item => item.name).map(item => "sp-" + item.name).join(',');
-            },
-        },
-        beforeMount: function () {
-            this.checkLogin();
-        },
-    };
+  export default {
+    name: 'sp-home',
+    data() {
+      return {
+        fullscreen: false,
+      };
+    },
+    provide() {
+      return {
+        bus,
+      };
+    },
+    methods: {
+      checkLogin() {
+        const self = this;
+        if (!self.$store.getters.is_login) {
+          self.$router.push({path: "/login/login", query: {back: this.$route.path}});
+        }
+      },
+      onSelect(index, indexPath) {
+        //this._log(index, indexPath)
+        this.$router.push('/' + index);
+      },
+      onCloseTag(tag) {
+        bus.$emit('close', tag.path);
+        this.$store.commit("closeTag", {
+          tag
+        });
+      },
+      onClickTag(tag) {
+        this.$router.push(tag.path);
+      },
+      getType(key) {
+        return key == this.current.key ? 'success' : '';
+      },
+      fullScreen() {
+        var el = document.documentElement;
+        var rfs = el.requestFullScreen || el.webkitRequestFullScreen || el.mozRequestFullScreen || el.msRequestFullscreen;
+        if (typeof rfs != "undefined" && rfs) {
+          rfs.call(el);
+        }
+        ;
+        return;
+      },
+      //退出全屏
+      exitScreen() {
+        const doc = document;
+        if (doc.exitFullscreen) {
+          doc.exitFullscreen();
+        } else if (doc.mozCancelFullScreen) {
+          doc.mozCancelFullScreen();
+        } else if (doc.webkitCancelFullScreen) {
+          doc.webkitCancelFullScreen();
+        } else if (doc.msExitFullscreen) {
+          doc.msExitFullscreen();
+        }
+        if (typeof cfs != "undefined" && cfs) {
+          cfs.call(el);
+        }
+      },
+      toggleFullScreen() {
+        const self = this;
+        if (self.fullscreen) {
+          self.exitScreen();
+        } else {
+          self.fullScreen();
+        }
+        self.fullscreen = !self.fullscreen;
+      },
+    },
+    watch: {
+      '$route'(newValue) {
+        var self = this;
+        //self._log("$route", this.$route)
+        self.checkLogin();
+      },
+      // 检测 tags 的变化，以便随时调整 与内容之间的间隙padding
+      'tags.length'(newVal, oldVal) {
+        // 记录变化值
+        console.log('tags.length发生变更 => ', newVal, oldVal)
+        this.$nextTick(() => {
+          // 获取当前节点的实时高度
+          let height = document.getElementById('nav').offsetHeight
+          // 然后设置 paddingTop 的值
+          document.getElementById('mainContainer').style.paddingTop = height + 'px'
+        })
+      }
+    },
+    computed: {
+      moduleName() {
+        return config().menus[this.$route.path.substr(1)];
+      },
+      module() {
+        return this.$route.path.replace(/\//g, "");
+      },
+      tags() {
+        //this._log(this.$store.getters.getTags)
+        //this._log(this.$store.getters.getTags.tags)
+        return this.$store.getters.getTags.tags;
+      },
+      current() {
+        //this._log(this.$store.getters.getTags)
+        return this.$store.getters.getTags.current;
+      },
+      includes() {
+        return this.$store.getters.getTags.tags.filter(item => item.name).map(item => "sp-" + item.name).join(',');
+      },
+    },
+    beforeMount: function () {
+      this.checkLogin();
+    },
+  };
 </script>

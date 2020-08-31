@@ -32,6 +32,7 @@ const props = function () {
       }
     },
 
+    // 商品尺寸
     "ulnarinch": {
       columns: [
         //{ name: "brandgroupchildid", label: _label("zipinlei"), type: "brandgroupchild", source:"brandgroupchild" },
@@ -47,6 +48,7 @@ const props = function () {
       }
     },
 
+    // 语言
     "language": {
       columns: [
         //{ name: "brandgroupchildid", label: _label("zipinlei"), type: "brandgroupchild", source:"brandgroupchild" },
@@ -56,6 +58,7 @@ const props = function () {
       key_column: "name"
     },
 
+    // 仓库
     "warehouse": {
       columns: [{
         name: "name",
@@ -77,7 +80,6 @@ const props = function () {
         label: _label("youbian"),
         is_hide: true
       },
-
         {
           name: "contact",
           label: _label("lianxiren")
@@ -111,6 +113,7 @@ const props = function () {
       }
     },
 
+    // 国家
     "country": {
       columns: [
         {name: "name", label: _label("guojiamingcheng"), is_multiple: true, is_focus: true},
@@ -128,6 +131,7 @@ const props = function () {
       }
     },
 
+    // 货币
     "currency": {
       columns: [
         {name: "code", label: _label("bianma")},
@@ -143,6 +147,7 @@ const props = function () {
       }
     },
 
+    // 材质
     "material": {
       columns: [
         {name: "name", label: _label("caizhimingcheng"), is_multiple: true, is_focus: true}
@@ -160,6 +165,7 @@ const props = function () {
       }
     },
 
+    // 材质备注
     "materialnote": {
       columns: [
         {name: "brandgroupids", label: _label("pinlei"), type: "select", source: "brandgroup", multiple: true},
@@ -178,6 +184,7 @@ const props = function () {
       }
     },
 
+    // 颜色模板
     "colortemplate": {
       columns: [
         {name: "name", label: _label("mingcheng"), is_multiple: true, is_focus: true},
@@ -193,6 +200,7 @@ const props = function () {
       }
     },
 
+    // 商品描述
     "productmemo": {
       columns: [
         //{ name: "brandgroupchildid", label: _label("zipinlei"), type: "brandgroupchild", source:"brandgroupchild" },
@@ -211,6 +219,7 @@ const props = function () {
       }
     },
 
+    // 销售端口
     "saleport": {
       columns: [{
         name: "name",
@@ -228,6 +237,8 @@ const props = function () {
         }
       }
     },
+
+    // 销售单收款信息表
     "salesreceive": {
       columns: [
         {name: "orderno", label: _label("dingdanhao"), type: 'label'},
@@ -257,6 +268,7 @@ const props = function () {
       }
     },
 
+    // 公司
     "company": {
       columns: [
         {name: "name", label: _label("mingcheng"), class: "width2"},
