@@ -366,21 +366,12 @@ const store = new Vuex.Store({
             }
         },
         allow(state) {
-            console.log('allow => state => ', state)
             return permission => {
-                console.log('allow => permission => ', permission)
-                //return true;
                 if (state.auth) {
                     if (state.auth.is_super == '1') {
                         return true;
                     } else {
-                        if (state.auth.permissions) {
-                            state.auth.permissions.findIndex(function (item) {
-                                console.log('state.auth.permissions.findIndex=>item=', item)
-                                console.log('state.auth.permissions.findIndex=>permission=', permission)
-                            })
-                        }
-                        console.log('state.auth.permissions.findIndex(item => item.name == permission)=', state.auth.permissions.findIndex(item => item.name == permission))
+                        // 根据权限的名称判断，能否找到匹配的记录，如果匹配，必定有下标，否则为 -1
                         return state.auth.permissions && state.auth.permissions.findIndex(item => item.name == permission) >= 0;
                     }
                 }
@@ -431,13 +422,12 @@ const store = new Vuex.Store({
             let index = tags.indexOf(payload.tag)
             let length = tags.length;
 
-            //最后一个窗口不允许关闭
+            // 最后一个窗口不允许关闭
             if (length == 1) {
                 tags.splice(0, 1)
                 router.push("/")
                 return
             }
-            //console.log(index)
 
             tags.splice(index, 1)
             if (index > 0) {
@@ -449,8 +439,6 @@ const store = new Vuex.Store({
     }
 })
 
-//console.log(VueRouter)
-//console.log("+++++++++++++", VueRouter, router, router.resolve)
 setTimeout(function () {
     const app = new Vue({
         router,

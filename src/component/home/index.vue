@@ -6,6 +6,7 @@
       <el-menu class="el-menu-demo" mode="horizontal" background-color="#545c64" text-color="#fff"
                active-text-color="#ffd04b" @select="onSelect">
 
+        <!-- 组织架构 start -->
         <el-submenu index="1">
           <template #title>{{ _label("menu-1") }}</template>
           <el-menu-item index="user">{{ _label("menu-1-1") }}</el-menu-item>
@@ -13,7 +14,9 @@
           <el-menu-item index="department">{{ _label("menu-1-4") }}</el-menu-item>
           <el-menu-item index="system">{{ _label("xitongshezhi") }}</el-menu-item>
         </el-submenu>
+        <!-- 组织架构 end -->
 
+        <!-- 基础资料 start -->
         <el-submenu index="2">
           <template #title>{{ _label("menu-2") }}</template>
           <el-menu-item index="brand">{{ _label("menu-2-1-1") }}</el-menu-item>
@@ -40,11 +43,17 @@
           <el-menu-item index="permission" v-if="_isAllowed('permission')">{{ _label("quanxianguanli") }}</el-menu-item>
           <el-menu-item index="paymentway">{{ _label("fukuanfangshi") }}</el-menu-item>
         </el-submenu>
+        <!-- 基础资料 end -->
 
+        <!-- 商品信息 start -->
         <el-menu-item index="product">{{ _label("menu-3-1") }}</el-menu-item>
+        <!-- 商品信息 end -->
 
+        <!-- 客户管理 start -->
         <el-menu-item index="supplier">{{ _label("menu-4") }}</el-menu-item>
+        <!-- 客户管理 end -->
 
+        <!-- 供应链管理 start -->
         <el-submenu index="5" v-if="_isAllowed('order-page,orderbrand-page,shipping-page')">
           <template #title>{{ _label("menu-5") }}</template>
           <el-menu-item index="order" v-if="_isAllowed('order-page')">{{ _label("dingdanguanli") }}</el-menu-item>
@@ -52,7 +61,9 @@
           </el-menu-item>
           <el-menu-item index="shipping" v-if="_isAllowed('shipping-page')">{{ _label("menu-5-2") }}</el-menu-item>
         </el-submenu>
+        <!-- 供应链管理 end -->
 
+        <!-- 供应链管理（简化版） start -->
         <el-submenu index="9" v-if="_isAllowed('order-simple-page,shipping-simple-page')">
           <template #title>{{ _label("menu-9") }}</template>
           <el-menu-item index="ordersimple" v-if="_isAllowed('order-simple-page')">{{ _label("simple-order") }}
@@ -60,7 +71,9 @@
           <el-menu-item index="shippingsimple" v-if="_isAllowed('shipping-simple-page')">{{ _label("menu-9-10") }}
           </el-menu-item>
         </el-submenu>
+        <!-- 供应链管理（简化版） end -->
 
+        <!-- 库存管理 start -->
         <el-submenu index="6" v-if="_isAllowed('requisition-page,productstock-search,requisition-simple-page')">
           <template #title>{{ _label("menu-6") }}</template>
           <el-menu-item index="requisition" v-if="_isAllowed('requisition-page')">{{ _label("menu-6-1") }}
@@ -70,19 +83,25 @@
           <el-menu-item index="productstock" v-if="_isAllowed('productstock-search')">{{ _label("menu-6-4") }}
           </el-menu-item>
         </el-submenu>
+        <!-- 库存管理 end -->
 
+        <!-- 销售管理 start -->
         <el-submenu index="7">
           <template #title>{{ _label("menu-7") }}</template>
           <el-menu-item index="sales">{{ _label("menu-7-1") }}</el-menu-item>
           <el-menu-item index="bill">{{ _label("xiaoshouduizhang") }}</el-menu-item>
         </el-submenu>
+        <!-- 销售管理 end -->
 
+        <!-- 结算 start -->
         <el-submenu index="8">
           <template #title>{{ _label("menu-8") }}</template>
           <el-menu-item index="orderpayment">{{ _label("dingdanjiesuan") }}</el-menu-item>
           <el-menu-item index="salesreceive">{{ _label("xiaoshoujiesuan") }}</el-menu-item>
         </el-submenu>
+        <!-- 结算 end -->
 
+        <!-- 系统 start -->
         <el-submenu index="11">
           <template #title>{{ _label("menu-11") }}</template>
           <el-menu-item index="user/modifypassword">{{ _label("xiugaimima") }}</el-menu-item>
@@ -90,6 +109,7 @@
           <el-menu-item index="develop">生成器</el-menu-item>
           <el-menu-item index="login/logout">{{ _label("menu-11-3") }}</el-menu-item>
         </el-submenu>
+        <!-- 系统 end -->
       </el-menu>
       <!-- 菜单列表 end -->
       <i class="el-icon-rank" style="position:fixed;top:18px;right:50px;font-size:20px;color:white;cursor:pointer;"
@@ -207,7 +227,9 @@ export default {
       console.log('tags.length发生变更 => ', newVal, oldVal)
       this.$nextTick(() => {
         // 获取当前节点的实时高度
-        let height = document.getElementById('nav').offsetHeight
+        let height = Number(document.getElementById('nav').offsetHeight) + Number(10)
+        // 测试这个值
+        console.log('当前高度值是：', height)
         // 然后设置 paddingTop 的值
         document.getElementById('mainContainer').style.paddingTop = height + 'px'
       })

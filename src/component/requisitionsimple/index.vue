@@ -2,8 +2,8 @@
   <div>
     <el-row>
       <el-col :span="6">
-        <as-button type="primary" @click="_showDialog('search')">{{_label('chaxun')}}</as-button>
-        <asa-button :enable="_isAllowed('requisition-save')" @click="showFormToCreate()">{{_label('xinjian')}}
+        <as-button type="primary" @click="_showDialog('search')">{{ _label('chaxun') }}</as-button>
+        <asa-button :enable="_isAllowed('requisition-simple-save')" @click="showFormToCreate()">{{ _label('xinjian') }}
         </asa-button>
       </el-col>
     </el-row>
@@ -31,8 +31,8 @@
         </el-row>
         <el-row :gutter="0">
           <el-col align="center">
-            <as-button type="primary" @click="onSearch(form)" native-type="submit">{{_label("chaxun")}}</as-button>
-            <as-button type="primary" @click="_hideDialog('search')">{{_label("tuichu")}}</as-button>
+            <as-button type="primary" @click="onSearch(form)" native-type="submit">{{ _label("chaxun") }}</as-button>
+            <as-button type="primary" @click="_hideDialog('search')">{{ _label("tuichu") }}</as-button>
           </el-col>
         </el-row>
       </el-form>
@@ -41,47 +41,47 @@
 </template>
 
 <script>
-    export default {
-        name: "sp-requisitionsimple",
-        data() {
-            const _label = this._label;
-            return {
-                form: {
-                    out_id: '',
-                    in_id: '',
-                    status: '',
-                },
-                props: {
-                    columns: [
-                        {name: "out_id", label: _label('diaochuku'), type: 'select', source: "warehouse"},
-                        {name: "in_id", label: _label('diaoruku'), type: 'select', source: "warehouse"},
-                        {name: "apply_staff", label: _label('shenqingren'), type: 'select', source: "user"},
-                        {name: "status", label: _label("zhuangtai"), type: "select", source: "requisitionstatus"},
-                    ],
-                    controller: "requisitionsimple",
-                    options: {
-                        action_width: 90,
-                    },
-                },
-            };
+export default {
+  name: "sp-requisitionsimple",
+  data() {
+    const _label = this._label;
+    return {
+      form: {
+        out_id: '',
+        in_id: '',
+        status: '',
+      },
+      props: {
+        columns: [
+          {name: "out_id", label: _label('diaochuku'), type: 'select', source: "warehouse"},
+          {name: "in_id", label: _label('diaoruku'), type: 'select', source: "warehouse"},
+          {name: "apply_staff", label: _label('shenqingren'), type: 'select', source: "user"},
+          {name: "status", label: _label("zhuangtai"), type: "select", source: "requisitionstatus"},
+        ],
+        controller: "requisitionsimple",
+        options: {
+          action_width: 90,
         },
-        methods: {
-            showFormToCreate() {
-                this._open('/requisitionsimple/create');
-            },
-            showFormToEdit(rowIndex, row) {
-                this._open('/requisitionsimple/edit/' + row.id);
-            },
-            onSearch() {
-                const self = this;
-                self.$refs.tablelist.search(self.form);
-                self._hideDialog('search');
-            },
-        },
-        // 渲染前调用
-        created() {
-            let self = this;
-            self._setTitle(self._label("menu-6-5"));
-        }
+      },
     };
+  },
+  methods: {
+    showFormToCreate() {
+      this._open('/requisitionsimple/create');
+    },
+    showFormToEdit(rowIndex, row) {
+      this._open('/requisitionsimple/edit/' + row.id);
+    },
+    onSearch() {
+      const self = this;
+      self.$refs.tablelist.search(self.form);
+      self._hideDialog('search');
+    },
+  },
+  // 渲染前调用
+  created() {
+    let self = this;
+    self._setTitle(self._label("menu-6-5"));
+  }
+};
 </script>
