@@ -58,7 +58,7 @@
             </el-table-column>
             <el-table-column :label="_label('diaorucangku')" width="180" align="center">
                 <template v-slot="{row}">
-                    <simple-select v-model="row.data.in_id" source="warehouse" :disabled="form.in_id>0" v-if="row.type=='body'"></simple-select>
+                    <simple-select v-model="row.data.in_id" source="warehouses" :disabled="form.in_id>0" v-if="row.type=='body'"></simple-select>
                 </template>
             </el-table-column>
 

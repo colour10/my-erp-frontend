@@ -58,7 +58,7 @@
         <el-col :span="4" style="width:300px" v-if="form.warehouseid>0">
           <!-- 销售人 start -->
           <el-form-item :label="_label('xiaoshouren')">
-            <simple-select v-model="form.salesstaff" source="user"></simple-select>
+            <simple-select v-model="form.salesstaff" source="currentUsers"></simple-select>
           </el-form-item>
           <!-- 销售人 end -->
 
@@ -82,7 +82,7 @@
 
           <!-- 制单人 start -->
           <el-form-item :label="_label('zhidanren')">
-            <sp-display-input :value="form.makestaff" source="user"></sp-display-input>
+            <sp-display-input :value="form.makestaff" source="currentUsers"></sp-display-input>
           </el-form-item>
           <!-- 制单人 end -->
         </el-col>

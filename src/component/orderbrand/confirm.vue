@@ -118,7 +118,7 @@
           <el-form-item :label="_label('zhidanren')">
             <sp-display-input
               :value="form.makestaff"
-              source="user"
+              source="currentUsers"
               :placeholder="_label('zidonghuoqu')"></sp-display-input>
           </el-form-item>
           <!-- 制单人 end -->

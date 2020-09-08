@@ -169,7 +169,7 @@
             <el-form-item :label="_label('cangku')">
               <simple-select
                 v-model="form.warehouseid"
-                source="warehouse"
+                source="warehouses"
                 :clearable="true">
               </simple-select>
             </el-form-item>
@@ -344,7 +344,7 @@
         <!-- 仓库 start -->
         <el-table-column :label="_label('cangku')" width="160" align="center">
           <template v-slot="{row}">
-            <sp-select-text :value="row.warehouseid" source="warehouse"></sp-select-text>
+            <sp-select-text :value="row.warehouseid" source="warehouses"></sp-select-text>
           </template>
         </el-table-column>
         <!-- 仓库 end -->

@@ -146,7 +146,7 @@
           <!-- 销售人 start -->
           <el-table-column :label="_label('xiaoshouren')" width="100" align="center">
             <template v-slot="{row}">
-              <sp-select-text :value="row.sales.salesstaff" source="user"/>
+              <sp-select-text :value="row.sales.salesstaff" source="currentUsers"/>
             </template>
           </el-table-column>
           <!-- 销售人 end -->
@@ -214,7 +214,7 @@
 
             <!-- 销售仓库 start -->
             <el-form-item :label="_label('xiaoshoucangku')">
-              <simple-select v-model="searchform.warehouseid" source="warehouse"></simple-select>
+              <simple-select v-model="searchform.warehouseid" source="warehouses"></simple-select>
             </el-form-item>
             <!-- 销售仓库 end -->
           </el-col>
@@ -294,7 +294,7 @@
         <!-- 销售人 start -->
         <el-table-column :label="_label('xiaoshouren')" width="100" align="center">
           <template v-slot="{row}">
-            <sp-select-text :value="row.sales.salesstaff" source="user"/>
+            <sp-select-text :value="row.sales.salesstaff" source="currentUsers"/>
           </template>
         </el-table-column>
         <!-- 销售人 end -->

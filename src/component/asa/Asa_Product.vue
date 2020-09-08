@@ -404,7 +404,7 @@
               </el-form-item>
 
               <el-form-item :label="_label('jiandangren')" prop="makestaff">
-                <sp-display-input :value="form.makestaff" source="user" disabled></sp-display-input>
+                <sp-display-input :value="form.makestaff" source="currentUsers" disabled></sp-display-input>
               </el-form-item>
 
               <el-form-item :label="_label('jiandangshijian')">

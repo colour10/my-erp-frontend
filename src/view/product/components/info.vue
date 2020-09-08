@@ -440,7 +440,7 @@
 
             <!-- 建档人 start -->
             <el-form-item :label="showLabel('jiandangren')">
-              <sp-display-input :value="product.form.makestaff" source="user" disabled></sp-display-input>
+              <sp-display-input :value="product.form.makestaff" source="currentUsers" disabled></sp-display-input>
             </el-form-item>
             <!-- 建档人 end -->
 

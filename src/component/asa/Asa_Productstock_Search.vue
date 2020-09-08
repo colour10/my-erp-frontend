@@ -5,7 +5,7 @@
                 <el-row :gutter="0">
                     <el-col :span="6" style="width:300px">
                         <el-form-item :label="_label('cangku')">
-                            <simple-select v-model="form.warehouseid" source="warehouse"></simple-select>
+                            <simple-select v-model="form.warehouseid" source="warehouses"></simple-select>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">

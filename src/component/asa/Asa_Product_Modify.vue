@@ -145,7 +145,7 @@
                             <simple-select v-model="form.ageseason" source="ageseason" :multiple="true"/>
                         </el-form-item>
                         <el-form-item :label="_label('daohuocangku')">
-                            <simple-select v-model="form.warehouseid" source="warehouse" :multiple="true"/>
+                            <simple-select v-model="form.warehouseid" source="warehouses" :multiple="true"/>
                         </el-form-item>
                     </el-col>
                 </el-row>

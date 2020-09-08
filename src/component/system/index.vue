@@ -55,7 +55,7 @@
             <!-- 销售端口 start -->
             <el-col :span="6">
               <el-form-item :label="_label('xiaoshouduankou')">
-                <simple-select v-model="form.oms_saleport" source="saleport"></simple-select>
+                <simple-select v-model="form.oms_saleport" source="saleports"></simple-select>
               </el-form-item>
             </el-col>
             <!-- 销售端口 end -->
@@ -63,7 +63,7 @@
             <!-- 销售仓库 start -->
             <el-col :span="6">
               <el-form-item :label="_label('xiaoshoucangku')">
-                <simple-select v-model="form.oms_warehouseids" source="warehouse" multiple></simple-select>
+                <simple-select v-model="form.oms_warehouseids" source="warehouses" multiple></simple-select>
               </el-form-item>
             </el-col>
             <!-- 销售仓库 end -->

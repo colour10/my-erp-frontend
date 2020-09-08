@@ -78,7 +78,7 @@
 
               <!-- 制单人 start -->
               <el-form-item :label="_label('zhidanren')">
-                <sp-display-input :value="form.makestaff" source="user"></sp-display-input>
+                <sp-display-input :value="form.makestaff" source="currentUsers"></sp-display-input>
               </el-form-item>
               <!-- 制单人 end -->
             </el-col>
@@ -98,7 +98,7 @@
 
               <!-- 到货仓库 start -->
               <el-form-item :label="_label('daohuocangku')">
-                <simple-select v-model="form.warehouseid" source="warehouse"></simple-select>
+                <simple-select v-model="form.warehouseid" source="warehouses"></simple-select>
               </el-form-item>
               <!-- 到货仓库 end -->
 

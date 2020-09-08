@@ -19,10 +19,10 @@
         <el-row :gutter="0">
           <el-col :span="8" style="width:270px">
             <el-form-item :label="_label('diaochuku')">
-              <simple-select v-model="form.out_id" source="warehouse"/>
+              <simple-select v-model="form.out_id" source="warehouses"/>
             </el-form-item>
             <el-form-item :label="_label('diaoruku')">
-              <simple-select v-model="form.in_id" source="warehouse"/>
+              <simple-select v-model="form.in_id" source="warehouses"/>
             </el-form-item>
             <el-form-item :label="_label('zhuangtai')">
               <simple-select v-model="form.status" source="requisitionstatus"/>

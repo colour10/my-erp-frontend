@@ -68,7 +68,7 @@
             <el-col :span="4" style="width:250px">
               <!-- 制单人 start -->
               <el-form-item :label="_label('zhidanren')">
-                <sp-display-input :value="form.createstaff" source="user"/>
+                <sp-display-input :value="form.createstaff" source="currentUsers"/>
               </el-form-item>
               <!-- 制单人 end -->
 
@@ -152,7 +152,7 @@
           <!-- 销售人 start -->
           <el-table-column :label="_label('xiaoshouren')" width="100" align="center">
             <template v-slot="{row}">
-              <sp-select-text :value="row.sales.salesstaff" source="user"/>
+              <sp-select-text :value="row.sales.salesstaff" source="currentUsers"/>
             </template>
           </el-table-column>
           <!-- 销售人 end -->

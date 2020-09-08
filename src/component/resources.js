@@ -46,6 +46,13 @@ function getOption(name) {
     //用户
     options["user"] = {url: '/l/user', oplabel: 'login_name', opvalue: 'id'}
 
+    //当前公司下的所有用户
+    options["currentUsers"] = {
+        url: '/company/users',
+        oplabel: 'login_name',
+        opvalue: 'id'
+    }
+
     //部门列表
     options["department.single"] = {url: '/department/single', oplabel: 'label', opvalue: 'id'}
 
@@ -115,9 +122,16 @@ function getOption(name) {
     //所有仓库
     options["warehouse"] = {url: '/l/warehouse', oplabel: 'name', opvalue: 'id'}
 
-    //当前用户可用的所有仓库列表，取出用户的时候要解析一下
-    options["currentWarehouses"] = {
-        url: '/user/warehouses/' + JSON.parse(localStorage.getItem('auth')).id,
+    //当前公司的所有仓库列表
+    options["warehouses"] = {
+        url: '/company/warehouses',
+        oplabel: 'name',
+        opvalue: 'id'
+    }
+
+    //当前公司的所有销售端口列表
+    options["saleports"] = {
+        url: '/company/saleports',
         oplabel: 'name',
         opvalue: 'id'
     }

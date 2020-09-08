@@ -12,7 +12,7 @@
       <el-row :gutter="0">
         <el-col :span="6" style="width:300px">
           <el-form-item :label="_label('shenqingren')">
-            <sp-display-input :value="form.apply_staff" source="user"></sp-display-input>
+            <sp-display-input :value="form.apply_staff" source="currentUsers"></sp-display-input>
           </el-form-item>
           <el-form-item :label="_label('shenqingriqi')">
             <el-input :value="form.apply_date" disabled></el-input>
@@ -23,24 +23,24 @@
         </el-col>
         <el-col :span="6" style="width:300px">
           <el-form-item :label="_label('chukuqueren')">
-            <sp-display-input :value="form.turnout_staff" source="user"></sp-display-input>
+            <sp-display-input :value="form.turnout_staff" source="currentUsers"></sp-display-input>
           </el-form-item>
           <el-form-item :label="_label('chukushijian')">
             <el-input :value="form.turnout_date" disabled></el-input>
           </el-form-item>
           <el-form-item :label="_label('diaochucangku')">
-            <sp-display-input :value="form.out_id" source="warehouse"></sp-display-input>
+            <sp-display-input :value="form.out_id" source="warehouses"></sp-display-input>
           </el-form-item>
         </el-col>
         <el-col :span="6" style="width:300px">
           <el-form-item :label="_label('rukuqueren')">
-            <sp-display-input :value="form.turnin_staff" source="user"></sp-display-input>
+            <sp-display-input :value="form.turnin_staff" source="currentUsers"></sp-display-input>
           </el-form-item>
           <el-form-item :label="_label('rukushijian')">
             <el-input :value="form.turnin_date" disabled></el-input>
           </el-form-item>
           <el-form-item :label="_label('diaorucangku')">
-            <sp-display-input :value="form.in_id" source="warehouse"></sp-display-input>
+            <sp-display-input :value="form.in_id" source="warehouses"></sp-display-input>
           </el-form-item>
         </el-col>
       </el-row>

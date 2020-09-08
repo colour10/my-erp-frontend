@@ -4,7 +4,7 @@
             <el-table :data="tabledata">
                 <el-table-column width="180" :label="_label('cangku')">
                     <template v-slot="{row}">
-                        <sp-select-text :value="row.warehouseid" source="warehouse"/>
+                        <sp-select-text :value="row.warehouseid" source="warehouses"/>
                     </template>
                 </el-table-column>
                 <el-table-column width="110" :label="_label('kucun')" prop="stock_number"></el-table-column>

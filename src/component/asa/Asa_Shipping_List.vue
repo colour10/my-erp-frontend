@@ -8,7 +8,7 @@
       </el-table-column>
       <el-table-column :label="_label('daohuocangku')" align="center" width="100">
         <template v-slot="{row, $index}">
-          <sp-select-text :value="row.warehouseid" source="warehouse"/>
+          <sp-select-text :value="row.warehouseid" source="warehouses"/>
         </template>
       </el-table-column>
 

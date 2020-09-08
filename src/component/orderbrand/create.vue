@@ -98,7 +98,7 @@
 
         <el-table-column :label="_label('zhidanren')" width="80" align="center">
           <template v-slot="{row}">
-            <sp-select-text :value="row.makestaff" source="user"/>
+            <sp-select-text :value="row.makestaff" source="currentUsers"/>
           </template>
         </el-table-column>
         <el-table-column :label="_label('zhidanriqi')" width="90" align="center" prop="maketime">

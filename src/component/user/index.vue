@@ -137,7 +137,7 @@
                 <el-option
                     :label="warehouse.name"
                     :value="warehouse.id"
-                    v-for="warehouse in currentWarehouses"
+                    v-for="warehouse in warehouses"
                     :key="warehouse.id"></el-option>
               </el-select>
             </el-form-item>
@@ -206,7 +206,7 @@ export default {
       // 当前用户价格列表
       currentPrices: [],
       // 当前用户销售仓库列表
-      currentWarehouses: [],
+      warehouses: [],
       currentTab: "user",
       saleport_list: [], //销售端口信息
       warehouse_list: [], //仓库信息
@@ -236,7 +236,7 @@ export default {
       // 仓库
       props2: {
         columns: [
-          {name: "warehouseid", label: _label("cangku"), type: 'select', source: "currentWarehouses"},
+          {name: "warehouseid", label: _label("cangku"), type: 'select', source: "warehouses"},
           {name: "warehouseroleid", label: _label("juese"), type: 'select', source: "warehouserole"}
         ],
         controller: "warehouseuser",
@@ -307,32 +307,27 @@ export default {
       self.dialogVisible = true;
       // 清空原来的销售端口列表
       self.saleport = [];
-      // 请求最新的销售端口，因为总是有缓存问题
-      self._fetch("/user/currentsaleportlist", {userId: self.form.id}).then(function (res) {
+      // 当前操作用户的销售端口列表
+      self._fetch("/user/saleports", {userId: self.form.id}).then(function (res) {
+        self.currentSaleports = res.data
         res.data.forEach(item => {
           self.saleport.push(item.id)
         })
-      })
-      // 然后其他的当前用户的变量也顺便取出来
-      // 取出当前用户下面所有的销售端口列表+价格列表+销售仓库列表
-      // 销售端口列表
-      self._fetch("/user/currentsaleportlist", {userId: self.form.id}).then(function (res) {
-        self.currentSaleports = res.data
       });
-      // 价格列表
-      self._fetch("/user/currentuserpricelist", {userId: self.form.id}).then(function (res) {
+      // 当前操作用户的价格列表
+      self._fetch("/user/prices", {userId: self.form.id}).then(function (res) {
         self.currentPrices = res.data
       });
-      // 仓库列表
-      self._fetch("/user/currentwarehouses", {userId: self.form.id}).then(function (res) {
-        self.currentWarehouses = res.data
+      // 当前操作用户的仓库列表
+      self._fetch("/user/warehouses", {userId: self.form.id}).then(function (res) {
+        self.warehouses = res.data
       });
       // 取出当前公司下面所有的销售端口列表
-      self._fetch("/user/saleports", {}).then(function (res) {
+      self._fetch("/company/saleports", {}).then(function (res) {
         self.saleport_list = res.data;
       })
       // 取出当前公司下面所有的仓库列表
-      self._fetch("/user/warehouses", {}).then(function (res) {
+      self._fetch("/company/warehouses", {}).then(function (res) {
         self.warehouse_list = res.data;
       });
     },

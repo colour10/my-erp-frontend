@@ -17,7 +17,7 @@
         <!-- 调出仓库 start -->
         <el-col :span="6" style="width:300px" v-if="form.requisitiontype=='1'">
           <el-form-item :label="_label('diaochucangku')">
-            <simple-select v-model="form.out_id" source="warehouse"></simple-select>
+            <simple-select v-model="form.out_id" source="warehouses"></simple-select>
           </el-form-item>
         </el-col>
         <!-- 调出仓库 end -->
@@ -25,7 +25,7 @@
         <!-- 调入仓库 start -->
         <el-col :span="6" style="width:300px" v-if="form.requisitiontype=='2'">
           <el-form-item :label="_label('diaorucangku')">
-            <simple-select v-model="form.in_id" source="warehouse" :disabled="counter>0"></simple-select>
+            <simple-select v-model="form.in_id" source="warehouses" :disabled="counter>0"></simple-select>
           </el-form-item>
         </el-col>
         <!-- 调入仓库 end -->
