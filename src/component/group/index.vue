@@ -49,7 +49,6 @@
 
         <!-- 权限 start -->
         <el-tab-pane :label="_label('quanxian')" :disabled="!form.id">
-          {{ permission_data }}
           <el-tree ref="tree" :data="permission_data" node-key="id" show-checkbox
                    :expand-on-click-node="false"></el-tree>
           <auth auth="group">
