@@ -147,92 +147,136 @@
               <!-- 删除 end -->
             </template>
           </el-table-column>
+
+          <!-- 主图 start -->
           <el-table-column :label="showLabel('zhutu')">
             <template slot-scope="{row}">
-              <img :src="_fileLink(row.picture)" style="max-width: 50px; max-height: 50px;">
+              <img :src="_fileLink(row.picture_150)" style="max-width: 50px; max-height: 50px;">
             </template>
           </el-table-column>
+          <!-- 主图 end -->
+
+          <!-- 副图 start -->
           <el-table-column :label="showLabel('futu')">
             <template slot-scope="{row}">
-              <img :src="_fileLink(row.picture2)" style="max-width: 50px; max-height: 50px;">
+              <img :src="_fileLink(row.picture2_150)" style="max-width: 50px; max-height: 50px;">
             </template>
           </el-table-column>
+          <!-- 副图 end -->
 
           <!-- 颜色 start -->
           <el-table-column :label="showLabel('yanse')">
             <template slot-scope="{row}">
               <div class="color-group" v-for="item in row.colors" :key="item.id">
                 <div class="box" style="'width: 20px; height: 20px;">
-                  <img :src="_fileLink(item.picture)" style="max-width: 20px; max-height: 20px;" @click="onClick(row)">
+                  <img :src="_fileLink(item.picture_40)" style="max-width: 20px; max-height: 20px;" @click="onClick(row)">
                 </div>
               </div>
             </template>
           </el-table-column>
           <!-- 颜色 end -->
 
+          <!-- 产品名称 start -->
           <el-table-column :label="showLabel('shangpinmingcheng')" width="250">
             <template slot-scope="{row}">
               {{ row.name }}
             </template>
           </el-table-column>
+          <!-- 产品名称 end -->
+
+          <!-- 年代 start -->
           <el-table-column :label="showLabel('niandai')" sortable="customer" prop="ageseason">
             <template slot-scope="{row}">
               {{ row.season }}
             </template>
           </el-table-column>
+          <!-- 年代 end -->
+
+          <!-- 国际码 start -->
           <el-table-column :label="showLabel('guojima')" width="200" sortable="customer" prop="wordcode">
             <template slot-scope="{row}">
-              {{ row.worldcode }}
+              {{ row.wordcode }}
             </template>
           </el-table-column>
+          <!-- 国际码 end -->
+
+          <!-- 产品属性 start -->
           <el-table-column :label="showLabel('shangpinshuxing')">
             <template slot-scope="{row}">
               {{ row.type }}
             </template>
           </el-table-column>
+          <!-- 产品属性 end -->
+
+          <!-- 出厂价 start -->
           <el-table-column :label="showLabel('chuchangjia')" width="100">
             <template slot-scope="{row}">
               {{ row.fpCurrencyCode }} {{ row.factoryprice }}
             </template>
           </el-table-column>
+          <!-- 出厂价 end -->
+
+          <!-- 倍率 start -->
           <el-table-column :label="showLabel('beilv')">
             <template slot-scope="{row}">
               {{ row.times }}
             </template>
           </el-table-column>
+          <!-- 倍率 end -->
+
+          <!-- 国际零售价 start -->
           <el-table-column :label="showLabel('guojilingshoujia')" width="100">
             <template slot-scope="{row}">
               {{ row.wpCurrencyCode }} {{ row.wordprice }}
             </template>
           </el-table-column>
+          <!-- 国际零售价 end -->
+
+          <!-- 折扣率 start -->
           <el-table-column :label="showLabel('zhekoulv')">
             <template slot-scope="{row}">
               {{ row.discountRate }}
             </template>
           </el-table-column>
+          <!-- 折扣率 end -->
+
+          <!-- 本国零售价 start -->
           <el-table-column :label="showLabel('benguolingshoujia')" width="100">
             <template slot-scope="{row}">
               {{ row.npCurrencyCode }} {{ row.nationalprice }}
             </template>
           </el-table-column>
+          <!-- 本国零售价 end -->
+
+          <!-- 销售属性 start -->
           <el-table-column :label="showLabel('xiaoshoushuxing')">
             <template slot-scope="{row}">
               {{ row.saleType }}
             </template>
           </el-table-column>
+          <!-- 销售属性 end -->
+
+          <!-- 零售比 start -->
           <el-table-column :label="showLabel('lingshoubi')">
             0
           </el-table-column>
+          <!-- 零售比 end -->
+
+          <!-- 系列 start -->
           <el-table-column :label="showLabel('xilie')">
             <template slot-scope="{row}">
               {{ row.seriesTitle }}
             </template>
           </el-table-column>
+          <!-- 系列 end -->
+
+          <!-- 最后入库 start -->
           <el-table-column :label="showLabel('zuihouruku')">
             <template slot-scope="{row}">
               {{ row.laststoragedate }}
             </template>
           </el-table-column>
+          <!-- 最后入库 end -->
         </el-table>
       </el-col>
     </el-row>
@@ -265,163 +309,163 @@
 </template>
 
 <script>
-    import globals from '../../component/globals.js'
-    import '../../assets/table.css'
-    import '../../assets/search-form.css'
-    import add from './add.vue'
-    import AsaProduct from "@/component/asa/Asa_Product"
+import globals from '../../component/globals.js'
+import '../../assets/table.css'
+import '../../assets/search-form.css'
+import add from './add.vue'
+import AsaProduct from "@/component/asa/Asa_Product"
 
-    export default {
-        name: 'product',
-        components: {
-            AsaProduct,
-            add
-        },
-        data() {
-            return {
-                dialogFormVisible: false,
-                listLoading: true,
-                list: [],
-                listQuery: {
-                    wordcode: '',
-                    ageseason: [],
-                    brandid: [],
-                    brandgroupid: [],
-                    childbrand: [],
-                    series: []
-                },
-                childrenBrand: [],
-                pagination: {
-                    pageSizes: globals.pageSizes,
-                    pageSize: 10,
-                    total: 0,
-                    current: 1
-                },
-                ageseasons: [],
-                brands: [],
-                categories: [],
-                productMemos: [],
-                series: []
-            }
-        },
-        created() {
-            this.getList()
-            this.getProductRelatedOptions()
-        },
-        methods: {
-            // 编辑商品对话框
-            onClick(row) {
-                let self = this;
-                self.$refs.product.edit(true).setInfo(row).then(product => product.show(false));
-            },
-            getProductRelatedOptions() {
-                let self = this
-                self._fetch("/product/getProductRelatedOptions", {}).then(function (res) {
-                    self.ageseasons = res.data.ageseasons
-                    self.brands = res.data.brands
-                    self.categories = res.data.categories
-                    self.productMemos = res.data.productMemos
-                })
-            },
-            handleSort(data) {
-                this.listQuery.sort = data.prop
-                this.listQuery.order = data.order
-                this.getList()
-            },
-            handleDelete(row) {
-                let self = this
-                self._remove("/product/delete", {id: row.id}).then(function () {
-                    self.reloadList()
-                })
-            },
-            handleResetFilter() {
-                this.listQuery = {
-                    sort: undefined,
-                    order: undefined,
-                    wordcode: '',
-                    ageseason: [],
-                    brandid: [],
-                    brandgroupid: [],
-                    childbrand: [],
-                    series: []
-                }
-            },
-            handleChangeBrand() {
-                let self = this
-                self.series = []
-                self.listQuery.series = []
-
-                if (self.listQuery.brandid.length > 0) {
-                    self.brands.forEach(item => {
-                        if (self.listQuery.brandid.indexOf(item.id) >= 0) {
-                            self.series.push.apply(self.series, item.series)
-                        }
-                    })
-                } else {
-                    self.brands.forEach(item => {
-                        self.series.push.apply(self.series, item.series)
-                    })
-                }
-            },
-            handleChangeBrandGroup() {
-                let self = this
-
-                self.listQuery.childbrand = []
-                self.childrenBrand = []
-
-                self.categories.forEach(item => {
-                    if (self.listQuery.brandgroupid.indexOf(item.id) >= 0) {
-                        self.childrenBrand.push.apply(self.childrenBrand, item.children)
-                    }
-                })
-            },
-            handleFilter() {
-                this.getList()
-            },
-            handleCreate() {
-                this.showDialogForm()
-                if (typeof (this.$refs.productForm) != 'undefined') {
-                    this.$refs.productForm.resetDialogForm()
-                }
-            },
-            handleSizeChange(pageSize) {
-                this.pagination.pageSize = pageSize
-                this.getList()
-            },
-            handleCurrentChange(current) {
-                this.pagination.current = current
-                this.getList()
-            },
-            showDialogForm() {
-                this.dialogFormVisible = true
-            },
-            hideDialogForm() {
-                this.dialogFormVisible = false
-            },
-            getList() {
-                let self = this
-                self.listLoading = true
-
-                let params = Object.assign({
-                    page: self.pagination.current,
-                    pageSize: self.pagination.pageSize
-                }, self.listQuery)
-                self._fetch("/product/page", params).then(function (res) {
-                    self.list = res.data
-                    self.pagination = res.pagination
-                    self.listLoading = false
-                })
-            },
-            // 重新加载列表
-            reloadList() {
-                this.getList()
-            }
-        }
+export default {
+  name: 'product',
+  components: {
+    AsaProduct,
+    add
+  },
+  data() {
+    return {
+      dialogFormVisible: false,
+      listLoading: true,
+      list: [],
+      listQuery: {
+        wordcode: '',
+        ageseason: [],
+        brandid: [],
+        brandgroupid: [],
+        childbrand: [],
+        series: []
+      },
+      childrenBrand: [],
+      pagination: {
+        pageSizes: globals.pageSizes,
+        pageSize: 10,
+        total: 0,
+        current: 1
+      },
+      ageseasons: [],
+      brands: [],
+      categories: [],
+      productMemos: [],
+      series: []
     }
+  },
+  created() {
+    this.getList()
+    this.getProductRelatedOptions()
+  },
+  methods: {
+    // 编辑商品对话框
+    onClick(row) {
+      let self = this;
+      self.$refs.product.edit(true).setInfo(row).then(product => product.show(false));
+    },
+    getProductRelatedOptions() {
+      let self = this
+      self._fetch("/product/getProductRelatedOptions", {}).then(function (res) {
+        self.ageseasons = res.data.ageseasons
+        self.brands = res.data.brands
+        self.categories = res.data.categories
+        self.productMemos = res.data.productMemos
+      })
+    },
+    handleSort(data) {
+      this.listQuery.sort = data.prop
+      this.listQuery.order = data.order
+      this.getList()
+    },
+    handleDelete(row) {
+      let self = this
+      self._remove("/product/delete", {id: row.id}).then(function () {
+        self.reloadList()
+      })
+    },
+    handleResetFilter() {
+      this.listQuery = {
+        sort: undefined,
+        order: undefined,
+        wordcode: '',
+        ageseason: [],
+        brandid: [],
+        brandgroupid: [],
+        childbrand: [],
+        series: []
+      }
+    },
+    handleChangeBrand() {
+      let self = this
+      self.series = []
+      self.listQuery.series = []
+
+      if (self.listQuery.brandid.length > 0) {
+        self.brands.forEach(item => {
+          if (self.listQuery.brandid.indexOf(item.id) >= 0) {
+            self.series.push.apply(self.series, item.series)
+          }
+        })
+      } else {
+        self.brands.forEach(item => {
+          self.series.push.apply(self.series, item.series)
+        })
+      }
+    },
+    handleChangeBrandGroup() {
+      let self = this
+
+      self.listQuery.childbrand = []
+      self.childrenBrand = []
+
+      self.categories.forEach(item => {
+        if (self.listQuery.brandgroupid.indexOf(item.id) >= 0) {
+          self.childrenBrand.push.apply(self.childrenBrand, item.children)
+        }
+      })
+    },
+    handleFilter() {
+      this.getList()
+    },
+    handleCreate() {
+      this.showDialogForm()
+      if (typeof (this.$refs.productForm) != 'undefined') {
+        this.$refs.productForm.resetDialogForm()
+      }
+    },
+    handleSizeChange(pageSize) {
+      this.pagination.pageSize = pageSize
+      this.getList()
+    },
+    handleCurrentChange(current) {
+      this.pagination.current = current
+      this.getList()
+    },
+    showDialogForm() {
+      this.dialogFormVisible = true
+    },
+    hideDialogForm() {
+      this.dialogFormVisible = false
+    },
+    getList() {
+      let self = this
+      self.listLoading = true
+
+      let params = Object.assign({
+        page: self.pagination.current,
+        pageSize: self.pagination.pageSize
+      }, self.listQuery)
+      self._fetch("/product/page", params).then(function (res) {
+        self.list = res.data
+        self.pagination = res.pagination
+        self.listLoading = false
+      })
+    },
+    // 重新加载列表
+    reloadList() {
+      this.getList()
+    }
+  }
+}
 </script>
 
 <style>
-  .create-product-dialog .el-dialog__header {
-    border-bottom: 1px solid #d3d3d3
-  }
+.create-product-dialog .el-dialog__header {
+  border-bottom: 1px solid #d3d3d3
+}
 </style>

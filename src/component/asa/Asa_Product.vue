@@ -124,6 +124,7 @@
               </el-form-item>
               <!-- 年代 end -->
 
+
               <!-- 品牌 start -->
               <el-form-item :label="showLabel('pinpai')" prop="brandid">
                 <el-select v-model="form.brandid" placeholder="" filterable @change="handleChangeBrand">
@@ -980,6 +981,7 @@ export default {
             material.materialnoteid = parseInt(material.materialnoteid)
           })
         }
+
         // 表单赋值
         self.form = res.data
         // 材质赋值
@@ -1121,7 +1123,7 @@ export default {
       }
     },
     // tab切换逻辑
-    onTabClick(tab) {
+    onTabClick: function (tab) {
       const self = this
       // 如果切换了商品条码
       if (tab.name == 'code') {
