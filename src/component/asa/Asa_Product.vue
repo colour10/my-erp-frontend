@@ -1206,11 +1206,11 @@ export default {
 
       return new Promise((resolve, reject) => {
         ProductDetail.load({data: row, depth: 1, isCache: false}).then(function (info) {
-          // 打印值，保存原始的row，如果用了info，那么其中的空值会被转换成0，这不是我们想要的
-          self._log("原始的row=", row)
-
-          // 打印值，info
-          self._log("收到的info=", info)
+          // // 打印值，保存原始的row，如果用了info，那么其中的空值会被转换成0，这不是我们想要的
+          // self._log("原始的row=", row)
+          //
+          // // 打印值，info
+          // self._log("收到的info=", info)
 
           // 赋值给 originProduct，保留一份原始的数据，方便对比
           self.originProduct = row

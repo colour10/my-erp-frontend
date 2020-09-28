@@ -356,7 +356,19 @@ export default {
     // 编辑商品对话框
     onClick(row) {
       let self = this;
-      self.$refs.product.edit(true).setInfo(row).then(product => product.show(false));
+      // 引入 loading
+      const loading = this.$loading({
+        lock: true,
+        text: 'Loading',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      });
+      // 预加载 2 秒钟
+      setTimeout(() => {
+        // loading过程中的业务逻辑
+        self.$refs.product.edit(true).setInfo(row).then(product => product.show(false));
+        loading.close();
+      }, 2000);
     },
     getProductRelatedOptions() {
       let self = this
