@@ -1326,6 +1326,8 @@ export default {
     show() {
       var self = this;
       self.dialogVisible = true;
+      // 返回一个值，方便后面的判断
+      return true;
     },
     clearInfo() {
       var self = this;

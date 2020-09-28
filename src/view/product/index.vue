@@ -354,7 +354,7 @@ export default {
   },
   methods: {
     // 编辑商品对话框
-    onClick(row) {
+    async onClick(row) {
       let self = this;
       // 引入 loading
       const loading = this.$loading({
@@ -363,13 +363,13 @@ export default {
         spinner: 'el-icon-loading',
         background: 'rgba(0, 0, 0, 0.7)'
       });
-      // 预加载 2 秒钟
-      setTimeout(() => {
-        // loading过程中的业务逻辑
-        self.$refs.product.edit(true).setInfo(row).then(product => product.show(false));
+      // loading过程中的业务逻辑
+      let result = await self.$refs.product.edit(true).setInfo(row).then(product => product.show(false));
+      // 直到返回 true 才关闭对话框
+      if (result === true) {
         // 关闭对话框
         loading.close();
-      }, 2000);
+      }
     },
     getProductRelatedOptions() {
       let self = this
