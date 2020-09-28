@@ -367,6 +367,7 @@ export default {
       setTimeout(() => {
         // loading过程中的业务逻辑
         self.$refs.product.edit(true).setInfo(row).then(product => product.show(false));
+        // 关闭对话框
         loading.close();
       }, 2000);
     },
