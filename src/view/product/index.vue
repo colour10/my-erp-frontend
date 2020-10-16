@@ -122,6 +122,15 @@
         </el-form-item>
         <!-- 新建按钮 end -->
 
+        <!-- 导入按钮 start -->
+        <el-form-item>
+          <el-button class="filter-item" style="margin-left: 10px;" type="warning" size="mini" icon="el-icon-star-off"
+                     @click="handleImport">
+            {{ showLabel('button-export') }}
+          </el-button>
+        </el-form-item>
+        <!-- 导入按钮 end -->
+
       </el-form>
     </div>
 
@@ -169,7 +178,8 @@
             <template slot-scope="{row}">
               <div class="color-group" v-for="item in row.colors" :key="item.id">
                 <div class="box" style="'width: 20px; height: 20px;">
-                  <img :src="_fileLink(item.picture_40)" style="max-width: 20px; max-height: 20px;" @click="onClick(row)">
+                  <img :src="_fileLink(item.picture_40)" style="max-width: 20px; max-height: 20px;"
+                       @click="onClick(row)">
                 </div>
               </div>
             </template>
@@ -305,6 +315,42 @@
     <asa-product ref="product" @reloadList="reloadList"></asa-product>
     <!-- 编辑商品对话框 end -->
 
+    <!-- 导入商品对话框 start -->
+    <el-dialog
+      :title="_label('button-export')"
+      :visible.sync="importDialogVisible"
+      width="30%">
+      <!-- 上传对话框 start -->
+      <el-upload
+        class="upload-demo"
+        drag
+        :action="host + '/common/upload?category=excel'"
+        :limit="1"
+        :on-remove="handleExcelRemove"
+        :before-remove="beforeExcelRemove"
+        :on-exceed="handleExcelExceed"
+        :on-success="handleExcelSuccess"
+        :before-upload="beforeExcelUpload">
+        <i class="el-icon-upload"></i>
+        <div class="el-upload__text">{{ _label('upload-text') }}<em>{{ _label('upload-click-text') }}</em></div>
+        <div class="el-upload__tip" slot="tip">{{ _label('upload-tip') }}</div>
+      </el-upload>
+      <!-- 上传对话框 end -->
+
+      <!-- 按钮组 start-->
+      <span slot="footer" class="dialog-footer">
+        <el-button size="mini" @click="hideImportDialogForm">{{ _label('quxiao') }}</el-button>
+        <el-tooltip class="item" effect="dark" content="点击确定按钮完成操作" placement="top-start" v-if="importExcelPath !== ''">
+          <el-button size="mini" type="primary" @click="handleFinishedImportDialog">{{ _label('queding') }}</el-button>
+        </el-tooltip>
+        <el-button size="mini" type="primary" @click="handleFinishedImportDialog" v-else>{{
+            _label('queding')
+          }}</el-button>
+      </span>
+      <!-- 按钮组 end-->
+    </el-dialog>
+    <!-- 导入商品对话框 end -->
+
   </div>
 </template>
 
@@ -314,6 +360,8 @@ import '../../assets/table.css'
 import '../../assets/search-form.css'
 import add from './add.vue'
 import AsaProduct from "@/component/asa/Asa_Product"
+import {_label} from "@/component/globals";
+import {host} from '@/component/http'
 
 export default {
   name: 'product',
@@ -323,7 +371,13 @@ export default {
   },
   data() {
     return {
+      // 主机地址
+      host,
+      // 导入的 excel 路径，默认为空，也就是当前没有任何文件被上传
+      importExcelPath: '',
       dialogFormVisible: false,
+      // 导入对话框
+      importDialogVisible: false,
       listLoading: true,
       list: [],
       listQuery: {
@@ -361,7 +415,7 @@ export default {
         lock: true,
         text: 'Loading',
         spinner: 'el-icon-loading',
-        background: 'rgba(0, 0, 0, 0.7)'
+        background: 'rgba(0,0,0,0.7)'
       });
       // loading过程中的业务逻辑
       let result = await self.$refs.product.edit(true).setInfo(row).then(product => product.show(false));
@@ -371,6 +425,7 @@ export default {
         loading.close();
       }
     },
+    // 获取相关参数，这个随着产品的增多会变得很大，需要着重优化
     getProductRelatedOptions() {
       let self = this
       self._fetch("/product/getProductRelatedOptions", {}).then(function (res) {
@@ -441,6 +496,10 @@ export default {
         this.$refs.productForm.resetDialogForm()
       }
     },
+    // 打开导入对话框
+    handleImport() {
+      this.showImportDialogForm()
+    },
     handleSizeChange(pageSize) {
       this.pagination.pageSize = pageSize
       this.getList()
@@ -454,6 +513,14 @@ export default {
     },
     hideDialogForm() {
       this.dialogFormVisible = false
+    },
+    // 导入对话框开启
+    showImportDialogForm() {
+      this.importDialogVisible = true
+    },
+    // 导入对话框关闭
+    hideImportDialogForm() {
+      this.importDialogVisible = false
     },
     getList() {
       let self = this
@@ -472,13 +539,120 @@ export default {
     // 重新加载列表
     reloadList() {
       this.getList()
+    },
+    // 上传 excel 后的回掉
+    handleExcelSuccess(res, file) {
+      // 记录当前文件信息
+      console.log('res=', res, 'file=', file)
+      // 把文件放进临时变量中
+      const filename = file.raw.name
+      this.importExcelPath = res.files[filename]
+      // 生成预览结果, 为了用户体验，这里加个进度条
+      // 引入 loading
+      const loading = this.$loading({
+        lock: true,
+        text: _label('results-preview-loading'),
+        spinner: 'el-icon-loading',
+        background: 'rgba(0,0,0,0.7)'
+      });
+      // 远程请求预览接口
+      this._fetch("/common/importExcelPreview", {
+        path: this.importExcelPath
+      }).then((res) => {
+        // 关闭 loading
+        loading.close()
+        // 根据 messages 判断
+        if (res.messages.length === 0) {
+          // 如果没有错误
+          this.$alert(res.data, _label('results-preview'), {})
+        } else {
+          // 如果有错误
+          this.$alert(res.messages[0], _label('results-preview'), {})
+        }
+      })
+    },
+    // 确定删除文件
+    handleExcelRemove(file, fileList) {
+      // 测试
+      console.log(file, fileList);
+      // 请求远程删除 this.importExcelPath 中的文件
+      this._fetch("/common/delete", {
+        path: this.importExcelPath
+      }).then((res) => {
+        // 这里不需要返回什么了，100%成功
+        console.log('res = ', res)
+        // 把文件路径删除掉
+        this.importExcelPath = ''
+      })
+    },
+    // 删除文件前的询问
+    beforeExcelRemove(file, fileList) {
+      return this.$confirm(_label('handle-delete') + ` ${file.name}?`)
+    },
+    // 最多允许上传文件的个数
+    handleExcelExceed(files, fileList) {
+      // 记录
+      console.log(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`)
+      // 提示
+      this.$message.warning(_label('upload-warning'))
+    },
+    // 上传 excel 之前的验证
+    beforeExcelUpload(file) {
+      // 官网默认的验证方法
+      const isXlsx = file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+      const isLt2M = file.size / 1024 / 1024 < 2;
+      if (!isXlsx) {
+        this.$message.error(_label('upload-filetype'));
+      }
+      if (!isLt2M) {
+        this.$message.error(_label('upload-filesize-2mb'));
+      }
+      return isXlsx && isLt2M;
+    },
+    // 点击确定按钮之后的操作
+    handleFinishedImportDialog() {
+      // 如果为空，说明，没有上传文件，那么就直接关闭对话框
+      if (this.importExcelPath === '') {
+        this.hideImportDialogForm()
+        return
+      }
+      // 否则就开始导入
+      // 引入 loading
+      const loading = this.$loading({
+        lock: true,
+        text: _label('results-finish-loading'),
+        spinner: 'el-icon-loading',
+        background: 'rgba(0,0,0,0.7)'
+      });
+
+      // 开始处理导入逻辑
+      this._fetch("/common/importExcel", {
+        path: this.importExcelPath
+      }).then((res) => {
+        // 这里不需要返回什么了，100%成功
+        console.log('res = ', res)
+        // 关闭 loading
+        loading.close()
+        // 根据 messages 判断
+        if (res.messages.length === 0) {
+          // 如果没有错误
+          this.$alert(_label('results-finished'), _label('results-preview'), {})
+        } else {
+          // 如果有错误
+          this.$alert(res.messages[0], _label('results-preview'), {})
+        }
+      })
     }
-  }
+  },
 }
 </script>
 
-<style>
+<style scoped>
 .create-product-dialog .el-dialog__header {
   border-bottom: 1px solid #d3d3d3
+}
+
+.upload-demo {
+  text-align: center;
 }
 </style>

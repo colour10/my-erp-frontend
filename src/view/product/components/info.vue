@@ -446,7 +446,7 @@
 
             <!-- 建档时间 start -->
             <el-form-item :label="showLabel('jiandangshijian')">
-              <el-input :value="product.form.maketime" disabled></el-input>
+              <el-input :value="product.form.created_at" disabled></el-input>
             </el-form-item>
             <!-- 建档时间 end -->
           </el-col>
