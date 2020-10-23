@@ -997,6 +997,7 @@
                     return (_.indexOf(materialnoteids, noteId) >= 0)
                 })
             },
+            // 根据第二段国际码进行远程检索
             querySearchWordCode(row) {
                 let self = this
                 // 下面的queryString代表的是国际码第二段
@@ -1010,7 +1011,8 @@
                             pageSize: 20,
                             wordcode: wordcode
                         }
-                        self._fetch("/product/page", params).then(function (res) {
+                        // 开始检索
+                        self._fetch("/product/secondWordcodeSearchPage", params).then(function (res) {
                             results = res.data
                         })
 

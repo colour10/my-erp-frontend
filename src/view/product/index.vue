@@ -131,6 +131,15 @@
         </el-form-item>
         <!-- 导入按钮 end -->
 
+        <!-- 导入文件地址 start -->
+        <el-form-item>
+          <el-button class="filter-item" style="margin-left: 10px;" type="danger" size="mini" icon="el-icon-star-off"
+                     @click="handleExcelDownload">
+            {{ showLabel('excel-download') }}
+          </el-button>
+        </el-form-item>
+        <!-- 导入文件地址 end -->
+
       </el-form>
     </div>
 
@@ -637,11 +646,17 @@ export default {
         if (res.messages.length === 0) {
           // 如果没有错误
           this.$alert(_label('results-finished'), _label('results-preview'), {})
+          // 然后清除文件
+          this.importExcelPath = ''
         } else {
           // 如果有错误
           this.$alert(res.messages[0], _label('results-preview'), {})
         }
       })
+    },
+    // excel 模板下载
+    handleExcelDownload() {
+      window.open(host + '/upload/excel/example.xlsx')
     }
   },
 }

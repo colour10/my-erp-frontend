@@ -53,7 +53,7 @@
         <el-col :span="16">
           <el-form-item :label="showLabel('sexi')" label-width="85px">
             <el-select
-              v-model="product.form.colorSystemId"
+              v-model="product.form.brandcolor"
               placeholder=""
               filterable
               size="mini"
@@ -71,7 +71,7 @@
           <!-- 颜色 start -->
           <el-form-item :label="showLabel('yanse')" label-width="60px">
             <el-select
-              v-model="product.form.colorId"
+              v-model="product.form.color_id"
               filterable
               placeholder=""
               size="mini"
@@ -90,7 +90,7 @@
           <el-form-item :label="showLabel('second_color')" label-width="60px">
             <el-cascader
               placeholder=""
-              v-model="product.form.secondColorId"
+              v-model="product.form.second_color_id"
               size="mini"
               :show-all-levels="false"
               :options="colorSystems"
@@ -646,9 +646,9 @@
         computed: {
             filterColors() {
                 let self = this
-                if (this.product.form.colorSystemId) {
+                if (this.product.form.brandcolor) {
                     let colorSystem = this.colorSystems.find(item => {
-                        return item.id == self.product.form.colorSystemId
+                        return item.id == self.product.form.brandcolor
                     })
 
                     if (typeof (colorSystem) != 'undefined') {
@@ -802,9 +802,9 @@
                     }
 
                     // 色系、颜色如果为空，则不强转为数字类型
-                    res.data.colorId = res.data.color_id ? parseInt(res.data.color_id) : ''
-                    res.data.colorSystemId = res.data.brandcolor ? parseInt(res.data.brandcolor) : ''
-                    res.data.secondColorId = res.data.second_color_id ? parseInt(res.data.second_color_id) : ''
+                    res.data.color_id = res.data.color_id ? parseInt(res.data.color_id) : ''
+                    res.data.brandcolor = res.data.brandcolor ? parseInt(res.data.brandcolor) : ''
+                    res.data.second_color_id = res.data.second_color_id ? parseInt(res.data.second_color_id) : ''
 
                     // 需要把 childbrand 和 brandgroupid 合在一起组成 子品类列表，这个给尺码组使用
                     const childbrand = res.data.childbrand
@@ -1048,10 +1048,10 @@
                     this.product.form.producttypeid_tootip = 0
                 });
             },
-            // 监控色系，一旦 colorSystemId 发生了变动，那么就需要重新选择下面的颜色
-            "product.form.colorSystemId"(newValue, oldValue) {
+            // 监控色系，一旦 brandcolor 发生了变动，那么就需要重新选择下面的颜色
+            "product.form.brandcolor"(newValue, oldValue) {
                 if (oldValue !== undefined) {
-                    this.product.form.colorId = '';
+                    this.product.form.color_id = '';
                 }
             }
         },

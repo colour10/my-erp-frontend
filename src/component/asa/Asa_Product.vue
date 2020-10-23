@@ -1,4 +1,5 @@
 <template>
+  <!-- 这个用于对话框的弹出修改 start -->
   <el-dialog
       :title="title"
       :visible.sync="dialogVisible"
@@ -10,7 +11,6 @@
       :modal="false">
 
     <el-tabs type="border-card" @tab-click="onTabClick" v-model="currentTab">
-
       <!-- 基本资料 start -->
       <el-tab-pane :label="_label('jibenziliao')" name="product">
 
@@ -63,7 +63,7 @@
               <!-- 色系 end -->
 
               <!-- 颜色 start -->
-              <el-form-item :label="showLabel('yanse')" label-width="40px" prop="colorId">
+              <el-form-item :label="showLabel('yanse')" label-width="40px" prop="color_id">
                 <el-select
                     v-model="form.color_id"
                     filterable
@@ -628,6 +628,7 @@
 
     </el-tabs>
   </el-dialog>
+  <!-- 这个用于对话框的弹出修改 end -->
 </template>
 
 <script>
@@ -988,7 +989,7 @@ export default {
         self.materials = res.data.materials
 
         // 打印 self 变量
-        console.log("self=", self)
+        // console.log("self=", self)
 
         self.handleChangeBrand()
       })
@@ -1399,9 +1400,19 @@ export default {
     },
     // 监控色系，一旦 brandcolor 发生了变动，那么就需要重新选择下面的颜色
     "form.brandcolor"(newValue, oldValue) {
-      if (oldValue !== undefined) {
-        this.form.colorId = '';
+      // 如果是第一次进入，oldVal 的值就是 undefined
+      if (oldValue === undefined) {
+        console.log('form.brandcolor => 第一次进入，不给与提示')
+        return
       }
+      // 如果用户没有改变 brandcolor 的值
+      if (String(this.form.brandcolor) === String(this.originProduct.brandcolor)) {
+        console.log('form.brandcolor => 用户没有改变 brandcolor 的值，也不会提示')
+        return
+      }
+      // 否则就清空 color_id
+      console.log('form.brandcolor => 用户改变 brandcolor 的值，开始清空 color_id')
+      this.form.color_id = ''
     },
     // 检测品类值的变化，如果发生变化，就重新请求二级子品类
     'form.brandgroupid'(newVal, oldValue) {
