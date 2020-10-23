@@ -124,10 +124,12 @@
 
         <!-- 导入按钮 start -->
         <el-form-item>
-          <el-button class="filter-item" style="margin-left: 10px;" type="warning" size="mini" icon="el-icon-star-off"
-                     @click="handleImport">
-            {{ showLabel('button-export') }}
-          </el-button>
+          <el-tooltip class="item" effect="dark" :content="_label('click-download-excel')" placement="top-start">
+            <el-button class="filter-item" style="margin-left: 10px;" type="warning" size="mini" icon="el-icon-star-off"
+                       @click="handleImport">
+              {{ showLabel('button-export') }}
+            </el-button>
+          </el-tooltip>
         </el-form-item>
         <!-- 导入按钮 end -->
 
@@ -349,7 +351,7 @@
       <!-- 按钮组 start-->
       <span slot="footer" class="dialog-footer">
         <el-button size="mini" @click="hideImportDialogForm">{{ _label('quxiao') }}</el-button>
-        <el-tooltip class="item" effect="dark" content="点击确定按钮完成操作" placement="top-start" v-if="importExcelPath !== ''">
+        <el-tooltip class="item" effect="dark" :content="_label('click-confirm-to-finish')" placement="top-start" v-if="importExcelPath !== ''">
           <el-button size="mini" type="primary" @click="handleFinishedImportDialog">{{ _label('queding') }}</el-button>
         </el-tooltip>
         <el-button size="mini" type="primary" @click="handleFinishedImportDialog" v-else>{{
