@@ -316,7 +316,7 @@
     <!-- 分页 end -->
 
     <!-- 新建商品对话框 start -->
-    <el-dialog :title="showLabel('createProduct')" :visible.sync="dialogFormVisible" :center="true" width="1400px"
+    <el-dialog :title="showLabel('createProduct')" :visible.sync="dialogFormVisible" :center="true" width="1500px"
                :close-on-click-modal="false" :close-on-press-escape="false" custom-class="create-product-dialog">
       <add ref="productForm" @hideDialogForm="hideDialogForm" @reloadList="reloadList"></add>
     </el-dialog>

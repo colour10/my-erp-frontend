@@ -55,9 +55,10 @@
               <!-- 款式 end -->
 
               <!-- 材质 start -->
-              <el-table-column :label="showLabel('caizhi')" width="210" align="center" v-if="!worldcode.two.disabled">
+              <el-table-column :label="showLabel('caizhi')" width="230" align="center" v-if="!worldcode.two.disabled">
                 <template slot-scope="scope">
                   <el-form-item
+                    class="myTwo"
                     :prop="'colors.' + scope.$index + '.wordcode_2'"
                     :rules="[{required: false, trigger: 'blur'}, {min: worldcode.two.minlength, max: worldcode.two.maxlength, triggger: 'blur'}]"
                   >
@@ -71,7 +72,7 @@
                       :trigger-on-focus="false"
                     >
                       <template slot-scope="props">
-                        <div class="wordcode">{{ props.item.worldcode }}</div>
+                        <div class="wordcode">{{ props.item.worldcode }} [{{ props.item.used_count }}] </div>
                         <div class="name">{{ props.item.name }}</div>
                       </template>
                     </el-autocomplete>
@@ -511,9 +512,7 @@
           <!-- 提交按钮 end -->
 
           <!-- 提交并保存图片按钮 start -->
-          <as-button auth="product" type="primary" @click="createProductWithSavePictures" v-if="this.isNeedSavePictures === true">{{
-              showLabel("baocun")
-            }}
+          <as-button auth="product" type="primary" @click="createProductWithSavePictures" v-if="this.isNeedSavePictures === true">{{ showLabel("baocun") }}
           </as-button>
           <!-- 提交并保存图片按钮 end -->
 
@@ -1449,10 +1448,11 @@ export default {
   padding: 7px;
 }
 
-.wordcode {
-  text-overflow: ellipsis;
-  overflow: hidden;
-}
+/* 需要显示出调用次数 */
+/*.wordcode {*/
+/*  text-overflow: ellipsis;*/
+/*  overflow: hidden;*/
+/*}*/
 
 .name {
   font-size: 12px;
@@ -1469,5 +1469,9 @@ export default {
 
 .order-form >>> .el-input__inner {
   width: inherit;
+}
+
+.myTwo >>> .el-input--mini .el-input__inner {
+  width: 200px !important;
 }
 </style>
