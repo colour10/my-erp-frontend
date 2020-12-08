@@ -27,13 +27,13 @@
 
               <!-- 供货商 start -->
               <el-form-item :label="_label('gonghuoshang')">
-                <simple-select v-model="form.supplierid" source="supplier_3"></simple-select>
+                <simple-select v-model="form.supplierid" source="current_supplier_2"></simple-select>
               </el-form-item>
               <!-- 供货商 end -->
 
               <!-- 供货单位 start -->
               <el-form-item :label="_label('gonghuodanwei')">
-                <simple-select v-model="form.finalsupplierid" source="supplier_3"></simple-select>
+                <simple-select v-model="form.finalsupplierid" source="current_supplier_2"></simple-select>
               </el-form-item>
               <!-- 供货单位 end -->
 

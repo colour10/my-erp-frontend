@@ -35,7 +35,7 @@
         <el-col :span="4" style="width:230px">
           <!-- 订货客户 start -->
           <el-form-item :label="_label('dinghuokehu')" prop="bookingid">
-            <simple-select v-model="form.bookingid" source="supplier_2"/>
+            <simple-select v-model="form.bookingid" source="current_customer_2"/>
           </el-form-item>
           <!-- 订货客户 end -->
 
@@ -47,13 +47,13 @@
 
           <!-- 供货商 start -->
           <el-form-item :label="_label('gonghuoshang')">
-            <simple-select v-model="form.supplierid" source="supplier_3" :clearable="true"/>
+            <simple-select v-model="form.supplierid" source="current_supplier_2" :clearable="true"/>
           </el-form-item>
           <!-- 供货商 end -->
 
           <!-- 发货商 start -->
           <el-form-item :label="_label('fahuoshang')">
-            <simple-select v-model="form.finalsupplierid" source="supplier_3" :clearable="true"/>
+            <simple-select v-model="form.finalsupplierid" source="current_supplier_2" :clearable="true"/>
           </el-form-item>
           <!-- 发货商 end -->
         </el-col>

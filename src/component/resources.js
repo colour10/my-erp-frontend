@@ -247,6 +247,27 @@ function getOption(name) {
         dependencies: ['supplier']
     }
 
+    //当前公司下的所有客户列表
+    options["current_customer_2"] = {
+      url: '/company/customers',
+      oplabel: 'suppliercode',
+      opvalue: 'id'
+    }
+
+    //当前公司下的所有供应商列表
+    options["current_supplier_2"] = {
+      url: '/company/suppliers',
+      oplabel: 'suppliercode',
+      opvalue: 'id'
+    }
+
+    //当前公司下的所有承运商列表
+    options["current_shipper_2"] = {
+      url: '/company/shippers',
+      oplabel: 'suppliercode',
+      opvalue: 'id'
+    }
+
     //供货商
     options["supplier_3"] = {
         callback: function (DataSource) {
