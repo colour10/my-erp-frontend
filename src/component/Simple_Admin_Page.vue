@@ -12,12 +12,25 @@
               <as-button type="primary" @click="onSearch" size="mini" v-if="isSubmit" icon="el-icon-search">
                 {{_label("chaxun")}}
               </as-button>
-              <asa-button :enable="_isAllowed(authname)" @click="showFormToCreate()" v-if="isAdd()!==false">
+
+              <!-- 因为缓存问题，权限偶尔会失效，所以暂时都为true，上面还有权限控制的 -->
+<!--              <asa-button :enable="_isAllowed(authname)" @click="showFormToCreate()" v-if="isAdd()!==false">-->
+<!--                {{_label("xinjian")}}-->
+<!--              </asa-button>-->
+
+              <asa-button :enable="true" @click="showFormToCreate()" v-if="isAdd()!==false">
                 {{_label("xinjian")}}
               </asa-button>
+
             </el-form-item>
           </el-form>
-          <asa-button :enable="_isAllowed(authname)" @click="showFormToCreate()"
+          <!-- 因为缓存问题，权限偶尔会失效，所以暂时都为true，上面还有权限控制的 -->
+<!--          <asa-button :enable="_isAllowed(authname)" @click="showFormToCreate()"-->
+<!--                      v-if="isAdd()!==false && opt.isSearch===false">{{_label("xinjian")}}-->
+<!--          </asa-button>-->
+
+
+          <asa-button :enable="true" @click="showFormToCreate()"
                       v-if="isAdd()!==false && opt.isSearch===false">{{_label("xinjian")}}
           </asa-button>
         </slot>
@@ -79,7 +92,12 @@
       <!-- 保存+退出 start -->
       <el-row>
         <el-col :span="24" style="text-align:center;">
-          <asa-button :enable="_isAllowed(authname)" @click="onSubmit" style="margin:auto;"
+          <!-- 因为缓存问题，权限偶尔会失效，所以暂时都为true，上面还有权限控制的 -->
+<!--          <asa-button :enable="_isAllowed(authname)" @click="onSubmit" style="margin:auto;"-->
+<!--                      v-if="opt.isShowSubmit!==false">{{_label("baocun")}}-->
+<!--          </asa-button>-->
+
+          <asa-button :enable="true" @click="onSubmit" style="margin:auto;"
                       v-if="opt.isShowSubmit!==false">{{_label("baocun")}}
           </asa-button>
           <as-button type="primary" @click="onQuit">{{_label("tuichu")}}</as-button>

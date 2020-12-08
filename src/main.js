@@ -371,7 +371,7 @@ const store = new Vuex.Store({
                     if (state.auth.is_super == '1') {
                         return true;
                     } else {
-                        // 根据权限的名称判断，能否找到匹配的记录，如果匹配，必定有下标，否则为 -1
+                        // 根据权限的名称判断，能否找到匹配的记录，如果匹配，必定有下标，否则为 -1，从permissions属性找name值匹配的字段
                         return state.auth.permissions && state.auth.permissions.findIndex(item => item.name == permission) >= 0;
                     }
                 }

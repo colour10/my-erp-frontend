@@ -99,7 +99,9 @@ export default {
       const self = this;
 
       let auths = authname.split(',');
-      // console.log(authname, auths)
+      // 测试变量
+      console.log("authname=", authname, "auths=", auths)
+
       for (let auth of auths) {
         if (behavier == 'any') {
           if (self.$store.getters.allow(auth)) {

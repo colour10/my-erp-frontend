@@ -15,11 +15,24 @@
           <as-button size="mini" @click="handleClickUpdate(scope.$index, scope.row)" v-if="isEditable(scope.row)">
             {{_label('bianji')}}
           </as-button>
-          <asa-button size="mini" type="danger" @click="onClickDelete(scope.$index, scope.row)"
-                      v-if="isDeletable(scope.row)" :enable="_isAllowed(authname||controller)">{{_label('shanchu')}}
+
+          <!-- 因为缓存问题，权限偶尔会失效，所以暂时都为true，上面还有权限控制的 -->
+<!--          <asa-button size="mini" type="danger" @click="onClickDelete(scope.$index, scope.row)"-->
+<!--                      v-if="isDeletable(scope.row)" :enable="_isAllowed(authname||controller)">{{_label('shanchu')}}-->
+
+            <asa-button size="mini" type="danger" @click="onClickDelete(scope.$index, scope.row)"
+                        v-if="isDeletable(scope.row)" :enable="true">{{_label('shanchu')}}
+
           </asa-button>
+
+          <!-- 因为缓存问题，权限偶尔会失效，所以暂时都为true，上面还有权限控制的 -->
+<!--          <asa-button size="mini" @click="handleAction(scope,item)" v-for="item in actions" :key="item.label"-->
+<!--                      :type="buttonType(item, scope.row)" :enable="item.enable" v-if="isShow(item,scope.row)"-->
+<!--                      style="margin-right:3px">{{item.label}}-->
+<!--          </asa-button>-->
+
           <asa-button size="mini" @click="handleAction(scope,item)" v-for="item in actions" :key="item.label"
-                      :type="buttonType(item, scope.row)" :enable="item.enable" v-if="isShow(item,scope.row)"
+                      :type="buttonType(item, scope.row)" :enable="true" v-if="isShow(item,scope.row)"
                       style="margin-right:3px">{{item.label}}
           </asa-button>
         </template>

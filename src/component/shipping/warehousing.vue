@@ -389,6 +389,7 @@
       <sp-product-search-form @search="search" @close="_hideDialog('search')"></sp-product-search-form>
     </sp-dialog>
 
+    <!-- 费用对话框 start -->
     <sp-dialog ref="orderpayment" :width="900">
       <simple-admin-page v-bind="orderpayment" @after-update="loadDetail" @after-delete="loadDetail">
         <template v-slot="{form}">
@@ -427,6 +428,7 @@
         </template>
       </simple-admin-page>
     </sp-dialog>
+    <!-- 费用对话框 end -->
 
     <!-- 前查 start -->
     <sp-orderbrand-list ref="qiancha" :shippingid="form.id"></sp-orderbrand-list>
