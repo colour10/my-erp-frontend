@@ -113,6 +113,13 @@ function getOption(name) {
     //成员
     options["member"] = {url: '/l/member', oplabel: 'name', opvalue: 'id'}
 
+    //当前公司下面的所有会员
+    options["currentMembers"] = {
+      url: '/company/members',
+      oplabel: 'name',
+      opvalue: 'id'
+    }
+
     //价格定义
     options["price"] = {url: '/l/price', oplabel: 'name', opvalue: 'id'}
 

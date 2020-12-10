@@ -29,7 +29,7 @@
             <el-date-picker v-model="form.salesdate" type="date" value-format="yyyy-MM-dd"></el-date-picker>
           </el-form-item>
           <el-form-item :label="_label('huiyuan')" v-if="form.warehouseid>0">
-            <simple-select v-model="form.memberid" source="member"></simple-select>
+            <simple-select v-model="form.memberid" source="currentMembers"></simple-select>
           </el-form-item>
         </el-col>
         <el-col :span="4" style="width:300px" v-if="form.warehouseid>0">

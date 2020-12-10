@@ -332,9 +332,8 @@ const ProductstockSearch = Object.assign(createModel("productstocksearch"), {
 
     let runner = promiseAll(row);
     // 库存
-    // 添加一个在途状态,split符号从默认;改为,
+    // 添加一个在途状态
     let stocks = row.sizecontent_data.split(',').map(item => {
-      // split符号从默认,改为-
       let [sizecontentid, number, reserve_number, sales_number, shipping_number] = item.split('-');
       return {
         sizecontentid,

@@ -223,10 +223,8 @@ export default {
         self._fetch(path, form, options).then(result => {
           //loading.close();
           resolve(result);
-        }).catch((err) => {
+        }).catch(() => {
           //loading.close();
-          // 打印错误
-          console.log("_submit_err = ", err)
           reject();
         });
       });
